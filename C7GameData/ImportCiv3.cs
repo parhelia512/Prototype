@@ -166,6 +166,7 @@ namespace C7GameData {
 			ImportSharedBiqData();
 			ImportBicLeaders();
 			ImportBicUnits();
+			ImportBicCities();
 
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(biq, save);
@@ -432,6 +433,31 @@ namespace C7GameData {
 					size = city.Popd.CitizenCount,
 					shieldsStored = city.ShieldsCollected,
 					foodStored = city.TotalFood,
+					foodNeededToGrow = 20, // HACK: don't know where to find this
+					// residents = city.Ppod // TODO: load tiles worked from PPOD
+				};
+				save.Cities.Add(saveCity);
+			}
+		}
+
+		private void ImportBicCities() {
+			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+
+			foreach (CITY city in theBiq.City) {
+				if (city.Owner < 0 || city.Owner >= save.Players.Count) {
+					continue;
+				}
+				SavePlayer player = save.Players[city.Owner];
+				SaveCity saveCity = new SaveCity{
+					id = ids.CreateID("city"),
+					owner = player.id,
+					location = new TileLocation(city.X, city.Y),
+					// TODO: try and get this from the unit prototype
+					producible = "Worker",
+					name = city.Name,
+					size = city.Size,
+					shieldsStored = 0,
+					foodStored = 0,
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 					// residents = city.Ppod // TODO: load tiles worked from PPOD
 				};
