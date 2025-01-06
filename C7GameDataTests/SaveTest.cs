@@ -22,6 +22,10 @@ public class SaveTests {
 		get => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "conquests.biq");
 	}
 
+	private static string defaultPediaIconsPath {
+		get => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Text", "PediaIcons.txt");
+	}
+
 	private static string testDirectory {
 		get {
 			string[] parts = AppDomain.CurrentDomain.BaseDirectory.Split(Path.DirectorySeparatorChar);
@@ -90,7 +94,9 @@ public class SaveTests {
 			SaveGame game = null;
 			GameData gd = null;
 			Exception ex = Record.Exception(() => {
-				game = ImportCiv3.ImportSav(saveFileInfo.FullName, defaultBicPath);
+				game = ImportCiv3.ImportSav(saveFileInfo.FullName, defaultBicPath, (relativeModePath) => {
+					return defaultPediaIconsPath;
+				});
 			});
 			Assert.Null(ex);
 			ex = Record.Exception(() => {
@@ -130,7 +136,10 @@ public class SaveTests {
 			SaveGame game = null;
 			GameData gd = null;
 			Exception ex = Record.Exception(() => {
-				game = ImportCiv3.ImportBiq(saveFileInfo.FullName, defaultBicPath);
+				game = ImportCiv3.ImportBiq(saveFileInfo.FullName, defaultBicPath, (relativeModePath) => {
+					string scenarioDir = relativeModePath.Substring(relativeModePath.LastIndexOf("\\")+1);
+					return Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", scenarioDir, "Text", "PediaIcons.txt");
+				});
 			});
 			Assert.Null(ex);
 			ex = Record.Exception(() => {

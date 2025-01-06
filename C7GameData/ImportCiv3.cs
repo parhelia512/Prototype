@@ -5,6 +5,7 @@ using Serilog;
 using QueryCiv3;
 using QueryCiv3.Biq;
 using C7GameData.Save;
+using System.IO;
 
 /*
   This will read a Civ3 sav into C7 native format for immediate use or saving to native JSON save
@@ -22,6 +23,7 @@ namespace C7GameData {
 		private BiqData biq;
 		private BiqData defaultBiq;
 		private SavData savData;
+		private PediaIcons pediaIcons;
 		private readonly IDFactory ids;
 
 		private static ILogger log = Log.ForContext<ImportCiv3>();
@@ -51,16 +53,17 @@ namespace C7GameData {
 			ImportBarbarianInfo();
 		}
 
-		public static SaveGame ImportSav(string savePath, string defaultBicPath) {
+		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
 			ImportCiv3 importer = new ImportCiv3();
-			return importer.importSav(savePath, defaultBicPath);
+			return importer.importSav(savePath, defaultBicPath, getPediaIconsPath);
 		}
 
-		private SaveGame importSav(string savePath, string defaultBicPath) {
+		private SaveGame importSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
 			// Get save data reader
 			byte[] defaultBicBytes = Util.ReadFile(defaultBicPath);
 			savData = new SavData(Util.ReadFile(savePath), defaultBicBytes);
 			biq = savData.Bic;
+			pediaIcons = new(getPediaIconsPath(biq.Game[0].ScenarioSearchFolders));
 
 			ImportSharedBiqData();
 			ImportSavLeaders();
@@ -145,8 +148,6 @@ namespace C7GameData {
 				}
 				i++;
 			}
-			// This probably doesn't belong here, but not sure where else to put it
-			// c7Save.GameData.map.RelativeModPath = civ3Save.MediaBic.Game[0].ScenarioSearchFolders;
 			return save;
 		}
 
@@ -154,14 +155,15 @@ namespace C7GameData {
 		 * defaultBiqPath is used in case some sections (map, rules, player data) are not
 		 * present.
 		 */
-		public static SaveGame ImportBiq(string biqPath, string defaultBiqPath) {
+		public static SaveGame ImportBiq(string biqPath, string defaultBiqPath, Func<string, string> getPediaIconsPath) {
 			ImportCiv3 importer = new ImportCiv3();
-			return importer.importBiq(biqPath, defaultBiqPath);
+			return importer.importBiq(biqPath, defaultBiqPath, getPediaIconsPath);
 		}
 
-		private SaveGame importBiq(string biqPath, string defaultBiqPath) {
+		private SaveGame importBiq(string biqPath, string defaultBiqPath, Func<string, string> getPediaIconsPath) {
 			biq = BiqData.LoadFile(biqPath);
 			defaultBiq = BiqData.LoadFile(defaultBiqPath);
+			pediaIcons = new(getPediaIconsPath(biq.Game[0].ScenarioSearchFolders));
 
 			ImportSharedBiqData();
 			ImportBicLeaders();
@@ -268,8 +270,6 @@ namespace C7GameData {
 				}
 			}
 
-			// This probably doesn't belong here, but not sure where else to put it
-			// c7Save.GameData.map.RelativeModPath = civ3Save.MediaBic.Game[0].ScenarioSearchFolders;
 			return save;
 		}
 
@@ -477,6 +477,7 @@ namespace C7GameData {
 					prototype.categories.Add("Air");
 				}
 				prototype.name = prto.Name;
+				prototype.artName = pediaIcons.GetArtName(prto.CivilopediaEntry);
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;

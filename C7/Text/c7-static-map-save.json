@@ -58917,6 +58917,7 @@
   "unitPrototypes": [
     {
       "name": "Settler",
+      "artName": "Settler",
       "shieldCost": 30,
       "populationCost": 2,
       "attack": 0,
@@ -58938,6 +58939,7 @@
     },
     {
       "name": "Worker",
+      "artName": "Worker",
       "shieldCost": 10,
       "populationCost": 1,
       "attack": 0,
@@ -58960,6 +58962,7 @@
     },
     {
       "name": "Scout",
+      "artName": "Scout",
       "shieldCost": 10,
       "populationCost": 0,
       "attack": 0,
@@ -58980,6 +58983,7 @@
     },
     {
       "name": "Explorer",
+      "artName": "Explorer",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 0,
@@ -59000,6 +59004,7 @@
     },
     {
       "name": "Marine",
+      "artName": "Marine",
       "shieldCost": 120,
       "populationCost": 0,
       "attack": 12,
@@ -59020,6 +59025,7 @@
     },
     {
       "name": "Modern Paratrooper",
+      "artName": "Modern Paratrooper",
       "shieldCost": 110,
       "populationCost": 0,
       "attack": 6,
@@ -59040,6 +59046,7 @@
     },
     {
       "name": "Warrior",
+      "artName": "Warrior",
       "shieldCost": 10,
       "populationCost": 0,
       "attack": 1,
@@ -59060,6 +59067,7 @@
     },
     {
       "name": "Archer",
+      "artName": "Archer",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 2,
@@ -59080,6 +59088,7 @@
     },
     {
       "name": "Spearman",
+      "artName": "Spearman",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -59100,6 +59109,7 @@
     },
     {
       "name": "Swordsman",
+      "artName": "Swordsman",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 3,
@@ -59120,6 +59130,7 @@
     },
     {
       "name": "Chariot",
+      "artName": "Chariot",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -59140,6 +59151,7 @@
     },
     {
       "name": "Horseman",
+      "artName": "Horseman",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -59160,6 +59172,7 @@
     },
     {
       "name": "Pikeman",
+      "artName": "Pikeman",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 1,
@@ -59180,6 +59193,7 @@
     },
     {
       "name": "Longbowman",
+      "artName": "Longbowman",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 4,
@@ -59200,6 +59214,7 @@
     },
     {
       "name": "Musketman",
+      "artName": "Musketman",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 2,
@@ -59220,6 +59235,7 @@
     },
     {
       "name": "Knight",
+      "artName": "Knight",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 4,
@@ -59240,6 +59256,7 @@
     },
     {
       "name": "Rifleman",
+      "artName": "Rifleman",
       "shieldCost": 80,
       "populationCost": 0,
       "attack": 4,
@@ -59260,6 +59277,7 @@
     },
     {
       "name": "Cavalry",
+      "artName": "Cavalry",
       "shieldCost": 80,
       "populationCost": 0,
       "attack": 6,
@@ -59280,6 +59298,7 @@
     },
     {
       "name": "Infantry",
+      "artName": "Infantry",
       "shieldCost": 90,
       "populationCost": 0,
       "attack": 6,
@@ -59300,6 +59319,7 @@
     },
     {
       "name": "Tank",
+      "artName": "Tank",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 16,
@@ -59320,6 +59340,7 @@
     },
     {
       "name": "Mech Infantry",
+      "artName": "Mech Infantry",
       "shieldCost": 110,
       "populationCost": 0,
       "attack": 12,
@@ -59340,6 +59361,7 @@
     },
     {
       "name": "Modern Armor",
+      "artName": "Modern Armor",
       "shieldCost": 120,
       "populationCost": 0,
       "attack": 24,
@@ -59360,6 +59382,7 @@
     },
     {
       "name": "Catapult",
+      "artName": "Catapult",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 0,
@@ -59381,6 +59404,7 @@
     },
     {
       "name": "Cannon",
+      "artName": "Cannon",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 0,
@@ -59402,6 +59426,7 @@
     },
     {
       "name": "Artillery",
+      "artName": "Artillery",
       "shieldCost": 80,
       "populationCost": 0,
       "attack": 0,
@@ -59423,6 +59448,7 @@
     },
     {
       "name": "Radar Artillery",
+      "artName": "Radar Artillery",
       "shieldCost": 120,
       "populationCost": 0,
       "attack": 0,
@@ -59444,6 +59470,7 @@
     },
     {
       "name": "Cruise Missile",
+      "artName": "Cruise Missile",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 0,
@@ -59465,6 +59492,7 @@
     },
     {
       "name": "Tactical Nuke",
+      "artName": "Tactical Nuke",
       "shieldCost": 300,
       "populationCost": 0,
       "attack": 0,
@@ -59486,6 +59514,7 @@
     },
     {
       "name": "ICBM",
+      "artName": "ICBM",
       "shieldCost": 500,
       "populationCost": 0,
       "attack": 0,
@@ -59507,6 +59536,7 @@
     },
     {
       "name": "Galley",
+      "artName": "Galley",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 1,
@@ -59527,6 +59557,7 @@
     },
     {
       "name": "Caravel",
+      "artName": "Caravel",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 1,
@@ -59547,6 +59578,7 @@
     },
     {
       "name": "Frigate",
+      "artName": "Frigate",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 2,
@@ -59568,6 +59600,7 @@
     },
     {
       "name": "Galleon",
+      "artName": "Galleon",
       "shieldCost": 50,
       "populationCost": 0,
       "attack": 1,
@@ -59588,6 +59621,7 @@
     },
     {
       "name": "Ironclad",
+      "artName": "Ironclad",
       "shieldCost": 90,
       "populationCost": 0,
       "attack": 5,
@@ -59609,6 +59643,7 @@
     },
     {
       "name": "Transport",
+      "artName": "Transport",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 1,
@@ -59629,6 +59664,7 @@
     },
     {
       "name": "Carrier",
+      "artName": "Carrier",
       "shieldCost": 180,
       "populationCost": 0,
       "attack": 1,
@@ -59649,6 +59685,7 @@
     },
     {
       "name": "Submarine",
+      "artName": "Submarine",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 8,
@@ -59669,6 +59706,7 @@
     },
     {
       "name": "Destroyer",
+      "artName": "Destroyer",
       "shieldCost": 120,
       "populationCost": 0,
       "attack": 12,
@@ -59690,6 +59728,7 @@
     },
     {
       "name": "Battleship",
+      "artName": "Battleship",
       "shieldCost": 200,
       "populationCost": 0,
       "attack": 18,
@@ -59711,6 +59750,7 @@
     },
     {
       "name": "AEGIS Cruiser",
+      "artName": "AEGIS Cruiser",
       "shieldCost": 160,
       "populationCost": 0,
       "attack": 15,
@@ -59732,6 +59772,7 @@
     },
     {
       "name": "Nuclear Submarine",
+      "artName": "Nuclear Submarine",
       "shieldCost": 140,
       "populationCost": 0,
       "attack": 8,
@@ -59752,6 +59793,7 @@
     },
     {
       "name": "Fighter",
+      "artName": "Fighter",
       "shieldCost": 80,
       "populationCost": 0,
       "attack": 4,
@@ -59771,6 +59813,7 @@
     },
     {
       "name": "Bomber",
+      "artName": "Bomber",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 0,
@@ -59790,6 +59833,7 @@
     },
     {
       "name": "Helicopter",
+      "artName": "Helicopter",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 0,
@@ -59809,6 +59853,7 @@
     },
     {
       "name": "Jet Fighter",
+      "artName": "Jet Fighter",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 8,
@@ -59828,6 +59873,7 @@
     },
     {
       "name": "Stealth Fighter",
+      "artName": "Stealth Fighter",
       "shieldCost": 120,
       "populationCost": 0,
       "attack": 8,
@@ -59847,6 +59893,7 @@
     },
     {
       "name": "Stealth Bomber",
+      "artName": "Stealth Bomber",
       "shieldCost": 240,
       "populationCost": 0,
       "attack": 0,
@@ -59866,6 +59913,7 @@
     },
     {
       "name": "Leader",
+      "artName": "Leader",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 0,
@@ -59886,6 +59934,7 @@
     },
     {
       "name": "Army",
+      "artName": "Army",
       "shieldCost": 400,
       "populationCost": 0,
       "attack": 0,
@@ -59906,6 +59955,7 @@
     },
     {
       "name": "Jaguar Warrior",
+      "artName": "Jaguar Warrior",
       "shieldCost": 15,
       "populationCost": 0,
       "attack": 1,
@@ -59926,6 +59976,7 @@
     },
     {
       "name": "Bowman",
+      "artName": "Bowman",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 2,
@@ -59946,6 +59997,7 @@
     },
     {
       "name": "Hoplite",
+      "artName": "Hoplite",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -59966,6 +60018,7 @@
     },
     {
       "name": "Impi",
+      "artName": "Impi",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -59986,6 +60039,7 @@
     },
     {
       "name": "Legionary",
+      "artName": "Legionary",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 3,
@@ -60006,6 +60060,7 @@
     },
     {
       "name": "Immortals",
+      "artName": "Immortals",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 4,
@@ -60026,6 +60081,7 @@
     },
     {
       "name": "War Chariot",
+      "artName": "War Chariot",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 2,
@@ -60046,6 +60102,7 @@
     },
     {
       "name": "Rider",
+      "artName": "Rider",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 4,
@@ -60066,6 +60123,7 @@
     },
     {
       "name": "Mounted Warrior",
+      "artName": "Mounted Warrior",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 3,
@@ -60086,6 +60144,7 @@
     },
     {
       "name": "Musketeer",
+      "artName": "Musketeer",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 2,
@@ -60106,6 +60165,7 @@
     },
     {
       "name": "Samurai",
+      "artName": "Samurai",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 4,
@@ -60126,6 +60186,7 @@
     },
     {
       "name": "War Elephant",
+      "artName": "War Elephant",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 4,
@@ -60146,6 +60207,7 @@
     },
     {
       "name": "Cossack",
+      "artName": "Cossack",
       "shieldCost": 90,
       "populationCost": 0,
       "attack": 6,
@@ -60166,6 +60228,7 @@
     },
     {
       "name": "Panzer",
+      "artName": "Panzer",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 16,
@@ -60186,6 +60249,7 @@
     },
     {
       "name": "Man-O-War",
+      "artName": "Man-O-War",
       "shieldCost": 65,
       "populationCost": 0,
       "attack": 4,
@@ -60207,6 +60271,7 @@
     },
     {
       "name": "F-15",
+      "artName": "F-15",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 8,
@@ -60226,6 +60291,7 @@
     },
     {
       "name": "Privateer",
+      "artName": "Privateer",
       "shieldCost": 50,
       "populationCost": 0,
       "attack": 2,
@@ -60246,6 +60312,7 @@
     },
     {
       "name": "Keshik",
+      "artName": "Keshik",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 4,
@@ -60266,6 +60333,7 @@
     },
     {
       "name": "Conquistador",
+      "artName": "Conquistador",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 3,
@@ -60286,6 +60354,7 @@
     },
     {
       "name": "Berserk",
+      "artName": "Berserk",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 6,
@@ -60306,6 +60375,7 @@
     },
     {
       "name": "Sipahi",
+      "artName": "Sipahi",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 8,
@@ -60326,6 +60396,7 @@
     },
     {
       "name": "Gallic Swordsman",
+      "artName": "Gallic Swordsman",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 3,
@@ -60346,6 +60417,7 @@
     },
     {
       "name": "Ansar Warrior",
+      "artName": "Ansar Warrior",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 4,
@@ -60366,6 +60438,7 @@
     },
     {
       "name": "Numidian Mercenary",
+      "artName": "Numidian Mercenary",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -60386,6 +60459,7 @@
     },
     {
       "name": "Hwach\u0027a",
+      "artName": "Hwach\u0027a",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 0,
@@ -60407,6 +60481,7 @@
     },
     {
       "name": "Medieval Infantry",
+      "artName": "Medieval Infantry",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 4,
@@ -60427,6 +60502,7 @@
     },
     {
       "name": "Guerilla",
+      "artName": "Guerilla",
       "shieldCost": 90,
       "populationCost": 0,
       "attack": 6,
@@ -60447,6 +60523,7 @@
     },
     {
       "name": "Princess",
+      "artName": "Princess",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 0,
@@ -60465,6 +60542,7 @@
     },
     {
       "name": "Lincoln",
+      "artName": "Lincoln",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60484,6 +60562,7 @@
     },
     {
       "name": "Hammurabi",
+      "artName": "Hammurabi",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60503,6 +60582,7 @@
     },
     {
       "name": "Mao",
+      "artName": "Mao",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60522,6 +60602,7 @@
     },
     {
       "name": "Bismarck",
+      "artName": "Bismarck",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60541,6 +60622,7 @@
     },
     {
       "name": "Alexander",
+      "artName": "Alexander",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60560,6 +60642,7 @@
     },
     {
       "name": "Caesar",
+      "artName": "Caesar",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60579,6 +60662,7 @@
     },
     {
       "name": "Xerxes",
+      "artName": "Xerxes",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60598,6 +60682,7 @@
     },
     {
       "name": "Hiawatha",
+      "artName": "Hiawatha",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60617,6 +60702,7 @@
     },
     {
       "name": "Shaka",
+      "artName": "Shaka",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60636,6 +60722,7 @@
     },
     {
       "name": "Montezuma",
+      "artName": "Montezuma",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60655,6 +60742,7 @@
     },
     {
       "name": "Cleopatra",
+      "artName": "Cleopatra",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60674,6 +60762,7 @@
     },
     {
       "name": "Elizabeth",
+      "artName": "Elizabeth",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60693,6 +60782,7 @@
     },
     {
       "name": "Catherine",
+      "artName": "Catherine",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60712,6 +60802,7 @@
     },
     {
       "name": "Abu",
+      "artName": "Abu",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60731,6 +60822,7 @@
     },
     {
       "name": "Hannibal",
+      "artName": "Hannibal",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60750,6 +60842,7 @@
     },
     {
       "name": "Osman",
+      "artName": "Osman",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60769,6 +60862,7 @@
     },
     {
       "name": "Temujin",
+      "artName": "Temujin",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60788,6 +60882,7 @@
     },
     {
       "name": "Gandhi",
+      "artName": "Gandhi",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60807,6 +60902,7 @@
     },
     {
       "name": "Ragnar",
+      "artName": "Ragnar",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60826,6 +60922,7 @@
     },
     {
       "name": "Brennus",
+      "artName": "Brennus",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60845,6 +60942,7 @@
     },
     {
       "name": "Tokugawa",
+      "artName": "Tokugawa",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60864,6 +60962,7 @@
     },
     {
       "name": "Joan d\u0027Arc",
+      "artName": "Joan d\u0027Arc",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60883,6 +60982,7 @@
     },
     {
       "name": "Wang Kon",
+      "artName": "Wang Kon",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60902,6 +61002,7 @@
     },
     {
       "name": "Isabella",
+      "artName": "Isabella",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60921,6 +61022,7 @@
     },
     {
       "name": "Enkidu Warrior",
+      "artName": "Enkidu Warrior",
       "shieldCost": 10,
       "populationCost": 0,
       "attack": 1,
@@ -60941,6 +61043,7 @@
     },
     {
       "name": "Three-Man Chariot",
+      "artName": "Three-Man Chariot",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -60961,6 +61064,7 @@
     },
     {
       "name": "Mursilis",
+      "artName": "Mursilis",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60980,6 +61084,7 @@
     },
     {
       "name": "Gilgamesh",
+      "artName": "Gilgamesh",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60999,6 +61104,7 @@
     },
     {
       "name": "Henry",
+      "artName": "Henry",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61018,6 +61124,7 @@
     },
     {
       "name": "Carrack",
+      "artName": "Carrack",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 2,
@@ -61038,6 +61145,7 @@
     },
     {
       "name": "Swiss Mercenary",
+      "artName": "Swiss Mercenary",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 1,
@@ -61058,6 +61166,7 @@
     },
     {
       "name": "William of Orange",
+      "artName": "William of Orange",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61077,6 +61186,7 @@
     },
     {
       "name": "Trebuchet",
+      "artName": "Trebuchet",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 0,
@@ -61098,6 +61208,7 @@
     },
     {
       "name": "Pachacuti",
+      "artName": "Pachacuti",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61117,6 +61228,7 @@
     },
     {
       "name": "Smoke-Jaguar",
+      "artName": "Smoke-Jaguar",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61136,6 +61248,7 @@
     },
     {
       "name": "Theodora",
+      "artName": "Theodora",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61155,6 +61268,7 @@
     },
     {
       "name": "Chasqui Scout",
+      "artName": "Chasqui Scout",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -61175,6 +61289,7 @@
     },
     {
       "name": "Javelin Thrower",
+      "artName": "Javelin Thrower",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -61195,6 +61310,7 @@
     },
     {
       "name": "Dromon",
+      "artName": "Dromon",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -61216,6 +61332,7 @@
     },
     {
       "name": "Cruiser",
+      "artName": "Cruiser",
       "shieldCost": 160,
       "populationCost": 0,
       "attack": 15,
@@ -61237,6 +61354,7 @@
     },
     {
       "name": "Crusader",
+      "artName": "Crusader",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 5,
@@ -61257,6 +61375,7 @@
     },
     {
       "name": "Ancient Cavalry",
+      "artName": "Ancient Cavalry",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 3,
@@ -61277,6 +61396,7 @@
     },
     {
       "name": "Curragh",
+      "artName": "Curragh",
       "shieldCost": 15,
       "populationCost": 0,
       "attack": 1,
@@ -61297,6 +61417,7 @@
     },
     {
       "name": "Paratrooper",
+      "artName": "Paratrooper",
       "shieldCost": 90,
       "populationCost": 0,
       "attack": 4,
@@ -61317,6 +61438,7 @@
     },
     {
       "name": "TOW Infantry",
+      "artName": "TOW Infantry",
       "shieldCost": 120,
       "populationCost": 0,
       "attack": 12,
@@ -61337,6 +61459,7 @@
     },
     {
       "name": "Flak",
+      "artName": "Flak",
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 1,
@@ -61357,6 +61480,7 @@
     },
     {
       "name": "Mobile SAM",
+      "artName": "Mobile SAM",
       "shieldCost": 100,
       "populationCost": 0,
       "attack": 1,
