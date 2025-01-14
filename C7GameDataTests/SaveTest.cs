@@ -10,8 +10,10 @@ using Xunit;
 using C7GameData;
 using C7GameData.Save;
 using QueryCiv3;
+using System.Runtime.InteropServices;
 
 public class SaveTests {
+
 	private static readonly string C7GameDataTestsFolderName = "C7GameDataTests";
 
 	private static string getBasePath(string file) => Path.Combine(testDirectory, file);
@@ -111,7 +113,7 @@ public class SaveTests {
 	}
 
 	[Fact]
-	public void LoadAllConquests() {
+	public void LoadAllConquestScenarios() {
 		// When running the tests via github actions, civ3 isn't installed so we can't
 		// check the conquests directories.
 		//
@@ -120,7 +122,12 @@ public class SaveTests {
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) { return; }
 
-		string conquests = Path.Join(Civ3Location.GetCiv3Path(), "Conquests/Conquests");
+		CheckScenariosInCiv3Subfolder("Conquests/Conquests");
+		CheckScenariosInCiv3Subfolder("Conquests/Scenarios");
+	}
+
+	public void CheckScenariosInCiv3Subfolder(string subfolder) {
+		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
 		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
 		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi => {
 			// currently only test 1 Mesopotamia.biq -> 9 WWII in the Pacific.biq:
@@ -136,18 +143,86 @@ public class SaveTests {
 			SaveGame game = null;
 			GameData gd = null;
 			Exception ex = Record.Exception(() => {
-				game = ImportCiv3.ImportBiq(saveFileInfo.FullName, defaultBicPath, (relativeModePath) => {
-					string scenarioDir = relativeModePath.Substring(relativeModePath.LastIndexOf("\\")+1);
-					return Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", scenarioDir, "Text", "PediaIcons.txt");
+				game = ImportCiv3.ImportBiq(saveFileInfo.FullName, defaultBicPath, (relativeModPath) => {
+					if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+						relativeModPath = relativeModPath.Replace("\\conquests\\", "/Conquests/");
+					}
+
+					return Path.GetFullPath(Path.Combine(Civ3Location.GetCiv3Path(), subfolder, relativeModPath, "Text", "PediaIcons.txt"));
 				});
 			});
-			Assert.Null(ex);
+			Assert.True(ex == null, name + ": " + ex?.ToString());
 			ex = Record.Exception(() => {
 				gd = game.ToGameData();
 			});
-			Assert.Null(ex);
+			Assert.True(ex == null, name + ":" + ex?.ToString());
 			Assert.NotNull(game);
 			Assert.NotNull(gd);
+
+			// Check that the human player has at least one settler or city in
+			// each scenario, when looking at the SaveGame.
+			foreach (SavePlayer player in game.Players) {
+				int settlerCount = 0;
+				int totalUnitCount = 0;
+				foreach (SaveUnit su in game.Units) {
+					if (su.owner == player.id) {
+						++totalUnitCount;
+						if (su.prototype == "Settler") {
+							++settlerCount;
+						}
+					}
+				}
+
+				int cityCount = 0;
+				foreach (SaveCity sc in game.Cities) {
+					if (sc.owner == player.id) {
+						++cityCount;
+					}
+				}
+
+				// This debugging output is visible when run via
+				// `dotnet test -v n`
+				Console.WriteLine(name + " : " + player.civilization + " has " +
+									settlerCount + " settlers, " +
+									cityCount + " cities, " +
+									totalUnitCount + " units, and is " +
+									(player.human ? "" : "not ") +
+									"the human player");
+
+				// The human player should always have either a city or a settler.
+				if (player.human) {
+					Assert.True(cityCount + settlerCount > 0,
+								name + " : " + player.civilization);
+				}
+			}
+
+			// And check again, looking at the GameData.
+			foreach (Player player in gd.players) {
+				int settlerCount = 0;
+				int totalUnitCount = 0;
+				foreach (MapUnit mu in player.units) {
+					++totalUnitCount;
+					if (mu.unitType.name == "Settler") {
+						++settlerCount;
+					}
+				}
+
+				int cityCount = player.cities.Count;
+
+				Console.WriteLine(name + " : " + player.civilization.name + " has " +
+									settlerCount + " settlers, " +
+									cityCount + " cities, " +
+									totalUnitCount + " units, and is " +
+									(player.isHuman ? "" : "not ") +
+									"the human player");
+
+				// The human player should always have either a city or a settler.
+				if (player.isHuman) {
+					Assert.True(cityCount + settlerCount > 0,
+								name + " : " + player.civilization.name);
+				}
+			}
+
 			game.Save(Path.Combine(testDirectory, "data", "output", $"conquest_{name[0]}.json"));
 		}
 	}
