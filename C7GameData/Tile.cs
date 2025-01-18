@@ -310,5 +310,6 @@ namespace C7GameData {
 		// assume that railroad contains road too
 		public bool railroad = false;
 		public bool mine = false;
+		public bool irrigation = false;
 	}
 }
