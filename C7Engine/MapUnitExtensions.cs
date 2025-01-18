@@ -453,13 +453,10 @@ namespace C7Engine {
 		}
 
 		public static bool canBuildMine(this MapUnit unit) {
-			// Mines can only be built on land, if there is no mine already there,
-			// and if there isn't a city.
-			//
-			// Volcanos also cannot be mined.
+			// Mines can only be built tiles with a mining bonus, if there is
+			// no mine already there, and if there isn't a city.
 			return unit.unitType.actions.Contains(C7Action.UnitBuildMine) &&
-				unit.location.IsLand() &&
-				!unit.location.IsVolcano() &&
+				unit.location.overlayTerrainType.miningBonus > 0 &&
 				!unit.location.overlays.mine &&
 				unit.location.cityAtTile == null;
 		}
