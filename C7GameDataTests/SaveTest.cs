@@ -59,9 +59,9 @@ public class SaveTests {
 		SaveGame saveWasGameData = SaveGame.FromGameData(gameData);
 		saveWasGameData.Save(outputWasGameDataPath);
 
-		byte[] original = File.ReadAllBytes(developerSave);
-		byte[] savedNeverGameData = File.ReadAllBytes(outputNeverGameDataPath);
-		byte[] savedWasGameData = File.ReadAllBytes(outputWasGameDataPath);
+		string[] original = File.ReadAllLines(developerSave);
+		string[] savedNeverGameData = File.ReadAllLines(outputNeverGameDataPath);
+		string[] savedWasGameData = File.ReadAllLines(outputWasGameDataPath);
 
 		// saved files should not be empty
 		Assert.NotEmpty(savedNeverGameData);
