@@ -522,6 +522,9 @@ namespace C7GameData {
 				if (prto.BuildMine) {
 					prototype.actions.Add(C7Action.UnitBuildMine);
 				}
+				if (prto.Irrigate) {
+					prototype.actions.Add(C7Action.UnitIrrigate);
+				}
 				if (prto.Bombard) {
 					prototype.actions.Add(C7Action.UnitBombard);
 				}

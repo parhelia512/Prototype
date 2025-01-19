@@ -208,7 +208,7 @@ namespace C7GameData {
 			return yield;
 		}
 
-		private bool BordersRiver() {
+		public bool BordersRiver() {
 			return riverNorth || riverNortheast || riverEast || riverSoutheast || riverSouth || riverSouthwest || riverWest || riverNorthwest;
 		}
 
