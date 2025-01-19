@@ -88,70 +88,19 @@ namespace C7Engine {
 		}
 	}
 
-	public class MsgSkipUnitTurn : MessageToEngine {
-		private ID unitID;
-
-		public MsgSkipUnitTurn(ID unitID) {
-			this.unitID = unitID;
+	// A generic class that allows the UI to have the game engine run some
+	// action, assumed to be on a unit.
+	//
+	// Actions that require more than a 1 or 2 line lambda should probably use
+	// a custom subclass.
+	public class ActionToEngineMsg : MessageToEngine {
+		private Action action;
+		public ActionToEngineMsg(Action action) {
+			this.action = action;
 		}
 
 		public override void process() {
-			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.skipTurn();
-		}
-	}
-
-	public class MsgDisbandUnit : MessageToEngine {
-		private ID unitID;
-
-		public MsgDisbandUnit(ID unitID) {
-			this.unitID = unitID;
-		}
-
-		public override void process() {
-			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.disband();
-		}
-	}
-
-	public class MsgBuildCity : MessageToEngine {
-		private ID unitID;
-		private string cityName;
-
-		public MsgBuildCity(ID unitID, string cityName) {
-			this.unitID = unitID;
-			this.cityName = cityName;
-		}
-
-		public override void process() {
-			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.buildCity(cityName);
-		}
-	}
-
-	public class MsgBuildRoad : MessageToEngine {
-		private ID unitID;
-
-		public MsgBuildRoad(ID unitID) {
-			this.unitID = unitID;
-		}
-
-		public override void process() {
-			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.buildRoad();
-		}
-	}
-
-	public class MsgBuildMine : MessageToEngine {
-		private ID unitID;
-
-		public MsgBuildMine(ID unitID) {
-			this.unitID = unitID;
-		}
-
-		public override void process() {
-			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.buildMine();
+			action();
 		}
 	}
 

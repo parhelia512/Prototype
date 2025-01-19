@@ -581,7 +581,7 @@ public partial class Game : Node2D {
 
 		// actions with unit buttons
 		if (currentAction == C7Action.UnitHold) {
-			new MsgSkipUnitTurn(CurrentlySelectedUnit.id).send();
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.skipTurn()).send();
 		}
 
 		if (currentAction == C7Action.UnitWait) {
@@ -629,11 +629,11 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit.canBuildRoad()) {
-			new MsgBuildRoad(CurrentlySelectedUnit.id).send();
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildRoad()).send();
 		}
 
 		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit.canBuildMine()) {
-			new MsgBuildMine(CurrentlySelectedUnit.id).send();
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
 		}
 
 	}
@@ -660,7 +660,7 @@ public partial class Game : Node2D {
 
 	// Called by the disband popup
 	private void OnUnitDisbanded() {
-		new MsgDisbandUnit(CurrentlySelectedUnit.id).send();
+		new ActionToEngineMsg(() => CurrentlySelectedUnit?.disband()).send();
 	}
 
 	/**
@@ -672,6 +672,6 @@ public partial class Game : Node2D {
 	}
 
 	private void OnBuildCity(string name) {
-		new MsgBuildCity(CurrentlySelectedUnit.id, name).send();
+		new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildCity(name)).send();
 	}
 }
