@@ -177,6 +177,9 @@ namespace C7GameData {
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.FoodBonus;
 			}
+			if (this.overlays.irrigation) {
+				yield += this.overlayTerrainType.irrigationBonus;
+			}
 			return yield;
 		}
 

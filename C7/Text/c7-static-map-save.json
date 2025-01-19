@@ -58112,6 +58112,7 @@
       "movementCost": 1,
       "allowCities": true,
       "miningBonus": 1,
+      "irrigationBonus": 1,
       "defenseBonus": {
         "description": "Desert",
         "amount": 0.1
@@ -58126,6 +58127,7 @@
       "movementCost": 1,
       "allowCities": true,
       "miningBonus": 1,
+      "irrigationBonus": 1,
       "defenseBonus": {
         "description": "Plains",
         "amount": 0.1
@@ -58140,6 +58142,7 @@
       "movementCost": 1,
       "allowCities": true,
       "miningBonus": 1,
+      "irrigationBonus": 1,
       "defenseBonus": {
         "description": "Grassland",
         "amount": 0.1
@@ -58154,6 +58157,7 @@
       "movementCost": 1,
       "allowCities": true,
       "miningBonus": 1,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Tundra",
         "amount": 0.1
@@ -58167,7 +58171,8 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "miningBonus": 1,
+      "miningBonus": 0,
+      "irrigationBonus": 1,
       "defenseBonus": {
         "description": "Flood Plain",
         "amount": 0.1
@@ -58181,7 +58186,8 @@
       "baseCommerceProduction": 0,
       "movementCost": 2,
       "allowCities": true,
-      "miningBonus": 1,
+      "miningBonus": 2,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Hills",
         "amount": 0.5
@@ -58195,7 +58201,8 @@
       "baseCommerceProduction": 0,
       "movementCost": 3,
       "allowCities": false,
-      "miningBonus": 1,
+      "miningBonus": 2,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Mountains",
         "amount": 1
@@ -58210,6 +58217,7 @@
       "movementCost": 2,
       "allowCities": true,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Forest",
         "amount": 0.25
@@ -58224,6 +58232,7 @@
       "movementCost": 3,
       "allowCities": true,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Jungle",
         "amount": 0.25
@@ -58238,6 +58247,7 @@
       "movementCost": 2,
       "allowCities": false,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Marsh",
         "amount": 0.2
@@ -58252,6 +58262,7 @@
       "movementCost": 3,
       "allowCities": false,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Volcano",
         "amount": 0.8
@@ -58266,6 +58277,7 @@
       "movementCost": 1,
       "allowCities": false,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Coast",
         "amount": 0.1
@@ -58280,6 +58292,7 @@
       "movementCost": 1,
       "allowCities": false,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Sea",
         "amount": 0.1
@@ -58294,6 +58307,7 @@
       "movementCost": 1,
       "allowCities": false,
       "miningBonus": 0,
+      "irrigationBonus": 0,
       "defenseBonus": {
         "description": "Ocean",
         "amount": 0.1
