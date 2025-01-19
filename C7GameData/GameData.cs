@@ -72,6 +72,18 @@ namespace C7GameData {
 				return null;
 		}
 
+		// TODO: This is a placeholder method for calculating tile owners.
+		// Currently, it marks a tile as owned only if it is a city tile or adjacent to a city.
+		public void UpdateTileOwners() {
+			foreach (City city in cities) {
+				city.location.owner = city.owner;
+
+				foreach (Tile tile in city.location.neighbors.Values) {
+					tile.owner = city.owner;
+				}
+			}
+		}
+
 		/**
 		 * This is intended as a place to set up post-load actions on the save, regardless of
 		 * whether it is loaded from a legacy Civ3 file or a C7 native file.

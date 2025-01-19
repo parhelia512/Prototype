@@ -4,7 +4,7 @@ using Serilog;
 
 namespace C7Engine {
 	using C7GameData;
-	using System;
+
 	public class TurnHandling {
 		private static ILogger log = Log.ForContext<TurnHandling>();
 
@@ -41,6 +41,7 @@ namespace C7Engine {
 
 				SpawnBarbarians(gameData);
 				HandleCityResults(gameData);
+				gameData.UpdateTileOwners();
 
 				gameData.turn++;
 				OnBeginTurn();

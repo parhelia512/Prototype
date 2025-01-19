@@ -3,11 +3,13 @@ namespace C7GameData {
 	using System.Text.Json.Serialization;
 	using System.Collections.Generic;
 	using System.Linq;
+
 	public class Tile {
 		public ID Id { get; internal set; }
 		public Civ3ExtraInfo ExtraInfo;
 		public int xCoordinate;
 		public int yCoordinate;
+		public Player owner; // Represents a civilization within which border the tile is located
 		public string baseTerrainTypeKey { get; set; }
 		[JsonIgnore]
 		public TerrainType baseTerrainType = TerrainType.NONE;

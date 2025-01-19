@@ -1,9 +1,11 @@
 using Godot;
 using System;
 using ConvertCiv3Media;
+using System.Collections.Generic;
 
 public partial class PCXToGodot : GodotObject {
-	private readonly static byte CIV3_TRANSPARENCY_START = 254;
+	// The set of color indexes considered transparent when loading a Civ3 PCX
+	private static readonly HashSet<int> transparentColorIndexes = new() { 1, 254, 255 };
 
 	public static ImageTexture getImageTextureFromPCX(Pcx pcx) {
 		Image ImgTxtr = ByteArrayToImage(pcx.ColorIndices, pcx.Palette, pcx.Width, pcx.Height);
@@ -44,7 +46,7 @@ public partial class PCXToGodot : GodotObject {
 		for (int y = 0; y < alphaPcx.Height; y++) {
 			for (int x = 0; x < alphaPcx.Width; x++, dataIndex++) {
 				int index = alphaPcx.ColorIndexAt(x, y);
-				if (index >= CIV3_TRANSPARENCY_START) {
+				if (transparentColorIndexes.Contains(index)) {
 					bufferData[dataIndex] = 0;
 				} else {
 					bufferData[dataIndex] = alphaData[index] << 24;
@@ -148,18 +150,16 @@ public partial class PCXToGodot : GodotObject {
 
 	private static int[] loadPalette(byte[,] palette, bool shadows) {
 		int Red, Green, Blue;
-		int Alpha = 255 << 24;
 		int[] ColorData = new int[256];
 
 		for (int i = 0; i < 256; i++) {
 			Red = palette[i, 0];
 			Green = palette[i, 1] << 8;
 			Blue = palette[i, 2] << 16;
-			ColorData[i] = Red + Green + Blue + Alpha;
-		}
 
-		for (int i = CIV3_TRANSPARENCY_START; i < 256; i++) {
-			ColorData[i] &= 0x00ffffff;
+			int Alpha = transparentColorIndexes.Contains(i) ? 0 : 255 << 24;
+
+			ColorData[i] = Red + Green + Blue + Alpha;
 		}
 
 		if (shadows) {

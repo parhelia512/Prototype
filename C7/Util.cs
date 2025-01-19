@@ -241,6 +241,23 @@ public partial class Util {
 		ColorCache[colorIndex] = color;
 		return color;
 	}
+	
+	// Replaces image colors based on a given dictionary
+	public static Image TransformColors(Image origin, Dictionary<Color, Color> colorReplacements) {
+		Image result = (Image)origin.Duplicate();
+
+		for (int y = 0; y < origin.GetHeight(); ++y) {
+			for (int x = 0; x < origin.GetWidth(); ++x) {
+				Color origin_color = origin.GetPixel(x, y);
+
+				if (colorReplacements.TryGetValue(origin_color, out Color new_color)) {
+					result.SetPixel(x, y, new_color);
+				}
+			}
+		}
+		
+		return result;
+	}
 
 	// Creates a texture from raw palette data. The data must be 256 pixels by 3 channels. Returns a 16x16 unfiltered RGB texture.
 	public static ImageTexture createPaletteTexture(byte[,] raw) {

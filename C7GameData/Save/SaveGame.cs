@@ -158,6 +158,8 @@ namespace C7GameData.Save {
 			data.healRateInHostileField = HealRates["hostile_field"];
 			data.healRateInCity = HealRates["city"];
 
+			data.UpdateTileOwners();
+
 			return data;
 		}
 
