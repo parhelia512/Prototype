@@ -29,7 +29,7 @@ public partial class AnimationManager {
 	}
 
 	public static string BaseAnimationKey(UnitPrototype unit, MapUnit.AnimatedAction action) {
-		return BaseAnimationKey(unit.name, action);
+		return BaseAnimationKey(unit.artName, action);
 	}
 
 	public static string AnimationKey(string baseKey, TileDirection direction) {
@@ -80,8 +80,8 @@ public partial class AnimationManager {
 	}
 
 	public string getUnitFlicFilepath(UnitPrototype unit, MapUnit.AnimatedAction action) {
-		string directory = string.Format("Art/Units/{0}", unit.name);
-		IniData ini = getUnitINIData(unit.name);
+		string directory = string.Format("Art/Units/{0}", unit.artName);
+		IniData ini = getUnitINIData(unit.artName);
 		string filename = getFlicFileName(ini, action);
 		return directory.PathJoin(filename);
 	}
@@ -136,7 +136,7 @@ public partial class AnimationManager {
 	}
 
 	public bool LoadAnimation(UnitPrototype unit, MapUnit.AnimatedAction action) {
-		string name = BaseAnimationKey(unit.name, action);
+		string name = BaseAnimationKey(unit.artName, action);
 		string testName = AnimationKey(name, TileDirection.NORTH);
 		if (spriteFrames.HasAnimation(testName) && tintFrames.HasAnimation(testName)) {
 			return false;
@@ -192,8 +192,8 @@ public partial class C7Animation {
 
 	public C7Animation(AnimationManager civ3AnimData, UnitPrototype unit, MapUnit.AnimatedAction action) {
 		this.animationManager = civ3AnimData;
-		this.folderPath = "Art/Units/" + unit.name;
-		this.iniFileName = unit.name + ".ini";
+		this.folderPath = "Art/Units/" + unit.artName;
+		this.iniFileName = unit.artName + ".ini";
 		this.action = action;
 		this.unit = unit;
 	}

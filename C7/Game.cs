@@ -82,13 +82,28 @@ public partial class Game : Node2D {
 			civ3AnimData = new AnimationManager(animSoundPlayer);
 			animTracker = new AnimationTracker(civ3AnimData);
 
-			controller = CreateGame.createGame(Global.LoadGamePath, Global.DefaultBicPath); // Spawns engine thread
+			controller = CreateGame.createGame(Global.LoadGamePath, Global.DefaultBicPath, (scenarioSearchPath) => {
+				// WHen the game loading logic tries to load the PediaIcons file, set the
+				// scenario search path and then use our Civ3MediaPath searching logic to
+				// find the correct version of the file.
+				//
+				// This weird bit of indirection is necessary because the C7GameData project
+				// can't depend on the C7 project without a circular dependency, and the
+				// search logic has a Godot dependency, so it doesn't make sense to live
+				// in the C7GameData project.
+				//
+				// This also helps ensure the weird stateful behavior of the Util class works,
+				// since the search path/mod path is a static global variable - we want to
+				// be sure it is always set properly, so doing it during game creation
+				// is reasonable.
+				Util.setModPath(scenarioSearchPath);
+				log.Debug("RelativeModPath ", scenarioSearchPath);
+				return Util.Civ3MediaPath("Text/PediaIcons.txt");
+			}); // Spawns engine thread
 			Global.ResetLoadGamePath();
 
 			using (var gameDataAccess = new UIGameDataAccess()) {
 				GameMap map = gameDataAccess.gameData.map;
-				Util.setModPath(gameDataAccess.gameData.scenarioSearchPath);
-				log.Debug("RelativeModPath ", map.RelativeModPath);
 				mapView = new MapView(this, map.numTilesWide, map.numTilesTall, map.wrapHorizontally, map.wrapVertically);
 				AddChild(mapView);
 

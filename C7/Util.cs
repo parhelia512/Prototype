@@ -67,8 +67,22 @@ public partial class Util {
 			exactCaseRoot = ProjectSettings.GlobalizePath(exactCaseRoot);
 		}
 
-		// First try the basic built-in File.Exists method since it's adequate in most cases.
+		// If we aren't on windows, fix any windows path separators that may
+		// appear in the path. This is particularly relevant for scenarios,
+		//where the mod path frequently looks like  '..\conquests\Rise of Rome'.
+		//
+		// This is a bit of a hack, but it fixes scenario loading.
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+			ignoredCaseExtension = ignoredCaseExtension.Replace('\\', '/');
+		}
+
+		// First try the basic built-in File.Exists method since it's adequate
+		// in most cases.
+		//
+		// We use GetFullPath to handle any ../Conquests/<scenario name> bits
+		// in the path, which happens with scenario mod paths.
 		string fullPath = System.IO.Path.Combine(exactCaseRoot, ignoredCaseExtension);
+		fullPath = System.IO.Path.GetFullPath(fullPath);
 		if (System.IO.File.Exists(fullPath))
 			return fullPath;
 
@@ -78,11 +92,21 @@ public partial class Util {
 		if ((!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) &&
 			System.IO.Directory.Exists(exactCaseRoot)) {
 			tr = exactCaseRoot;
+
+			// We need to update the ignored case extension before doing this
+			// search, in case the ignored case extension previously had
+			// ../Conquests/<scenario name> in it.
+			//
+			// If we didn't do this we'd end up with ".." as one of our steps
+			// below, which derails the searching logic.
+			ignoredCaseExtension = fullPath.Substring(exactCaseRoot.Length);
+
 			foreach (string step in ignoredCaseExtension.Replace('\\', '/').Split('/')) {
 				string goal = System.IO.Path.Combine(tr, step);
-				List<string> matches = System.IO.Directory.EnumerateFileSystemEntries(tr, "*")
+				List<string> matches = System.IO.Directory.EnumerateFileSystemEntries(tr, "**")
 					.Where(p => p.Equals(goal, StringComparison.CurrentCultureIgnoreCase))
 					.ToList();
+
 				if (matches.Count > 0)
 					tr = matches[0];
 				else {
@@ -102,6 +126,11 @@ public partial class Util {
 	private static string modPath;
 	public static void setModPath(string modPathParam) {
 		modPath = modPathParam;
+		// Specifically fix up the conquests mod path for case sensitive
+		// platforms. If we didn't do this then our path searching logic below
+		// would find the default PediaIcons.txt instead of the scenario
+		// specific file.
+		modPath = modPath.Replace("\\conquests\\", "\\Conquests\\");
 	}
 
 	/// <summary>
