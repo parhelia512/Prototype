@@ -1,10 +1,9 @@
 using Godot;
 
 [GlobalClass]
-public partial class Civ3FileDialog : FileDialog
+public partial class Civ3FileDialog : FileDialog {
 	// Use this instead of a scene-based FileDialog to avoid it saving the local dev's last browsed folder in the repo
 	// While instantiated it will return to the last-accessed folder when reopened
-	{
 	public Civ3FileDialog() {
 		FileMode = FileDialog.FileModeEnum.OpenFile;
 	}

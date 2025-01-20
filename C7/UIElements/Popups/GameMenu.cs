@@ -1,7 +1,14 @@
 using System;
 using Godot;
+using Serilog;
 
 public partial class GameMenu : Popup {
+	private ILogger log;
+
+	Civ3FileDialog GameMenuLoadDialog;
+
+	// An object for passing information (like save file paths) between scenes.
+	GlobalSingleton Global;
 
 	public GameMenu() {
 		alignment = BoxContainer.AlignmentMode.Center;
@@ -10,6 +17,7 @@ public partial class GameMenu : Popup {
 
 	public override void _Ready() {
 		base._Ready();
+		log = LogManager.ForContext<GameMenu>();
 
 		AddTexture(370, 300);
 		AddBackground(370, 300);
@@ -23,6 +31,13 @@ public partial class GameMenu : Popup {
 		AddButton("Retire (Ctrl-Q)", 160, retire);
 		AddButton("Save Game (Ctrl-S)", 185, save);
 		AddButton("Quit Game (ESC)", 210, quit);
+
+		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
+
+		GameMenuLoadDialog = new Civ3FileDialog();
+		AddChild(GameMenuLoadDialog);
+		GameMenuLoadDialog.SetDirectory(@"Conquests/Saves");
+		GameMenuLoadDialog.FileSelected += OnFileSelected;
 	}
 
 	private void save() {
@@ -38,7 +53,11 @@ public partial class GameMenu : Popup {
 	}
 
 	private void load() {
-		throw new NotImplementedException();
+		log.Information("load game button pressed");
+		// TODO: The main menu does sound playing but we don't know our path in
+		// the scene, which makes this hard.
+		// PlayButtonPressedSound();
+		GameMenuLoadDialog.Popup();
 	}
 
 	private void quit() {
@@ -53,4 +72,9 @@ public partial class GameMenu : Popup {
 		GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 	}
 
+	private void OnFileSelected(string path) {
+		log.Information($"loading {path}");
+		Global.LoadGamePath = path;
+		GetTree().ChangeSceneToFile("res://C7Game.tscn");
+	}
 }

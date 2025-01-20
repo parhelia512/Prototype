@@ -241,7 +241,7 @@ public partial class Util {
 		ColorCache[colorIndex] = color;
 		return color;
 	}
-	
+
 	// Replaces image colors based on a given dictionary
 	public static Image TransformColors(Image origin, Dictionary<Color, Color> colorReplacements) {
 		Image result = (Image)origin.Duplicate();
@@ -255,7 +255,7 @@ public partial class Util {
 				}
 			}
 		}
-		
+
 		return result;
 	}
 
