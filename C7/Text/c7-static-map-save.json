@@ -63259,5 +63259,1057 @@
     "neutral_field": 1,
     "hostile_field": 0,
     "city": 2
-  }
+  },
+  "techs": [
+    {
+      "name": "Bronze Working",
+      "civilopediaEntry": "TECH_Bronze_Working",
+      "era": "Ancient Times",
+      "id": "tech-1",
+      "cost": 3,
+      "advanceIcon": 6,
+      "x": 82,
+      "y": 72
+    },
+    {
+      "name": "Masonry",
+      "civilopediaEntry": "TECH_Masonry",
+      "era": "Ancient Times",
+      "id": "tech-2",
+      "cost": 4,
+      "advanceIcon": 40,
+      "x": 85,
+      "y": 182
+    },
+    {
+      "name": "Alphabet",
+      "civilopediaEntry": "TECH_Alphabet",
+      "era": "Ancient Times",
+      "id": "tech-3",
+      "cost": 5,
+      "advanceIcon": 1,
+      "x": 85,
+      "y": 290
+    },
+    {
+      "name": "Pottery",
+      "civilopediaEntry": "TECH_Pottery",
+      "era": "Ancient Times",
+      "id": "tech-4",
+      "cost": 2,
+      "advanceIcon": 57,
+      "x": 85,
+      "y": 391
+    },
+    {
+      "name": "The Wheel",
+      "civilopediaEntry": "TECH_The_Wheel",
+      "era": "Ancient Times",
+      "id": "tech-5",
+      "cost": 4,
+      "advanceIcon": 78,
+      "x": 85,
+      "y": 473
+    },
+    {
+      "name": "Warrior Code",
+      "civilopediaEntry": "TECH_Warrior_Code",
+      "era": "Ancient Times",
+      "id": "tech-6",
+      "cost": 3,
+      "advanceIcon": 81,
+      "x": 85,
+      "y": 554
+    },
+    {
+      "name": "Ceremonial Burial",
+      "civilopediaEntry": "TECH_Ceremonial_Burial",
+      "era": "Ancient Times",
+      "id": "tech-7",
+      "cost": 2,
+      "advanceIcon": 7,
+      "x": 85,
+      "y": 638
+    },
+    {
+      "name": "Iron Working",
+      "civilopediaEntry": "TECH_Iron_Working",
+      "era": "Ancient Times",
+      "id": "tech-8",
+      "cost": 6,
+      "advanceIcon": 35,
+      "x": 279,
+      "y": 76,
+      "prerequisites": [
+        "tech-1"
+      ]
+    },
+    {
+      "name": "Writing",
+      "civilopediaEntry": "TECH_Writing",
+      "era": "Ancient Times",
+      "id": "tech-9",
+      "cost": 8,
+      "advanceIcon": 82,
+      "x": 257,
+      "y": 332,
+      "prerequisites": [
+        "tech-3"
+      ]
+    },
+    {
+      "name": "Mysticism",
+      "civilopediaEntry": "TECH_Mysticism",
+      "era": "Ancient Times",
+      "id": "tech-10",
+      "cost": 4,
+      "advanceIcon": 50,
+      "x": 275,
+      "y": 632,
+      "prerequisites": [
+        "tech-7"
+      ]
+    },
+    {
+      "name": "Mathematics",
+      "civilopediaEntry": "TECH_Mathematics",
+      "era": "Ancient Times",
+      "id": "tech-11",
+      "cost": 8,
+      "advanceIcon": 41,
+      "x": 327,
+      "y": 182,
+      "prerequisites": [
+        "tech-2",
+        "tech-3"
+      ]
+    },
+    {
+      "name": "Philosophy",
+      "civilopediaEntry": "TECH_Philosophy",
+      "era": "Ancient Times",
+      "id": "tech-12",
+      "cost": 6,
+      "advanceIcon": 54,
+      "x": 499,
+      "y": 216,
+      "prerequisites": [
+        "tech-9"
+      ]
+    },
+    {
+      "name": "Code of Laws",
+      "civilopediaEntry": "TECH_Code_of_Laws",
+      "era": "Ancient Times",
+      "id": "tech-13",
+      "cost": 10,
+      "advanceIcon": 10,
+      "x": 469,
+      "y": 298,
+      "prerequisites": [
+        "tech-9"
+      ]
+    },
+    {
+      "name": "Literature",
+      "civilopediaEntry": "TECH_Literature",
+      "era": "Ancient Times",
+      "id": "tech-14",
+      "cost": 10,
+      "advanceIcon": 36,
+      "x": 469,
+      "y": 379,
+      "prerequisites": [
+        "tech-9"
+      ]
+    },
+    {
+      "name": "Map Making",
+      "civilopediaEntry": "TECH_Map_Making",
+      "era": "Ancient Times",
+      "id": "tech-15",
+      "cost": 12,
+      "advanceIcon": 39,
+      "x": 469,
+      "y": 459,
+      "prerequisites": [
+        "tech-9",
+        "tech-4"
+      ]
+    },
+    {
+      "name": "Horseback Riding",
+      "civilopediaEntry": "TECH_Horseback_Riding",
+      "era": "Ancient Times",
+      "id": "tech-16",
+      "cost": 5,
+      "advanceIcon": 31,
+      "x": 469,
+      "y": 544,
+      "prerequisites": [
+        "tech-5",
+        "tech-6"
+      ]
+    },
+    {
+      "name": "Polytheism",
+      "civilopediaEntry": "TECH_Polytheism",
+      "era": "Ancient Times",
+      "id": "tech-17",
+      "cost": 12,
+      "advanceIcon": 56,
+      "x": 467,
+      "y": 635,
+      "prerequisites": [
+        "tech-10"
+      ]
+    },
+    {
+      "name": "Currency",
+      "civilopediaEntry": "TECH_Currency",
+      "era": "Ancient Times",
+      "id": "tech-18",
+      "cost": 16,
+      "advanceIcon": 15,
+      "x": 636,
+      "y": 175,
+      "prerequisites": [
+        "tech-11"
+      ]
+    },
+    {
+      "name": "The Republic",
+      "civilopediaEntry": "TECH_The_Republic",
+      "era": "Ancient Times",
+      "id": "tech-19",
+      "cost": 28,
+      "advanceIcon": 77,
+      "x": 680,
+      "y": 278,
+      "prerequisites": [
+        "tech-12",
+        "tech-13"
+      ]
+    },
+    {
+      "name": "Monarchy",
+      "civilopediaEntry": "TECH_Monarchy",
+      "era": "Ancient Times",
+      "id": "tech-20",
+      "cost": 24,
+      "advanceIcon": 46,
+      "x": 680,
+      "y": 591,
+      "prerequisites": [
+        "tech-6",
+        "tech-17"
+      ]
+    },
+    {
+      "name": "Construction",
+      "civilopediaEntry": "TECH_Construction",
+      "era": "Ancient Times",
+      "id": "tech-21",
+      "cost": 20,
+      "advanceIcon": 14,
+      "x": 611,
+      "y": 70,
+      "prerequisites": [
+        "tech-8",
+        "tech-11"
+      ]
+    },
+    {
+      "name": "Monotheism",
+      "civilopediaEntry": "TECH_Monotheism",
+      "era": "Middle Ages",
+      "id": "tech-22",
+      "cost": 36,
+      "advanceIcon": 47,
+      "x": 75,
+      "y": 180
+    },
+    {
+      "name": "Feudalism",
+      "civilopediaEntry": "TECH_Feudalism",
+      "era": "Middle Ages",
+      "id": "tech-23",
+      "cost": 32,
+      "advanceIcon": 24,
+      "x": 73,
+      "y": 398
+    },
+    {
+      "name": "Engineering",
+      "civilopediaEntry": "TECH_Engineering",
+      "era": "Middle Ages",
+      "id": "tech-24",
+      "cost": 36,
+      "advanceIcon": 22,
+      "x": 73,
+      "y": 610
+    },
+    {
+      "name": "Theology",
+      "civilopediaEntry": "TECH_Theology",
+      "era": "Middle Ages",
+      "id": "tech-25",
+      "cost": 40,
+      "advanceIcon": 79,
+      "x": 241,
+      "y": 180,
+      "prerequisites": [
+        "tech-22"
+      ]
+    },
+    {
+      "name": "Chivalry",
+      "civilopediaEntry": "TECH_Chivalry",
+      "era": "Middle Ages",
+      "id": "tech-26",
+      "cost": 32,
+      "advanceIcon": 9,
+      "x": 210,
+      "y": 295,
+      "prerequisites": [
+        "tech-22",
+        "tech-23"
+      ]
+    },
+    {
+      "name": "Invention",
+      "civilopediaEntry": "TECH_Invention",
+      "era": "Middle Ages",
+      "id": "tech-27",
+      "cost": 44,
+      "advanceIcon": 34,
+      "x": 209,
+      "y": 531,
+      "prerequisites": [
+        "tech-23",
+        "tech-24"
+      ]
+    },
+    {
+      "name": "Printing Press",
+      "civilopediaEntry": "TECH_Printing_Press",
+      "era": "Middle Ages",
+      "id": "tech-28",
+      "cost": 36,
+      "advanceIcon": 58,
+      "x": 432,
+      "y": 180,
+      "prerequisites": [
+        "tech-25"
+      ]
+    },
+    {
+      "name": "Music Theory",
+      "civilopediaEntry": "TECH_Music_Theory",
+      "era": "Middle Ages",
+      "id": "tech-29",
+      "cost": 40,
+      "advanceIcon": 49,
+      "x": 430,
+      "y": 287,
+      "prerequisites": [
+        "tech-30"
+      ]
+    },
+    {
+      "name": "Education",
+      "civilopediaEntry": "TECH_Education",
+      "era": "Middle Ages",
+      "id": "tech-30",
+      "cost": 44,
+      "advanceIcon": 19,
+      "x": 331,
+      "y": 374,
+      "prerequisites": [
+        "tech-25"
+      ]
+    },
+    {
+      "name": "Gunpowder",
+      "civilopediaEntry": "TECH_Gunpowder",
+      "era": "Middle Ages",
+      "id": "tech-31",
+      "cost": 48,
+      "advanceIcon": 30,
+      "x": 388,
+      "y": 531,
+      "prerequisites": [
+        "tech-27"
+      ]
+    },
+    {
+      "name": "Banking",
+      "civilopediaEntry": "TECH_Banking",
+      "era": "Middle Ages",
+      "id": "tech-32",
+      "cost": 52,
+      "advanceIcon": 5,
+      "x": 561,
+      "y": 338,
+      "prerequisites": [
+        "tech-30"
+      ]
+    },
+    {
+      "name": "Astronomy",
+      "civilopediaEntry": "TECH_Astronomy",
+      "era": "Middle Ages",
+      "id": "tech-33",
+      "cost": 56,
+      "advanceIcon": 3,
+      "x": 526,
+      "y": 429,
+      "prerequisites": [
+        "tech-30"
+      ]
+    },
+    {
+      "name": "Chemistry",
+      "civilopediaEntry": "TECH_Chemistry",
+      "era": "Middle Ages",
+      "id": "tech-34",
+      "cost": 60,
+      "advanceIcon": 8,
+      "x": 562,
+      "y": 531,
+      "prerequisites": [
+        "tech-31"
+      ]
+    },
+    {
+      "name": "Democracy",
+      "civilopediaEntry": "TECH_Democracy",
+      "era": "Middle Ages",
+      "id": "tech-35",
+      "cost": 68,
+      "advanceIcon": 16,
+      "x": 606,
+      "y": 180,
+      "prerequisites": [
+        "tech-28",
+        "tech-32"
+      ]
+    },
+    {
+      "name": "Economics",
+      "civilopediaEntry": "TECH_Economics",
+      "era": "Middle Ages",
+      "id": "tech-36",
+      "cost": 56,
+      "advanceIcon": 18,
+      "x": 735,
+      "y": 276,
+      "prerequisites": [
+        "tech-32"
+      ]
+    },
+    {
+      "name": "Navigation",
+      "civilopediaEntry": "TECH_Navigation",
+      "era": "Middle Ages",
+      "id": "tech-37",
+      "cost": 56,
+      "advanceIcon": 52,
+      "x": 766,
+      "y": 361,
+      "prerequisites": [
+        "tech-33"
+      ]
+    },
+    {
+      "name": "Physics",
+      "civilopediaEntry": "TECH_Physics",
+      "era": "Middle Ages",
+      "id": "tech-38",
+      "cost": 64,
+      "advanceIcon": 55,
+      "x": 703,
+      "y": 458,
+      "prerequisites": [
+        "tech-33",
+        "tech-34"
+      ]
+    },
+    {
+      "name": "Metallurgy",
+      "civilopediaEntry": "TECH_Metallurgy",
+      "era": "Middle Ages",
+      "id": "tech-39",
+      "cost": 64,
+      "advanceIcon": 43,
+      "x": 590,
+      "y": 629,
+      "prerequisites": [
+        "tech-34"
+      ]
+    },
+    {
+      "name": "Free Artistry",
+      "civilopediaEntry": "TECH_Free_Artistry",
+      "era": "Middle Ages",
+      "id": "tech-40",
+      "cost": 52,
+      "advanceIcon": 27,
+      "x": 686,
+      "y": 83,
+      "prerequisites": [
+        "tech-35"
+      ]
+    },
+    {
+      "name": "Theory of Gravity",
+      "civilopediaEntry": "TECH_Theory_of_Gravity",
+      "era": "Middle Ages",
+      "id": "tech-41",
+      "cost": 68,
+      "advanceIcon": 80,
+      "x": 850,
+      "y": 440,
+      "prerequisites": [
+        "tech-38"
+      ]
+    },
+    {
+      "name": "Magnetism",
+      "civilopediaEntry": "TECH_Magnetism",
+      "era": "Middle Ages",
+      "id": "tech-42",
+      "cost": 68,
+      "advanceIcon": 37,
+      "x": 786,
+      "y": 533,
+      "prerequisites": [
+        "tech-38"
+      ]
+    },
+    {
+      "name": "Military Tradition",
+      "civilopediaEntry": "TECH_Military_Tradition",
+      "era": "Middle Ages",
+      "id": "tech-43",
+      "cost": 64,
+      "advanceIcon": 44,
+      "x": 807,
+      "y": 633,
+      "prerequisites": [
+        "tech-39"
+      ]
+    },
+    {
+      "name": "Nationalism",
+      "civilopediaEntry": "TECH_Nationalism",
+      "era": "Industrial Ages",
+      "id": "tech-44",
+      "cost": 120,
+      "advanceIcon": 51,
+      "x": 75,
+      "y": 116
+    },
+    {
+      "name": "Steam Power",
+      "civilopediaEntry": "TECH_Steam_Power",
+      "era": "Industrial Ages",
+      "id": "tech-45",
+      "cost": 120,
+      "advanceIcon": 71,
+      "x": 73,
+      "y": 369
+    },
+    {
+      "name": "Medicine",
+      "civilopediaEntry": "TECH_Medicine",
+      "era": "Industrial Ages",
+      "id": "tech-46",
+      "cost": 100,
+      "advanceIcon": 42,
+      "x": 76,
+      "y": 548
+    },
+    {
+      "name": "Communism",
+      "civilopediaEntry": "TECH_Communism",
+      "era": "Industrial Ages",
+      "id": "tech-47",
+      "cost": 120,
+      "advanceIcon": 12,
+      "x": 325,
+      "y": 77,
+      "prerequisites": [
+        "tech-44"
+      ]
+    },
+    {
+      "name": "Industrialization",
+      "civilopediaEntry": "TECH_Industrialization",
+      "era": "Industrial Ages",
+      "id": "tech-48",
+      "cost": 120,
+      "advanceIcon": 32,
+      "x": 225,
+      "y": 255,
+      "prerequisites": [
+        "tech-45"
+      ]
+    },
+    {
+      "name": "Electricity",
+      "civilopediaEntry": "TECH_Electricity",
+      "era": "Industrial Ages",
+      "id": "tech-49",
+      "cost": 140,
+      "advanceIcon": 20,
+      "x": 204,
+      "y": 464,
+      "prerequisites": [
+        "tech-45"
+      ]
+    },
+    {
+      "name": "Scientific Method",
+      "civilopediaEntry": "TECH_Scientific_Method",
+      "era": "Industrial Ages",
+      "id": "tech-50",
+      "cost": 100,
+      "advanceIcon": 67,
+      "x": 315,
+      "y": 549,
+      "prerequisites": [
+        "tech-46",
+        "tech-49"
+      ]
+    },
+    {
+      "name": "Sanitation",
+      "civilopediaEntry": "TECH_Sanitation",
+      "era": "Industrial Ages",
+      "id": "tech-51",
+      "cost": 90,
+      "advanceIcon": 65,
+      "x": 202,
+      "y": 632,
+      "prerequisites": [
+        "tech-46"
+      ]
+    },
+    {
+      "name": "Espionage",
+      "civilopediaEntry": "TECH_Espionage",
+      "era": "Industrial Ages",
+      "id": "tech-52",
+      "cost": 90,
+      "advanceIcon": 23,
+      "x": 325,
+      "y": 169,
+      "prerequisites": [
+        "tech-44",
+        "tech-48"
+      ]
+    },
+    {
+      "name": "The Corporation",
+      "civilopediaEntry": "TECH_The_Corporation",
+      "era": "Industrial Ages",
+      "id": "tech-53",
+      "cost": 100,
+      "advanceIcon": 75,
+      "x": 304,
+      "y": 345,
+      "prerequisites": [
+        "tech-48"
+      ]
+    },
+    {
+      "name": "Refining",
+      "civilopediaEntry": "TECH_Refining",
+      "era": "Industrial Ages",
+      "id": "tech-54",
+      "cost": 160,
+      "advanceIcon": 61,
+      "x": 433,
+      "y": 245,
+      "prerequisites": [
+        "tech-53"
+      ]
+    },
+    {
+      "name": "Steel",
+      "civilopediaEntry": "TECH_Steel",
+      "era": "Industrial Ages",
+      "id": "tech-55",
+      "cost": 140,
+      "advanceIcon": 72,
+      "x": 409,
+      "y": 427,
+      "prerequisites": [
+        "tech-53"
+      ]
+    },
+    {
+      "name": "Atomic Theory",
+      "civilopediaEntry": "TECH_Atomic_Theory",
+      "era": "Industrial Ages",
+      "id": "tech-56",
+      "cost": 200,
+      "advanceIcon": 4,
+      "x": 466,
+      "y": 598,
+      "prerequisites": [
+        "tech-50"
+      ]
+    },
+    {
+      "name": "Combustion",
+      "civilopediaEntry": "TECH_Combustion",
+      "era": "Industrial Ages",
+      "id": "tech-57",
+      "cost": 160,
+      "advanceIcon": 11,
+      "x": 518,
+      "y": 335,
+      "prerequisites": [
+        "tech-54",
+        "tech-55"
+      ]
+    },
+    {
+      "name": "Replaceable Parts",
+      "civilopediaEntry": "TECH_Replaceable_Parts",
+      "era": "Industrial Ages",
+      "id": "tech-58",
+      "cost": 140,
+      "advanceIcon": 62,
+      "x": 513,
+      "y": 509,
+      "prerequisites": [
+        "tech-49"
+      ]
+    },
+    {
+      "name": "Flight",
+      "civilopediaEntry": "TECH_Flight",
+      "era": "Industrial Ages",
+      "id": "tech-59",
+      "cost": 180,
+      "advanceIcon": 26,
+      "x": 607,
+      "y": 179,
+      "prerequisites": [
+        "tech-57"
+      ]
+    },
+    {
+      "name": "Amphibious War",
+      "civilopediaEntry": "TECH_Amphibious_Warfare",
+      "era": "Industrial Ages",
+      "id": "tech-60",
+      "cost": 120,
+      "advanceIcon": 2,
+      "x": 689,
+      "y": 296,
+      "prerequisites": [
+        "tech-61"
+      ]
+    },
+    {
+      "name": "Mass Production",
+      "civilopediaEntry": "TECH_Mass_Production",
+      "era": "Industrial Ages",
+      "id": "tech-61",
+      "cost": 140,
+      "advanceIcon": 38,
+      "x": 654,
+      "y": 421,
+      "prerequisites": [
+        "tech-57",
+        "tech-58"
+      ]
+    },
+    {
+      "name": "Electronics",
+      "civilopediaEntry": "TECH_Electronics",
+      "era": "Industrial Ages",
+      "id": "tech-62",
+      "cost": 180,
+      "advanceIcon": 21,
+      "x": 621,
+      "y": 604,
+      "prerequisites": [
+        "tech-56"
+      ]
+    },
+    {
+      "name": "Motorized Transportation",
+      "civilopediaEntry": "TECH_Motorized_Transportation",
+      "era": "Industrial Ages",
+      "id": "tech-63",
+      "cost": 140,
+      "advanceIcon": 48,
+      "x": 741,
+      "y": 509,
+      "prerequisites": [
+        "tech-61"
+      ]
+    },
+    {
+      "name": "Advanced Flight",
+      "civilopediaEntry": "TECH_Advanced_Flight",
+      "era": "Industrial Ages",
+      "id": "tech-64",
+      "cost": 180,
+      "advanceIcon": 0,
+      "x": 812,
+      "y": 319,
+      "prerequisites": [
+        "tech-59",
+        "tech-62",
+        "tech-63"
+      ]
+    },
+    {
+      "name": "Rocketry",
+      "civilopediaEntry": "TECH_Rocketry",
+      "era": "Modern Times",
+      "id": "tech-65",
+      "cost": 240,
+      "advanceIcon": 64,
+      "x": 72,
+      "y": 239
+    },
+    {
+      "name": "Fission",
+      "civilopediaEntry": "TECH_Fission",
+      "era": "Modern Times",
+      "id": "tech-66",
+      "cost": 280,
+      "advanceIcon": 25,
+      "x": 72,
+      "y": 398
+    },
+    {
+      "name": "Computers",
+      "civilopediaEntry": "TECH_Computers",
+      "era": "Modern Times",
+      "id": "tech-67",
+      "cost": 260,
+      "advanceIcon": 13,
+      "x": 72,
+      "y": 567
+    },
+    {
+      "name": "Recycling",
+      "civilopediaEntry": "TECH_Recycling",
+      "era": "Modern Times",
+      "id": "tech-68",
+      "cost": 240,
+      "advanceIcon": 60,
+      "x": 239,
+      "y": 153,
+      "prerequisites": [
+        "tech-73"
+      ]
+    },
+    {
+      "name": "Space Flight",
+      "civilopediaEntry": "TECH_Space_Flight",
+      "era": "Modern Times",
+      "id": "tech-69",
+      "cost": 300,
+      "advanceIcon": 69,
+      "x": 254,
+      "y": 239,
+      "prerequisites": [
+        "tech-65"
+      ]
+    },
+    {
+      "name": "Nuclear Power",
+      "civilopediaEntry": "TECH_Nuclear_Power",
+      "era": "Modern Times",
+      "id": "tech-70",
+      "cost": 280,
+      "advanceIcon": 53,
+      "x": 266,
+      "y": 443,
+      "prerequisites": [
+        "tech-66"
+      ]
+    },
+    {
+      "name": "Superconductor",
+      "civilopediaEntry": "TECH_Superconductor",
+      "era": "Modern Times",
+      "id": "tech-71",
+      "cost": 300,
+      "advanceIcon": 73,
+      "x": 533,
+      "y": 274,
+      "prerequisites": [
+        "tech-66",
+        "tech-69"
+      ]
+    },
+    {
+      "name": "Miniaturization",
+      "civilopediaEntry": "TECH_Miniaturization",
+      "era": "Modern Times",
+      "id": "tech-72",
+      "cost": 320,
+      "advanceIcon": 45,
+      "x": 271,
+      "y": 570,
+      "prerequisites": [
+        "tech-67"
+      ]
+    },
+    {
+      "name": "Ecology",
+      "civilopediaEntry": "TECH_Ecology",
+      "era": "Modern Times",
+      "id": "tech-73",
+      "cost": 260,
+      "advanceIcon": 17,
+      "x": 72,
+      "y": 91
+    },
+    {
+      "name": "Synthetic Fibers",
+      "civilopediaEntry": "TECH_Synthetic_Fibers",
+      "era": "Modern Times",
+      "id": "tech-74",
+      "cost": 280,
+      "advanceIcon": 74,
+      "x": 415,
+      "y": 88,
+      "prerequisites": [
+        "tech-73"
+      ]
+    },
+    {
+      "name": "Satellites",
+      "civilopediaEntry": "TECH_Satellites",
+      "era": "Modern Times",
+      "id": "tech-75",
+      "cost": 260,
+      "advanceIcon": 66,
+      "x": 537,
+      "y": 382,
+      "prerequisites": [
+        "tech-69"
+      ]
+    },
+    {
+      "name": "The Laser",
+      "civilopediaEntry": "TECH_The_Laser",
+      "era": "Modern Times",
+      "id": "tech-76",
+      "cost": 280,
+      "advanceIcon": 76,
+      "x": 464,
+      "y": 505,
+      "prerequisites": [
+        "tech-70",
+        "tech-67"
+      ]
+    },
+    {
+      "name": "Genetics",
+      "civilopediaEntry": "TECH_Genetics",
+      "era": "Modern Times",
+      "id": "tech-77",
+      "cost": 320,
+      "advanceIcon": 29,
+      "x": 437,
+      "y": 625,
+      "prerequisites": [
+        "tech-72"
+      ]
+    },
+    {
+      "name": "Stealth",
+      "civilopediaEntry": "TECH_Stealth",
+      "era": "Modern Times",
+      "id": "tech-78",
+      "cost": 300,
+      "advanceIcon": 70,
+      "x": 630,
+      "y": 87,
+      "prerequisites": [
+        "tech-74"
+      ]
+    },
+    {
+      "name": "Smart Weapons",
+      "civilopediaEntry": "TECH_Smart_Weapons",
+      "era": "Modern Times",
+      "id": "tech-79",
+      "cost": 280,
+      "advanceIcon": 68,
+      "x": 682,
+      "y": 479,
+      "prerequisites": [
+        "tech-75",
+        "tech-76"
+      ]
+    },
+    {
+      "name": "Robotics",
+      "civilopediaEntry": "TECH_Robotics",
+      "era": "Modern Times",
+      "id": "tech-80",
+      "cost": 320,
+      "advanceIcon": 63,
+      "x": 663,
+      "y": 573,
+      "prerequisites": [
+        "tech-76",
+        "tech-72"
+      ]
+    },
+    {
+      "name": "Integrated Defense",
+      "civilopediaEntry": "TECH_Integrated_Defense",
+      "era": "Modern Times",
+      "id": "tech-81",
+      "cost": 360,
+      "advanceIcon": 33,
+      "x": 816,
+      "y": 376,
+      "prerequisites": [
+        "tech-71",
+        "tech-75",
+        "tech-79"
+      ]
+    },
+    {
+      "name": "Ironclads",
+      "civilopediaEntry": "TECH_Ironclads",
+      "era": "Industrial Ages",
+      "id": "tech-82",
+      "cost": 100,
+      "advanceIcon": -858993460,
+      "x": 105,
+      "y": 215,
+      "prerequisites": [
+        "tech-45"
+      ]
+    },
+    {
+      "name": "Fascism",
+      "civilopediaEntry": "TECH_Fascism",
+      "era": "Industrial Ages",
+      "id": "tech-83",
+      "cost": 130,
+      "advanceIcon": -858993460,
+      "x": 497,
+      "y": 115,
+      "prerequisites": [
+        "tech-44"
+      ]
+    }
+  ]
 }

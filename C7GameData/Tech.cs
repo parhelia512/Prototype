@@ -1,0 +1,47 @@
+using System.Collections.Generic;
+using C7GameData.Save;
+
+namespace C7GameData {
+	// The in-game representation of a tech that can be researched.
+	public class Tech {
+		public ID id;
+		public string Name { get; set; }
+		public string CivilopediaEntry { get; set; }
+		public int Cost;
+		public string Era { get; set; }
+		public int AdvanceIcon;
+
+		// The position of this tech within the tech advisor UI.
+		public int X;
+		public int Y;
+
+		public List<Tech> Prerequisites = new();
+
+		public C7GameData.Save.SaveTech ToSaveTech() {
+			C7GameData.Save.SaveTech result = new() {
+				id = this.id,
+				Name = this.Name,
+				CivilopediaEntry = this.CivilopediaEntry,
+				Cost = this.Cost,
+				Era = this.Era,
+				AdvanceIcon = this.AdvanceIcon,
+				X = this.X,
+				Y = this.Y
+			};
+
+			foreach (Tech t in Prerequisites) {
+				result.Prerequisites.Add(t.id);
+			}
+
+			return result;
+		}
+
+		public void FillInPrereqs(List<SaveTech> saveTechs, List<Tech> techs) {
+			SaveTech st = saveTechs.Find(st => st.id == this.id);
+
+			foreach (ID prereq in st.Prerequisites) {
+				this.Prerequisites.Add(techs.Find(t => t.id == prereq));
+			}
+		}
+	}
+}

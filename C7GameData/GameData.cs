@@ -22,6 +22,7 @@ namespace C7GameData {
 		internal List<Civilization> civilizations = new List<Civilization>();
 
 		public List<ExperienceLevel> experienceLevels = new List<ExperienceLevel>();
+		public List<Tech> techs = new();
 		public string defaultExperienceLevelKey;
 		public ExperienceLevel defaultExperienceLevel;
 

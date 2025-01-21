@@ -71,6 +71,7 @@ namespace C7GameData.Save {
 			save.HealRates["city"] = data.healRateInCity;
 			save.ScenarioSearchPath = data.scenarioSearchPath;
 			save.DefaultExperienceLevel = data.defaultExperienceLevelKey;
+			save.Techs = data.techs.ConvertAll(t => t.ToSaveTech());
 			return save;
 		}
 
@@ -116,6 +117,17 @@ namespace C7GameData.Save {
 
 			// add references to map tiles after units and cities are defined
 			populateGameDataTileUnitsAndCities(data);
+
+			// Fill in the list of techs and then backfill the prereqs.
+			//
+			// This is an N^2 approach, but doing a topological sort of the
+			// prereqs feels like overkill given how many techs are in a game.
+			foreach (SaveTech st in this.Techs) {
+				data.techs.Add(st.ToTechWithoutPrereqs());
+			}
+			foreach (Tech t in data.techs) {
+				t.FillInPrereqs(this.Techs, data.techs);
+			}
 
 			data.experienceLevels = ExperienceLevels;
 			data.barbarianInfo = BarbarianInfo;
@@ -178,6 +190,7 @@ namespace C7GameData.Save {
 		public List<Civilization> Civilizations = new List<Civilization>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
+		public List<SaveTech> Techs = new();
 		public string ScenarioSearchPath; // TODO: what is this
 		public void Save(string path) {
 			byte[] json = JsonSerializer.SerializeToUtf8Bytes(this, JsonOptions);
