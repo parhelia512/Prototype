@@ -51,6 +51,7 @@ namespace C7GameData {
 			save.HealRates["city"] = 2;
 			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
+			ImportTechs();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -592,6 +593,47 @@ namespace C7GameData {
 			barbInfo.basicBarbarianIndex = Rule.BasicBarbarianUnitType;
 			barbInfo.advancedBarbarianIndex = Rule.AdvancedBarbarianUnitType;
 			barbInfo.barbarianSeaUnitIndex = Rule.BarbarianSeaUnitType;
+		}
+
+		private void ImportTechs() {
+			BiqData theBiq = biq.Tech is null ? defaultBiq : biq;
+
+			// Pass one: create the techs without prereqs.
+			for (int i = 0; i < theBiq.Tech.Length; ++i) {
+				TECH t = theBiq.Tech[i];
+
+				SaveTech st = new() {
+					id = ids.CreateID("tech"),
+					Name = t.Name,
+					CivilopediaEntry = t.CivilopediaEntry,
+					Cost = t.Cost,
+					Era = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].Name,
+					AdvanceIcon = t.AdvanceIcon,
+					X = t.X,
+					Y = t.Y
+				};
+				save.Techs.Add(st);
+			}
+
+			// Pass two: set up the prereqs now that we can index into the list
+			// of techs.
+			for (int i = 0; i < theBiq.Tech.Length; ++i) {
+				TECH t = theBiq.Tech[i];
+				SaveTech st = save.Techs[i];
+
+				if (t.Prerequisite1 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite1].id);
+				}
+				if (t.Prerequisite2 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite2].id);
+				}
+				if (t.Prerequisite3 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite3].id);
+				}
+				if (t.Prerequisite4 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite3].id);
+				}
+			}
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {
