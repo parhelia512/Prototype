@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Serilog;
+using System.Collections.Generic;
 
 /**
  * Handles managing the advisor screens.
@@ -10,6 +11,13 @@ using Serilog;
 public partial class Advisors : CenterContainer {
 	private ILogger log = LogManager.ForContext<Advisors>();
 
+	private DomesticAdvisor domesticAdvisor;
+	private ScienceAdvisor scienceAdvisor;
+
+	// A list of all the non-null advisors, so we can hide them whenever we
+	// draw a different advisor.
+	private List<TextureRect> advisors = new();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		//Center the advisor container.  Following directions at https://docs.godotengine.org/en/stable/tutorials/gui/size_and_anchors.html?highlight=anchor
@@ -18,19 +26,10 @@ public partial class Advisors : CenterContainer {
 		this.Hide();
 	}
 
-	//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-	//  public override void _Process(float delta)
-	//  {
-	//
-	//  }
-
 	private void ShowLatestAdvisor() {
 		log.Debug("Received request to show latest advisor");
 
-		if (this.GetChildCount() == 0) {
-			DomesticAdvisor advisor = new DomesticAdvisor();
-			AddChild(advisor);
-		}
+		OnShowSpecificAdvisor("F1");
 		this.Show();
 	}
 
@@ -39,10 +38,28 @@ public partial class Advisors : CenterContainer {
 	}
 
 	private void OnShowSpecificAdvisor(string advisorType) {
+		// Hide any existing advisors so we can draw the requested one.
+		foreach (TextureRect tr in advisors) {
+			tr.Hide();
+		}
+
 		if (advisorType.Equals("F1")) {
-			if (this.GetChildCount() == 0) {
-				DomesticAdvisor advisor = new DomesticAdvisor();
-				AddChild(advisor);
+			if (domesticAdvisor == null) {
+				domesticAdvisor = new DomesticAdvisor();
+				advisors.Add(domesticAdvisor);
+				AddChild(domesticAdvisor);
+			} else {
+				domesticAdvisor.Show();
+			}
+			this.Show();
+		}
+		if (advisorType.Equals("F6")) {
+			if (scienceAdvisor == null) {
+				scienceAdvisor = new ScienceAdvisor();
+				advisors.Add(scienceAdvisor);
+				AddChild(scienceAdvisor);
+			} else {
+				scienceAdvisor.Show();
 			}
 			this.Show();
 		}
