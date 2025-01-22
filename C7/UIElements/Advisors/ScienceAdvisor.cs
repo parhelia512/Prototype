@@ -49,12 +49,6 @@ public partial class ScienceAdvisor : TextureRect {
 		AddChild(GoBackButton);
 		GoBackButton.Pressed += ReturnToMenu;
 
-		// TODO: Figure out how to pick which of the different sized tech boxes
-		// we should use for a given tech.
-		//
-		// NOTE: this pcx has 4 columns (discovered, planned, possible,
-		// not yet researchable), and 16 rows, 4 per era, with different sizes.
-		ImageTexture techBox = Util.LoadTextureFromPCX("Art/Advisors/techboxes.pcx", 1, 1, 180, 80);
 		using (UIGameDataAccess gameDataAccess = new()) {
 			List<Tech> techs = gameDataAccess.gameData.techs;
 
@@ -64,10 +58,7 @@ public partial class ScienceAdvisor : TextureRect {
 					continue;
 				}
 
-				// TODO: draw the icon, name, etc. Consider sticking that in
-				// its own class.
-				TextureButton techButton = new();
-				techButton.TextureNormal = techBox;
+				TechBox techButton = new(tech);
 				techButton.SetPosition(new Vector2(tech.X, tech.Y));
 				AddChild(techButton);
 			}
