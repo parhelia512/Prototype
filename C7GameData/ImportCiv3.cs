@@ -505,7 +505,7 @@ namespace C7GameData {
 					prototype.categories.Add("Air");
 				}
 				prototype.name = prto.Name;
-				prototype.artName = pediaIcons.GetArtName(prto.CivilopediaEntry);
+				prototype.artName = pediaIcons.GetUnitArtName(prto.CivilopediaEntry);
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;
@@ -638,7 +638,7 @@ namespace C7GameData {
 					CivilopediaEntry = t.CivilopediaEntry,
 					Cost = t.Cost,
 					Era = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].Name,
-					AdvanceIcon = t.AdvanceIcon,
+					SmallIconPath = t.Era == -1 ? "" : pediaIcons.GetTechIconPath(t.CivilopediaEntry),
 					X = t.X,
 					Y = t.Y
 				};

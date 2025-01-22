@@ -11,7 +11,10 @@ namespace C7GameData.Save {
 		public string CivilopediaEntry { get; set; }
 		public int Cost;
 		public string Era { get; set; }
-		public int AdvanceIcon;
+
+		// The path, like "Art\tech chooser\Icons\39-Mapmaking-small.pcx", of
+		// the small icon for this tech.
+		public string SmallIconPath;
 
 		// The position of this tech within the tech advisor UI.
 		public int X;
@@ -26,7 +29,7 @@ namespace C7GameData.Save {
 				CivilopediaEntry = this.CivilopediaEntry,
 				Cost = this.Cost,
 				Era = this.Era,
-				AdvanceIcon = this.AdvanceIcon,
+				SmallIconPath = this.SmallIconPath,
 				X = this.X,
 				Y = this.Y
 			};
