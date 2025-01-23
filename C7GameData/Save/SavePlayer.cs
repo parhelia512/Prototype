@@ -14,6 +14,9 @@ namespace C7GameData.Save {
 
 		public List<TileLocation> tileKnowledge = new List<TileLocation>();
 
+		// The list of techs known by this player.
+		public List<ID> knownTechs = new();
+
 		public int turnsUntilPriorityReevaluation = 0;
 
 		public Player ToPlayer(GameMap map, List<Civilization> civilizations) {
@@ -26,9 +29,15 @@ namespace C7GameData.Save {
 				civilization = civilization is not null ? civilizations.Find(civ => civ.name == civilization) : null,
 				cityNameIndex = cityNameIndex,
 				tileKnowledge = new TileKnowledge(),
+				knownTechs = knownTechs,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
 				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.x, tile.y));
+			}
+			foreach (ID techId in player.civilization.startingTechs) {
+				if (!player.knownTechs.Contains(techId)) {
+					player.knownTechs.Add(techId);
+				}
 			}
 			return player;
 		}
@@ -47,6 +56,7 @@ namespace C7GameData.Save {
 			cityNameIndex = player.cityNameIndex;
 			tileKnowledge = player.tileKnowledge.AllKnownTiles().ConvertAll(tile => new TileLocation(tile));
 			turnsUntilPriorityReevaluation = player.turnsUntilPriorityReevaluation;
+			knownTechs = player.knownTechs;
 		}
 	}
 }

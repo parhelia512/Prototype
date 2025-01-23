@@ -61588,6 +61588,10 @@
           "y": 45
         }
       ],
+      "knownTechs": [
+        "tech-3",
+        "tech-2"
+      ],
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61652,6 +61656,10 @@
           "y": 30
         }
       ],
+      "knownTechs": [
+        "tech-4",
+        "tech-2"
+      ],
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61711,6 +61719,10 @@
           "x": 60,
           "y": 62
         }
+      ],
+      "knownTechs": [
+        "tech-6",
+        "tech-4"
       ],
       "turnsUntilPriorityReevaluation": 0
     },
@@ -61775,6 +61787,10 @@
           "x": 76,
           "y": 48
         }
+      ],
+      "knownTechs": [
+        "tech-4",
+        "tech-2"
       ],
       "turnsUntilPriorityReevaluation": 0
     },
@@ -61844,6 +61860,10 @@
           "y": 75
         }
       ],
+      "knownTechs": [
+        "tech-1",
+        "tech-2"
+      ],
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61908,6 +61928,10 @@
           "y": 56
         }
       ],
+      "knownTechs": [
+        "tech-2",
+        "tech-4"
+      ],
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61967,6 +61991,10 @@
           "x": 46,
           "y": 78
         }
+      ],
+      "knownTechs": [
+        "tech-4",
+        "tech-3"
       ],
       "turnsUntilPriorityReevaluation": 0
     }
