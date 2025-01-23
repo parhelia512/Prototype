@@ -51,6 +51,7 @@ public partial class ScienceAdvisor : TextureRect {
 
 		using (UIGameDataAccess gameDataAccess = new()) {
 			List<Tech> techs = gameDataAccess.gameData.techs;
+			List<ID> knownTechs = gameDataAccess.gameData.GetHumanPlayers()[0].knownTechs;
 
 			foreach (Tech tech in techs) {
 				// TODO: handle other eras.
@@ -58,7 +59,22 @@ public partial class ScienceAdvisor : TextureRect {
 					continue;
 				}
 
-				TechBox techButton = new(tech);
+				// TODO: track the currently researched tech for kInProgress.
+				TechBox.TechState techState = TechBox.TechState.kBlocked;
+				if (knownTechs.Contains(tech.id)) {
+					techState = TechBox.TechState.kKnown;
+				} else {
+					bool prereqsKnown = true;
+					foreach (Tech prereq in tech.Prerequisites) {
+						if (!knownTechs.Contains(prereq.id)) {
+							prereqsKnown = false;
+							break;
+						}
+					}
+					techState = prereqsKnown ? TechBox.TechState.kPossible : TechBox.TechState.kBlocked;
+				}
+
+				TechBox techButton = new(tech, techState);
 				techButton.SetPosition(new Vector2(tech.X, tech.Y));
 				AddChild(techButton);
 			}
