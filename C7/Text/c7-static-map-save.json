@@ -62145,6 +62145,10 @@
         "Lauriacum",
         "Teurnia",
         "Curia"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-3"
       ]
     },
     {
@@ -62183,6 +62187,10 @@
         "Oryx",
         "Sebennytus",
         "Cairo"
+      ],
+      "startingTechs": [
+        "tech-7",
+        "tech-2"
       ]
     },
     {
@@ -62221,6 +62229,10 @@
         "Syracuse",
         "Apollonia",
         "Apolyton"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-1"
       ]
     },
     {
@@ -62257,6 +62269,10 @@
         "Telloh",
         "Nina",
         "Ebla"
+      ],
+      "startingTechs": [
+        "tech-1",
+        "tech-7"
       ]
     },
     {
@@ -62282,6 +62298,10 @@
         "Salzburg",
         "Dortmund",
         "Brandenburg"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-1"
       ]
     },
     {
@@ -62330,6 +62350,10 @@
         "Nizhniy Novgorod",
         "Suzdal\u0027",
         "Magnitogorsk"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-1"
       ]
     },
     {
@@ -62357,6 +62381,10 @@
         "Ningpo",
         "Paoting",
         "Yangchow"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-2"
       ]
     },
     {
@@ -62406,6 +62434,10 @@
         "Springfield",
         "Palo Alto",
         "Spokane"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-2"
       ]
     },
     {
@@ -62441,6 +62473,10 @@
         "Echigo",
         "Kozuke",
         "Sado"
+      ],
+      "startingTechs": [
+        "tech-5",
+        "tech-7"
       ]
     },
     {
@@ -62471,6 +62507,10 @@
         "Brest",
         "Bordeaux",
         "Rennes"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-2"
       ]
     },
     {
@@ -62497,6 +62537,10 @@
         "Indus",
         "Ganges",
         "Pune"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-7"
       ]
     },
     {
@@ -62535,6 +62579,10 @@
         "Bunyan",
         "Charsadda",
         "Ura Tyube"
+      ],
+      "startingTechs": [
+        "tech-1",
+        "tech-2"
       ]
     },
     {
@@ -62580,6 +62628,10 @@
         "Itzapalapa",
         "Ayotzinco",
         "Iztapam"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-4"
       ]
     },
     {
@@ -62605,6 +62657,10 @@
         "Isipezi",
         "Amatikulu",
         "Zunguin"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-4"
       ]
     },
     {
@@ -62643,6 +62699,10 @@
         "Oiogouen",
         "Skannayutenate",
         "Onnontare"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-3"
       ]
     },
     {
@@ -62681,6 +62741,10 @@
         "Berwick",
         "Bath",
         "The Mumbles"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-4"
       ]
     },
     {
@@ -62720,6 +62784,10 @@
         "Ondorhaan",
         "Saynshand",
         "Tumentsogt"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-4"
       ]
     },
     {
@@ -62760,6 +62828,10 @@
         "Burgos",
         "Vigo",
         "Badajoz"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-7"
       ]
     },
     {
@@ -62802,6 +62874,10 @@
         "Helsinki",
         "Keflavik",
         "Thunderfall"
+      ],
+      "startingTechs": [
+        "tech-6",
+        "tech-3"
       ]
     },
     {
@@ -62840,6 +62916,10 @@
         "Yozgat",
         "Tokat",
         "Van"
+      ],
+      "startingTechs": [
+        "tech-1",
+        "tech-2"
       ]
     },
     {
@@ -62879,6 +62959,10 @@
         "Noviomagus",
         "Arausio",
         "Durocortorum"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-7"
       ]
     },
     {
@@ -62916,6 +63000,10 @@
         "Tabuk",
         "Sana\u0027a",
         "Shihr"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-7"
       ]
     },
     {
@@ -62955,6 +63043,10 @@
         "Gigthis",
         "Tacape",
         "Zama"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-2"
       ]
     },
     {
@@ -62994,6 +63086,10 @@
         "Namwon",
         "Kumgang",
         "Oijongbu"
+      ],
+      "startingTechs": [
+        "tech-1",
+        "tech-3"
       ]
     },
     {
@@ -63028,6 +63124,10 @@
         "Babil",
         "Apisala",
         "Dabrum"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-1"
       ]
     },
     {
@@ -63062,6 +63162,10 @@
         "Katna",
         "Kultepe",
         "Alisar Huyuk"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-3"
       ]
     },
     {
@@ -63096,11 +63200,15 @@
         "Leerdam",
         "Hilversum",
         "Roosendaal"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-3"
       ]
     },
     {
       "name": "Portugal",
-      "noun": "Portugese",
+      "noun": "Portuguese",
       "leader": "Henry",
       "colorIndex": 8,
       "leaderGender": "male",
@@ -63141,6 +63249,10 @@
         "Atoleiros",
         "Mina",
         "Pederneira"
+      ],
+      "startingTechs": [
+        "tech-3",
+        "tech-4"
       ]
     },
     {
@@ -63175,6 +63287,10 @@
         "Ani",
         "Edessa",
         "Taormina"
+      ],
+      "startingTechs": [
+        "tech-1",
+        "tech-3"
       ]
     },
     {
@@ -63209,6 +63325,10 @@
         "Sausa",
         "Tambo Colorado",
         "Huaca"
+      ],
+      "startingTechs": [
+        "tech-4",
+        "tech-2"
       ]
     },
     {
@@ -63244,6 +63364,10 @@
         "Tazumal",
         "Cozumel",
         ""
+      ],
+      "startingTechs": [
+        "tech-2",
+        "tech-4"
       ]
     }
   ],
