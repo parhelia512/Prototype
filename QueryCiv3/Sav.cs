@@ -32,6 +32,7 @@ namespace QueryCiv3 {
 		public CLNY[] Clny;
 
 		public int[] CitiesPerContinent;
+		// Bit k of element i means that civ k knows tech i.
 		public IntBitmap[] KnownTechFlags;
 		public int[] GreatWonderCityIDs;
 		public bool[] GreatWondersBuilt;

@@ -27,6 +27,6 @@ namespace C7GameData {
 		public List<string> cityNames = new List<string>();
 
 		// The IDs of all the techs that this civ starts with.
-		public List<ID> startingTechs = new();
+		public HashSet<ID> startingTechs = new();
 	}
 }

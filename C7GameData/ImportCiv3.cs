@@ -5,7 +5,6 @@ using Serilog;
 using QueryCiv3;
 using QueryCiv3.Biq;
 using C7GameData.Save;
-using System.IO;
 
 /*
   This will read a Civ3 sav into C7 native format for immediate use or saving to native JSON save
@@ -370,6 +369,13 @@ namespace C7GameData {
 				// Put the player in the correct starting era.
 				player.eraCivilopediaName = theBiq.Eras[lead.InitialEra].CivilopediaEntry;
 
+				// Add the starting techs for scenarios.
+				if (theBiq.LeadTech != null) {
+					for (int j = 0; j < theBiq.LeadTech[leadIndex].Length; ++j) {
+						player.knownTechs.Add(save.Techs[theBiq.LeadTech[leadIndex][j]].id);
+					}
+				}
+
 				// Mark the first human playable civ as the human player.
 				if (lead.HumanPlayer == 1 && !foundHuman) {
  					player.human = true;
@@ -394,8 +400,16 @@ namespace C7GameData {
 										  /*cityNameIndex=*/leader.FoundedCities,
 										  /*era=*/theBiq.Eras[leader.Era].CivilopediaEntry);
 
+
 				// TODO: store non-negative values of leader.Researching,
 				// which indexes into save.Techs.
+
+				// Record any techs that this player knows.
+				for (int k = 0; k < savData.KnownTechFlags.Length; ++k) {
+					if (savData.KnownTechFlags[k][i]) {
+						player.knownTechs.Add(save.Techs[k].id);
+					}
+				}
 
 				save.Players.Add(player);
 				i++;
@@ -706,6 +720,19 @@ namespace C7GameData {
 				if (race.FreeTech4 > -1) {
 					sc.startingTechs.Add(save.Techs[race.FreeTech4].id);
 				}
+
+				// Remove any invalid starting techs. Some scenarios like
+				// Fall of Rome give starting techs without giving all of the
+				// prereqs, so they should be ignored.
+				sc.startingTechs.RemoveWhere(t => {
+					SaveTech st = save.Techs.Find(x => x.id == t);
+					foreach (ID prereqId in st.Prerequisites) {
+						if (!sc.startingTechs.Contains(prereqId)) {
+							return true;
+						}
+					}
+					return false;
+				});
 			}
 		}
 
