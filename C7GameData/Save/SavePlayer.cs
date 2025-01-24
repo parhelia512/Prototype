@@ -17,6 +17,12 @@ namespace C7GameData.Save {
 		// The list of techs known by this player.
 		public List<ID> knownTechs = new();
 
+		// The civilopedia name of the era this player is in.
+		//
+		// The civilopedia name is what is used for art lookups, not the actual
+		// name.
+		public string eraCivilopediaName;
+
 		public int turnsUntilPriorityReevaluation = 0;
 
 		public Player ToPlayer(GameMap map, List<Civilization> civilizations) {
@@ -30,6 +36,7 @@ namespace C7GameData.Save {
 				cityNameIndex = cityNameIndex,
 				tileKnowledge = new TileKnowledge(),
 				knownTechs = knownTechs,
+				eraCivilopediaName = eraCivilopediaName,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
 				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.x, tile.y));
@@ -57,6 +64,7 @@ namespace C7GameData.Save {
 			tileKnowledge = player.tileKnowledge.AllKnownTiles().ConvertAll(tile => new TileLocation(tile));
 			turnsUntilPriorityReevaluation = player.turnsUntilPriorityReevaluation;
 			knownTechs = player.knownTechs;
+			eraCivilopediaName = player.eraCivilopediaName;
 		}
 	}
 }

@@ -61592,6 +61592,7 @@
         "tech-3",
         "tech-2"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61660,6 +61661,7 @@
         "tech-4",
         "tech-2"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61724,6 +61726,7 @@
         "tech-6",
         "tech-4"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61792,6 +61795,7 @@
         "tech-4",
         "tech-2"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61864,6 +61868,7 @@
         "tech-1",
         "tech-2"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61932,6 +61937,7 @@
         "tech-2",
         "tech-4"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     },
     {
@@ -61996,6 +62002,7 @@
         "tech-4",
         "tech-3"
       ],
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0
     }
   ],
@@ -63431,7 +63438,7 @@
     {
       "name": "Bronze Working",
       "civilopediaEntry": "TECH_Bronze_Working",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-1",
       "cost": 3,
       "smallIconPath": "Art\\tech chooser\\Icons\\06-bronzeWorking-small.pcx",
@@ -63441,7 +63448,7 @@
     {
       "name": "Masonry",
       "civilopediaEntry": "TECH_Masonry",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-2",
       "cost": 4,
       "smallIconPath": "Art\\tech chooser\\Icons\\40-Masonry-small.pcx",
@@ -63451,7 +63458,7 @@
     {
       "name": "Alphabet",
       "civilopediaEntry": "TECH_Alphabet",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-3",
       "cost": 5,
       "smallIconPath": "Art\\tech chooser\\Icons\\01-alphabet-small.pcx",
@@ -63461,7 +63468,7 @@
     {
       "name": "Pottery",
       "civilopediaEntry": "TECH_Pottery",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-4",
       "cost": 2,
       "smallIconPath": "Art\\tech chooser\\Icons\\57-Pottery-small.pcx",
@@ -63471,7 +63478,7 @@
     {
       "name": "The Wheel",
       "civilopediaEntry": "TECH_The_Wheel",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-5",
       "cost": 4,
       "smallIconPath": "Art\\tech chooser\\Icons\\78-TheWheel-small.pcx",
@@ -63481,7 +63488,7 @@
     {
       "name": "Warrior Code",
       "civilopediaEntry": "TECH_Warrior_Code",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-6",
       "cost": 3,
       "smallIconPath": "Art\\tech chooser\\Icons\\81-Warrior Code-small.pcx",
@@ -63491,7 +63498,7 @@
     {
       "name": "Ceremonial Burial",
       "civilopediaEntry": "TECH_Ceremonial_Burial",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-7",
       "cost": 2,
       "smallIconPath": "Art\\tech chooser\\Icons\\07-CeremonialBurial-small.pcx",
@@ -63501,7 +63508,7 @@
     {
       "name": "Iron Working",
       "civilopediaEntry": "TECH_Iron_Working",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-8",
       "cost": 6,
       "smallIconPath": "Art\\tech chooser\\Icons\\35-Ironworking-small.pcx",
@@ -63514,7 +63521,7 @@
     {
       "name": "Writing",
       "civilopediaEntry": "TECH_Writing",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-9",
       "cost": 8,
       "smallIconPath": "Art\\tech chooser\\Icons\\82-writing-small.pcx",
@@ -63527,7 +63534,7 @@
     {
       "name": "Mysticism",
       "civilopediaEntry": "TECH_Mysticism",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-10",
       "cost": 4,
       "smallIconPath": "Art\\tech chooser\\Icons\\50-mysticism-small.pcx",
@@ -63540,7 +63547,7 @@
     {
       "name": "Mathematics",
       "civilopediaEntry": "TECH_Mathematics",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-11",
       "cost": 8,
       "smallIconPath": "Art\\tech chooser\\Icons\\41-mathematics-small.pcx",
@@ -63554,7 +63561,7 @@
     {
       "name": "Philosophy",
       "civilopediaEntry": "TECH_Philosophy",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-12",
       "cost": 6,
       "smallIconPath": "Art\\tech chooser\\Icons\\54-Philosophy-small.pcx",
@@ -63567,7 +63574,7 @@
     {
       "name": "Code of Laws",
       "civilopediaEntry": "TECH_Code_of_Laws",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-13",
       "cost": 10,
       "smallIconPath": "Art\\tech chooser\\Icons\\10-CodeOfLaws-small.pcx",
@@ -63580,7 +63587,7 @@
     {
       "name": "Literature",
       "civilopediaEntry": "TECH_Literature",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-14",
       "cost": 10,
       "smallIconPath": "Art\\tech chooser\\Icons\\36-literature-small.pcx",
@@ -63593,7 +63600,7 @@
     {
       "name": "Map Making",
       "civilopediaEntry": "TECH_Map_Making",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-15",
       "cost": 12,
       "smallIconPath": "Art\\tech chooser\\Icons\\39-Mapmaking-small.pcx",
@@ -63607,7 +63614,7 @@
     {
       "name": "Horseback Riding",
       "civilopediaEntry": "TECH_Horseback_Riding",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-16",
       "cost": 5,
       "smallIconPath": "Art\\tech chooser\\Icons\\31-HorsebackRiding-small.pcx",
@@ -63621,7 +63628,7 @@
     {
       "name": "Polytheism",
       "civilopediaEntry": "TECH_Polytheism",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-17",
       "cost": 12,
       "smallIconPath": "Art\\tech chooser\\Icons\\56-Polytheism-small.pcx",
@@ -63634,7 +63641,7 @@
     {
       "name": "Currency",
       "civilopediaEntry": "TECH_Currency",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-18",
       "cost": 16,
       "smallIconPath": "Art\\tech chooser\\Icons\\15-Currency-small.pcx",
@@ -63647,7 +63654,7 @@
     {
       "name": "The Republic",
       "civilopediaEntry": "TECH_The_Republic",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-19",
       "cost": 28,
       "smallIconPath": "Art\\tech chooser\\Icons\\77-republic-small.pcx",
@@ -63661,7 +63668,7 @@
     {
       "name": "Monarchy",
       "civilopediaEntry": "TECH_Monarchy",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-20",
       "cost": 24,
       "smallIconPath": "Art\\tech chooser\\Icons\\46-Monarchy-small.pcx",
@@ -63675,7 +63682,7 @@
     {
       "name": "Construction",
       "civilopediaEntry": "TECH_Construction",
-      "era": "Ancient Times",
+      "eraCivilopediaName": "ERAS_Ancient_Times",
       "id": "tech-21",
       "cost": 20,
       "smallIconPath": "Art\\tech chooser\\Icons\\14-Construction-small.pcx",
@@ -63689,7 +63696,7 @@
     {
       "name": "Monotheism",
       "civilopediaEntry": "TECH_Monotheism",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-22",
       "cost": 36,
       "smallIconPath": "Art\\tech chooser\\Icons\\47-Monotheism-small.pcx",
@@ -63699,7 +63706,7 @@
     {
       "name": "Feudalism",
       "civilopediaEntry": "TECH_Feudalism",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-23",
       "cost": 32,
       "smallIconPath": "Art\\tech chooser\\Icons\\Feudalism-small.pcx",
@@ -63709,7 +63716,7 @@
     {
       "name": "Engineering",
       "civilopediaEntry": "TECH_Engineering",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-24",
       "cost": 36,
       "smallIconPath": "Art\\tech chooser\\Icons\\22-engineering-small.pcx",
@@ -63719,7 +63726,7 @@
     {
       "name": "Theology",
       "civilopediaEntry": "TECH_Theology",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-25",
       "cost": 40,
       "smallIconPath": "Art\\tech chooser\\Icons\\79-theology-small.pcx",
@@ -63732,7 +63739,7 @@
     {
       "name": "Chivalry",
       "civilopediaEntry": "TECH_Chivalry",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-26",
       "cost": 32,
       "smallIconPath": "Art\\tech chooser\\Icons\\09-Chivalry2-small.pcx",
@@ -63746,7 +63753,7 @@
     {
       "name": "Invention",
       "civilopediaEntry": "TECH_Invention",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-27",
       "cost": 44,
       "smallIconPath": "Art\\tech chooser\\Icons\\34-Invention-bolt-small.pcx",
@@ -63760,7 +63767,7 @@
     {
       "name": "Printing Press",
       "civilopediaEntry": "TECH_Printing_Press",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-28",
       "cost": 36,
       "smallIconPath": "Art\\tech chooser\\Icons\\58-printing press-small.pcx",
@@ -63773,7 +63780,7 @@
     {
       "name": "Music Theory",
       "civilopediaEntry": "TECH_Music_Theory",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-29",
       "cost": 40,
       "smallIconPath": "Art\\tech chooser\\Icons\\49-musicTheory-small.pcx",
@@ -63786,7 +63793,7 @@
     {
       "name": "Education",
       "civilopediaEntry": "TECH_Education",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-30",
       "cost": 44,
       "smallIconPath": "Art\\tech chooser\\Icons\\19-education-small.pcx",
@@ -63799,7 +63806,7 @@
     {
       "name": "Gunpowder",
       "civilopediaEntry": "TECH_Gunpowder",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-31",
       "cost": 48,
       "smallIconPath": "Art\\tech chooser\\Icons\\30-gunpowder-small.pcx",
@@ -63812,7 +63819,7 @@
     {
       "name": "Banking",
       "civilopediaEntry": "TECH_Banking",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-32",
       "cost": 52,
       "smallIconPath": "Art\\tech chooser\\Icons\\05-Banking-small.pcx",
@@ -63825,7 +63832,7 @@
     {
       "name": "Astronomy",
       "civilopediaEntry": "TECH_Astronomy",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-33",
       "cost": 56,
       "smallIconPath": "Art\\tech chooser\\Icons\\03-Astronomy-small.pcx",
@@ -63838,7 +63845,7 @@
     {
       "name": "Chemistry",
       "civilopediaEntry": "TECH_Chemistry",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-34",
       "cost": 60,
       "smallIconPath": "Art\\tech chooser\\Icons\\08-Chemistry-small.pcx",
@@ -63851,7 +63858,7 @@
     {
       "name": "Democracy",
       "civilopediaEntry": "TECH_Democracy",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-35",
       "cost": 68,
       "smallIconPath": "Art\\tech chooser\\Icons\\16-democracy-small.pcx",
@@ -63865,7 +63872,7 @@
     {
       "name": "Economics",
       "civilopediaEntry": "TECH_Economics",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-36",
       "cost": 56,
       "smallIconPath": "Art\\tech chooser\\Icons\\18-Economics-small.pcx",
@@ -63878,7 +63885,7 @@
     {
       "name": "Navigation",
       "civilopediaEntry": "TECH_Navigation",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-37",
       "cost": 56,
       "smallIconPath": "Art\\tech chooser\\Icons\\52-navigation-small.pcx",
@@ -63891,7 +63898,7 @@
     {
       "name": "Physics",
       "civilopediaEntry": "TECH_Physics",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-38",
       "cost": 64,
       "smallIconPath": "Art\\tech chooser\\Icons\\55-physics-small.pcx",
@@ -63905,7 +63912,7 @@
     {
       "name": "Metallurgy",
       "civilopediaEntry": "TECH_Metallurgy",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-39",
       "cost": 64,
       "smallIconPath": "Art\\tech chooser\\Icons\\43-metallurgy-small.pcx",
@@ -63918,7 +63925,7 @@
     {
       "name": "Free Artistry",
       "civilopediaEntry": "TECH_Free_Artistry",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-40",
       "cost": 52,
       "smallIconPath": "Art\\tech chooser\\Icons\\27-freeArtistry-small.pcx",
@@ -63931,7 +63938,7 @@
     {
       "name": "Theory of Gravity",
       "civilopediaEntry": "TECH_Theory_of_Gravity",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-41",
       "cost": 68,
       "smallIconPath": "Art\\tech chooser\\Icons\\80-theoryGravity-small.pcx",
@@ -63944,7 +63951,7 @@
     {
       "name": "Magnetism",
       "civilopediaEntry": "TECH_Magnetism",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-42",
       "cost": 68,
       "smallIconPath": "Art\\tech chooser\\Icons\\37-Magnetism-small.pcx",
@@ -63957,7 +63964,7 @@
     {
       "name": "Military Tradition",
       "civilopediaEntry": "TECH_Military_Tradition",
-      "era": "Middle Ages",
+      "eraCivilopediaName": "ERAS_Middle_Ages",
       "id": "tech-43",
       "cost": 64,
       "smallIconPath": "Art\\tech chooser\\Icons\\44-militaryTradition-small.pcx",
@@ -63970,7 +63977,7 @@
     {
       "name": "Nationalism",
       "civilopediaEntry": "TECH_Nationalism",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-44",
       "cost": 120,
       "smallIconPath": "Art\\tech chooser\\Icons\\51-Nationalism-small.pcx",
@@ -63980,7 +63987,7 @@
     {
       "name": "Steam Power",
       "civilopediaEntry": "TECH_Steam_Power",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-45",
       "cost": 120,
       "smallIconPath": "Art\\tech chooser\\Icons\\71-SteamPower-small.pcx",
@@ -63990,7 +63997,7 @@
     {
       "name": "Medicine",
       "civilopediaEntry": "TECH_Medicine",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-46",
       "cost": 100,
       "smallIconPath": "Art\\tech chooser\\Icons\\42-Medicine-small.pcx",
@@ -64000,7 +64007,7 @@
     {
       "name": "Communism",
       "civilopediaEntry": "TECH_Communism",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-47",
       "cost": 120,
       "smallIconPath": "Art\\tech chooser\\Icons\\12-Communism-small-vp.pcx",
@@ -64013,7 +64020,7 @@
     {
       "name": "Industrialization",
       "civilopediaEntry": "TECH_Industrialization",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-48",
       "cost": 120,
       "smallIconPath": "Art\\tech chooser\\Icons\\32-Industrialization-small.pcx",
@@ -64026,7 +64033,7 @@
     {
       "name": "Electricity",
       "civilopediaEntry": "TECH_Electricity",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-49",
       "cost": 140,
       "smallIconPath": "Art\\tech chooser\\Icons\\20-Electricity-small-vp.pcx",
@@ -64039,7 +64046,7 @@
     {
       "name": "Scientific Method",
       "civilopediaEntry": "TECH_Scientific_Method",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-50",
       "cost": 100,
       "smallIconPath": "Art\\tech chooser\\Icons\\67-ScientificMethod-small.pcx",
@@ -64053,7 +64060,7 @@
     {
       "name": "Sanitation",
       "civilopediaEntry": "TECH_Sanitation",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-51",
       "cost": 90,
       "smallIconPath": "Art\\tech chooser\\Icons\\65-sanitation-small.pcx",
@@ -64066,7 +64073,7 @@
     {
       "name": "Espionage",
       "civilopediaEntry": "TECH_Espionage",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-52",
       "cost": 90,
       "smallIconPath": "Art\\tech chooser\\Icons\\23-espionage-small.pcx",
@@ -64080,7 +64087,7 @@
     {
       "name": "The Corporation",
       "civilopediaEntry": "TECH_The_Corporation",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-53",
       "cost": 100,
       "smallIconPath": "Art\\tech chooser\\Icons\\75-Corporation-small.pcx",
@@ -64093,7 +64100,7 @@
     {
       "name": "Refining",
       "civilopediaEntry": "TECH_Refining",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-54",
       "cost": 160,
       "smallIconPath": "Art\\tech chooser\\Icons\\61-Refining-small.pcx",
@@ -64106,7 +64113,7 @@
     {
       "name": "Steel",
       "civilopediaEntry": "TECH_Steel",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-55",
       "cost": 140,
       "smallIconPath": "Art\\tech chooser\\Icons\\72-Steel-small.pcx",
@@ -64119,7 +64126,7 @@
     {
       "name": "Atomic Theory",
       "civilopediaEntry": "TECH_Atomic_Theory",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-56",
       "cost": 200,
       "smallIconPath": "Art\\tech chooser\\Icons\\04-AtomicTheory-small-vp.pcx",
@@ -64132,7 +64139,7 @@
     {
       "name": "Combustion",
       "civilopediaEntry": "TECH_Combustion",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-57",
       "cost": 160,
       "smallIconPath": "Art\\tech chooser\\Icons\\11-Combustion-small-vp.pcx",
@@ -64146,7 +64153,7 @@
     {
       "name": "Replaceable Parts",
       "civilopediaEntry": "TECH_Replaceable_Parts",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-58",
       "cost": 140,
       "smallIconPath": "Art\\tech chooser\\Icons\\62-ReplaceableParts-small.pcx",
@@ -64159,7 +64166,7 @@
     {
       "name": "Flight",
       "civilopediaEntry": "TECH_Flight",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-59",
       "cost": 180,
       "smallIconPath": "Art\\tech chooser\\Icons\\26-Flight-small.pcx",
@@ -64172,7 +64179,7 @@
     {
       "name": "Amphibious War",
       "civilopediaEntry": "TECH_Amphibious_Warfare",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-60",
       "cost": 120,
       "smallIconPath": "Art\\tech chooser\\Icons\\02-AmphibiousWarfare-small.pcx",
@@ -64185,7 +64192,7 @@
     {
       "name": "Mass Production",
       "civilopediaEntry": "TECH_Mass_Production",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-61",
       "cost": 140,
       "smallIconPath": "Art\\tech chooser\\Icons\\38-Manufacturing-small.pcx",
@@ -64199,7 +64206,7 @@
     {
       "name": "Electronics",
       "civilopediaEntry": "TECH_Electronics",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-62",
       "cost": 180,
       "smallIconPath": "Art\\tech chooser\\Icons\\21-Electronics-small.pcx",
@@ -64212,7 +64219,7 @@
     {
       "name": "Motorized Transportation",
       "civilopediaEntry": "TECH_Motorized_Transportation",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-63",
       "cost": 140,
       "smallIconPath": "Art\\tech chooser\\Icons\\48-MotorizedTransport-small.pcx",
@@ -64225,7 +64232,7 @@
     {
       "name": "Advanced Flight",
       "civilopediaEntry": "TECH_Advanced_Flight",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-64",
       "cost": 180,
       "smallIconPath": "Art\\tech chooser\\Icons\\00-AdvancedFlight-small.pcx",
@@ -64240,7 +64247,7 @@
     {
       "name": "Rocketry",
       "civilopediaEntry": "TECH_Rocketry",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-65",
       "cost": 240,
       "smallIconPath": "Art\\tech chooser\\Icons\\64-rocketry-small.pcx",
@@ -64250,7 +64257,7 @@
     {
       "name": "Fission",
       "civilopediaEntry": "TECH_Fission",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-66",
       "cost": 280,
       "smallIconPath": "Art\\tech chooser\\Icons\\25-FissionPower-small.pcx",
@@ -64260,7 +64267,7 @@
     {
       "name": "Computers",
       "civilopediaEntry": "TECH_Computers",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-67",
       "cost": 260,
       "smallIconPath": "Art\\tech chooser\\Icons\\13-Computers-small-vp.pcx",
@@ -64270,7 +64277,7 @@
     {
       "name": "Recycling",
       "civilopediaEntry": "TECH_Recycling",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-68",
       "cost": 240,
       "smallIconPath": "Art\\tech chooser\\Icons\\60-Recycle-small.pcx",
@@ -64283,7 +64290,7 @@
     {
       "name": "Space Flight",
       "civilopediaEntry": "TECH_Space_Flight",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-69",
       "cost": 300,
       "smallIconPath": "Art\\tech chooser\\Icons\\69-spaceflight-small.pcx",
@@ -64296,7 +64303,7 @@
     {
       "name": "Nuclear Power",
       "civilopediaEntry": "TECH_Nuclear_Power",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-70",
       "cost": 280,
       "smallIconPath": "Art\\tech chooser\\Icons\\53-NuclearPower-small.pcx",
@@ -64309,7 +64316,7 @@
     {
       "name": "Superconductor",
       "civilopediaEntry": "TECH_Superconductor",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-71",
       "cost": 300,
       "smallIconPath": "Art\\tech chooser\\Icons\\73-Superconductor-small.pcx",
@@ -64323,7 +64330,7 @@
     {
       "name": "Miniaturization",
       "civilopediaEntry": "TECH_Miniaturization",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-72",
       "cost": 320,
       "smallIconPath": "Art\\tech chooser\\Icons\\45-Miniaturization-small.pcx",
@@ -64336,7 +64343,7 @@
     {
       "name": "Ecology",
       "civilopediaEntry": "TECH_Ecology",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-73",
       "cost": 260,
       "smallIconPath": "Art\\tech chooser\\Icons\\17-Ecology-small.pcx",
@@ -64346,7 +64353,7 @@
     {
       "name": "Synthetic Fibers",
       "civilopediaEntry": "TECH_Synthetic_Fibers",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-74",
       "cost": 280,
       "smallIconPath": "Art\\tech chooser\\Icons\\74-syntheticFibers-small.pcx",
@@ -64359,7 +64366,7 @@
     {
       "name": "Satellites",
       "civilopediaEntry": "TECH_Satellites",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-75",
       "cost": 260,
       "smallIconPath": "Art\\tech chooser\\Icons\\66-Satellites-small.pcx",
@@ -64372,7 +64379,7 @@
     {
       "name": "The Laser",
       "civilopediaEntry": "TECH_The_Laser",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-76",
       "cost": 280,
       "smallIconPath": "Art\\tech chooser\\Icons\\76-Laser-small.pcx",
@@ -64386,7 +64393,7 @@
     {
       "name": "Genetics",
       "civilopediaEntry": "TECH_Genetics",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-77",
       "cost": 320,
       "smallIconPath": "Art\\tech chooser\\Icons\\29-Genetics-small-vp.pcx",
@@ -64399,7 +64406,7 @@
     {
       "name": "Stealth",
       "civilopediaEntry": "TECH_Stealth",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-78",
       "cost": 300,
       "smallIconPath": "Art\\tech chooser\\Icons\\70-Stealth-small.pcx",
@@ -64412,7 +64419,7 @@
     {
       "name": "Smart Weapons",
       "civilopediaEntry": "TECH_Smart_Weapons",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-79",
       "cost": 280,
       "smallIconPath": "Art\\tech chooser\\Icons\\68-SmartWeapons-small.pcx",
@@ -64426,7 +64433,7 @@
     {
       "name": "Robotics",
       "civilopediaEntry": "TECH_Robotics",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-80",
       "cost": 320,
       "smallIconPath": "Art\\tech chooser\\Icons\\63-robotics-small.pcx",
@@ -64440,7 +64447,7 @@
     {
       "name": "Integrated Defense",
       "civilopediaEntry": "TECH_Integrated_Defense",
-      "era": "Modern Times",
+      "eraCivilopediaName": "ERAS_Modern_Era",
       "id": "tech-81",
       "cost": 360,
       "smallIconPath": "Art\\tech chooser\\Icons\\33-integratedDefense-small.pcx",
@@ -64455,7 +64462,7 @@
     {
       "name": "Ironclads",
       "civilopediaEntry": "TECH_Ironclads",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-82",
       "cost": 100,
       "smallIconPath": "Art\\tech chooser\\Icons\\NavalTactics-small.pcx",
@@ -64468,7 +64475,7 @@
     {
       "name": "Fascism",
       "civilopediaEntry": "TECH_Fascism",
-      "era": "Industrial Ages",
+      "eraCivilopediaName": "ERAS_Industrial_Age",
       "id": "tech-83",
       "cost": 130,
       "smallIconPath": "Art\\tech chooser\\Icons\\Fascism-small.pcx",

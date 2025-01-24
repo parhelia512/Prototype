@@ -352,37 +352,57 @@ namespace C7GameData {
 		private void ImportBicLeaders() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 
-			// Make a player for each civ. The barbarians are always civ 0.
-			for (int i = 0; i < save.Civilizations.Count; ++i) {
-				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
-										/*isBarbarian=*/i == 0,
-										/*isHuman=*/false,
-										/*cityNameIndex=*/0));
-			}
+ 			// Make a player for each civ. The barbarians are always civ 0.
+ 			for (int i = 0; i < save.Civilizations.Count; ++i) {
+ 				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
+ 										/*isBarbarian=*/i == 0,
+ 										/*isHuman=*/false,
+										/*cityNameIndex=*/0,
+										/*era=*/""));
+ 			}
 
-			// Now use the leaders to find the first human player.
-			foreach (LEAD lead in theBiq.Lead) {
-				SavePlayer player = save.Players[lead.Civ];
-				if (lead.HumanPlayer == 1) {
-					player.human = true;
-					break;
+			// Now fill in the rest of the data using the leader struct.
+			bool foundHuman = false;
+			int leadIndex = 0;
+ 			foreach (LEAD lead in theBiq.Lead) {
+ 				SavePlayer player = save.Players[lead.Civ];
+
+				// Put the player in the correct starting era.
+				player.eraCivilopediaName = theBiq.Eras[lead.InitialEra].CivilopediaEntry;
+
+				// Mark the first human playable civ as the human player.
+				if (lead.HumanPlayer == 1 && !foundHuman) {
+ 					player.human = true;
+					foundHuman = true;
 				}
+
+				++leadIndex;
 			}
 		}
 
 		private void ImportSavLeaders() {
+			BiqData theBiq = biq.Eras is null ? defaultBiq : biq;
 			int i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
 				if (leader.RaceID == -1) {
 					continue; // can probably break here
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];
-				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/leader.FoundedCities));
+				SavePlayer player = MakeSavePlayerFromCiv(civ,
+										  /*isBarbarian=*/i == 0,
+										  /*isHuman=*/i == 1,
+										  /*cityNameIndex=*/leader.FoundedCities,
+										  /*era=*/theBiq.Eras[leader.Era].CivilopediaEntry);
+
+				// TODO: store non-negative values of leader.Researching,
+				// which indexes into save.Techs.
+
+				save.Players.Add(player);
 				i++;
 			}
 		}
 
-		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex) {
+		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex, string era) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
 				colorIndex = civ.colorIndex,
@@ -391,6 +411,7 @@ namespace C7GameData {
 				civilization = civ.name,
 				hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
 				cityNameIndex = cityNameIndex,
+				eraCivilopediaName = era,
 			};
 		}
 
@@ -640,7 +661,7 @@ namespace C7GameData {
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
 					Cost = t.Cost,
-					Era = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].Name,
+					EraCivilopediaName = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].CivilopediaEntry,
 					SmallIconPath = t.Era == -1 ? "" : pediaIcons.GetTechIconPath(t.CivilopediaEntry),
 					X = t.X,
 					Y = t.Y

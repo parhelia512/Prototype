@@ -26,6 +26,12 @@ namespace C7GameData {
 		// The list of techs known by this player.
 		public List<ID> knownTechs = new();
 
+		// The civilopedia name of the era this player is in.
+		//
+		// The civilopedia name is what is used for art lookups, not the actual
+		// name.
+		public string eraCivilopediaName;
+
 		public int turnsUntilPriorityReevaluation = 0;
 
 		public void AddUnit(MapUnit unit) {
