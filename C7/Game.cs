@@ -636,6 +636,10 @@ public partial class Game : Node2D {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
 		}
 
+		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit.canIrrigate()) {
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.irrigate()).send();
+		}
+
 	}
 
 	private void GetNextAutoselectedUnit(GameData gameData) {

@@ -58967,6 +58967,7 @@
       "actions": [
         "unit_build_road",
         "unit_build_mine",
+        "unit_irrigate",
         "unit_hold",
         "unit_wait",
         "unit_fortify",

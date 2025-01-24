@@ -453,11 +453,12 @@ namespace C7Engine {
 		}
 
 		public static bool canBuildMine(this MapUnit unit) {
-			// Mines can only be built tiles with a mining bonus, if there is
-			// no mine already there, and if there isn't a city.
+			// Mines can only be built on tiles with a mining bonus, if there is
+			// no mine/irrigation already there, and if there isn't a city.
 			return unit.unitType.actions.Contains(C7Action.UnitBuildMine) &&
 				unit.location.overlayTerrainType.miningBonus > 0 &&
 				!unit.location.overlays.mine &&
+				!unit.location.overlays.irrigation &&
 				unit.location.cityAtTile == null;
 		}
 
@@ -469,6 +470,62 @@ namespace C7Engine {
 
 			// TODO add animation and long process of building
 			unit.location.overlays.mine = true;
+			unit.movementPoints.onConsumeAll();
+		}
+
+		// TODO: This method doesn't handle two important irrigation cases:
+		//  - inland lakes/seas: we need to figure out what is fresh/salt water
+		//  - Electricity tech, to allow irrigating w/o fresh water access
+		public static bool canIrrigate(this MapUnit unit) {
+			// Irrigation can't be done if the unit doesn't have the action, if
+			// there is no irrigation bonus for the tile, or if there's already
+			// an improvement or city on the tile.
+			if (!unit.unitType.actions.Contains(C7Action.UnitIrrigate) ||
+				unit.location.overlayTerrainType.irrigationBonus == 0 ||
+				unit.location.overlays.mine ||
+				unit.location.overlays.irrigation ||
+				unit.location.cityAtTile != null) {
+					return false;
+			}
+
+			// If a tile borders a river, it has fresh water access.
+			if (unit.location.BordersRiver()) {
+				return true;
+			}
+
+			foreach (KeyValuePair<TileDirection, Tile> dirToTile in unit.location.neighbors) {
+				// If a neighboring tile is irrigated, this tile has fresh water access.
+				if (dirToTile.Value.overlays.irrigation) {
+					return true;
+				}
+
+				// Special case, if we are neighboring the worker's city, check
+				// if the city can act as part of an irrigation chain.
+				if (dirToTile.Value.cityAtTile?.owner == unit.owner) {
+					if (dirToTile.Value.BordersRiver()) {
+						return true;
+					}
+
+					foreach (var (dir, tile) in dirToTile.Value.neighbors) {
+						if (tile.overlays.irrigation) {
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+
+		}
+
+		public static void irrigate(this MapUnit unit) {
+			if (!unit.canIrrigate()) {
+				log.Warning($"can't build irrigate by {unit}");
+				return;
+			}
+
+			// TODO add animation and long process of building
+			unit.location.overlays.irrigation = true;
 			unit.movementPoints.onConsumeAll();
 		}
 	}
