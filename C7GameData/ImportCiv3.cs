@@ -136,6 +136,9 @@ namespace C7GameData {
 				if (civ3Tile.Mine) {
 					tile.overlays.Add("mine");
 				}
+				if (civ3Tile.Irrigation) {
+					tile.overlays.Add("irrigation");
+				}
 				Resource tileResource = resourcesByIndex[civ3Tile.ResourceID];
 				if (tileResource != Resource.NONE) {
 					tile.resource = tileResource.Key;
@@ -233,6 +236,9 @@ namespace C7GameData {
 				}
 				if (civ3Tile.Mine) {
 					tile.overlays.Add("mine");
+				}
+				if (civ3Tile.Irrigation) {
+					tile.overlays.Add("irrigation");
 				}
 				Resource tileResource = resourcesByIndex[civ3Tile.Resource];
 				if (tileResource != Resource.NONE) {

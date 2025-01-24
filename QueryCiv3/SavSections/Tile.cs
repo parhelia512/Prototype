@@ -39,6 +39,7 @@ namespace QueryCiv3.Sav {
 		public bool Road { get => Util.GetFlag(Flags2[0], 0); }
 		public bool Railroad { get => Util.GetFlag(Flags2[0], 1); }
 		public bool Mine { get => Util.GetFlag(Flags2[0], 2); }
+		public bool Irrigation { get => Util.GetFlag(Flags2[0], 3); }
 
 		public int BaseTerrain { get => Flags2[5] & 0x0f; }
 		public int OverlayTerrain { get => (Flags2[5] & 0xf0) >> 4; }
