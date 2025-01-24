@@ -111,6 +111,12 @@ namespace C7GameData.Save {
 
 			// cities require game map for location and players for city owner
 			data.cities = Cities.ConvertAll(city => city.ToCity(data.map, data.players, UnitPrototypes, Civilizations));
+
+			// Once cities are known, players can reference cities.
+			data.players.ForEach(player => {
+				player.cities = data.cities.Where(city => city.owner.id == player.id).ToList(); ;
+			});
+
 			foreach (City city in data.cities) {
 				data.map.tileAt(city.location.xCoordinate, city.location.yCoordinate).cityAtTile = city;
 			}

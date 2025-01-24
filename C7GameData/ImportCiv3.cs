@@ -270,6 +270,14 @@ namespace C7GameData {
 					player.tileKnowledge.Add(new TileLocation(neighbor.Item1, neighbor.Item2));
 				}
 			}
+			foreach (SaveCity city in save.Cities) {
+				SavePlayer player = playerLookup[city.owner];
+				player.tileKnowledge.Add(city.location);
+				foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
+					Tuple<int, int> neighbor = Tile.NeighborCoordinate(city.location.x, city.location.y, direction);
+					player.tileKnowledge.Add(new TileLocation(neighbor.Item1, neighbor.Item2));
+				}
+			}
 
 			return save;
 		}
@@ -338,13 +346,21 @@ namespace C7GameData {
 		private void ImportBicLeaders() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 
-			int i = 0;
-			foreach (int playerIndex in theBiq.GameCiv[0]) {
-				Civilization civ = save.Civilizations[playerIndex];
-				// TODO: the city name index is wrong, we need to count the number of
-				// cities this civilization has.
-				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/0));
-				i++;
+			// Make a player for each civ. The barbarians are always civ 0.
+			for (int i = 0; i < save.Civilizations.Count; ++i) {
+				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
+										/*isBarbarian=*/i == 0,
+										/*isHuman=*/false,
+										/*cityNameIndex=*/0));
+			}
+
+			// Now use the leaders to find the first human player.
+			foreach (LEAD lead in theBiq.Lead) {
+				SavePlayer player = save.Players[lead.Civ];
+				if (lead.HumanPlayer == 1) {
+					player.human = true;
+					break;
+				}
 			}
 		}
 
@@ -398,13 +414,18 @@ namespace C7GameData {
 		}
 
 		private void ImportBicUnits() {
+			// TODO: This doesn't account for default starting units.
 			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
 
 			foreach (UNIT unit in theBiq.Unit) {
-				if (unit.Owner < 0 || unit.Owner >= save.Players.Count) {
+				if (unit.Owner >= save.Players.Count) {
 					continue;
 				}
+
+				// The owner index is into the list of civs, and we have a 1:1
+				// mapping of players and civs.
 				SavePlayer player = save.Players[unit.Owner];
+
 				PRTO prototype = theBiq.Prto[unit.UnitType];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
 				SaveUnit saveUnit = new SaveUnit{
@@ -442,13 +463,13 @@ namespace C7GameData {
 		}
 
 		private void ImportBicCities() {
-			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+			BiqData theBiq = biq.City is null ? defaultBiq : biq;
 
 			foreach (CITY city in theBiq.City) {
-				if (city.Owner < 0 || city.Owner >= save.Players.Count) {
-					continue;
-				}
+				// The owner index is into the list of civs, and we have a 1:1
+				// mapping of players and civs.
 				SavePlayer player = save.Players[city.Owner];
+
 				SaveCity saveCity = new SaveCity{
 					id = ids.CreateID("city"),
 					owner = player.id,
