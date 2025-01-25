@@ -99,7 +99,11 @@ public partial class Util {
 			//
 			// If we didn't do this we'd end up with ".." as one of our steps
 			// below, which derails the searching logic.
+			//
+			// We also strip any leading slashes, which can show up if the civ3
+			// root doesn't end in a slash.
 			ignoredCaseExtension = fullPath.Substring(exactCaseRoot.Length);
+			ignoredCaseExtension = ignoredCaseExtension.TrimPrefix("\\").TrimPrefix("/");
 
 			foreach (string step in ignoredCaseExtension.Replace('\\', '/').Split('/')) {
 				string goal = System.IO.Path.Combine(tr, step);
@@ -270,7 +274,7 @@ public partial class Util {
 		ColorCache[colorIndex] = color;
 		return color;
 	}
-	
+
 	// Replaces image colors based on a given dictionary
 	public static Image TransformColors(Image origin, Dictionary<Color, Color> colorReplacements) {
 		Image result = (Image)origin.Duplicate();
@@ -284,7 +288,7 @@ public partial class Util {
 				}
 			}
 		}
-		
+
 		return result;
 	}
 
