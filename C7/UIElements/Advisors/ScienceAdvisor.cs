@@ -5,9 +5,15 @@ using System;
 using System.Collections.Generic;
 
 public partial class ScienceAdvisor : TextureRect {
+	private ImageTexture AncientBackground;
+	private ImageTexture MiddleBackground;
+	private ImageTexture IndustrialBackground;
+	private ImageTexture ModernBackground;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		this.CreateUI();
+		this.DrawTechTree();
 	}
 
 	private void CreateUI() {
@@ -16,10 +22,10 @@ public partial class ScienceAdvisor : TextureRect {
 		//
 		// science_industrial_new is used as the industrial tech tree is
 		// different from vanilla civ3.
-		ImageTexture AncientBackground = Util.LoadTextureFromPCX("Art/Advisors/science_ancient.pcx");
-		ImageTexture MiddleBackground = Util.LoadTextureFromPCX("Art/Advisors/science_middle.pcx");
-		ImageTexture IndustrialBackground = Util.LoadTextureFromPCX("Art/Advisors/science_industrial_new.pcx");
-		ImageTexture ModernBackground = Util.LoadTextureFromPCX("Art/Advisors/science_modern.pcx");
+		AncientBackground = Util.LoadTextureFromPCX("Art/Advisors/science_ancient.pcx");
+		MiddleBackground = Util.LoadTextureFromPCX("Art/Advisors/science_middle.pcx");
+		IndustrialBackground = Util.LoadTextureFromPCX("Art/Advisors/science_industrial_new.pcx");
+		ModernBackground = Util.LoadTextureFromPCX("Art/Advisors/science_modern.pcx");
 
 		// TODO: Age-based background.  Only use Ancient for now.
 		// TODO: Consider moving this to an advisor utility, since we're copying
@@ -53,11 +59,13 @@ public partial class ScienceAdvisor : TextureRect {
 		GoBackButton.SetPosition(new Vector2(952, 720));
 		AddChild(GoBackButton);
 		GoBackButton.Pressed += ReturnToMenu;
+	}
 
+	void DrawTechTree() {
 		using (UIGameDataAccess gameDataAccess = new()) {
 			List<Tech> techs = gameDataAccess.gameData.techs;
 			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
-			List<ID> knownTechs = player.knownTechs;
+			HashSet<ID> knownTechs = player.knownTechs;
 
 			// Set the tech background based on the player's era.
 			if (player.eraCivilopediaName == "ERAS_Ancient_Times") {
@@ -75,10 +83,11 @@ public partial class ScienceAdvisor : TextureRect {
 					continue;
 				}
 
-				// TODO: track the currently researched tech for kInProgress.
 				TechBox.TechState techState = TechBox.TechState.kBlocked;
 				if (knownTechs.Contains(tech.id)) {
 					techState = TechBox.TechState.kKnown;
+				} else if (player.currentlyResearchedTech == tech.id) {
+					techState = TechBox.TechState.kInProgress;
 				} else {
 					bool prereqsKnown = true;
 					foreach (Tech prereq in tech.Prerequisites) {
@@ -92,6 +101,9 @@ public partial class ScienceAdvisor : TextureRect {
 
 				TechBox techButton = new(tech, techState);
 				techButton.SetPosition(new Vector2(tech.X, tech.Y));
+				techButton.Pressed += () => {
+					new MsgChooseResearch(tech.id).send();
+				};
 				AddChild(techButton);
 			}
 		}

@@ -400,9 +400,10 @@ namespace C7GameData {
 										  /*cityNameIndex=*/leader.FoundedCities,
 										  /*era=*/theBiq.Eras[leader.Era].CivilopediaEntry);
 
-
-				// TODO: store non-negative values of leader.Researching,
-				// which indexes into save.Techs.
+				// Record what the player is currently researching.
+				if (leader.Researching > -1) {
+					player.currentlyResearchedTech = save.Techs[leader.Researching].id;
+				}
 
 				// Record any techs that this player knows.
 				for (int k = 0; k < savData.KnownTechFlags.Length; ++k) {

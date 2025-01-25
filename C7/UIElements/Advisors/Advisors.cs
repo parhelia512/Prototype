@@ -54,13 +54,16 @@ public partial class Advisors : CenterContainer {
 			this.Show();
 		}
 		if (advisorType.Equals("F6")) {
-			if (scienceAdvisor == null) {
-				scienceAdvisor = new ScienceAdvisor();
-				advisors.Add(scienceAdvisor);
-				AddChild(scienceAdvisor);
-			} else {
-				scienceAdvisor.Show();
+			// TODO: What's the best way to refresh the tech tree UI without
+			// adding too many children?
+			if (scienceAdvisor != null) {
+				RemoveChild(scienceAdvisor);
+				scienceAdvisor = null;
 			}
+
+			scienceAdvisor = new ScienceAdvisor();
+			advisors.Add(scienceAdvisor);
+			AddChild(scienceAdvisor);
 			this.Show();
 		}
 	}

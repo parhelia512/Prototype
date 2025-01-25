@@ -24,7 +24,10 @@ namespace C7GameData {
 		public List<StrategicPriority> strategicPriorityData = new List<StrategicPriority>();
 
 		// The list of techs known by this player.
-		public List<ID> knownTechs = new();
+		public HashSet<ID> knownTechs = new();
+
+		// The tech the player is currently researching.
+		public ID currentlyResearchedTech;
 
 		// The civilopedia name of the era this player is in.
 		//
