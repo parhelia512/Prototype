@@ -259,6 +259,7 @@ script = ExtResource("3")
 [connection signal="ShowSpecificAdvisor" from="." to="CanvasLayer/Advisor" method="OnShowSpecificAdvisor"]
 [connection signal="TurnEnded" from="." to="CanvasLayer/Control/GameStatus" method="OnTurnEnded"]
 [connection signal="TurnStarted" from="." to="CanvasLayer/Control/GameStatus" method="OnTurnStarted"]
+[connection signal="UpdateTechProgress" from="." to="CanvasLayer/Control/GameStatus" method="OnUpdateTechProgress"]
 [connection signal="BuildCity" from="CanvasLayer/PopupOverlay" to="." method="OnBuildCity"]
 [connection signal="HidePopup" from="CanvasLayer/PopupOverlay" to="CanvasLayer/PopupOverlay" method="OnHidePopup"]
 [connection signal="Quit" from="CanvasLayer/PopupOverlay" to="." method="OnQuitTheGame"]
