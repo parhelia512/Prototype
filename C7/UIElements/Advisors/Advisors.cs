@@ -44,13 +44,14 @@ public partial class Advisors : CenterContainer {
 		}
 
 		if (advisorType.Equals("F1")) {
-			if (domesticAdvisor == null) {
-				domesticAdvisor = new DomesticAdvisor();
-				advisors.Add(domesticAdvisor);
-				AddChild(domesticAdvisor);
-			} else {
-				domesticAdvisor.Show();
+			if (domesticAdvisor != null) {
+				RemoveChild(domesticAdvisor);
+				domesticAdvisor = null;
 			}
+
+			domesticAdvisor = new DomesticAdvisor();
+			advisors.Add(domesticAdvisor);
+			AddChild(domesticAdvisor);
 			this.Show();
 		}
 		if (advisorType.Equals("F6")) {
