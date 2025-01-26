@@ -143,15 +143,19 @@ public partial class LowerRightInfoBox : TextureRect {
 
 	///This is going to evolve a lot over time.  Probably this info box will need to keep some local state.
 	///But for now it'll show the changing turn number, providing some interactivity
-	public void SetTurn(int turnNumber) {
-		yearAndGold.Text = $"Turn {turnNumber}  10 Gold (+0 per turn)";
+	public void SetTurnAndGold(int turnNumber, int gold, int goldPerTurn) {
+		if (goldPerTurn >= 0) {
+			yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (+{goldPerTurn} per turn)";
+		} else {
+			yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (-{goldPerTurn} per turn)";
+		}
 	}
 
 	public void UpdateTechProgress(string techName, int turnsRemaining) {
 		if (turnsRemaining > 0) {
-			SetTextAndCenterLabel(scienceProgress,  $"{techName} (-- turns)");
+			SetTextAndCenterLabel(scienceProgress, $"{techName} (-- turns)");
 		} else {
-			SetTextAndCenterLabel(scienceProgress,  $"{techName} ({turnsRemaining} turns)");
+			SetTextAndCenterLabel(scienceProgress, $"{techName} ({turnsRemaining} turns)");
 		}
 	}
 

@@ -37,6 +37,9 @@ namespace C7GameData {
 
 		public int turnsUntilPriorityReevaluation = 0;
 
+		// The amount of gold this player has.
+		public int gold = 0;
+
 		public void AddUnit(MapUnit unit) {
 			this.units.Add(unit);
 		}

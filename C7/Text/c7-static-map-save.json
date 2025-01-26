@@ -61524,7 +61524,8 @@
       "hasPlayedCurrentTurn": false,
       "civilization": "A Barbarian Chiefdom",
       "cityNameIndex": 0,
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-2",
@@ -61593,7 +61594,8 @@
         "tech-2"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-3",
@@ -61662,7 +61664,8 @@
         "tech-2"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-4",
@@ -61727,7 +61730,8 @@
         "tech-4"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-5",
@@ -61796,7 +61800,8 @@
         "tech-2"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-6",
@@ -61869,7 +61874,8 @@
         "tech-2"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-7",
@@ -61938,7 +61944,8 @@
         "tech-4"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     },
     {
       "id": "player-8",
@@ -62003,7 +62010,8 @@
         "tech-3"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
-      "turnsUntilPriorityReevaluation": 0
+      "turnsUntilPriorityReevaluation": 0,
+      "gold": 10
     }
   ],
   "barbarianInfo": {

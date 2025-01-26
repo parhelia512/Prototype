@@ -338,11 +338,13 @@ public partial class Game : Node2D {
 
 	private void OnPlayerStartTurn() {
 		log.Information("Starting player turn");
-		int turnNumber = TurnHandling.GetTurnNumber();
-		EmitSignal(SignalName.TurnStarted, turnNumber);
-		CurrentState = GameState.PlayerTurn;
-
 		using (var gameDataAccess = new UIGameDataAccess()) {
+			int turnNumber = TurnHandling.GetTurnNumber();
+			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+
+			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
+			CurrentState = GameState.PlayerTurn;
+
 			GetNextAutoselectedUnit(gameDataAccess.gameData);
 		}
 	}

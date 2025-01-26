@@ -28,6 +28,9 @@ namespace C7GameData.Save {
 
 		public int turnsUntilPriorityReevaluation = 0;
 
+		// The amount of gold this player has.
+		public int gold = 0;
+
 		public Player ToPlayer(GameMap map, List<Civilization> civilizations) {
 			Player player = new Player{
 				id = id,
@@ -41,6 +44,7 @@ namespace C7GameData.Save {
 				knownTechs = knownTechs,
 				currentlyResearchedTech = currentlyResearchedTech,
 				eraCivilopediaName = eraCivilopediaName,
+				gold = gold,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
 				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.x, tile.y));
@@ -70,6 +74,7 @@ namespace C7GameData.Save {
 			knownTechs = player.knownTechs;
 			currentlyResearchedTech = player.currentlyResearchedTech;
 			eraCivilopediaName = player.eraCivilopediaName;
+			gold = player.gold;
 		}
 	}
 }
