@@ -27,7 +27,7 @@ namespace C7GameData {
 		public HashSet<ID> knownTechs = new();
 
 		// The tech the player is currently researching.
-		public ID currentlyResearchedTech;
+		public ID currentlyResearchedTech { get; private set; }
 
 		// The civilopedia name of the era this player is in.
 		//
@@ -48,8 +48,23 @@ namespace C7GameData {
 		// The amount of gold this player has.
 		public int gold = 0;
 
+		// The number of "beakers" (gold) spent on the currently researched
+		// tech.
+		public int beakers = 0;
+
+		// The number of turns the player has been researching the current tech.
+		public int turnsResearched = 0;
+
 		public void AddUnit(MapUnit unit) {
 			this.units.Add(unit);
+		}
+
+		public void SetCurrentlyResearchedTech(ID id) {
+			currentlyResearchedTech = id;
+
+			// Clear out previous progress.
+			beakers = 0;
+			turnsResearched = 0;
 		}
 
 		public string GetNextCityName() {
