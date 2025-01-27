@@ -9,6 +9,7 @@ namespace C7GameData.Save {
 	public class SaveCity {
 		public ID id;
 		public ID owner;
+		public bool capital;
 		public TileLocation location;
 		public string producible;
 		public string name;
@@ -23,6 +24,7 @@ namespace C7GameData.Save {
 		public SaveCity(City city) {
 			id = city.id;
 			owner = city.owner.id;
+			capital = city.capital;
 			location = new TileLocation(city.location);
 			name = city.name;
 			size = city.size;
@@ -49,6 +51,7 @@ namespace C7GameData.Save {
 				shieldsStored = shieldsStored,
 				foodStored = foodStored,
 				foodNeededToGrow = foodNeededToGrow,
+				capital = capital,
 				residents = residents.ConvertAll(resident =>{
 					return new CityResident{
 						tileWorked = gameMap.tileAt(resident.tileWorked.x, resident.tileWorked.y),
