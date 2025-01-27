@@ -54,6 +54,16 @@ namespace C7Engine {
 					// incremented if the player is actually spending money on
 					// research, or has a science specialist.
 					player.turnsResearched++;
+
+					// Check to see if the player has finished researching their
+					// tech, and if they have, add it to the list of known techs
+					if (player.currentlyResearchedTech != null) {
+						Tech tech = gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
+						if (player.EstimateTurnsToResearch(tech) <= 0) {
+							player.knownTechs.Add(player.currentlyResearchedTech);
+							player.SetCurrentlyResearchedTech(null);
+						}
+					}
 				}
 				OnBeginTurn();
 			}
