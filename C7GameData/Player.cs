@@ -22,6 +22,10 @@ namespace C7GameData {
 
 		//Ordered list of priority data.  First is most important.
 		public List<StrategicPriority> strategicPriorityData = new List<StrategicPriority>();
+
+		// The list of techs known by this player.
+		public List<ID> knownTechs = new();
+
 		public int turnsUntilPriorityReevaluation = 0;
 
 		public void AddUnit(MapUnit unit) {
