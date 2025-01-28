@@ -667,6 +667,25 @@ namespace C7GameData {
 					st.Prerequisites.Add(save.Techs[t.Prerequisite3].id);
 				}
 			}
+
+			// Now that we have ids for all the techs, distribute the free techs
+			for (int i = 0; i < save.Civilizations.Count; ++i) {
+				Civilization sc = save.Civilizations[i];
+				RACE race = theBiq.Race[i];
+
+				if (race.FreeTech1 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech1].id);
+				}
+				if (race.FreeTech2 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech2].id);
+				}
+				if (race.FreeTech3 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech3].id);
+				}
+				if (race.FreeTech4 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech4].id);
+				}
+			}
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {
