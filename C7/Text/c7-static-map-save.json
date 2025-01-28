@@ -63282,7 +63282,7 @@
       "era": "Ancient Times",
       "id": "tech-1",
       "cost": 3,
-      "advanceIcon": 6,
+      "smallIconPath": "Art\\tech chooser\\Icons\\06-bronzeWorking-small.pcx",
       "x": 82,
       "y": 72
     },
@@ -63292,7 +63292,7 @@
       "era": "Ancient Times",
       "id": "tech-2",
       "cost": 4,
-      "advanceIcon": 40,
+      "smallIconPath": "Art\\tech chooser\\Icons\\40-Masonry-small.pcx",
       "x": 85,
       "y": 182
     },
@@ -63302,7 +63302,7 @@
       "era": "Ancient Times",
       "id": "tech-3",
       "cost": 5,
-      "advanceIcon": 1,
+      "smallIconPath": "Art\\tech chooser\\Icons\\01-alphabet-small.pcx",
       "x": 85,
       "y": 290
     },
@@ -63312,7 +63312,7 @@
       "era": "Ancient Times",
       "id": "tech-4",
       "cost": 2,
-      "advanceIcon": 57,
+      "smallIconPath": "Art\\tech chooser\\Icons\\57-Pottery-small.pcx",
       "x": 85,
       "y": 391
     },
@@ -63322,7 +63322,7 @@
       "era": "Ancient Times",
       "id": "tech-5",
       "cost": 4,
-      "advanceIcon": 78,
+      "smallIconPath": "Art\\tech chooser\\Icons\\78-TheWheel-small.pcx",
       "x": 85,
       "y": 473
     },
@@ -63332,7 +63332,7 @@
       "era": "Ancient Times",
       "id": "tech-6",
       "cost": 3,
-      "advanceIcon": 81,
+      "smallIconPath": "Art\\tech chooser\\Icons\\81-Warrior Code-small.pcx",
       "x": 85,
       "y": 554
     },
@@ -63342,7 +63342,7 @@
       "era": "Ancient Times",
       "id": "tech-7",
       "cost": 2,
-      "advanceIcon": 7,
+      "smallIconPath": "Art\\tech chooser\\Icons\\07-CeremonialBurial-small.pcx",
       "x": 85,
       "y": 638
     },
@@ -63352,7 +63352,7 @@
       "era": "Ancient Times",
       "id": "tech-8",
       "cost": 6,
-      "advanceIcon": 35,
+      "smallIconPath": "Art\\tech chooser\\Icons\\35-Ironworking-small.pcx",
       "x": 279,
       "y": 76,
       "prerequisites": [
@@ -63365,7 +63365,7 @@
       "era": "Ancient Times",
       "id": "tech-9",
       "cost": 8,
-      "advanceIcon": 82,
+      "smallIconPath": "Art\\tech chooser\\Icons\\82-writing-small.pcx",
       "x": 257,
       "y": 332,
       "prerequisites": [
@@ -63378,7 +63378,7 @@
       "era": "Ancient Times",
       "id": "tech-10",
       "cost": 4,
-      "advanceIcon": 50,
+      "smallIconPath": "Art\\tech chooser\\Icons\\50-mysticism-small.pcx",
       "x": 275,
       "y": 632,
       "prerequisites": [
@@ -63391,7 +63391,7 @@
       "era": "Ancient Times",
       "id": "tech-11",
       "cost": 8,
-      "advanceIcon": 41,
+      "smallIconPath": "Art\\tech chooser\\Icons\\41-mathematics-small.pcx",
       "x": 327,
       "y": 182,
       "prerequisites": [
@@ -63405,7 +63405,7 @@
       "era": "Ancient Times",
       "id": "tech-12",
       "cost": 6,
-      "advanceIcon": 54,
+      "smallIconPath": "Art\\tech chooser\\Icons\\54-Philosophy-small.pcx",
       "x": 499,
       "y": 216,
       "prerequisites": [
@@ -63418,7 +63418,7 @@
       "era": "Ancient Times",
       "id": "tech-13",
       "cost": 10,
-      "advanceIcon": 10,
+      "smallIconPath": "Art\\tech chooser\\Icons\\10-CodeOfLaws-small.pcx",
       "x": 469,
       "y": 298,
       "prerequisites": [
@@ -63431,7 +63431,7 @@
       "era": "Ancient Times",
       "id": "tech-14",
       "cost": 10,
-      "advanceIcon": 36,
+      "smallIconPath": "Art\\tech chooser\\Icons\\36-literature-small.pcx",
       "x": 469,
       "y": 379,
       "prerequisites": [
@@ -63444,7 +63444,7 @@
       "era": "Ancient Times",
       "id": "tech-15",
       "cost": 12,
-      "advanceIcon": 39,
+      "smallIconPath": "Art\\tech chooser\\Icons\\39-Mapmaking-small.pcx",
       "x": 469,
       "y": 459,
       "prerequisites": [
@@ -63458,7 +63458,7 @@
       "era": "Ancient Times",
       "id": "tech-16",
       "cost": 5,
-      "advanceIcon": 31,
+      "smallIconPath": "Art\\tech chooser\\Icons\\31-HorsebackRiding-small.pcx",
       "x": 469,
       "y": 544,
       "prerequisites": [
@@ -63472,7 +63472,7 @@
       "era": "Ancient Times",
       "id": "tech-17",
       "cost": 12,
-      "advanceIcon": 56,
+      "smallIconPath": "Art\\tech chooser\\Icons\\56-Polytheism-small.pcx",
       "x": 467,
       "y": 635,
       "prerequisites": [
@@ -63485,7 +63485,7 @@
       "era": "Ancient Times",
       "id": "tech-18",
       "cost": 16,
-      "advanceIcon": 15,
+      "smallIconPath": "Art\\tech chooser\\Icons\\15-Currency-small.pcx",
       "x": 636,
       "y": 175,
       "prerequisites": [
@@ -63498,7 +63498,7 @@
       "era": "Ancient Times",
       "id": "tech-19",
       "cost": 28,
-      "advanceIcon": 77,
+      "smallIconPath": "Art\\tech chooser\\Icons\\77-republic-small.pcx",
       "x": 680,
       "y": 278,
       "prerequisites": [
@@ -63512,7 +63512,7 @@
       "era": "Ancient Times",
       "id": "tech-20",
       "cost": 24,
-      "advanceIcon": 46,
+      "smallIconPath": "Art\\tech chooser\\Icons\\46-Monarchy-small.pcx",
       "x": 680,
       "y": 591,
       "prerequisites": [
@@ -63526,7 +63526,7 @@
       "era": "Ancient Times",
       "id": "tech-21",
       "cost": 20,
-      "advanceIcon": 14,
+      "smallIconPath": "Art\\tech chooser\\Icons\\14-Construction-small.pcx",
       "x": 611,
       "y": 70,
       "prerequisites": [
@@ -63540,7 +63540,7 @@
       "era": "Middle Ages",
       "id": "tech-22",
       "cost": 36,
-      "advanceIcon": 47,
+      "smallIconPath": "Art\\tech chooser\\Icons\\47-Monotheism-small.pcx",
       "x": 75,
       "y": 180
     },
@@ -63550,7 +63550,7 @@
       "era": "Middle Ages",
       "id": "tech-23",
       "cost": 32,
-      "advanceIcon": 24,
+      "smallIconPath": "Art\\tech chooser\\Icons\\Feudalism-small.pcx",
       "x": 73,
       "y": 398
     },
@@ -63560,7 +63560,7 @@
       "era": "Middle Ages",
       "id": "tech-24",
       "cost": 36,
-      "advanceIcon": 22,
+      "smallIconPath": "Art\\tech chooser\\Icons\\22-engineering-small.pcx",
       "x": 73,
       "y": 610
     },
@@ -63570,7 +63570,7 @@
       "era": "Middle Ages",
       "id": "tech-25",
       "cost": 40,
-      "advanceIcon": 79,
+      "smallIconPath": "Art\\tech chooser\\Icons\\79-theology-small.pcx",
       "x": 241,
       "y": 180,
       "prerequisites": [
@@ -63583,7 +63583,7 @@
       "era": "Middle Ages",
       "id": "tech-26",
       "cost": 32,
-      "advanceIcon": 9,
+      "smallIconPath": "Art\\tech chooser\\Icons\\09-Chivalry2-small.pcx",
       "x": 210,
       "y": 295,
       "prerequisites": [
@@ -63597,7 +63597,7 @@
       "era": "Middle Ages",
       "id": "tech-27",
       "cost": 44,
-      "advanceIcon": 34,
+      "smallIconPath": "Art\\tech chooser\\Icons\\34-Invention-bolt-small.pcx",
       "x": 209,
       "y": 531,
       "prerequisites": [
@@ -63611,7 +63611,7 @@
       "era": "Middle Ages",
       "id": "tech-28",
       "cost": 36,
-      "advanceIcon": 58,
+      "smallIconPath": "Art\\tech chooser\\Icons\\58-printing press-small.pcx",
       "x": 432,
       "y": 180,
       "prerequisites": [
@@ -63624,7 +63624,7 @@
       "era": "Middle Ages",
       "id": "tech-29",
       "cost": 40,
-      "advanceIcon": 49,
+      "smallIconPath": "Art\\tech chooser\\Icons\\49-musicTheory-small.pcx",
       "x": 430,
       "y": 287,
       "prerequisites": [
@@ -63637,7 +63637,7 @@
       "era": "Middle Ages",
       "id": "tech-30",
       "cost": 44,
-      "advanceIcon": 19,
+      "smallIconPath": "Art\\tech chooser\\Icons\\19-education-small.pcx",
       "x": 331,
       "y": 374,
       "prerequisites": [
@@ -63650,7 +63650,7 @@
       "era": "Middle Ages",
       "id": "tech-31",
       "cost": 48,
-      "advanceIcon": 30,
+      "smallIconPath": "Art\\tech chooser\\Icons\\30-gunpowder-small.pcx",
       "x": 388,
       "y": 531,
       "prerequisites": [
@@ -63663,7 +63663,7 @@
       "era": "Middle Ages",
       "id": "tech-32",
       "cost": 52,
-      "advanceIcon": 5,
+      "smallIconPath": "Art\\tech chooser\\Icons\\05-Banking-small.pcx",
       "x": 561,
       "y": 338,
       "prerequisites": [
@@ -63676,7 +63676,7 @@
       "era": "Middle Ages",
       "id": "tech-33",
       "cost": 56,
-      "advanceIcon": 3,
+      "smallIconPath": "Art\\tech chooser\\Icons\\03-Astronomy-small.pcx",
       "x": 526,
       "y": 429,
       "prerequisites": [
@@ -63689,7 +63689,7 @@
       "era": "Middle Ages",
       "id": "tech-34",
       "cost": 60,
-      "advanceIcon": 8,
+      "smallIconPath": "Art\\tech chooser\\Icons\\08-Chemistry-small.pcx",
       "x": 562,
       "y": 531,
       "prerequisites": [
@@ -63702,7 +63702,7 @@
       "era": "Middle Ages",
       "id": "tech-35",
       "cost": 68,
-      "advanceIcon": 16,
+      "smallIconPath": "Art\\tech chooser\\Icons\\16-democracy-small.pcx",
       "x": 606,
       "y": 180,
       "prerequisites": [
@@ -63716,7 +63716,7 @@
       "era": "Middle Ages",
       "id": "tech-36",
       "cost": 56,
-      "advanceIcon": 18,
+      "smallIconPath": "Art\\tech chooser\\Icons\\18-Economics-small.pcx",
       "x": 735,
       "y": 276,
       "prerequisites": [
@@ -63729,7 +63729,7 @@
       "era": "Middle Ages",
       "id": "tech-37",
       "cost": 56,
-      "advanceIcon": 52,
+      "smallIconPath": "Art\\tech chooser\\Icons\\52-navigation-small.pcx",
       "x": 766,
       "y": 361,
       "prerequisites": [
@@ -63742,7 +63742,7 @@
       "era": "Middle Ages",
       "id": "tech-38",
       "cost": 64,
-      "advanceIcon": 55,
+      "smallIconPath": "Art\\tech chooser\\Icons\\55-physics-small.pcx",
       "x": 703,
       "y": 458,
       "prerequisites": [
@@ -63756,7 +63756,7 @@
       "era": "Middle Ages",
       "id": "tech-39",
       "cost": 64,
-      "advanceIcon": 43,
+      "smallIconPath": "Art\\tech chooser\\Icons\\43-metallurgy-small.pcx",
       "x": 590,
       "y": 629,
       "prerequisites": [
@@ -63769,7 +63769,7 @@
       "era": "Middle Ages",
       "id": "tech-40",
       "cost": 52,
-      "advanceIcon": 27,
+      "smallIconPath": "Art\\tech chooser\\Icons\\27-freeArtistry-small.pcx",
       "x": 686,
       "y": 83,
       "prerequisites": [
@@ -63782,7 +63782,7 @@
       "era": "Middle Ages",
       "id": "tech-41",
       "cost": 68,
-      "advanceIcon": 80,
+      "smallIconPath": "Art\\tech chooser\\Icons\\80-theoryGravity-small.pcx",
       "x": 850,
       "y": 440,
       "prerequisites": [
@@ -63795,7 +63795,7 @@
       "era": "Middle Ages",
       "id": "tech-42",
       "cost": 68,
-      "advanceIcon": 37,
+      "smallIconPath": "Art\\tech chooser\\Icons\\37-Magnetism-small.pcx",
       "x": 786,
       "y": 533,
       "prerequisites": [
@@ -63808,7 +63808,7 @@
       "era": "Middle Ages",
       "id": "tech-43",
       "cost": 64,
-      "advanceIcon": 44,
+      "smallIconPath": "Art\\tech chooser\\Icons\\44-militaryTradition-small.pcx",
       "x": 807,
       "y": 633,
       "prerequisites": [
@@ -63821,7 +63821,7 @@
       "era": "Industrial Ages",
       "id": "tech-44",
       "cost": 120,
-      "advanceIcon": 51,
+      "smallIconPath": "Art\\tech chooser\\Icons\\51-Nationalism-small.pcx",
       "x": 75,
       "y": 116
     },
@@ -63831,7 +63831,7 @@
       "era": "Industrial Ages",
       "id": "tech-45",
       "cost": 120,
-      "advanceIcon": 71,
+      "smallIconPath": "Art\\tech chooser\\Icons\\71-SteamPower-small.pcx",
       "x": 73,
       "y": 369
     },
@@ -63841,7 +63841,7 @@
       "era": "Industrial Ages",
       "id": "tech-46",
       "cost": 100,
-      "advanceIcon": 42,
+      "smallIconPath": "Art\\tech chooser\\Icons\\42-Medicine-small.pcx",
       "x": 76,
       "y": 548
     },
@@ -63851,7 +63851,7 @@
       "era": "Industrial Ages",
       "id": "tech-47",
       "cost": 120,
-      "advanceIcon": 12,
+      "smallIconPath": "Art\\tech chooser\\Icons\\12-Communism-small-vp.pcx",
       "x": 325,
       "y": 77,
       "prerequisites": [
@@ -63864,7 +63864,7 @@
       "era": "Industrial Ages",
       "id": "tech-48",
       "cost": 120,
-      "advanceIcon": 32,
+      "smallIconPath": "Art\\tech chooser\\Icons\\32-Industrialization-small.pcx",
       "x": 225,
       "y": 255,
       "prerequisites": [
@@ -63877,7 +63877,7 @@
       "era": "Industrial Ages",
       "id": "tech-49",
       "cost": 140,
-      "advanceIcon": 20,
+      "smallIconPath": "Art\\tech chooser\\Icons\\20-Electricity-small-vp.pcx",
       "x": 204,
       "y": 464,
       "prerequisites": [
@@ -63890,7 +63890,7 @@
       "era": "Industrial Ages",
       "id": "tech-50",
       "cost": 100,
-      "advanceIcon": 67,
+      "smallIconPath": "Art\\tech chooser\\Icons\\67-ScientificMethod-small.pcx",
       "x": 315,
       "y": 549,
       "prerequisites": [
@@ -63904,7 +63904,7 @@
       "era": "Industrial Ages",
       "id": "tech-51",
       "cost": 90,
-      "advanceIcon": 65,
+      "smallIconPath": "Art\\tech chooser\\Icons\\65-sanitation-small.pcx",
       "x": 202,
       "y": 632,
       "prerequisites": [
@@ -63917,7 +63917,7 @@
       "era": "Industrial Ages",
       "id": "tech-52",
       "cost": 90,
-      "advanceIcon": 23,
+      "smallIconPath": "Art\\tech chooser\\Icons\\23-espionage-small.pcx",
       "x": 325,
       "y": 169,
       "prerequisites": [
@@ -63931,7 +63931,7 @@
       "era": "Industrial Ages",
       "id": "tech-53",
       "cost": 100,
-      "advanceIcon": 75,
+      "smallIconPath": "Art\\tech chooser\\Icons\\75-Corporation-small.pcx",
       "x": 304,
       "y": 345,
       "prerequisites": [
@@ -63944,7 +63944,7 @@
       "era": "Industrial Ages",
       "id": "tech-54",
       "cost": 160,
-      "advanceIcon": 61,
+      "smallIconPath": "Art\\tech chooser\\Icons\\61-Refining-small.pcx",
       "x": 433,
       "y": 245,
       "prerequisites": [
@@ -63957,7 +63957,7 @@
       "era": "Industrial Ages",
       "id": "tech-55",
       "cost": 140,
-      "advanceIcon": 72,
+      "smallIconPath": "Art\\tech chooser\\Icons\\72-Steel-small.pcx",
       "x": 409,
       "y": 427,
       "prerequisites": [
@@ -63970,7 +63970,7 @@
       "era": "Industrial Ages",
       "id": "tech-56",
       "cost": 200,
-      "advanceIcon": 4,
+      "smallIconPath": "Art\\tech chooser\\Icons\\04-AtomicTheory-small-vp.pcx",
       "x": 466,
       "y": 598,
       "prerequisites": [
@@ -63983,7 +63983,7 @@
       "era": "Industrial Ages",
       "id": "tech-57",
       "cost": 160,
-      "advanceIcon": 11,
+      "smallIconPath": "Art\\tech chooser\\Icons\\11-Combustion-small-vp.pcx",
       "x": 518,
       "y": 335,
       "prerequisites": [
@@ -63997,7 +63997,7 @@
       "era": "Industrial Ages",
       "id": "tech-58",
       "cost": 140,
-      "advanceIcon": 62,
+      "smallIconPath": "Art\\tech chooser\\Icons\\62-ReplaceableParts-small.pcx",
       "x": 513,
       "y": 509,
       "prerequisites": [
@@ -64010,7 +64010,7 @@
       "era": "Industrial Ages",
       "id": "tech-59",
       "cost": 180,
-      "advanceIcon": 26,
+      "smallIconPath": "Art\\tech chooser\\Icons\\26-Flight-small.pcx",
       "x": 607,
       "y": 179,
       "prerequisites": [
@@ -64023,7 +64023,7 @@
       "era": "Industrial Ages",
       "id": "tech-60",
       "cost": 120,
-      "advanceIcon": 2,
+      "smallIconPath": "Art\\tech chooser\\Icons\\02-AmphibiousWarfare-small.pcx",
       "x": 689,
       "y": 296,
       "prerequisites": [
@@ -64036,7 +64036,7 @@
       "era": "Industrial Ages",
       "id": "tech-61",
       "cost": 140,
-      "advanceIcon": 38,
+      "smallIconPath": "Art\\tech chooser\\Icons\\38-Manufacturing-small.pcx",
       "x": 654,
       "y": 421,
       "prerequisites": [
@@ -64050,7 +64050,7 @@
       "era": "Industrial Ages",
       "id": "tech-62",
       "cost": 180,
-      "advanceIcon": 21,
+      "smallIconPath": "Art\\tech chooser\\Icons\\21-Electronics-small.pcx",
       "x": 621,
       "y": 604,
       "prerequisites": [
@@ -64063,7 +64063,7 @@
       "era": "Industrial Ages",
       "id": "tech-63",
       "cost": 140,
-      "advanceIcon": 48,
+      "smallIconPath": "Art\\tech chooser\\Icons\\48-MotorizedTransport-small.pcx",
       "x": 741,
       "y": 509,
       "prerequisites": [
@@ -64076,7 +64076,7 @@
       "era": "Industrial Ages",
       "id": "tech-64",
       "cost": 180,
-      "advanceIcon": 0,
+      "smallIconPath": "Art\\tech chooser\\Icons\\00-AdvancedFlight-small.pcx",
       "x": 812,
       "y": 319,
       "prerequisites": [
@@ -64091,7 +64091,7 @@
       "era": "Modern Times",
       "id": "tech-65",
       "cost": 240,
-      "advanceIcon": 64,
+      "smallIconPath": "Art\\tech chooser\\Icons\\64-rocketry-small.pcx",
       "x": 72,
       "y": 239
     },
@@ -64101,7 +64101,7 @@
       "era": "Modern Times",
       "id": "tech-66",
       "cost": 280,
-      "advanceIcon": 25,
+      "smallIconPath": "Art\\tech chooser\\Icons\\25-FissionPower-small.pcx",
       "x": 72,
       "y": 398
     },
@@ -64111,7 +64111,7 @@
       "era": "Modern Times",
       "id": "tech-67",
       "cost": 260,
-      "advanceIcon": 13,
+      "smallIconPath": "Art\\tech chooser\\Icons\\13-Computers-small-vp.pcx",
       "x": 72,
       "y": 567
     },
@@ -64121,7 +64121,7 @@
       "era": "Modern Times",
       "id": "tech-68",
       "cost": 240,
-      "advanceIcon": 60,
+      "smallIconPath": "Art\\tech chooser\\Icons\\60-Recycle-small.pcx",
       "x": 239,
       "y": 153,
       "prerequisites": [
@@ -64134,7 +64134,7 @@
       "era": "Modern Times",
       "id": "tech-69",
       "cost": 300,
-      "advanceIcon": 69,
+      "smallIconPath": "Art\\tech chooser\\Icons\\69-spaceflight-small.pcx",
       "x": 254,
       "y": 239,
       "prerequisites": [
@@ -64147,7 +64147,7 @@
       "era": "Modern Times",
       "id": "tech-70",
       "cost": 280,
-      "advanceIcon": 53,
+      "smallIconPath": "Art\\tech chooser\\Icons\\53-NuclearPower-small.pcx",
       "x": 266,
       "y": 443,
       "prerequisites": [
@@ -64160,7 +64160,7 @@
       "era": "Modern Times",
       "id": "tech-71",
       "cost": 300,
-      "advanceIcon": 73,
+      "smallIconPath": "Art\\tech chooser\\Icons\\73-Superconductor-small.pcx",
       "x": 533,
       "y": 274,
       "prerequisites": [
@@ -64174,7 +64174,7 @@
       "era": "Modern Times",
       "id": "tech-72",
       "cost": 320,
-      "advanceIcon": 45,
+      "smallIconPath": "Art\\tech chooser\\Icons\\45-Miniaturization-small.pcx",
       "x": 271,
       "y": 570,
       "prerequisites": [
@@ -64187,7 +64187,7 @@
       "era": "Modern Times",
       "id": "tech-73",
       "cost": 260,
-      "advanceIcon": 17,
+      "smallIconPath": "Art\\tech chooser\\Icons\\17-Ecology-small.pcx",
       "x": 72,
       "y": 91
     },
@@ -64197,7 +64197,7 @@
       "era": "Modern Times",
       "id": "tech-74",
       "cost": 280,
-      "advanceIcon": 74,
+      "smallIconPath": "Art\\tech chooser\\Icons\\74-syntheticFibers-small.pcx",
       "x": 415,
       "y": 88,
       "prerequisites": [
@@ -64210,7 +64210,7 @@
       "era": "Modern Times",
       "id": "tech-75",
       "cost": 260,
-      "advanceIcon": 66,
+      "smallIconPath": "Art\\tech chooser\\Icons\\66-Satellites-small.pcx",
       "x": 537,
       "y": 382,
       "prerequisites": [
@@ -64223,7 +64223,7 @@
       "era": "Modern Times",
       "id": "tech-76",
       "cost": 280,
-      "advanceIcon": 76,
+      "smallIconPath": "Art\\tech chooser\\Icons\\76-Laser-small.pcx",
       "x": 464,
       "y": 505,
       "prerequisites": [
@@ -64237,7 +64237,7 @@
       "era": "Modern Times",
       "id": "tech-77",
       "cost": 320,
-      "advanceIcon": 29,
+      "smallIconPath": "Art\\tech chooser\\Icons\\29-Genetics-small-vp.pcx",
       "x": 437,
       "y": 625,
       "prerequisites": [
@@ -64250,7 +64250,7 @@
       "era": "Modern Times",
       "id": "tech-78",
       "cost": 300,
-      "advanceIcon": 70,
+      "smallIconPath": "Art\\tech chooser\\Icons\\70-Stealth-small.pcx",
       "x": 630,
       "y": 87,
       "prerequisites": [
@@ -64263,7 +64263,7 @@
       "era": "Modern Times",
       "id": "tech-79",
       "cost": 280,
-      "advanceIcon": 68,
+      "smallIconPath": "Art\\tech chooser\\Icons\\68-SmartWeapons-small.pcx",
       "x": 682,
       "y": 479,
       "prerequisites": [
@@ -64277,7 +64277,7 @@
       "era": "Modern Times",
       "id": "tech-80",
       "cost": 320,
-      "advanceIcon": 63,
+      "smallIconPath": "Art\\tech chooser\\Icons\\63-robotics-small.pcx",
       "x": 663,
       "y": 573,
       "prerequisites": [
@@ -64291,7 +64291,7 @@
       "era": "Modern Times",
       "id": "tech-81",
       "cost": 360,
-      "advanceIcon": 33,
+      "smallIconPath": "Art\\tech chooser\\Icons\\33-integratedDefense-small.pcx",
       "x": 816,
       "y": 376,
       "prerequisites": [
@@ -64306,7 +64306,7 @@
       "era": "Industrial Ages",
       "id": "tech-82",
       "cost": 100,
-      "advanceIcon": -858993460,
+      "smallIconPath": "Art\\tech chooser\\Icons\\NavalTactics-small.pcx",
       "x": 105,
       "y": 215,
       "prerequisites": [
@@ -64319,7 +64319,7 @@
       "era": "Industrial Ages",
       "id": "tech-83",
       "cost": 130,
-      "advanceIcon": -858993460,
+      "smallIconPath": "Art\\tech chooser\\Icons\\Fascism-small.pcx",
       "x": 497,
       "y": 115,
       "prerequisites": [
