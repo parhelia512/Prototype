@@ -449,12 +449,14 @@ namespace C7GameData {
 		}
 
 		private void ImportSavCities() {
-			foreach (QueryCiv3.Sav.CITY city in savData.City) {
+			for (int i = 0; i < savData.City.Length; ++i) {
+				QueryCiv3.Sav.CITY city = savData.City[i];
 				SavePlayer owner = save.Players[city.Owner];
 				SaveCity saveCity = new SaveCity{
 					id = ids.CreateID("city"),
 					owner = owner.id,
 					location = new TileLocation(city.X, city.Y),
+					capital = i == savData.Lead[city.Owner].CapitalCity,
 					// producible = city.Constructing // TODO: lookup building or unit prototype
 					producible = "Warrior",
 					name = city.Name,
@@ -480,6 +482,7 @@ namespace C7GameData {
 					id = ids.CreateID("city"),
 					owner = player.id,
 					location = new TileLocation(city.X, city.Y),
+					capital = city.HasPalace != 0,
 					// TODO: try and get this from the unit prototype
 					producible = "Worker",
 					name = city.Name,
