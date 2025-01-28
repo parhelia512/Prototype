@@ -377,12 +377,12 @@ namespace C7GameData {
 					continue; // can probably break here
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];
-				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/leader.FoundedCities, leader.CapitalCity));
+				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/leader.FoundedCities));
 				i++;
 			}
 		}
 
-		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex, int capitalCityIndex = -1) {
+		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
 				colorIndex = civ.colorIndex,
@@ -391,7 +391,6 @@ namespace C7GameData {
 				civilization = civ.name,
 				hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
 				cityNameIndex = cityNameIndex,
-				capitalCityIndex = capitalCityIndex,
 			};
 		}
 
@@ -457,7 +456,7 @@ namespace C7GameData {
 					id = ids.CreateID("city"),
 					owner = owner.id,
 					location = new TileLocation(city.X, city.Y),
-					capital = i == owner.capitalCityIndex,
+					capital = i == savData.Lead[city.Owner].CapitalCity,
 					// producible = city.Constructing // TODO: lookup building or unit prototype
 					producible = "Warrior",
 					name = city.Name,

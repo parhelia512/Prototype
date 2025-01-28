@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace C7GameData.Save {
 
@@ -12,13 +11,6 @@ namespace C7GameData.Save {
 
 		public string civilization;
 		public int cityNameIndex = 0;
-
-		// Index of the player's capital city. 
-		// It will only be stored as a part of SavePlayer when loading SAV files.
-		// When loading BIQ (scenario) files and custom JSON saves, 
-		// the Civ's capital information will be retrieved directly into the SaveCity class instead.
-		[JsonIgnore]
-		public int capitalCityIndex = -1;
 
 		public List<TileLocation> tileKnowledge = new List<TileLocation>();
 
