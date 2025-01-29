@@ -13,8 +13,13 @@ public partial class ScienceAdvisor : TextureRect {
 	private void CreateUI() {
 		// TODO: support other eras. Amusingly the dependency arrows are drawn
 		// on this texture, so to render prereqs we need to update this per era.
-		ImageTexture DomesticBackground = Util.LoadTextureFromPCX("Art/Advisors/science_ancient.pcx");
-		this.Texture = DomesticBackground;
+		//
+		// science_industrial_new is used as the industrial tech tree is
+		// different from vanilla civ3.
+		ImageTexture AncientBackground = Util.LoadTextureFromPCX("Art/Advisors/science_ancient.pcx");
+		ImageTexture MiddleBackground = Util.LoadTextureFromPCX("Art/Advisors/science_middle.pcx");
+		ImageTexture IndustrialBackground = Util.LoadTextureFromPCX("Art/Advisors/science_industrial_new.pcx");
+		ImageTexture ModernBackground = Util.LoadTextureFromPCX("Art/Advisors/science_modern.pcx");
 
 		// TODO: Age-based background.  Only use Ancient for now.
 		// TODO: Consider moving this to an advisor utility, since we're copying
@@ -51,11 +56,22 @@ public partial class ScienceAdvisor : TextureRect {
 
 		using (UIGameDataAccess gameDataAccess = new()) {
 			List<Tech> techs = gameDataAccess.gameData.techs;
-			List<ID> knownTechs = gameDataAccess.gameData.GetHumanPlayers()[0].knownTechs;
+			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+			List<ID> knownTechs = player.knownTechs;
+
+			// Set the tech background based on the player's era.
+			if (player.eraCivilopediaName == "ERAS_Ancient_Times") {
+				this.Texture = AncientBackground;
+			} else if (player.eraCivilopediaName == "ERAS_Middle_Ages") {
+				this.Texture = MiddleBackground;
+			} else if (player.eraCivilopediaName == "ERAS_Industrial_Age") {
+				this.Texture = IndustrialBackground;
+			} else if (player.eraCivilopediaName == "ERAS_Modern_Era") {
+				this.Texture = ModernBackground;
+			}
 
 			foreach (Tech tech in techs) {
-				// TODO: handle other eras.
-				if (tech.Era != "Ancient Times") {
+				if (tech.EraCivilopediaName != player.eraCivilopediaName) {
 					continue;
 				}
 
