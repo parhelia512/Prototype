@@ -13,6 +13,7 @@ public partial class Game : Node2D {
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
 	[Signal] public delegate void NewAutoselectedUnitEventHandler();
 	[Signal] public delegate void NoMoreAutoselectableUnitsEventHandler();
+	[Signal] public delegate void UpdateTechProgressEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
 
@@ -212,6 +213,10 @@ public partial class Game : Node2D {
 					// F6 is the science advisor.
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
+					Tech tech = gameData.techs.Find(x => x.id == gameData.GetHumanPlayers()[0].currentlyResearchedTech);
+
+					// TODO: calculate research speed.
+					EmitSignal(SignalName.UpdateTechProgress, tech.Name, -1);
 					break;
 			}
 		}

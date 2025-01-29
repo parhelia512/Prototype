@@ -37,4 +37,8 @@ public partial class GameStatus : MarginContainer {
 	private void OnNoMoreAutoselectableUnits() {
 		LowerRightInfoBox.SetEndOfTurnStatus();
 	}
+
+	private void OnUpdateTechProgress(string techName, int turnsRemaining) {
+		LowerRightInfoBox.UpdateTechProgress(techName, turnsRemaining);
+	}
 }
