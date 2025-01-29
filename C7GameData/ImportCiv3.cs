@@ -23,13 +23,13 @@ namespace C7GameData {
 		private BiqData defaultBiq;
 		private SavData savData;
 		private PediaIcons pediaIcons;
-		private readonly IDFactory ids;
+		private readonly ID.Factory ids;
 
 		private static ILogger log = Log.ForContext<ImportCiv3>();
 
 		private ImportCiv3() {
 			save = new SaveGame();
-			ids = new IDFactory();
+			ids = new ID.Factory(save);
 		}
 
 		/// <summary>
@@ -351,20 +351,20 @@ namespace C7GameData {
 		private void ImportBicLeaders() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 
- 			// Make a player for each civ. The barbarians are always civ 0.
- 			for (int i = 0; i < save.Civilizations.Count; ++i) {
- 				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
- 										/*isBarbarian=*/i == 0,
- 										/*isHuman=*/false,
-										/*cityNameIndex=*/0,
-										/*era=*/""));
- 			}
+			// Make a player for each civ. The barbarians are always civ 0.
+			for (int i = 0; i < save.Civilizations.Count; ++i) {
+				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
+									   /*isBarbarian=*/i == 0,
+									   /*isHuman=*/false,
+									   /*cityNameIndex=*/0,
+									   /*era=*/""));
+			}
 
 			// Now fill in the rest of the data using the leader struct.
 			bool foundHuman = false;
 			int leadIndex = 0;
- 			foreach (LEAD lead in theBiq.Lead) {
- 				SavePlayer player = save.Players[lead.Civ];
+			foreach (LEAD lead in theBiq.Lead) {
+				SavePlayer player = save.Players[lead.Civ];
 
 				// Put the player in the correct starting era.
 				player.eraCivilopediaName = theBiq.Eras[lead.InitialEra].CivilopediaEntry;
@@ -378,7 +378,7 @@ namespace C7GameData {
 
 				// Mark the first human playable civ as the human player.
 				if (lead.HumanPlayer == 1 && !foundHuman) {
- 					player.human = true;
+					player.human = true;
 					foundHuman = true;
 				}
 
