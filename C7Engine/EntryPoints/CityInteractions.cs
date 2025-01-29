@@ -5,7 +5,7 @@ namespace C7Engine {
 	using C7GameData;
 
 	public class CityInteractions {
-		public static void BuildCity(int x, int y, ID playerID, string name) {
+		public static City BuildCity(int x, int y, ID playerID, string name) {
 			GameData gameData = EngineStorage.gameData;
 			Player owner = gameData.GetPlayer(playerID);
 			Tile tileWithNewCity = gameData.map.tileAt(x, y);
@@ -24,8 +24,10 @@ namespace C7Engine {
 			// a city is build on a mine, the mine should be removed.
 			tileWithNewCity.overlays.road = true;
 			tileWithNewCity.overlays.mine = false;
+			tileWithNewCity.overlays.irrigation = false;
 
 			gameData.UpdateTileOwners();
+			return newCity;
 		}
 
 		public static void DestroyCity(int x, int y) {
