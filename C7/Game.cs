@@ -127,6 +127,10 @@ public partial class Game : Node2D {
 					if (startingSettler != null)
 						mapView.centerCameraOnTile(startingSettler.location);
 				}
+
+				// Allow the city screen to control whether tile assignments
+				// are visible.
+				cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
 			}
 
 			//TODO: What was this supposed to do?  It throws errors and occasinally causes crashes now, because _OnViewportSizeChanged doesn't exist
@@ -576,7 +580,7 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.Escape && cityScreen.Visible) {
-			cityScreen.Hide();
+			cityScreen.HideScreen();
 			return;
 		}
 
