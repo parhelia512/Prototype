@@ -159,6 +159,8 @@ namespace C7Engine {
 					}
 					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));
 				}
+
+				city.owner.gold += city.CurrentCommerceYield();
 			}
 		}
 

@@ -118,6 +118,8 @@ namespace C7GameData {
 			return yield;
 		}
 		public int CurrentCommerceYield() {
+			// TODO: Split this into science, entertainment, etc.
+
 			int yield = 3;  //city center min yield
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.commerceYield(owner);
