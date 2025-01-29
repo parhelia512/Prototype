@@ -126,6 +126,34 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgChooseResearch : MessageToEngine {
+		private ID techId;
+		public MsgChooseResearch(ID techId) {
+			this.techId = techId;
+		}
+
+		public override void process() {
+			Player player = EngineStorage.gameData.GetHumanPlayers()[0];
+			if (player.currentlyResearchedTech == techId) {
+				return;
+			}
+			Tech requestedTech = EngineStorage.gameData.techs.Find(t => t.id == techId);
+
+			// Ensure this is an eligible tech to research.
+			//
+			// TODO: do a topological sort to allow a queue of techs to study.
+			foreach (Tech prereq in requestedTech.Prerequisites) {
+				if (!player.knownTechs.Contains(prereq.id)) {
+					return;
+				}
+			}
+
+			// Start researching this tech and update the UI.
+			player.currentlyResearchedTech = requestedTech.id;
+			new MsgUpdateUiAfterTechSelection().send();
+		}
+	}
+
 	public class MsgEndTurn : MessageToEngine {
 
 		private ILogger log = Log.ForContext<MsgEndTurn>();

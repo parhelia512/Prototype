@@ -15,7 +15,10 @@ namespace C7GameData.Save {
 		public List<TileLocation> tileKnowledge = new List<TileLocation>();
 
 		// The list of techs known by this player.
-		public List<ID> knownTechs = new();
+		public HashSet<ID> knownTechs = new();
+
+		// The tech the player is currently researching.
+		public ID currentlyResearchedTech;
 
 		// The civilopedia name of the era this player is in.
 		//
@@ -36,6 +39,7 @@ namespace C7GameData.Save {
 				cityNameIndex = cityNameIndex,
 				tileKnowledge = new TileKnowledge(),
 				knownTechs = knownTechs,
+				currentlyResearchedTech = currentlyResearchedTech,
 				eraCivilopediaName = eraCivilopediaName,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
@@ -64,6 +68,7 @@ namespace C7GameData.Save {
 			tileKnowledge = player.tileKnowledge.AllKnownTiles().ConvertAll(tile => new TileLocation(tile));
 			turnsUntilPriorityReevaluation = player.turnsUntilPriorityReevaluation;
 			knownTechs = player.knownTechs;
+			currentlyResearchedTech = player.currentlyResearchedTech;
 			eraCivilopediaName = player.eraCivilopediaName;
 		}
 	}
