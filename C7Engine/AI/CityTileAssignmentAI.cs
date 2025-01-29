@@ -14,7 +14,8 @@ namespace C7Engine.AI {
 
 		private static ILogger log = Log.ForContext<CityTileAssignmentAI>();
 
-		public static void AssignNewCitizenToTile(City city, CityResident newResident) {
+		public static void AssignNewCitizenToTile(CityResident newResident) {
+			City city = newResident.city;
 			int foodYield = city.CurrentFoodYield();
 
 			int desiredFoodRate = city.size * FOOD_PER_CITIZEN + DesiredFoodSurplusPerTurn;
