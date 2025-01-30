@@ -29,7 +29,7 @@ namespace C7GameData {
 
 		private ImportCiv3() {
 			save = new SaveGame();
-			ids = new ID.Factory(save);
+			ids = new ID.Factory();
 		}
 
 		/// <summary>
