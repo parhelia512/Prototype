@@ -197,6 +197,8 @@ public partial class Game : Node2D {
 							MapUnitExtensions.disband(mCD.city.owner.units[i]);
 						}
 					}
+
+					gameData.UpdateTileOwnersOnCityDestruction(mCD.city);
 					break;
 				case MsgUpdateUiAfterMove mUUAM:
 					// The unit finished moving and still has moves left, so we need to

@@ -77,12 +77,26 @@ namespace C7GameData {
 		// Currently, it marks a tile as owned only if it is a city tile or adjacent to a city.
 		public void UpdateTileOwners() {
 			foreach (City city in cities) {
+				if (city.size == 0) {
+					continue; // skip destroyed cities
+				}
+
 				city.location.owner = city.owner;
 
 				foreach (Tile tile in city.location.neighbors.Values) {
 					tile.owner = city.owner;
 				}
 			}
+		}
+
+		public void UpdateTileOwnersOnCityDestruction(City city) {
+			city.location.owner = null;
+
+			foreach (Tile tile in city.location.neighbors.Values) {
+				tile.owner = null;
+			}
+
+			UpdateTileOwners();
 		}
 
 		/**
