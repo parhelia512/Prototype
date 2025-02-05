@@ -94,7 +94,7 @@ namespace C7Engine {
 
 		public static void RollToPromote(this MapUnit unit, MapUnit opponent, bool waitForAnimation) {
 			double promotionChance = unit.experienceLevel.promotionChance;
-			if (opponent.owner.isBarbarians)
+			if (opponent.owner.IsBarbarians)
 				promotionChance /= 2.0;
 			// TODO: Double promotionChance if unit is owned by a militaristic civ
 
@@ -274,10 +274,10 @@ namespace C7Engine {
 
 		public static void OnEnterTile(this MapUnit unit, Tile tile) {
 			//Add to player knowledge of tiles
-			unit.owner.tileKnowledge.AddTilesToKnown(tile);
+			unit.owner.TileKnowledge.AddTilesToKnown(tile);
 
 			// Disperse barb camp
-			if (tile.hasBarbarianCamp && (!unit.owner.isBarbarians)) {
+			if (tile.hasBarbarianCamp && (!unit.owner.IsBarbarians)) {
 				tile.DisbandNonDefendingUnits();
 				EngineStorage.gameData.map.barbarianCamps.Remove(tile);
 				tile.hasBarbarianCamp = false;
@@ -404,8 +404,8 @@ namespace C7Engine {
 			unit.location.unitsOnTile.Remove(unit);
 			gameData.mapUnits.Remove(unit);
 			foreach (Player player in gameData.players) {
-				if (player.units.Contains(unit)) {
-					player.units.Remove(unit);
+				if (player.Units.Contains(unit)) {
+					player.Units.Remove(unit);
 				}
 			}
 		}
@@ -430,7 +430,7 @@ namespace C7Engine {
 
 			// TODO: Need to check somewhere that this unit is allowed to build a city on its current tile. Either do that here or in every caller
 			// (probably best to just do it here).
-			CityInteractions.BuildCity(unit.location.xCoordinate, unit.location.yCoordinate, unit.owner.id, cityName);
+			CityInteractions.BuildCity(unit.location.xCoordinate, unit.location.yCoordinate, unit.owner.Id, cityName);
 
 			// TODO: Should directly delete the unit instead of disbanding it. Disbanding in a city will eventually award shields, which we
 			// obviously don't want to do here.

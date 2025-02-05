@@ -25,7 +25,7 @@ namespace C7GameData.AIData {
 		/// <param name="player"></param>
 		/// <returns></returns>
 		public override void CalculateWeightAndMetadata(Player player) {
-			if (player.cities.Count < 2) {
+			if (player.Cities.Count < 2) {
 				this.calculatedWeight = 0;
 			} else {
 				int landScore = UtilityCalculations.CalculateAvailableLandScore(player);
@@ -42,7 +42,7 @@ namespace C7GameData.AIData {
 							int rnd = GameData.rng.Next(opponentCount);
 							if (rnd == 0) {
 								//Let's fight this nation!
-								properties["opponent"] = nation.id.ToString();
+								properties["opponent"] = nation.Id.ToString();
 								calculatedWeight = TEMP_WAR_PRIORITY_WEIGHT;
 							} else {
 								opponentCount--;    //guarantees we'll eventually get an opponent selected

@@ -29,7 +29,7 @@ namespace C7Engine {
 		 * get hung up on knowing exactly how it should be done the road.
 		 */
 		public static IProducible GetNextItemToBeProduced(City city, IProducible lastProduced) {
-			List<StrategicPriority> priorities = city.owner.strategicPriorityData;
+			List<StrategicPriority> priorities = city.owner.StrategicPriorityData;
 			IEnumerable<IProducible> unitPrototypes = city.ListProductionOptions();
 
 			log.Information($"Choosing what to produce next in {city.name}");

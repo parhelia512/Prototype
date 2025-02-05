@@ -16,7 +16,7 @@ namespace C7.Map {
 
 		public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
 			Rect2 screenTarget = new Rect2(tileCenter - tileSize / 2, tileSize);
-			TileKnowledge tileKnowledge = gameData.GetHumanPlayers()[0].tileKnowledge;
+			TileKnowledge tileKnowledge = gameData.GetHumanPlayers()[0].TileKnowledge;
 			//N.B. FogOfWar.pcx handles both totally unknown and fogged tiles, indexed in the same file.
 			//Hence the trinary math rather than the more commonplace binary.
 			if (!tileKnowledge.isTileKnown(tile)) {

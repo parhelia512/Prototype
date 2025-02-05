@@ -154,7 +154,7 @@ namespace C7.Map {
 			Image labelImage = Image.Create(cityLabelWidth, CITY_LABEL_HEIGHT, false, Image.Format.Rgba8);
 			labelImage.Fill(Color.Color8(0, 0, 0, 0));
 			byte transparencyLevel = 192; //25%
-			Color civColor = Util.LoadColor(city.owner.colorIndex);
+			Color civColor = Util.LoadColor(city.owner.ColorIndex);
 			civColor = new Color(civColor, transparencyLevel);
 			Color civColorDarker = Color.Color8(0, 0, 138, transparencyLevel); //todo: automate the darker() function.  maybe less transparency?
 			Color topRowGrey = Color.Color8(32, 32, 32, transparencyLevel);

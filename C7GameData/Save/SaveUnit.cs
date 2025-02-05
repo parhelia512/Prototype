@@ -20,7 +20,7 @@ namespace C7GameData.Save {
 		public SaveUnit(MapUnit unit, GameMap map) {
 			id = unit.id;
 			prototype = unit.unitType.name;
-			owner = unit.owner.id;
+			owner = unit.owner.Id;
 			if (unit.previousLocation is not null) {
 				previousLocation = new TileLocation(unit.previousLocation);
 			}
@@ -41,7 +41,7 @@ namespace C7GameData.Save {
 				unitType = prototypes.Find(p => p.name == prototype),
 				experienceLevelKey = experience,
 				experienceLevel = experienceLevels.Find(el => el.key == experience),
-				owner = players.Find(player => player.id == owner),
+				owner = players.Find(player => player.Id == owner),
 				location = map.tileAt(currentLocation.x, currentLocation.y),
 				previousLocation = currentLocation.x == - 1 ? Tile.NONE : map.tileAt(previousLocation.x, previousLocation.y),
 				hitPointsRemaining = hitPointsRemaining,

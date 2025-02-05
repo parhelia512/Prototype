@@ -334,14 +334,14 @@ namespace C7GameData {
 			int i = 0;
 			foreach (RACE race in theBiq.Race) {
 				Civilization civ = new Civilization{
-					name = race.Name,
-					noun = race.Noun,
-					leader = race.LeaderName,
-					leaderGender = race.LeaderGender == 0 ? Gender.Male : Gender.Female,
-					colorIndex = race.DefaultColor,
+					Name = race.Name,
+					Noun = race.Noun,
+					Leader = race.LeaderName,
+					LeaderGender = race.LeaderGender == 0 ? Gender.Male : Gender.Female,
+					ColorIndex = race.DefaultColor,
 				};
 				foreach (RACE_City city in theBiq.RaceCityName[i]) {
-					civ.cityNames.Add(city.Name);
+					civ.CityNames.Add(city.Name);
 				}
 				save.Civilizations.Add(civ);
 				i++;
@@ -425,10 +425,10 @@ namespace C7GameData {
 		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex, string era) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
-				colorIndex = civ.colorIndex,
+				colorIndex = civ.ColorIndex,
 				barbarian = isBarbarian,
 				human = isHuman,
-				civilization = civ.name,
+				civilization = civ.Name,
 				hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
 				cityNameIndex = cityNameIndex,
 				eraCivilopediaName = era,
@@ -715,25 +715,25 @@ namespace C7GameData {
 				RACE race = theBiq.Race[i];
 
 				if (race.FreeTech1 > -1) {
-					sc.startingTechs.Add(save.Techs[race.FreeTech1].id);
+					sc.StartingTechs.Add(save.Techs[race.FreeTech1].id);
 				}
 				if (race.FreeTech2 > -1) {
-					sc.startingTechs.Add(save.Techs[race.FreeTech2].id);
+					sc.StartingTechs.Add(save.Techs[race.FreeTech2].id);
 				}
 				if (race.FreeTech3 > -1) {
-					sc.startingTechs.Add(save.Techs[race.FreeTech3].id);
+					sc.StartingTechs.Add(save.Techs[race.FreeTech3].id);
 				}
 				if (race.FreeTech4 > -1) {
-					sc.startingTechs.Add(save.Techs[race.FreeTech4].id);
+					sc.StartingTechs.Add(save.Techs[race.FreeTech4].id);
 				}
 
 				// Remove any invalid starting techs. Some scenarios like
 				// Fall of Rome give starting techs without giving all of the
 				// prereqs, so they should be ignored.
-				sc.startingTechs.RemoveWhere(t => {
+				sc.StartingTechs.RemoveWhere(t => {
 					SaveTech st = save.Techs.Find(x => x.id == t);
 					foreach (ID prereqId in st.Prerequisites) {
-						if (!sc.startingTechs.Contains(prereqId)) {
+						if (!sc.StartingTechs.Contains(prereqId)) {
 							return true;
 						}
 					}

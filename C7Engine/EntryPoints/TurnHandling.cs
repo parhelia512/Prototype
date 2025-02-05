@@ -16,7 +16,7 @@ namespace C7Engine {
 				mapUnit.OnBeginTurn();
 
 			foreach (Player player in gameData.players) {
-				player.hasPlayedThisTurn = false;
+				player.HasPlayedThisTurn = false;
 			}
 		}
 
@@ -56,22 +56,22 @@ namespace C7Engine {
 		/// <returns>true when it is time for the human to take control again</returns>
 		private static bool PlayPlayerTurns(GameData gameData, bool firstTurn) {
 			foreach (Player player in gameData.players) {
-				if ((!player.hasPlayedThisTurn) &&
+				if ((!player.HasPlayedThisTurn) &&
 					!(firstTurn && player.SitsOutFirstTurn())) {
-					if (player.isBarbarians) {
+					if (player.IsBarbarians) {
 						//Call the barbarian AI
 						//TODO: The AIs should be stored somewhere on the game state as some of them will store state (plans,
 						//strategy, etc.) For now, we only have a random AI, so that will be in a future commit
 						new BarbarianAI().PlayTurn(player, gameData);
-						player.hasPlayedThisTurn = true;
-					} else if (!player.isHuman) {
-						PlayerAI.PlayTurn(player, GameData.rng);
-						player.hasPlayedThisTurn = true;
-					} else if (player.id != EngineStorage.uiControllerID) {
-						player.hasPlayedThisTurn = true;
+						player.HasPlayedThisTurn = true;
+					} else if (!player.IsHuman) {
+						PlayerAi.PlayTurn(player, GameData.rng);
+						player.HasPlayedThisTurn = true;
+					} else if (player.Id != EngineStorage.uiControllerID) {
+						player.HasPlayedThisTurn = true;
 					}
 					//Human player check.  Let the human see what's going on even if they are in observer mode.
-					if (player.id == EngineStorage.uiControllerID) {
+					if (player.Id == EngineStorage.uiControllerID) {
 						new MsgStartTurn().send();
 						return true;
 					}
@@ -81,7 +81,7 @@ namespace C7Engine {
 		}
 		private static void SpawnBarbarians(GameData gameData) {
 			//Generate new barbarian units.
-			Player barbPlayer = gameData.players.Find(player => player.isBarbarians);
+			Player barbPlayer = gameData.players.Find(player => player.IsBarbarians);
 			foreach (Tile tile in gameData.map.barbarianCamps) {
 				//7% chance of a new barbarian.  Probably should scale based on barbarian activity.
 				int result = GameData.rng.Next(100);
@@ -98,7 +98,7 @@ namespace C7Engine {
 
 					tile.unitsOnTile.Add(newUnit);
 					gameData.mapUnits.Add(newUnit);
-					barbPlayer.units.Add(newUnit);
+					barbPlayer.Units.Add(newUnit);
 					log.Debug("New barbarian added at " + tile);
 				} else if (tile.NeighborsWater() && result < 6) {
 					MapUnit newUnit = new MapUnit(gameData.ids.CreateID(gameData.barbarianInfo.barbarianSeaUnit.name));
@@ -112,7 +112,7 @@ namespace C7Engine {
 
 					tile.unitsOnTile.Add(newUnit);
 					gameData.mapUnits.Add(newUnit);
-					barbPlayer.units.Add(newUnit);
+					barbPlayer.Units.Add(newUnit);
 					log.Debug("New barbarian galley added at " + tile);
 				}
 			}
@@ -127,7 +127,7 @@ namespace C7Engine {
 				int newSize = city.size;
 				if (newSize > initialSize) {
 					CityResident newResident = new CityResident();
-					newResident.nationality = city.owner.civilization;
+					newResident.nationality = city.owner.Civilization;
 					CityTileAssignmentAI.AssignNewCitizenToTile(city, newResident);
 				} else if (newSize < initialSize) {
 					int diff = initialSize - newSize;
@@ -160,7 +160,7 @@ namespace C7Engine {
 					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));
 				}
 
-				city.owner.gold += city.CurrentCommerceYield();
+				city.owner.Gold += city.CurrentCommerceYield();
 			}
 		}
 

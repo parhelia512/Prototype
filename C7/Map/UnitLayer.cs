@@ -149,7 +149,7 @@ public partial class UnitLayer : LooseLayer {
 		Vector2 position = tileCenter + animOffset - new Vector2(0, inst.FrameSize(animName).Y / 4);
 		inst.SetPosition(position);
 
-		Color civColor = Util.LoadColor(unit.owner.colorIndex);
+		Color civColor = Util.LoadColor(unit.owner.ColorIndex);
 		int nextFrame = inst.GetNextFrameByProgress(animName, appearance.progress);
 		inst.material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
 

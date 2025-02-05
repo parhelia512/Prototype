@@ -13,11 +13,11 @@ namespace C7Engine {
 			CityResident firstResident = new CityResident();
 			CityTileAssignmentAI.AssignNewCitizenToTile(newCity, firstResident);
 			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
-			if (owner.cities.Count == 0) {
+			if (owner.Cities.Count == 0) {
 				newCity.capital = true;
 			}
 			gameData.cities.Add(newCity);
-			owner.cities.Add(newCity);
+			owner.Cities.Add(newCity);
 			tileWithNewCity.cityAtTile = newCity;
 
 			// Cities are treated as though they have a road, but if
@@ -32,7 +32,7 @@ namespace C7Engine {
 			Tile tile = EngineStorage.gameData.map.tileAt(x, y);
 			tile.DisbandNonDefendingUnits();
 			tile.cityAtTile.RemoveAllCitizens();
-			tile.cityAtTile.owner.cities.Remove(tile.cityAtTile);
+			tile.cityAtTile.owner.Cities.Remove(tile.cityAtTile);
 			EngineStorage.gameData.cities.Remove(tile.cityAtTile);
 			new MsgCityDestroyed(tile.cityAtTile).send();
 			tile.cityAtTile = null;

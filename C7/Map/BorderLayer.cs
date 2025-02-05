@@ -75,7 +75,7 @@ namespace C7.Map {
 					{ TileDirection.SOUTHEAST, 6 }
 				};
 
-			Color borderColor = Util.LoadColor(tile.owner.colorIndex);
+			Color borderColor = Util.LoadColor(tile.owner.ColorIndex);
 
 			foreach (var entry in directionToTextureIdx) {
 				if (tile.neighbors[entry.Key].owner != tile.owner) {

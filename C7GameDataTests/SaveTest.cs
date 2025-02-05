@@ -200,26 +200,26 @@ public class SaveTests {
 			foreach (Player player in gd.players) {
 				int settlerCount = 0;
 				int totalUnitCount = 0;
-				foreach (MapUnit mu in player.units) {
+				foreach (MapUnit mu in player.Units) {
 					++totalUnitCount;
 					if (mu.unitType.name == "Settler") {
 						++settlerCount;
 					}
 				}
 
-				int cityCount = player.cities.Count;
+				int cityCount = player.Cities.Count;
 
-				Console.WriteLine(name + " : " + player.civilization.name + " has " +
+				Console.WriteLine(name + " : " + player.Civilization.Name + " has " +
 									settlerCount + " settlers, " +
 									cityCount + " cities, " +
 									totalUnitCount + " units, and is " +
-									(player.isHuman ? "" : "not ") +
+									(player.IsHuman ? "" : "not ") +
 									"the human player");
 
 				// The human player should always have either a city or a settler.
-				if (player.isHuman) {
+				if (player.IsHuman) {
 					Assert.True(cityCount + settlerCount > 0,
-								name + " : " + player.civilization.name);
+								name + " : " + player.Civilization.Name);
 				}
 			}
 

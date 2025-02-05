@@ -16,20 +16,20 @@ namespace C7GameData.AIData
 	 * I'm also unsure of how much the logic of figuring out what to do should be in these
 	 * classes, versus higher-level ones.
 	 */
-	public class SettlerAIData : UnitAIData
+	public class SettlerAiData : UnitAIData
 	{
 		public enum SettlerGoal
 		{
-			BUILD_CITY,
-			JOIN_CITY
+			BuildCity,
+			JoinCity
 		}
-		public SettlerGoal goal;
-		public Tile destination;
-		public TilePath pathToDestination;
+		public SettlerGoal Goal;
+		public Tile Destination;
+		public TilePath PathToDestination;
 
 		public override string ToString()
 		{
-			return goal + " at " + destination;
+			return Goal + " at " + Destination;
 		}
 	}
 }

@@ -10,15 +10,15 @@ namespace C7Engine.AI.StrategicAI {
 	/// </summary>
 	public class UtilityCalculations {
 
-		private static readonly int POSSIBLE_CITY_LOCATION_SCORE = 2;   //how much weight to give to each possible city location
-		private static readonly int TILE_SCORE_DIVIDER = 10;    //how much to divide each location's tile score by
+		private static readonly int PossibleCityLocationScore = 2;   //how much weight to give to each possible city location
+		private static readonly int TileScoreDivider = 10;    //how much to divide each location's tile score by
 
 		public static int CalculateAvailableLandScore(Player player) {
 			//Figure out if there's land to settle, and how much
-			Dictionary<Tile, int> possibleLocations = SettlerLocationAI.GetScoredSettlerCandidates(player.cities[0].location, player);
-			int score = possibleLocations.Count * POSSIBLE_CITY_LOCATION_SCORE;
+			Dictionary<Tile, float> possibleLocations = SettlerLocationAi.GetScoredSettlerCandidates(player.Cities[0].location, player);
+			int score = possibleLocations.Count * PossibleCityLocationScore;
 			foreach (int i in possibleLocations.Values) {
-				score += i / TILE_SCORE_DIVIDER;
+				score += i / TileScoreDivider;
 			}
 			return score;
 		}

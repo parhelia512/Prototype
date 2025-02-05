@@ -23,7 +23,7 @@ namespace C7GameData.Save {
 
 		public SaveCity(City city) {
 			id = city.id;
-			owner = city.owner.id;
+			owner = city.owner.Id;
 			capital = city.capital;
 			location = new TileLocation(city.location);
 			name = city.name;
@@ -34,7 +34,7 @@ namespace C7GameData.Save {
 			foodNeededToGrow = city.foodNeededToGrow;
 			residents = city.residents.ConvertAll(resident => {
 				return new SaveCityResident {
-					nationality = resident.nationality?.name,
+					nationality = resident.nationality?.Name,
 					tileWorked = new TileLocation(resident.tileWorked),
 				};
 			});
@@ -44,7 +44,7 @@ namespace C7GameData.Save {
 			City city = new City{
 				id = id,
 				location = gameMap.tileAt(location.x, location.y),
-				owner = players.Find(p => p.id == owner),
+				owner = players.Find(p => p.Id == owner),
 				name = name,
 				size = size,
 				itemBeingProduced = unitPrototypes.Find(proto => proto.name == producible),
@@ -55,7 +55,7 @@ namespace C7GameData.Save {
 				residents = residents.ConvertAll(resident =>{
 					return new CityResident{
 						tileWorked = gameMap.tileAt(resident.tileWorked.x, resident.tileWorked.y),
-						nationality = civilizations.Find(civ => civ.name == resident.nationality),
+						nationality = civilizations.Find(civ => civ.Name == resident.nationality),
 					};
 				}),
 			};

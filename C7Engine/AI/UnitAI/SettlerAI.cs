@@ -1,5 +1,4 @@
 using System;
-using C7Engine.Pathing;
 using C7GameData;
 using C7GameData.AIData;
 using Serilog;
@@ -10,15 +9,15 @@ namespace C7Engine {
 		private ILogger log = Log.ForContext<SettlerAI>();
 
 		public bool PlayTurn(Player player, MapUnit unit) {
-			SettlerAIData settlerAi = (SettlerAIData)unit.currentAIData;
+			SettlerAiData settlerAi = (SettlerAiData)unit.currentAIData;
 start:
-			switch (settlerAi.goal) {
-				case SettlerAIData.SettlerGoal.BUILD_CITY:
-					if (IsInvalidCityLocation(settlerAi.destination)) {
-						log.Information("Seeking new destination for settler " + unit.id + "headed to " + settlerAi.destination);
-						PlayerAI.SetAIForUnit(unit, player);
+			switch (settlerAi.Goal) {
+				case SettlerAiData.SettlerGoal.BuildCity:
+					if (IsInvalidCityLocation(settlerAi.Destination)) {
+						log.Information("Seeking new destination for settler " + unit.id + "headed to " + settlerAi.Destination);
+						PlayerAi.SetAiForUnit(unit, player);
 						//Make sure we're using the new settler AI going forward, including this turn
-						settlerAi = (SettlerAIData)unit.currentAIData;
+						settlerAi = (SettlerAiData)unit.currentAIData;
 						//Re-process since the unit's goal may have changed.
 						//TODO: In theory in the future, it might even have a non-settler AI.  Maybe we should instead return false,
 						//and have the PlayerAI re-kick the unit based on a possibly different AI class?
@@ -26,20 +25,20 @@ start:
 						//very well become a Defender or Attacker if there's no exploration left, for example.
 						goto start;
 					}
-					if (unit.location == settlerAi.destination) {
+					if (unit.location == settlerAi.Destination) {
 						log.Information("Building city with " + unit);
 						//TODO: This should use a message, and the message handler should cause the disbanding to happen.
-						CityInteractions.BuildCity(unit.location.xCoordinate, unit.location.yCoordinate, player.id, unit.owner.GetNextCityName());
+						CityInteractions.BuildCity(unit.location.xCoordinate, unit.location.yCoordinate, player.Id, unit.owner.GetNextCityName());
 						unit.disband();
 					} else {
 						//If the settler has no destination, then disband rather than crash later.
-						if (settlerAi.destination == Tile.NONE) {
+						if (settlerAi.Destination == Tile.NONE) {
 							log.Information("Disbanding settler " + unit.id + " with no valid destination");
 							unit.disband();
 							return false;
 						}
 						try {
-							Tile nextTile = settlerAi.pathToDestination.Next();
+							Tile nextTile = settlerAi.PathToDestination.Next();
 							unit.move(unit.location.directionTo(nextTile));
 						} catch (Exception ex) {
 							//This occurs when on the previous turn, a settler tries to move to the next location on its path, but cannot, due to another
@@ -50,7 +49,7 @@ start:
 						}
 					}
 					break;
-				case SettlerAIData.SettlerGoal.JOIN_CITY:
+				case SettlerAiData.SettlerGoal.JoinCity:
 					if (unit.location.cityAtTile != null) {
 						//TODO: Actually join the city.  Haven't added that action.
 						//For now, just get rid of the unit.  Sorry, bro.
@@ -62,7 +61,7 @@ start:
 					}
 					break;
 				default:
-					log.Warning("Unknown strategy of " + settlerAi.goal + " for unit");
+					log.Warning("Unknown strategy of " + settlerAi.Goal + " for unit");
 					break;
 			}
 			return true;

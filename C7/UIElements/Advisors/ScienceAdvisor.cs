@@ -65,28 +65,28 @@ public partial class ScienceAdvisor : TextureRect {
 		using (UIGameDataAccess gameDataAccess = new()) {
 			List<Tech> techs = gameDataAccess.gameData.techs;
 			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
-			HashSet<ID> knownTechs = player.knownTechs;
+			HashSet<ID> knownTechs = player.KnownTechs;
 
 			// Set the tech background based on the player's era.
-			if (player.eraCivilopediaName == "ERAS_Ancient_Times") {
+			if (player.EraCivilopediaName == "ERAS_Ancient_Times") {
 				this.Texture = AncientBackground;
-			} else if (player.eraCivilopediaName == "ERAS_Middle_Ages") {
+			} else if (player.EraCivilopediaName == "ERAS_Middle_Ages") {
 				this.Texture = MiddleBackground;
-			} else if (player.eraCivilopediaName == "ERAS_Industrial_Age") {
+			} else if (player.EraCivilopediaName == "ERAS_Industrial_Age") {
 				this.Texture = IndustrialBackground;
-			} else if (player.eraCivilopediaName == "ERAS_Modern_Era") {
+			} else if (player.EraCivilopediaName == "ERAS_Modern_Era") {
 				this.Texture = ModernBackground;
 			}
 
 			foreach (Tech tech in techs) {
-				if (tech.EraCivilopediaName != player.eraCivilopediaName) {
+				if (tech.EraCivilopediaName != player.EraCivilopediaName) {
 					continue;
 				}
 
 				TechBox.TechState techState = TechBox.TechState.kBlocked;
 				if (knownTechs.Contains(tech.id)) {
 					techState = TechBox.TechState.kKnown;
-				} else if (player.currentlyResearchedTech == tech.id) {
+				} else if (player.CurrentlyResearchedTech == tech.id) {
 					techState = TechBox.TechState.kInProgress;
 				} else {
 					bool prereqsKnown = true;
