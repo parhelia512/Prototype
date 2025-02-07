@@ -226,6 +226,11 @@ public partial class Game : Node2D {
 					// TODO: calculate research speed.
 					EmitSignal(SignalName.UpdateTechProgress, tech.Name, -1);
 					break;
+				case MsgUpdateUiAfterSliderChange mUUASC:
+					// F1 is the science advisor.
+					// TODO: Move the F* key strings to a set of constants/enum.
+					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
+					break;
 			}
 		}
 	}
