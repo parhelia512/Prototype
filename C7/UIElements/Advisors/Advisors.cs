@@ -67,23 +67,4 @@ public partial class Advisors : CenterContainer {
 			this.Show();
 		}
 	}
-
-	public override void _UnhandledInput(InputEvent @event) {
-		if (this.Visible) {
-			if (@event is InputEventKey eventKey) {
-				//As I've added more shortcuts, I've realized checking all of them here could be irksome.
-				//For now, I'm thinking it would make more sense to process or allow through the ones that should go through,
-				//as most of the global ones should *not* go through here.
-				if (eventKey.Pressed) {
-					if (eventKey.Keycode == Godot.Key.Escape) {
-						this.Hide();
-						GetViewport().SetInputAsHandled();
-					} else {
-						log.Debug("Advisor received a key press; stopping propagation.");
-						GetViewport().SetInputAsHandled();
-					}
-				}
-			}
-		}
-	}
 }

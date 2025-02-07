@@ -14,6 +14,7 @@ public partial class Game : Node2D {
 	[Signal] public delegate void NewAutoselectedUnitEventHandler();
 	[Signal] public delegate void NoMoreAutoselectableUnitsEventHandler();
 	[Signal] public delegate void UpdateTechProgressEventHandler();
+	[Signal] public delegate void ShowCityScreenEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
 
@@ -60,6 +61,10 @@ public partial class Game : Node2D {
 
 	[Export]
 	private PopupOverlay popupOverlay;
+	[Export]
+	private CityScreen cityScreen;
+	[Export]
+	private Advisors advisor;
 	[Export]
 	private VSlider slider;
 	[Export]
@@ -182,6 +187,9 @@ public partial class Game : Node2D {
 					break;
 				case MsgStartTurn mST:
 					OnPlayerStartTurn();
+					break;
+				case MsgCityCreated mCC:
+					ShowCityScreenForCity(mCC.city);
 					break;
 				case MsgCityDestroyed mCD:
 					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
@@ -551,8 +559,18 @@ public partial class Game : Node2D {
 			return;
 		}
 
+		if (currentAction == C7Action.Escape && cityScreen.Visible) {
+			cityScreen.Hide();
+			return;
+		}
+
+		if (currentAction == C7Action.Escape && advisor.Visible) {
+			advisor.Hide();
+			return;
+		}
+
 		// never poll for actions if UI elements are visible
-		if (popupOverlay.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible) {
 			return;
 		}
 
@@ -691,6 +709,17 @@ public partial class Game : Node2D {
 	}
 
 	private void OnBuildCity(string name) {
-		new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildCity(name)).send();
+		new ActionToEngineMsg(() => {
+			// Create the city and then let the ui know, so we can show the city
+			// screen.
+			City? city = CurrentlySelectedUnit?.buildCity(name);
+			if (city != null) {
+				new MsgCityCreated(city).send();
+			}
+		}).send();
+	}
+
+	public void ShowCityScreenForCity(City city) {
+		EmitSignal(SignalName.ShowCityScreen, new ParameterWrapper<City>(city));
 	}
 }

@@ -50,4 +50,11 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgCityCreated : MessageToUI {
+		public City city;
+
+		public MsgCityCreated(City city) {
+			this.city = city;
+		}
+	}
 }
