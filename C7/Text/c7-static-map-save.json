@@ -61528,7 +61528,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-2",
@@ -61601,7 +61603,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-3",
@@ -61674,7 +61678,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-4",
@@ -61743,7 +61749,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-5",
@@ -61816,7 +61824,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-6",
@@ -61893,7 +61903,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-7",
@@ -61966,7 +61978,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     },
     {
       "id": "player-8",
@@ -62035,7 +62049,9 @@
       "luxuryRate": 0,
       "scienceRate": 5,
       "taxRate": 5,
-      "gold": 10
+      "gold": 10,
+      "beakers": 0,
+      "turnsResearched": 0
     }
   ],
   "barbarianInfo": {

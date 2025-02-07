@@ -149,7 +149,7 @@ namespace C7Engine {
 			}
 
 			// Start researching this tech and update the UI.
-			player.currentlyResearchedTech = requestedTech.id;
+			player.SetCurrentlyResearchedTech(requestedTech.id);
 			new MsgUpdateUiAfterTechSelection().send();
 		}
 	}

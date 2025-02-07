@@ -422,6 +422,8 @@ namespace C7GameData {
 				}
 
 				player.gold = leader.Gold;
+				player.beakers = leader.Beakers;
+				player.turnsResearched = leader.TurnsResearched;
 				player.scienceRate = leader.ScienceRate;
 				player.luxuryRate = leader.LuxuryRate;
 				player.taxRate = leader.TaxRate;
