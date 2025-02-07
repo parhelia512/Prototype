@@ -61525,6 +61525,9 @@
       "civilization": "A Barbarian Chiefdom",
       "cityNameIndex": 0,
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -61595,6 +61598,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -61665,6 +61671,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -61731,6 +61740,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -61801,6 +61813,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -61875,6 +61890,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -61945,6 +61963,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     },
     {
@@ -62011,6 +62032,9 @@
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
+      "luxuryRate": 0,
+      "scienceRate": 5,
+      "taxRate": 5,
       "gold": 10
     }
   ],

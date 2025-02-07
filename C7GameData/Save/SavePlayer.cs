@@ -28,6 +28,14 @@ namespace C7GameData.Save {
 
 		public int turnsUntilPriorityReevaluation = 0;
 
+		// The values of the science/happiness/tax sliders (tax is implicit)
+		// A value of 1 => 10%, a value of 10 => 100%.
+		//
+		// INVARIANT: LuxuryRate + ScienceRate + TaxRate = 10
+		public int luxuryRate = 0;
+		public int scienceRate = 5;
+		public int taxRate = 5;
+
 		// The amount of gold this player has.
 		public int gold = 0;
 
@@ -44,6 +52,9 @@ namespace C7GameData.Save {
 				knownTechs = knownTechs,
 				currentlyResearchedTech = currentlyResearchedTech,
 				eraCivilopediaName = eraCivilopediaName,
+				luxuryRate = luxuryRate,
+				scienceRate = scienceRate,
+				taxRate = taxRate,
 				gold = gold,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
@@ -74,6 +85,9 @@ namespace C7GameData.Save {
 			knownTechs = player.knownTechs;
 			currentlyResearchedTech = player.currentlyResearchedTech;
 			eraCivilopediaName = player.eraCivilopediaName;
+			luxuryRate = player.luxuryRate;
+			scienceRate = player.scienceRate;
+			taxRate = player.taxRate;
 			gold = player.gold;
 		}
 	}
