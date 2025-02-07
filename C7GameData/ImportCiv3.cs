@@ -23,13 +23,13 @@ namespace C7GameData {
 		private BiqData defaultBiq;
 		private SavData savData;
 		private PediaIcons pediaIcons;
-		private readonly IDFactory ids;
+		private readonly ID.Factory ids;
 
 		private static ILogger log = Log.ForContext<ImportCiv3>();
 
 		private ImportCiv3() {
 			save = new SaveGame();
-			ids = new IDFactory();
+			ids = new ID.Factory();
 		}
 
 		/// <summary>
