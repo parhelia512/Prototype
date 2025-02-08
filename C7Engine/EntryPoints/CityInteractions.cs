@@ -36,6 +36,7 @@ namespace C7Engine {
 			tile.cityAtTile.RemoveAllCitizens();
 			tile.cityAtTile.owner.cities.Remove(tile.cityAtTile);
 			EngineStorage.gameData.cities.Remove(tile.cityAtTile);
+			EngineStorage.gameData.UpdateTileOwnersOnCityDestruction(tile.cityAtTile);
 			new MsgCityDestroyed(tile.cityAtTile).send();
 			tile.cityAtTile = null;
 			tile.overlays.road = false;
