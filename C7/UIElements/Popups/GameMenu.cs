@@ -1,8 +1,8 @@
 using System;
 using Godot;
+using Serilog;
 
 public partial class GameMenu : Popup {
-
 	public GameMenu() {
 		alignment = BoxContainer.AlignmentMode.Center;
 		margins = new Margins(top: 100);
@@ -23,6 +23,7 @@ public partial class GameMenu : Popup {
 		AddButton("Retire (Ctrl-Q)", 160, retire);
 		AddButton("Save Game (Ctrl-S)", 185, save);
 		AddButton("Quit Game (ESC)", 210, quit);
+
 	}
 
 	private void save() {
@@ -38,7 +39,15 @@ public partial class GameMenu : Popup {
 	}
 
 	private void load() {
-		throw new NotImplementedException();
+		var loadDialog = GetNode<Civ3FileDialog>("../%LoadDialog");
+		loadDialog.SetDirectory(@"Conquests/Saves");
+
+		// TODO: The main menu does sound playing but we don't know our path in
+		// the scene, which makes this hard.
+		// PlayButtonPressedSound();
+		GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
+
+		loadDialog.Popup();
 	}
 
 	private void quit() {
@@ -52,5 +61,4 @@ public partial class GameMenu : Popup {
 	private void map() {
 		GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 	}
-
 }

@@ -36,10 +36,7 @@ public partial class MainMenu : Node2D {
 		Global.ResetLoadGamePath();
 
 		LoadDialog.SetDirectory(@"Conquests/Saves");
-		LoadDialog.FileSelected += _on_FileDialog_file_selected;
-
 		LoadScenarioDialog.SetDirectory(@"Conquests/Scenarios");
-		LoadScenarioDialog.FileSelected += _on_FileDialog_file_selected;
 
 		DisplayTitleScreen();
 	}
@@ -137,12 +134,6 @@ public partial class MainMenu : Node2D {
 		AudioStreamPlayer player = GetNode<AudioStreamPlayer>("CanvasLayer/SoundEffectPlayer");
 		player.Stream = wav;
 		player.Play();
-	}
-
-	private void _on_FileDialog_file_selected(string path) {
-		log.Information($"loading {path}");
-		Global.LoadGamePath = path;
-		GetTree().ChangeSceneToFile("res://C7Game.tscn");
 	}
 
 	private void _on_SetCiv3Home_pressed() {
