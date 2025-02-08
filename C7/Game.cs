@@ -13,6 +13,8 @@ public partial class Game : Node2D {
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
 	[Signal] public delegate void NewAutoselectedUnitEventHandler();
 	[Signal] public delegate void NoMoreAutoselectableUnitsEventHandler();
+	[Signal] public delegate void UpdateTechProgressEventHandler();
+	[Signal] public delegate void ShowCityScreenEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
 
@@ -60,6 +62,10 @@ public partial class Game : Node2D {
 	[Export]
 	private PopupOverlay popupOverlay;
 	[Export]
+	private CityScreen cityScreen;
+	[Export]
+	private Advisors advisor;
+	[Export]
 	private VSlider slider;
 	[Export]
 	private AnimationPlayer animationPlayer;
@@ -82,13 +88,28 @@ public partial class Game : Node2D {
 			civ3AnimData = new AnimationManager(animSoundPlayer);
 			animTracker = new AnimationTracker(civ3AnimData);
 
-			controller = CreateGame.createGame(Global.LoadGamePath, Global.DefaultBicPath); // Spawns engine thread
+			controller = CreateGame.createGame(Global.LoadGamePath, Global.DefaultBicPath, (scenarioSearchPath) => {
+				// WHen the game loading logic tries to load the PediaIcons file, set the
+				// scenario search path and then use our Civ3MediaPath searching logic to
+				// find the correct version of the file.
+				//
+				// This weird bit of indirection is necessary because the C7GameData project
+				// can't depend on the C7 project without a circular dependency, and the
+				// search logic has a Godot dependency, so it doesn't make sense to live
+				// in the C7GameData project.
+				//
+				// This also helps ensure the weird stateful behavior of the Util class works,
+				// since the search path/mod path is a static global variable - we want to
+				// be sure it is always set properly, so doing it during game creation
+				// is reasonable.
+				Util.setModPath(scenarioSearchPath);
+				log.Debug("RelativeModPath ", scenarioSearchPath);
+				return Util.Civ3MediaPath("Text/PediaIcons.txt");
+			}); // Spawns engine thread
 			Global.ResetLoadGamePath();
 
 			using (var gameDataAccess = new UIGameDataAccess()) {
 				GameMap map = gameDataAccess.gameData.map;
-				Util.setModPath(gameDataAccess.gameData.scenarioSearchPath);
-				log.Debug("RelativeModPath ", map.RelativeModPath);
 				mapView = new MapView(this, map.numTilesWide, map.numTilesTall, map.wrapHorizontally, map.wrapVertically);
 				AddChild(mapView);
 
@@ -154,9 +175,9 @@ public partial class Game : Node2D {
 					}
 					break;
 				case MsgStartEffectAnimation mSEA:
-					int x, y;
-					gameData.map.tileIndexToCoords(mSEA.tileIndex, out x, out y);
-					Tile tile = gameData.map.tileAt(x, y);
+					int X, Y;
+					gameData.map.tileIndexToCoords(mSEA.tileIndex, out X, out Y);
+					Tile tile = gameData.map.tileAt(X, Y);
 					if (tile != Tile.NONE && controller.tileKnowledge.isTileKnown(tile))
 						animTracker.startAnimation(tile, mSEA.effect, mSEA.completionEvent, mSEA.ending);
 					else {
@@ -166,6 +187,9 @@ public partial class Game : Node2D {
 					break;
 				case MsgStartTurn mST:
 					OnPlayerStartTurn();
+					break;
+				case MsgCityCreated mCC:
+					ShowCityScreenForCity(mCC.city);
 					break;
 				case MsgCityDestroyed mCD:
 					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
@@ -192,6 +216,24 @@ public partial class Game : Node2D {
 					if (CurrentlySelectedUnit != MapUnit.NONE) {
 						setSelectedUnit(CurrentlySelectedUnit);
 					}
+					break;
+				case MsgUpdateUiAfterTechSelection mUUATS:
+					// F6 is the science advisor.
+					// TODO: Move the F* key strings to a set of constants/enum.
+					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
+					Player player = gameData.GetHumanPlayers()[0];
+					Tech tech = gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
+
+					if (tech != null) {
+						EmitSignal(SignalName.UpdateTechProgress, tech.Name, player.EstimateTurnsToResearch(tech));
+					} else {
+						EmitSignal(SignalName.UpdateTechProgress, "Not selected", int.MaxValue);
+					}
+					break;
+				case MsgUpdateUiAfterSliderChange mUUASC:
+					// F1 is the science advisor.
+					// TODO: Move the F* key strings to a set of constants/enum.
+					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 					break;
 			}
 		}
@@ -235,6 +277,9 @@ public partial class Game : Node2D {
 				if (Input.IsKeyPressed(Godot.Key.F1)) {
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 				}
+				if (Input.IsKeyPressed(Godot.Key.F6)) {
+					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
+				}
 			}
 		}
 	}
@@ -247,11 +292,11 @@ public partial class Game : Node2D {
 		Godot.FastNoiseLite noise = new Godot.FastNoiseLite();
 		noise.Seed = seed;
 		// Populate map values
-		for (int y = 0; y < mapHeight; y++) {
-			for (int x = 0; x < mapWidth; x++) {
-				// Multiplying x & y for noise coordinate sampling
-				float n = noise.GetNoise2D(x*2,y*2);
-				tr[x, y] = n < 0.1 ? 2 : n < 0.4 ? 1 : 0;
+		for (int Y = 0; Y < mapHeight; Y++) {
+			for (int X = 0; X < mapWidth; X++) {
+				// Multiplying X & Y for noise coordinate sampling
+				float n = noise.GetNoise2D(X*2,Y*2);
+				tr[X, Y] = n < 0.1 ? 2 : n < 0.4 ? 1 : 0;
 			}
 		}
 		return tr;
@@ -310,11 +355,20 @@ public partial class Game : Node2D {
 
 	private void OnPlayerStartTurn() {
 		log.Information("Starting player turn");
-		int turnNumber = TurnHandling.GetTurnNumber();
-		EmitSignal(SignalName.TurnStarted, turnNumber);
-		CurrentState = GameState.PlayerTurn;
-
 		using (var gameDataAccess = new UIGameDataAccess()) {
+			int turnNumber = TurnHandling.GetTurnNumber();
+			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+
+			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
+
+			Tech tech = gameDataAccess.gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
+			if (tech != null) {
+				EmitSignal(SignalName.UpdateTechProgress, tech.Name, player.EstimateTurnsToResearch(tech));
+			} else {
+				EmitSignal(SignalName.UpdateTechProgress, "Not selected", int.MaxValue);
+			}
+			CurrentState = GameState.PlayerTurn;
+
 			GetNextAutoselectedUnit(gameDataAccess.gameData);
 		}
 	}
@@ -428,7 +482,7 @@ public partial class Game : Node2D {
 							new RightClickCityMenu(this, tile).Open(eventMouseButton.Position);
 
 						string yield = tile.YieldString(controller);
-						log.Debug($"({tile.xCoordinate}, {tile.yCoordinate}): {tile.overlayTerrainType.DisplayName} {yield}");
+						log.Debug($"({tile.XCoordinate}, {tile.YCoordinate}): {tile.overlayTerrainType.DisplayName} {yield}");
 
 						if (tile.cityAtTile != null) {
 							City city = tile.cityAtTile;
@@ -521,8 +575,18 @@ public partial class Game : Node2D {
 			return;
 		}
 
+		if (currentAction == C7Action.Escape && cityScreen.Visible) {
+			cityScreen.Hide();
+			return;
+		}
+
+		if (currentAction == C7Action.Escape && advisor.Visible) {
+			advisor.Hide();
+			return;
+		}
+
 		// never poll for actions if UI elements are visible
-		if (popupOverlay.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible) {
 			return;
 		}
 
@@ -566,7 +630,7 @@ public partial class Game : Node2D {
 
 		// actions with unit buttons
 		if (currentAction == C7Action.UnitHold) {
-			new MsgSkipUnitTurn(CurrentlySelectedUnit.id).send();
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.skipTurn()).send();
 		}
 
 		if (currentAction == C7Action.UnitWait) {
@@ -614,11 +678,15 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit.canBuildRoad()) {
-			new MsgBuildRoad(CurrentlySelectedUnit.id).send();
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildRoad()).send();
 		}
 
 		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit.canBuildMine()) {
-			new MsgBuildMine(CurrentlySelectedUnit.id).send();
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
+		}
+
+		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit.canIrrigate()) {
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.irrigate()).send();
 		}
 
 	}
@@ -645,7 +713,7 @@ public partial class Game : Node2D {
 
 	// Called by the disband popup
 	private void OnUnitDisbanded() {
-		new MsgDisbandUnit(CurrentlySelectedUnit.id).send();
+		new ActionToEngineMsg(() => CurrentlySelectedUnit?.disband()).send();
 	}
 
 	/**
@@ -657,6 +725,17 @@ public partial class Game : Node2D {
 	}
 
 	private void OnBuildCity(string name) {
-		new MsgBuildCity(CurrentlySelectedUnit.id, name).send();
+		new ActionToEngineMsg(() => {
+			// Create the city and then let the ui know, so we can show the city
+			// screen.
+			City? city = CurrentlySelectedUnit?.buildCity(name);
+			if (city != null) {
+				new MsgCityCreated(city).send();
+			}
+		}).send();
+	}
+
+	public void ShowCityScreenForCity(City city) {
+		EmitSignal(SignalName.ShowCityScreen, new ParameterWrapper<City>(city));
 	}
 }

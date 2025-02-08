@@ -5,10 +5,10 @@ namespace C7Engine {
 	using C7GameData;
 
 	public class CityInteractions {
-		public static void BuildCity(int x, int y, ID playerID, string name) {
+		public static City BuildCity(int X, int Y, ID playerID, string name) {
 			GameData gameData = EngineStorage.gameData;
 			Player owner = gameData.GetPlayer(playerID);
-			Tile tileWithNewCity = gameData.map.tileAt(x, y);
+			Tile tileWithNewCity = gameData.map.tileAt(X, Y);
 			City newCity = new City(tileWithNewCity, owner, name, gameData.ids.CreateID("city"));
 			CityResident firstResident = new CityResident();
 			CityTileAssignmentAI.AssignNewCitizenToTile(newCity, firstResident);
@@ -24,12 +24,14 @@ namespace C7Engine {
 			// a city is build on a mine, the mine should be removed.
 			tileWithNewCity.overlays.road = true;
 			tileWithNewCity.overlays.mine = false;
+			tileWithNewCity.overlays.irrigation = false;
 
 			gameData.UpdateTileOwners();
+			return newCity;
 		}
 
-		public static void DestroyCity(int x, int y) {
-			Tile tile = EngineStorage.gameData.map.tileAt(x, y);
+		public static void DestroyCity(int X, int Y) {
+			Tile tile = EngineStorage.gameData.map.tileAt(X, Y);
 			tile.DisbandNonDefendingUnits();
 			tile.cityAtTile.RemoveAllCitizens();
 			tile.cityAtTile.owner.cities.Remove(tile.cityAtTile);

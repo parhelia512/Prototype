@@ -22,13 +22,14 @@ namespace C7GameData {
 		private BiqData biq;
 		private BiqData defaultBiq;
 		private SavData savData;
-		private readonly IDFactory ids;
+		private PediaIcons pediaIcons;
+		private readonly ID.Factory ids;
 
 		private static ILogger log = Log.ForContext<ImportCiv3>();
 
 		private ImportCiv3() {
 			save = new SaveGame();
-			ids = new IDFactory();
+			ids = new ID.Factory();
 		}
 
 		/// <summary>
@@ -49,18 +50,20 @@ namespace C7GameData {
 			save.HealRates["city"] = 2;
 			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
+			ImportTechs();
 		}
 
-		public static SaveGame ImportSav(string savePath, string defaultBicPath) {
+		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
 			ImportCiv3 importer = new ImportCiv3();
-			return importer.importSav(savePath, defaultBicPath);
+			return importer.importSav(savePath, defaultBicPath, getPediaIconsPath);
 		}
 
-		private SaveGame importSav(string savePath, string defaultBicPath) {
+		private SaveGame importSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
 			// Get save data reader
 			byte[] defaultBicBytes = Util.ReadFile(defaultBicPath);
 			savData = new SavData(Util.ReadFile(savePath), defaultBicBytes);
 			biq = savData.Bic;
+			pediaIcons = new(getPediaIconsPath(biq.Game[0].ScenarioSearchFolders));
 
 			ImportSharedBiqData();
 			ImportSavLeaders();
@@ -81,12 +84,12 @@ namespace C7GameData {
 					BaseTerrainImageID = civ3Tile.TextureLocation,
 				};
 
-				(int x, int y) = GetMapCoordinates(i, savData.Wrld.Width);
+				(int X, int Y) = GetMapCoordinates(i, savData.Wrld.Width);
 				SaveTile tile = new SaveTile{
 					id = ids.CreateID("tile"),
 					extraInfo = extra,
-					x = x,
-					y = y,
+					X = X,
+					Y = Y,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
@@ -132,6 +135,9 @@ namespace C7GameData {
 				if (civ3Tile.Mine) {
 					tile.overlays.Add("mine");
 				}
+				if (civ3Tile.Irrigation) {
+					tile.overlays.Add("irrigation");
+				}
 				Resource tileResource = resourcesByIndex[civ3Tile.ResourceID];
 				if (tileResource != Resource.NONE) {
 					tile.resource = tileResource.Key;
@@ -140,13 +146,11 @@ namespace C7GameData {
 				for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
 					if (civ3Tile.ExploredBy[playerIndex]) {
 						SavePlayer player = save.Players[playerIndex];
-						player.tileKnowledge.Add(new TileLocation(x, y));
+						player.tileKnowledge.Add(new TileLocation(X, Y));
 					}
 				}
 				i++;
 			}
-			// This probably doesn't belong here, but not sure where else to put it
-			// c7Save.GameData.map.RelativeModPath = civ3Save.MediaBic.Game[0].ScenarioSearchFolders;
 			return save;
 		}
 
@@ -154,18 +158,20 @@ namespace C7GameData {
 		 * defaultBiqPath is used in case some sections (map, rules, player data) are not
 		 * present.
 		 */
-		public static SaveGame ImportBiq(string biqPath, string defaultBiqPath) {
+		public static SaveGame ImportBiq(string biqPath, string defaultBiqPath, Func<string, string> getPediaIconsPath) {
 			ImportCiv3 importer = new ImportCiv3();
-			return importer.importBiq(biqPath, defaultBiqPath);
+			return importer.importBiq(biqPath, defaultBiqPath, getPediaIconsPath);
 		}
 
-		private SaveGame importBiq(string biqPath, string defaultBiqPath) {
+		private SaveGame importBiq(string biqPath, string defaultBiqPath, Func<string, string> getPediaIconsPath) {
 			biq = BiqData.LoadFile(biqPath);
 			defaultBiq = BiqData.LoadFile(defaultBiqPath);
+			pediaIcons = new(getPediaIconsPath(biq.Game[0].ScenarioSearchFolders));
 
 			ImportSharedBiqData();
 			ImportBicLeaders();
 			ImportBicUnits();
+			ImportBicCities();
 
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(biq, save);
@@ -174,7 +180,7 @@ namespace C7GameData {
 			// Import tiles
 			int i = 0;
 			foreach (QueryCiv3.Biq.TILE civ3Tile in biq.Tile) {
-				(int x, int y) = GetMapCoordinates(i, biq.Wmap[0].Width);
+				(int X, int Y) = GetMapCoordinates(i, biq.Wmap[0].Width);
 				Civ3ExtraInfo extra = new Civ3ExtraInfo
 				{
 					BaseTerrainFileID = civ3Tile.TextureFile,
@@ -183,8 +189,8 @@ namespace C7GameData {
 				SaveTile tile = new SaveTile{
 					id = ids.CreateID("tile"),
 					extraInfo = extra,
-					x = x,
-					y = y,
+					X = X,
+					Y = Y,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
@@ -230,6 +236,9 @@ namespace C7GameData {
 				if (civ3Tile.Mine) {
 					tile.overlays.Add("mine");
 				}
+				if (civ3Tile.Irrigation) {
+					tile.overlays.Add("irrigation");
+				}
 				Resource tileResource = resourcesByIndex[civ3Tile.Resource];
 				if (tileResource != Resource.NONE) {
 					tile.resource = tileResource.Key;
@@ -240,7 +249,7 @@ namespace C7GameData {
 				if (civ3Tile.FogOfWar != 0) {
 					for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
 						SavePlayer player = save.Players[playerIndex];
-						player.tileKnowledge.Add(new TileLocation(x, y));
+						player.tileKnowledge.Add(new TileLocation(X, Y));
 					}
 				}
 
@@ -262,20 +271,26 @@ namespace C7GameData {
 				SavePlayer player = playerLookup[unit.owner];
 				player.tileKnowledge.Add(unit.currentLocation);
 				foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
-					Tuple<int, int> neighbor = Tile.NeighborCoordinate(unit.currentLocation.x, unit.currentLocation.y, direction);
+					Tuple<int, int> neighbor = Tile.NeighborCoordinate(unit.currentLocation.X, unit.currentLocation.Y, direction);
+					player.tileKnowledge.Add(new TileLocation(neighbor.Item1, neighbor.Item2));
+				}
+			}
+			foreach (SaveCity city in save.Cities) {
+				SavePlayer player = playerLookup[city.owner];
+				player.tileKnowledge.Add(city.location);
+				foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
+					Tuple<int, int> neighbor = Tile.NeighborCoordinate(city.location.X, city.location.Y, direction);
 					player.tileKnowledge.Add(new TileLocation(neighbor.Item1, neighbor.Item2));
 				}
 			}
 
-			// This probably doesn't belong here, but not sure where else to put it
-			// c7Save.GameData.map.RelativeModPath = civ3Save.MediaBic.Game[0].ScenarioSearchFolders;
 			return save;
 		}
 
 		static (int, int) GetMapCoordinates(int tileIndex, int mapWidth) {
-			int y = tileIndex / (mapWidth / 2);
-			int x = tileIndex % (mapWidth / 2) * 2 + (y % 2);
-			return (x, y);
+			int Y = tileIndex / (mapWidth / 2);
+			int X = tileIndex % (mapWidth / 2) * 2 + (Y % 2);
+			return (X, Y);
 		}
 
 		private Dictionary<int, Resource> ImportCiv3Resources() {
@@ -336,29 +351,89 @@ namespace C7GameData {
 		private void ImportBicLeaders() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 
-			int i = 0;
-			foreach (int playerIndex in theBiq.GameCiv[0]) {
-				Civilization civ = save.Civilizations[playerIndex];
-				// TODO: the city name index is wrong, we need to count the number of
-				// cities this civilization has.
-				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/0));
-				i++;
+			// Make a player for each civ. The barbarians are always civ 0.
+			for (int i = 0; i < save.Civilizations.Count; ++i) {
+				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
+									   /*isBarbarian=*/i == 0,
+									   /*isHuman=*/false,
+									   /*cityNameIndex=*/0,
+									   /*era=*/""));
+			}
+
+			// Now fill in the rest of the data using the leader struct.
+			bool foundHuman = false;
+			int leadIndex = 0;
+			foreach (LEAD lead in theBiq.Lead) {
+				SavePlayer player = save.Players[lead.Civ];
+
+				// Put the player in the correct starting era.
+				player.eraCivilopediaName = theBiq.Eras[lead.InitialEra].CivilopediaEntry;
+
+				// Give the correct amount of starting gold.
+				player.gold = lead.StartCash;
+
+				// The game starts out with 50% on the science slider and 0% on
+				// the luxury slider.
+				player.scienceRate = 5;
+				player.taxRate = 5;
+				player.luxuryRate = 0;
+
+				// Add the starting techs for scenarios.
+				if (theBiq.LeadTech != null) {
+					for (int j = 0; j < theBiq.LeadTech[leadIndex].Length; ++j) {
+						player.knownTechs.Add(save.Techs[theBiq.LeadTech[leadIndex][j]].id);
+					}
+				}
+
+				// Mark the first human playable civ as the human player.
+				if (lead.HumanPlayer == 1 && !foundHuman) {
+					player.human = true;
+					foundHuman = true;
+				}
+
+				++leadIndex;
 			}
 		}
 
 		private void ImportSavLeaders() {
+			BiqData theBiq = biq.Eras is null ? defaultBiq : biq;
 			int i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
 				if (leader.RaceID == -1) {
 					continue; // can probably break here
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];
-				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/leader.FoundedCities));
+				SavePlayer player = MakeSavePlayerFromCiv(civ,
+										  /*isBarbarian=*/i == 0,
+										  /*isHuman=*/i == 1,
+										  /*cityNameIndex=*/leader.FoundedCities,
+										  /*era=*/theBiq.Eras[leader.Era].CivilopediaEntry);
+
+				// Record what the player is currently researching.
+				if (leader.Researching > -1) {
+					player.currentlyResearchedTech = save.Techs[leader.Researching].id;
+				}
+
+				// Record any techs that this player knows.
+				for (int k = 0; k < savData.KnownTechFlags.Length; ++k) {
+					if (savData.KnownTechFlags[k][i]) {
+						player.knownTechs.Add(save.Techs[k].id);
+					}
+				}
+
+				player.gold = leader.Gold;
+				player.beakers = leader.Beakers;
+				player.turnsResearched = leader.TurnsResearched;
+				player.scienceRate = leader.ScienceRate;
+				player.luxuryRate = leader.LuxuryRate;
+				player.taxRate = leader.TaxRate;
+
+				save.Players.Add(player);
 				i++;
 			}
 		}
 
-		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex) {
+		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex, string era) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
 				colorIndex = civ.colorIndex,
@@ -367,6 +442,7 @@ namespace C7GameData {
 				civilization = civ.name,
 				hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
 				cityNameIndex = cityNameIndex,
+				eraCivilopediaName = era,
 			};
 		}
 
@@ -396,13 +472,18 @@ namespace C7GameData {
 		}
 
 		private void ImportBicUnits() {
+			// TODO: This doesn't account for default starting units.
 			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
 
 			foreach (UNIT unit in theBiq.Unit) {
-				if (unit.Owner < 0 || unit.Owner >= save.Players.Count) {
+				if (unit.Owner >= save.Players.Count) {
 					continue;
 				}
+
+				// The owner index is into the list of civs, and we have a 1:1
+				// mapping of players and civs.
 				SavePlayer player = save.Players[unit.Owner];
+
 				PRTO prototype = theBiq.Prto[unit.UnitType];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
 				SaveUnit saveUnit = new SaveUnit{
@@ -420,18 +501,46 @@ namespace C7GameData {
 		}
 
 		private void ImportSavCities() {
-			foreach (QueryCiv3.Sav.CITY city in savData.City) {
+			for (int i = 0; i < savData.City.Length; ++i) {
+				QueryCiv3.Sav.CITY city = savData.City[i];
 				SavePlayer owner = save.Players[city.Owner];
 				SaveCity saveCity = new SaveCity{
 					id = ids.CreateID("city"),
 					owner = owner.id,
 					location = new TileLocation(city.X, city.Y),
+					capital = i == savData.Lead[city.Owner].CapitalCity,
 					// producible = city.Constructing // TODO: lookup building or unit prototype
 					producible = "Warrior",
 					name = city.Name,
 					size = city.Popd.CitizenCount,
 					shieldsStored = city.ShieldsCollected,
 					foodStored = city.TotalFood,
+					foodNeededToGrow = 20, // HACK: don't know where to find this
+					// residents = city.Ppod // TODO: load tiles worked from PPOD
+				};
+				save.Cities.Add(saveCity);
+			}
+		}
+
+		private void ImportBicCities() {
+			BiqData theBiq = biq.City is null ? defaultBiq : biq;
+
+			foreach (CITY city in theBiq.City) {
+				// The owner index is into the list of civs, and we have a 1:1
+				// mapping of players and civs.
+				SavePlayer player = save.Players[city.Owner];
+
+				SaveCity saveCity = new SaveCity{
+					id = ids.CreateID("city"),
+					owner = player.id,
+					location = new TileLocation(city.X, city.Y),
+					capital = city.HasPalace != 0,
+					// TODO: try and get this from the unit prototype
+					producible = "Worker",
+					name = city.Name,
+					size = city.Size,
+					shieldsStored = 0,
+					foodStored = 0,
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 					// residents = city.Ppod // TODO: load tiles worked from PPOD
 				};
@@ -451,6 +560,7 @@ namespace C7GameData {
 					prototype.categories.Add("Air");
 				}
 				prototype.name = prto.Name;
+				prototype.artName = pediaIcons.GetUnitArtName(prto.CivilopediaEntry);
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;
@@ -466,6 +576,9 @@ namespace C7GameData {
 				}
 				if (prto.BuildMine) {
 					prototype.actions.Add(C7Action.UnitBuildMine);
+				}
+				if (prto.Irrigate) {
+					prototype.actions.Add(C7Action.UnitIrrigate);
 				}
 				if (prto.Bombard) {
 					prototype.actions.Add(C7Action.UnitBombard);
@@ -565,6 +678,79 @@ namespace C7GameData {
 			barbInfo.basicBarbarianIndex = Rule.BasicBarbarianUnitType;
 			barbInfo.advancedBarbarianIndex = Rule.AdvancedBarbarianUnitType;
 			barbInfo.barbarianSeaUnitIndex = Rule.BarbarianSeaUnitType;
+		}
+
+		private void ImportTechs() {
+			BiqData theBiq = biq.Tech is null ? defaultBiq : biq;
+
+			// Pass one: create the techs without prereqs.
+			for (int i = 0; i < theBiq.Tech.Length; ++i) {
+				TECH t = theBiq.Tech[i];
+
+				SaveTech st = new() {
+					id = ids.CreateID("tech"),
+					Name = t.Name,
+					CivilopediaEntry = t.CivilopediaEntry,
+					Cost = t.Cost,
+					EraCivilopediaName = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].CivilopediaEntry,
+					SmallIconPath = t.Era == -1 ? "" : pediaIcons.GetTechIconPath(t.CivilopediaEntry),
+					X = t.X,
+					Y = t.Y
+				};
+				save.Techs.Add(st);
+			}
+
+			// Pass two: set up the prereqs now that we can index into the list
+			// of techs.
+			for (int i = 0; i < theBiq.Tech.Length; ++i) {
+				TECH t = theBiq.Tech[i];
+				SaveTech st = save.Techs[i];
+
+				if (t.Prerequisite1 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite1].id);
+				}
+				if (t.Prerequisite2 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite2].id);
+				}
+				if (t.Prerequisite3 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite3].id);
+				}
+				if (t.Prerequisite4 > -1) {
+					st.Prerequisites.Add(save.Techs[t.Prerequisite3].id);
+				}
+			}
+
+			// Now that we have ids for all the techs, distribute the free techs
+			for (int i = 0; i < save.Civilizations.Count; ++i) {
+				Civilization sc = save.Civilizations[i];
+				RACE race = theBiq.Race[i];
+
+				if (race.FreeTech1 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech1].id);
+				}
+				if (race.FreeTech2 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech2].id);
+				}
+				if (race.FreeTech3 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech3].id);
+				}
+				if (race.FreeTech4 > -1) {
+					sc.startingTechs.Add(save.Techs[race.FreeTech4].id);
+				}
+
+				// Remove any invalid starting techs. Some scenarios like
+				// Fall of Rome give starting techs without giving all of the
+				// prereqs, so they should be ignored.
+				sc.startingTechs.RemoveWhere(t => {
+					SaveTech st = save.Techs.Find(x => x.id == t);
+					foreach (ID prereqId in st.Prerequisites) {
+						if (!sc.startingTechs.Contains(prereqId)) {
+							return true;
+						}
+					}
+					return false;
+				});
+			}
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

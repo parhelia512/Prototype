@@ -1,4 +1,5 @@
 ﻿namespace C7Engine {
+	using System;
 	using System.IO;
 	using C7GameData;
 	using C7GameData.Save;
@@ -24,10 +25,10 @@
 		}
 
 		// Load and initialize a save
-		public static SaveGame LoadSave(string path, string bicPath) {
+		public static SaveGame LoadSave(string path, string bicPath, Func<string, string> getPediaIconsPath) {
 			SaveGame save = getFileFormat(path) switch {
-				SaveFileFormat.Sav => ImportCiv3.ImportSav(path, bicPath),
-				SaveFileFormat.Biq => ImportCiv3.ImportBiq(path, bicPath),
+				SaveFileFormat.Sav => ImportCiv3.ImportSav(path, bicPath, getPediaIconsPath),
+				SaveFileFormat.Biq => ImportCiv3.ImportBiq(path, bicPath, getPediaIconsPath),
 				SaveFileFormat.C7 => SaveGame.Load(path),
 				_ => throw new FileLoadException("invalid save format"),
 			};

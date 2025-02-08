@@ -29,7 +29,7 @@ namespace C7Engine {
 		public AnimationEnding ending;
 
 		public MsgStartEffectAnimation(Tile tile, AnimatedEffect effect, AutoResetEvent completionEvent, AnimationEnding ending) {
-			this.tileIndex = EngineStorage.gameData.map.tileCoordsToIndex(tile.xCoordinate, tile.yCoordinate);
+			this.tileIndex = EngineStorage.gameData.map.tileCoordsToIndex(tile.XCoordinate, tile.YCoordinate);
 			this.effect = effect;
 			this.completionEvent = completionEvent;
 			this.ending = ending;
@@ -40,6 +40,10 @@ namespace C7Engine {
 
 	public class MsgUpdateUiAfterMove : MessageToUI { }
 
+	public class MsgUpdateUiAfterTechSelection : MessageToUI { }
+
+	public class MsgUpdateUiAfterSliderChange : MessageToUI { }
+
 	public class MsgCityDestroyed : MessageToUI {
 		public City city;
 
@@ -48,4 +52,11 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgCityCreated : MessageToUI {
+		public City city;
+
+		public MsgCityCreated(City city) {
+			this.city = city;
+		}
+	}
 }

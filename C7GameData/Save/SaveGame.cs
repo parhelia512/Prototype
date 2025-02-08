@@ -71,6 +71,7 @@ namespace C7GameData.Save {
 			save.HealRates["city"] = data.healRateInCity;
 			save.ScenarioSearchPath = data.scenarioSearchPath;
 			save.DefaultExperienceLevel = data.defaultExperienceLevelKey;
+			save.Techs = data.techs.ConvertAll(t => t.ToSaveTech());
 			return save;
 		}
 
@@ -93,6 +94,7 @@ namespace C7GameData.Save {
 				unitPrototypes = UnitPrototypes.ToDictionary(up => up.name),
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
+				ids = new ID.Factory(this),
 			};
 			// units and cities are empty
 			data.map = Map.ToGameMap(data);
@@ -110,12 +112,29 @@ namespace C7GameData.Save {
 
 			// cities require game map for location and players for city owner
 			data.cities = Cities.ConvertAll(city => city.ToCity(data.map, data.players, UnitPrototypes, Civilizations));
+
+			// Once cities are known, players can reference cities.
+			data.players.ForEach(player => {
+				player.cities = data.cities.Where(city => city.owner.id == player.id).ToList(); ;
+			});
+
 			foreach (City city in data.cities) {
-				data.map.tileAt(city.location.xCoordinate, city.location.yCoordinate).cityAtTile = city;
+				data.map.tileAt(city.location.XCoordinate, city.location.YCoordinate).cityAtTile = city;
 			}
 
 			// add references to map tiles after units and cities are defined
 			populateGameDataTileUnitsAndCities(data);
+
+			// Fill in the list of techs and then backfill the prereqs.
+			//
+			// This is an N^2 approach, but doing a topological sort of the
+			// prereqs feels like overkill given how many techs are in a game.
+			foreach (SaveTech st in this.Techs) {
+				data.techs.Add(st.ToTechWithoutPrereqs());
+			}
+			foreach (Tech t in data.techs) {
+				t.FillInPrereqs(this.Techs, data.techs);
+			}
 
 			data.experienceLevels = ExperienceLevels;
 			data.barbarianInfo = BarbarianInfo;
@@ -178,6 +197,7 @@ namespace C7GameData.Save {
 		public List<Civilization> Civilizations = new List<Civilization>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
+		public List<SaveTech> Techs = new();
 		public string ScenarioSearchPath; // TODO: what is this
 		public void Save(string path) {
 			byte[] json = JsonSerializer.SerializeToUtf8Bytes(this, JsonOptions);

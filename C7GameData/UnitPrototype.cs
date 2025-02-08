@@ -9,6 +9,8 @@ namespace C7GameData {
 	 **/
 	public class UnitPrototype : IProducible {
 		public string name { get; set; }
+		// The name to use when searching for animations for this unit.
+		public string artName { get; set; }
 		public int shieldCost { get; set; }
 		public int populationCost { get; set; }
 		public int attack { get; set; }

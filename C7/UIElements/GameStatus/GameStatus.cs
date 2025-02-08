@@ -29,12 +29,16 @@ public partial class GameStatus : MarginContainer {
 		LowerRightInfoBox.StopToggling();
 	}
 
-	private void OnTurnStarted(int turnNumber) {
+	private void OnTurnStarted(int turnNumber, int gold, int goldPerTurn) {
 		//Oh hai, we do need this handler here!
-		LowerRightInfoBox.SetTurn(turnNumber);
+		LowerRightInfoBox.SetTurnAndGold(turnNumber, gold, goldPerTurn);
 	}
 
 	private void OnNoMoreAutoselectableUnits() {
 		LowerRightInfoBox.SetEndOfTurnStatus();
+	}
+
+	private void OnUpdateTechProgress(string techName, int turnsRemaining) {
+		LowerRightInfoBox.UpdateTechProgress(techName, turnsRemaining);
 	}
 }

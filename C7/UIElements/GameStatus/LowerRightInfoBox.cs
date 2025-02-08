@@ -15,6 +15,7 @@ public partial class LowerRightInfoBox : TextureRect {
 	Label attackDefenseMovement = new Label();
 	Label terrainType = new Label();
 	Label yearAndGold = new Label();
+	Label scienceProgress = new();
 
 	Timer blinkingTimer = new Timer();
 	bool timerStarted = false;  //This "isStopped" returns false if it's never been started.  So we need this to know if we've ever started it.
@@ -68,26 +69,18 @@ public partial class LowerRightInfoBox : TextureRect {
 		terrainType.OffsetRight = -30;
 		boxRightRectangle.AddChild(terrainType);
 
-		//For the centered labels, we anchor them center, with equal weight on each side.
-		//Then, when they are visible, we add a left margin that's negative and equal to half
-		//their width.
-		//Seems like there probably is an easier way, but I haven't found it yet.
 		Label civAndGovt = new Label();
-		civAndGovt.Text = "Carthage - Despotism (5.5.0)";
-		civAndGovt.HorizontalAlignment = HorizontalAlignment.Center;
-		civAndGovt.SetPosition(new Vector2(0, 90));
-		civAndGovt.AnchorLeft = 0.5f;
-		civAndGovt.AnchorRight = 0.5f;
+		civAndGovt.SetPosition(new Vector2(0, 75));
 		boxRightRectangle.AddChild(civAndGovt);
-		civAndGovt.OffsetLeft = -1 * (civAndGovt.Size.X / 2.0f);
+		SetTextAndCenterLabel(civAndGovt, "Carthage - Despotism (5.5.0)");
 
-		yearAndGold.Text = "Turn 0  10 Gold (+0 per turn)";
-		yearAndGold.HorizontalAlignment = HorizontalAlignment.Center;
-		yearAndGold.SetPosition(new Vector2(0, 105));
-		yearAndGold.AnchorLeft = 0.5f;
-		yearAndGold.AnchorRight = 0.5f;
+		yearAndGold.SetPosition(new Vector2(0, 90));
 		boxRightRectangle.AddChild(yearAndGold);
-		yearAndGold.OffsetLeft = -1 * (yearAndGold.Size.X / 2.0f);
+		SetTextAndCenterLabel(yearAndGold, "Turn 0  10 Gold (+0 per turn)");
+
+		scienceProgress.SetPosition(new Vector2(0, 105));
+		boxRightRectangle.AddChild(scienceProgress);
+		SetTextAndCenterLabel(scienceProgress, "");
 
 		//Setup up, but do not start, the timer.
 		blinkingTimer.OneShot = false;
@@ -150,7 +143,32 @@ public partial class LowerRightInfoBox : TextureRect {
 
 	///This is going to evolve a lot over time.  Probably this info box will need to keep some local state.
 	///But for now it'll show the changing turn number, providing some interactivity
-	public void SetTurn(int turnNumber) {
-		yearAndGold.Text = $"Turn {turnNumber}  10 Gold (+0 per turn)";
+	public void SetTurnAndGold(int turnNumber, int gold, int goldPerTurn) {
+		if (goldPerTurn >= 0) {
+			yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (+{goldPerTurn} per turn)";
+		} else {
+			yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (-{goldPerTurn} per turn)";
+		}
+	}
+
+	public void UpdateTechProgress(string techName, int turnsRemaining) {
+		if (turnsRemaining >= int.MaxValue) {
+			SetTextAndCenterLabel(scienceProgress, $"{techName} (-- turns)");
+		} else {
+			SetTextAndCenterLabel(scienceProgress, $"{techName} ({turnsRemaining} turns)");
+		}
+	}
+
+	private void SetTextAndCenterLabel(Label label, string text) {
+		//For the centered labels, we anchor them center, with equal weight on each side.
+		//Then, when they are visible, we add a left margin that's negative and equal to half
+		//their width.
+		//Seems like there probably is an easier way, but I haven't found it yet.
+		label.Text = text;
+		label.HorizontalAlignment = HorizontalAlignment.Center;
+		label.AnchorLeft = 0.5f;
+		label.AnchorRight = 0.5f;
+		label.OffsetLeft = -1 * (label.Size.X / 2.0f);
+
 	}
 }
