@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=16 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" path="res://Game.cs" id="1"]
 [ext_resource type="Script" path="res://UIElements/Advisors/Advisors.cs" id="3"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://UIElements/Popups/PopupOverlay.cs" id="9"]
 [ext_resource type="Theme" uid="uid://c1jpmssnhvodi" path="res://C7Theme.tres" id="10"]
 [ext_resource type="Script" path="res://UIElements/UnitButtons/UnitButtons.cs" id="12"]
+[ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="12_yjlfl"]
 [ext_resource type="Script" path="res://UIElements/CityScreen/CityScreen.cs" id="13"]
 
 [sub_resource type="Animation" id="2"]
@@ -59,14 +60,14 @@ _data = {
 "SlideOutAnimation": SubResource("1")
 }
 
-[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "slider", "animationPlayer", "cityScreen", "advisor")]
+[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "slider", "animationPlayer")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
-slider = NodePath("CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom")
-animationPlayer = NodePath("CanvasLayer/Control/SlideOutBar/AnimationPlayer")
 cityScreen = NodePath("CanvasLayer/CityScreen")
 advisor = NodePath("CanvasLayer/Advisor")
+slider = NodePath("CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom")
+animationPlayer = NodePath("CanvasLayer/Control/SlideOutBar/AnimationPlayer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -264,12 +265,16 @@ grow_vertical = 2
 theme = ExtResource("10")
 script = ExtResource("13")
 
+[node name="LoadDialog" parent="." instance=ExtResource("12_yjlfl")]
+unique_name_in_owner = true
+visible = false
+
 [connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus" method="OnNewUnitSelected"]
 [connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/UnitButtons" method="OnNewUnitSelected"]
 [connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus" method="OnNoMoreAutoselectableUnits"]
 [connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/UnitButtons" method="OnNoMoreAutoselectableUnits"]
-[connection signal="ShowSpecificAdvisor" from="." to="CanvasLayer/Advisor" method="OnShowSpecificAdvisor"]
 [connection signal="ShowCityScreen" from="." to="CanvasLayer/CityScreen" method="OnShowCityScreen"]
+[connection signal="ShowSpecificAdvisor" from="." to="CanvasLayer/Advisor" method="OnShowSpecificAdvisor"]
 [connection signal="TurnEnded" from="." to="CanvasLayer/Control/GameStatus" method="OnTurnEnded"]
 [connection signal="TurnStarted" from="." to="CanvasLayer/Control/GameStatus" method="OnTurnStarted"]
 [connection signal="UpdateTechProgress" from="." to="CanvasLayer/Control/GameStatus" method="OnUpdateTechProgress"]
