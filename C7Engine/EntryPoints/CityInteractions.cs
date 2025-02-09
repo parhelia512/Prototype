@@ -11,7 +11,8 @@ namespace C7Engine {
 			Tile tileWithNewCity = gameData.map.tileAt(X, Y);
 			City newCity = new City(tileWithNewCity, owner, name, gameData.ids.CreateID("city"));
 			CityResident firstResident = new CityResident();
-			CityTileAssignmentAI.AssignNewCitizenToTile(newCity, firstResident);
+			firstResident.city = newCity;
+			CityTileAssignmentAI.AssignNewCitizenToTile(firstResident);
 			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
 			if (owner.cities.Count == 0) {
 				newCity.capital = true;

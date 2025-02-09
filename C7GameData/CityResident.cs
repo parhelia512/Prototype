@@ -3,6 +3,7 @@ namespace C7GameData {
 		//Specialist type
 		public Tile tileWorked = Tile.NONE;
 		public Civilization nationality;
+		public City city;
 		//Eventually more things like happiness
 	}
 }

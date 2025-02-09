@@ -3,6 +3,7 @@ using System.Collections.Generic;
 namespace C7GameData.Save {
 	public class SaveCityResident {
 		public string nationality;
+		public ID city;
 		public TileLocation tileWorked;
 	}
 
@@ -35,6 +36,7 @@ namespace C7GameData.Save {
 			residents = city.residents.ConvertAll(resident => {
 				return new SaveCityResident {
 					nationality = resident.nationality?.name,
+					city = resident.city.id,
 					tileWorked = new TileLocation(resident.tileWorked),
 				};
 			});
@@ -52,13 +54,15 @@ namespace C7GameData.Save {
 				foodStored = foodStored,
 				foodNeededToGrow = foodNeededToGrow,
 				capital = capital,
-				residents = residents.ConvertAll(resident =>{
-					return new CityResident{
-						tileWorked = gameMap.tileAt(resident.tileWorked.X, resident.tileWorked.Y),
-						nationality = civilizations.Find(civ => civ.name == resident.nationality),
-					};
-				}),
 			};
+
+			city.residents = residents.ConvertAll(resident => {
+				return new CityResident {
+					nationality = civilizations.Find(civ => civ.name == resident.nationality),
+					tileWorked = gameMap.tileAt(resident.tileWorked.X, resident.tileWorked.Y),
+					city = city,
+				};
+			});
 			return city;
 		}
 	}
