@@ -51,6 +51,7 @@ namespace C7GameData {
 			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
 			ImportTechs();
+			ImportCitizenTypes();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -765,6 +766,35 @@ namespace C7GameData {
 					}
 					return false;
 				});
+			}
+		}
+
+		private void ImportCitizenTypes() {
+			BiqData theBiq = biq.Ctzn is null ? defaultBiq : biq;
+
+			for (int i = 0; i < theBiq.Ctzn.Length; ++i) {
+				CTZN c = theBiq.Ctzn[i];
+
+				CitizenType ct = new() {
+					Id = ids.CreateID("CitizenType"),
+					IsDefaultCitizen = c.DefaultCitizen == 1,
+					SingularName = c.SingularName,
+					CivilopediaEntry = c.CivilopediaEntry,
+					PluralName = c.PluralName,
+					Luxuries = c.Luxuries,
+					Research = c.Research,
+					Taxes = c.Taxes,
+					Corruption = c.Corruption,
+					Construction = c.Construction
+				};
+				if (!ct.IsDefaultCitizen) {
+					ct.SpecialistIndex = i;
+				}
+				if (c.Prerequisite > -1) {
+					ct.PrerequisiteTech = save.Techs[c.Prerequisite].id;
+				}
+
+				save.CitizenTypes.Add(ct);
 			}
 		}
 
