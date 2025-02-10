@@ -31,7 +31,6 @@ namespace QueryCiv3 {
 		}
 
 		private static string GetExpandedPath(string path) {
-			// if (path == null) return null;
 			bool isUnixLike = !RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 			if (isUnixLike && path[0] == '~') path = GetHome() + path.Substring(1);
 			if (isUnixLike) path = ConvertUnixVarsToWindowsVars(path);
