@@ -41,8 +41,8 @@ namespace QueryCiv3 {
 
 		public static string GetCiv3Path() {
 			// Use CIV3_HOME env var if present
-			string path = GetExpandedPath(Environment.GetEnvironmentVariable("CIV3_HOME"));
-			if (path != null) { return path; }
+			string path = Environment.GetEnvironmentVariable("CIV3_HOME");
+			if (path != null) { return GetExpandedPath(path); }
 
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
 				// Look up in Windows registry if present
