@@ -63,6 +63,11 @@ namespace C7GameData.Save {
 					city = city,
 				};
 			});
+
+			// Fill in the back pointers.
+			foreach (CityResident cr in city.residents) {
+				cr.tileWorked.personWorkingTile = cr;
+			}
 			return city;
 		}
 	}
