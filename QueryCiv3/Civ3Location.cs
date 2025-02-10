@@ -31,6 +31,7 @@ namespace QueryCiv3 {
 		}
 
 		private static string GetExpandedPath(string path) {
+			// if (path == null) return null;
 			bool isUnixLike = !RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 			if (isUnixLike && path[0] == '~') path = GetHome() + path.Substring(1);
 			if (isUnixLike) path = ConvertUnixVarsToWindowsVars(path);
@@ -41,8 +42,8 @@ namespace QueryCiv3 {
 
 		public static string GetCiv3Path() {
 			// Use CIV3_HOME env var if present
-			string path = GetExpandedPath(Environment.GetEnvironmentVariable("CIV3_HOME"));
-			if (path != null) { return path; }
+			string path = Environment.GetEnvironmentVariable("CIV3_HOME");
+			if (path != null) { return GetExpandedPath(path); }
 
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
 				// Look up in Windows registry if present
