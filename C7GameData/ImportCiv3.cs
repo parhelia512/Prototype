@@ -579,10 +579,6 @@ namespace C7GameData {
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
 
-				// TODO: figure out how residents are assigned in scenarios - is
-				// it just the default assignment? If so maybe we can just use
-				// our tile assignment ai.
-
 				save.Cities.Add(saveCity);
 			}
 		}

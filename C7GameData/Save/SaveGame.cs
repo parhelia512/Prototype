@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -87,7 +88,7 @@ namespace C7GameData.Save {
 		// TODO: GameData should store Civilizations, otherwise the round trip from
 		// SaveGame to GameData and back loses Civilization instances that are not
 		// assigned to a player.
-		public GameData ToGameData() {
+		public GameData ToGameData(Action<City, CitizenType> assignScenarioResidents) {
 			// copy data without references
 			GameData data = new GameData{
 				seed = Seed,
@@ -115,7 +116,7 @@ namespace C7GameData.Save {
 			});
 
 			// cities require game map for location and players for city owner
-			data.cities = Cities.ConvertAll(city => city.ToCity(data.map, data.players, UnitPrototypes, Civilizations, Buildings, CitizenTypes));
+			data.cities = Cities.ConvertAll(city => city.ToCity(data.map, data.players, UnitPrototypes, Civilizations, Buildings, CitizenTypes, assignScenarioResidents));
 
 			// Once cities are known, players can reference cities.
 			data.players.ForEach(player => {

@@ -61,7 +61,9 @@ public class SaveTests {
 		SaveGame saveNeverGameData = SaveGame.Load(developerSave);
 
 		saveNeverGameData.Save(outputNeverGameDataPath);
-		GameData gameData = saveNeverGameData.ToGameData();
+		GameData gameData = saveNeverGameData.ToGameData((City c, CitizenType ct) => {
+			// We don't care about scenario tile assignment here.
+		});
 		SaveGame saveWasGameData = SaveGame.FromGameData(gameData);
 		saveWasGameData.Save(outputWasGameDataPath);
 
@@ -110,7 +112,9 @@ public class SaveTests {
 			});
 			Assert.Null(ex);
 			ex = Record.Exception(() => {
-				gd = game.ToGameData();
+				gd = game.ToGameData((City c, CitizenType ct) => {
+					// We don't care about scenario tile assignment here.
+				});
 			});
 			Assert.Null(ex);
 			Assert.NotNull(game);
@@ -162,7 +166,9 @@ public class SaveTests {
 			});
 			Assert.True(ex == null, name + ": " + ex?.ToString());
 			ex = Record.Exception(() => {
-				gd = game.ToGameData();
+				gd = game.ToGameData((City c, CitizenType ct) => {
+					// We don't care about scenario tile assignment here.
+				});
 			});
 			Assert.True(ex == null, name + ":" + ex?.ToString());
 			Assert.NotNull(game);

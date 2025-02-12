@@ -12,12 +12,14 @@ namespace C7Engine {
 		 * quickly.  By keeping all the client-callable APIs in the EntryPoints folder,
 		 * hopefully it won't be too much of a goose hunt to refactor it later if we decide to do so.
 		 **/
-		public static Player createGame(string loadFilePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
+		public static Player createGame(string loadFilePath, string defaultBicPath,
+										Func<string, string> getPediaIconsPath,
+										Action<City, CitizenType> assignScenarioResidents) {
 			EngineStorage.createThread();
 			EngineStorage.gameDataMutex.WaitOne();
 
 			SaveGame save = SaveManager.LoadSave(loadFilePath, defaultBicPath, getPediaIconsPath);
-			GameData gameData = save.ToGameData();
+			GameData gameData = save.ToGameData(assignScenarioResidents);
 
 			EngineStorage.gameData = gameData;
 
