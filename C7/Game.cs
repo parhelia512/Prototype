@@ -132,6 +132,7 @@ public partial class Game : Node2D {
 				// are visible and map UI locations back to map locations.
 				cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
 				cityScreen.mapView = mapView;
+				cityScreen.citizenTypes = gameDataAccess.gameData.citizenTypes;
 			}
 
 			//TODO: What was this supposed to do?  It throws errors and occasinally causes crashes now, because _OnViewportSizeChanged doesn't exist
