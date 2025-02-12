@@ -520,15 +520,22 @@ namespace C7GameData {
 				};
 
 				foreach (QueryCiv3.Sav.CTZN ctzn in savData.CityCtzn[i]) {
-					if (ctzn.TileWorked == 0) {
-						// TODO: handle resistors and specialists
-						continue;
+					if (ctzn.Type == 4) {  // Specialist
+						SaveCityResident scr = new();
+						scr.city = saveCity.id;
+						scr.nationality = save.Civilizations[ctzn.Nationality].name;
+						scr.citizenType = save.CitizenTypes.Find(x => x.SpecialistIndex == ctzn.SpecialistType).Id;
+						saveCity.residents.Add(scr);
+					} else if (ctzn.TileWorked == 0) {
+						// TODO: handle resistors
+					} else {
+						SaveCityResident scr = new();
+						scr.city = saveCity.id;
+						scr.tileWorked = GetTileFromSpiral(saveCity.location, ctzn.TileWorked);
+						scr.nationality = save.Civilizations[ctzn.Nationality].name;
+						scr.citizenType = save.CitizenTypes.Find(x => x.IsDefaultCitizen).Id;
+						saveCity.residents.Add(scr);
 					}
-					SaveCityResident scr = new();
-					scr.city = saveCity.id;
-					scr.tileWorked = GetTileFromSpiral(saveCity.location, ctzn.TileWorked);
-					scr.nationality = save.Civilizations[ctzn.Nationality].name;
-					saveCity.residents.Add(scr);
 				}
 				save.Cities.Add(saveCity);
 			}
