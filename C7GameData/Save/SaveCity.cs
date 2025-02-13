@@ -7,12 +7,15 @@ namespace C7GameData.Save {
 		public TileLocation tileWorked;
 	}
 
+	public enum ProducibleType { WEALTH, BUILDING, UNIT };
+
 	public class SaveCity : IHasID {
 		public ID id { get; set; }
 		public ID owner;
 		public bool capital;
 		public TileLocation location;
 		public string producible;
+		public ProducibleType producibleType;
 		public string name;
 		public int size;
 		public int shieldsStored;
@@ -30,6 +33,10 @@ namespace C7GameData.Save {
 			name = city.name;
 			size = city.size;
 			producible = city.itemBeingProduced.name;
+			producibleType = city.itemBeingProduced switch {
+				UnitPrototype => ProducibleType.UNIT,
+				Building => ProducibleType.BUILDING,
+			};
 			shieldsStored = city.shieldsStored;
 			foodStored = city.foodStored;
 			foodNeededToGrow = city.foodNeededToGrow;
@@ -42,14 +49,17 @@ namespace C7GameData.Save {
 			});
 		}
 
-		public City ToCity(GameMap gameMap, List<Player> players, List<UnitPrototype> unitPrototypes, List<Civilization> civilizations) {
+		public City ToCity(GameMap gameMap, List<Player> players, List<UnitPrototype> unitPrototypes, List<Civilization> civilizations, List<Building> buildings) {
 			City city = new City{
 				id = id,
 				location = gameMap.tileAt(location.X, location.Y),
 				owner = players.Find(p => p.id == owner),
 				name = name,
 				size = size,
-				itemBeingProduced = unitPrototypes.Find(proto => proto.name == producible),
+				itemBeingProduced = producibleType switch {
+					ProducibleType.UNIT => unitPrototypes.Find(proto => proto.name == producible),
+					ProducibleType.BUILDING => buildings.Find(building => building.name == producible),
+				},
 				shieldsStored = shieldsStored,
 				foodStored = foodStored,
 				foodNeededToGrow = foodNeededToGrow,
