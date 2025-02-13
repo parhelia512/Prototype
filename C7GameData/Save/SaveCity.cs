@@ -20,6 +20,7 @@ namespace C7GameData.Save {
 		public ProducibleType producibleType;
 		public string name;
 		public int size;
+		public Dictionary<string, int> perPlayerCulture = new();
 		public int shieldsStored;
 		public int foodStored;
 		public int foodNeededToGrow;
@@ -49,6 +50,9 @@ namespace C7GameData.Save {
 					tileWorked = new TileLocation(resident.tileWorked),
 				};
 			});
+			foreach (KeyValuePair<Player, int> keyValuePair in city.perPlayerCulture) {
+				perPlayerCulture.Add(keyValuePair.Key.id.ToString(), keyValuePair.Value);
+			}
 		}
 
 		public City ToCity(GameMap gameMap,
@@ -73,6 +77,10 @@ namespace C7GameData.Save {
 				foodNeededToGrow = foodNeededToGrow,
 				capital = capital,
 			};
+
+			foreach (KeyValuePair<string, int> keyValuePair in perPlayerCulture) {
+				city.perPlayerCulture.Add(players.Find(x => x.id.ToString() == keyValuePair.Key), keyValuePair.Value);
+			}
 
 			city.residents = residents.ConvertAll(resident => {
 				return new CityResident {

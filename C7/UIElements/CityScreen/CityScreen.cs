@@ -17,6 +17,8 @@ public partial class CityScreen : CenterContainer {
 	public List<CitizenType> citizenTypes;
 	private TextureRect background;
 	private List<TextureButton> popHeads = new();
+	private Label culturePerTurn;
+	private Label totalCulture;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -33,6 +35,12 @@ public partial class CityScreen : CenterContainer {
 		close.SetPosition(new Vector2(950, 20));
 		close.Pressed += () => { HideScreen(); };
 		background.AddChild(close);
+
+		background.AddChild(new Label() {
+			Text = "CULTURE",
+			OffsetLeft = 714,
+			OffsetTop = 4
+		});
 
 		this.Hide();
 	}
@@ -145,6 +153,28 @@ public partial class CityScreen : CenterContainer {
 		this.Show();
 		tileAssignmentLayer.city = city.Value;
 		RenderPopHeads(city.Value);
+		RenderCulture(city.Value);
+	}
+
+	private void RenderCulture(City city) {
+		if (culturePerTurn == null) {
+			culturePerTurn = new Label() {
+				OffsetLeft = 790,
+				OffsetTop = 4
+			};
+			background.AddChild(culturePerTurn);
+		}
+		culturePerTurn.Text = "0/turn";  // TODO: fill this in
+
+		if (totalCulture == null) {
+			totalCulture = new Label() {
+				OffsetLeft = 714,
+				OffsetTop = 55
+			};
+			background.AddChild(totalCulture);
+		}
+		int nextCultureExpansion = (int)Math.Pow(10, city.GetBorderExpansionLevel());
+		totalCulture.Text = $"Total: {city.GetCulture()}/{nextCultureExpansion}";
 	}
 
 	private void RenderPopHeads(City city) {

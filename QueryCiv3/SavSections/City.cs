@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace QueryCiv3.Sav {
@@ -33,7 +34,10 @@ namespace QueryCiv3.Sav {
 		public int ConstructingType; // 0: wealth, 1: building, 2: unit
 		public int YearBuilt;
 		private fixed byte UnknownBuffer2[4];
-		public int Culture;
+
+		// The power of 10 that will result in the next culture expansion.
+		// 1 = 10, 2=100, 3=1000, etc.
+		public int NextCultureExpansionPower;
 		public int MilitaryPolice;
 		public int LuxuryConnectedCount;
 		public IntBitmap LuxuryConnectedBits;
@@ -58,7 +62,17 @@ namespace QueryCiv3.Sav {
 		private fixed byte HeaderText4[4];
 		public int Length4;
 		public int CulturePerTurn;
-		public fixed int CulturePerLead[32];
+		private fixed int CulturePerLead[32];
+
+		// The amount of culture this city has for each player. This is tracked
+		// per leader because recaptured cities regain their previous culture.
+		public List<int> GetCulturePerLeader() {
+			List<int> result = new();
+			for (int i = 0; i < 32; ++i) {
+				result.Add(CulturePerLead[i]);
+			}
+			return result;
+		}
 		private fixed byte UnknownBuffer7[8];
 		public int FoodPerTurn;
 		public int ShieldsPerTurn;
