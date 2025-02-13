@@ -82,22 +82,56 @@ namespace C7GameData {
 					continue; // skip destroyed cities
 				}
 
-				city.location.owner = city.owner;
+				city.location.owningCity = city;
 
-				foreach (Tile tile in city.location.neighbors.Values) {
-					tile.owner = city.owner;
+				foreach (Tile t in city.GetTilesWithinBorders()) {
+					// If another city has claim to this tile, we need to resolve
+					// that conflict.
+					if (t.owningCity != null) {
+						t.owningCity = ResolveTileOwnershipConflict(t.owningCity, city, t);
+						t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
+						continue;
+					}
+
+					t.owningCity = city;
+					t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
 				}
 			}
 		}
 
 		public void UpdateTileOwnersOnCityDestruction(City city) {
-			city.location.owner = null;
+			city.location.owningCity = null;
 
-			foreach (Tile tile in city.location.neighbors.Values) {
-				tile.owner = null;
+			foreach (Tile tile in city.GetTilesWithinBorders()) {
+				tile.owningCity = null;
 			}
 
 			UpdateTileOwners();
+		}
+
+		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/
+
+		private City ResolveTileOwnershipConflict(City a, City b, Tile t) {
+			int aRank = a.location.rankDistanceTo(t);
+			int bRank = b.location.rankDistanceTo(t);
+
+			// The city with the lowest rank claim gets the tile.
+			if (aRank > bRank) {
+				return b;
+			} else if (aRank < bRank) {
+				return a;
+			}
+
+			// If the ranks are equal, the city with more culture gets the tile.
+			if (a.GetCulture() < b.GetCulture()) {
+				return b;
+			} else if (a.GetCulture() > b.GetCulture()) {
+				return a;
+			}
+
+			// If the cultures are equal the oldest city gets the tile.
+			// TODO: track city age - for now we just return the first.
+			return a;
 		}
 
 		/**

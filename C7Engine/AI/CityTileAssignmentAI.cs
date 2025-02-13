@@ -21,11 +21,9 @@ namespace C7Engine.AI {
 			int desiredFoodRate = city.size * FOOD_PER_CITIZEN + DesiredFoodSurplusPerTurn;
 			int targetTileFoodAmount = desiredFoodRate - foodYield;
 
-			Tile cityCenter = city.location;
-
 			double maxScore = 0;
 			Tile preferredTile = Tile.NONE;
-			foreach (Tile t in cityCenter.neighbors.Values) {
+			foreach (Tile t in city.GetWorkableTiles()) {
 				if (t.personWorkingTile == null) {
 					double score = CalculateTileYieldScore(t, targetTileFoodAmount, city.owner);
 					log.Debug($"Tile {t} scored {score}");
