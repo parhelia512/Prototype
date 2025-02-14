@@ -46,6 +46,7 @@ namespace C7Engine {
 				// player's city, instead of over all cities, irrespective of
 				// player order? See also https://github.com/C7-Game/Prototype/pull/529#discussion_r1935006632
 				HandleCityResults(gameData);
+				UpdateWorkerJobs(gameData);
 				gameData.UpdateTileOwners();
 
 				gameData.turn++;
@@ -68,6 +69,7 @@ namespace C7Engine {
 				OnBeginTurn();
 			}
 		}
+
 
 		/// <summary>
 		/// Plays the turns for all the players in the game (including barbarians).
@@ -184,6 +186,21 @@ namespace C7Engine {
 
 				city.owner.gold += (int)Math.Floor(city.CurrentCommerceYield() * city.owner.taxRate / 10.0);
 				city.owner.beakers += (int)Math.Floor(city.CurrentCommerceYield() * city.owner.scienceRate / 10.0);
+			}
+		}
+
+		/// <summary>
+		/// At the end of turn iterate over all units with an active workerJob and update the state.
+		/// </summary>
+		/// <param name="gameData"></param>
+		private static void UpdateWorkerJobs(GameData gameData) {
+			foreach (Player player in gameData.players) {
+				foreach (MapUnit unit in player.units) {
+					if (unit.WorkerJob != null && unit.movementPoints.canMove) {
+						unit.location.UpdateAllWorkerJobs(unit.WorkerJob);
+					}
+				}
+
 			}
 		}
 
