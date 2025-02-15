@@ -172,6 +172,7 @@ namespace C7GameData {
 			return (Math.Abs(other.XCoordinate - this.XCoordinate) + Math.Abs(other.YCoordinate - this.YCoordinate)) / 2;
 		}
 
+		// TODO: This is innacurate for city centers.
 		public int foodYield(Player player) {
 			int yield = overlayTerrainType.baseFoodProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
@@ -183,6 +184,7 @@ namespace C7GameData {
 			return yield;
 		}
 
+		// TODO: This is innacurate for city centers.
 		public int productionYield(Player player) {
 			int yield = overlayTerrainType.baseShieldProduction;
 			if (overlayTerrainType.Key == "grassland" && this.isBonusShield) {
@@ -197,6 +199,7 @@ namespace C7GameData {
 			return yield;
 		}
 
+		// TODO: This is innacurate for city centers.
 		public int commerceYield(Player player) {
 			int yield = overlayTerrainType.baseCommerceProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
