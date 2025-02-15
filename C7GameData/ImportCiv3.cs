@@ -245,8 +245,10 @@ namespace C7GameData {
 				}
 
 				// Some tiles are known ahead of time, like all of europe in age of
-				// discovery. Add those tiles ahead of time.
-				if (civ3Tile.FogOfWar != 0) {
+				// discovery. Other scenarios set the entire map to be visible.
+				//
+				// Add those tiles ahead of time.
+				if (civ3Tile.FogOfWar != 0 || biq.Game[0].MapVisible == 1) {
 					for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
 						SavePlayer player = save.Players[playerIndex];
 						player.tileKnowledge.Add(new TileLocation(X, Y));
