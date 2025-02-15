@@ -80,6 +80,14 @@ public class SaveTests {
 
 	[Fact]
 	public async void LoadSampleSaves() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
+		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
+		if (is_on_github != null) { return; }
+
 		string savesPath = getDataPath("saves");
 		Directory.CreateDirectory(savesPath);
 
@@ -110,6 +118,7 @@ public class SaveTests {
 			game.Save(Path.Combine(testDirectory, "data", "output", $"gotm_save_{i}.json"));
 			i++;
 		}
+		Assert.True(i > 0);
 	}
 
 	[Fact]
