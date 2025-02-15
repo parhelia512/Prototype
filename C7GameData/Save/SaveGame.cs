@@ -53,6 +53,7 @@ namespace C7GameData.Save {
 				Map = new SaveMap(data.map),
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
+				Buildings = data.Buildings,
 				BarbarianInfo = data.barbarianInfo,
 				Units = data.mapUnits.ConvertAll(unit => new SaveUnit(unit, data.map)),
 				UnitPrototypes = data.unitPrototypes.Values.ToList(),
