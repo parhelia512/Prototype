@@ -552,6 +552,7 @@ namespace C7GameData {
 					capital = city.HasPalace != 0,
 					// TODO: try and get this from the unit prototype
 					producible = "Worker",
+					producibleType = ProducibleType.UNIT,
 					name = city.Name,
 					size = city.Size,
 					shieldsStored = 0,
