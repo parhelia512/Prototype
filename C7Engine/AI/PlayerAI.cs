@@ -13,7 +13,7 @@ namespace C7Engine {
 	public class PlayerAI {
 		private static ILogger log = Log.ForContext<PlayerAI>();
 
-		public static void PlayTurn(Player player, Random rng) {
+		public static void PlayTurn(Player player, Random rng, List<Tech> techs) {
 			if (player.isHuman || player.isBarbarians) {
 				return;
 			}
@@ -30,6 +30,17 @@ namespace C7Engine {
 				log.Information(player.turnsUntilPriorityReevaluation + " turns until next re-evaluation");
 			} else {
 				player.turnsUntilPriorityReevaluation--;
+			}
+
+			if (player.currentlyResearchedTech == null) {
+				Tech toResearch = PickTechToResearch(player, techs);
+				if (toResearch == null) {
+					log.Information($"Player {player.civilization.name} has no techs available to research.");
+					player.SetCurrentlyResearchedTech(null);
+				} else {
+					log.Information($"Player {player.civilization.name} is researching {toResearch.Name}.");
+					player.SetCurrentlyResearchedTech(toResearch.id);
+				}
 			}
 
 			//Do things with units.  Copy into an array first to avoid collection-was-modified exception
@@ -252,6 +263,34 @@ namespace C7Engine {
 				return new CombatAI();
 			}
 			throw new Exception("AI data not recognized" + aiData);
+		}
+
+		private static Tech PickTechToResearch(Player player, List<Tech> techs) {
+			List<Tech> possibleTechs = new();
+
+			// Figure out what techs we're allowed to research.
+			foreach (Tech tech in techs) {
+				if (tech.EraCivilopediaName != player.eraCivilopediaName) {
+					continue;
+				}
+				bool prereqsKnown = true;
+				foreach (Tech prereq in tech.Prerequisites) {
+					if (!player.knownTechs.Contains(prereq.id)) {
+						prereqsKnown = false;
+						break;
+					}
+				}
+				if (!prereqsKnown) {
+					continue;
+				}
+				possibleTechs.Add(tech);
+			}
+
+			if (possibleTechs.Count == 0) {
+				return null;
+			}
+
+			return possibleTechs[(int)GameData.rng.NextInt64(possibleTechs.Count)];
 		}
 	}
 }
