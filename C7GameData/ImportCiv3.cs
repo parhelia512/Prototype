@@ -549,7 +549,7 @@ namespace C7GameData {
 			PRTO[] unitPrototypes = biq.Prto ?? defaultBiq.Prto;
 
 			return city.ConstructingType switch {
-				0 => ("Warrior", ProducibleType.UNIT), // TODO: Wealth production is not implemented yet
+				0 => ("Worker", ProducibleType.UNIT), // TODO: Wealth production is not implemented yet
 				1 => (save.Buildings[city.Constructing].name, ProducibleType.BUILDING),
 				2 => (unitPrototypes[city.Constructing].Name, ProducibleType.UNIT),
 				_ => throw new NotImplementedException()
