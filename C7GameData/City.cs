@@ -108,7 +108,7 @@ namespace C7GameData {
 		}
 
 		public int CurrentFoodYield() {
-			int yield = 2;  //city center min yield
+			int yield = location.foodYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.foodYield(owner);
 			}
@@ -116,16 +116,17 @@ namespace C7GameData {
 		}
 
 		public int CurrentProductionYield() {
-			int yield = 1;  //city center min yield
+			int yield = location.productionYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.productionYield(owner);
 			}
 			return yield;
 		}
+
 		public int CurrentCommerceYield() {
 			// TODO: Split this into science, entertainment, etc.
 
-			int yield = 3;  //city center min yield
+			int yield = location.commerceYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.commerceYield(owner);
 			}
