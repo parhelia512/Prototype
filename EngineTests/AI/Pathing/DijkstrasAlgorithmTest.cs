@@ -62,7 +62,7 @@ namespace EngineTests {
 		}
 	}
 
-	public class TestGraph: EdgeWalker<int> {
+	public class TestGraph : EdgeWalker<int> {
 		public readonly List<Edge<int>> edges = new List<Edge<int>>();
 
 		public void addBidirectional(int v1, int v2, float distance) {

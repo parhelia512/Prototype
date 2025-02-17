@@ -1,4 +1,4 @@
-﻿using C7GameData;
+using C7GameData;
 using C7GameData.AIData;
 using Serilog;
 

@@ -1,4 +1,4 @@
-﻿namespace C7Engine {
+namespace C7Engine {
 	using System;
 	using System.IO;
 	using C7GameData;
