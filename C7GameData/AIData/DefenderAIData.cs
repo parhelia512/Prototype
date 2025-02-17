@@ -1,11 +1,8 @@
-namespace C7GameData.AIData
-{
-	public class DefenderAIData : UnitAIData
-	{
+namespace C7GameData.AIData {
+	public class DefenderAIData : UnitAIData {
 		//I've been a bit expansive in possible goals here, perhaps some of them should be
 		//in other types of AIs.  But all of them are things I might do with a defensive unit in Civ.
-		public enum DefenderGoal
-		{
+		public enum DefenderGoal {
 			DEFEND_CITY,
 			DEFEND_RESOURCE,
 			ESCORT_UNITS,           //including settlers and offensive armies
@@ -20,8 +17,7 @@ namespace C7GameData.AIData
 		public Tile destination;
 		public TilePath pathToDestination;
 
-		public override string ToString()
-		{
+		public override string ToString() {
 			string cityName = destination.HasCity ? destination.cityAtTile.name : " at " + destination.ToString();
 			return goal + " " + cityName;
 		}

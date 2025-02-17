@@ -1,5 +1,4 @@
-namespace C7GameData.AIData
-{
+namespace C7GameData.AIData {
 	/**
 	 * I'm playing around with different possibilities for AI here.
 	 * I realized that I'd like units/players/etc. to be able to have references to their
@@ -16,10 +15,8 @@ namespace C7GameData.AIData
 	 * I'm also unsure of how much the logic of figuring out what to do should be in these
 	 * classes, versus higher-level ones.
 	 */
-	public class SettlerAIData : UnitAIData
-	{
-		public enum SettlerGoal
-		{
+	public class SettlerAIData : UnitAIData {
+		public enum SettlerGoal {
 			BUILD_CITY,
 			JOIN_CITY
 		}
@@ -27,8 +24,7 @@ namespace C7GameData.AIData
 		public Tile destination;
 		public TilePath pathToDestination;
 
-		public override string ToString()
-		{
+		public override string ToString() {
 			return goal + " at " + destination;
 		}
 	}

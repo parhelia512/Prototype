@@ -4,13 +4,10 @@ using C7Engine.Pathing;
 using C7GameData;
 using Xunit;
 
-namespace EngineTests
-{
-	public class BFSLandAlgorithmTest
-	{
+namespace EngineTests {
+	public class BFSLandAlgorithmTest {
 		[Fact]
-		public void ConstructPath_CreatesASamplePathProperly()
-		{
+		public void ConstructPath_CreatesASamplePathProperly() {
 			ID id = ID.None("test-tile");
 			Dictionary<Tile, Tile> predecessors = new Dictionary<Tile, Tile>();
 			Tile start = new Tile(id) { XCoordinate = 34, YCoordinate = 18 };

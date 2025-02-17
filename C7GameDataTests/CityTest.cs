@@ -1,11 +1,9 @@
 using C7GameData;
 using Xunit;
 
-public class CityTest
-{
+public class CityTest {
 	[Fact]
-	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf9_of_10ProductionDone()
-	{
+	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf9_of_10ProductionDone() {
 		UnitPrototype warrior = new UnitPrototype();
 		warrior.shieldCost = 10;
 
