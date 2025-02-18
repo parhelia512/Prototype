@@ -90,7 +90,7 @@ namespace C7Engine {
 			int lowestDistance = int.MaxValue;
 			TilePath chosenPath = null;
 
-			PathingAlgorithm algo = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
+			PathingAlgorithm algo = PathingAlgorithmChooser.GetAlgorithm(unit);
 			log.Debug("Explorer pathing from " + unit.location + " with " + unit.unitType);
 			foreach (Tile t in validExplorerTiles) {
 				if (t.distanceTo(unit.location) > lowestDistance) {
