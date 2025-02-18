@@ -20,7 +20,7 @@ namespace C7Engine.Pathing {
 	// for some useful details.
 	public class AStarAlgorithm : PathingAlgorithm {
 		private readonly EdgeWalker<Tile> edgeWalker;
-		
+
 		// An estimate of the cost between two tiles, usually between a tile in
 		// the search and the destination tile. This allows targeting the search
 		// by doing things like focusing the search in the cardinal direction of
