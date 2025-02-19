@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace C7GameData.Save {
@@ -50,7 +51,13 @@ namespace C7GameData.Save {
 			});
 		}
 
-		public City ToCity(GameMap gameMap, List<Player> players, List<UnitPrototype> unitPrototypes, List<Civilization> civilizations, List<Building> buildings, List<CitizenType> citizenTypes) {
+		public City ToCity(GameMap gameMap,
+							List<Player> players,
+							List<UnitPrototype> unitPrototypes,
+							List<Civilization> civilizations,
+							List<Building> buildings,
+							List<CitizenType> citizenTypes,
+							Action<City, CitizenType> assignScenarioResidents) {
 			City city = new City{
 				id = id,
 				location = gameMap.tileAt(location.X, location.Y),
@@ -80,6 +87,15 @@ namespace C7GameData.Save {
 			foreach (CityResident cr in city.residents) {
 				cr.tileWorked.personWorkingTile = cr;
 			}
+
+			// Scenarios don't specify the citizens of each city, only the city
+			// size. So we need to do that assignment now. This requires using
+			// the tile assignment AI, which due to dependency reasons we can't
+			// access directly, so we do this via a lambda.
+			if (city.residents.Count == 0) {
+				assignScenarioResidents(city, citizenTypes.Find(x => x.IsDefaultCitizen));
+			}
+
 			return city;
 		}
 	}
