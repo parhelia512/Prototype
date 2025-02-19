@@ -14,6 +14,7 @@ public partial class CityScreen : CenterContainer {
 	private ILogger log = LogManager.ForContext<CityScreen>();
 	public TileAssignmentLayer tileAssignmentLayer;
 	public MapView mapView;
+	public List<CitizenType> citizenTypes;
 	private TextureRect background;
 	private List<TextureButton> popHeads = new();
 
@@ -50,7 +51,7 @@ public partial class CityScreen : CenterContainer {
 					using (UIGameDataAccess gameDataAccess = new()) {
 						Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
 						if (tile != null) {
-							HandleReassignment(tile, gameDataAccess.gameData.citizenTypes);
+							HandleReassignment(tile);
 							RenderPopHeads(tileAssignmentLayer.city);
 						}
 					}
@@ -59,7 +60,14 @@ public partial class CityScreen : CenterContainer {
 		}
 	}
 
-	private void HandleReassignment(Tile tile, List<CitizenType> citizenTypes) {
+	// Returns a list of specialists that this player can use.
+	private List<CitizenType> GetKnownSpecialists(Player player) {
+		return citizenTypes.FindAll(x => {
+			return !x.IsDefaultCitizen && (x.PrerequisiteTech == null || player.knownTechs.Contains(x.PrerequisiteTech));
+		});
+	}
+
+	private void HandleReassignment(Tile tile) {
 		City city = tileAssignmentLayer.city;
 
 		// We can't assign citizens to other cities.
@@ -73,9 +81,12 @@ public partial class CityScreen : CenterContainer {
 		}
 
 		// If we're already working a tile and click on it, turn the citizen
-		// into an entertainer.
+		// into a specialist.
 		if (tile.personWorkingTile != null && tile.personWorkingTile.city == city) {
-			// TODO: implement entertainers.
+			CityResident resident = tile.personWorkingTile;
+			tile.personWorkingTile = null;
+			resident.tileWorked = Tile.NONE;
+			resident.citizenType = GetKnownSpecialists(city.owner)[0];
 			return;
 		}
 
@@ -202,9 +213,6 @@ public partial class CityScreen : CenterContainer {
 
 		// Add each of the specialists.
 		//
-		// TODO: When clicking a specialist, have it iterate through the types
-		// of specialists known to the player.
-		//
 		// TODO: Render the specialist effect (like a smiley for entertainers)
 		// in the corner of the head.
 		foreach (CityResident cr in specialists) {
@@ -215,6 +223,16 @@ public partial class CityScreen : CenterContainer {
 			tb.TextureNormal = Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
 														textX + 1, textY + 1, 48, 48);
 			tb.SetPosition(new Vector2(xPos, 440));
+
+			List<CitizenType> specialistTypes = GetKnownSpecialists(city.owner);
+			int index = specialistTypes.FindIndex(x => x.Id == cr.citizenType.Id);
+			tb.Pressed += () => {
+				cr.citizenType = specialistTypes[(index + 1) % specialistTypes.Count];
+				++index;
+				RenderPopHeads(city);
+			};
+
+
 			background.AddChild(tb);
 			popHeads.Add(tb);
 			xPos += 48;
