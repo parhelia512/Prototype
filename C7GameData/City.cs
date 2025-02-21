@@ -8,6 +8,7 @@ namespace C7GameData {
 		public Tile location { get; internal set; }
 		public string name;
 		public int size = 1;
+		public Dictionary<Player, int> perPlayerCulture = new();
 
 		//Temporary production code because production is fun.
 		public IProducible itemBeingProduced;
@@ -27,6 +28,9 @@ namespace C7GameData {
 			this.location = location;
 			this.owner = owner;
 			this.name = name;
+			if (owner != null) {
+				this.perPlayerCulture.Add(owner, 0);
+			}
 		}
 
 		internal City() { }
@@ -155,6 +159,22 @@ namespace C7GameData {
 
 		public override string ToString() {
 			return $"{name} ({size})";
+		}
+
+		public int GetCulture() {
+			return perPlayerCulture[owner];
+		}
+
+		public int GetBorderExpansionLevel() {
+			// Give ourselves a minimum of 1 culture to avoid taking the log of 0
+			int culture = Math.Max(1, GetCulture());
+
+			// Take the log10 of culture, rounding down (so a culture of 123
+			// would be 2, a culture of 5 would be 0, etc) and then add one to
+			// get the expansion level. With 0-9 culture our culture goal is 10^1
+			// and we have one tile of borders, with 10-99 our culture goal is
+			// 10^2 and we have two tiles of borders.
+			return (int)Math.Floor(Math.Log10(culture)) + 1;
 		}
 	}
 }

@@ -523,6 +523,13 @@ namespace C7GameData {
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
 
+				List<int> culturePerLeader = city.GetCulturePerLeader();
+				for (int j = 0; j < 32; ++j) {
+					if (culturePerLeader[j] > 0 || j == city.Owner) {
+						saveCity.perPlayerCulture.Add(save.Players[j].id.ToString(), culturePerLeader[j]);
+					}
+				}
+
 				foreach (QueryCiv3.Sav.CTZN ctzn in savData.CityCtzn[i]) {
 					if (ctzn.Type == 4) {  // Specialist
 						SaveCityResident scr = new();
@@ -578,6 +585,7 @@ namespace C7GameData {
 					foodStored = 0,
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
+				saveCity.perPlayerCulture.Add(player.id.ToString(), city.Culture);
 
 				save.Cities.Add(saveCity);
 			}
