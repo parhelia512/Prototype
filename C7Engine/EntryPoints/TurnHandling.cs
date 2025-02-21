@@ -46,7 +46,6 @@ namespace C7Engine {
 				// player's city, instead of over all cities, irrespective of
 				// player order? See also https://github.com/C7-Game/Prototype/pull/529#discussion_r1935006632
 				HandleCityResults(gameData);
-				gameData.UpdateTileOwners();
 
 				gameData.turn++;
 				foreach (Player player in gameData.players) {
@@ -160,6 +159,9 @@ namespace C7Engine {
 						city.RemoveCitizens(diff);
 					}
 				}
+
+				// TODO: Update culture and check for border expansion. Call
+				// gameData.UpdateTileOwners if borders did expand.
 
 				IProducible producedItem = city.ComputeTurnProduction();
 				if (producedItem != null) {

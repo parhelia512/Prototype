@@ -16,11 +16,11 @@ namespace C7.Map {
 			int textureWidth = 128;
 			int textureHeight = 72;
 
-			// This loops slices the PCX image into separate border textures. 
+			// This loops slices the PCX image into separate border textures.
 			// The PCX image contains 4 rows and 2 columns:
 			// - Each row corresponds to a border direction.
 			// - The first column contains border textures for regular terrain.
-			// - The second column contains border textures for hills and mountains 
+			// - The second column contains border textures for hills and mountains
 			//   (rendering logic for textures of the second column is not yet implemented).
 			for (int j = 0; j < 4; j++) {
 				for (int k = 0; k < 2; k++) {
@@ -63,7 +63,7 @@ namespace C7.Map {
 		}
 
 		public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
-			if (tile.owner is null) {
+			if (tile.owningCity is null) {
 				return;
 			}
 
@@ -75,10 +75,10 @@ namespace C7.Map {
 					{ TileDirection.SOUTHEAST, 6 }
 				};
 
-			Color borderColor = Util.LoadColor(tile.owner.colorIndex);
+			Color borderColor = Util.LoadColor(tile.owningCity.owner.colorIndex);
 
 			foreach (var entry in directionToTextureIdx) {
-				if (tile.neighbors[entry.Key].owner != tile.owner) {
+				if (tile.neighbors[entry.Key].owningCity?.owner != tile.owningCity?.owner) {
 					ImageTexture texture = GetBorderTexture(entry.Value, borderColor);
 					Vector2 offset = texture.GetSize() * 0.5f;
 
