@@ -156,6 +156,7 @@ public partial class CityScreen : CenterContainer {
 
 	private void OnShowCityScreen(ParameterWrapper<City> city) {
 		this.Show();
+		mapView.centerCameraOnTile(city.Value.location.neighbors[TileDirection.SOUTH]);
 		tileAssignmentLayer.city = city.Value;
 		RenderPopHeads(city.Value);
 		RenderCulture(city.Value);
