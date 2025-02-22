@@ -8,11 +8,15 @@ using C7Engine.Pathing;
 using Serilog;
 
 namespace C7Engine {
-	public class ExplorerAI : UnitAI {
+	public class ExplorerAI : C7GameData.UnitAI {
 		private static ILogger log = Log.ForContext<ExplorerAI>();
+		public ExplorerAIData explorerData;
 
-		public bool PlayTurn(Player player, MapUnit unit) {
-			ExplorerAIData explorerData = (ExplorerAIData)unit.currentAIData;
+		public ExplorerAI(ExplorerAIData d) {
+			explorerData = d;
+		}
+
+		bool UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (MovingToNewExplorationArea(explorerData)) {
 				return MoveToNextTileOnPath(explorerData, unit);
 			} else {
@@ -25,19 +29,21 @@ namespace C7Engine {
 				//We prefer nearest because the one that allows the most discovery might be pretty far away
 				bool foundNewPath = FindPathToNewExplorationArea(player, explorerData, unit);
 				if (foundNewPath) {
-					MoveToNextTileOnPath(explorerData, unit);
-					return true;
+					return MoveToNextTileOnPath(explorerData, unit);
 				}
 			}
 			return false;
+		}
+
+		public string SummarizePlan() {
+			return "ExplorerAI: " + explorerData.ToString();
 		}
 
 		private static bool MoveToNextTileOnPath(ExplorerAIData explorerData, MapUnit unit) {
 			Tile next = explorerData.path.Next();
 			foreach (KeyValuePair<TileDirection, Tile> neighbor in unit.location.neighbors) {
 				if (neighbor.Value == next) {
-					unit.move(neighbor.Key);
-					return true;
+					return unit.move(neighbor.Key);
 				}
 			}
 			//In the future, it might no longer be possible to go to the correct neighbor, perhaps
@@ -56,8 +62,7 @@ namespace C7Engine {
 			Tile newLocation = topScoringTile.Key;
 
 			if (newLocation != Tile.NONE && topScoringTile.Value > 0) {
-				unit.move(unit.location.directionTo(newLocation));
-				return true;
+				return unit.move(unit.location.directionTo(newLocation));
 			}
 			return false;
 		}
@@ -90,7 +95,7 @@ namespace C7Engine {
 			int lowestDistance = int.MaxValue;
 			TilePath chosenPath = null;
 
-			PathingAlgorithm algo = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
+			PathingAlgorithm algo = PathingAlgorithmChooser.GetAlgorithm(unit);
 			log.Debug("Explorer pathing from " + unit.location + " with " + unit.unitType);
 			foreach (Tile t in validExplorerTiles) {
 				if (t.distanceTo(unit.location) > lowestDistance) {

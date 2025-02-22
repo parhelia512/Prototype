@@ -495,7 +495,9 @@ public partial class Game : Node2D {
 						if (tile.unitsOnTile.Count > 0) {
 							foreach (MapUnit unit in tile.unitsOnTile) {
 								log.Debug("  Unit on tile: " + unit);
-								log.Debug("  Strategy: " + unit.currentAIData);
+								if (unit.currentAI != null) {
+									log.Debug("  Strategy: " + unit.currentAI.SummarizePlan());
+								}
 							}
 						}
 					} else {
@@ -520,7 +522,7 @@ public partial class Game : Node2D {
 				// different than the tile the unit is on, calculate the path to move there.
 				MapUnit unit = tile == null ? null : gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
 				if (unit != null && unit.location != tile) {
-					TilePath path = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit()).PathFrom(unit.location, tile);
+					TilePath path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
 					gotoInfo.moveCost = path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
 					gotoInfo.pathCoords = path.GetPathCoords();
 				} else {

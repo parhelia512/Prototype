@@ -3,12 +3,23 @@ using C7GameData.AIData;
 using Serilog;
 
 namespace C7Engine.AI.UnitAI {
-	class DefenderAI : C7Engine.UnitAI {
+	class DefenderAI : C7GameData.UnitAI {
+		private static ILogger log = Log.ForContext<DefenderAI>();
+		private DefenderAIData defenderAI;
 
-		private ILogger log = Log.ForContext<DefenderAI>();
+		public static DefenderAIData MakeAiData(MapUnit unit, Player player) {
+			DefenderAIData ai = new DefenderAIData();
+			ai.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
+			ai.destination = unit.location;
+			log.Information("Set defender AI for " + unit + " with destination of " + ai.destination);
+			return ai;
+		}
 
-		public bool PlayTurn(Player player, MapUnit unit) {
-			DefenderAIData defenderAI = (DefenderAIData)unit.currentAIData;
+		public DefenderAI(DefenderAIData d) {
+			defenderAI = d;
+		}
+
+		bool C7GameData.UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (defenderAI.destination == unit.location) {
 				if (!unit.isFortified) {
 					unit.fortify();
@@ -19,7 +30,7 @@ namespace C7Engine.AI.UnitAI {
 
 				Tile nextTile = defenderAI.pathToDestination.Next();
 				if (nextTile != Tile.NONE) {
-					unit.move(unit.location.directionTo(nextTile));
+					return unit.move(unit.location.directionTo(nextTile));
 				} else {
 					//Got a crash due to trying to move to (or less likely from) Tile.NONE.
 					//However, from the logs, the destination was [15, 55], so somehow the path
@@ -29,9 +40,15 @@ namespace C7Engine.AI.UnitAI {
 					//likely affect its pathing.  Put a breakpoint here while debugging!
 					//This should be a higher severity Serilog error
 					log.Error("ERROR: Unit pathed via Tile.NONE");
+					return false;
 				}
 			}
+
 			return true;
+		}
+
+		public string SummarizePlan() {
+			return "DefenderAI: " + defenderAI.ToString();
 		}
 	}
 }
