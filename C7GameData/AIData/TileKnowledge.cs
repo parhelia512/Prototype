@@ -3,23 +3,46 @@ using System.Collections.Generic;
 namespace C7GameData {
 	public class TileKnowledge {
 		HashSet<Tile> knownTiles = new HashSet<Tile>();
+		HashSet<Tile> borderTiles = new HashSet<Tile>();
 		HashSet<Tile> visibleTiles = new HashSet<Tile>();
 
 		public void AddTilesToKnown(Tile unitLocation) {
 			knownTiles.Add(unitLocation);
+			borderTiles.Remove(unitLocation);
+
 			foreach (Tile t in unitLocation.neighbors.Values) {
 				knownTiles.Add(t);
+				borderTiles.Remove(t);
+
+				foreach (Tile border in t.neighbors.Values) {
+					if (!knownTiles.Contains(border)) {
+						borderTiles.Add(border);
+					}
+				}
 			}
 		}
 
 		// neighboring tiles should not be added when loading tile knowledge
 		// from a .sav file
 		internal bool AddTileToKnown(Tile unitLocation) {
-			return knownTiles.Add(unitLocation);
+			bool added = knownTiles.Add(unitLocation);
+			borderTiles.Remove(unitLocation);
+
+			foreach (Tile border in unitLocation.neighbors.Values) {
+				if (!knownTiles.Contains(border)) {
+					borderTiles.Add(border);
+				}
+			}
+
+			return added;
 		}
 
 		public bool isTileKnown(Tile t) {
 			return knownTiles.Contains(t);
+		}
+
+		public bool isBorderOfTileKnowleged(Tile t) {
+			return borderTiles.Contains(t);
 		}
 
 		/**
