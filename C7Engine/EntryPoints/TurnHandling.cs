@@ -85,7 +85,7 @@ namespace C7Engine {
 						new BarbarianAI().PlayTurn(player, gameData);
 						player.hasPlayedThisTurn = true;
 					} else if (!player.isHuman) {
-						PlayerAI.PlayTurn(player, GameData.rng);
+						PlayerAI.PlayTurn(player, GameData.rng, gameData.techs);
 						player.hasPlayedThisTurn = true;
 					} else if (player.id != EngineStorage.uiControllerID) {
 						player.hasPlayedThisTurn = true;
