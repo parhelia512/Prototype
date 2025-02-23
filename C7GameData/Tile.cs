@@ -189,34 +189,71 @@ namespace C7GameData {
 			return (int)Math.Round(Math.Pow(Math.Pow(deltaX, 1.8) + Math.Pow(deltaY, 1.8), 1 / 1.8) / 2);
 		}
 
-		// TODO: This is innacurate for city centers.
 		public int foodYield(Player player) {
 			int yield = overlayTerrainType.baseFoodProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.FoodBonus;
 			}
+
 			if (this.overlays.irrigation) {
 				yield += this.overlayTerrainType.irrigationBonus;
+				if (this.overlays.railroad) {
+					yield += 1;
+				}
 			}
+
+			if (HasCity) {
+				// All city centers have a food yield of 2, regardless of bonus
+				// food. See https://wiki.civforum.de/wiki/Stadtfeldertrag_(Civ3).
+				yield = 2;
+
+				// TODO: For agricultural civilizations, the city field produces
+				// a food yield of three food, but this is reduced to two by the
+				// despotism penalty, unless the city is located on a fresh
+				// water source or has already reached city size (≥ 7)
+			}
+
 			return yield;
 		}
 
-		// TODO: This is innacurate for city centers.
 		public int productionYield(Player player) {
 			int yield = overlayTerrainType.baseShieldProduction;
 			if (overlayTerrainType.Key == "grassland" && this.isBonusShield) {
 				yield++;
 			}
+
+			if (HasCity) {
+				// City centers always have 1 shield prior to any bonuses
+				// resources, regardless of the terrain.
+				// See https://wiki.civforum.de/wiki/Stadtfeldertrag_(Civ3).
+				yield = 1;
+
+				// There is a size bonus for larger cities.
+				if (cityAtTile.size >= 7 && cityAtTile.size < 13) {
+					yield += 1;
+				} else if (cityAtTile.size >= 13) {
+					yield += 2;
+
+					// TODO: +1 more for industrial civs.
+				}
+			}
+
+			// Bonus resources provide a boost in yield regardless of whether
+			// there is a city.
 			if (Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.ShieldsBonus;
 			}
+
 			if (this.overlays.mine) {
 				yield += this.overlayTerrainType.miningBonus;
+				if (this.overlays.railroad) {
+					yield += 1;
+				}
 			}
+
 			return yield;
 		}
 
-		// TODO: This is innacurate for city centers.
 		public int commerceYield(Player player) {
 			int yield = overlayTerrainType.baseCommerceProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
@@ -225,6 +262,38 @@ namespace C7GameData {
 			if (BordersRiver()) {
 				yield += 1;
 			}
+			if (overlays.road) {
+				yield += overlayTerrainType.roadBonus;
+			}
+
+			// See https://wiki.civforum.de/wiki/Stadtfeldertrag_(Civ3)
+			if (HasCity) {
+				int regularCityYield;
+				if (cityAtTile.size < 7) {
+					regularCityYield = 1;
+				} else if (cityAtTile.size < 13) {
+					regularCityYield = 2;
+				} else {
+					regularCityYield = 3;
+				}
+				if (BordersRiver()) {
+					regularCityYield += 1;
+				}
+				if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
+					regularCityYield += this.Resource.CommerceBonus;
+				}
+
+				int capitalCityYield = 0;
+				if (cityAtTile.IsCapital()) {
+					capitalCityYield = 4;
+				}
+
+				yield = Math.Max(regularCityYield, capitalCityYield);
+			}
+
+			// TODO: handle the commerce bonus for costal cities+seafaring
+			// TODO: handle the commerce bonus for commerial civs
+			// TODO: handle the commerce bonus from Republic/Democracy.
 			return yield;
 		}
 

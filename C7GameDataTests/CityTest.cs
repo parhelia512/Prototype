@@ -27,9 +27,14 @@ public class CityTest {
 
 	[Fact]
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf19_of_20FoodDone() {
-		City city = new City(Tile.NONE, null, "Gotham", ID.None("city"));
+		TerrainType oneShield = new TerrainType();
+		oneShield.baseShieldProduction = 1;
+		Tile tile = new Tile(ID.None("tile"));
+
+		City city = new City(tile, null, "Gotham", ID.None("city"));
 		city.foodStored = 19;
 		city.size = 1;
+		tile.cityAtTile = city;
 
 		TerrainType grassland = new TerrainType();
 		grassland.baseFoodProduction = 2;
