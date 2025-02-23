@@ -78,6 +78,11 @@ public partial class CityScreen : CenterContainer {
 	private void HandleReassignment(Tile tile) {
 		City city = tileAssignmentLayer.city;
 
+		// We only support clicking on workable tiles or the city center.
+		if (!city.GetWorkableTiles().Contains(tile) && tile != city.location) {
+			return;
+		}
+
 		// We can't assign citizens to other cities.
 		if (tile.cityAtTile != null && tile.cityAtTile != city) {
 			return;
@@ -151,6 +156,7 @@ public partial class CityScreen : CenterContainer {
 
 	private void OnShowCityScreen(ParameterWrapper<City> city) {
 		this.Show();
+		mapView.centerCameraOnTile(city.Value.location.neighbors[TileDirection.SOUTH]);
 		tileAssignmentLayer.city = city.Value;
 		RenderPopHeads(city.Value);
 		RenderCulture(city.Value);

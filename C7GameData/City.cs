@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Serilog;
 
 namespace C7GameData {
@@ -193,6 +194,71 @@ namespace C7GameData {
 				year = 1, // TODO: Implement in-game year tracking
 				culture = 0
 			});
+		}
+
+		// The list of tiles that could be worked by this city.
+		// This isn't necessarily a subset of our borders, because we're allowed
+		// to work tiles owned by our civ in our big fat cross, even if our
+		// borders haven't expanded yet.
+		//
+		// TODO: we should make this configurable to allow for the bigger cross
+		// if a mod wants it.
+		public HashSet<Tile> GetWorkableTiles() {
+			HashSet<Tile> result = new();
+			foreach (Tile t in GetTilesOfRank(2)) {
+				// Skip tiles not owned by this player.
+				if (t.owningCity == null || t.owningCity.owner != this.owner) {
+					continue;
+				}
+
+				// Skip tiles with cities on them.
+				if (t.HasCity) {
+					continue;
+				}
+
+				result.Add(t);
+			}
+			return result;
+		}
+
+		// The list of tiles that are within the borders of this city, without
+		// taking into account border collisions with other cities.
+		public HashSet<Tile> GetTilesWithinBorders() {
+			return GetTilesOfRank(GetBorderExpansionLevel());
+		}
+
+		private HashSet<Tile> GetTilesOfRank(int rank) {
+			HashSet<Tile> result = new();
+			HashSet<Tile> knownTiles = new();
+
+			Stack<Tile> toCheck = new();
+			toCheck.Push(location);
+			knownTiles.Add(location);
+
+			while (toCheck.Count > 0) {
+				Tile t = toCheck.Pop();
+
+				// Skip tiles that are too far away.
+				if (location.rankDistanceTo(t) > rank) {
+					continue;
+				}
+
+				// Ocean tiles may only hold claims of rank 2.
+				if (t.baseTerrainTypeKey == "ocean" && rank > 2) {
+					continue;
+				}
+
+				// Otherwise this tile is close enough. Check its neighbors next.
+				result.Add(t);
+				foreach (Tile neighbor in t.neighbors.Values) {
+					if (!knownTiles.Contains(neighbor)) {
+						toCheck.Push(neighbor);
+						knownTiles.Add(t);
+					}
+				}
+			}
+
+			return result;
 		}
 	}
 }

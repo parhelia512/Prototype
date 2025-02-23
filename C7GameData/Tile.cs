@@ -10,7 +10,7 @@ namespace C7GameData {
 		public Civ3ExtraInfo ExtraInfo;
 		public int XCoordinate;
 		public int YCoordinate;
-		public Player owner; // Represents a civilization within which border the tile is located
+		public City owningCity; // The city whose border contains this tile
 		public string baseTerrainTypeKey { get; set; }
 		[JsonIgnore]
 		public TerrainType baseTerrainType = TerrainType.NONE;
@@ -171,6 +171,22 @@ namespace C7GameData {
 		 */
 		public int distanceTo(Tile other) {
 			return (Math.Abs(other.XCoordinate - this.XCoordinate) + Math.Abs(other.YCoordinate - this.YCoordinate)) / 2;
+		}
+
+		// Returns the number of "ranks" to another tile, where each rank is a
+		// border expansion due to culture. So rank 1 is immediate neighbors,
+		// rank 2 is the "big fat cross", etc.
+		public int rankDistanceTo(Tile other) {
+			// We use sqrt(2) to try and "unskew" issues caused by the rotated
+			// rectangular grid. We need N/E/S/W tiles to be slightly further
+			// away than NE/SE/NW/SW tiles.
+			double deltaX = Math.Abs(other.XCoordinate - this.XCoordinate) * Math.Sqrt(2);
+			double deltaY = Math.Abs(other.YCoordinate - this.YCoordinate) * Math.Sqrt(2);
+
+			// Calculating the euclidian distance with an exponent of 1.8 instead
+			// of 2 gives us the correct results up to 99k culture (20k is a
+			// victory condition). Credit to KulkoBSW for this observation.
+			return (int)Math.Round(Math.Pow(Math.Pow(deltaX, 1.8) + Math.Pow(deltaY, 1.8), 1 / 1.8) / 2);
 		}
 
 		// TODO: This is innacurate for city centers.
