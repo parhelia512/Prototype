@@ -520,6 +520,7 @@ namespace C7GameData {
 					size = city.Popd.CitizenCount,
 					shieldsStored = city.ShieldsCollected,
 					foodStored = city.TotalFood,
+					buildings = ImportCityBuildings(i),
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
 
@@ -552,6 +553,26 @@ namespace C7GameData {
 			}
 		}
 
+		List<SaveCityBuilding> ImportCityBuildings(int cityIndex) {
+			List<SaveCityBuilding> res = [];
+			var cityBuildings = savData.CityBuilding[cityIndex];
+
+			for (int buildingIndex = 0; buildingIndex < cityBuildings.Length; ++buildingIndex) {
+				var building = cityBuildings[buildingIndex];
+
+				if (building.BuiltByPlayer != -1) {
+					res.Add(new SaveCityBuilding {
+						building = save.Buildings[buildingIndex].name,
+						builtByPlayer = save.Players[building.BuiltByPlayer].id,
+						year = building.Year,
+						culture = building.Culture,
+					});
+				}
+			}
+
+			return res;
+		}
+
 		private (string, ProducibleType) CityToProducible(QueryCiv3.Sav.CITY city) {
 			PRTO[] unitPrototypes = biq.Prto ?? defaultBiq.Prto;
 
@@ -566,7 +587,9 @@ namespace C7GameData {
 		private void ImportBicCities() {
 			BiqData theBiq = biq.City is null ? defaultBiq : biq;
 
-			foreach (CITY city in theBiq.City) {
+			for (int cityIndex = 0; cityIndex < theBiq.City.Length; ++cityIndex) {
+				CITY city = theBiq.City[cityIndex];
+
 				// The owner index is into the list of civs, and we have a 1:1
 				// mapping of players and civs.
 				SavePlayer player = save.Players[city.Owner];
@@ -581,6 +604,7 @@ namespace C7GameData {
 					producibleType = ProducibleType.UNIT,
 					name = city.Name,
 					size = city.Size,
+					buildings = ImportCityBuildings(cityIndex),
 					shieldsStored = 0,
 					foodStored = 0,
 					foodNeededToGrow = 20, // HACK: don't know where to find this

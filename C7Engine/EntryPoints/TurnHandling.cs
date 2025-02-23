@@ -175,11 +175,14 @@ namespace C7Engine {
 						city.location.unitsOnTile.Add(newUnit);
 						gameData.mapUnits.Add(newUnit);
 						city.owner.AddUnit(newUnit);
-
-						if (newUnit.unitType.populationCost > 0) {
-							city.RemoveCitizens(newUnit.unitType.populationCost);
-						}
+					} else if (producedItem is Building building) {
+						city.AddBuilding(building);
 					}
+
+					if (producedItem.populationCost > 0) {
+						city.RemoveCitizens(producedItem.populationCost);
+					}
+
 					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));
 				}
 
