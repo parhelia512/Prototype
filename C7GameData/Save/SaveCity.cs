@@ -9,6 +9,32 @@ namespace C7GameData.Save {
 		public TileLocation tileWorked;
 	}
 
+	public class SaveCityBuilding {
+		public string building;
+		public ID builtByPlayer;
+		public int year;
+		public int totalCulture;
+
+		public SaveCityBuilding() { }
+
+		public SaveCityBuilding(CityBuilding cityBuilding) {
+			building = cityBuilding.building.name;
+			builtByPlayer = cityBuilding.builtByPlayer.id;
+			year = cityBuilding.year;
+			totalCulture = cityBuilding.totalCulture;
+		}
+
+		public CityBuilding ToCityBuilding(List<Building> buildings, List<Player> players) {
+			return new CityBuilding {
+				building = buildings.Find(buildingType => buildingType.name == building),
+				builtByPlayer = players.Find(player => player.id == builtByPlayer),
+				year = year,
+				totalCulture = totalCulture,
+			};
+		}
+
+	}
+
 	public enum ProducibleType { WEALTH, BUILDING, UNIT };
 
 	public class SaveCity : IHasID {
@@ -25,6 +51,7 @@ namespace C7GameData.Save {
 		public int foodStored;
 		public int foodNeededToGrow;
 		public List<SaveCityResident> residents = new List<SaveCityResident>();
+		public List<SaveCityBuilding> buildings = [];
 
 		public SaveCity() { }
 
@@ -50,6 +77,8 @@ namespace C7GameData.Save {
 					tileWorked = new TileLocation(resident.tileWorked),
 				};
 			});
+			buildings = city.buildings.ConvertAll(building => new SaveCityBuilding(building));
+
 			foreach (KeyValuePair<Player, int> keyValuePair in city.perPlayerCulture) {
 				perPlayerCulture.Add(keyValuePair.Key.id.ToString(), keyValuePair.Value);
 			}
@@ -76,6 +105,7 @@ namespace C7GameData.Save {
 				foodStored = foodStored,
 				foodNeededToGrow = foodNeededToGrow,
 				capital = capital,
+				buildings = this.buildings.ConvertAll(building => building.ToCityBuilding(buildings, players)),
 			};
 
 			foreach (KeyValuePair<string, int> keyValuePair in perPlayerCulture) {

@@ -4,6 +4,14 @@ using System.Linq;
 using Serilog;
 
 namespace C7GameData {
+	public class CityBuilding {
+		public Building building;
+		public Player builtByPlayer;
+		public int year;
+		public int totalCulture; // This represents the total culture produced by the building. 
+								 // In Civ3, this value is displayed in the cultural advisor tab
+	}
+
 	public struct CommerceBreakdown {
 		public int taxes;
 		public int beakers;
@@ -27,6 +35,7 @@ namespace C7GameData {
 		public bool capital = false;
 		public Player owner { get; set; }
 		public List<CityResident> residents = new List<CityResident>();
+		public List<CityBuilding> buildings = [];
 
 		public static City NONE = new City(Tile.NONE, null, "Dummy City", ID.None("city"));
 
@@ -187,6 +196,15 @@ namespace C7GameData {
 			// and we have one tile of borders, with 10-99 our culture goal is
 			// 10^2 and we have two tiles of borders.
 			return (int)Math.Floor(Math.Log10(culture)) + 1;
+		}
+
+		public void AddBuilding(Building building) {
+			buildings.Add(new CityBuilding {
+				building = building,
+				builtByPlayer = owner,
+				year = 1, // TODO: Implement in-game year tracking
+				totalCulture = 0
+			});
 		}
 
 		// The list of tiles that could be worked by this city.
