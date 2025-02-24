@@ -46,11 +46,9 @@ public partial class PCXToGodot : GodotObject {
 		for (int y = 0; y < alphaPcx.Height; y++) {
 			for (int x = 0; x < alphaPcx.Width; x++, dataIndex++) {
 				int index = alphaPcx.ColorIndexAt(x, y);
-				if (transparentColorIndexes.Contains(index)) {
-					bufferData[dataIndex] = 0;
-				} else {
-					bufferData[dataIndex] = alphaData[index] << 24;
-				}
+
+				bufferData[dataIndex] = (255 - alphaData[index]) << 24;
+
 			}
 		}
 
