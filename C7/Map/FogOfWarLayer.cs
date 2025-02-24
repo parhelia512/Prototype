@@ -38,7 +38,8 @@ namespace C7.Map {
 		private Rect2 getRect(int sum) {
 			int row = sum / 9;
 			int col = sum % 9;
-			return new Rect2(col * tileSize.X, row * tileSize.Y, tileSize);
+			// The 0.999f scaling is a hack to prevent "seams".
+			return new Rect2(col * tileSize.X, row * tileSize.Y, tileSize * 0.999f);
 		}
 	}
 }
