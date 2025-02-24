@@ -13,7 +13,7 @@ namespace C7GameData.Save {
 		public string building;
 		public ID builtByPlayer;
 		public int year;
-		public int culture;
+		public int totalCulture;
 
 		public SaveCityBuilding() { }
 
@@ -21,7 +21,7 @@ namespace C7GameData.Save {
 			building = cityBuilding.building.name;
 			builtByPlayer = cityBuilding.builtByPlayer.id;
 			year = cityBuilding.year;
-			culture = cityBuilding.culture;
+			totalCulture = cityBuilding.totalCulture;
 		}
 
 		public CityBuilding ToCityBuilding(List<Building> buildings, List<Player> players) {
@@ -29,7 +29,7 @@ namespace C7GameData.Save {
 				building = buildings.Find(buildingType => buildingType.name == building),
 				builtByPlayer = players.Find(player => player.id == builtByPlayer),
 				year = year,
-				culture = culture,
+				totalCulture = totalCulture,
 			};
 		}
 

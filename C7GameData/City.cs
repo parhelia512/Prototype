@@ -8,8 +8,8 @@ namespace C7GameData {
 		public Building building;
 		public Player builtByPlayer;
 		public int year;
-		public int culture; // This represents the total culture produced by the building. 
-							// In Civ3, this value is displayed in the cultural advisor tab
+		public int totalCulture; // This represents the total culture produced by the building. 
+								 // In Civ3, this value is displayed in the cultural advisor tab
 	}
 
 	public class City {
@@ -192,7 +192,7 @@ namespace C7GameData {
 				building = building,
 				builtByPlayer = owner,
 				year = 1, // TODO: Implement in-game year tracking
-				culture = 0
+				totalCulture = 0
 			});
 		}
 

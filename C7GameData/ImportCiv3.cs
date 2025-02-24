@@ -565,7 +565,7 @@ namespace C7GameData {
 						building = save.Buildings[buildingIndex].name,
 						builtByPlayer = save.Players[building.BuiltByPlayer].id,
 						year = building.Year,
-						culture = building.Culture,
+						totalCulture = building.Culture,
 					});
 				}
 			}
