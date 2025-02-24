@@ -12,6 +12,12 @@ namespace C7GameData {
 								 // In Civ3, this value is displayed in the cultural advisor tab
 	}
 
+	public struct CommerceBreakdown {
+		public int taxes;
+		public int beakers;
+		public int happiness;
+	}
+
 	public class City {
 		public ID id { get; set; }
 		public Tile location { get; internal set; }
@@ -89,7 +95,7 @@ namespace C7GameData {
 		}
 
 		public void ComputeCityGrowth() {
-			foodStored += CurrentFoodYield() - size * 2;
+			foodStored += FoodGrowthPerTurn();
 			if (foodStored >= foodNeededToGrow) {
 				size++;
 				foodStored = 0;
@@ -117,7 +123,7 @@ namespace C7GameData {
 		}
 
 		public int CurrentFoodYield() {
-			int yield = 2;  //city center min yield
+			int yield = location.foodYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.foodYield(owner);
 			}
@@ -125,23 +131,28 @@ namespace C7GameData {
 		}
 
 		public int CurrentProductionYield() {
-			int yield = 1;  //city center min yield
+			int yield = location.productionYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.productionYield(owner);
 			}
 			return yield;
 		}
-		public int CurrentCommerceYield() {
-			// TODO: Split this into science, entertainment, etc.
 
-			int yield = 3;  //city center min yield
+		public CommerceBreakdown CurrentCommerceYield() {
+			int yield = location.commerceYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.commerceYield(owner);
 			}
-			return yield;
+
+			CommerceBreakdown result = new CommerceBreakdown();
+			result.beakers = (int)Math.Floor(yield * owner.scienceRate / 10.0);
+			result.happiness = (int)Math.Floor(yield * owner.luxuryRate / 10.0);
+			result.taxes = yield - result.beakers - result.happiness;
+
+			return result;
 		}
 
-		private int FoodGrowthPerTurn() {
+		public int FoodGrowthPerTurn() {
 			return CurrentFoodYield() - size * 2;
 		}
 

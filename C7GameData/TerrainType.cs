@@ -18,6 +18,7 @@ namespace C7GameData {
 		public bool allowCities { get; set; } = true;
 		public int miningBonus { get; set; }
 		public int irrigationBonus { get; set; }
+		public int roadBonus { get; set; }
 		public StrengthBonus defenseBonus;
 
 		//some stuff about graphics would probably make sense, too
@@ -60,6 +61,7 @@ namespace C7GameData {
 				amount = civ3Terrain.DefenseBonus / 100.0
 			};
 			c7Terrain.miningBonus = civ3Terrain.MiningBonus;
+			c7Terrain.roadBonus = civ3Terrain.RoadBonus;
 			c7Terrain.irrigationBonus = civ3Terrain.IrrigationBonus;
 			return c7Terrain;
 		}
