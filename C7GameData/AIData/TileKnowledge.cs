@@ -41,7 +41,7 @@ namespace C7GameData {
 			return knownTiles.Contains(t);
 		}
 
-		public bool isBorderOfTileKnowleged(Tile t) {
+		public bool isBorderOfTileKnowlege(Tile t) {
 			return borderTiles.Contains(t);
 		}
 
