@@ -7,6 +7,7 @@ namespace C7Engine {
 	using Pathing;
 	using C7GameData;
 	using C7GameData.Save;
+	using C7GameData.AIData;
 
 	//We should document why we're putting things in the extensions methods.  We discussed it a month or so ago, but I forget why at this point.
 	//Coming from an OO background, I'm wondering why these aren't on the MapUnit class... data access?  Modding?  Some other benefit?
@@ -412,7 +413,10 @@ namespace C7Engine {
 				return;
 			}
 
-			// TODO: Handle worker automation and unit exploration here.
+			if (unit.isAutomated) {
+				unit.playAutomatedTurn();
+				return;
+			}
 		}
 
 		public static void moveAlongPath(this MapUnit unit) {
@@ -555,6 +559,49 @@ namespace C7Engine {
 			unit.WorkerJob = null;
 			unit.WorkerProgressTowardsJob = 0;
 			unit.animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
+		}
+
+		public static bool canAutomate(this MapUnit unit) {
+			return unit.unitType.actions.Contains(C7Action.UnitAutomate);
+		}
+
+		public static void automate(this MapUnit unit) {
+			unit.isAutomated = true;
+			WorkerAIData? maybeAiData = WorkerAI.MakeAiData(unit, unit.owner);
+			if (maybeAiData == null) {
+				log.Information($"Could not find anything to automate for {unit} owned by {unit.owner}");
+				unit.isAutomated = false;
+				return;
+			}
+			unit.currentAI = new WorkerAI(maybeAiData);
+			unit.playAutomatedTurn();
+		}
+
+		public static bool canExplore(this MapUnit unit) {
+			return unit.unitType.actions.Contains(C7Action.UnitExplore);
+		}
+
+		public static void explore(this MapUnit unit) {
+			unit.isAutomated = true;
+			ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, unit.owner);
+			if (maybeAiData == null) {
+				log.Information($"Could not find anything to explore for {unit} owned by {unit.owner}");
+				unit.isAutomated = false;
+				return;
+			}
+			unit.currentAI = new ExplorerAI(maybeAiData);
+			unit.playAutomatedTurn();
+		}
+
+		public static void playAutomatedTurn(this MapUnit unit) {
+			bool done = !unit.currentAI.PlayTurn(unit.owner, unit);
+			if (done) {
+				if (unit.currentAI is WorkerAI) {
+					unit.automate();
+				} else if (unit.currentAI is ExplorerAI) {
+					unit.explore();
+				}
+			}
 		}
 	}
 }

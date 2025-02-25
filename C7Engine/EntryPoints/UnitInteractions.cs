@@ -67,6 +67,14 @@ namespace C7Engine {
 				result.Add(C7Action.UnitIrrigate);
 			}
 
+			if (unit.canExplore()) {
+				result.Add(C7Action.UnitExplore);
+			}
+
+			if (unit.canAutomate()) {
+				result.Add(C7Action.UnitAutomate);
+			}
+
 			// Eventually we will have advanced actions too, whose availability will rely on their base actions' availability.
 			// unit.availableActions.Add("rename");
 

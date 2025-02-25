@@ -33,6 +33,9 @@ namespace C7GameData {
 			}
 		}
 		public bool isFortified { get; set; }
+
+		public bool isAutomated { get; set; }
+
 		//sentry, etc. will come later.  For now, let's just have a couple things so we can cycle through units that aren't fortified.
 		public int defensiveBombardsRemaining;
 
@@ -53,7 +56,7 @@ namespace C7GameData {
 		internal MapUnit() { }
 
 		public bool IsBusy() {
-			return isFortified || (path != null && path.PathLength() > 0) || WorkerJob != null;
+			return isFortified || (path != null && path.PathLength() > 0) || WorkerJob != null || isAutomated;
 		}
 
 		public bool IsLandUnit() {

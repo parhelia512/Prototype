@@ -58686,7 +58686,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-1",
@@ -58705,7 +58706,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-2",
@@ -58724,7 +58726,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-2",
@@ -58743,7 +58746,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Scout-1",
@@ -58762,7 +58766,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-3",
@@ -58781,7 +58786,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-3",
@@ -58800,7 +58806,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-4",
@@ -58819,7 +58826,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-4",
@@ -58838,7 +58846,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Scout-2",
@@ -58857,7 +58866,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-5",
@@ -58876,7 +58886,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-5",
@@ -58895,7 +58906,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-6",
@@ -58914,7 +58926,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-6",
@@ -58933,7 +58946,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-7",
@@ -58952,7 +58966,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-7",
@@ -58971,7 +58986,8 @@
       "facingDirection": "north",
       "experience": "Regular",
       "workerProgressTowardsJob": 0,
-      "workerJob": -1
+      "workerJob": -1,
+      "isAutomated": false
     }
   ],
   "unitPrototypes": [
@@ -58994,7 +59010,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59018,7 +59035,9 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore",
+        "unit_automate"
       ]
     },
     {
@@ -59039,7 +59058,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59060,7 +59080,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59081,12 +59102,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Modern Paratrooper",
-      "artName": "Modern Paratrooper",
+      "artName": "Paratrooper",
       "shieldCost": 110,
       "populationCost": 0,
       "attack": 6,
@@ -59102,7 +59124,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59123,7 +59146,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59144,7 +59168,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59165,7 +59190,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59186,12 +59212,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Chariot",
-      "artName": "Chariot",
+      "artName": "chariot",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -59207,7 +59234,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59228,7 +59256,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59249,7 +59278,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59270,7 +59300,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59291,7 +59322,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59312,7 +59344,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59333,7 +59366,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59354,7 +59388,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59375,7 +59410,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59396,7 +59432,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59417,7 +59454,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59438,7 +59476,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59460,7 +59499,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59482,7 +59522,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59504,7 +59545,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59526,7 +59568,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59570,7 +59613,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59613,7 +59657,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59634,7 +59679,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59656,7 +59702,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59677,7 +59724,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59699,7 +59747,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59720,7 +59769,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59741,7 +59791,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59762,7 +59813,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59784,7 +59836,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59806,7 +59859,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59828,7 +59882,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59849,7 +59904,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59990,7 +60046,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60011,7 +60068,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60032,7 +60090,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60053,7 +60112,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60074,7 +60134,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60095,7 +60156,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60116,7 +60178,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60137,7 +60200,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60158,7 +60222,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60179,7 +60244,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60200,7 +60266,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60221,7 +60288,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60242,7 +60310,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60263,7 +60332,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60284,7 +60354,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60305,7 +60376,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60327,7 +60399,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60368,7 +60441,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60389,7 +60463,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60410,7 +60485,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60431,7 +60507,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60452,12 +60529,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Gallic Swordsman",
-      "artName": "Gallic Swordsman",
+      "artName": "gallic swordsman",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 3,
@@ -60473,12 +60551,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Ansar Warrior",
-      "artName": "Ansar Warrior",
+      "artName": "ansar warrior",
       "shieldCost": 60,
       "populationCost": 0,
       "attack": 4,
@@ -60494,12 +60573,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Numidian Mercenary",
-      "artName": "Numidian Mercenary",
+      "artName": "Libyan Mercenary",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -60515,12 +60595,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Hwach\u0027a",
-      "artName": "Hwach\u0027a",
+      "artName": "Hwacha",
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 0,
@@ -60537,7 +60618,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60558,7 +60640,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60579,7 +60662,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60603,7 +60687,7 @@
     },
     {
       "name": "Lincoln",
-      "artName": "Lincoln",
+      "artName": "King American",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60618,12 +60702,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Hammurabi",
-      "artName": "Hammurabi",
+      "artName": "King Babylonian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60638,12 +60723,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Mao",
-      "artName": "Mao",
+      "artName": "King Chinese",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60658,12 +60744,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Bismarck",
-      "artName": "Bismarck",
+      "artName": "King German",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60678,12 +60765,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Alexander",
-      "artName": "Alexander",
+      "artName": "King Greek",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60698,12 +60786,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Caesar",
-      "artName": "Caesar",
+      "artName": "King Roman",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60718,12 +60807,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Xerxes",
-      "artName": "Xerxes",
+      "artName": "King Persian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60738,12 +60828,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Hiawatha",
-      "artName": "Hiawatha",
+      "artName": "King Iroquois",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60758,12 +60849,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Shaka",
-      "artName": "Shaka",
+      "artName": "King Zulu",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60778,12 +60870,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Montezuma",
-      "artName": "Montezuma",
+      "artName": "King Aztec",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60798,12 +60891,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Cleopatra",
-      "artName": "Cleopatra",
+      "artName": "King Egyptian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60818,12 +60912,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Elizabeth",
-      "artName": "Elizabeth",
+      "artName": "King English",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60838,12 +60933,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Catherine",
-      "artName": "Catherine",
+      "artName": "King Russian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60858,12 +60954,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Abu",
-      "artName": "Abu",
+      "artName": "King Arab",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60878,12 +60975,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Hannibal",
-      "artName": "Hannibal",
+      "artName": "King Carthaginian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60898,12 +60996,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Osman",
-      "artName": "Osman",
+      "artName": "King Ottoman",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60918,12 +61017,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Temujin",
-      "artName": "Temujin",
+      "artName": "King Mongol",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60938,12 +61038,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Gandhi",
-      "artName": "Gandhi",
+      "artName": "King Indian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60958,12 +61059,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Ragnar",
-      "artName": "Ragnar",
+      "artName": "King Viking",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60978,12 +61080,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Brennus",
-      "artName": "Brennus",
+      "artName": "King Celtic",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60998,12 +61101,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Tokugawa",
-      "artName": "Tokugawa",
+      "artName": "King Japanese",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61018,12 +61122,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Joan d\u0027Arc",
-      "artName": "Joan d\u0027Arc",
+      "artName": "King French",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61038,12 +61143,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Wang Kon",
-      "artName": "Wang Kon",
+      "artName": "King Korean",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61058,12 +61164,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Isabella",
-      "artName": "Isabella",
+      "artName": "King Spanish",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61078,7 +61185,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61099,12 +61207,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Three-Man Chariot",
-      "artName": "Three-Man Chariot",
+      "artName": "Three Man Chariot",
       "shieldCost": 30,
       "populationCost": 0,
       "attack": 2,
@@ -61120,12 +61229,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Mursilis",
-      "artName": "Mursilis",
+      "artName": "King Hatti",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61140,12 +61250,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Gilgamesh",
-      "artName": "Gilgamesh",
+      "artName": "King Sumeria",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61160,12 +61271,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Henry",
-      "artName": "Henry",
+      "artName": "King Portugal",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61180,7 +61292,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61201,7 +61314,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61222,12 +61336,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "William of Orange",
-      "artName": "William of Orange",
+      "artName": "King Netherlands",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61242,7 +61357,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61264,12 +61380,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Pachacuti",
-      "artName": "Pachacuti",
+      "artName": "King Incan",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61284,12 +61401,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Smoke-Jaguar",
-      "artName": "Smoke-Jaguar",
+      "artName": "King Mayan",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61304,12 +61422,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Theodora",
-      "artName": "Theodora",
+      "artName": "King Byzantines",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61324,12 +61443,13 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Chasqui Scout",
-      "artName": "Chasqui Scout",
+      "artName": "Chasquis Scout",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -61345,7 +61465,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61366,7 +61487,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61388,7 +61510,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61410,7 +61533,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61431,7 +61555,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61452,7 +61577,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61473,12 +61599,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Paratrooper",
-      "artName": "Paratrooper",
+      "artName": "WWII Paratrooper",
       "shieldCost": 90,
       "populationCost": 0,
       "attack": 4,
@@ -61494,7 +61621,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61515,7 +61643,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61536,7 +61665,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61557,7 +61687,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     }
   ],
