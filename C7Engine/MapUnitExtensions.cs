@@ -13,6 +13,11 @@ namespace C7Engine {
 
 		private static ILogger log = Log.ForContext<MapUnit>();
 
+		// TODO: Read from scenario info
+		public const int JOB_COST_IRRIGATION = 8;
+		private const int JOB_PROGRESS_WORKER = 2;
+		private const int JOB_PROGRESS_SLAVE = 1;
+
 		public static void animate(this MapUnit unit, MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
 			if (EngineStorage.animationsEnabled) {
 				new MsgStartUnitAnimation(unit, action, wait ? EngineStorage.uiEvent : null, ending).send();
@@ -526,9 +531,37 @@ namespace C7Engine {
 				return;
 			}
 
-			// TODO add animation and long process of building
-			unit.location.overlays.irrigation = true;
+			string currentWorkerJob = C7Action.UnitIrrigate;
+			unit.startWorkerJob(currentWorkerJob, MapUnit.AnimatedAction.IRRIGATE);
+
+			// Add up the total progress of all workers working on the task, and cancel any other jobs which might currently be worked on.
+			int totalProgress = unit.location.AddTotalProgressAndResetOtherJobs(unit.WorkerJob);
+
+			// If the job is complete, adjust the map and free up everybody who has not yet worked.
+			if (unit.location.IsWorkerJobFinished(currentWorkerJob, totalProgress)) {
+				unit.location.FinishWorkerJob(currentWorkerJob);
+			}
+		}
+
+		public static void startWorkerJob(this MapUnit unit, string currentWorkerJob, MapUnit.AnimatedAction animatedAction) {
+			unit.WorkerJob = currentWorkerJob;
+			// On the first turn the progress is added immediately and the movement points are spend
+			//Since the unit spends its movement points here it won't be counted again at the end of turn.
+			if (unit.movementPoints.canMove) {
+				unit.updateWorkerJob();
+			}
+			unit.animate(animatedAction,false,AnimationEnding.Repeat);
+		}
+
+		public static void updateWorkerJob(this MapUnit unit) {
+			unit.WorkerProgressTowardsJob += JOB_PROGRESS_WORKER;
 			unit.movementPoints.onConsumeAll();
+		}
+
+		public static void resetWorkerJob(this MapUnit unit) {
+			unit.WorkerJob = null;
+			unit.WorkerProgressTowardsJob = 0;
+			unit.animate(MapUnit.AnimatedAction.BLANK,false,AnimationEnding.Repeat);
 		}
 	}
 }
