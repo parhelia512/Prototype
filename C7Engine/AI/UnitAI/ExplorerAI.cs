@@ -16,6 +16,49 @@ namespace C7Engine {
 			explorerData = d;
 		}
 
+		public static ExplorerAIData? MaybeMakeAiData(MapUnit unit, Player player) {
+			ExplorerAIData ai = new();
+			if (unit.unitType.categories.Contains("Sea")) {
+				ai.type = ExplorerAIData.ExplorationType.COASTLINE;
+				log.Information("Set coastline exploration AI for " + unit);
+				return ai;
+			}
+
+			if (unit.location.unitsOnTile.Exists((x) => x.unitType.categories.Contains("Sea"))) {
+				ai.type = ExplorerAIData.ExplorationType.ON_A_BOAT;
+				//TODO: Actually put the unit on the boat
+				log.Information("Set ON_A_BOAT exploration AI for " + unit);
+				return ai;
+			}
+
+			//Isn't a Settler.  If there's a city at the location, it's defended.  No boats involved.  What's our priority?
+			//If there is land to explore, we'll try to explore it.
+			//Long-term TODO: Should only send tiles on this landmass.
+			KeyValuePair<Tile, float> tileToExplore = ExplorerAI.FindTopScoringTileForExploration(player, player.tileKnowledge.AllKnownTiles().Where(t => t.IsLand()), ExplorerAIData.ExplorationType.RANDOM);
+
+			if (tileToExplore.Value <= 0) {
+				//Nowhere to explore.
+				return null;
+			}
+
+			//What type of exploration should we do?
+			int nearbyExplorers = 0;
+			foreach (MapUnit mapUnit in player.units) {
+				if (mapUnit.currentAI is ExplorerAI explorerAI) {
+					if (explorerAI.explorerData.type == ExplorerAIData.ExplorationType.NEAR_CITIES) {
+						nearbyExplorers++;
+					}
+				}
+			}
+			if (nearbyExplorers < (player.cities.Count + 1)) {
+				ai.type = ExplorerAIData.ExplorationType.NEAR_CITIES;
+			} else {
+				ai.type = ExplorerAIData.ExplorationType.RANDOM;
+			}
+			log.Information($"Set {ai.type} exploration AI for {unit}");
+			return ai;
+		}
+
 		bool UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (MovingToNewExplorationArea(explorerData)) {
 				return MoveToNextTileOnPath(explorerData, unit);
