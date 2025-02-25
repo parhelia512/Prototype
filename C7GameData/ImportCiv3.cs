@@ -520,7 +520,7 @@ namespace C7GameData {
 					size = city.Popd.CitizenCount,
 					shieldsStored = city.ShieldsCollected,
 					foodStored = city.TotalFood,
-					buildings = ImportCityBuildings(i),
+					buildings = ImportCityBuildingsFromSav(i),
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
 
@@ -553,7 +553,7 @@ namespace C7GameData {
 			}
 		}
 
-		List<SaveCityBuilding> ImportCityBuildings(int cityIndex) {
+		List<SaveCityBuilding> ImportCityBuildingsFromSav(int cityIndex) {
 			List<SaveCityBuilding> res = [];
 			var cityBuildings = savData.CityBuilding[cityIndex];
 
@@ -568,6 +568,25 @@ namespace C7GameData {
 						totalCulture = building.Culture,
 					});
 				}
+			}
+
+			return res;
+		}
+
+		List<SaveCityBuilding> ImportCityBuildingsFromBiq(int cityIndex, ID player) {
+			BiqData theBiq = biq.City is null ? defaultBiq : biq;
+			List<SaveCityBuilding> res = [];
+			int[] cityBuildings = theBiq.CityBuilding[cityIndex];
+
+			for (int buildingIndex = 0; buildingIndex < cityBuildings.Length; ++buildingIndex) {
+				BLDG building = theBiq.Bldg[cityBuildings[buildingIndex]];
+
+				res.Add(new SaveCityBuilding {
+					building = building.Name,
+					builtByPlayer = player,
+					year = 0,
+					totalCulture = 0,
+				});
 			}
 
 			return res;
@@ -604,7 +623,7 @@ namespace C7GameData {
 					producibleType = ProducibleType.UNIT,
 					name = city.Name,
 					size = city.Size,
-					buildings = ImportCityBuildings(cityIndex),
+					buildings = ImportCityBuildingsFromBiq(cityIndex, player.id),
 					shieldsStored = 0,
 					foodStored = 0,
 					foodNeededToGrow = 20, // HACK: don't know where to find this
