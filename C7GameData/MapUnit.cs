@@ -120,6 +120,26 @@ namespace C7GameData {
 			}
 		}
 
+		public int WorkerJobAsInt() {
+			switch (WorkerJob) {
+				case C7Action.UnitIrrigate:
+					return 1;
+				default:
+					return -1;
+			};
+		}
+
+		public void SetWorkerJobFromInt(int WorkerJobValue) {
+			switch (WorkerJobValue) {
+				case 1:
+					WorkerJob = C7Action.UnitIrrigate;
+					return;
+				default:
+					WorkerJob = null;
+					return;
+			}
+		}
+
 		public static MapUnit NONE = new MapUnit(ID.None("unit"));
 	}
 }

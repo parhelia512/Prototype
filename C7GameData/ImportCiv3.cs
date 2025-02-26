@@ -483,10 +483,13 @@ namespace C7GameData {
 					experience = experience.key,
 					hitPointsRemaining = experience.baseHitPoints - unit.Damage, // TODO: include bonus hitpoints from unit type
 					movePointsRemaining = (float)prototype.Movement - (unit.MovementUsed / 3f),
+					WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob,
+					WorkerJob = unit.WorkerJob,
 				};
 				if (unit.Fortified) {
 					saveUnit.action = "fortified";
 				}
+
 				save.Units.Add(saveUnit);
 			}
 		}
