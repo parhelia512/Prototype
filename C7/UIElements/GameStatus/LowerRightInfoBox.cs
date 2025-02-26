@@ -2,6 +2,7 @@ using Godot;
 using ConvertCiv3Media;
 using C7GameData;
 using Serilog;
+using C7Engine;
 
 public partial class LowerRightInfoBox : TextureRect {
 	private ILogger log = LogManager.ForContext<LowerRightInfoBox>();
@@ -11,11 +12,14 @@ public partial class LowerRightInfoBox : TextureRect {
 	ImageTexture nextTurnOffTexture;
 	ImageTexture nextTurnBlinkTexture;
 
+	Label civAndGovt = new();
 	Label lblUnitSelected = new Label();
 	Label attackDefenseMovement = new Label();
 	Label terrainType = new Label();
 	Label yearAndGold = new Label();
 	Label scienceProgress = new();
+
+	TextureButton openDiplomacy = new ();
 
 	Timer blinkingTimer = new Timer();
 	bool timerStarted = false;  //This "isStopped" returns false if it's never been started.  So we need this to know if we've ever started it.
@@ -69,7 +73,6 @@ public partial class LowerRightInfoBox : TextureRect {
 		terrainType.OffsetRight = -30;
 		boxRightRectangle.AddChild(terrainType);
 
-		Label civAndGovt = new Label();
 		civAndGovt.SetPosition(new Vector2(0, 75));
 		boxRightRectangle.AddChild(civAndGovt);
 		SetTextAndCenterLabel(civAndGovt, "Carthage - Despotism (5.5.0)");
@@ -87,6 +90,23 @@ public partial class LowerRightInfoBox : TextureRect {
 		blinkingTimer.WaitTime = 0.6f;
 		blinkingTimer.Timeout += toggleEndTurnButton;
 		AddChild(blinkingTimer);
+
+		// Add the diplomacy button, with a "D" label on it.
+		openDiplomacy.TextureNormal = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 1, 1, 16, 16);
+		openDiplomacy.TextureHover = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 17, 1, 16, 16);
+		openDiplomacy.TexturePressed = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 33, 1, 16, 16);
+		openDiplomacy.SetPosition(new Vector2(268, 34));
+		openDiplomacy.Pressed += OpenDiplomacyPopup;
+		openDiplomacy.TooltipText = "Diplomacy";
+		AddChild(openDiplomacy);
+		openDiplomacy.Hide();
+
+		Label openDiplomacyLabel = new();
+		openDiplomacyLabel.Text = "D";
+		openDiplomacyLabel.OffsetLeft = 3;
+		openDiplomacyLabel.OffsetTop = -3;
+		openDiplomacyLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
+		openDiplomacy.AddChild(openDiplomacyLabel);
 	}
 
 	public void SetEndOfTurnStatus() {
@@ -141,22 +161,50 @@ public partial class LowerRightInfoBox : TextureRect {
 		attackDefenseMovement.Visible = true;
 	}
 
-	///This is going to evolve a lot over time.  Probably this info box will need to keep some local state.
-	///But for now it'll show the changing turn number, providing some interactivity
-	public void SetTurnAndGold(int turnNumber, int gold, int goldPerTurn) {
-		if (goldPerTurn >= 0) {
-			yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (+{goldPerTurn} per turn)";
-		} else {
-			yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (-{goldPerTurn} per turn)";
-		}
-	}
+	public override void _Process(double delta) {
+		// Update our information each time we're drawn, just like the tile and
+		// city scenes.
+		using (UIGameDataAccess gameDataAccess = new()) {
+			GameData gD = gameDataAccess.gameData;
+			// There may be no human players in observer mode.
+			Player player = gD.GetHumanPlayers().Count > 0 ? gD.GetHumanPlayers()[0] : gD.players[1];
 
-	public void UpdateTechProgress(string techName, int turnsRemaining) {
-		if (turnsRemaining >= int.MaxValue) {
-			SetTextAndCenterLabel(scienceProgress, $"{techName} (-- turns)");
-		} else {
-			SetTextAndCenterLabel(scienceProgress, $"{techName} ({turnsRemaining} turns)");
+			// Gold per turn and turn indicator.
+			{
+				int turnNumber = TurnHandling.GetTurnNumber();
+				int gold = player.gold;
+				int goldPerTurn = player.CalculateGoldPerTurn();
+
+				if (goldPerTurn >= 0) {
+					yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (+{goldPerTurn} per turn)";
+				} else {
+					yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (-{goldPerTurn} per turn)";
+				}
+			}
+
+			// Tech progress.
+			{
+				Tech tech = gD.techs.Find(x => x.id == player.currentlyResearchedTech);
+				string techName = tech == null ? "Not selected" : tech.Name;
+				int turnsRemaining = tech == null ? int.MaxValue : player.EstimateTurnsToResearch(tech);
+
+				if (turnsRemaining >= int.MaxValue) {
+					SetTextAndCenterLabel(scienceProgress, $"{techName} (-- turns)");
+				} else {
+					SetTextAndCenterLabel(scienceProgress, $"{techName} ({turnsRemaining} turns)");
+				}
+			}
+
+			// Civ and government.
+			SetTextAndCenterLabel(civAndGovt, $"{player.civilization.name} - Despotism (5.5.0)");
+
+			// Only show the diplomacy button if we have civs to talk to.
+			if (player.playerRelationships.Count > 0 && !openDiplomacy.Visible) {
+				openDiplomacy.Show();
+			}
 		}
+
+		base._Process(delta);
 	}
 
 	private void SetTextAndCenterLabel(Label label, string text) {
@@ -169,6 +217,14 @@ public partial class LowerRightInfoBox : TextureRect {
 		label.AnchorLeft = 0.5f;
 		label.AnchorRight = 0.5f;
 		label.OffsetLeft = -1 * (label.Size.X / 2.0f);
+	}
 
+	private void OpenDiplomacyPopup() {
+		using (UIGameDataAccess gameDataAccess = new()) {
+			GameData gD = gameDataAccess.gameData;
+			Player player = gD.GetHumanPlayers()[0];
+
+			GetParent<GameStatus>().popupOverlay.ShowPopup(new DiplomacySelection(player, gD.players), PopupOverlay.PopupCategory.Info);
+		}
 	}
 }

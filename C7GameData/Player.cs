@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
+using C7GameData.Save;
 
 namespace C7GameData {
-
 	public class Player {
 		public ID id { get; internal set; }
 		public int colorIndex;
@@ -23,6 +23,9 @@ namespace C7GameData {
 
 		//Ordered list of priority data.  First is most important.
 		public List<StrategicPriority> strategicPriorityData = new List<StrategicPriority>();
+
+		// A map from player id to the relationship this player has with the other player.
+		public Dictionary<ID, PlayerRelationship> playerRelationships = new();
 
 		// The list of techs known by this player.
 		public HashSet<ID> knownTechs = new();
@@ -117,6 +120,14 @@ namespace C7GameData {
 			if (civilization != null)
 				return civilization.cityNames.First();
 			return "";
+		}
+
+		public int CalculateGoldPerTurn() {
+			int result = 0;
+			foreach (City city in cities) {
+				result += city.CurrentCommerceYield().taxes;
+			}
+			return result;
 		}
 
 		public int EstimateTurnsToResearch(Tech tech) {

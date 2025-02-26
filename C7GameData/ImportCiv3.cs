@@ -5,6 +5,8 @@ using Serilog;
 using QueryCiv3;
 using QueryCiv3.Biq;
 using C7GameData.Save;
+using System.Reflection;
+using System.ComponentModel;
 
 /*
   This will read a Civ3 sav into C7 native format for immediate use or saving to native JSON save
@@ -433,6 +435,22 @@ namespace C7GameData {
 				save.Players.Add(player);
 				i++;
 			}
+
+			// Now that we know all the players, fill in details about their
+			// relationship to each other.
+			i = 0;
+			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
+				List<int> contacts = leader.GetContact();
+				List<bool> warStatus = leader.GetWarStatuses();
+				for (int j = 0; j < contacts.Count; ++j) {
+					if (contacts[j] > 0) {
+						save.Players[i].playerRelationships.Add(save.Players[j].id.ToString(), new PlayerRelationship() {
+							atWar = warStatus[j],
+						});
+					}
+				}
+				++i;
+			}
 		}
 
 		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex, string era) {
@@ -520,7 +538,7 @@ namespace C7GameData {
 					size = city.Popd.CitizenCount,
 					shieldsStored = city.ShieldsCollected,
 					foodStored = city.TotalFood,
-					buildings = ImportCityBuildings(i),
+					buildings = ImportCityBuildingsFromSav(i),
 					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
 
@@ -553,7 +571,7 @@ namespace C7GameData {
 			}
 		}
 
-		List<SaveCityBuilding> ImportCityBuildings(int cityIndex) {
+		List<SaveCityBuilding> ImportCityBuildingsFromSav(int cityIndex) {
 			List<SaveCityBuilding> res = [];
 			var cityBuildings = savData.CityBuilding[cityIndex];
 
@@ -568,6 +586,25 @@ namespace C7GameData {
 						totalCulture = building.Culture,
 					});
 				}
+			}
+
+			return res;
+		}
+
+		List<SaveCityBuilding> ImportCityBuildingsFromBiq(int cityIndex, ID player) {
+			BiqData theBiq = biq.City is null ? defaultBiq : biq;
+			List<SaveCityBuilding> res = [];
+			int[] cityBuildings = theBiq.CityBuilding[cityIndex];
+
+			for (int buildingIndex = 0; buildingIndex < cityBuildings.Length; ++buildingIndex) {
+				BLDG building = theBiq.Bldg[cityBuildings[buildingIndex]];
+
+				res.Add(new SaveCityBuilding {
+					building = building.Name,
+					builtByPlayer = player,
+					year = 0,
+					totalCulture = 0,
+				});
 			}
 
 			return res;
@@ -604,7 +641,7 @@ namespace C7GameData {
 					producibleType = ProducibleType.UNIT,
 					name = city.Name,
 					size = city.Size,
-					buildings = ImportCityBuildings(cityIndex),
+					buildings = ImportCityBuildingsFromBiq(cityIndex, player.id),
 					shieldsStored = 0,
 					foodStored = 0,
 					foodNeededToGrow = 20, // HACK: don't know where to find this
@@ -942,7 +979,18 @@ namespace C7GameData {
 
 				_ => throw new ArgumentOutOfRangeException("Invalid spiral value" + spiral),
 			};
+		}
 
+		// A handy utility for trying to reverse engineer various structs when
+		// comparing SAV files.
+		private void DumpObject(string label, object o) {
+			Console.WriteLine(label);
+			foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(o)) {
+				Console.WriteLine($"\t{descriptor.Name}={descriptor.GetValue(o)}");
+			}
+			foreach (System.Reflection.FieldInfo fieldInfo in o.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) {
+				Console.WriteLine($"\t{fieldInfo.Name}={fieldInfo.GetValue(o)}");
+			}
 		}
 	}
 }

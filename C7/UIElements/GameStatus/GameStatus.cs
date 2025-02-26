@@ -12,6 +12,9 @@ public partial class GameStatus : MarginContainer {
 
 	[Signal] public delegate void BlinkyEndTurnButtonPressedEventHandler();
 
+	[Export]
+	public PopupOverlay popupOverlay;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		OffsetLeft = -(294 + 5);
@@ -29,16 +32,7 @@ public partial class GameStatus : MarginContainer {
 		LowerRightInfoBox.StopToggling();
 	}
 
-	private void OnTurnStarted(int turnNumber, int gold, int goldPerTurn) {
-		//Oh hai, we do need this handler here!
-		LowerRightInfoBox.SetTurnAndGold(turnNumber, gold, goldPerTurn);
-	}
-
 	private void OnNoMoreAutoselectableUnits() {
 		LowerRightInfoBox.SetEndOfTurnStatus();
-	}
-
-	private void OnUpdateTechProgress(string techName, int turnsRemaining) {
-		LowerRightInfoBox.UpdateTechProgress(techName, turnsRemaining);
 	}
 }
