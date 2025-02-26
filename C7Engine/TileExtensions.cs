@@ -122,7 +122,6 @@ namespace C7Engine {
 			return totalProgress >= requiredProgress;
 		}
 
-
 		public static void Animate(this Tile tile, AnimatedEffect effect, bool wait) {
 			if (EngineStorage.animationsEnabled) {
 				new MsgStartEffectAnimation(tile, effect, wait ? EngineStorage.uiEvent : null, AnimationEnding.Stop).send();
