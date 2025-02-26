@@ -83,8 +83,8 @@ namespace C7.Map {
 					Vector2 size = texture.GetSize();
 					Vector2 offset = size/2;
 					// these values were found experimentally to alignment with the grid
-					offset.X += size.X * 0.01f;
-					offset.Y += size.Y * 0.05f;
+					offset.X += size.X * 0.00f;
+					offset.Y += size.Y * 0.055f;
 
 					looseView.DrawTexture(texture, tileCenter - offset);
 				}
