@@ -15,7 +15,12 @@ namespace C7Engine {
 				//TODO: Should pass in a player GUID instead of checking for human
 				//This current limits us to one human player, although it's better
 				//than the old limit of one non-barbarian player.
-				foreach (MapUnit unit in player.units.Where(u => u.movementPoints.canMove && !u.IsBusy())) {
+				foreach (MapUnit unit in player.units.Where(u => u.movementPoints.canMove)) {
+					if (unit.IsBusy()) {
+						new MsgPerformUnitAction(unit).send();
+						continue;
+					}
+
 					if (!waitQueue.Contains(unit)) {
 						return unit;
 					}

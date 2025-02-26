@@ -402,6 +402,18 @@ namespace C7Engine {
 			return true;
 		}
 
+		public static void PerformBusyAction(this MapUnit unit) {
+			if (unit.isFortified) {
+				return;
+			}
+
+			if (unit.path != null && unit.path.PathLength() > 0) {
+				unit.moveAlongPath();
+				return;
+			}
+
+			// TODO: Handle worker automation and unit exploration here.
+		}
 
 		public static void moveAlongPath(this MapUnit unit) {
 			while (unit.movementPoints.canMove && unit.path?.PathLength() > 0) {
