@@ -80,9 +80,10 @@ namespace C7.Map {
 			foreach (var entry in directionToTextureIdx) {
 				if (tile.neighbors[entry.Key].owningCity?.owner != tile.owningCity?.owner) {
 					ImageTexture texture = GetBorderTexture(entry.Value, borderColor);
-					Vector2 offset = texture.GetSize()/2;
-					offset.X += texture.GetSize().X * 0.01f;
-					offset.Y += texture.GetSize().Y * 0.05f;
+					Vector2 size = texture.GetSize();
+					Vector2 offset = size/2;
+					offset.X += size.X * 0.01f;
+					offset.Y += size.Y * 0.05f;
 
 					looseView.DrawTexture(texture, tileCenter - offset);
 				}
