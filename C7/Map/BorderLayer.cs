@@ -24,7 +24,11 @@ namespace C7.Map {
 			//   (rendering logic for textures of the second column is not yet implemented).
 			for (int j = 0; j < 4; j++) {
 				for (int k = 0; k < 2; k++) {
-					borderGraphics[j * 2 + k] = PCXToGodot.getImageTextureFromPCX(texturePcx, k * textureWidth, j * textureHeight, textureWidth, textureHeight, true);
+					borderGraphics[j * 2 + k] = PCXToGodot.getImageTextureFromPCX(
+						texturePcx,
+						new(k * textureWidth, j * textureHeight, textureWidth, textureHeight),
+						new(true, [1, 254, 255])
+					);
 				}
 			}
 		}

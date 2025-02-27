@@ -57,7 +57,7 @@ namespace C7.Map {
 			//Must set the FixedSize so Godot can calculate the width of the font for city labels
 			smallFont.FixedSize = 11;
 
-			nonEmbassyStar = PCXToGodot.getImageFromPCX(cityIcons, 20, 1, 18, 18);
+			nonEmbassyStar = PCXToGodot.getImageFromPCX(cityIcons, new(20, 1, 18, 18));
 		}
 
 		public CityLabelScene(City city, Tile tile, Vector2I tileCenter) {

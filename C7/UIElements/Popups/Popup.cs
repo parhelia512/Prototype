@@ -127,15 +127,15 @@ public partial class Popup : TextureRect {
 		//The pop-up part is the tricky part
 		Stopwatch imageTimer = new Stopwatch();
 		imageTimer.Start();
-		Image topLeftPopup = PCXToGodot.getImageFromPCX(popupborders, 251, 1, 61, 44);
-		Image topCenterPopup = PCXToGodot.getImageFromPCX(popupborders, 313, 1, 61, 44);
-		Image topRightPopup = PCXToGodot.getImageFromPCX(popupborders, 375, 1, 61, 44);
-		Image middleLeftPopup = PCXToGodot.getImageFromPCX(popupborders, 251, 46, 61, 44);
-		Image middleCenterPopup = PCXToGodot.getImageFromPCX(popupborders, 313, 46, 61, 44);
-		Image middleRightPopup = PCXToGodot.getImageFromPCX(popupborders, 375, 46, 61, 44);
-		Image bottomLeftPopup = PCXToGodot.getImageFromPCX(popupborders, 251, 91, 61, 44);
-		Image bottomCenterPopup = PCXToGodot.getImageFromPCX(popupborders, 313, 91, 61, 44);
-		Image bottomRightPopup = PCXToGodot.getImageFromPCX(popupborders, 375, 91, 61, 44);
+		Image topLeftPopup = PCXToGodot.getImageFromPCX(popupborders, new(251, 1, 61, 44));
+		Image topCenterPopup = PCXToGodot.getImageFromPCX(popupborders, new(313, 1, 61, 44));
+		Image topRightPopup = PCXToGodot.getImageFromPCX(popupborders, new(375, 1, 61, 44));
+		Image middleLeftPopup = PCXToGodot.getImageFromPCX(popupborders, new(251, 46, 61, 44));
+		Image middleCenterPopup = PCXToGodot.getImageFromPCX(popupborders, new(313, 46, 61, 44));
+		Image middleRightPopup = PCXToGodot.getImageFromPCX(popupborders, new(375, 46, 61, 44));
+		Image bottomLeftPopup = PCXToGodot.getImageFromPCX(popupborders, new(251, 91, 61, 44));
+		Image bottomCenterPopup = PCXToGodot.getImageFromPCX(popupborders, new(313, 91, 61, 44));
+		Image bottomRightPopup = PCXToGodot.getImageFromPCX(popupborders, new(375, 91, 61, 44));
 		imageTimer.Stop();
 		TimeSpan stopwatchElapsed = imageTimer.Elapsed;
 		log.Debug("Image creation time: " + Convert.ToInt32(stopwatchElapsed.TotalMilliseconds) + " ms");
