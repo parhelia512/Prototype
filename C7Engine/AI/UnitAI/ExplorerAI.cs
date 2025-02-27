@@ -199,7 +199,11 @@ namespace C7Engine {
 							distanceToNearestCity = distance;
 						}
 					}
-					explorationScore[t] = 100 - 4 * distanceToNearestCity * distanceToNearestCity + baseScore;
+
+					// Ensure we don't stray too far from the nearest city, but
+					// don't weight the distance too much or we don't do useful
+					// exploring.
+					explorationScore[t] = 100 - distanceToNearestCity + baseScore;
 					log.Verbose($"Exploration score for {t}: {explorationScore[t]}");
 				} else {
 					explorationScore[t] = baseScore;
