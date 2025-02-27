@@ -24,7 +24,11 @@ namespace C7.Map {
 			//   (rendering logic for textures of the second column is not yet implemented).
 			for (int j = 0; j < 4; j++) {
 				for (int k = 0; k < 2; k++) {
-					borderGraphics[j * 2 + k] = PCXToGodot.getImageTextureFromPCX(texturePcx, k * textureWidth, j * textureHeight, textureWidth, textureHeight, true);
+					borderGraphics[j * 2 + k] = PCXToGodot.getImageTextureFromPCX(
+						texturePcx,
+						new(k * textureWidth, j * textureHeight, textureWidth, textureHeight),
+						new(true, [1, 254, 255])
+					);
 				}
 			}
 		}
@@ -80,7 +84,10 @@ namespace C7.Map {
 			foreach (var entry in directionToTextureIdx) {
 				if (tile.neighbors[entry.Key].owningCity?.owner != tile.owningCity?.owner) {
 					ImageTexture texture = GetBorderTexture(entry.Value, borderColor);
-					Vector2 offset = texture.GetSize() * 0.5f;
+					Vector2 size = texture.GetSize();
+					Vector2 offset = size/2;
+					// this value were found experimentally to improve alignment with the grid
+					offset.Y += size.Y * 0.055f;
 
 					looseView.DrawTexture(texture, tileCenter - offset);
 				}

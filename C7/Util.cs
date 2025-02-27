@@ -200,7 +200,7 @@ public partial class Util {
 			return textureCache[key];
 		}
 		Pcx NewPCX = LoadPCX(relPath);
-		ImageTexture texture = PCXToGodot.getImageTextureFromPCX(NewPCX, leftStart, topStart, width, height, shadows);
+		ImageTexture texture = PCXToGodot.getImageTextureFromPCX(NewPCX, new(leftStart, topStart, width, height), shadows);
 		textureCache[key] = texture;
 		return texture;
 	}
