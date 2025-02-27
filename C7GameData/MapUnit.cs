@@ -38,6 +38,10 @@ namespace C7GameData {
 
 		public TileDirection facingDirection;
 
+		public int WorkerProgressTowardsJob { get; set; }
+		public string WorkerJob { get; set; }
+
+
 		[JsonIgnore]
 		public List<string> availableActions = new List<string>();
 		public UnitAI currentAI;
@@ -49,7 +53,7 @@ namespace C7GameData {
 		internal MapUnit() { }
 
 		public bool IsBusy() {
-			return isFortified || (path != null && path.PathLength() > 0);
+			return isFortified || (path != null && path.PathLength() > 0) || WorkerJob != null;
 		}
 
 		public bool IsLandUnit() {
@@ -113,6 +117,26 @@ namespace C7GameData {
 				// TODO: Special rules for different animations. We don't need to see workers do their thing but we do want to watch units
 				// move. IMO we should also not show units fortifying even though I know the original game does.
 				return progress < 1.0;
+			}
+		}
+
+		public int WorkerJobAsInt() {
+			switch (WorkerJob) {
+				case C7Action.UnitIrrigate:
+					return 1;
+				default:
+					return -1;
+			};
+		}
+
+		public void SetWorkerJobFromInt(int WorkerJobValue) {
+			switch (WorkerJobValue) {
+				case 1:
+					WorkerJob = C7Action.UnitIrrigate;
+					return;
+				default:
+					WorkerJob = null;
+					return;
 			}
 		}
 

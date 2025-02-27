@@ -58684,7 +58684,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-1",
@@ -58701,7 +58703,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Settler-2",
@@ -58718,7 +58722,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-2",
@@ -58735,7 +58741,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Scout-1",
@@ -58752,7 +58760,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 2,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Settler-3",
@@ -58769,7 +58779,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-3",
@@ -58786,7 +58798,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Settler-4",
@@ -58803,7 +58817,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-4",
@@ -58820,7 +58836,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Scout-2",
@@ -58837,7 +58855,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 2,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Settler-5",
@@ -58854,7 +58874,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-5",
@@ -58871,7 +58893,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Settler-6",
@@ -58888,7 +58912,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-6",
@@ -58905,7 +58931,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Settler-7",
@@ -58922,7 +58950,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     },
     {
       "id": "Worker-7",
@@ -58939,7 +58969,9 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1
     }
   ],
   "unitPrototypes": [
