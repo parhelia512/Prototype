@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using C7GameData.AIData;
 
 namespace C7GameData {
 	/**
@@ -45,7 +44,7 @@ namespace C7GameData {
 
 		[JsonIgnore]
 		public List<string> availableActions = new List<string>();
-		public UnitAIData currentAIData;
+		public UnitAI currentAI;
 
 		public MapUnit(ID id) {
 			this.id = id;
@@ -63,7 +62,7 @@ namespace C7GameData {
 
 		public override string ToString() {
 			if (this != MapUnit.NONE) {
-				return this.owner + " " + unitType.name + "at (" + location.XCoordinate + ", " + location.YCoordinate + ") with " + movementPoints.getMixedNumber() + " MP and " + hitPointsRemaining + " HP, id = " + id;
+				return this.owner + " " + unitType.name + " at (" + location.XCoordinate + ", " + location.YCoordinate + ") with " + movementPoints.getMixedNumber() + " MP and " + hitPointsRemaining + " HP, id = " + id;
 			} else {
 				return "This is the NONE unit";
 			}

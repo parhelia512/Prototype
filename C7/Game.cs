@@ -371,7 +371,17 @@ public partial class Game : Node2D {
 	private void OnPlayerStartTurn() {
 		log.Information("Starting player turn");
 		using (var gameDataAccess = new UIGameDataAccess()) {
-			EmitSignal(SignalName.TurnStarted);
+			int turnNumber = TurnHandling.GetTurnNumber();
+			Player player = controller;
+
+			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
+
+			Tech tech = gameDataAccess.gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
+			if (tech != null) {
+				EmitSignal(SignalName.UpdateTechProgress, tech.Name, player.EstimateTurnsToResearch(tech));
+			} else {
+				EmitSignal(SignalName.UpdateTechProgress, "Not selected", int.MaxValue);
+			}
 			CurrentState = GameState.PlayerTurn;
 
 			GetNextAutoselectedUnit(gameDataAccess.gameData);
@@ -500,7 +510,9 @@ public partial class Game : Node2D {
 						if (tile.unitsOnTile.Count > 0) {
 							foreach (MapUnit unit in tile.unitsOnTile) {
 								log.Debug("  Unit on tile: " + unit);
-								log.Debug("  Strategy: " + unit.currentAIData);
+								if (unit.currentAI != null) {
+									log.Debug("  Strategy: " + unit.currentAI.SummarizePlan());
+								}
 							}
 						}
 					} else {

@@ -4,24 +4,48 @@ using ConvertCiv3Media;
 using System.Collections.Generic;
 
 public partial class PCXToGodot : GodotObject {
-	// The set of color indexes considered transparent when loading a Civ3 PCX
-	private static readonly HashSet<int> transparentColorIndexes = new() { 1, 254, 255 };
+	public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
+
+	public struct ColorOptions {
+		public static readonly ColorOptions Default = new();
+
+		// The set of color indexes considered transparent when loading a Civ3 PCX
+		public HashSet<int> transparentColorIndexes = [254, 255];
+
+		public bool shadows = true;
+
+		public ColorOptions(bool shadows, HashSet<int> transparentColorIndexes) {
+			this.shadows = shadows;
+			this.transparentColorIndexes = transparentColorIndexes;
+		}
+
+		public ColorOptions(bool shadows) {
+			this.shadows = shadows;
+		}
+
+		public ColorOptions() { }
+
+		// Implicit conversion to initialize ColorOptions with a custom 'shadows' value
+		public static implicit operator ColorOptions(bool value) => new(value);
+	}
 
 	public static ImageTexture getImageTextureFromPCX(Pcx pcx) {
 		Image ImgTxtr = ByteArrayToImage(pcx.ColorIndices, pcx.Palette, pcx.Width, pcx.Height);
 		return getImageTextureFromImage(ImgTxtr);
 	}
 
-	public static ImageTexture getImageTextureFromPCX(Pcx pcx, int leftStart, int topStart, int croppedWidth, int croppedHeight, bool shadows = true) {
-		Image image = getImageFromPCX(pcx, leftStart, topStart, croppedWidth, croppedHeight, shadows);
+	public static ImageTexture getImageTextureFromPCX(Pcx pcx, CropRegion cropRegion, ColorOptions colorOptions) {
+		Image image = getImageFromPCX(pcx, cropRegion, colorOptions);
 		return getImageTextureFromImage(image);
 	}
 
 	/**
 	 * This method is for cases where we want to use components of multiple PCXs in a texture, such as for the popup background.
 	 **/
-	public static Image getImageFromPCX(Pcx pcx, int leftStart, int topStart, int croppedWidth, int croppedHeight, bool shadows = true) {
-		int[] ColorData = loadPalette(pcx.Palette, shadows);
+	public static Image getImageFromPCX(Pcx pcx, CropRegion cropRegion, ColorOptions colorOptions) {
+		var (leftStart, topStart, croppedWidth, croppedHeight) = cropRegion;
+
+		int[] ColorData = loadPalette(pcx.Palette, colorOptions);
 		int[] BufferData = new int[croppedWidth * croppedHeight];
 
 		int DataIndex = 0;
@@ -34,6 +58,10 @@ public partial class PCXToGodot : GodotObject {
 		}
 
 		return getImageFromBufferData(croppedWidth, croppedHeight, BufferData);
+	}
+
+	public static Image getImageFromPCX(Pcx pcx, CropRegion cropRegion) {
+		return getImageFromPCX(pcx, cropRegion, ColorOptions.Default);
 	}
 
 	public static ImageTexture getPureAlphaFromPCX(Pcx alphaPcx) {
@@ -146,7 +174,7 @@ public partial class PCXToGodot : GodotObject {
 		return ImageTexture.CreateFromImage(image);
 	}
 
-	private static int[] loadPalette(byte[,] palette, bool shadows) {
+	private static int[] loadPalette(byte[,] palette, ColorOptions colorOptions) {
 		int Red, Green, Blue;
 		int[] ColorData = new int[256];
 
@@ -155,12 +183,12 @@ public partial class PCXToGodot : GodotObject {
 			Green = palette[i, 1] << 8;
 			Blue = palette[i, 2] << 16;
 
-			int Alpha = transparentColorIndexes.Contains(i) ? 0 : 255 << 24;
+			int Alpha = colorOptions.transparentColorIndexes.Contains(i) ? 0 : 255 << 24;
 
 			ColorData[i] = Red + Green + Blue + Alpha;
 		}
 
-		if (shadows) {
+		if (colorOptions.shadows) {
 			for (int i = 240; i < 256; i++) {
 				ColorData[i] = ((255 - i) * 16) << 24;
 			}
