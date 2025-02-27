@@ -77,7 +77,7 @@ namespace C7Engine {
 					continue;
 				}
 
-				if (currentWorkerJob==(unit.WorkerJob)) {
+				if (currentWorkerJob == (unit.WorkerJob)) {
 					if (unit.movementPoints.canMove) {
 						unit.updateWorkerJob();
 					}
@@ -102,7 +102,7 @@ namespace C7Engine {
 		public static void FinishWorkerJob(this Tile tile, string currentWorkerJob) {
 			// Reset All Workers working on the finished Job
 			foreach (MapUnit unit in tile.unitsOnTile) {
-				if (currentWorkerJob==(unit.WorkerJob)) {
+				if (currentWorkerJob == (unit.WorkerJob)) {
 					unit.resetWorkerJob();
 				}
 			}
@@ -114,8 +114,7 @@ namespace C7Engine {
 			}
 		}
 
-		public static bool IsWorkerJobFinished(this Tile tile, string currentWorkerJob, int totalProgress)
-		{
+		public static bool IsWorkerJobFinished(this Tile tile, string currentWorkerJob, int totalProgress) {
 			//TODO Make that dynamic
 			int requiredProgress = MapUnitExtensions.JOB_COST_IRRIGATION;
 

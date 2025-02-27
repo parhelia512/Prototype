@@ -572,7 +572,7 @@ namespace C7Engine {
 			if (unit.movementPoints.canMove) {
 				unit.updateWorkerJob();
 			}
-			unit.animate(animatedAction,false,AnimationEnding.Repeat);
+			unit.animate(animatedAction, false, AnimationEnding.Repeat);
 		}
 
 		public static void updateWorkerJob(this MapUnit unit) {
@@ -583,7 +583,7 @@ namespace C7Engine {
 		public static void resetWorkerJob(this MapUnit unit) {
 			unit.WorkerJob = null;
 			unit.WorkerProgressTowardsJob = 0;
-			unit.animate(MapUnit.AnimatedAction.BLANK,false,AnimationEnding.Repeat);
+			unit.animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
 		}
 	}
 }
