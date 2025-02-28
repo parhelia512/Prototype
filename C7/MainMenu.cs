@@ -35,8 +35,8 @@ public partial class MainMenu : Node2D {
 		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 		Global.ResetLoadGamePath();
 
-		LoadDialog.SetDirectory(@"Conquests/Saves");
-		LoadScenarioDialog.SetDirectory(@"Conquests/Scenarios");
+		LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
+		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
 
 		DisplayTitleScreen();
 	}

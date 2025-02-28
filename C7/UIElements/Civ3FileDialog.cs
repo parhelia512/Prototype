@@ -18,13 +18,30 @@ public partial class Civ3FileDialog : FileDialog {
 		FileSelected += OnFileSelected;
 	}
 
-	public void SetDirectory(string RelPath) {
+	public void SetDirectoryForLoading(string RelPath) {
 		CurrentDir = Util.Civ3Root + "/" + RelPath;
+		FileMode = FileDialog.FileModeEnum.OpenFile;
+	}
+
+	public void SetDirectoryForSaving(string RelPath) {
+		CurrentDir = Util.Civ3Root + "/" + RelPath;
+		FileMode = FileDialog.FileModeEnum.SaveFile;
 	}
 
 	private void OnFileSelected(string path) {
-		log.Information($"loading {path}");
-		Global.LoadGamePath = path;
-		GetTree().ChangeSceneToFile("res://C7Game.tscn");
+		if (FileMode == FileDialog.FileModeEnum.OpenFile) {
+			log.Information($"loading {path}");
+			Global.LoadGamePath = path;
+			GetTree().ChangeSceneToFile("res://C7Game.tscn");
+		} else {
+			if (!path.EndsWith(".json")) {
+				path = path + ".json";
+			}
+
+			log.Information($"Saving game to {path}");
+			using (C7Engine.UIGameDataAccess gameDataAccess = new()) {
+				C7GameData.Save.SaveGame.FromGameData(gameDataAccess.gameData).Save(path);
+			}
+		}
 	}
 }
