@@ -6,6 +6,7 @@ using C7GameData;
 using Serilog;
 using C7Engine.Pathing;
 using System.Collections.Generic;
+using System.Linq;
 using C7Engine.AI;
 
 public partial class Game : Node2D {
@@ -330,8 +331,10 @@ public partial class Game : Node2D {
 	 * Currently (11/14/2021), all unit selection goes through here.
 	 * Both code paths are in Game.cs for now, so it's local, but we may
 	 * want to change it event driven.
+	 *
+	 * Returns whether the selected unit has remaining moves.
 	 **/
-	public void setSelectedUnit(MapUnit unit) {
+	public bool setSelectedUnit(MapUnit unit) {
 		unit.availableActions = UnitInteractions.GetAvailableActions(unit);
 
 		if ((unit.path?.PathLength() ?? -1) > 0) {
@@ -351,12 +354,18 @@ public partial class Game : Node2D {
 			ensureLocationIsInView(unit.location);
 		}
 
+		if (unit != MapUnit.NONE && !unit.movementPoints.canMove) {
+			return false;
+		}
+
 		// Also emit the signal for a new unit being selected, so other areas such as Game Status and Unit Buttons can update
 		if (CurrentlySelectedUnit != MapUnit.NONE) {
 			ParameterWrapper<MapUnit> wrappedUnit = new ParameterWrapper<MapUnit>(CurrentlySelectedUnit);
 			EmitSignal(SignalName.NewAutoselectedUnit, wrappedUnit);
+			return true;
 		} else {
 			EmitSignal(SignalName.NoMoreAutoselectableUnits);
+			return false;
 		}
 	}
 
@@ -461,9 +470,17 @@ public partial class Game : Node2D {
 						using (var gameDataAccess = new UIGameDataAccess()) {
 							var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
 							if (tile != null) {
-								MapUnit to_select = tile.unitsOnTile.Find(u => u.movementPoints.canMove);
-								if (to_select != null && to_select.owner == controller)
-									setSelectedUnit(to_select);
+								// TODO: This should really be the top unit.
+								MapUnit to_select = tile.unitsOnTile.FirstOrDefault();
+								if (to_select != null && to_select.owner == controller) {
+									bool canMove = setSelectedUnit(to_select);
+									if (!canMove) {
+										TemporaryPopup popup = new("This unit has already moved.", 1);
+										popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
+										AddChild(popup);
+										popup.ShowPopup();
+									}
+								}
 							}
 						}
 
