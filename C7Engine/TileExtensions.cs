@@ -48,14 +48,13 @@ namespace C7Engine {
 		/// <param name="currentWorkerJob">the worker job currently started</param>
 		/// <returns>total progress towards that workerjob, must not be null</returns>
 		public static int AddTotalProgressAndResetOtherJobs(this Tile tile, string currentWorkerJob) {
-
 			int totalProgress = 0;
 			foreach (MapUnit unit in tile.unitsOnTile) {
 				if (unit.WorkerJob == null) {
 					continue;
 				}
 
-				if (currentWorkerJob.Equals(unit.WorkerJob)) {
+				if (currentWorkerJob == unit.WorkerJob) {
 					totalProgress += unit.WorkerProgressTowardsJob;
 				} else {
 					// reset Unit working on other jobs
@@ -77,7 +76,7 @@ namespace C7Engine {
 					continue;
 				}
 
-				if (currentWorkerJob == (unit.WorkerJob)) {
+				if (currentWorkerJob == unit.WorkerJob) {
 					if (unit.movementPoints.canMove) {
 						unit.updateWorkerJob();
 					}
