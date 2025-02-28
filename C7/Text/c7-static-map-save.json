@@ -59015,6 +59015,7 @@
       "artName": "Explorer",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-33",
       "attack": 0,
       "defense": 0,
       "bombard": 0,
@@ -59036,6 +59037,7 @@
       "artName": "Marine",
       "shieldCost": 120,
       "populationCost": 0,
+      "requiredTech": "tech-60",
       "attack": 12,
       "defense": 6,
       "bombard": 0,
@@ -59057,6 +59059,7 @@
       "artName": "Modern Paratrooper",
       "shieldCost": 110,
       "populationCost": 0,
+      "requiredTech": "tech-74",
       "attack": 6,
       "defense": 11,
       "bombard": 0,
@@ -59099,6 +59102,7 @@
       "artName": "Archer",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-6",
       "attack": 2,
       "defense": 1,
       "bombard": 1,
@@ -59120,6 +59124,7 @@
       "artName": "Spearman",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-1",
       "attack": 1,
       "defense": 2,
       "bombard": 0,
@@ -59141,6 +59146,7 @@
       "artName": "Swordsman",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-8",
       "attack": 3,
       "defense": 2,
       "bombard": 0,
@@ -59162,6 +59168,7 @@
       "artName": "Chariot",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-5",
       "attack": 1,
       "defense": 1,
       "bombard": 0,
@@ -59183,6 +59190,7 @@
       "artName": "Horseman",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-16",
       "attack": 2,
       "defense": 1,
       "bombard": 0,
@@ -59204,6 +59212,7 @@
       "artName": "Pikeman",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-23",
       "attack": 1,
       "defense": 3,
       "bombard": 0,
@@ -59225,6 +59234,7 @@
       "artName": "Longbowman",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-27",
       "attack": 4,
       "defense": 1,
       "bombard": 2,
@@ -59246,6 +59256,7 @@
       "artName": "Musketman",
       "shieldCost": 60,
       "populationCost": 0,
+      "requiredTech": "tech-31",
       "attack": 2,
       "defense": 4,
       "bombard": 0,
@@ -59267,6 +59278,7 @@
       "artName": "Knight",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-26",
       "attack": 4,
       "defense": 3,
       "bombard": 0,
@@ -59288,6 +59300,7 @@
       "artName": "Rifleman",
       "shieldCost": 80,
       "populationCost": 0,
+      "requiredTech": "tech-44",
       "attack": 4,
       "defense": 6,
       "bombard": 0,
@@ -59309,6 +59322,7 @@
       "artName": "Cavalry",
       "shieldCost": 80,
       "populationCost": 0,
+      "requiredTech": "tech-43",
       "attack": 6,
       "defense": 3,
       "bombard": 0,
@@ -59330,6 +59344,7 @@
       "artName": "Infantry",
       "shieldCost": 90,
       "populationCost": 0,
+      "requiredTech": "tech-58",
       "attack": 6,
       "defense": 10,
       "bombard": 0,
@@ -59351,6 +59366,7 @@
       "artName": "Tank",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-63",
       "attack": 16,
       "defense": 8,
       "bombard": 0,
@@ -59372,6 +59388,7 @@
       "artName": "Mech Infantry",
       "shieldCost": 110,
       "populationCost": 0,
+      "requiredTech": "tech-67",
       "attack": 12,
       "defense": 18,
       "bombard": 0,
@@ -59393,6 +59410,7 @@
       "artName": "Modern Armor",
       "shieldCost": 120,
       "populationCost": 0,
+      "requiredTech": "tech-74",
       "attack": 24,
       "defense": 16,
       "bombard": 0,
@@ -59414,6 +59432,7 @@
       "artName": "Catapult",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-11",
       "attack": 0,
       "defense": 0,
       "bombard": 4,
@@ -59436,6 +59455,7 @@
       "artName": "Cannon",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-39",
       "attack": 0,
       "defense": 0,
       "bombard": 8,
@@ -59458,6 +59478,7 @@
       "artName": "Artillery",
       "shieldCost": 80,
       "populationCost": 0,
+      "requiredTech": "tech-58",
       "attack": 0,
       "defense": 0,
       "bombard": 12,
@@ -59480,6 +59501,7 @@
       "artName": "Radar Artillery",
       "shieldCost": 120,
       "populationCost": 0,
+      "requiredTech": "tech-80",
       "attack": 0,
       "defense": 0,
       "bombard": 16,
@@ -59502,6 +59524,7 @@
       "artName": "Cruise Missile",
       "shieldCost": 60,
       "populationCost": 0,
+      "requiredTech": "tech-65",
       "attack": 0,
       "defense": 0,
       "bombard": 16,
@@ -59524,6 +59547,7 @@
       "artName": "Tactical Nuke",
       "shieldCost": 300,
       "populationCost": 0,
+      "requiredTech": "tech-69",
       "attack": 0,
       "defense": 0,
       "bombard": 0,
@@ -59546,6 +59570,7 @@
       "artName": "ICBM",
       "shieldCost": 500,
       "populationCost": 0,
+      "requiredTech": "tech-75",
       "attack": 0,
       "defense": 0,
       "bombard": 0,
@@ -59568,6 +59593,7 @@
       "artName": "Galley",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-15",
       "attack": 1,
       "defense": 1,
       "bombard": 0,
@@ -59589,6 +59615,7 @@
       "artName": "Caravel",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-33",
       "attack": 1,
       "defense": 2,
       "bombard": 0,
@@ -59610,6 +59637,7 @@
       "artName": "Frigate",
       "shieldCost": 60,
       "populationCost": 0,
+      "requiredTech": "tech-42",
       "attack": 2,
       "defense": 2,
       "bombard": 3,
@@ -59632,6 +59660,7 @@
       "artName": "Galleon",
       "shieldCost": 50,
       "populationCost": 0,
+      "requiredTech": "tech-42",
       "attack": 1,
       "defense": 2,
       "bombard": 0,
@@ -59653,6 +59682,7 @@
       "artName": "Ironclad",
       "shieldCost": 90,
       "populationCost": 0,
+      "requiredTech": "tech-82",
       "attack": 5,
       "defense": 6,
       "bombard": 6,
@@ -59675,6 +59705,7 @@
       "artName": "Transport",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-57",
       "attack": 1,
       "defense": 2,
       "bombard": 0,
@@ -59696,6 +59727,7 @@
       "artName": "Carrier",
       "shieldCost": 180,
       "populationCost": 0,
+      "requiredTech": "tech-61",
       "attack": 1,
       "defense": 8,
       "bombard": 0,
@@ -59717,6 +59749,7 @@
       "artName": "Submarine",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-61",
       "attack": 8,
       "defense": 4,
       "bombard": 0,
@@ -59738,6 +59771,7 @@
       "artName": "Destroyer",
       "shieldCost": 120,
       "populationCost": 0,
+      "requiredTech": "tech-57",
       "attack": 12,
       "defense": 8,
       "bombard": 6,
@@ -59760,6 +59794,7 @@
       "artName": "Battleship",
       "shieldCost": 200,
       "populationCost": 0,
+      "requiredTech": "tech-61",
       "attack": 18,
       "defense": 12,
       "bombard": 8,
@@ -59782,6 +59817,7 @@
       "artName": "AEGIS Cruiser",
       "shieldCost": 160,
       "populationCost": 0,
+      "requiredTech": "tech-80",
       "attack": 15,
       "defense": 10,
       "bombard": 6,
@@ -59804,6 +59840,7 @@
       "artName": "Nuclear Submarine",
       "shieldCost": 140,
       "populationCost": 0,
+      "requiredTech": "tech-66",
       "attack": 8,
       "defense": 4,
       "bombard": 0,
@@ -59825,6 +59862,7 @@
       "artName": "Fighter",
       "shieldCost": 80,
       "populationCost": 0,
+      "requiredTech": "tech-59",
       "attack": 4,
       "defense": 2,
       "bombard": 3,
@@ -59845,6 +59883,7 @@
       "artName": "Bomber",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-59",
       "attack": 0,
       "defense": 2,
       "bombard": 12,
@@ -59865,6 +59904,7 @@
       "artName": "Helicopter",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-64",
       "attack": 0,
       "defense": 2,
       "bombard": 0,
@@ -59885,6 +59925,7 @@
       "artName": "Jet Fighter",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-65",
       "attack": 8,
       "defense": 4,
       "bombard": 3,
@@ -59905,6 +59946,7 @@
       "artName": "Stealth Fighter",
       "shieldCost": 120,
       "populationCost": 0,
+      "requiredTech": "tech-78",
       "attack": 8,
       "defense": 6,
       "bombard": 6,
@@ -59925,6 +59967,7 @@
       "artName": "Stealth Bomber",
       "shieldCost": 240,
       "populationCost": 0,
+      "requiredTech": "tech-78",
       "attack": 0,
       "defense": 5,
       "bombard": 18,
@@ -59942,7 +59985,7 @@
     },
     {
       "name": "Leader",
-      "artName": "Leader",
+      "artName": "Leader Modern Times",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 0,
@@ -59963,7 +60006,7 @@
     },
     {
       "name": "Army",
-      "artName": "Army",
+      "artName": "Army Modern Times",
       "shieldCost": 400,
       "populationCost": 0,
       "attack": 0,
@@ -59987,6 +60030,7 @@
       "artName": "Jaguar Warrior",
       "shieldCost": 15,
       "populationCost": 0,
+      "requiredTech": "tech-6",
       "attack": 1,
       "defense": 1,
       "bombard": 0,
@@ -60008,6 +60052,7 @@
       "artName": "Bowman",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-6",
       "attack": 2,
       "defense": 2,
       "bombard": 1,
@@ -60029,6 +60074,7 @@
       "artName": "Hoplite",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-1",
       "attack": 1,
       "defense": 3,
       "bombard": 0,
@@ -60050,6 +60096,7 @@
       "artName": "Impi",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-1",
       "attack": 1,
       "defense": 2,
       "bombard": 0,
@@ -60071,6 +60118,7 @@
       "artName": "Legionary",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-8",
       "attack": 3,
       "defense": 3,
       "bombard": 0,
@@ -60092,6 +60140,7 @@
       "artName": "Immortals",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-8",
       "attack": 4,
       "defense": 2,
       "bombard": 0,
@@ -60113,6 +60162,7 @@
       "artName": "War Chariot",
       "shieldCost": 20,
       "populationCost": 0,
+      "requiredTech": "tech-5",
       "attack": 2,
       "defense": 1,
       "bombard": 0,
@@ -60134,6 +60184,7 @@
       "artName": "Rider",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-26",
       "attack": 4,
       "defense": 3,
       "bombard": 0,
@@ -60155,6 +60206,7 @@
       "artName": "Mounted Warrior",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-16",
       "attack": 3,
       "defense": 1,
       "bombard": 0,
@@ -60176,6 +60228,7 @@
       "artName": "Musketeer",
       "shieldCost": 60,
       "populationCost": 0,
+      "requiredTech": "tech-31",
       "attack": 2,
       "defense": 5,
       "bombard": 2,
@@ -60197,6 +60250,7 @@
       "artName": "Samurai",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-26",
       "attack": 4,
       "defense": 4,
       "bombard": 0,
@@ -60218,6 +60272,7 @@
       "artName": "War Elephant",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-26",
       "attack": 4,
       "defense": 3,
       "bombard": 0,
@@ -60239,6 +60294,7 @@
       "artName": "Cossack",
       "shieldCost": 90,
       "populationCost": 0,
+      "requiredTech": "tech-43",
       "attack": 6,
       "defense": 3,
       "bombard": 0,
@@ -60260,6 +60316,7 @@
       "artName": "Panzer",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-63",
       "attack": 16,
       "defense": 8,
       "bombard": 0,
@@ -60281,6 +60338,7 @@
       "artName": "Man-O-War",
       "shieldCost": 65,
       "populationCost": 0,
+      "requiredTech": "tech-42",
       "attack": 4,
       "defense": 2,
       "bombard": 4,
@@ -60303,6 +60361,7 @@
       "artName": "F-15",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-65",
       "attack": 8,
       "defense": 4,
       "bombard": 6,
@@ -60323,6 +60382,7 @@
       "artName": "Privateer",
       "shieldCost": 50,
       "populationCost": 0,
+      "requiredTech": "tech-42",
       "attack": 2,
       "defense": 1,
       "bombard": 3,
@@ -60344,6 +60404,7 @@
       "artName": "Keshik",
       "shieldCost": 60,
       "populationCost": 0,
+      "requiredTech": "tech-26",
       "attack": 4,
       "defense": 2,
       "bombard": 0,
@@ -60365,6 +60426,7 @@
       "artName": "Conquistador",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-33",
       "attack": 3,
       "defense": 2,
       "bombard": 0,
@@ -60386,6 +60448,7 @@
       "artName": "Berserk",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-27",
       "attack": 6,
       "defense": 2,
       "bombard": 0,
@@ -60407,6 +60470,7 @@
       "artName": "Sipahi",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-43",
       "attack": 8,
       "defense": 3,
       "bombard": 0,
@@ -60425,9 +60489,10 @@
     },
     {
       "name": "Gallic Swordsman",
-      "artName": "Gallic Swordsman",
+      "artName": "gallic swordsman",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-8",
       "attack": 3,
       "defense": 2,
       "bombard": 0,
@@ -60446,9 +60511,10 @@
     },
     {
       "name": "Ansar Warrior",
-      "artName": "Ansar Warrior",
+      "artName": "ansar warrior",
       "shieldCost": 60,
       "populationCost": 0,
+      "requiredTech": "tech-26",
       "attack": 4,
       "defense": 2,
       "bombard": 0,
@@ -60467,9 +60533,10 @@
     },
     {
       "name": "Numidian Mercenary",
-      "artName": "Numidian Mercenary",
+      "artName": "Libyan Mercenary",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-1",
       "attack": 2,
       "defense": 3,
       "bombard": 0,
@@ -60488,9 +60555,10 @@
     },
     {
       "name": "Hwach\u0027a",
-      "artName": "Hwach\u0027a",
+      "artName": "Hwacha",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-39",
       "attack": 0,
       "defense": 0,
       "bombard": 8,
@@ -60513,6 +60581,7 @@
       "artName": "Medieval Infantry",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-23",
       "attack": 4,
       "defense": 2,
       "bombard": 0,
@@ -60534,6 +60603,7 @@
       "artName": "Guerilla",
       "shieldCost": 90,
       "populationCost": 0,
+      "requiredTech": "tech-58",
       "attack": 6,
       "defense": 6,
       "bombard": 3,
@@ -60571,7 +60641,7 @@
     },
     {
       "name": "Lincoln",
-      "artName": "Lincoln",
+      "artName": "King American",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60591,7 +60661,7 @@
     },
     {
       "name": "Hammurabi",
-      "artName": "Hammurabi",
+      "artName": "King Babylonian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60611,7 +60681,7 @@
     },
     {
       "name": "Mao",
-      "artName": "Mao",
+      "artName": "King Chinese",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60631,7 +60701,7 @@
     },
     {
       "name": "Bismarck",
-      "artName": "Bismarck",
+      "artName": "King German",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60651,7 +60721,7 @@
     },
     {
       "name": "Alexander",
-      "artName": "Alexander",
+      "artName": "King Greek",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60671,7 +60741,7 @@
     },
     {
       "name": "Caesar",
-      "artName": "Caesar",
+      "artName": "King Roman",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60691,7 +60761,7 @@
     },
     {
       "name": "Xerxes",
-      "artName": "Xerxes",
+      "artName": "King Persian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60711,7 +60781,7 @@
     },
     {
       "name": "Hiawatha",
-      "artName": "Hiawatha",
+      "artName": "King Iroquois",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60731,7 +60801,7 @@
     },
     {
       "name": "Shaka",
-      "artName": "Shaka",
+      "artName": "King Zulu",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60751,7 +60821,7 @@
     },
     {
       "name": "Montezuma",
-      "artName": "Montezuma",
+      "artName": "King Aztec",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60771,7 +60841,7 @@
     },
     {
       "name": "Cleopatra",
-      "artName": "Cleopatra",
+      "artName": "King Egyptian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60791,7 +60861,7 @@
     },
     {
       "name": "Elizabeth",
-      "artName": "Elizabeth",
+      "artName": "King English",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60811,7 +60881,7 @@
     },
     {
       "name": "Catherine",
-      "artName": "Catherine",
+      "artName": "King Russian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60831,7 +60901,7 @@
     },
     {
       "name": "Abu",
-      "artName": "Abu",
+      "artName": "King Arab",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60851,7 +60921,7 @@
     },
     {
       "name": "Hannibal",
-      "artName": "Hannibal",
+      "artName": "King Carthaginian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60871,7 +60941,7 @@
     },
     {
       "name": "Osman",
-      "artName": "Osman",
+      "artName": "King Ottoman",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60891,7 +60961,7 @@
     },
     {
       "name": "Temujin",
-      "artName": "Temujin",
+      "artName": "King Mongol",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60911,7 +60981,7 @@
     },
     {
       "name": "Gandhi",
-      "artName": "Gandhi",
+      "artName": "King Indian",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60931,7 +61001,7 @@
     },
     {
       "name": "Ragnar",
-      "artName": "Ragnar",
+      "artName": "King Viking",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60951,7 +61021,7 @@
     },
     {
       "name": "Brennus",
-      "artName": "Brennus",
+      "artName": "King Celtic",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60971,7 +61041,7 @@
     },
     {
       "name": "Tokugawa",
-      "artName": "Tokugawa",
+      "artName": "King Japanese",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -60991,7 +61061,7 @@
     },
     {
       "name": "Joan d\u0027Arc",
-      "artName": "Joan d\u0027Arc",
+      "artName": "King French",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61011,7 +61081,7 @@
     },
     {
       "name": "Wang Kon",
-      "artName": "Wang Kon",
+      "artName": "King Korean",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61031,7 +61101,7 @@
     },
     {
       "name": "Isabella",
-      "artName": "Isabella",
+      "artName": "King Spanish",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61072,9 +61142,10 @@
     },
     {
       "name": "Three-Man Chariot",
-      "artName": "Three-Man Chariot",
+      "artName": "Three Man Chariot",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-5",
       "attack": 2,
       "defense": 2,
       "bombard": 0,
@@ -61093,7 +61164,7 @@
     },
     {
       "name": "Mursilis",
-      "artName": "Mursilis",
+      "artName": "King Hatti",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61113,7 +61184,7 @@
     },
     {
       "name": "Gilgamesh",
-      "artName": "Gilgamesh",
+      "artName": "King Sumeria",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61133,7 +61204,7 @@
     },
     {
       "name": "Henry",
-      "artName": "Henry",
+      "artName": "King Portugal",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61156,6 +61227,7 @@
       "artName": "Carrack",
       "shieldCost": 40,
       "populationCost": 0,
+      "requiredTech": "tech-33",
       "attack": 2,
       "defense": 2,
       "bombard": 0,
@@ -61177,6 +61249,7 @@
       "artName": "Swiss Mercenary",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-23",
       "attack": 1,
       "defense": 4,
       "bombard": 0,
@@ -61195,7 +61268,7 @@
     },
     {
       "name": "William of Orange",
-      "artName": "William of Orange",
+      "artName": "King Netherlands",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61218,6 +61291,7 @@
       "artName": "Trebuchet",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-24",
       "attack": 0,
       "defense": 0,
       "bombard": 6,
@@ -61237,7 +61311,7 @@
     },
     {
       "name": "Pachacuti",
-      "artName": "Pachacuti",
+      "artName": "King Incan",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61257,7 +61331,7 @@
     },
     {
       "name": "Smoke-Jaguar",
-      "artName": "Smoke-Jaguar",
+      "artName": "King Mayan",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61277,7 +61351,7 @@
     },
     {
       "name": "Theodora",
-      "artName": "Theodora",
+      "artName": "King Byzantines",
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
@@ -61297,7 +61371,7 @@
     },
     {
       "name": "Chasqui Scout",
-      "artName": "Chasqui Scout",
+      "artName": "Chasquis Scout",
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
@@ -61321,6 +61395,7 @@
       "artName": "Javelin Thrower",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-6",
       "attack": 2,
       "defense": 2,
       "bombard": 0,
@@ -61342,6 +61417,7 @@
       "artName": "Dromon",
       "shieldCost": 30,
       "populationCost": 0,
+      "requiredTech": "tech-15",
       "attack": 2,
       "defense": 1,
       "bombard": 2,
@@ -61364,6 +61440,7 @@
       "artName": "Cruiser",
       "shieldCost": 160,
       "populationCost": 0,
+      "requiredTech": "tech-57",
       "attack": 15,
       "defense": 10,
       "bombard": 7,
@@ -61428,6 +61505,7 @@
       "artName": "Curragh",
       "shieldCost": 15,
       "populationCost": 0,
+      "requiredTech": "tech-3",
       "attack": 1,
       "defense": 1,
       "bombard": 0,
@@ -61449,6 +61527,7 @@
       "artName": "Paratrooper",
       "shieldCost": 90,
       "populationCost": 0,
+      "requiredTech": "tech-64",
       "attack": 4,
       "defense": 9,
       "bombard": 0,
@@ -61470,6 +61549,7 @@
       "artName": "TOW Infantry",
       "shieldCost": 120,
       "populationCost": 0,
+      "requiredTech": "tech-65",
       "attack": 12,
       "defense": 14,
       "bombard": 6,
@@ -61491,6 +61571,7 @@
       "artName": "Flak",
       "shieldCost": 70,
       "populationCost": 0,
+      "requiredTech": "tech-59",
       "attack": 1,
       "defense": 6,
       "bombard": 0,
@@ -61512,6 +61593,7 @@
       "artName": "Mobile SAM",
       "shieldCost": 100,
       "populationCost": 0,
+      "requiredTech": "tech-65",
       "attack": 1,
       "defense": 6,
       "bombard": 0,
@@ -61533,417 +61615,673 @@
     {
       "name": "Palace",
       "shieldCost": 100,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-2",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Barracks",
       "shieldCost": 40,
-      "populationCost": 0
+      "populationCost": 0,
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Granary",
       "shieldCost": 60,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-4",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Temple",
       "shieldCost": 60,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-7",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Marketplace",
       "shieldCost": 100,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-18",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Library",
       "shieldCost": 80,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-14",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Courthouse",
       "shieldCost": 80,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-13",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Walls",
       "shieldCost": 20,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-2",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Aqueduct",
       "shieldCost": 100,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-21",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Bank",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-32",
+      "requiredBuilding": "Marketplace",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Cathedral",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-22",
+      "requiredBuilding": "Temple",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "University",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-30",
+      "requiredBuilding": "Library",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Colosseum",
       "shieldCost": 120,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-21",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Factory",
       "shieldCost": 240,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-48",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Manufacturing Plant",
       "shieldCost": 320,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-80",
+      "requiredBuilding": "Factory",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Recycling Center",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-68",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Coal Plant",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-48",
+      "requiredBuilding": "Factory",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Hydro Plant",
       "shieldCost": 240,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-62",
+      "requiredBuilding": "Factory",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Nuclear Plant",
       "shieldCost": 240,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-70",
+      "requiredBuilding": "Factory",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Hospital",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-51",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Research Lab",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-67",
+      "requiredBuilding": "University",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Mass Transit System",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-73",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SAM Missile Battery",
       "shieldCost": 80,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-65",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Coastal Fortress",
       "shieldCost": 40,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-39",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Solar Plant",
       "shieldCost": 320,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-73",
+      "requiredBuilding": "Factory",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Harbor",
       "shieldCost": 60,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-15",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Offshore Platform",
       "shieldCost": 240,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-72",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Airport",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-59",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Police Station",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-47",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Wealth",
       "shieldCost": 0,
-      "populationCost": 0
+      "populationCost": 0,
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "The Pyramids",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-2",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Hanging Gardens",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-20",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Colossus",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-1",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Great Lighthouse",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-15",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Great Library",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-14",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Oracle",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-10",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Great Wall",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-21",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Sun Tzu\u0027s Art of War",
       "shieldCost": 600,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-23",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Sistine Chapel",
       "shieldCost": 600,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-25",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Magellan\u0027s Voyage",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-37",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Copernicus\u0027 Observatory",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-33",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Shakespeare\u0027s Theater",
       "shieldCost": 450,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-40",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Leonardo\u0027s Workshop",
       "shieldCost": 600,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-27",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "JS Bach\u0027s Cathedral",
       "shieldCost": 600,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-29",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Newton\u0027s University",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-41",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Smith\u0027s Trading Company",
       "shieldCost": 600,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-36",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Universal Suffrage",
       "shieldCost": 800,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-48",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Hoover Dam",
       "shieldCost": 800,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-62",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Theory of Evolution",
       "shieldCost": 600,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-50",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The United Nations",
       "shieldCost": 1000,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-66",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Manhattan Project",
       "shieldCost": 800,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-66",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Cure for Cancer",
       "shieldCost": 1000,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-77",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Longevity",
       "shieldCost": 1000,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-77",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "SETI program",
       "shieldCost": 1000,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-67",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Heroic Epic",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Iron Works",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Forbidden Palace",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Military Academy",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-43",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "The Pentagon",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Wall Street",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredBuilding": "Stock Exchange",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Apollo Program",
       "shieldCost": 500,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-69",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Strategic Missile Defense",
       "shieldCost": 500,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-81",
+      "requiredBuilding": "SAM Missile Battery",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Intelligence Agency",
       "shieldCost": 400,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-52",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "Battlefield Medicine",
       "shieldCost": 500,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredBuilding": "Hospital",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     },
     {
       "name": "SS Thrusters",
       "shieldCost": 320,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-75",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Engine",
       "shieldCost": 640,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-69",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Docking Bay",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-69",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Cockpit",
       "shieldCost": 320,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-69",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Fuel Cells",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-71",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Life Support System",
       "shieldCost": 320,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-71",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Stasis Chamber",
       "shieldCost": 320,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-80",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Storage/Supply",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-74",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Planetary Party Lounge",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-76",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "SS Exterior Casing",
       "shieldCost": 640,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-74",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "The Internet",
       "shieldCost": 1000,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-72",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Civil Defense",
       "shieldCost": 120,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-62",
+      "requiredBuilding": "Barracks",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Stock Exchange",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-53",
+      "requiredBuilding": "Bank",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "Commercial Dock",
       "shieldCost": 160,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-61",
+      "requiredBuilding": "Harbor",
+      "isGreatWonder": false,
+      "isSmallWonder": false
     },
     {
       "name": "The Temple of Artemis",
       "shieldCost": 500,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-17",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Statue of Zeus",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-11",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "The Mausoleum of Mausollos",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-12",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Knights Templar",
       "shieldCost": 300,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-26",
+      "isGreatWonder": true,
+      "isSmallWonder": false
     },
     {
       "name": "Secret Police HQ",
       "shieldCost": 200,
-      "populationCost": 0
+      "populationCost": 0,
+      "requiredTech": "tech-52",
+      "isGreatWonder": false,
+      "isSmallWonder": true
     }
   ],
   "players": [

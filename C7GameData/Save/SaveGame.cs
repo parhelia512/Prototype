@@ -54,10 +54,10 @@ namespace C7GameData.Save {
 				Map = new SaveMap(data.map),
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
-				Buildings = data.Buildings,
+				Buildings = data.Buildings.ConvertAll(building => new SaveBuilding(building)),
 				BarbarianInfo = data.barbarianInfo,
 				Units = data.mapUnits.ConvertAll(unit => new SaveUnit(unit, data.map)),
-				UnitPrototypes = data.unitPrototypes,
+				UnitPrototypes = data.unitPrototypes.ConvertAll(proto => new SaveUnitPrototype(proto)),
 				Players = data.players.ConvertAll(player => new SavePlayer(player)),
 				Cities = data.cities.ConvertAll(city => new SaveCity(city)),
 				ExperienceLevels = data.experienceLevels,
@@ -85,78 +85,139 @@ namespace C7GameData.Save {
 			}
 		}
 
-		// TODO: GameData should store Civilizations, otherwise the round trip from
-		// SaveGame to GameData and back loses Civilization instances that are not
-		// assigned to a player.
 		public GameData ToGameData(Action<City, CitizenType> assignScenarioResidents) {
+			GameData data = InitializeGameData();
+			ConvertMapAndPlayers(data);
+			ConvertTechnologies(data);
+			ConvertBuildings(data);
+			ConvertUnits(data);
+			ConvertCities(data, assignScenarioResidents);
+			ConvertBarbarianInfo(data);
+			ConvertStrengthBonuses(data);
+			ConvertHealRates(data);
+
+			data.defaultExperienceLevelKey = DefaultExperienceLevel;
+			data.defaultExperienceLevel = data.experienceLevels.Find(el => el.key == DefaultExperienceLevel);
+
+			data.UpdateTileOwners();
+
+			return data;
+		}
+
+		private GameData InitializeGameData() {
 			// copy data without references
-			GameData data = new GameData{
+			return new GameData {
 				seed = Seed,
 				terrainTypes = TerrainTypes,
 				Resources = Resources,
-				Buildings = Buildings,
-				unitPrototypes = UnitPrototypes,
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
 				citizenTypes = CitizenTypes,
 				ids = new ID.Factory(this),
+				experienceLevels = ExperienceLevels,
 			};
+		}
+
+		private void ConvertMapAndPlayers(GameData data) {
 			// units and cities are empty
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
 			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations));
+		}
+
+		private void ConvertTechnologies(GameData data) {
+			// Fill in the list of techs and then backfill the prereqs.
+			//
+			// This is an N^2 approach, but doing a topological sort of the
+			// prereqs feels like overkill given how many techs are in a game.
+
+			foreach (SaveTech st in this.Techs) {
+				data.techs.Add(st.ToTechWithoutPrereqs());
+			}
+
+			foreach (Tech t in data.techs) {
+				t.FillInPrereqs(this.Techs, data.techs);
+			}
+		}
+
+		private void ConvertBuildings(GameData data) {
+			var techDict = data.techs.ToDictionary(t => t.id);
+
+			data.Buildings = Buildings.ConvertAll(building =>
+				new Building(
+					building,
+					building.requiredTech != null ? techDict[building.requiredTech] : null
+				)
+			);
+
+			var buildingDict = data.Buildings.ToDictionary(b => b.name);
+
+			data.Buildings = data.Buildings
+				.Zip(Buildings, (building, saveBuilding) => {
+					if (saveBuilding.requiredBuilding != null)
+						building.requiredBuilding = buildingDict[saveBuilding.requiredBuilding];
+					return building;
+				})
+				.ToList();
+		}
+
+		private void ConvertUnits(GameData data) {
+			var techDict = data.techs.ToDictionary(t => t.id);
+
+			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype =>
+				new UnitPrototype(
+					prototype,
+					prototype.requiredTech != null ? techDict[prototype.requiredTech] : null
+				)
+			);
 
 			// map units need game map and players to populate location and owner
-			data.mapUnits = Units.ConvertAll(unit => unit.ToMapUnit(UnitPrototypes, ExperienceLevels, data.players, data.map));
+			data.mapUnits = Units.ConvertAll(unit =>
+				unit.ToMapUnit(data.unitPrototypes, ExperienceLevels, data.players, data.map)
+			);
+
 
 			// once unit owners are known, players can reference units
 			data.players.ForEach(player => {
-				player.units = data.mapUnits.Where(unit => unit.owner.id == player.id).ToList(); ;
+				player.units = data.mapUnits.Where(unit => unit.owner.id == player.id).ToList();
 			});
+		}
 
+		private void ConvertCities(GameData data, Action<City, CitizenType> assignScenarioResidents) {
 			// cities require game map for location and players for city owner
-			data.cities = Cities.ConvertAll(city => city.ToCity(data.map, data.players, UnitPrototypes, Civilizations, Buildings, CitizenTypes, assignScenarioResidents));
+			data.cities = Cities.ConvertAll(city =>
+				city.ToCity(data.map, data.players, data.unitPrototypes, Civilizations, data.Buildings, CitizenTypes, assignScenarioResidents)
+			);
+
+			// add references to map tiles after units and cities are defined
+			populateGameDataTileUnitsAndCities(data);
 
 			// Once cities are known, players can reference cities.
 			data.players.ForEach(player => {
-				player.cities = data.cities.Where(city => city.owner.id == player.id).ToList(); ;
+				player.cities = data.cities.Where(city => city.owner.id == player.id).ToList();
 			});
 
 			foreach (City city in data.cities) {
 				data.map.tileAt(city.location.XCoordinate, city.location.YCoordinate).cityAtTile = city;
 			}
+		}
 
-			// add references to map tiles after units and cities are defined
-			populateGameDataTileUnitsAndCities(data);
-
-			// Fill in the list of techs and then backfill the prereqs.
-			//
-			// This is an N^2 approach, but doing a topological sort of the
-			// prereqs feels like overkill given how many techs are in a game.
-			foreach (SaveTech st in this.Techs) {
-				data.techs.Add(st.ToTechWithoutPrereqs());
-			}
-			foreach (Tech t in data.techs) {
-				t.FillInPrereqs(this.Techs, data.techs);
-			}
-
-			data.experienceLevels = ExperienceLevels;
+		private void ConvertBarbarianInfo(GameData data) {
 			data.barbarianInfo = BarbarianInfo;
 
 			if (BarbarianInfo.basicBarbarianIndex != -1) {
-				data.barbarianInfo.basicBarbarian = UnitPrototypes[data.barbarianInfo.basicBarbarianIndex];
+				data.barbarianInfo.basicBarbarian = data.unitPrototypes[data.barbarianInfo.basicBarbarianIndex];
 			}
 			if (BarbarianInfo.advancedBarbarianIndex != -1) {
-				data.barbarianInfo.advancedBarbarian = UnitPrototypes[data.barbarianInfo.advancedBarbarianIndex];
+				data.barbarianInfo.advancedBarbarian = data.unitPrototypes[data.barbarianInfo.advancedBarbarianIndex];
 			}
 			if (BarbarianInfo.barbarianSeaUnitIndex != -1) {
-				data.barbarianInfo.barbarianSeaUnit = UnitPrototypes[data.barbarianInfo.barbarianSeaUnitIndex];
+				data.barbarianInfo.barbarianSeaUnit = data.unitPrototypes[data.barbarianInfo.barbarianSeaUnitIndex];
 			}
+		}
 
-			data.defaultExperienceLevelKey = DefaultExperienceLevel;
-			data.defaultExperienceLevel = data.experienceLevels.Find(el => el.key == DefaultExperienceLevel);
-
+		private void ConvertStrengthBonuses(GameData data) {
 			foreach (StrengthBonus sb in StrengthBonuses) {
 				switch (sb.description) {
 					case "Fortified":
@@ -176,15 +237,13 @@ namespace C7GameData.Save {
 						break;
 				}
 			}
+		}
 
+		private void ConvertHealRates(GameData data) {
 			data.healRateInFriendlyField = HealRates["friendly_field"];
 			data.healRateInNeutralField = HealRates["neutral_field"];
 			data.healRateInHostileField = HealRates["hostile_field"];
 			data.healRateInCity = HealRates["city"];
-
-			data.UpdateTileOwners();
-
-			return data;
 		}
 
 		public string Version = "0.0.0";
@@ -193,8 +252,8 @@ namespace C7GameData.Save {
 		public List<TerrainType> TerrainTypes = new List<TerrainType>();
 		public List<Resource> Resources = new List<Resource>();
 		public List<SaveUnit> Units = new List<SaveUnit>();
-		public List<UnitPrototype> UnitPrototypes = new List<UnitPrototype>();
-		public List<Building> Buildings = new();
+		public List<SaveUnitPrototype> UnitPrototypes = [];
+		public List<SaveBuilding> Buildings = [];
 		public List<SavePlayer> Players = new List<SavePlayer>();
 		public List<SaveCity> Cities = new List<SaveCity>();
 		public BarbarianInfo BarbarianInfo = new BarbarianInfo();
