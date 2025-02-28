@@ -712,7 +712,7 @@ public partial class Game : Node2D {
 			// unimplemented
 		}
 
-		if (currentAction == C7Action.UnitBuildCity && (CurrentlySelectedUnit?.canBuildCity() ?? false)) {
+		if (currentAction == C7Action.UnitBuildCity && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildCity() ?? false)) {
 			using (var gameDataAccess = new UIGameDataAccess()) {
 				MapUnit currentUnit = gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
 				log.Debug(currentUnit.Describe());
@@ -722,15 +722,15 @@ public partial class Game : Node2D {
 			}
 		}
 
-		if (currentAction == C7Action.UnitBuildRoad && (CurrentlySelectedUnit?.canBuildRoad() ?? false)) {
+		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildRoad() ?? false)) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildRoad()).send();
 		}
 
-		if (currentAction == C7Action.UnitBuildMine && (CurrentlySelectedUnit?.canBuildMine() ?? false)) {
+		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildMine() ?? false)) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
 		}
 
-		if (currentAction == C7Action.UnitIrrigate && (CurrentlySelectedUnit?.canIrrigate() ?? false)) {
+		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canIrrigate() ?? false)) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.irrigate()).send();
 		}
 

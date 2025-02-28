@@ -15,10 +15,17 @@ namespace C7Engine {
 
 		private static ILogger log = Log.ForContext<MapUnit>();
 
-		// TODO: Read from scenario info
-		public const int JOB_COST_IRRIGATION = 8;
 		private const int JOB_PROGRESS_WORKER = 2;
 		private const int JOB_PROGRESS_SLAVE = 1;
+
+		private static int GetWorkerJobCost(string workerJob) {
+			// TODO: Read from scenario info, and probably store this in a
+			// worker job class.
+			if (workerJob == C7Action.UnitIrrigate) {
+				return 8;
+			}
+			return 1;
+		}
 
 		public static void animate(this MapUnit unit, MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
 			if (EngineStorage.animationsEnabled) {
@@ -403,6 +410,16 @@ namespace C7Engine {
 			return true;
 		}
 
+		private static int SumWorkerProgress(Tile tile, string workerJob) {
+			int result = 0;
+			foreach (MapUnit unit in tile.unitsOnTile) {
+				if (unit.WorkerJob == workerJob) {
+					result += unit.WorkerProgressTowardsJob;
+				}
+			}
+			return result;
+		}
+
 		public static void PerformBusyAction(this MapUnit unit) {
 			if (unit.isFortified) {
 				return;
@@ -411,6 +428,18 @@ namespace C7Engine {
 			if (unit.path != null && unit.path.PathLength() > 0) {
 				unit.moveAlongPath();
 				return;
+			}
+
+			// Check to see if we have a worker job, and if so, contribute our
+			// work towards it. We do this before any automation logic, so that
+			// automated units properly contribute their efforts.
+			if (unit.WorkerJob != null) {
+				unit.updateWorkerJob();
+
+				// See if this worker finished the job.
+				if (SumWorkerProgress(unit.location, unit.WorkerJob) >= GetWorkerJobCost(unit.WorkerJob)) {
+					unit.location.FinishWorkerJob(unit.WorkerJob);
+				}
 			}
 
 			if (unit.isAutomated) {
@@ -528,26 +557,9 @@ namespace C7Engine {
 				return;
 			}
 
-			string currentWorkerJob = C7Action.UnitIrrigate;
-			unit.startWorkerJob(currentWorkerJob, MapUnit.AnimatedAction.IRRIGATE);
-
-			// Add up the total progress of all workers working on the task, and cancel any other jobs which might currently be worked on.
-			int totalProgress = unit.location.AddTotalProgressAndResetOtherJobs(unit.WorkerJob);
-
-			// If the job is complete, adjust the map and free up everybody who has not yet worked.
-			if (unit.location.IsWorkerJobFinished(currentWorkerJob, totalProgress)) {
-				unit.location.FinishWorkerJob(currentWorkerJob);
-			}
-		}
-
-		public static void startWorkerJob(this MapUnit unit, string currentWorkerJob, MapUnit.AnimatedAction animatedAction) {
-			unit.WorkerJob = currentWorkerJob;
-			// On the first turn the progress is added immediately and the movement points are spend
-			//Since the unit spends its movement points here it won't be counted again at the end of turn.
-			if (unit.movementPoints.canMove) {
-				unit.updateWorkerJob();
-			}
-			unit.animate(animatedAction, false, AnimationEnding.Repeat);
+			unit.WorkerJob = C7Action.UnitIrrigate;
+			unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
+			unit.PerformBusyAction();
 		}
 
 		public static void updateWorkerJob(this MapUnit unit) {
