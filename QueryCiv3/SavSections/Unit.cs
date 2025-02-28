@@ -31,16 +31,30 @@ namespace QueryCiv3.Sav {
 		// a foreign worker (configurable via PRTO::WorkerStrength).
 		public int WorkerProgressTowardsJob;
 		public int WorkerJob; // Index into TFRM, -1 if idle
-		private fixed byte UnknownBuffer2[4];
+		private int UnknownBuffer2;
 		public int LoadedOnUnitId;
 
 		private fixed byte Flags2[12];
 		public bool Fortified { get => Util.GetFlag(Flags2[0], 0); }
 
-		// Note: this doesn't appear to correlate with whether a worker is
-		// performing an action - use `WorkerJob != -1` for that.
-		public bool Working { get => Util.GetFlag(Flags2[0], 3); }
-		public bool GoTo { get => Util.GetFlag(Flags2[0], 4); }
+		// Appears to be true for multiple types of automation, including
+		// exploring.
+		public bool IsAutomated { get => Util.GetFlag(Flags2[0], 4); }
+
+		// A utility for trying to understand the values of the various flags.
+		public string DumpFlags() {
+			string result = "";
+			for (int i = 0; i < 4; ++i) {
+				result += Flags[i] + " : ";
+			}
+			for (int i = 0; i < 12; ++i) {
+				result += Flags2[i] + " : ";
+			}
+			for (int i = 0; i < 4; ++i) {
+				result += Flags3[i] + " : ";
+			}
+			return result;
+		}
 
 		public int UseName;
 

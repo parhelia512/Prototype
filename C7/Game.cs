@@ -279,7 +279,8 @@ public partial class Game : Node2D {
 					if ((CurrentlySelectedUnit != MapUnit.NONE) &&
 						(((!CurrentlySelectedUnit.movementPoints.canMove || CurrentlySelectedUnit.hitPointsRemaining <= 0) &&
 						  !animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
-						 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified)))
+						 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified) ||
+						 CurrentlySelectedUnit.isAutomated))
 						GetNextAutoselectedUnit(gameData);
 				}
 				//Listen to keys.  There is a C# Mono Godot bug where e.g. Godot.Key.F1 (etc.) doesn't work
@@ -342,9 +343,15 @@ public partial class Game : Node2D {
 			unit.path = TilePath.NONE;
 		}
 
-		// clear the current WorkerJob
+		// Allow cancellation of active worker jobs by clicking on the unit.
 		if (unit.WorkerJob != null) {
 			unit.resetWorkerJob();
+		}
+
+		// Allow cancellation automation via clicking on the unit.
+		if (unit.isAutomated) {
+			unit.isAutomated = false;
+			unit.currentAI = null;
 		}
 
 		this.CurrentlySelectedUnit = unit;
@@ -689,8 +696,12 @@ public partial class Game : Node2D {
 			setGotoMode(true);
 		}
 
-		if (currentAction == C7Action.UnitExplore) {
-			// unimplemented
+		if (currentAction == C7Action.UnitExplore && CurrentlySelectedUnit != MapUnit.NONE) {
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.explore()).send();
+		}
+
+		if (currentAction == C7Action.UnitAutomate && CurrentlySelectedUnit != MapUnit.NONE) {
+			new ActionToEngineMsg(() => CurrentlySelectedUnit?.automate()).send();
 		}
 
 		if (currentAction == C7Action.UnitSentry) {
@@ -701,7 +712,7 @@ public partial class Game : Node2D {
 			// unimplemented
 		}
 
-		if (currentAction == C7Action.UnitBuildCity && CurrentlySelectedUnit.canBuildCity()) {
+		if (currentAction == C7Action.UnitBuildCity && (CurrentlySelectedUnit?.canBuildCity() ?? false)) {
 			using (var gameDataAccess = new UIGameDataAccess()) {
 				MapUnit currentUnit = gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
 				log.Debug(currentUnit.Describe());
@@ -711,15 +722,15 @@ public partial class Game : Node2D {
 			}
 		}
 
-		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit.canBuildRoad()) {
+		if (currentAction == C7Action.UnitBuildRoad && (CurrentlySelectedUnit?.canBuildRoad() ?? false)) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildRoad()).send();
 		}
 
-		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit.canBuildMine()) {
+		if (currentAction == C7Action.UnitBuildMine && (CurrentlySelectedUnit?.canBuildMine() ?? false)) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
 		}
 
-		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit.canIrrigate()) {
+		if (currentAction == C7Action.UnitIrrigate && (CurrentlySelectedUnit?.canIrrigate() ?? false)) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.irrigate()).send();
 		}
 

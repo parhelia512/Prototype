@@ -19,6 +19,7 @@ namespace C7GameData {
 		public const string UnitBuildRoad = "unit_build_road";
 		public const string UnitBuildMine = "unit_build_mine";
 		public const string UnitIrrigate = "unit_irrigate";
+		public const string UnitAutomate = "unit_automate";
 		public const string UnitDisband = "unit_disband";
 		public const string UnitExplore = "unit_explore";
 		public const string UnitFortify = "unit_fortify";
