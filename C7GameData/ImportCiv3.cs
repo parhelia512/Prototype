@@ -939,7 +939,7 @@ namespace C7GameData {
 				};
 				tf.Action = ConvertCiv3OrderToAction(t.Order);
 				if (t.Required > -1) {
-					tf.RequiredTech.Add(save.Techs[t.Required].id);
+					tf.RequiredTech = save.Techs[t.Required].id;
 				}
 				save.TerraForms.Add(tf);
 			}

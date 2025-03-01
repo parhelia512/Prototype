@@ -11,7 +11,7 @@ public class Terraform {
 
 	public int TurnsToComplete;
 
-	public List<ID> RequiredTech = new();
+	public ID RequiredTech;
 
 	public List<ID> RequiredResources = new();
 
