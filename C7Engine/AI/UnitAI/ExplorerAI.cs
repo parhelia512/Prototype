@@ -16,7 +16,50 @@ namespace C7Engine {
 			explorerData = d;
 		}
 
-		public bool PlayTurn(Player player, MapUnit unit) {
+		public static ExplorerAIData? MaybeMakeAiData(MapUnit unit, Player player) {
+			ExplorerAIData ai = new();
+			if (unit.unitType.categories.Contains("Sea")) {
+				ai.type = ExplorerAIData.ExplorationType.COASTLINE;
+				log.Information("Set coastline exploration AI for " + unit);
+				return ai;
+			}
+
+			if (unit.location.unitsOnTile.Exists((x) => x.unitType.categories.Contains("Sea"))) {
+				ai.type = ExplorerAIData.ExplorationType.ON_A_BOAT;
+				//TODO: Actually put the unit on the boat
+				log.Information("Set ON_A_BOAT exploration AI for " + unit);
+				return ai;
+			}
+
+			//Isn't a Settler.  If there's a city at the location, it's defended.  No boats involved.  What's our priority?
+			//If there is land to explore, we'll try to explore it.
+			//Long-term TODO: Should only send tiles on this landmass.
+			KeyValuePair<Tile, float> tileToExplore = ExplorerAI.FindTopScoringTileForExploration(player, player.tileKnowledge.AllKnownTiles().Where(t => t.IsLand()), ExplorerAIData.ExplorationType.RANDOM);
+
+			if (tileToExplore.Value <= 0) {
+				//Nowhere to explore.
+				return null;
+			}
+
+			//What type of exploration should we do?
+			int nearbyExplorers = 0;
+			foreach (MapUnit mapUnit in player.units) {
+				if (mapUnit.currentAI is ExplorerAI explorerAI) {
+					if (explorerAI.explorerData.type == ExplorerAIData.ExplorationType.NEAR_CITIES) {
+						nearbyExplorers++;
+					}
+				}
+			}
+			if (nearbyExplorers < (player.cities.Count + 1)) {
+				ai.type = ExplorerAIData.ExplorationType.NEAR_CITIES;
+			} else {
+				ai.type = ExplorerAIData.ExplorationType.RANDOM;
+			}
+			log.Information($"Set {ai.type} exploration AI for {unit}");
+			return ai;
+		}
+
+		bool UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (MovingToNewExplorationArea(explorerData)) {
 				return MoveToNextTileOnPath(explorerData, unit);
 			} else {
@@ -29,8 +72,7 @@ namespace C7Engine {
 				//We prefer nearest because the one that allows the most discovery might be pretty far away
 				bool foundNewPath = FindPathToNewExplorationArea(player, explorerData, unit);
 				if (foundNewPath) {
-					MoveToNextTileOnPath(explorerData, unit);
-					return true;
+					return MoveToNextTileOnPath(explorerData, unit);
 				}
 			}
 			return false;
@@ -44,8 +86,7 @@ namespace C7Engine {
 			Tile next = explorerData.path.Next();
 			foreach (KeyValuePair<TileDirection, Tile> neighbor in unit.location.neighbors) {
 				if (neighbor.Value == next) {
-					unit.move(neighbor.Key);
-					return true;
+					return unit.move(neighbor.Key);
 				}
 			}
 			//In the future, it might no longer be possible to go to the correct neighbor, perhaps
@@ -64,8 +105,7 @@ namespace C7Engine {
 			Tile newLocation = topScoringTile.Key;
 
 			if (newLocation != Tile.NONE && topScoringTile.Value > 0) {
-				unit.move(unit.location.directionTo(newLocation));
-				return true;
+				return unit.move(unit.location.directionTo(newLocation));
 			}
 			return false;
 		}
@@ -159,7 +199,11 @@ namespace C7Engine {
 							distanceToNearestCity = distance;
 						}
 					}
-					explorationScore[t] = 100 - 4 * distanceToNearestCity * distanceToNearestCity + baseScore;
+
+					// Ensure we don't stray too far from the nearest city, but
+					// don't weight the distance too much or we don't do useful
+					// exploring.
+					explorationScore[t] = 100 - distanceToNearestCity + baseScore;
 					log.Verbose($"Exploration score for {t}: {explorationScore[t]}");
 				} else {
 					explorationScore[t] = baseScore;

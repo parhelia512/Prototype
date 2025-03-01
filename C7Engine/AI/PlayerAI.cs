@@ -74,6 +74,8 @@ namespace C7Engine {
 			//TODO: Use strategies, not names
 			if (unit.unitType.name == "Settler") {
 				return new SettlerAI(SettlerAI.MakeAiData(unit, player));
+			} else if (unit.unitType.name == "Worker") {
+				return new WorkerAI(WorkerAI.MakeAiData(unit, player));
 			} else if (unit.location.cityAtTile != null && unit.location.unitsOnTile.Count(u => u.unitType.defense > 0 && u != unit) == 0) {
 				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
 			} else if (GetCombatAIIfUnitCanAttackNearbyBarbCamp(unit, player) is UnitAI unitAI && unitAI != null) {
@@ -83,68 +85,36 @@ namespace C7Engine {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
 				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
 			} else {
-				if (unit.unitType.categories.Contains("Sea")) {
-					ExplorerAIData ai = new ExplorerAIData();
-					ai.type = ExplorerAIData.ExplorationType.COASTLINE;
-					log.Information("Set coastline exploration AI for " + unit);
-					return new ExplorerAI(ai);
-				} else if (unit.location.unitsOnTile.Exists((x) => x.unitType.categories.Contains("Sea"))) {
-					ExplorerAIData ai = new ExplorerAIData();
-					ai.type = ExplorerAIData.ExplorationType.ON_A_BOAT;
-					//TODO: Actually put the unit on the boat
-					log.Information("Set ON_A_BOAT exploration AI for " + unit);
-					return new ExplorerAI(ai);
-				} else {
-					//Isn't a Settler.  If there's a city at the location, it's defended.  No boats involved.  What's our priority?
-					//If there is land to explore, we'll try to explore it.
-					//Long-term TODO: Should only send tiles on this landmass.
-					KeyValuePair<Tile, float> tileToExplore = ExplorerAI.FindTopScoringTileForExploration(player, player.tileKnowledge.AllKnownTiles().Where(t => t.IsLand()), ExplorerAIData.ExplorationType.RANDOM);
-					if (tileToExplore.Value > 0) {
-						ExplorerAIData ai = new ExplorerAIData();
-						//What type of exploration should we do?
-						int nearbyExplorers = 0;
-						foreach (MapUnit mapUnit in player.units) {
-							if (mapUnit.currentAI is ExplorerAI explorerAI) {
-								if (explorerAI.explorerData.type == ExplorerAIData.ExplorationType.NEAR_CITIES) {
-									nearbyExplorers++;
-								}
-							}
-						}
-						if (nearbyExplorers < (player.cities.Count + 1)) {
-							ai.type = ExplorerAIData.ExplorationType.NEAR_CITIES;
-						} else {
-							ai.type = ExplorerAIData.ExplorationType.RANDOM;
-						}
-						log.Information($"Set {ai.type} exploration AI for {unit}");
-						return new ExplorerAI(ai);
-					} else {
-						//Nowhere to explore.  What to do now?
-						//Priority 1: Adequate defense of cities.
-						//Future Priority 1: Escorting Settlers
-						//Priority 2: Clearing out barbs
-						//Priority 3: Defending chokepoints
-						//Priority 4: ???
-						//Priority 5: Profit!
-						//(Realistically, as we evolve there will be a lot of options, such as defending borders from barbs, preparing attackers on other civs, defending
-						//resources.  I expect we'll have some sort of arbiter that decides between competing priorities, with each being given a score as to how important
-						//they are, including a weight by how far away the task is.  But this will evolve gradually over a long time)
-
-						//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
-						//and that's a problem.
-
-						City nearestCityToDefend = FindNearbyCityToDefend(unit, player);
-
-						DefenderAIData newUnitAIData = new DefenderAIData();
-						newUnitAIData.destination = nearestCityToDefend.location;
-						newUnitAIData.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
-
-						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-						newUnitAIData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAIData.destination);
-
-						log.Information($"Unit {unit} tasked with defending {nearestCityToDefend.name}");
-						return new DefenderAI(newUnitAIData);
-					}
+				ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
+				if (maybeAiData != null) {
+					return new ExplorerAI(maybeAiData);
 				}
+
+				//Nowhere to explore.  What to do now?
+				//Priority 1: Adequate defense of cities.
+				//Future Priority 1: Escorting Settlers
+				//Priority 2: Clearing out barbs
+				//Priority 3: Defending chokepoints
+				//Priority 4: ???
+				//Priority 5: Profit!
+				//(Realistically, as we evolve there will be a lot of options, such as defending borders from barbs, preparing attackers on other civs, defending
+				//resources.  I expect we'll have some sort of arbiter that decides between competing priorities, with each being given a score as to how important
+				//they are, including a weight by how far away the task is.  But this will evolve gradually over a long time)
+
+				//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
+				//and that's a problem.
+
+				City nearestCityToDefend = FindNearbyCityToDefend(unit, player);
+
+				DefenderAIData newUnitAIData = new DefenderAIData();
+				newUnitAIData.destination = nearestCityToDefend.location;
+				newUnitAIData.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
+
+				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
+				newUnitAIData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAIData.destination);
+
+				log.Information($"Unit {unit} tasked with defending {nearestCityToDefend.name}");
+				return new DefenderAI(newUnitAIData);
 			}
 		}
 

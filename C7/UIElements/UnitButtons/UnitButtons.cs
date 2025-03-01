@@ -67,7 +67,7 @@ public partial class UnitButtons : VBoxContainer {
 		AddNewButton(specializedControls, new UnitControlButton("chopJungle", 4, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton("plantForest", 5, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton("clearDamage", 6, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("automate", 7, 3, onButtonPressed));
+		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitAutomate, 7, 3, onButtonPressed));
 
 		// Row index 4 and later not yet added
 	}
