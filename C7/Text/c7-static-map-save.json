@@ -65547,5 +65547,105 @@
       "corruption": 0,
       "construction": 2
     }
+  ],
+  "terraForms": [
+    {
+      "id": "Terraform-1",
+      "name": "Mine",
+      "civilopediaEntry": "TFRM_Mine",
+      "turnsToComplete": 12,
+      "action": "unit_build_mine"
+    },
+    {
+      "id": "Terraform-2",
+      "name": "Irrigation",
+      "civilopediaEntry": "TFRM_Irrigation",
+      "turnsToComplete": 8,
+      "action": "unit_irrigate"
+    },
+    {
+      "id": "Terraform-3",
+      "name": "Fortress",
+      "civilopediaEntry": "TFRM_Fortress",
+      "turnsToComplete": 16,
+      "requiredTech": "tech-21",
+      "action": "unit_build_fortress"
+    },
+    {
+      "id": "Terraform-4",
+      "name": "Road",
+      "civilopediaEntry": "TFRM_Road",
+      "turnsToComplete": 6,
+      "action": "unit_build_road"
+    },
+    {
+      "id": "Terraform-5",
+      "name": "Railroad",
+      "civilopediaEntry": "TFRM_Railroad",
+      "turnsToComplete": 12,
+      "requiredTech": "tech-45",
+      "action": "unit_build_railroad"
+    },
+    {
+      "id": "Terraform-6",
+      "name": "Plant Forest",
+      "civilopediaEntry": "TFRM_Plant_Forest",
+      "turnsToComplete": 18,
+      "requiredTech": "tech-24",
+      "action": "unit_plant_forest"
+    },
+    {
+      "id": "Terraform-7",
+      "name": "Clear Forest",
+      "civilopediaEntry": "TFRM_Clear_Forest",
+      "turnsToComplete": 4,
+      "action": "unit_clear_forest"
+    },
+    {
+      "id": "Terraform-8",
+      "name": "Clear Wetlands",
+      "civilopediaEntry": "TFRM_Clear_Wetlands",
+      "turnsToComplete": 16,
+      "action": "unit_clear_wetlands"
+    },
+    {
+      "id": "Terraform-9",
+      "name": "Clear Damage",
+      "civilopediaEntry": "TFRM_Clear_Damage",
+      "turnsToComplete": 24,
+      "action": "unit_clear_damage"
+    },
+    {
+      "id": "Terraform-10",
+      "name": "Airfield",
+      "civilopediaEntry": "TFRM_Airfield",
+      "turnsToComplete": 1,
+      "requiredTech": "tech-59",
+      "action": "unit_build_airfield"
+    },
+    {
+      "id": "Terraform-11",
+      "name": "Radar Tower",
+      "civilopediaEntry": "TFRM_Radar_Tower",
+      "turnsToComplete": 1,
+      "requiredTech": "tech-64",
+      "action": "unit_build_radar_tower"
+    },
+    {
+      "id": "Terraform-12",
+      "name": "Outpost",
+      "civilopediaEntry": "TFRM_Outpost",
+      "turnsToComplete": 1,
+      "requiredTech": "tech-2",
+      "action": "unit_build_outpost"
+    },
+    {
+      "id": "Terraform-13",
+      "name": "Barricade",
+      "civilopediaEntry": "TFRM_Barricades",
+      "turnsToComplete": 16,
+      "requiredTech": "tech-21",
+      "action": "unit_build_barricade"
+    }
   ]
 }

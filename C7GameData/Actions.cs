@@ -19,6 +19,16 @@ namespace C7GameData {
 		public const string UnitBuildRoad = "unit_build_road";
 		public const string UnitBuildMine = "unit_build_mine";
 		public const string UnitIrrigate = "unit_irrigate";
+		public const string UnitBuildRailroad = "unit_build_railroad";
+		public const string UnitBuildFortress = "unit_build_fortress";
+		public const string UnitPlantForest = "unit_plant_forest";
+		public const string UnitClearForest = "unit_clear_forest";
+		public const string UnitClearWetlands = "unit_clear_wetlands";
+		public const string UnitClearDamage = "unit_clear_damage";
+		public const string UnitBuildAirfield= "unit_build_airfield";
+		public const string UnitBuildRadarTower = "unit_build_radar_tower";
+		public const string UnitBuildOutpost = "unit_build_outpost";
+		public const string UnitBuildBarricade = "unit_build_barricade";
 		public const string UnitAutomate = "unit_automate";
 		public const string UnitDisband = "unit_disband";
 		public const string UnitExplore = "unit_explore";

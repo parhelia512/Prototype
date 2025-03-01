@@ -24,6 +24,7 @@ namespace C7GameData {
 		public List<ExperienceLevel> experienceLevels = new List<ExperienceLevel>();
 		public List<Tech> techs = new();
 		public List<CitizenType> citizenTypes = new();
+		public List<Terraform> Terraforms = new();
 		public string defaultExperienceLevelKey;
 		public ExperienceLevel defaultExperienceLevel;
 
