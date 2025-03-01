@@ -53,6 +53,11 @@ public partial class Game : Node2D {
 	// that. This is useful so that the unit autoselector can be prevented from interfering with the player selecting fortified units.
 	public bool KeepCSUWhenFortified = false;
 
+	// When in observer mode, the number of turns to play before prompting the
+	// user to advance the turn manually. This allows for more rapid debugging
+	// without pressing the spacebar repeatedly.
+	public int turnsLeftToFastForward = 0;
+
 	[Export]
 	Control Toolbar;
 	private bool IsMovingCamera;
@@ -390,6 +395,13 @@ public partial class Game : Node2D {
 			int turnNumber = TurnHandling.GetTurnNumber();
 			Player player = controller;
 
+			// Allow fast forwarding in observer mode.
+			if (gameDataAccess.gameData.observerMode && turnsLeftToFastForward > 0) {
+				--turnsLeftToFastForward;
+				new MsgEndTurn().send();
+				return;
+			}
+
 			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
 
 			Tech tech = gameDataAccess.gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
@@ -577,6 +589,12 @@ public partial class Game : Node2D {
 						foreach (Player player in gameDataAccess.gameData.players) {
 							player.isHuman = false;
 						}
+						SetAnimationsEnabled(false);
+						popupOverlay.ShowPopup(
+							new TextDialog("How many turns to fast forward through?", 
+											"Turns: ", "100",
+											(string turns) => { turnsLeftToFastForward = int.Parse(turns); }), 
+								PopupOverlay.PopupCategory.Advisor);
 					} else {
 						foreach (Player player in gameDataAccess.gameData.players) {
 							if (player.id == EngineStorage.uiControllerID) {
