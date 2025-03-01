@@ -936,13 +936,45 @@ namespace C7GameData {
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
 					TurnsToComplete = t.TurnsToComplete,
-					Order = t.Order,
-
 				};
+				tf.Action = ConvertCiv3OrderToAction(t.Order);
 				if (t.Required > -1) {
-					tf.RequiredTech = save.Techs[t.Required].id;
+					tf.RequiredTech.Add(save.Techs[t.Required].id);
 				}
 				save.TerraForms.Add(tf);
+			}
+		}
+
+		private static string ConvertCiv3OrderToAction(string order) {
+			switch (order) {
+				case "Build Mine":
+					return C7Action.UnitBuildMine;
+				case "Irrigate":
+					return C7Action.UnitIrrigate;
+				case "Build Fortress":
+					return C7Action.UnitBuildFortress;
+				case "Build Road":
+					return C7Action.UnitBuildRoad;
+				case "Build Railroad":
+					return C7Action.UnitBuildRailroad;
+				case "Plant Forest":
+					return C7Action.UnitPlantForest;
+				case "Clear Forest":
+					return C7Action.UnitClearForest;
+				case "Clear Wetlands":
+					return C7Action.UnitClearWetlands;
+				case "Clear Damage":
+					return C7Action.UnitClearDamage;
+				case "Build Airfield":
+					return C7Action.UnitBuildAirfield;
+				case "Build Radar Tower":
+					return C7Action.UnitBuildRadarTower;
+				case "Build Outpost":
+					return C7Action.UnitBuildOutpost;
+				case "Build Barricade":
+					return C7Action.UnitBuildBarricade;
+				default:
+					return null;
 			}
 		}
 

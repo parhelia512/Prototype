@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace C7GameData;
 
 public class Terraform {
@@ -9,11 +11,9 @@ public class Terraform {
 
 	public int TurnsToComplete;
 
-	public ID RequiredTech;
+	public List<ID> RequiredTech = new();
 
-	public ID RequiredResource1;
+	public List<ID> RequiredResources = new();
 
-	public ID RequiredResource2;
-
-	public string Order;
+	public string Action;
 }
