@@ -2,9 +2,12 @@ using System.Collections.Generic;
 
 namespace C7GameData {
 	public class TileKnowledge {
-		HashSet<Tile> knownTiles = new HashSet<Tile>();
-		HashSet<Tile> borderTiles = new HashSet<Tile>();
-		HashSet<Tile> visibleTiles = new HashSet<Tile>();
+		HashSet<Tile> knownTiles = new();
+		public HashSet<Tile> borderTiles { get; private set; } = new();
+		HashSet<Tile> visibleTiles = new();
+
+		// The set of tiles this player currently has explorers headed towards.
+		public HashSet<Tile> aiExplorationTargets = new();
 
 		public void AddTilesToKnown(Tile unitLocation) {
 			knownTiles.Add(unitLocation);

@@ -8,18 +8,24 @@ namespace C7GameData {
 	//of stuff being done.  I.e. it kinda sucks.  But that's okay.
 	//It has to start somewhere, right?
 	public interface UnitAI {
-		public bool PlayTurn(Player player, MapUnit unit) {
-			do {
-				bool wasSuccessful = PlayTurnImpl(player, unit);
-				if (!wasSuccessful) {
-					return false;
+		enum Result {
+			Done,
+			InProgress,
+			Error,
+		};
+
+		public Result PlayTurn(Player player, MapUnit unit) {
+			while (unit.movementPoints.canMove && !unit.isFortified) {
+				Result result = PlayTurnImpl(player, unit);
+				if (result == Result.Error || result == Result.Done) {
+					return result;
 				}
-			} while (unit.movementPoints.canMove && !unit.isFortified);
-			return true;
+			}
+			return Result.InProgress;
 		}
 
 		// To be implemented by each AI subclass.
-		protected abstract bool PlayTurnImpl(Player player, MapUnit unit);
+		protected abstract Result PlayTurnImpl(Player player, MapUnit unit);
 
 		// Provide a string representation of the current AI plan.
 		string SummarizePlan();
