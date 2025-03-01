@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Xunit;
 
 using C7GameData;
+using C7Engine;
 using C7GameData.Save;
 using QueryCiv3;
 using System.Runtime.InteropServices;
@@ -61,9 +62,7 @@ public class SaveTests {
 		SaveGame saveNeverGameData = SaveGame.Load(developerSave);
 
 		saveNeverGameData.Save(outputNeverGameDataPath);
-		GameData gameData = saveNeverGameData.ToGameData((City c, CitizenType ct) => {
-			// We don't care about scenario tile assignment here.
-		});
+		GameData gameData = ToGameData(saveNeverGameData);
 		SaveGame saveWasGameData = SaveGame.FromGameData(gameData);
 		saveWasGameData.Save(outputWasGameDataPath);
 
@@ -78,6 +77,86 @@ public class SaveTests {
 		// saved files should be the same as the original
 		Assert.Equal(original, savedNeverGameData);
 		Assert.Equal(original, savedWasGameData);
+	}
+
+	private void WaitForStartTurnMessage() {
+		while (true) {
+			MessageToUI msg;
+			while (EngineStorage.messagesToUI.TryDequeue(out msg)) {
+				switch (msg) {
+					case MsgStartTurn mST:
+						return;
+					case MsgStartUnitAnimation mSUA:
+						// Ensure we don't get stuck waiting for animations to finish.
+						if (mSUA.completionEvent != null) {
+							mSUA.completionEvent.Set();
+						}
+						continue;
+					default:
+						continue;
+				}
+			}
+		}
+	}
+
+	private Player CreateHeadlessGame(string path) {
+		return CreateGame.createGame(path, "",
+			(string unused) => {
+				// We don't care about pedia icons here.
+				return unused;
+			},
+			(City c, CitizenType ct) => {
+				// We don't care about scenario tile assignment here.
+			});
+	}
+
+	private GameData ToGameData(SaveGame game) {
+		return game.ToGameData((City c, CitizenType ct) => {
+			// We don't care about scenario tile assignment here.
+		});
+	}
+
+	[Fact]
+	public void SimpleGame() {
+		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+		Player human = CreateHeadlessGame(developerSave);
+
+		// Make all the players AI players while we run the game in headless mode.
+		human.isHuman = false;
+
+		// Play out 30 turns.
+		for (int i = 0; i < 30; ++i) {
+			WaitForStartTurnMessage();
+			new MsgEndTurn().send();
+		}
+		WaitForStartTurnMessage();
+
+		// Make the player a human again so we can save and load the game.
+		human.isHuman = true;
+		GameData game;
+		using (UIGameDataAccess gda = new()) {
+			game = gda.gameData;
+		}
+		Assert.Equal(30, game.turn);
+
+		// Save the game.
+		string outputDirectSavePath = getDataPath("output/headless-game-direct-save.json");
+		SaveGame.FromGameData(game).Save(outputDirectSavePath);
+
+		// Load the saved game and save it again.
+		string roundTrippedSavePath = getDataPath("output/headless-game-round-tripped-save.json");
+		GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath));
+		SaveGame.FromGameData(roundTrippedGameData).Save(roundTrippedSavePath);
+
+		string[] directSaveLines = File.ReadAllLines(outputDirectSavePath);
+		string[] roundTrippedSaveLines = File.ReadAllLines(roundTrippedSavePath);
+
+		// The saved files should not be empty
+		Assert.NotEmpty(directSaveLines);
+		Assert.NotEmpty(roundTrippedSaveLines);
+
+		// And they should be the same, despite round-tripping through the GameData format.
+		Assert.Equal(directSaveLines, roundTrippedSaveLines);
 	}
 
 	[Fact]
@@ -112,9 +191,7 @@ public class SaveTests {
 			});
 			Assert.Null(ex);
 			ex = Record.Exception(() => {
-				gd = game.ToGameData((City c, CitizenType ct) => {
-					// We don't care about scenario tile assignment here.
-				});
+				gd = ToGameData(game);
 			});
 			Assert.Null(ex);
 			Assert.NotNull(game);
@@ -139,7 +216,7 @@ public class SaveTests {
 		CheckScenariosInCiv3Subfolder("Conquests/Scenarios");
 	}
 
-	public void CheckScenariosInCiv3Subfolder(string subfolder) {
+	private void CheckScenariosInCiv3Subfolder(string subfolder) {
 		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
 		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
 		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi => {
@@ -166,9 +243,7 @@ public class SaveTests {
 			});
 			Assert.True(ex == null, name + ": " + ex?.ToString());
 			ex = Record.Exception(() => {
-				gd = game.ToGameData((City c, CitizenType ct) => {
-					// We don't care about scenario tile assignment here.
-				});
+				gd = ToGameData(game);
 			});
 			Assert.True(ex == null, name + ":" + ex?.ToString());
 			Assert.NotNull(game);

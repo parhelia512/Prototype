@@ -69,6 +69,7 @@ namespace C7GameData.Save {
 				scienceRate = scienceRate,
 				taxRate = taxRate,
 				gold = gold,
+				turnsUntilPriorityReevaluation = turnsUntilPriorityReevaluation,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
 				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.X, tile.Y));

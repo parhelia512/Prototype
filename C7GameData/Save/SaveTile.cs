@@ -42,6 +42,12 @@ namespace C7GameData.Save {
 			if (tile.overlays.railroad) {
 				overlays.Add("railroad");
 			}
+			if (tile.overlays.mine) {
+				overlays.Add("mine");
+			}
+			if (tile.overlays.irrigation) {
+				overlays.Add("irrigation");
+			}
 		}
 
 		// TODO: if this is slow, features can be read from JSON and then hashed so the Contains check is faster
