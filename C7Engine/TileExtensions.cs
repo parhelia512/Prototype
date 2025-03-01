@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Serilog;
 
 namespace C7Engine {
 	using C7GameData;
@@ -37,6 +38,26 @@ namespace C7Engine {
 				foreach (MapUnit destroyedUnit in unitsOnTile) {
 					destroyedUnit.disband();
 				}
+			}
+		}
+
+		/// <summary>
+		/// After a WorkerJob has finished, Cclean up all the WorkerJobs and set the correct overlay
+		/// </summary>
+		/// <param name="tile">the current tile</param>
+		/// <param name="currentWorkerJob">the worker job currently finished, must not be null</param>
+		public static void FinishWorkerJob(this Tile tile, string currentWorkerJob) {
+			// Reset All Workers working on the finished Job
+			foreach (MapUnit unit in tile.unitsOnTile) {
+				if (currentWorkerJob == unit.WorkerJob) {
+					unit.resetWorkerJob();
+				}
+			}
+			// Set the correct Overlay
+			switch (currentWorkerJob) {
+				case C7Action.UnitIrrigate:
+					tile.overlays.irrigation = true;
+					break;
 			}
 		}
 

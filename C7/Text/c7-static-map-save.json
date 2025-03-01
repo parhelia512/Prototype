@@ -58684,7 +58684,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-1",
@@ -58701,7 +58704,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-2",
@@ -58718,7 +58724,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-2",
@@ -58735,7 +58744,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Scout-1",
@@ -58752,7 +58764,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 2,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-3",
@@ -58769,7 +58784,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-3",
@@ -58786,7 +58804,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-4",
@@ -58803,7 +58824,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-4",
@@ -58820,7 +58844,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Scout-2",
@@ -58837,7 +58864,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 2,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-5",
@@ -58854,7 +58884,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-5",
@@ -58871,7 +58904,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-6",
@@ -58888,7 +58924,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-6",
@@ -58905,7 +58944,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Settler-7",
@@ -58922,7 +58964,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     },
     {
       "id": "Worker-7",
@@ -58939,7 +58984,10 @@
       "hitPointsRemaining": 3,
       "movePointsRemaining": 1,
       "facingDirection": "north",
-      "experience": "Regular"
+      "experience": "Regular",
+      "workerProgressTowardsJob": 0,
+      "workerJob": -1,
+      "isAutomated": false
     }
   ],
   "unitPrototypes": [
@@ -58962,7 +59010,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -58986,7 +59035,9 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore",
+        "unit_automate"
       ]
     },
     {
@@ -59007,7 +59058,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59029,7 +59081,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59051,12 +59104,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Modern Paratrooper",
-      "artName": "Modern Paratrooper",
+      "artName": "Paratrooper",
       "shieldCost": 110,
       "populationCost": 0,
       "requiredTech": "tech-74",
@@ -59073,7 +59127,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59094,7 +59149,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59116,7 +59172,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59138,7 +59195,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59160,12 +59218,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Chariot",
-      "artName": "Chariot",
+      "artName": "chariot",
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-5",
@@ -59182,7 +59241,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59204,7 +59264,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59226,7 +59287,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59248,7 +59310,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59270,7 +59333,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59292,7 +59356,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59314,7 +59379,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59336,7 +59402,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59358,7 +59425,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59380,7 +59448,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59402,7 +59471,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59424,7 +59494,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59447,7 +59518,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59470,7 +59542,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59493,7 +59566,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59516,7 +59590,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59562,7 +59637,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59607,7 +59683,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59629,7 +59706,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59652,7 +59730,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59674,7 +59753,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59697,7 +59777,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59719,7 +59800,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59741,7 +59823,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59763,7 +59846,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59786,7 +59870,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59809,7 +59894,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59832,7 +59918,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -59854,7 +59941,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60001,7 +60089,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60022,7 +60111,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60044,7 +60134,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60066,7 +60157,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60088,7 +60180,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60110,7 +60203,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60132,7 +60226,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60154,7 +60249,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60176,7 +60272,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60198,7 +60295,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60220,7 +60318,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60242,7 +60341,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60264,7 +60364,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60286,7 +60387,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60308,7 +60410,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60330,7 +60433,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60353,7 +60457,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60396,7 +60501,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60418,7 +60524,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60440,7 +60547,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60462,7 +60570,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60484,7 +60593,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60506,7 +60616,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60528,7 +60639,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60550,7 +60662,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60573,7 +60686,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60595,7 +60709,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60617,7 +60732,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60656,7 +60772,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60676,7 +60793,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60696,7 +60814,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60716,7 +60835,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60736,7 +60856,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60756,7 +60877,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60776,7 +60898,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60796,7 +60919,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60816,7 +60940,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60836,7 +60961,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60856,7 +60982,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60876,7 +61003,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60896,7 +61024,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60916,7 +61045,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60936,7 +61066,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60956,7 +61087,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60976,7 +61108,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -60996,7 +61129,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61016,7 +61150,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61036,7 +61171,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61056,7 +61192,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61076,7 +61213,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61096,7 +61234,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61116,7 +61255,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61137,7 +61277,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61159,7 +61300,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61179,7 +61321,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61199,7 +61342,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61219,7 +61363,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61241,7 +61386,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61263,7 +61409,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61283,7 +61430,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61306,7 +61454,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61326,7 +61475,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61346,7 +61496,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61366,7 +61517,8 @@
         "unit_hold",
         "unit_wait",
         "unit_fortify",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61387,7 +61539,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61409,7 +61562,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61432,7 +61586,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61455,7 +61610,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61476,7 +61632,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61497,7 +61654,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61519,12 +61677,13 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
       "name": "Paratrooper",
-      "artName": "Paratrooper",
+      "artName": "WWII Paratrooper",
       "shieldCost": 90,
       "populationCost": 0,
       "requiredTech": "tech-64",
@@ -61541,7 +61700,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61563,7 +61723,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61585,7 +61746,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     },
     {
@@ -61607,7 +61769,8 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband",
-        "unit_goto"
+        "unit_goto",
+        "unit_explore"
       ]
     }
   ],

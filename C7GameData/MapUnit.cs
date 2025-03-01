@@ -33,10 +33,17 @@ namespace C7GameData {
 			}
 		}
 		public bool isFortified { get; set; }
+
+		public bool isAutomated { get; set; }
+
 		//sentry, etc. will come later.  For now, let's just have a couple things so we can cycle through units that aren't fortified.
 		public int defensiveBombardsRemaining;
 
 		public TileDirection facingDirection;
+
+		public int WorkerProgressTowardsJob { get; set; }
+		public string WorkerJob { get; set; }
+
 
 		[JsonIgnore]
 		public List<string> availableActions = new List<string>();
@@ -49,7 +56,7 @@ namespace C7GameData {
 		internal MapUnit() { }
 
 		public bool IsBusy() {
-			return isFortified || (path != null && path.PathLength() > 0);
+			return isFortified || (path != null && path.PathLength() > 0) || WorkerJob != null || isAutomated;
 		}
 
 		public bool IsLandUnit() {
@@ -112,7 +119,31 @@ namespace C7GameData {
 			public bool DeservesPlayerAttention() {
 				// TODO: Special rules for different animations. We don't need to see workers do their thing but we do want to watch units
 				// move. IMO we should also not show units fortifying even though I know the original game does.
+				// This may also be the culprit behind why we can fortify a unit that is in motion.
+				if (action == AnimatedAction.IRRIGATE || action == AnimatedAction.BLANK || action == AnimatedAction.DEFAULT) {
+					return false;
+				}
 				return progress < 1.0;
+			}
+		}
+
+		public int WorkerJobAsInt() {
+			switch (WorkerJob) {
+				case C7Action.UnitIrrigate:
+					return 1;
+				default:
+					return -1;
+			};
+		}
+
+		public void SetWorkerJobFromInt(int WorkerJobValue) {
+			switch (WorkerJobValue) {
+				case 1:
+					WorkerJob = C7Action.UnitIrrigate;
+					return;
+				default:
+					WorkerJob = null;
+					return;
 			}
 		}
 

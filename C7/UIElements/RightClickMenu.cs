@@ -100,6 +100,13 @@ public partial class RightClickMenu : VBoxContainer {
 			this.AcceptEvent();
 		}
 	}
+
+	public void ShowCannotMovePopup() {
+		TemporaryPopup popup = new("This unit has already moved.", 1);
+		popup.SetPosition(position + new Vector2(0, -64));
+		GetParent().AddChild(popup);
+		popup.ShowPopup();
+	}
 }
 
 public partial class RightClickTileMenu : RightClickMenu {
@@ -181,7 +188,10 @@ public partial class RightClickTileMenu : RightClickMenu {
 		using (var gameDataAccess = new UIGameDataAccess()) {
 			MapUnit toSelect = gameDataAccess.gameData.mapUnits.Find(u => u.id == id);
 			if (toSelect != null && toSelect.owner == game.controller) {
-				game.setSelectedUnit(toSelect);
+				bool canMove = game.setSelectedUnit(toSelect);
+				if (!canMove) {
+					ShowCannotMovePopup();
+				}
 				new MsgSetFortification(toSelect.id, false).send();
 				ResetItems(toSelect.location, new Dictionary<ID, bool>() { { toSelect.id, false } });
 			}
@@ -202,7 +212,10 @@ public partial class RightClickTileMenu : RightClickMenu {
 					new MsgSetFortification(unit.id, isFortify).send();
 
 					if (!hasSelectedUnit && !isFortify) {
-						game.setSelectedUnit(unit);
+						bool canMove = game.setSelectedUnit(unit);
+						if (!canMove) {
+							ShowCannotMovePopup();
+						}
 					}
 				}
 			}

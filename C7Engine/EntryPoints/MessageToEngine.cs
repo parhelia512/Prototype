@@ -216,21 +216,28 @@ namespace C7Engine {
 	}
 
 	public class MsgEndTurn : MessageToEngine {
-
 		private ILogger log = Log.ForContext<MsgEndTurn>();
 
 		public override void process() {
 			Player controller = EngineStorage.gameData.GetPlayer(EngineStorage.uiControllerID);
 
-			foreach (MapUnit unit in controller.units) {
-				log.Debug($"{unit}, path length: {unit.path?.PathLength() ?? 0}");
-				if (unit.path?.PathLength() > 0) {
-					unit.moveAlongPath();
-				}
-			}
+			// Reorder the unit list so that non-busy units will be selected
+			// first.
+			controller.units.Sort((x, y) => x.IsBusy().CompareTo(y.IsBusy()));
 
 			controller.hasPlayedThisTurn = true;
 			TurnHandling.AdvanceTurn();
+		}
+	}
+
+	public class MsgPerformUnitAction : MessageToEngine {
+		private MapUnit unit;
+		public MsgPerformUnitAction(MapUnit unit) {
+			this.unit = unit;
+		}
+
+		public override void process() {
+			unit.PerformBusyAction();
 		}
 	}
 

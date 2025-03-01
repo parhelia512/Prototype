@@ -15,6 +15,13 @@ namespace C7GameData.Save {
 		public string action; // "fortified"
 		public TileDirection facingDirection;
 		public string experience;
+		public int WorkerProgressTowardsJob;
+		public int WorkerJob;
+
+		// True for multiple types of automation, including worker automation
+		// and automated exploring.
+		public bool isAutomated;
+
 		public SaveUnit() { }
 
 		public SaveUnit(MapUnit unit, GameMap map) {
@@ -30,10 +37,14 @@ namespace C7GameData.Save {
 			}
 			hitPointsRemaining = unit.hitPointsRemaining;
 			action = unit.isFortified ? "fortified" : "";
+			isAutomated = unit.isAutomated;
 			facingDirection = unit.facingDirection;
 			experience = unit.experienceLevelKey;
 			movePointsRemaining = unit.movementPoints.remaining;
+			WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob;
+			WorkerJob = unit.WorkerJobAsInt();
 		}
+
 
 		public MapUnit ToMapUnit(List<UnitPrototype> prototypes, List<ExperienceLevel> experienceLevels, List<Player> players, GameMap map) {
 			MapUnit unit = new MapUnit{
@@ -47,9 +58,12 @@ namespace C7GameData.Save {
 				hitPointsRemaining = hitPointsRemaining,
 				movementPoints = new MovementPoints(),
 				isFortified = action == "fortified",
+				isAutomated = isAutomated,
 			};
 			unit.location.unitsOnTile.Add(unit);
 			unit.movementPoints.reset(movePointsRemaining);
+			unit.WorkerProgressTowardsJob = WorkerProgressTowardsJob;
+			unit.SetWorkerJobFromInt(WorkerJob);
 			return unit;
 		}
 	}

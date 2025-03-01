@@ -15,7 +15,12 @@ namespace C7Engine {
 				//TODO: Should pass in a player GUID instead of checking for human
 				//This current limits us to one human player, although it's better
 				//than the old limit of one non-barbarian player.
-				foreach (MapUnit unit in player.units.Where(u => u.movementPoints.canMove && !u.IsBusy())) {
+				foreach (MapUnit unit in player.units.Where(u => u.movementPoints.canMove)) {
+					if (unit.IsBusy()) {
+						new MsgPerformUnitAction(unit).send();
+						continue;
+					}
+
 					if (!waitQueue.Contains(unit)) {
 						return unit;
 					}
@@ -60,6 +65,14 @@ namespace C7Engine {
 
 			if (unit.canIrrigate()) {
 				result.Add(C7Action.UnitIrrigate);
+			}
+
+			if (unit.canExplore()) {
+				result.Add(C7Action.UnitExplore);
+			}
+
+			if (unit.canAutomate()) {
+				result.Add(C7Action.UnitAutomate);
 			}
 
 			// Eventually we will have advanced actions too, whose availability will rely on their base actions' availability.

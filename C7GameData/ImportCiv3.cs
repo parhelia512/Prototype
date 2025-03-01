@@ -483,10 +483,14 @@ namespace C7GameData {
 					experience = experience.key,
 					hitPointsRemaining = experience.baseHitPoints - unit.Damage, // TODO: include bonus hitpoints from unit type
 					movePointsRemaining = (float)prototype.Movement - (unit.MovementUsed / 3f),
+					WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob,
+					WorkerJob = unit.WorkerJob,
+					isAutomated = unit.IsAutomated,
 				};
 				if (unit.Fortified) {
 					saveUnit.action = "fortified";
 				}
+
 				save.Units.Add(saveUnit);
 			}
 		}
@@ -702,7 +706,12 @@ namespace C7GameData {
 				if (prto.GoTo) {
 					prototype.actions.Add(C7Action.UnitGoto);
 				}
-
+				if (prto.Explore) {
+					prototype.actions.Add(C7Action.UnitExplore);
+				}
+				if (prto.Automate) {
+					prototype.actions.Add(C7Action.UnitAutomate);
+				}
 				//Temporary check until #329/#330 are finished
 				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
 					if (prto.Required != -1) {

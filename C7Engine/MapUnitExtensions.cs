@@ -7,12 +7,25 @@ namespace C7Engine {
 	using Pathing;
 	using C7GameData;
 	using C7GameData.Save;
+	using C7GameData.AIData;
 
 	//We should document why we're putting things in the extensions methods.  We discussed it a month or so ago, but I forget why at this point.
 	//Coming from an OO background, I'm wondering why these aren't on the MapUnit class... data access?  Modding?  Some other benefit?
 	public static class MapUnitExtensions {
 
 		private static ILogger log = Log.ForContext<MapUnit>();
+
+		private const int JOB_PROGRESS_WORKER = 2;
+		private const int JOB_PROGRESS_SLAVE = 1;
+
+		private static int GetWorkerJobCost(string workerJob) {
+			// TODO: Read from scenario info, and probably store this in a
+			// worker job class.
+			if (workerJob == C7Action.UnitIrrigate) {
+				return 8;
+			}
+			return 1;
+		}
 
 		public static void animate(this MapUnit unit, MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
 			if (EngineStorage.animationsEnabled) {
@@ -391,10 +404,49 @@ namespace C7Engine {
 				unit.location = newLoc;
 				unit.movementPoints.onUnitMove(movementCost);
 				unit.animate(MapUnit.AnimatedAction.RUN, wait);
+			} else {
+				return false;
 			}
 			return true;
 		}
 
+		private static int SumWorkerProgress(Tile tile, string workerJob) {
+			int result = 0;
+			foreach (MapUnit unit in tile.unitsOnTile) {
+				if (unit.WorkerJob == workerJob) {
+					result += unit.WorkerProgressTowardsJob;
+				}
+			}
+			return result;
+		}
+
+		public static void PerformBusyAction(this MapUnit unit) {
+			if (unit.isFortified) {
+				return;
+			}
+
+			if (unit.path != null && unit.path.PathLength() > 0) {
+				unit.moveAlongPath();
+				return;
+			}
+
+			// Check to see if we have a worker job, and if so, contribute our
+			// work towards it. We do this before any automation logic, so that
+			// automated units properly contribute their efforts.
+			if (unit.WorkerJob != null) {
+				unit.updateWorkerJob();
+
+				// See if this worker finished the job.
+				if (SumWorkerProgress(unit.location, unit.WorkerJob) >= GetWorkerJobCost(unit.WorkerJob)) {
+					unit.location.FinishWorkerJob(unit.WorkerJob);
+				}
+			}
+
+			if (unit.isAutomated) {
+				unit.playAutomatedTurn();
+				return;
+			}
+		}
 
 		public static void moveAlongPath(this MapUnit unit) {
 			while (unit.movementPoints.canMove && unit.path?.PathLength() > 0) {
@@ -421,6 +473,7 @@ namespace C7Engine {
 			// Set unit's hit points to zero to indicate that it's no longer alive. Ultimately we may not want to do this. I'm only doing it right
 			// now since this way all the UI needs to do to check if the selected unit has been destroyed is to check its hit points.
 			unit.hitPointsRemaining = 0;
+			unit.movementPoints.onConsumeAll();
 
 			// EngineStorage.animTracker.endAnimation(unit, false);   TODO: Must send message instead of call directly
 			unit.location.unitsOnTile.Remove(unit);
@@ -504,9 +557,63 @@ namespace C7Engine {
 				return;
 			}
 
-			// TODO add animation and long process of building
-			unit.location.overlays.irrigation = true;
+			unit.WorkerJob = C7Action.UnitIrrigate;
+			unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
+			unit.PerformBusyAction();
+		}
+
+		public static void updateWorkerJob(this MapUnit unit) {
+			unit.WorkerProgressTowardsJob += JOB_PROGRESS_WORKER;
 			unit.movementPoints.onConsumeAll();
+		}
+
+		public static void resetWorkerJob(this MapUnit unit) {
+			unit.WorkerJob = null;
+			unit.WorkerProgressTowardsJob = 0;
+			unit.animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
+		}
+
+		public static bool canAutomate(this MapUnit unit) {
+			return unit.unitType.actions.Contains(C7Action.UnitAutomate);
+		}
+
+		public static void automate(this MapUnit unit) {
+			unit.isAutomated = true;
+			WorkerAIData? maybeAiData = WorkerAI.MakeAiData(unit, unit.owner);
+			if (maybeAiData == null) {
+				log.Information($"Could not find anything to automate for {unit} owned by {unit.owner}");
+				unit.isAutomated = false;
+				return;
+			}
+			unit.currentAI = new WorkerAI(maybeAiData);
+			unit.playAutomatedTurn();
+		}
+
+		public static bool canExplore(this MapUnit unit) {
+			return unit.unitType.actions.Contains(C7Action.UnitExplore);
+		}
+
+		public static void explore(this MapUnit unit) {
+			unit.isAutomated = true;
+			ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, unit.owner);
+			if (maybeAiData == null) {
+				log.Information($"Could not find anything to explore for {unit} owned by {unit.owner}");
+				unit.isAutomated = false;
+				return;
+			}
+			unit.currentAI = new ExplorerAI(maybeAiData);
+			unit.playAutomatedTurn();
+		}
+
+		public static void playAutomatedTurn(this MapUnit unit) {
+			bool done = !unit.currentAI.PlayTurn(unit.owner, unit);
+			if (done) {
+				if (unit.currentAI is WorkerAI) {
+					unit.automate();
+				} else if (unit.currentAI is ExplorerAI) {
+					unit.explore();
+				}
+			}
 		}
 	}
 }
