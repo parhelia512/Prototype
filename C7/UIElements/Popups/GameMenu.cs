@@ -30,7 +30,7 @@ public partial class GameMenu : Popup {
 		var loadDialog = GetNode<Civ3FileDialog>("../%LoadDialog");
 		// TODO: this should go to our own saves directory.
 		loadDialog.SetDirectoryForSaving(@"Conquests/Saves");
- 
+
 		// TODO: The main menu does sound playing but we don't know our path in
 		// the scene, which makes this hard.
 		// PlayButtonPressedSound();
