@@ -42,6 +42,7 @@ namespace C7GameData {
 		/// <param name="c7Save">Destination C7 in-memory structure</param>
 		private void ImportSharedBiqData() {
 			ImportRaces();
+			ImportTechs();
 			ImportUnitPrototypes();
 			ImportBuildings();
 			ImportCiv3TerrainTypes();
@@ -53,7 +54,6 @@ namespace C7GameData {
 			save.HealRates["city"] = 2;
 			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
-			ImportTechs();
 			ImportCitizenTypes();
 		}
 
@@ -659,7 +659,7 @@ namespace C7GameData {
 		private void ImportUnitPrototypes() {
 			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
 			foreach (PRTO prto in Prto) {
-				UnitPrototype prototype = new UnitPrototype();
+				SaveUnitPrototype prototype = new();
 				if (prto.Type == PRTO.TYPE_SEA) {
 					prototype.categories.Add("Sea");
 				} else if (prto.Type == PRTO.TYPE_LAND) {
@@ -714,6 +714,10 @@ namespace C7GameData {
 				}
 				//Temporary check until #329/#330 are finished
 				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
+					if (prto.Required != -1) {
+						prototype.requiredTech = save.Techs[prto.Required].id;
+					}
+
 					save.UnitPrototypes.Add(prototype);
 				}
 			}
@@ -723,11 +727,22 @@ namespace C7GameData {
 			BLDG[] Bldg = biq.Bldg ?? defaultBiq.Bldg;
 
 			foreach (BLDG bldg in Bldg) {
-				Building building = new() {
+				SaveBuilding building = new() {
 					name=bldg.Name,
 					shieldCost=bldg.Cost * 10, // In Civ3 files, building costs are stored at 1/10th of their actual value
 					populationCost=0, // In Civ3, a building cannot have a population cost
+					isSmallWonder=bldg.SmallWonder,
+					isGreatWonder=bldg.Wonder,
 				};
+
+				if (bldg.RequiredAdvance != -1) {
+					building.requiredTech = save.Techs[bldg.RequiredAdvance].id;
+				}
+
+				if (bldg.RequiredBuilding != -1) {
+					building.requiredBuilding = Bldg[bldg.RequiredBuilding].Name;
+				}
+
 				save.Buildings.Add(building);
 			}
 		}

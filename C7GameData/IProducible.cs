@@ -7,5 +7,6 @@ namespace C7GameData {
 		string name { get; set; }
 		int shieldCost { get; set; }
 		int populationCost { get; set; }
+		Tech requiredTech { get; set; }
 	}
 }
