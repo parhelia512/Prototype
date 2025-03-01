@@ -27,7 +27,7 @@ namespace C7GameData {
 		public const string UnitClearDamage = "unit_clear_damage";
 		public const string UnitBuildAirfield= "unit_build_airfield";
 		public const string UnitBuildRadarTower = "unit_build_radar_tower";
-		public const string UnitBuildOutpost = "unit_build_outpostr";
+		public const string UnitBuildOutpost = "unit_build_outpost";
 		public const string UnitBuildBarricade = "unit_build_barricade";
 		public const string UnitAutomate = "unit_automate";
 		public const string UnitDisband = "unit_disband";
