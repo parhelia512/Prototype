@@ -75,6 +75,7 @@ namespace C7GameData.Save {
 			save.DefaultExperienceLevel = data.defaultExperienceLevelKey;
 			save.Techs = data.techs.ConvertAll(t => t.ToSaveTech());
 			save.CitizenTypes = data.citizenTypes;
+			save.TerraForms = data.Terraforms;
 			return save;
 		}
 
@@ -99,6 +100,7 @@ namespace C7GameData.Save {
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
 				citizenTypes = CitizenTypes,
+				Terraforms = TerraForms,
 				ids = new ID.Factory(this),
 			};
 			// units and cities are empty
@@ -205,6 +207,7 @@ namespace C7GameData.Save {
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
 		public List<SaveTech> Techs = new();
 		public List<CitizenType> CitizenTypes = new();
+		public List<Terraform> TerraForms = new();
 		public string ScenarioSearchPath; // TODO: what is this
 		public void Save(string path) {
 			byte[] json = JsonSerializer.SerializeToUtf8Bytes(this, JsonOptions);

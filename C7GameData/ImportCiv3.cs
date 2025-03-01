@@ -55,6 +55,7 @@ namespace C7GameData {
 			ImportBarbarianInfo();
 			ImportTechs();
 			ImportCitizenTypes();
+			ImportTerraforms();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -899,6 +900,27 @@ namespace C7GameData {
 				}
 
 				save.CitizenTypes.Add(ct);
+			}
+		}
+
+		private void ImportTerraforms() {
+			BiqData theBiq = biq.Tfrm is null ? defaultBiq : biq;
+
+			for (int i = 0; i < theBiq.Tfrm.Length; ++i) {
+				TFRM t = theBiq.Tfrm[i];
+
+				Terraform tf = new() {
+					Id = ids.CreateID("Terraform"),
+					Name = t.Name,
+					CivilopediaEntry = t.CivilopediaEntry,
+					TurnsToComplete = t.TurnsToComplete,
+					Order = t.Order,
+
+				};
+				if (t.Required > -1) {
+					tf.RequiredTech = save.Techs[t.Required].id;
+				}
+				save.TerraForms.Add(tf);
 			}
 		}
 
