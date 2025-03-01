@@ -6,7 +6,7 @@ namespace C7Engine.Pathing {
 	 */
 	public class PathingAlgorithmChooser {
 		public static PathingAlgorithm GetAlgorithm(MapUnit unit) {
-			return new AStarAlgorithm(new UnitWalker(unit), (Tile from, Tile to) => {
+			return new AStarAlgorithm(new UnitWalker(unit), unit, (Tile from, Tile to) => {
 				// HACK: for land-based movement we have to deal with railroads,
 				// which have zero movement cost. If our heuristic is too strong it
 				// will result in units taking a direct path between points A and B,
