@@ -8,6 +8,7 @@ using C7GameData;
 using C7Engine;
 using Serilog;
 using Serilog.Events;
+using System.Diagnostics;
 
 // Loose layers are for drawing things on the map on a per-tile basis. (Historical aside: There used to be another kind of layer called a TileLayer
 // that was intended to draw regularly tiled objects like terrain sprites but using LooseLayers for everything was found to be a prefereable
@@ -431,6 +432,12 @@ public partial class GridLayer : LooseLayer {
 		Vector2 right = tileCenter + new Vector2(cS.X, 0);
 		looseView.DrawLine(left, top, color, lineWidth);
 		looseView.DrawLine(top, right, color, lineWidth);
+
+		if (gameData.observerMode && gameData.showGridCoordinates) {
+			looseView.DrawString(ThemeDB.FallbackFont,
+								 tileCenter + new Vector2(-16, 0), tile.XCoordinate + "," + tile.YCoordinate,
+								 HorizontalAlignment.Center, -1, 24, Color.Color8(255, 0, 0));
+		}
 	}
 }
 
@@ -459,6 +466,7 @@ public partial class BuildingLayer : LooseLayer {
 public partial class LooseView : Node2D {
 	public MapView mapView;
 	public List<LooseLayer> layers = new List<LooseLayer>();
+	private static ILogger log = Log.ForContext<LooseView>();
 
 	public LooseView(MapView mapView) {
 		this.mapView = mapView;
@@ -490,12 +498,17 @@ public partial class LooseView : Node2D {
 				}
 			}
 
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
 			foreach (LooseLayer layer in layers.FindAll(L => L.visible && !(L is FogOfWarLayer))) {
 				layer.onBeginDraw(this, gD);
 				foreach (VisibleTile vT in visibleTiles) {
 					layer.drawObject(this, gD, vT.tile, vT.tileCenter);
 				}
 				layer.onEndDraw(this, gD);
+			}
+			if (stopwatch.ElapsedMilliseconds > 100) {
+				log.Information($"-> End draw: {stopwatch.ElapsedMilliseconds} milliseconds");
 			}
 
 			if (!gD.observerMode) {
