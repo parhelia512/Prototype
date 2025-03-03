@@ -10,6 +10,14 @@ namespace C7GameData {
 		public Civ3ExtraInfo ExtraInfo;
 		public int XCoordinate;
 		public int YCoordinate;
+
+		// An arbitrary number indicating which landmass this tile is part of,
+		// for land-based tiles, or -1 for water.
+		//
+		// This is used to avoid the expensive process of pathfinding between
+		// two land tiles just to discover they have no land connection.
+		public int continent;
+
 		public City owningCity; // The city whose border contains this tile
 		public string baseTerrainTypeKey { get; set; }
 		[JsonIgnore]

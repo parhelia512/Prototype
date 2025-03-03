@@ -591,9 +591,9 @@ public partial class Game : Node2D {
 						}
 						SetAnimationsEnabled(false);
 						popupOverlay.ShowPopup(
-							new TextDialog("How many turns to fast forward through?", 
+							new TextDialog("How many turns to fast forward through?",
 											"Turns: ", "100",
-											(string turns) => { turnsLeftToFastForward = int.Parse(turns); }), 
+											(string turns) => { turnsLeftToFastForward = int.Parse(turns); }),
 								PopupOverlay.PopupCategory.Advisor);
 					} else {
 						foreach (Player player in gameDataAccess.gameData.players) {

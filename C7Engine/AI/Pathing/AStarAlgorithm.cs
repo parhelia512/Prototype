@@ -35,6 +35,13 @@ namespace C7Engine.Pathing {
 		}
 
 		public override TilePath PathFrom(Tile start, Tile destination) {
+			// Exit early if we're starting and ending on land, and we're on
+			// different continents. Don't waste time checking every tile on the
+			// continent just to discover the path is impossible.
+			if (start.IsLand() && destination.IsLand() && start.continent != destination.continent) {
+				return TilePath.EmptyPath(destination);
+			}
+
 			// The set of tiles to explore next, ordered by their cumulative cost
 			// so far and the estimate of the cost to the goal.
 			BinaryMinHeap<TileAndCost> openSet = new();

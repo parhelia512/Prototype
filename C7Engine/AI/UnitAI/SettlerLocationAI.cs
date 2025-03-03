@@ -39,7 +39,8 @@ namespace C7Engine {
 
 		public static Dictionary<Tile, int> GetScoredSettlerCandidates(Tile start, Player player) {
 			List<MapUnit> playerUnits = player.units;
-			IEnumerable<Tile> candidates = player.tileKnowledge.AllKnownTiles().Where(t => !IsInvalidCityLocation(t));
+			// TODO: handle settling other continents
+			IEnumerable<Tile> candidates = player.tileKnowledge.AllKnownTiles().Where(t => !IsInvalidCityLocation(t) && t.continent == start.continent);
 			Dictionary<Tile, int> scores = AssignTileScores(start, player, candidates, playerUnits.FindAll(u => u.unitType.name == "Settler"));
 			return scores;
 		}
