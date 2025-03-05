@@ -42,11 +42,11 @@ namespace C7GameData.Save {
 			experience = unit.experienceLevelKey;
 			movePointsRemaining = unit.movementPoints.remaining;
 			WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob;
-			WorkerJob = unit.WorkerJobAsInt();
+			WorkerJob = WorkerJobAsInt(unit.WorkerJob);
 		}
 
 
-		public MapUnit ToMapUnit(List<UnitPrototype> prototypes, List<ExperienceLevel> experienceLevels, List<Player> players, GameMap map) {
+		public MapUnit ToMapUnit(List<UnitPrototype> prototypes, List<ExperienceLevel> experienceLevels, List<Player> players, List<Terraform> terraforms, GameMap map) {
 			MapUnit unit = new MapUnit{
 				id = id,
 				unitType = prototypes.Find(p => p.name == prototype),
@@ -64,8 +64,38 @@ namespace C7GameData.Save {
 			unit.location.unitsOnTile.Add(unit);
 			unit.movementPoints.reset(movePointsRemaining);
 			unit.WorkerProgressTowardsJob = WorkerProgressTowardsJob;
-			unit.SetWorkerJobFromInt(WorkerJob);
+			unit.WorkerJob = WorkerJobFromInt(WorkerJob, terraforms);
 			return unit;
 		}
+
+		public int WorkerJobAsInt(Terraform workerJob) {
+			if (workerJob == null) {
+				return -1;
+			}
+			switch (workerJob.Action) {
+				case C7Action.UnitIrrigate:
+					return 1;
+				case C7Action.UnitBuildMine:
+					return 2;
+				case C7Action.UnitBuildRoad:
+					return 0;
+				default:
+					return -1;
+			};
+		}
+
+		public Terraform WorkerJobFromInt(int WorkerJobValue, List<Terraform> terraforms) {
+			switch (WorkerJobValue) {
+				case 0:
+					return terraforms.Find(terraform => terraform.Action == C7Action.UnitBuildRoad);
+				case 1:
+					return terraforms.Find(terraform => terraform.Action == C7Action.UnitIrrigate);
+				case 2:
+					return terraforms.Find(terraform => terraform.Action == C7Action.UnitBuildMine);
+				default:
+					return null;
+			}
+		}
+
 	}
 }

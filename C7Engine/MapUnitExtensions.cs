@@ -18,13 +18,8 @@ namespace C7Engine {
 		private const int JOB_PROGRESS_WORKER = 2;
 		private const int JOB_PROGRESS_SLAVE = 1;
 
-		private static int GetWorkerJobCost(string workerJob) {
-			// TODO: Read from scenario info, and probably store this in a
-			// worker job class.
-			if (workerJob == C7Action.UnitIrrigate) {
-				return 8;
-			}
-			return 1;
+		private static int GetWorkerJobCost(Terraform workerJob) {
+			return workerJob.TurnsToComplete;
 		}
 
 		public static void animate(this MapUnit unit, MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
@@ -410,7 +405,7 @@ namespace C7Engine {
 			return true;
 		}
 
-		private static int SumWorkerProgress(Tile tile, string workerJob) {
+		private static int SumWorkerProgress(Tile tile, Terraform workerJob) {
 			int result = 0;
 			foreach (MapUnit unit in tile.unitsOnTile) {
 				if (unit.WorkerJob == workerJob) {
@@ -551,13 +546,20 @@ namespace C7Engine {
 			return unit.unitType.actions.Contains(C7Action.UnitIrrigate) && unit.location.CanBeIrrigated(unit.owner);
 		}
 
-		public static void irrigate(this MapUnit unit) {
-			if (!unit.canIrrigate()) {
-				log.Warning($"can't build irrigate by {unit}");
-				return;
-			}
+		// public static void irrigate(this MapUnit unit) {
+		// 	if (!unit.canIrrigate()) {
+		// 		log.Warning($"can't build irrigate by {unit}");
+		// 		return;
+		// 	}
+		//
+		// 	unit.WorkerJob = null;
+		// 	unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
+		// 	unit.PerformBusyAction();
+		// }
 
-			unit.WorkerJob = C7Action.UnitIrrigate;
+		public static void PerformTerraformAction(this MapUnit unit, string action) {
+			Terraform workerJob = EngineStorage.gameData.GetTerraformByAction(action);
+			unit.WorkerJob = workerJob;
 			unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
 			unit.PerformBusyAction();
 		}
@@ -615,5 +617,6 @@ namespace C7Engine {
 				}
 			}
 		}
+
 	}
 }

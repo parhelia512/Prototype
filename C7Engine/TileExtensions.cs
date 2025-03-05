@@ -46,17 +46,27 @@ namespace C7Engine {
 		/// </summary>
 		/// <param name="tile">the current tile</param>
 		/// <param name="currentWorkerJob">the worker job currently finished, must not be null</param>
-		public static void FinishWorkerJob(this Tile tile, string currentWorkerJob) {
+		public static void FinishWorkerJob(this Tile tile, Terraform currentWorkerJob) {
 			// Reset All Workers working on the finished Job
 			foreach (MapUnit unit in tile.unitsOnTile) {
 				if (currentWorkerJob == unit.WorkerJob) {
 					unit.resetWorkerJob();
 				}
 			}
-			// Set the correct Overlay
-			switch (currentWorkerJob) {
+
+			tile.SetTerraformOverlay(currentWorkerJob);
+		}
+
+		private static void SetTerraformOverlay(this Tile tile, Terraform currentWorkerJob) {
+			switch (currentWorkerJob.Action) {
 				case C7Action.UnitIrrigate:
 					tile.overlays.irrigation = true;
+					break;
+				case C7Action.UnitBuildMine:
+					tile.overlays.mine = true;
+					break;
+				case C7Action.UnitBuildRoad:
+					tile.overlays.road = true;
 					break;
 			}
 		}

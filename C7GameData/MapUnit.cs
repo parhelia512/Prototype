@@ -42,7 +42,7 @@ namespace C7GameData {
 		public TileDirection facingDirection;
 
 		public int WorkerProgressTowardsJob { get; set; }
-		public string WorkerJob { get; set; }
+		public Terraform WorkerJob { get; set; }
 
 
 		[JsonIgnore]
@@ -124,26 +124,6 @@ namespace C7GameData {
 					return false;
 				}
 				return progress < 1.0;
-			}
-		}
-
-		public int WorkerJobAsInt() {
-			switch (WorkerJob) {
-				case C7Action.UnitIrrigate:
-					return 1;
-				default:
-					return -1;
-			};
-		}
-
-		public void SetWorkerJobFromInt(int WorkerJobValue) {
-			switch (WorkerJobValue) {
-				case 1:
-					WorkerJob = C7Action.UnitIrrigate;
-					return;
-				default:
-					WorkerJob = null;
-					return;
 			}
 		}
 

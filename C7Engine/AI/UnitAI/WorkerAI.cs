@@ -121,19 +121,19 @@ namespace C7Engine {
 		private bool PerformWorkerMove(MapUnit unit, string workerMove) {
 			if (workerMove == C7Action.UnitBuildRoad) {
 				if (unit.canBuildRoad()) {
-					unit.buildRoad();
+					unit.PerformTerraformAction(C7Action.UnitBuildRoad);
 					return true;
 				}
 				return false;
 			} else if (workerMove == C7Action.UnitBuildMine) {
 				if (unit.canBuildMine()) {
-					unit.buildMine();
+					unit.PerformTerraformAction(C7Action.UnitBuildMine);
 					return true;
 				}
 				return false;
 			} else if (workerMove == C7Action.UnitIrrigate) {
 				if (unit.canIrrigate()) {
-					unit.irrigate();
+					unit.PerformTerraformAction(C7Action.UnitIrrigate);
 					return true;
 				}
 				return false;

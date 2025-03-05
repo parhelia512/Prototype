@@ -176,7 +176,7 @@ namespace C7GameData.Save {
 
 			// map units need game map and players to populate location and owner
 			data.mapUnits = Units.ConvertAll(unit =>
-				unit.ToMapUnit(data.unitPrototypes, ExperienceLevels, data.players, data.map)
+				unit.ToMapUnit(data.unitPrototypes, ExperienceLevels, data.players, data.Terraforms, data.map)
 			);
 
 
