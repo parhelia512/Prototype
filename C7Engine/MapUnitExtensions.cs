@@ -546,17 +546,6 @@ namespace C7Engine {
 			return unit.unitType.actions.Contains(C7Action.UnitIrrigate) && unit.location.CanBeIrrigated(unit.owner);
 		}
 
-		// public static void irrigate(this MapUnit unit) {
-		// 	if (!unit.canIrrigate()) {
-		// 		log.Warning($"can't build irrigate by {unit}");
-		// 		return;
-		// 	}
-		//
-		// 	unit.WorkerJob = null;
-		// 	unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
-		// 	unit.PerformBusyAction();
-		// }
-
 		public static void PerformTerraformAction(this MapUnit unit, string action) {
 			Terraform workerJob = EngineStorage.gameData.GetTerraformByAction(action);
 			unit.WorkerJob = workerJob;
