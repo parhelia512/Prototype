@@ -135,9 +135,14 @@ public partial class RightClickTileMenu : RightClickMenu {
 	public void ResetItems(Tile tile, Dictionary<ID, bool> uiUpdatedUnitStates = null) {
 		RemoveAll();
 
+		bool observerMode;
+		using (UIGameDataAccess gameDataAccess = new()) {
+			observerMode = gameDataAccess.gameData.observerMode;
+		}
+
 		int fortifiedCount = 0;
-		List<MapUnit> playerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id == game.controller.id);
-		List<MapUnit> nonPlayerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id != game.controller.id);
+		List<MapUnit> playerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id == game.controller.id || observerMode);
+		List<MapUnit> nonPlayerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id != game.controller.id && !observerMode);
 
 		foreach (MapUnit unit in playerUnits) {
 			bool isFortified = isUnitFortified(unit, uiUpdatedUnitStates);

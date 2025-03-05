@@ -18,6 +18,10 @@ namespace C7GameData.AIData {
 			key = "WarPriority";
 		}
 
+		public override string ToString() {
+			return "WarPriority";
+		}
+
 		/// <summary>
 		/// For now, we're simply going to say if we've run out of room for expansion, we'll fight someone.
 		/// As we add more elements to the game, this should get more complex, as things like science and industry are considered.
