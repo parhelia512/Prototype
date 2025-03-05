@@ -80,6 +80,11 @@ namespace C7Engine {
 						break;
 					}
 
+					if (unit.hitPointsRemaining <= 0) {
+						unit.currentAI = null;
+						break;
+					}
+
 					// Otherwise we need a new plan for next turn. Pick it now
 					// to avoid things like new units being preferred for
 					// exploration instead of units already far away from home
