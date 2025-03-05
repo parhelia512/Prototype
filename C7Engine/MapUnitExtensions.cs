@@ -333,7 +333,7 @@ namespace C7Engine {
 			foreach (MapUnit other in tile.unitsOnTile)
 				if (other.owner != unit.owner) {
 					if (!other.owner.IsAtPeaceWith(unit.owner))
-						return allowCombat;
+						return allowCombat && unit.unitType.attack > 0;
 					else
 						return false;
 				}
@@ -467,6 +467,11 @@ namespace C7Engine {
 			// now since this way all the UI needs to do to check if the selected unit has been destroyed is to check its hit points.
 			unit.hitPointsRemaining = 0;
 			unit.movementPoints.onConsumeAll();
+
+			if (unit.currentAI != null) {
+				unit.currentAI.UpdateOnDeath();
+				unit.currentAI = null;
+			}
 
 			// EngineStorage.animTracker.endAnimation(unit, false);   TODO: Must send message instead of call directly
 			unit.location.unitsOnTile.Remove(unit);

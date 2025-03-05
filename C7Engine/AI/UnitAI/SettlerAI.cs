@@ -7,7 +7,7 @@ using Serilog;
 namespace C7Engine {
 	public class SettlerAI : C7GameData.UnitAI {
 		private static ILogger log = Log.ForContext<SettlerAI>();
-		public SettlerAIData settlerAi;
+		public SettlerAIData data;
 
 		public static SettlerAIData MakeAiData(MapUnit unit, Player player) {
 			SettlerAIData settlerAiData = new SettlerAIData();
@@ -36,24 +36,37 @@ namespace C7Engine {
 		}
 
 		public SettlerAI(SettlerAIData d) {
-			settlerAi = d;
+			data = d;
+		}
+
+		public void UpdateOnDeath() {
+			// When we're destroyed, clear out our reference to the unit we're
+			// being escorted by, and clear our their reference to us.
+			if (data.escort != null && data.escort.currentAI is EscortAI escortAi) {
+				escortAi.data.unitToEscort = null;
+			}
+			data.escort = null;
 		}
 
 		C7GameData.UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
-			switch (settlerAi.goal) {
+			switch (data.goal) {
 				case SettlerAIData.SettlerGoal.BUILD_CITY:
-					if (IsInvalidCityLocation(settlerAi.destination)) {
-						log.Information("Seeking new destination for settler " + unit.id + "headed to " + settlerAi.destination);
+					if (IsInvalidCityLocation(data.destination)) {
+						log.Information("Seeking new destination for settler " + unit.id + " headed to " + data.destination);
 						return C7GameData.UnitAI.Result.Error;
 					}
 
-					if (unit.location == settlerAi.destination) {
+					if (unit.location == data.destination) {
 						log.Information("Building city with " + unit);
 						//TODO: This should use a message, and the message handler should cause the disbanding to happen.
 						CityInteractions.BuildCity(unit.location.XCoordinate, unit.location.YCoordinate, player.id, unit.owner.GetNextCityName());
 						unit.disband();
+					} else if (data.escort == null) {
+						log.Information($"Settler {unit.id} is waiting for an escort");
+						unit.movementPoints.onConsumeAll();
+						return C7GameData.UnitAI.Result.InProgress;
 					} else {
-						return this.TryToMoveAlongPath(unit, settlerAi.pathToDestination, /*allowCombat=*/false);
+						return this.TryToMoveAlongPath(unit, ref data.pathToDestination, /*allowCombat=*/false);
 					}
 					break;
 				case SettlerAIData.SettlerGoal.JOIN_CITY:
@@ -85,7 +98,7 @@ namespace C7Engine {
 		}
 
 		public string SummarizePlan() {
-			return "SettlerAI: " + settlerAi.ToString();
+			return "SettlerAI: " + data.ToString();
 		}
 	}
 }

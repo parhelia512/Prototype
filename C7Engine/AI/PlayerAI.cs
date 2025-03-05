@@ -48,6 +48,22 @@ namespace C7Engine {
 				}
 			}
 
+			// Reorder the list so that settlers are last, giving our escorts a
+			// chance to configure themselves without wasting a turn.
+			player.units.Sort((x, y) => (x.unitType.name == "Settler").CompareTo(y.unitType.name == "Settler"));
+
+			// Any time we have an unescorted settler, wake up any other units
+			// on the same tile to force us to re-evaluate whether they should
+			// be an escort. Otherwise can have perfectly fine escorts sitting
+			// there fortified.
+			foreach (MapUnit u in player.units) {
+				if (u.currentAI is SettlerAI settlerAi && settlerAi.data.escort == null) {
+					foreach (MapUnit uu in u.location.unitsOnTile) {
+						uu.wake();
+					}
+				}
+			}
+
 			//Do things with units.  Copy into an array first to avoid collection-was-modified exception
 			foreach (MapUnit unit in player.units.ToArray()) {
 				// Don't waste time recalculating behaviors for fortified units.
@@ -80,7 +96,7 @@ namespace C7Engine {
 						break;
 					}
 
-					if (unit.hitPointsRemaining <= 0) {
+					if (unit.hitPointsRemaining <= 0 || unit.isFortified) {
 						unit.currentAI = null;
 						break;
 					}
@@ -114,6 +130,12 @@ namespace C7Engine {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
 				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else {
+				// If there's an unescorted settler, escort it.
+				EscortAIData? maybeEscortData = EscortAI.MaybeMakeAiData(unit, player);
+				if (maybeEscortData != null) {
+					return new EscortAI(maybeEscortData);
+				}
+
 				// As long as we don't have too many explorers yet of this unit's
 				// type (land vs sea), start a new exploring unit.
 				int numRelevantExplorers = 0;
@@ -132,7 +154,6 @@ namespace C7Engine {
 
 				//Nowhere to explore or too many explorers.  What to do now?
 				//Priority 1: Adequate defense of cities.
-				//Future Priority 1: Escorting Settlers
 				//Priority 2: Clearing out barbs
 				//Priority 3: Defending chokepoints
 				//Priority 4: ???

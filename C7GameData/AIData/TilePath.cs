@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace C7GameData {
 	public class TilePath {
-		private Tile destination; //stored in case we need to re-calculate
+		public Tile destination { get; private set; } //stored in case we need to re-calculate
 		public Queue<Tile> path { get; private set; }
 
 		private TilePath() {
@@ -22,6 +22,10 @@ namespace C7GameData {
 		// are no remaining tiles, or the path is invalid
 		public Tile Next() {
 			return PathLength() > 0 ? path.Dequeue() : Tile.NONE;
+		}
+
+		public Tile PeekNext() {
+			return PathLength() > 0 ? path.Peek() : Tile.NONE;
 		}
 
 		//TODO: Once we have roads, we should return the calculated cost, not just the length.

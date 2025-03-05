@@ -42,12 +42,14 @@ namespace C7Engine {
 				return UnitAI.Result.Done;
 			}
 
-			return this.TryToMoveAlongPath(unit, data.pathToDestination, /*allowCombat=*/false);
+			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, /*allowCombat=*/false);
 		}
 
 		public string SummarizePlan() {
 			return "ExplorerAI: " + data.ToString();
 		}
+
+		public void UpdateOnDeath() { }
 
 		private static int DistanceToNearestCity(Player player, Tile t) {
 			int result = int.MaxValue;

@@ -19,6 +19,8 @@ namespace C7Engine.AI.UnitAI {
 			combatAIData = d;
 		}
 
+		public void UpdateOnDeath() { }
+
 		public C7GameData.UnitAI.Result PlayTurnImpl(Player player, MapUnit unit) {
 			if (unit.location == combatAIData.destination) {
 				return C7GameData.UnitAI.Result.Done;
@@ -28,7 +30,7 @@ namespace C7Engine.AI.UnitAI {
 			//This might initiate combat.
 			//Once there are more combat goals than run to a barbarian camp,
 			//we will need fancier algorithms
-			return this.TryToMoveAlongPath(unit, combatAIData.path, /*allowCombat=*/true);
+			return this.TryToMoveAlongPath(unit, ref combatAIData.path, /*allowCombat=*/true);
 		}
 
 		public string SummarizePlan() {
