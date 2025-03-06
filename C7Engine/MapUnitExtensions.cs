@@ -557,22 +557,20 @@ namespace C7Engine {
 			unit.animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
 		}
 
-		private static void setWorkerJobAnimation(this MapUnit unit, string action)
-		{
-			switch (action)
-			{
+		private static void setWorkerJobAnimation(this MapUnit unit, string action) {
+			switch (action) {
 				case C7Action.UnitIrrigate:
-				unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
-				return;
+					unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
+					return;
 				case C7Action.UnitBuildMine:
-				unit.animate(MapUnit.AnimatedAction.MINE, false, AnimationEnding.Repeat);
-				return;
+					unit.animate(MapUnit.AnimatedAction.MINE, false, AnimationEnding.Repeat);
+					return;
 				case C7Action.UnitBuildRoad:
-				unit.animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
-				return;
+					unit.animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
+					return;
 				default:
-				// do nothing;
-				return;
+					// do nothing;
+					return;
 			}
 		}
 
