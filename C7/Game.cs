@@ -723,17 +723,16 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildRoad() ?? false)) {
-			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildRoad()).send();
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
 
 		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildMine() ?? false)) {
-			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
 
 		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canIrrigate() ?? false)) {
-			new ActionToEngineMsg(() => CurrentlySelectedUnit?.irrigate()).send();
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
-
 	}
 
 	private void GetNextAutoselectedUnit(GameData gameData) {

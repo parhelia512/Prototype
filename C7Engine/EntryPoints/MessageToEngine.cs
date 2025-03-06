@@ -104,6 +104,22 @@ namespace C7Engine {
 		}
 	}
 
+	// A Class that allows the UI to have the game engine run some
+	// terraform action.
+	public class MsgStartWorkerJob : MessageToEngine {
+		private ID UnitID;
+		private string Action;
+		public MsgStartWorkerJob(ID unitID, string action) {
+			this.UnitID = unitID;
+			this.Action = action;
+		}
+
+		public override void process() {
+			MapUnit unit = EngineStorage.gameData.GetUnit(UnitID);
+			unit?.PerformTerraformAction(Action);
+		}
+	}
+
 	public class MsgChooseProduction : MessageToEngine {
 		private ID cityID;
 		private string producibleName;

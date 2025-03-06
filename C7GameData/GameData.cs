@@ -75,6 +75,10 @@ namespace C7GameData {
 				return null;
 		}
 
+		public Terraform GetTerraformByAction(string action) {
+			return Terraforms.Find(tf => tf.Action == action);
+		}
+
 		// TODO: This is a placeholder method for calculating tile owners.
 		// Currently, it marks a tile as owned only if it is a city tile or adjacent to a city.
 		public void UpdateTileOwners() {
