@@ -517,6 +517,8 @@ namespace C7Engine {
 					return unit.canBuildMine();
 				case C7Action.UnitBuildRoad:
 					return unit.canBuildRoad();
+				default:
+					return true;
 			}
 		}
 
