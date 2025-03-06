@@ -16,7 +16,7 @@ namespace C7GameData.Save {
 		public TileDirection facingDirection;
 		public string experience;
 		public int WorkerProgressTowardsJob;
-		public int WorkerJob;
+		public ID WorkerJob;
 
 		// True for multiple types of automation, including worker automation
 		// and automated exploring.
@@ -42,7 +42,7 @@ namespace C7GameData.Save {
 			experience = unit.experienceLevelKey;
 			movePointsRemaining = unit.movementPoints.remaining;
 			WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob;
-			WorkerJob = WorkerJobAsInt(unit.WorkerJob);
+			WorkerJob = unit.WorkerJob?.Id;
 		}
 
 
@@ -60,42 +60,13 @@ namespace C7GameData.Save {
 				isFortified = action == "fortified",
 				isAutomated = isAutomated,
 				facingDirection = facingDirection,
+				WorkerProgressTowardsJob = WorkerProgressTowardsJob,
+				WorkerJob = WorkerJob == null ? null:terraforms.Find(tf => tf.Id == WorkerJob)
 			};
 			unit.location.unitsOnTile.Add(unit);
 			unit.movementPoints.reset(movePointsRemaining);
-			unit.WorkerProgressTowardsJob = WorkerProgressTowardsJob;
-			unit.WorkerJob = WorkerJobFromInt(WorkerJob, terraforms);
+
 			return unit;
 		}
-
-		public int WorkerJobAsInt(Terraform workerJob) {
-			if (workerJob == null) {
-				return -1;
-			}
-			switch (workerJob.Action) {
-				case C7Action.UnitIrrigate:
-					return 1;
-				case C7Action.UnitBuildMine:
-					return 2;
-				case C7Action.UnitBuildRoad:
-					return 0;
-				default:
-					return -1;
-			};
-		}
-
-		public Terraform WorkerJobFromInt(int WorkerJobValue, List<Terraform> terraforms) {
-			switch (WorkerJobValue) {
-				case 0:
-					return terraforms.Find(terraform => terraform.Action == C7Action.UnitBuildRoad);
-				case 1:
-					return terraforms.Find(terraform => terraform.Action == C7Action.UnitIrrigate);
-				case 2:
-					return terraforms.Find(terraform => terraform.Action == C7Action.UnitBuildMine);
-				default:
-					return null;
-			}
-		}
-
 	}
 }

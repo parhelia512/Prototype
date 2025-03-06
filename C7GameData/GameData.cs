@@ -75,6 +75,10 @@ namespace C7GameData {
 				return null;
 		}
 
+		public Terraform GetTerraform(ID id) {
+			return Terraforms.Find(tf => tf.Id == id);
+		}
+
 		public Terraform GetTerraformByAction(string action) {
 			return Terraforms.Find(tf => tf.Action == action);
 		}
