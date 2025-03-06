@@ -23,7 +23,7 @@ namespace C7Engine {
 				return Tile.NONE;   //nowhere to settle
 			}
 
-			IOrderedEnumerable<KeyValuePair<Tile, int> > orderedScores = scores.OrderByDescending(t => t.Value);
+			IOrderedEnumerable<KeyValuePair<Tile, int>> orderedScores = scores.OrderByDescending(t => t.Value);
 			log.Debug("Top city location candidates from " + start + ":");
 			Tile returnValue = null;
 			foreach (KeyValuePair<Tile, int> kvp in orderedScores.Take(5)) {

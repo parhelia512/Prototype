@@ -45,24 +45,41 @@ namespace C7Engine {
 
 			//Do things with units.  Copy into an array first to avoid collection-was-modified exception
 			foreach (MapUnit unit in player.units.ToArray()) {
-				//For each unit, if there's already an AI task assigned, it will attempt to complete its goal.
-				//It may fail due to conditions having changed since that goal was assigned; in that case it will
-				//get a new task to try to complete.
+				// Don't waste time recalculating behaviors for fortified units.
+				// This means we'll have to unfortify all our units after
+				// interesting events like war declarations, but this seems like
+				// a good tradeoff for faster turns.
+				if (unit.isFortified) {
+					continue;
+				}
 
-				bool unitDone = false;
-				int attempts = 0;
-				int maxAttempts = 2;    //safety valve so we don't freeze the UI if SetAIForUnit returns something that fails
-				while (!unitDone) {
-					if (unit.currentAI == null || attempts > 0) {
+				// For each unit, if there's already an AI task assigned, it will attempt to complete its goal.
+				// It may fail due to conditions having changed since that goal was assigned; in that case it will
+				// get a new task to try to complete.
+				//
+				// Cap our attempts at 2 to avoid getting stuck in bad situations.
+				for (int attempt = 0; attempt < 2; ++attempt) {
+					if (unit.currentAI == null) {
 						unit.currentAI = GetAIForUnit(unit, player);
 					}
 
-					unitDone = unit.currentAI.PlayTurn(player, unit);
-					attempts++;
-					if (!unitDone && attempts >= maxAttempts) {
-						log.Warning($"Hit max AI attempts of {maxAttempts} for unit {unit} at {unit.location} without succeeding.  This indicates GetAIForUnit returned an impossible task, and should be debugged.");
+					// If the unit is still the process of doing its plan, allow
+					// it to continue next turn.
+					UnitAI.Result result = unit.currentAI.PlayTurn(player, unit);
+					if (result == UnitAI.Result.InProgress) {
 						break;
 					}
+
+					if (result == UnitAI.Result.Error) {
+						unit.currentAI = null;
+						break;
+					}
+
+					// Otherwise we need a new plan for next turn. Pick it now
+					// to avoid things like new units being preferred for
+					// exploration instead of units already far away from home
+					// for exploration.
+					unit.currentAI = GetAIForUnit(unit, player);
 				}
 
 				player.tileKnowledge.AddTilesToKnown(unit.location);
@@ -85,12 +102,23 @@ namespace C7Engine {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
 				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
 			} else {
-				ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
-				if (maybeAiData != null) {
-					return new ExplorerAI(maybeAiData);
+				// As long as we don't have too many explorers yet, start a new
+				// exploring unit.
+				int numExplorers = 0;
+				foreach (MapUnit u in player.units) {
+					if (u.currentAI is ExplorerAI) {
+						++numExplorers;
+					}
 				}
 
-				//Nowhere to explore.  What to do now?
+				if (numExplorers < 10) {
+					ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
+					if (maybeAiData != null) {
+						return new ExplorerAI(maybeAiData);
+					}
+				}
+
+				//Nowhere to explore or too many explorers.  What to do now?
 				//Priority 1: Adequate defense of cities.
 				//Future Priority 1: Escorting Settlers
 				//Priority 2: Clearing out barbs
@@ -138,6 +166,7 @@ namespace C7Engine {
 
 			if (closestBarbDistance <= 3) {
 				CombatAIData caid = new CombatAIData();
+				caid.destination = closestBarbCamp;
 
 				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
 				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp);
@@ -203,6 +232,7 @@ namespace C7Engine {
 				return null;
 			}
 
+			// Details on how Civ3 does it: https://forums.civfanatics.com/threads/what-will-the-ai-research-next.45559/
 			return possibleTechs[(int)GameData.rng.NextInt64(possibleTechs.Count)];
 		}
 	}

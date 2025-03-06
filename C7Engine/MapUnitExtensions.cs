@@ -399,8 +399,6 @@ namespace C7Engine {
 				unit.location = newLoc;
 				unit.movementPoints.onUnitMove(movementCost);
 				unit.animate(MapUnit.AnimatedAction.RUN, wait);
-			} else {
-				return false;
 			}
 			return true;
 		}
@@ -592,14 +590,18 @@ namespace C7Engine {
 		}
 
 		public static void playAutomatedTurn(this MapUnit unit) {
-			bool done = !unit.currentAI.PlayTurn(unit.owner, unit);
-			if (done) {
+			UnitAI.Result result = unit.currentAI.PlayTurn(unit.owner, unit);
+			if (result == UnitAI.Result.Done) {
 				if (unit.currentAI is WorkerAI) {
 					unit.automate();
 				} else if (unit.currentAI is ExplorerAI) {
 					unit.explore();
 				}
 			}
+
+			// Do nothing after an error so control returns to the player, and
+			// nothing after an progress result, so that next turn continues the
+			// AI action.
 		}
 
 	}

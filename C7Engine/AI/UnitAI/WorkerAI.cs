@@ -47,9 +47,9 @@ namespace C7Engine {
 			return "WorkerAI: " + data.ToString();
 		}
 
-		bool UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
-				return false;
+				return UnitAI.Result.Error;
 			}
 
 			// If we're at the destination, do our planned move.
@@ -68,16 +68,7 @@ namespace C7Engine {
 				return PerformWorkerMove(unit, improvement);
 			}
 
-			// Finally, if we've done all the worker moves locally, continue on
-			// towards our actual goal.
-			Tile nextTile = data.pathToDestination.Next();
-			if (nextTile == Tile.NONE) {
-				log.Warning($"Worker at {unit.location} owned by {unit.owner.civilization.name} was trying to get to {data.destination} to {data.workerMove} but could not get there.");
-				return false;
-			}
-			unit.move(unit.location.directionTo(nextTile));
-
-			return true;
+			return this.TryToMoveAlongPath(unit, data.pathToDestination, /*allowCombat=*/false);
 		}
 
 		private static string? GetTileImprovement(Tile t, Player player) {
@@ -118,25 +109,34 @@ namespace C7Engine {
 			return null;
 		}
 
-		private bool PerformWorkerMove(MapUnit unit, string workerMove) {
+		private UnitAI.Result PerformWorkerMove(MapUnit unit, string workerMove) {
 			if (workerMove == C7Action.UnitBuildRoad) {
 				if (unit.canBuildRoad()) {
 					unit.PerformTerraformAction(C7Action.UnitBuildRoad);
-					return true;
+					return UnitAI.Result.InProgress;
 				}
-				return false;
+				if (unit.location.overlays.road) {
+					return UnitAI.Result.Done;
+				}
+				return UnitAI.Result.Error;
 			} else if (workerMove == C7Action.UnitBuildMine) {
 				if (unit.canBuildMine()) {
 					unit.PerformTerraformAction(C7Action.UnitBuildMine);
-					return true;
+					return UnitAI.Result.InProgress;
 				}
-				return false;
+				if (unit.location.overlays.mine) {
+					return UnitAI.Result.Done;
+				}
+				return UnitAI.Result.Error;
 			} else if (workerMove == C7Action.UnitIrrigate) {
 				if (unit.canIrrigate()) {
 					unit.PerformTerraformAction(C7Action.UnitIrrigate);
-					return true;
+					return UnitAI.Result.InProgress;
 				}
-				return false;
+				if (unit.location.overlays.irrigation) {
+					return UnitAI.Result.Done;
+				}
+				return UnitAI.Result.Error;
 			} else {
 				throw new ArgumentOutOfRangeException("Invalid worker move" + data.workerMove);
 			}
