@@ -509,19 +509,19 @@ namespace C7Engine {
 			return city;
 		}
 
-		public static bool canBuildRoad(this MapUnit unit) {
-			return unit.unitType.actions.Contains(C7Action.UnitBuildRoad) && unit.location.CanBeRoaded();
+		public static bool canPerformTerraformAction(this MapUnit unit, string action) {
+			switch (action) {
+				case C7Action.UnitIrrigate:
+					return unit.canIrrigate();
+				case C7Action.UnitBuildMine:
+					return unit.canBuildMine();
+				case C7Action.UnitBuildRoad:
+					return unit.canBuildRoad();
+			}
 		}
 
-		public static void buildRoad(this MapUnit unit) {
-			if (!unit.canBuildRoad()) {
-				log.Warning($"can't build road by {unit}");
-				return;
-			}
-
-			// TODO add animation and long process of building
-			unit.location.overlays.road = true;
-			unit.movementPoints.onConsumeAll();
+		public static bool canBuildRoad(this MapUnit unit) {
+			return unit.unitType.actions.Contains(C7Action.UnitBuildRoad) && unit.location.CanBeRoaded();
 		}
 
 		public static bool canBuildMine(this MapUnit unit) {
@@ -531,22 +531,15 @@ namespace C7Engine {
 				unit.location.CanBeMined();
 		}
 
-		public static void buildMine(this MapUnit unit) {
-			if (!unit.canBuildMine()) {
-				log.Warning($"can't build mine by {unit}");
-				return;
-			}
-
-			// TODO add animation and long process of building
-			unit.location.overlays.mine = true;
-			unit.movementPoints.onConsumeAll();
-		}
-
 		public static bool canIrrigate(this MapUnit unit) {
 			return unit.unitType.actions.Contains(C7Action.UnitIrrigate) && unit.location.CanBeIrrigated(unit.owner);
 		}
 
 		public static void PerformTerraformAction(this MapUnit unit, string action) {
+			if (!unit.canPerformTerraformAction(action)) {
+				log.Warning($"can't perform {action} by {unit}");
+				return;
+			}
 			Terraform workerJob = EngineStorage.gameData.GetTerraformByAction(action);
 			unit.WorkerJob = workerJob;
 			unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
