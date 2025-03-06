@@ -320,6 +320,12 @@ namespace C7Engine {
 		}
 
 		public static bool CanEnterTile(this MapUnit unit, Tile tile, bool allowCombat) {
+			return unit.CanEnterTile(tile, allowCombat, /*allowWarDeclaration=*/false);
+		}
+
+		// Like above, but allows specifying that we want to handle the case
+		// where a war declaration could be made before the move.
+		public static bool CanEnterTile(this MapUnit unit, Tile tile, bool allowCombat, bool allowWarDeclaration) {
 			// Keep land units on land and sea units on water
 			if (unit.unitType.categories.Contains("Sea") && tile.IsLand()) {
 				if (tile.HasCity && tile.cityAtTile.owner == unit.owner) {
@@ -329,14 +335,27 @@ namespace C7Engine {
 			} else if (unit.unitType.categories.Contains("Land") && !tile.IsLand())
 				return false;
 
+			// If we allow declaring war on this move, then it doesn't matter if
+			// there are units belonging to another player on the tile.
+			// TODO: unbreakable alliances
+			if (allowWarDeclaration) {
+				return true;
+			}
+
 			// Check for units belonging to other civs
-			foreach (MapUnit other in tile.unitsOnTile)
+			foreach (MapUnit other in tile.unitsOnTile) {
 				if (other.owner != unit.owner) {
 					if (!other.owner.IsAtPeaceWith(unit.owner))
 						return allowCombat && unit.unitType.attack > 0;
 					else
 						return false;
 				}
+			}
+
+			// Check for cities belonging to other civs.
+			if (tile.cityAtTile != null && tile.cityAtTile.owner != unit.owner) {
+				return allowCombat;
+			}
 
 			return true;
 		}
@@ -448,11 +467,8 @@ namespace C7Engine {
 			}
 		}
 
-		public static void setUnitPath(this MapUnit unit, Tile dest) {
-			unit.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, dest);
-			if (unit.path == TilePath.NONE) {
-				log.Warning("Cannot move unit to " + dest + ", path is NONE!");
-			}
+		public static void setUnitPath(this MapUnit unit, TilePath path) {
+			unit.path = path;
 			unit.moveAlongPath();
 		}
 

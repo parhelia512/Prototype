@@ -67,18 +67,16 @@ namespace C7Engine {
 
 	public class MsgSetUnitPath : MessageToEngine {
 		private ID unitID;
-		private int destX;
-		private int destY;
+		private TilePath path;
 
-		public MsgSetUnitPath(ID unitID, Tile tile) {
+		public MsgSetUnitPath(ID unitID, TilePath path) {
 			this.unitID = unitID;
-			this.destX = tile.XCoordinate;
-			this.destY = tile.YCoordinate;
+			this.path = path;
 		}
 
 		public override void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.setUnitPath(EngineStorage.gameData.map.tileAt(destX, destY));
+			unit?.setUnitPath(path);
 
 			// The unit moved to a new tile - if it still has movement points,
 			// update the UI to reflect this new position and movement points.
