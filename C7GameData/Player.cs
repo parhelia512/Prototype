@@ -88,8 +88,14 @@ namespace C7GameData {
 		public Player() { }
 
 		public bool IsAtPeaceWith(Player other) {
-			// Right now it's a free-for-all but eventually we'll implement peace treaties and alliances
-			return other == this;
+			if (other.isBarbarians || this.isBarbarians) {
+				return false;
+			}
+
+			if (playerRelationships.ContainsKey(other.id)) {
+				return !playerRelationships[other.id].atWar;
+			}
+			return true;
 		}
 
 		public bool SitsOutFirstTurn() {
