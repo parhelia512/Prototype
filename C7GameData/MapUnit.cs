@@ -113,6 +113,7 @@ namespace C7GameData {
 			public TileDirection direction;
 			public float progress; // Varies 0 to 1
 			public float offsetX, offsetY; // Offset is in grid cells from the unit's location
+			public AnimationEnding ending;
 
 			// When true, indicates that the animation is still playing (f.e. a unit is still running between tiles) so the UI shouldn't yet
 			// autoselect another unit.
@@ -120,7 +121,7 @@ namespace C7GameData {
 				// TODO: Special rules for different animations. We don't need to see workers do their thing but we do want to watch units
 				// move. IMO we should also not show units fortifying even though I know the original game does.
 				// This may also be the culprit behind why we can fortify a unit that is in motion.
-				if (action == AnimatedAction.IRRIGATE || action == AnimatedAction.MINE || action == AnimatedAction.ROAD || action == AnimatedAction.BLANK || action == AnimatedAction.DEFAULT) {
+				if (ending == AnimationEnding.Repeat) {
 					return false;
 				}
 				return progress < 1.0;
