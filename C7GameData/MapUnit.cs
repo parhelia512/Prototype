@@ -120,7 +120,7 @@ namespace C7GameData {
 				// TODO: Special rules for different animations. We don't need to see workers do their thing but we do want to watch units
 				// move. IMO we should also not show units fortifying even though I know the original game does.
 				// This may also be the culprit behind why we can fortify a unit that is in motion.
-				if (action == AnimatedAction.IRRIGATE || action == AnimatedAction.BLANK || action == AnimatedAction.DEFAULT) {
+				if (action == AnimatedAction.IRRIGATE || action == AnimatedAction.MINE || action == AnimatedAction.ROAD || action == AnimatedAction.BLANK || action == AnimatedAction.DEFAULT) {
 					return false;
 				}
 				return progress < 1.0;

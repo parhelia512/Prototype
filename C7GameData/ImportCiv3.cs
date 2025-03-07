@@ -485,7 +485,7 @@ namespace C7GameData {
 					hitPointsRemaining = experience.baseHitPoints - unit.Damage, // TODO: include bonus hitpoints from unit type
 					movePointsRemaining = (float)prototype.Movement - (unit.MovementUsed / 3f),
 					WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob,
-					WorkerJob = unit.WorkerJob,
+					WorkerJob = (unit.WorkerJob==-1) ? null: save.TerraForms[unit.WorkerJob].Id,
 					isAutomated = unit.IsAutomated,
 				};
 				if (unit.Fortified) {
