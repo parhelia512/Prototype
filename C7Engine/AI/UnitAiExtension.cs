@@ -17,7 +17,7 @@ namespace C7Engine {
 			}
 			Tile nextTile = path.Next();
 			if (nextTile == Tile.NONE || !unit.CanEnterTile(nextTile, allowCombat)) {
-				log.Information($"Attempting to repath from {unit.location} to {path.destination}");
+				log.Information($"Attempting to repath {unit} from {unit.location} to {path.destination}");
 				// Attempt to repath. If we succeed, return inprogress so we get
 				// called again.
 				path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, path.destination);

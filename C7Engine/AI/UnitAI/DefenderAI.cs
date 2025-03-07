@@ -18,8 +18,16 @@ namespace C7Engine.AI.UnitAI {
 			return ai;
 		}
 
-		public static DefenderAIData MakeAiDataForDefendAtRiskCity(MapUnit unit, Player player) {
-			City cityToDefend = FindAtRiskCityToDefend(unit, player);
+		public static DefenderAIData? MakeAiDataForDefendAtRiskCity(MapUnit unit, Player player, int minDefenders) {
+			if (!unit.CanDefendOnLand()) {
+				// Just fortify in place if we can't defend on land.
+				return MakeAiDataForDefendInPlace(unit, player);
+			}
+
+			City cityToDefend = FindAtRiskCityToDefend(unit, player, minDefenders);
+			if (cityToDefend == null) {
+				return null;
+			}
 
 			DefenderAIData ai = new DefenderAIData();
 			ai.destination = cityToDefend.location;
@@ -61,7 +69,7 @@ namespace C7Engine.AI.UnitAI {
 		 * This is not a brilliant method, with many flaws such as whether the 
 		 * city needs more defenders, or if the units present are defenders.
 		 */
-		private static City FindAtRiskCityToDefend(MapUnit unit, Player player) {
+		private static City FindAtRiskCityToDefend(MapUnit unit, Player player, int minDefenders) {
 			if (player.cities.Count == 0) {
 				return City.NONE;
 			}
@@ -70,10 +78,12 @@ namespace C7Engine.AI.UnitAI {
 			// we want to send our unit to.
 			Dictionary<City, float> cityScores = new();
 			foreach (City c in player.cities) {
-				int score = 0;
-				if (c.location.unitsOnTile.Count(u => u.CanDefendOnLand()) < 3) {
-					// Add to the score if there aren't many defenders.
-					score += 10;
+				int numDefenders = c.location.unitsOnTile.Count(u => u.CanDefendOnLand());
+				float score = 0;
+				if (numDefenders < minDefenders) {
+					// Add to the score if there aren't many defenders, with a
+					// larger score for less defended cities.
+					score += 10f;
 				}
 
 				// Penalize cities for being far away.
@@ -87,12 +97,29 @@ namespace C7Engine.AI.UnitAI {
 			foreach (MapUnit u in player.units) {
 				if (u.currentAI is DefenderAI defenderAi) {
 					if (defenderAi.data.destination.cityAtTile != null) {
-						cityScores[defenderAi.data.destination.cityAtTile] -= 3;
+						cityScores[defenderAi.data.destination.cityAtTile] -= 3f;
 					}
 				}
 			}
 
-			return cityScores.MaxBy(t => t.Value).Key;
+			float bestScore = (float)int.MinValue;
+			City bestCity = null;
+			foreach (KeyValuePair<City, float> p in cityScores) {
+				if (p.Value > bestScore) {
+					bestScore = p.Value;
+					bestCity = p.Key;
+				}
+			}
+
+			// If there are no cities in need of defending at this defense level,
+			// don't return a city. This will let us decide to use units for
+			// offense instead. We can always call this method with a larger
+			// min defenders value if we really want to use defenders.
+			if (bestScore <= 0 && minDefenders != int.MaxValue) {
+				return null;
+			}
+
+			return bestCity;
 		}
 	}
 }

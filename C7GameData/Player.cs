@@ -92,6 +92,10 @@ namespace C7GameData {
 				return false;
 			}
 
+			if (other == this) {
+				return true;
+			}
+
 			if (playerRelationships.ContainsKey(other.id)) {
 				return !playerRelationships[other.id].atWar;
 			}
@@ -108,6 +112,10 @@ namespace C7GameData {
 
 			playerRelationships[other.id].atWar = true;
 			other.playerRelationships[this.id].atWar = true;
+
+			// Whenever war is declared, re-evaluate priorities.
+			turnsUntilPriorityReevaluation = 0;
+			other.turnsUntilPriorityReevaluation = 0;
 		}
 
 		public bool SitsOutFirstTurn() {
