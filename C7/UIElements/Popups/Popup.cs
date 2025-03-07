@@ -163,4 +163,29 @@ public partial class Popup : TextureRect {
 		return rect;
 	}
 
+	protected void AddConfirmButton(Vector2 position, Action action) {
+		ImageTexture circleTexture= Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 1, 1, 19, 19);
+		ImageTexture circleHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 37, 1, 19, 19);
+		ImageTexture circlePressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 73, 1, 19, 19);
+		TextureButton confirmButton = new TextureButton();
+		confirmButton.TextureNormal = circleTexture;
+		confirmButton.TextureHover = circleHover;
+		confirmButton.TexturePressed = circlePressed;
+		confirmButton.SetPosition(position);
+		confirmButton.Pressed += action;
+		AddChild(confirmButton);
+	}
+
+	protected void AddCancelButton(Vector2 position) {
+		ImageTexture xTexture = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 21, 1, 15, 19);
+		ImageTexture xHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 57, 1, 15, 19);
+		ImageTexture xPressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 93, 1, 15, 19);
+		TextureButton cancelButton = new TextureButton();
+		cancelButton.TextureNormal = xTexture;
+		cancelButton.TextureHover = xHover;
+		cancelButton.TexturePressed = xPressed;
+		cancelButton.SetPosition(position);
+		cancelButton.Pressed += GetParent<PopupOverlay>().OnHidePopup;
+		AddChild(cancelButton);
+	}
 }

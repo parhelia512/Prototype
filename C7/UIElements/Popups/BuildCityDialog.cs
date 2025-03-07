@@ -59,28 +59,8 @@ public partial class BuildCityDialog : Popup {
 
 		cityName.TextSubmitted += OnCityNameEntered;
 
-		//Cancel/confirm buttons.  Note the X button is thinner than the O button.
-		ImageTexture circleTexture= Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 1, 1, 19, 19);
-		ImageTexture xTexture = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 21, 1, 15, 19);
-		ImageTexture circleHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 37, 1, 19, 19);
-		ImageTexture xHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 57, 1, 15, 19);
-		ImageTexture circlePressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 73, 1, 19, 19);
-		ImageTexture xPressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 93, 1, 15, 19);
-		TextureButton confirmButton = new TextureButton();
-		confirmButton.TextureNormal = circleTexture;
-		confirmButton.TextureHover = circleHover;
-		confirmButton.TexturePressed = circlePressed;
-		confirmButton.SetPosition(new Vector2(475, 213));
-		AddChild(confirmButton);
-		TextureButton cancelButton = new TextureButton();
-		cancelButton.TextureNormal = xTexture;
-		cancelButton.TextureHover = xHover;
-		cancelButton.TexturePressed = xPressed;
-		cancelButton.SetPosition(new Vector2(500, 213));
-		AddChild(cancelButton);
-
-		confirmButton.Pressed += OnConfirmButtonPressed;
-		cancelButton.Pressed += GetParent<PopupOverlay>().OnHidePopup;
+		AddConfirmButton(new Vector2(475, 213), OnConfirmButtonPressed);
+		AddCancelButton(new Vector2(500, 213));
 	}
 
 	/**
