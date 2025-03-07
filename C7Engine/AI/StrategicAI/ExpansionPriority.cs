@@ -14,9 +14,7 @@ namespace C7GameData.AIData {
 
 		private ILogger log = Log.ForContext<ExpansionPriority>();
 
-		public ExpansionPriority() {
-			key = "Expansion";
-		}
+		public ExpansionPriority() { }
 
 		public override void CalculateWeightAndMetadata(Player player) {
 			if (player.cities.Count < 2) {
