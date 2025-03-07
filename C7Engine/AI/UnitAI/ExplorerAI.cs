@@ -23,6 +23,10 @@ namespace C7Engine {
 			ExplorerAIData? result = PickBestTileToExplore(unit, CalculateExplorationScores(player, unit, candidates));
 
 			if (result == null) {
+				if (!unit.IsLandUnit()) {
+					player.tileKnowledge.fullyExploredOceans = true;
+				}
+
 				return result;
 			}
 
@@ -34,6 +38,11 @@ namespace C7Engine {
 		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
 				return UnitAI.Result.Error;
+			}
+
+			if (player.tileKnowledge.isTileKnown(data.destination)) {
+				player.tileKnowledge.aiExplorationTargets.Remove(data.destination);
+				return UnitAI.Result.Done;
 			}
 
 			// If we're at the destination we're done.
