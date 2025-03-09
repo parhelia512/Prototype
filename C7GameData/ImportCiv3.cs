@@ -657,6 +657,20 @@ namespace C7GameData {
 			}
 		}
 
+		private static IEnumerable<string> GetUnitActions(PRTO prto) {
+			if (prto.BuildCity) yield return C7Action.UnitBuildCity;
+			if (prto.BuildRoad) yield return C7Action.UnitBuildRoad;
+			if (prto.BuildMine) yield return C7Action.UnitBuildMine;
+			if (prto.Irrigate) yield return C7Action.UnitIrrigate;
+			if (prto.Bombard) yield return C7Action.UnitBombard;
+			if (prto.SkipTurn) yield return C7Action.UnitHold;
+			if (prto.Wait) yield return C7Action.UnitWait;
+			if (prto.Fortify) yield return C7Action.UnitFortify;
+			if (prto.Disband) yield return C7Action.UnitDisband;
+			if (prto.GoTo) yield return C7Action.UnitGoto;
+			if (prto.Explore) yield return C7Action.UnitExplore;
+			if (prto.Automate) yield return C7Action.UnitAutomate;
+		}
 		private void ImportUnitPrototypes() {
 			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
 			foreach (PRTO prto in Prto) {
@@ -668,6 +682,7 @@ namespace C7GameData {
 				} else if (prto.Type == PRTO.TYPE_AIR) {
 					prototype.categories.Add("Air");
 				}
+
 				prototype.name = prto.Name;
 				prototype.artName = pediaIcons.GetUnitArtName(prto.CivilopediaEntry);
 				prototype.attack = prto.Attack;
@@ -677,50 +692,17 @@ namespace C7GameData {
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
 				prototype.iconIndex = prto.IconIndex;
-				if (prto.BuildCity) {
-					prototype.actions.Add(C7Action.UnitBuildCity);
-				}
-				if (prto.BuildRoad) {
-					prototype.actions.Add(C7Action.UnitBuildRoad);
-				}
-				if (prto.BuildMine) {
-					prototype.actions.Add(C7Action.UnitBuildMine);
-				}
-				if (prto.Irrigate) {
-					prototype.actions.Add(C7Action.UnitIrrigate);
-				}
-				if (prto.Bombard) {
-					prototype.actions.Add(C7Action.UnitBombard);
-				}
-				if (prto.SkipTurn) {
-					prototype.actions.Add(C7Action.UnitHold);
-				}
-				if (prto.Wait) {
-					prototype.actions.Add(C7Action.UnitWait);
-				}
-				if (prto.Fortify) {
-					prototype.actions.Add(C7Action.UnitFortify);
-				}
-				if (prto.Disband) {
-					prototype.actions.Add(C7Action.UnitDisband);
-				}
-				if (prto.GoTo) {
-					prototype.actions.Add(C7Action.UnitGoto);
-				}
-				if (prto.Explore) {
-					prototype.actions.Add(C7Action.UnitExplore);
-				}
-				if (prto.Automate) {
-					prototype.actions.Add(C7Action.UnitAutomate);
-				}
-				//Temporary check until #329/#330 are finished
-				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
-					if (prto.Required != -1) {
-						prototype.requiredTech = save.Techs[prto.Required].id;
-					}
+				prototype.actions.UnionWith(GetUnitActions(prto));
 
+				if (prto.Required != -1) {
+					prototype.requiredTech = save.Techs[prto.Required].id;
+				}
+
+				//Temporary check until #330 is finished
+				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
 					save.UnitPrototypes.Add(prototype);
 				}
+
 			}
 		}
 
