@@ -144,24 +144,22 @@ namespace C7GameData.Save {
 		}
 
 		private void ConvertBuildings(GameData data) {
-			var techDict = data.techs.ToDictionary(t => t.id);
-
-			data.Buildings = Buildings.ConvertAll(building =>
-				new Building(
-					building,
-					building.requiredTech != null ? techDict[building.requiredTech] : null
-				)
-			);
+			data.Buildings = Buildings.ConvertAll(building => new Building(building));
 
 			var buildingDict = data.Buildings.ToDictionary(b => b.name);
+			var techDict = data.techs.ToDictionary(t => t.id);
 
-			data.Buildings = data.Buildings
-				.Zip(Buildings, (building, saveBuilding) => {
-					if (saveBuilding.requiredBuilding != null)
-						building.requiredBuilding = buildingDict[saveBuilding.requiredBuilding];
-					return building;
-				})
-				.ToList();
+			foreach (SaveBuilding saveBuilding in Buildings) {
+				Building building = buildingDict[saveBuilding.name];
+
+				if (saveBuilding.requiredBuilding != null) {
+					building.requiredBuilding = buildingDict[saveBuilding.requiredBuilding];
+				}
+
+				if (saveBuilding.requiredTech != null) {
+					building.requiredTech = techDict[saveBuilding.requiredTech];
+				}
+			}
 		}
 
 		private void ConvertUnits(GameData data) {
