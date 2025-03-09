@@ -20,6 +20,7 @@ namespace C7Engine.Pathing {
 	// for some useful details.
 	public class AStarAlgorithm : PathingAlgorithm {
 		private readonly EdgeWalker<Tile> edgeWalker;
+		private readonly MapUnit unit;
 
 		// An estimate of the cost between two tiles, usually between a tile in
 		// the search and the destination tile. This allows targeting the search
@@ -27,9 +28,10 @@ namespace C7Engine.Pathing {
 		// the destination instead of expanding outwards in all directions.
 		private Func<Tile, Tile, double> costHeuristic;
 
-		public AStarAlgorithm(EdgeWalker<Tile> edgeWalker, Func<Tile, Tile, double> costHeuristic) {
+		public AStarAlgorithm(EdgeWalker<Tile> edgeWalker, MapUnit unit, Func<Tile, Tile, double> costHeuristic) {
 			this.edgeWalker = edgeWalker;
 			this.costHeuristic = costHeuristic;
+			this.unit = unit;
 		}
 
 		public override TilePath PathFrom(Tile start, Tile destination) {
@@ -63,6 +65,16 @@ namespace C7Engine.Pathing {
 				// Otherwise check each neighbor that we can use.
 				foreach (Edge<Tile> neighborEdge in edgeWalker.getEdges(current)) {
 					Tile neighbor = neighborEdge.current;
+
+					// Only allow a potentially attacking move for the last step,
+					// to allow pathing to attack. We don't want to try and path
+					// through opponents on the way to our destination though,
+					// as we can get stuck.
+					bool allowCombat = neighbor == destination;
+					if (!unit.CanEnterTile(neighbor, allowCombat)) {
+						continue;
+					}
+
 					double newCost = neighborEdge.distanceToCurrent + knownCosts[current];
 
 					// If we didn't know the cost to get to this neighbor, or 
