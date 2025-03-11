@@ -95,6 +95,7 @@ namespace C7GameData {
 					extraInfo = extra,
 					X = X,
 					Y = Y,
+					continent = civ3Tile.Continent,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
@@ -196,6 +197,7 @@ namespace C7GameData {
 					extraInfo = extra,
 					X = X,
 					Y = Y,
+					continent = civ3Tile.Continent,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};

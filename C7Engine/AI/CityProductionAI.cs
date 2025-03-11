@@ -32,7 +32,7 @@ namespace C7Engine {
 			List<StrategicPriority> priorities = city.owner.strategicPriorityData;
 			IEnumerable<IProducible> unitPrototypes = city.ListProductionOptions();
 
-			log.Information($"Choosing what to produce next in {city.name}");
+			log.Debug($"Choosing what to produce next in {city.name}");
 
 			List<IProducible> prototypes = new List<IProducible>();
 			List<float> weights = new List<float>();
@@ -53,7 +53,7 @@ namespace C7Engine {
 				}
 
 				// Exclude settlers if we don't have anywhere to build a city.
-				if (unitPrototype.actions.Contains("unit_build_city") && SettlerLocationAI.findSettlerLocation(city.location, city.owner) == Tile.NONE) {
+				if (unitPrototype.actions.Contains(C7Action.UnitBuildCity) && SettlerLocationAI.findSettlerLocation(city.location, city.owner) == Tile.NONE) {
 					flatAdjustedScore = 0;
 				}
 
@@ -120,7 +120,7 @@ namespace C7Engine {
 			int idx = 0;
 			foreach (double cutoff in cutoffs) {
 				if (randomDouble < cutoff) {
-					log.Information($"Chose item {items[idx]}");
+					log.Debug($"Chose item {items[idx]}");
 					return items[idx];
 				}
 				idx++;

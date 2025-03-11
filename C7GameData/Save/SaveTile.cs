@@ -14,6 +14,7 @@ namespace C7GameData.Save {
 			extraInfo = tile.ExtraInfo;
 			X = tile.XCoordinate;
 			Y = tile.YCoordinate;
+			continent = tile.continent;
 			baseTerrain = tile.baseTerrainTypeKey;
 			overlayTerrain = tile.overlayTerrainTypeKey;
 			if (tile.Resource != Resource.NONE) {
@@ -57,6 +58,7 @@ namespace C7GameData.Save {
 				ExtraInfo = extraInfo,
 				XCoordinate = X,
 				YCoordinate = Y,
+				continent = continent,
 				baseTerrainTypeKey = baseTerrain,
 				baseTerrainType = terrainTypes.Find(tt => tt.Key == baseTerrain),
 				overlayTerrainTypeKey = overlayTerrain,
@@ -92,6 +94,7 @@ namespace C7GameData.Save {
 		public ID id;
 		public int X;
 		public int Y;
+		public int continent;
 		[JsonRequired]
 		public string baseTerrain;
 		public string overlayTerrain;
