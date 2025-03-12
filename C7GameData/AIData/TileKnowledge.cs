@@ -74,8 +74,6 @@ namespace C7GameData {
 		}
 
 		private void RecomputeActiveTiles() {
-			activeTiles.Clear();
-
 			activeTiles = _player.cities
 				.SelectMany(x => x.GetTilesWithinBorders().SelectMany(y => y.neighbors.Values).Append(x.location))
 				.Concat(_player.units.SelectMany(x => x.location.neighbors.Values.Append(x.location)))
