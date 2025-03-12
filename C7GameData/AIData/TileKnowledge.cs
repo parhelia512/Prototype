@@ -4,7 +4,6 @@ namespace C7GameData {
 	public class TileKnowledge {
 		public HashSet<Tile> knownTiles { get; private set; } = new();
 		public HashSet<Tile> borderTiles { get; private set; } = new();
-		HashSet<Tile> visibleTiles = new();
 
 		// Has this player explored all known ocean tiles?
 		// TODO: this should be split out for coast/ocean
@@ -46,10 +45,6 @@ namespace C7GameData {
 
 		public bool isTileKnown(Tile t) {
 			return knownTiles.Contains(t);
-		}
-
-		public bool isBorderOfTileKnowlege(Tile t) {
-			return borderTiles.Contains(t);
 		}
 
 		/**
