@@ -2,6 +2,11 @@ using System.Collections.Generic;
 
 namespace C7GameData.Save {
 	public class SaveUnitPrototype {
+		public class Unique {
+			public string replace;
+			public string civilization;
+		};
+
 		public string name { get; set; }
 		public string artName { get; set; }
 		public int shieldCost { get; set; }
@@ -12,6 +17,10 @@ namespace C7GameData.Save {
 		public int bombard { get; set; }
 		public int movement { get; set; }
 		public int iconIndex { get; set; }
+
+		public string upgradeTo;
+		public Unique unique;
+		public bool unproducible;
 
 		public HashSet<string> categories = new HashSet<string>();
 
