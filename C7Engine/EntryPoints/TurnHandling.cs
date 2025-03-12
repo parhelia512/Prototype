@@ -165,7 +165,7 @@ namespace C7Engine {
 
 				IProducible producedItem = city.ComputeTurnProduction();
 				if (producedItem != null) {
-					log.Information($"Produced {producedItem} in {city}");
+					log.Debug($"Produced {producedItem} in {city}");
 					if (producedItem is UnitPrototype prototype) {
 						MapUnit newUnit = prototype.GetInstance(gameData);
 						newUnit.owner = city.owner;

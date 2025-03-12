@@ -29,6 +29,8 @@ namespace C7Engine {
 					settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination);
 					log.Information($"Set AI for unit {unit.id} of {unit.owner.civilization.name} to BUILD_CITY with destination of " + settlerAiData.destination);
 				}
+
+				// TODO: return the ranked list, so we can check paths here and avoid duplicate calculations.
 			}
 			return settlerAiData;
 		}
@@ -72,12 +74,10 @@ namespace C7Engine {
 
 		private static bool IsInvalidCityLocation(Tile tile) {
 			if (tile.cityAtTile != null) {
-				Log.ForContext<SettlerAI>().Debug("Cannot build at " + tile + " due to city of " + tile.cityAtTile.name);
 				return true;
 			}
 			foreach (Tile neighbor in tile.neighbors.Values) {
 				if (neighbor.cityAtTile != null) {
-					Log.ForContext<SettlerAI>().Debug("Cannot build at " + tile + " due to nearby city of " + neighbor.cityAtTile.name);
 					return true;
 				}
 			}

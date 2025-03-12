@@ -42,6 +42,7 @@ namespace C7GameData {
 		public int healRateInCity;
 
 		public bool observerMode = false;
+		public bool showGridCoordinates = false;
 
 		public string scenarioSearchPath;   //legacy from Civ3, we'll probably have a more modern format someday but this keeps legacy compatibility
 

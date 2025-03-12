@@ -604,6 +604,11 @@ public partial class Game : Node2D {
 					}
 				}
 			}
+			if (eventKeyDown.Keycode == Godot.Key.G && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
+				using (UIGameDataAccess gameDataAccess = new UIGameDataAccess()) {
+					gameDataAccess.gameData.showGridCoordinates = !gameDataAccess.gameData.showGridCoordinates;
+				}
+			}
 		} else if (@event is InputEventMagnifyGesture magnifyGesture) {
 			// UI slider has the min/max zoom settings for now
 			double newScale = mapView.cameraZoom * magnifyGesture.Factor;

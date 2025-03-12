@@ -8,6 +8,7 @@ using C7Engine.AI;
 using C7Engine.AI.StrategicAI;
 using C7Engine.AI.UnitAI;
 using Serilog;
+using System.Diagnostics;
 
 namespace C7Engine {
 	public class PlayerAI {
@@ -17,6 +18,8 @@ namespace C7Engine {
 			if (player.isHuman || player.isBarbarians) {
 				return;
 			}
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
 
 			if (player.turnsUntilPriorityReevaluation == 0) {
@@ -84,6 +87,8 @@ namespace C7Engine {
 
 				player.tileKnowledge.AddTilesToKnown(unit.location);
 			}
+
+			log.Information("-> End " + player.civilization.cityNames[0] + $" turn {stopwatch.ElapsedMilliseconds} milliseconds");
 		}
 
 		public static UnitAI GetAIForUnit(MapUnit unit, Player player) {
