@@ -99,13 +99,13 @@ namespace C7Engine {
 			} else if (unit.unitType.name == "Worker") {
 				return new WorkerAI(WorkerAI.MakeAiData(unit, player));
 			} else if (unit.location.cityAtTile != null && unit.location.unitsOnTile.Count(u => u.unitType.defense > 0 && u != unit) == 0) {
-				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else if (GetCombatAIIfUnitCanAttackNearbyBarbCamp(unit, player) is UnitAI unitAI && unitAI != null) {
 				log.Information("Set unit " + unit + " to take out barb camp");
 				return unitAI;
 			} else if (unit.unitType.name == "Catapult") {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
-				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else {
 				// As long as we don't have too many explorers yet, start a new
 				// exploring unit.
@@ -136,18 +136,7 @@ namespace C7Engine {
 
 				//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
 				//and that's a problem.
-
-				City nearestCityToDefend = FindNearbyCityToDefend(unit, player);
-
-				DefenderAIData newUnitAIData = new DefenderAIData();
-				newUnitAIData.destination = nearestCityToDefend.location;
-				newUnitAIData.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
-
-				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-				newUnitAIData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAIData.destination);
-
-				log.Information($"Unit {unit} tasked with defending {nearestCityToDefend.name}");
-				return new DefenderAI(newUnitAIData);
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player));
 			}
 		}
 
@@ -178,38 +167,6 @@ namespace C7Engine {
 				return new CombatAI(caid);
 			}
 			return null;
-		}
-
-		/**
-		 * Finds a nearby city that could use extra defenders.  Currently, that is a city that is tied
-		 * for the fewest units present, and among those, it's the closest.
-		 *
-		 * This is not a brilliant method, with many flaws such as not considering units already en route to defend,
-		 * whether the city needs more defenders, or if the units present are defenders.
-		 *
-		 * However, in the spirit of incrementalism, sending units to defend is still better than not sending them to defend.
-		 */
-		private static City FindNearbyCityToDefend(MapUnit unit, Player player) {
-			int minDefenders = int.MaxValue;
-			//TODO: Just being there doesn't mean a unit is a defender.
-			List<City> citiesWithFewestDefenders = new List<City>();
-			foreach (City c in player.cities) {
-				if (c.location.unitsOnTile.Count < minDefenders) {
-					minDefenders = c.location.unitsOnTile.Count;
-					citiesWithFewestDefenders.Clear();
-					citiesWithFewestDefenders.Add(c);
-				}
-			}
-			City nearestCityToDefend = City.NONE;
-			int closestCityDistance = int.MaxValue;
-			foreach (City c in citiesWithFewestDefenders) {
-				int distanceToCity = c.location.distanceTo(unit.location);
-				if (distanceToCity < closestCityDistance) {
-					nearestCityToDefend = c;
-					closestCityDistance = distanceToCity;
-				}
-			}
-			return nearestCityToDefend;
 		}
 
 		private static Tech PickTechToResearch(Player player, List<Tech> techs) {
