@@ -24,9 +24,13 @@ namespace C7GameData {
 		public string leader;
 		public int colorIndex;
 		public Gender leaderGender;
+
 		public List<string> cityNames = new List<string>();
 
 		// The IDs of all the techs that this civ starts with.
 		public HashSet<ID> startingTechs = new();
+
+		[JsonIgnore]
+		public UnitPrototype uniqueUnit;
 	}
 }

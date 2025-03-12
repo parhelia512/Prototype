@@ -163,14 +163,37 @@ namespace C7GameData.Save {
 		}
 
 		private void ConvertUnits(GameData data) {
-			var techDict = data.techs.ToDictionary(t => t.id);
+			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype => new UnitPrototype(prototype));
 
-			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype =>
-				new UnitPrototype(
-					prototype,
-					prototype.requiredTech != null ? techDict[prototype.requiredTech] : null
-				)
-			);
+			var techDict = data.techs.ToDictionary(t => t.id);
+			var unitPrototypeDict = data.unitPrototypes.ToDictionary(b => b.name);
+			var civDict = data.civilizations.ToDictionary(c => c.name);
+
+			foreach (SaveUnitPrototype saveProto in UnitPrototypes) {
+				UnitPrototype proto = unitPrototypeDict[saveProto.name];
+
+				if (saveProto.upgradeTo != null) {
+					proto.upgradeTo = unitPrototypeDict[saveProto.upgradeTo];
+				}
+
+				if (saveProto.requiredTech != null) {
+					proto.requiredTech = techDict[saveProto.requiredTech];
+				}
+
+				if (saveProto.unique != null) {
+					Civilization civ = civDict[saveProto.unique.civilization];
+
+					proto.unique = new() {
+						civilization = civ
+					};
+
+					if (saveProto.unique.replace != null) {
+						proto.unique.replace = unitPrototypeDict[saveProto.unique.replace];
+					}
+
+					civ.uniqueUnit = proto;
+				}
+			}
 
 			// map units need game map and players to populate location and owner
 			data.mapUnits = Units.ConvertAll(unit =>
