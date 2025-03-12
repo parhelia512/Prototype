@@ -32,5 +32,50 @@ namespace C7GameData {
 
 		[JsonIgnore]
 		public UnitPrototype uniqueUnit;
+
+		private UnitPrototype GetDirectUpgrade(UnitPrototype unit) {
+			// Check if a regular upgrade is replaced by a unique unit
+			if (uniqueUnit != null
+				&& uniqueUnit.unique.replace != null
+				&& uniqueUnit.unique.replace == unit.upgradeTo) {
+				return uniqueUnit;
+			}
+
+			return unit.upgradeTo;
+		}
+
+		public List<UnitPrototype> GetUpgradeChain(UnitPrototype unit) {
+			List<UnitPrototype> result = [];
+			var current = unit;
+
+			while (true) {
+				var upgrade = GetDirectUpgrade(current);
+				if (upgrade == null) break;
+
+				result.Add(upgrade);
+				current = upgrade;
+			}
+
+			return result;
+		}
+
+		public bool IsUnitAvailable(UnitPrototype unit) {
+			if (unit.unproducible) {
+				return false;
+			}
+
+			// Check if unit is replaced by a unique unit
+			if (uniqueUnit != null && uniqueUnit.unique.replace == unit) {
+				return false;
+			}
+
+			// Check if unit is a unique unit from another civilization
+			if (unit.unique != null && unit.unique.civilization != this) {
+				return false;
+			}
+
+			return true;
+		}
 	}
+
 }

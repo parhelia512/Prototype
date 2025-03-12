@@ -60,13 +60,34 @@ namespace C7GameData {
 		}
 
 		public bool CanBuildUnit(UnitPrototype proto) {
-			List<string> allowedUnits = new List<string> {"Warrior", "Chariot", "Settler", "Worker", "Catapult", "Galley"};
-			if (!allowedUnits.Contains(proto.name))
+			return MeetsProductionRequirements(proto) && !IsUnitObsolete(proto);
+		}
+
+		private bool IsUnitObsolete(UnitPrototype proto) {
+			var upgradeChain = owner.civilization.GetUpgradeChain(proto);
+
+			return upgradeChain.Any(MeetsProductionRequirements);
+		}
+
+		private bool HasRequiredTechnology(IProducible producible) {
+			return producible.requiredTech == null ||
+				   owner.knownTechs.Contains(producible.requiredTech.id);
+		}
+
+		private bool MeetsProductionRequirements(UnitPrototype proto) {
+			if (!owner.civilization.IsUnitAvailable(proto)) {
 				return false;
-			if (proto.categories.Contains("Sea"))
-				return location.NeighborsWater();
-			else
-				return true;
+			}
+
+			if (!HasRequiredTechnology(proto)) {
+				return false;
+			}
+
+			if (proto.categories.Contains("Sea") && !location.NeighborsWater()) {
+				return false;
+			}
+
+			return true;
 		}
 
 		public int TurnsUntilGrowth() {
