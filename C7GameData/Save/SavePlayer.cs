@@ -62,7 +62,6 @@ namespace C7GameData.Save {
 				colorIndex = colorIndex,
 				civilization = civilization is not null ? civilizations.Find(civ => civ.name == civilization) : null,
 				cityNameIndex = cityNameIndex,
-				tileKnowledge = new TileKnowledge(),
 				knownTechs = knownTechs,
 				eraCivilopediaName = eraCivilopediaName,
 				luxuryRate = luxuryRate,

@@ -513,7 +513,6 @@ public partial class LooseView : Node2D {
 
 			if (!gD.observerMode) {
 				foreach (FogOfWarLayer layer in layers.Where(layer => layer is FogOfWarLayer).Cast<FogOfWarLayer>()) {
-					layer.ComputeTileKnowledge(gD);
 					for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++)
 						if (gD.map.isRowAt(Y))
 							for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {

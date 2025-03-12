@@ -9,22 +9,11 @@ namespace C7.Map {
 
 		private readonly ImageTexture fogOfWarTexture;
 		private readonly Vector2 tileSize;
-		private HashSet<Tile> activeTiles = new HashSet<Tile>();
 
 		public FogOfWarLayer() {
 			Pcx fogOfWarPcx = new Pcx(Util.Civ3MediaPath("Art/Terrain/FogOfWar.pcx"));
 			fogOfWarTexture = PCXToGodot.getPureAlphaFromPCX(fogOfWarPcx);
 			tileSize = fogOfWarTexture.GetSize() / 9;
-		}
-
-		public void ComputeTileKnowledge(GameData gameData) {
-			activeTiles.Clear();
-
-			var player = gameData.GetHumanPlayers()[0];
-			activeTiles = player.cities
-				.SelectMany(x => x.GetTilesWithinBorders().SelectMany(y => y.neighbors.Values).Append(x.location))
-				.Concat(player.units.SelectMany(x => x.location.neighbors.Values.Append(x.location)))
-				.ToHashSet();
 		}
 
 		public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
@@ -41,25 +30,25 @@ namespace C7.Map {
 			int column = 0;
 			int row = 0;
 
-			if (activeTiles.Contains(north)) {
+			if (tileKnowledge.isActiveTile(north)) {
 				column += 2;
 			} else if (tileKnowledge.isTileKnown(north)) {
 				column += 1;
 			}
 
-			if (activeTiles.Contains(west)) {
+			if (tileKnowledge.isActiveTile(west)) {
 				column += 6;
 			} else if (tileKnowledge.isTileKnown(west)) {
 				column += 3;
 			}
 
-			if (activeTiles.Contains(east)) {
+			if (tileKnowledge.isActiveTile(east)) {
 				row += 2;
 			} else if (tileKnowledge.isTileKnown(east)) {
 				row += 1;
 			}
 
-			if (activeTiles.Contains(south)) {
+			if (tileKnowledge.isActiveTile(south)) {
 				row += 6;
 			} else if (tileKnowledge.isTileKnown(south)) {
 				row += 3;
