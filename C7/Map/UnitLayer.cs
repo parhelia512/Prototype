@@ -230,7 +230,7 @@ public partial class UnitLayer : LooseLayer {
 		// First draw animated effects. These will always appear over top of units regardless of draw order due to z-index.
 		C7Animation tileEffect = looseView.mapView.game.animTracker.getTileEffect(tile);
 		if (tileEffect != null) {
-			(_, float progress) = looseView.mapView.game.animTracker.getCurrentActionAndProgress(tile);
+			(_, float progress, _) = looseView.mapView.game.animTracker.getCurrentActionAndProgress(tile);
 			drawEffectAnimFrame(looseView, tileEffect, progress, tileCenter);
 		}
 

@@ -23,23 +23,14 @@ namespace C7Engine {
 				return Tile.NONE;   //nowhere to settle
 			}
 
-			IOrderedEnumerable<KeyValuePair<Tile, int> > orderedScores = scores.OrderByDescending(t => t.Value);
-			log.Debug("Top city location candidates from " + start + ":");
-			Tile returnValue = null;
-			foreach (KeyValuePair<Tile, int> kvp in orderedScores.Take(5)) {
-				if (returnValue == null) {
-					returnValue = kvp.Key;
-				}
-				if (kvp.Value > 0) {
-					log.Debug("  Tile " + kvp.Key + " scored " + kvp.Value);
-				}
-			}
-			return returnValue;
+			Tile result = scores.MaxBy(t => t.Value).Key;
+			return result;
 		}
 
 		public static Dictionary<Tile, int> GetScoredSettlerCandidates(Tile start, Player player) {
 			List<MapUnit> playerUnits = player.units;
-			IEnumerable<Tile> candidates = player.tileKnowledge.AllKnownTiles().Where(t => !IsInvalidCityLocation(t));
+			// TODO: handle settling other continents
+			IEnumerable<Tile> candidates = player.tileKnowledge.AllKnownTiles().Where(t => !IsInvalidCityLocation(t) && t.continent == start.continent);
 			Dictionary<Tile, int> scores = AssignTileScores(start, player, candidates, playerUnits.FindAll(u => u.unitType.name == "Settler"));
 			return scores;
 		}
@@ -92,25 +83,21 @@ namespace C7Engine {
 			return score;
 		}
 
-		public static bool IsInvalidCityLocation(Tile tile) {
+		private static bool IsInvalidCityLocation(Tile tile) {
 			if (tile.HasCity) {
-				log.Verbose("Tile " + tile + " is invalid due to existing city of " + tile.cityAtTile.name);
 				return true;
 			}
 			foreach (Tile neighbor in tile.neighbors.Values) {
 				if (neighbor.HasCity) {
-					log.Verbose("Tile " + tile + " is invalid due to neighboring city of " + neighbor.cityAtTile.name);
 					return true;
 				}
 				foreach (Tile neighborOfNeighbor in neighbor.neighbors.Values) {
 					if (neighborOfNeighbor.HasCity) {
-						log.Verbose("Tile " + tile + " is invalid due to nearby city of " + neighborOfNeighbor.cityAtTile.name);
 						return true;
 					}
 				}
 			}
 
-			log.Debug("Tile " + tile + " is a valid city location ");
 			return false;
 		}
 
@@ -123,7 +110,7 @@ namespace C7Engine {
 		/// <param name="tile">The tile under consideration for a future city.</param>
 		/// <param name="playerSettlers">The settlers owned by the AI considering building a city.</param>
 		/// <returns></returns>
-		public static bool SettlerAlreadyMovingTowardsTile(Tile tile, List<MapUnit> playerSettlers) {
+		private static bool SettlerAlreadyMovingTowardsTile(Tile tile, List<MapUnit> playerSettlers) {
 			foreach (MapUnit otherSettler in playerSettlers) {
 				if (otherSettler.currentAI is SettlerAI otherSettlerAI) {
 					Tile otherDestination = ((SettlerAI)(otherSettler.currentAI)).settlerAi.destination;

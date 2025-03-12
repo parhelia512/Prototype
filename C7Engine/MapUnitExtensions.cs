@@ -18,13 +18,8 @@ namespace C7Engine {
 		private const int JOB_PROGRESS_WORKER = 2;
 		private const int JOB_PROGRESS_SLAVE = 1;
 
-		private static int GetWorkerJobCost(string workerJob) {
-			// TODO: Read from scenario info, and probably store this in a
-			// worker job class.
-			if (workerJob == C7Action.UnitIrrigate) {
-				return 8;
-			}
-			return 1;
+		private static int GetWorkerJobCost(Terraform workerJob) {
+			return workerJob.TurnsToComplete;
 		}
 
 		public static void animate(this MapUnit unit, MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
@@ -404,13 +399,11 @@ namespace C7Engine {
 				unit.location = newLoc;
 				unit.movementPoints.onUnitMove(movementCost);
 				unit.animate(MapUnit.AnimatedAction.RUN, wait);
-			} else {
-				return false;
 			}
 			return true;
 		}
 
-		private static int SumWorkerProgress(Tile tile, string workerJob) {
+		private static int SumWorkerProgress(Tile tile, Terraform workerJob) {
 			int result = 0;
 			foreach (MapUnit unit in tile.unitsOnTile) {
 				if (unit.WorkerJob == workerJob) {
@@ -514,19 +507,21 @@ namespace C7Engine {
 			return city;
 		}
 
-		public static bool canBuildRoad(this MapUnit unit) {
-			return unit.unitType.actions.Contains(C7Action.UnitBuildRoad) && unit.location.CanBeRoaded();
+		public static bool canPerformTerraformAction(this MapUnit unit, string action) {
+			switch (action) {
+				case C7Action.UnitIrrigate:
+					return unit.canIrrigate();
+				case C7Action.UnitBuildMine:
+					return unit.canBuildMine();
+				case C7Action.UnitBuildRoad:
+					return unit.canBuildRoad();
+				default:
+					return true;
+			}
 		}
 
-		public static void buildRoad(this MapUnit unit) {
-			if (!unit.canBuildRoad()) {
-				log.Warning($"can't build road by {unit}");
-				return;
-			}
-
-			// TODO add animation and long process of building
-			unit.location.overlays.road = true;
-			unit.movementPoints.onConsumeAll();
+		public static bool canBuildRoad(this MapUnit unit) {
+			return unit.unitType.actions.Contains(C7Action.UnitBuildRoad) && unit.location.CanBeRoaded();
 		}
 
 		public static bool canBuildMine(this MapUnit unit) {
@@ -536,29 +531,18 @@ namespace C7Engine {
 				unit.location.CanBeMined();
 		}
 
-		public static void buildMine(this MapUnit unit) {
-			if (!unit.canBuildMine()) {
-				log.Warning($"can't build mine by {unit}");
-				return;
-			}
-
-			// TODO add animation and long process of building
-			unit.location.overlays.mine = true;
-			unit.movementPoints.onConsumeAll();
-		}
-
 		public static bool canIrrigate(this MapUnit unit) {
 			return unit.unitType.actions.Contains(C7Action.UnitIrrigate) && unit.location.CanBeIrrigated(unit.owner);
 		}
 
-		public static void irrigate(this MapUnit unit) {
-			if (!unit.canIrrigate()) {
-				log.Warning($"can't build irrigate by {unit}");
+		public static void PerformTerraformAction(this MapUnit unit, string action) {
+			if (!unit.canPerformTerraformAction(action)) {
+				log.Warning($"can't perform {action} by {unit}");
 				return;
 			}
-
-			unit.WorkerJob = C7Action.UnitIrrigate;
-			unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
+			Terraform workerJob = EngineStorage.gameData.GetTerraformByAction(action);
+			unit.WorkerJob = workerJob;
+			unit.setWorkerJobAnimation(action);
 			unit.PerformBusyAction();
 		}
 
@@ -571,6 +555,23 @@ namespace C7Engine {
 			unit.WorkerJob = null;
 			unit.WorkerProgressTowardsJob = 0;
 			unit.animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
+		}
+
+		private static void setWorkerJobAnimation(this MapUnit unit, string action) {
+			switch (action) {
+				case C7Action.UnitIrrigate:
+					unit.animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
+					return;
+				case C7Action.UnitBuildMine:
+					unit.animate(MapUnit.AnimatedAction.MINE, false, AnimationEnding.Repeat);
+					return;
+				case C7Action.UnitBuildRoad:
+					unit.animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
+					return;
+				default:
+					// do nothing;
+					return;
+			}
 		}
 
 		public static bool canAutomate(this MapUnit unit) {
@@ -606,14 +607,19 @@ namespace C7Engine {
 		}
 
 		public static void playAutomatedTurn(this MapUnit unit) {
-			bool done = !unit.currentAI.PlayTurn(unit.owner, unit);
-			if (done) {
+			UnitAI.Result result = unit.currentAI.PlayTurn(unit.owner, unit);
+			if (result == UnitAI.Result.Done) {
 				if (unit.currentAI is WorkerAI) {
 					unit.automate();
 				} else if (unit.currentAI is ExplorerAI) {
 					unit.explore();
 				}
 			}
+
+			// Do nothing after an error so control returns to the player, and
+			// nothing after an progress result, so that next turn continues the
+			// AI action.
 		}
+
 	}
 }

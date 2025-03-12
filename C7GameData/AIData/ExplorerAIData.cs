@@ -1,18 +1,10 @@
 namespace C7GameData.AIData {
 	public class ExplorerAIData : UnitAIData {
-		public enum ExplorationType {
-			RANDOM,
-			NEAR_CITIES,
-			COASTLINE,
-			DIRECTIONAL,
-			SCOUT_RIVAL,
-			ON_A_BOAT
-		}
-		public ExplorationType type;
-		public TilePath path;
+		public Tile destination;
+		public TilePath pathToDestination;
 
 		public override string ToString() {
-			return type + " exploration";
+			return "exploring toward " + destination;
 		}
 	}
 }

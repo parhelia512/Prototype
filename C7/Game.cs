@@ -53,6 +53,11 @@ public partial class Game : Node2D {
 	// that. This is useful so that the unit autoselector can be prevented from interfering with the player selecting fortified units.
 	public bool KeepCSUWhenFortified = false;
 
+	// When in observer mode, the number of turns to play before prompting the
+	// user to advance the turn manually. This allows for more rapid debugging
+	// without pressing the spacebar repeatedly.
+	public int turnsLeftToFastForward = 0;
+
 	[Export]
 	Control Toolbar;
 	private bool IsMovingCamera;
@@ -390,6 +395,13 @@ public partial class Game : Node2D {
 			int turnNumber = TurnHandling.GetTurnNumber();
 			Player player = controller;
 
+			// Allow fast forwarding in observer mode.
+			if (gameDataAccess.gameData.observerMode && turnsLeftToFastForward > 0) {
+				--turnsLeftToFastForward;
+				new MsgEndTurn().send();
+				return;
+			}
+
 			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
 
 			Tech tech = gameDataAccess.gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
@@ -577,6 +589,12 @@ public partial class Game : Node2D {
 						foreach (Player player in gameDataAccess.gameData.players) {
 							player.isHuman = false;
 						}
+						SetAnimationsEnabled(false);
+						popupOverlay.ShowPopup(
+							new TextDialog("How many turns to fast forward through?",
+											"Turns: ", "100",
+											(string turns) => { turnsLeftToFastForward = int.Parse(turns); }),
+								PopupOverlay.PopupCategory.Advisor);
 					} else {
 						foreach (Player player in gameDataAccess.gameData.players) {
 							if (player.id == EngineStorage.uiControllerID) {
@@ -584,6 +602,11 @@ public partial class Game : Node2D {
 							}
 						}
 					}
+				}
+			}
+			if (eventKeyDown.Keycode == Godot.Key.G && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
+				using (UIGameDataAccess gameDataAccess = new UIGameDataAccess()) {
+					gameDataAccess.gameData.showGridCoordinates = !gameDataAccess.gameData.showGridCoordinates;
 				}
 			}
 		} else if (@event is InputEventMagnifyGesture magnifyGesture) {
@@ -723,17 +746,16 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildRoad() ?? false)) {
-			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildRoad()).send();
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
 
 		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildMine() ?? false)) {
-			new ActionToEngineMsg(() => CurrentlySelectedUnit?.buildMine()).send();
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
 
 		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canIrrigate() ?? false)) {
-			new ActionToEngineMsg(() => CurrentlySelectedUnit?.irrigate()).send();
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
-
 	}
 
 	private void GetNextAutoselectedUnit(GameData gameData) {

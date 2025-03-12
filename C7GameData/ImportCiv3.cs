@@ -97,6 +97,7 @@ namespace C7GameData {
 					extraInfo = extra,
 					X = X,
 					Y = Y,
+					continent = civ3Tile.Continent,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
@@ -198,6 +199,7 @@ namespace C7GameData {
 					extraInfo = extra,
 					X = X,
 					Y = Y,
+					continent = civ3Tile.Continent,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
@@ -487,7 +489,7 @@ namespace C7GameData {
 					hitPointsRemaining = experience.baseHitPoints - unit.Damage, // TODO: include bonus hitpoints from unit type
 					movePointsRemaining = (float)prototype.Movement - (unit.MovementUsed / 3f),
 					WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob,
-					WorkerJob = unit.WorkerJob,
+					WorkerJob = (unit.WorkerJob==-1) ? null: save.TerraForms[unit.WorkerJob].Id,
 					isAutomated = unit.IsAutomated,
 				};
 				if (unit.Fortified) {

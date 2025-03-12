@@ -8,6 +8,7 @@ using C7Engine.AI;
 using C7Engine.AI.StrategicAI;
 using C7Engine.AI.UnitAI;
 using Serilog;
+using System.Diagnostics;
 
 namespace C7Engine {
 	public class PlayerAI {
@@ -17,6 +18,8 @@ namespace C7Engine {
 			if (player.isHuman || player.isBarbarians) {
 				return;
 			}
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
 
 			if (player.turnsUntilPriorityReevaluation == 0) {
@@ -45,28 +48,47 @@ namespace C7Engine {
 
 			//Do things with units.  Copy into an array first to avoid collection-was-modified exception
 			foreach (MapUnit unit in player.units.ToArray()) {
-				//For each unit, if there's already an AI task assigned, it will attempt to complete its goal.
-				//It may fail due to conditions having changed since that goal was assigned; in that case it will
-				//get a new task to try to complete.
+				// Don't waste time recalculating behaviors for fortified units.
+				// This means we'll have to unfortify all our units after
+				// interesting events like war declarations, but this seems like
+				// a good tradeoff for faster turns.
+				if (unit.isFortified) {
+					continue;
+				}
 
-				bool unitDone = false;
-				int attempts = 0;
-				int maxAttempts = 2;    //safety valve so we don't freeze the UI if SetAIForUnit returns something that fails
-				while (!unitDone) {
-					if (unit.currentAI == null || attempts > 0) {
+				// For each unit, if there's already an AI task assigned, it will attempt to complete its goal.
+				// It may fail due to conditions having changed since that goal was assigned; in that case it will
+				// get a new task to try to complete.
+				//
+				// Cap our attempts at 2 to avoid getting stuck in bad situations.
+				for (int attempt = 0; attempt < 2; ++attempt) {
+					if (unit.currentAI == null) {
 						unit.currentAI = GetAIForUnit(unit, player);
 					}
 
-					unitDone = unit.currentAI.PlayTurn(player, unit);
-					attempts++;
-					if (!unitDone && attempts >= maxAttempts) {
-						log.Warning($"Hit max AI attempts of {maxAttempts} for unit {unit} at {unit.location} without succeeding.  This indicates GetAIForUnit returned an impossible task, and should be debugged.");
+					// If the unit is still the process of doing its plan, allow
+					// it to continue next turn.
+					UnitAI.Result result = unit.currentAI.PlayTurn(player, unit);
+					if (result == UnitAI.Result.InProgress) {
 						break;
 					}
+
+					if (result == UnitAI.Result.Error) {
+						unit.currentAI = null;
+						break;
+					}
+
+					// Otherwise we need a new plan for next turn. Pick it now
+					// to avoid things like new units being preferred for
+					// exploration instead of units already far away from home
+					// for exploration.
+					unit.currentAI = GetAIForUnit(unit, player);
 				}
 
 				player.tileKnowledge.AddTilesToKnown(unit.location);
 			}
+
+			log.Information("-> End " + player.civilization.cityNames[0] + $" turn {stopwatch.ElapsedMilliseconds} milliseconds");
 		}
 
 		public static UnitAI GetAIForUnit(MapUnit unit, Player player) {
@@ -77,20 +99,31 @@ namespace C7Engine {
 			} else if (unit.unitType.name == "Worker") {
 				return new WorkerAI(WorkerAI.MakeAiData(unit, player));
 			} else if (unit.location.cityAtTile != null && unit.location.unitsOnTile.Count(u => u.unitType.defense > 0 && u != unit) == 0) {
-				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else if (GetCombatAIIfUnitCanAttackNearbyBarbCamp(unit, player) is UnitAI unitAI && unitAI != null) {
 				log.Information("Set unit " + unit + " to take out barb camp");
 				return unitAI;
 			} else if (unit.unitType.name == "Catapult") {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
-				return new DefenderAI(DefenderAI.MakeAiData(unit, player));
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else {
-				ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
-				if (maybeAiData != null) {
-					return new ExplorerAI(maybeAiData);
+				// As long as we don't have too many explorers yet, start a new
+				// exploring unit.
+				int numExplorers = 0;
+				foreach (MapUnit u in player.units) {
+					if (u.currentAI is ExplorerAI) {
+						++numExplorers;
+					}
 				}
 
-				//Nowhere to explore.  What to do now?
+				if (numExplorers < 10) {
+					ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
+					if (maybeAiData != null) {
+						return new ExplorerAI(maybeAiData);
+					}
+				}
+
+				//Nowhere to explore or too many explorers.  What to do now?
 				//Priority 1: Adequate defense of cities.
 				//Future Priority 1: Escorting Settlers
 				//Priority 2: Clearing out barbs
@@ -103,18 +136,7 @@ namespace C7Engine {
 
 				//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
 				//and that's a problem.
-
-				City nearestCityToDefend = FindNearbyCityToDefend(unit, player);
-
-				DefenderAIData newUnitAIData = new DefenderAIData();
-				newUnitAIData.destination = nearestCityToDefend.location;
-				newUnitAIData.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
-
-				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-				newUnitAIData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAIData.destination);
-
-				log.Information($"Unit {unit} tasked with defending {nearestCityToDefend.name}");
-				return new DefenderAI(newUnitAIData);
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player));
 			}
 		}
 
@@ -138,44 +160,13 @@ namespace C7Engine {
 
 			if (closestBarbDistance <= 3) {
 				CombatAIData caid = new CombatAIData();
+				caid.destination = closestBarbCamp;
 
 				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
 				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp);
 				return new CombatAI(caid);
 			}
 			return null;
-		}
-
-		/**
-		 * Finds a nearby city that could use extra defenders.  Currently, that is a city that is tied
-		 * for the fewest units present, and among those, it's the closest.
-		 *
-		 * This is not a brilliant method, with many flaws such as not considering units already en route to defend,
-		 * whether the city needs more defenders, or if the units present are defenders.
-		 *
-		 * However, in the spirit of incrementalism, sending units to defend is still better than not sending them to defend.
-		 */
-		private static City FindNearbyCityToDefend(MapUnit unit, Player player) {
-			int minDefenders = int.MaxValue;
-			//TODO: Just being there doesn't mean a unit is a defender.
-			List<City> citiesWithFewestDefenders = new List<City>();
-			foreach (City c in player.cities) {
-				if (c.location.unitsOnTile.Count < minDefenders) {
-					minDefenders = c.location.unitsOnTile.Count;
-					citiesWithFewestDefenders.Clear();
-					citiesWithFewestDefenders.Add(c);
-				}
-			}
-			City nearestCityToDefend = City.NONE;
-			int closestCityDistance = int.MaxValue;
-			foreach (City c in citiesWithFewestDefenders) {
-				int distanceToCity = c.location.distanceTo(unit.location);
-				if (distanceToCity < closestCityDistance) {
-					nearestCityToDefend = c;
-					closestCityDistance = distanceToCity;
-				}
-			}
-			return nearestCityToDefend;
 		}
 
 		private static Tech PickTechToResearch(Player player, List<Tech> techs) {
@@ -203,6 +194,7 @@ namespace C7Engine {
 				return null;
 			}
 
+			// Details on how Civ3 does it: https://forums.civfanatics.com/threads/what-will-the-ai-research-next.45559/
 			return possibleTechs[(int)GameData.rng.NextInt64(possibleTechs.Count)];
 		}
 	}

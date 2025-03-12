@@ -27,8 +27,10 @@ namespace C7Engine {
 				} else {
 					PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
 					settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination);
-					log.Information("Set AI for unit to BUILD_CITY with destination of " + settlerAiData.destination);
+					log.Information($"Set AI for unit {unit.id} of {unit.owner.civilization.name} to BUILD_CITY with destination of " + settlerAiData.destination);
 				}
+
+				// TODO: return the ranked list, so we can check paths here and avoid duplicate calculations.
 			}
 			return settlerAiData;
 		}
@@ -37,44 +39,21 @@ namespace C7Engine {
 			settlerAi = d;
 		}
 
-		bool UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
-start:
+		C7GameData.UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			switch (settlerAi.goal) {
 				case SettlerAIData.SettlerGoal.BUILD_CITY:
 					if (IsInvalidCityLocation(settlerAi.destination)) {
 						log.Information("Seeking new destination for settler " + unit.id + "headed to " + settlerAi.destination);
-						//Make sure we're using the new settler AI going forward, including this turn
-						settlerAi = MakeAiData(unit, player);
-						//Re-process since the unit's goal may have changed.
-						//TODO: In theory in the future, it might even have a non-settler AI.  Maybe we should instead return false,
-						//and have the PlayerAI re-kick the unit based on a possibly different AI class?
-						//Not too worried for settler AI types, but that's a real possibility for other types - an Explorer could
-						//very well become a Defender or Attacker if there's no exploration left, for example.
-						goto start;
+						return C7GameData.UnitAI.Result.Error;
 					}
+
 					if (unit.location == settlerAi.destination) {
 						log.Information("Building city with " + unit);
 						//TODO: This should use a message, and the message handler should cause the disbanding to happen.
 						CityInteractions.BuildCity(unit.location.XCoordinate, unit.location.YCoordinate, player.id, unit.owner.GetNextCityName());
 						unit.disband();
 					} else {
-						//If the settler has no destination, then disband rather than crash later.
-						if (settlerAi.destination == Tile.NONE) {
-							log.Information("Disbanding settler " + unit.id + " with no valid destination");
-							unit.disband();
-							return false;
-						}
-						try {
-							Tile nextTile = settlerAi.pathToDestination.Next();
-							unit.move(unit.location.directionTo(nextTile));
-						} catch (Exception ex) {
-							//This occurs when on the previous turn, a settler tries to move to the next location on its path, but cannot, due to another
-							//civilization's unit (or a barbarian unit) being on that tile.
-							//TODO: #213 - If the path cannot be completed, we should create a different path instead.
-							//But to do that, the pathing algorithm will need to be enhanced to be aware of when rival units are in the way.
-							log.Warning("#213 - Could not get next part of path for unit " + settlerAi + ", " + ex.Message);
-							return false;
-						}
+						return this.TryToMoveAlongPath(unit, settlerAi.pathToDestination, /*allowCombat=*/false);
 					}
 					break;
 				case SettlerAIData.SettlerGoal.JOIN_CITY:
@@ -88,22 +67,17 @@ start:
 						unit.disband();
 					}
 					break;
-				default:
-					log.Warning("Unknown strategy of " + settlerAi.goal + " for unit");
-					break;
 			}
 
-			return true;
+			return C7GameData.UnitAI.Result.Done;
 		}
 
 		private static bool IsInvalidCityLocation(Tile tile) {
 			if (tile.cityAtTile != null) {
-				Log.ForContext<SettlerAI>().Debug("Cannot build at " + tile + " due to city of " + tile.cityAtTile.name);
 				return true;
 			}
 			foreach (Tile neighbor in tile.neighbors.Values) {
 				if (neighbor.cityAtTile != null) {
-					Log.ForContext<SettlerAI>().Debug("Cannot build at " + tile + " due to nearby city of " + neighbor.cityAtTile.name);
 					return true;
 				}
 			}

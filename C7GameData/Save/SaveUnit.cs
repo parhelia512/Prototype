@@ -16,7 +16,7 @@ namespace C7GameData.Save {
 		public TileDirection facingDirection;
 		public string experience;
 		public int WorkerProgressTowardsJob;
-		public int WorkerJob;
+		public ID WorkerJob;
 
 		// True for multiple types of automation, including worker automation
 		// and automated exploring.
@@ -42,11 +42,11 @@ namespace C7GameData.Save {
 			experience = unit.experienceLevelKey;
 			movePointsRemaining = unit.movementPoints.remaining;
 			WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob;
-			WorkerJob = unit.WorkerJobAsInt();
+			WorkerJob = unit.WorkerJob?.Id;
 		}
 
 
-		public MapUnit ToMapUnit(List<UnitPrototype> prototypes, List<ExperienceLevel> experienceLevels, List<Player> players, GameMap map) {
+		public MapUnit ToMapUnit(List<UnitPrototype> prototypes, List<ExperienceLevel> experienceLevels, List<Player> players, List<Terraform> terraforms, GameMap map) {
 			MapUnit unit = new MapUnit{
 				id = id,
 				unitType = prototypes.Find(p => p.name == prototype),
@@ -60,11 +60,12 @@ namespace C7GameData.Save {
 				isFortified = action == "fortified",
 				isAutomated = isAutomated,
 				facingDirection = facingDirection,
+				WorkerProgressTowardsJob = WorkerProgressTowardsJob,
+				WorkerJob = WorkerJob == null ? null:terraforms.Find(tf => tf.Id == WorkerJob)
 			};
 			unit.location.unitsOnTile.Add(unit);
 			unit.movementPoints.reset(movePointsRemaining);
-			unit.WorkerProgressTowardsJob = WorkerProgressTowardsJob;
-			unit.SetWorkerJobFromInt(WorkerJob);
+
 			return unit;
 		}
 	}

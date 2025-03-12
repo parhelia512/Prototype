@@ -42,6 +42,7 @@ namespace C7GameData {
 		public int healRateInCity;
 
 		public bool observerMode = false;
+		public bool showGridCoordinates = false;
 
 		public string scenarioSearchPath;   //legacy from Civ3, we'll probably have a more modern format someday but this keeps legacy compatibility
 
@@ -73,6 +74,14 @@ namespace C7GameData {
 				return experienceLevels[n + 1];
 			else
 				return null;
+		}
+
+		public Terraform GetTerraform(ID id) {
+			return Terraforms.Find(tf => tf.Id == id);
+		}
+
+		public Terraform GetTerraformByAction(string action) {
+			return Terraforms.Find(tf => tf.Action == action);
 		}
 
 		// TODO: This is a placeholder method for calculating tile owners.

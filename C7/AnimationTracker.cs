@@ -72,7 +72,7 @@ public partial class AnimationTracker {
 		return activeAnims.ContainsKey(unit.id);
 	}
 
-	public (MapUnit.AnimatedAction, float) getCurrentActionAndProgress(ID id) {
+	public (MapUnit.AnimatedAction, float, AnimationEnding) getCurrentActionAndProgress(ID id) {
 		ActiveAnimation aa = activeAnims[id];
 
 		var durationMS = (double)(aa.endTimeMS - aa.startTimeMS);
@@ -85,14 +85,14 @@ public partial class AnimationTracker {
 		else if (progress > 1.0)
 			progress = 1.0;
 
-		return (aa.anim.action, (float)progress);
+		return (aa.anim.action, (float)progress, aa.ending);
 	}
 
-	public (MapUnit.AnimatedAction, float) getCurrentActionAndProgress(MapUnit unit) {
+	public (MapUnit.AnimatedAction, float, AnimationEnding) getCurrentActionAndProgress(MapUnit unit) {
 		return getCurrentActionAndProgress(unit.id);
 	}
 
-	public (MapUnit.AnimatedAction, float) getCurrentActionAndProgress(Tile tile) {
+	public (MapUnit.AnimatedAction, float, AnimationEnding) getCurrentActionAndProgress(Tile tile) {
 		return getCurrentActionAndProgress(tile.Id);
 	}
 
@@ -114,7 +114,7 @@ public partial class AnimationTracker {
 
 	public MapUnit.Appearance getUnitAppearance(MapUnit unit) {
 		if (hasCurrentAction(unit)) {
-			var (action, progress) = getCurrentActionAndProgress(unit);
+			var (action, progress, ending) = getCurrentActionAndProgress(unit);
 
 			float offsetX = 0, offsetY = 0;
 			if (action == MapUnit.AnimatedAction.RUN) {
@@ -128,7 +128,8 @@ public partial class AnimationTracker {
 				direction = unit.facingDirection,
 				progress = progress,
 				offsetX = offsetX,
-				offsetY = offsetY
+				offsetY = offsetY,
+				ending = ending,
 			};
 		} else {
 			return new MapUnit.Appearance {
@@ -136,7 +137,7 @@ public partial class AnimationTracker {
 				direction = unit.facingDirection,
 				progress = 1f,
 				offsetX = 0f,
-				offsetY = 0f
+				offsetY = 0f,
 			};
 		}
 	}
