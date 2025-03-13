@@ -78,6 +78,15 @@ namespace C7Engine {
 				return null;
 			}
 
+			// Don't waste worker moves on unowned tiles. We do allow roading
+			// unowned tiles though.
+			if (t.owningCity == null || t.owningCity.owner != player) {
+				if (t.CanBeRoaded()) {
+					return C7Action.UnitBuildRoad;
+				}
+				return null;
+			}
+
 			// "Mine green, irrigate brown"
 			if (t.overlayTerrainType.Key == "grassland" || t.overlayTerrainType.Key == "hills" || t.overlayTerrainType.Key == "mountains") {
 				if (t.CanBeMined()) {
