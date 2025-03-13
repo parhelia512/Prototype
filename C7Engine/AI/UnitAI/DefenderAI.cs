@@ -69,8 +69,7 @@ namespace C7Engine.AI.UnitAI {
 			Dictionary<City, float> cityScores = new();
 			foreach (City c in player.cities) {
 				int score = 0;
-				//TODO: Just being there doesn't mean a unit is a defender.
-				if (c.location.unitsOnTile.Count < 3) {
+				if (c.location.unitsOnTile.Count(u => u.CanDefendOnLand()) < 3) {
 					// Add to the score if there aren't many defenders.
 					score += 10;
 				}

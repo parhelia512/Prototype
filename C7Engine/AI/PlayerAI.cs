@@ -30,7 +30,9 @@ namespace C7Engine {
 					player.strategicPriorityData.Add(priority);
 				}
 				player.turnsUntilPriorityReevaluation = 15 + GameData.rng.Next(10);
-				log.Information(player.turnsUntilPriorityReevaluation + " turns until next re-evaluation");
+
+				string summary = string.Join(',', player.strategicPriorityData);
+				log.Information($"Player {player.civilization.name} now has priorities of: {summary}. {player.turnsUntilPriorityReevaluation} turns until next re-evaluation");
 			} else {
 				player.turnsUntilPriorityReevaluation--;
 			}
@@ -98,7 +100,7 @@ namespace C7Engine {
 				return new SettlerAI(SettlerAI.MakeAiData(unit, player));
 			} else if (unit.unitType.name == "Worker") {
 				return new WorkerAI(WorkerAI.MakeAiData(unit, player));
-			} else if (unit.location.cityAtTile != null && unit.location.unitsOnTile.Count(u => u.unitType.defense > 0 && u != unit) == 0) {
+			} else if (unit.location.cityAtTile != null && unit.CanDefendOnLand() && unit.location.unitsOnTile.Count(u => u.CanDefendOnLand() && u != unit) == 0) {
 				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else if (GetCombatAIIfUnitCanAttackNearbyBarbCamp(unit, player) is UnitAI unitAI && unitAI != null) {
 				log.Information("Set unit " + unit + " to take out barb camp");
@@ -107,16 +109,16 @@ namespace C7Engine {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
 				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else {
-				// As long as we don't have too many explorers yet, start a new
-				// exploring unit.
-				int numExplorers = 0;
+				// As long as we don't have too many explorers yet of this unit's
+				// type (land vs sea), start a new exploring unit.
+				int numRelevantExplorers = 0;
 				foreach (MapUnit u in player.units) {
-					if (u.currentAI is ExplorerAI) {
-						++numExplorers;
+					if (u.currentAI is ExplorerAI && u.IsLandUnit() == unit.IsLandUnit()) {
+						++numRelevantExplorers;
 					}
 				}
 
-				if (numExplorers < 10) {
+				if (numRelevantExplorers < 10) {
 					ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
 					if (maybeAiData != null) {
 						return new ExplorerAI(maybeAiData);
@@ -177,6 +179,10 @@ namespace C7Engine {
 				if (tech.EraCivilopediaName != player.eraCivilopediaName) {
 					continue;
 				}
+				if (player.knownTechs.Contains(tech.id)) {
+					continue;
+				}
+
 				bool prereqsKnown = true;
 				foreach (Tech prereq in tech.Prerequisites) {
 					if (!player.knownTechs.Contains(prereq.id)) {
