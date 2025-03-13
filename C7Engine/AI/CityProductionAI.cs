@@ -59,11 +59,14 @@ namespace C7Engine {
 
 				// Below here are multiplicative adjusters
 				float popAdjustedScore = AdjustScoreByPopCost(city, unitPrototype, flatAdjustedScore);
-				log.Debug($" {unitPrototype.name} pop-adjusted-scores {popAdjustedScore}");
+				log.Debug($"  {unitPrototype.name} pop-adjusted-scores {popAdjustedScore}");
 				float priorityAdjustedScore = AdjustScoreByPriorities(priorities, unitPrototype, popAdjustedScore);
-				log.Debug($" {unitPrototype.name} priority-adjusted-scores {priorityAdjustedScore}");
+				log.Debug($"  {unitPrototype.name} priority-adjusted-scores {priorityAdjustedScore}");
+				float cityAdjustedScore = AdjustScoreForCity(city, unitPrototype, priorityAdjustedScore);
+				log.Debug($"  {unitPrototype.name} city-adjusted-scores {cityAdjustedScore}");
+
 				prototypes.Add(unitPrototype);
-				weights.Add(priorityAdjustedScore);
+				weights.Add(cityAdjustedScore);
 			}
 
 			IProducible chosen = ChooseWeightedPriority(prototypes, weights, Weighting.WEIGHTED_QUADRATIC);
@@ -126,6 +129,23 @@ namespace C7Engine {
 				idx++;
 			}
 			return items[0];    //TODO: Fallback
+		}
+
+		private static float AdjustScoreForCity(City city, UnitPrototype unit, float score) {
+			// If the city is guarded, let our other priorities determine what
+			// we do.
+			if (city.location.unitsOnTile.Count(u => u.CanDefendOnLand()) > 0) {
+				return score;
+			}
+
+			// Otherwise if we're unguarded, we should build a defending unit
+			// quickly
+			if (unit.categories.Contains("Land") && unit.defense > 0) {
+				return score;
+			} else {
+				// Prefer not to build non-defense units in unguarded cities. 
+				return 0;
+			}
 		}
 
 		public static float AdjustScoreByPopCost(City city, UnitPrototype unitPrototype, float baseScore) {

@@ -23,7 +23,7 @@ namespace C7Engine {
 					//by another colonist.  Longer-term, the AI shouldn't be building settlers if that is the case,
 					//but right now we'll just spike the football to stop the clock and avoid building immediately next to another city.
 					settlerAiData.goal = SettlerAIData.SettlerGoal.JOIN_CITY;
-					log.Information("Set AI for unit to JOIN_CITY due to lack of locations to settle");
+					log.Information($"Set AI for unit {unit.id} of {unit.owner.civilization.name} to JOIN_CITY due to lack of locations to settle");
 				} else {
 					PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
 					settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination);
