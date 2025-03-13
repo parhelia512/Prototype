@@ -29,5 +29,10 @@ namespace C7GameData {
 
 		// Provide a string representation of the current AI plan.
 		string SummarizePlan();
+
+		// Do any bookkeeping required when the unit is destroyed. For example,
+		// if an escort is destroyed, update the unit being escorted to reflect
+		// that it no longer has an escort.
+		void UpdateOnDeath();
 	}
 }

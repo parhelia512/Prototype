@@ -47,6 +47,8 @@ namespace C7Engine {
 			return "WorkerAI: " + data.ToString();
 		}
 
+		public void UpdateOnDeath() { }
+
 		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
 				return UnitAI.Result.Error;
@@ -68,7 +70,7 @@ namespace C7Engine {
 				return PerformWorkerMove(unit, improvement);
 			}
 
-			return this.TryToMoveAlongPath(unit, data.pathToDestination, /*allowCombat=*/false);
+			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, /*allowCombat=*/false);
 		}
 
 		private static string? GetTileImprovement(Tile t, Player player) {

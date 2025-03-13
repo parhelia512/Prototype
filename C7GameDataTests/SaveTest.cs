@@ -116,6 +116,33 @@ public class SaveTests {
 		});
 	}
 
+	private void CheckAiInvariants() {
+		using UIGameDataAccess gda = new();
+		GameData game = gda.gameData;
+
+		foreach (Player p in game.players) {
+			foreach (MapUnit u in p.units) {
+				if (u.unitType.name != "Settler") {
+					continue;
+				}
+
+				// We don't require an escort if the settler is in a city.
+				if (u.location.cityAtTile != null) {
+					continue;
+				}
+
+				// This is a settler not in a city - make sure it has an escort.
+				if (u.currentAI is SettlerAI settlerAi) {
+					if (settlerAi.data.escort != null) {
+						Assert.Equal(settlerAi.data.escort.location, u.location);
+					} else {
+						Assert.True(u.location.unitsOnTile.Count > 1);
+					}
+				}
+			}
+		}
+	}
+
 	[Fact]
 	public void SimpleGame() {
 		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
@@ -124,9 +151,10 @@ public class SaveTests {
 		// Make all the players AI players while we run the game in headless mode.
 		human.isHuman = false;
 
-		// Play out 30 turns.
-		for (int i = 0; i < 30; ++i) {
+		// Play out 50 turns.
+		for (int i = 0; i < 50; ++i) {
 			WaitForStartTurnMessage();
+			CheckAiInvariants();
 			new MsgEndTurn().send();
 		}
 		WaitForStartTurnMessage();
@@ -137,7 +165,7 @@ public class SaveTests {
 		using (UIGameDataAccess gda = new()) {
 			game = gda.gameData;
 		}
-		Assert.Equal(30, game.turn);
+		Assert.Equal(50, game.turn);
 
 		// Save the game.
 		string outputDirectSavePath = getDataPath("output/headless-game-direct-save.json");

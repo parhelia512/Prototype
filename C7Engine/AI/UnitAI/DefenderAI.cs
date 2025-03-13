@@ -45,13 +45,15 @@ namespace C7Engine.AI.UnitAI {
 				return C7GameData.UnitAI.Result.Done;
 			} else {
 				log.Debug("Moving defender towards " + data.destination);
-				return this.TryToMoveAlongPath(unit, data.pathToDestination, /*allowCombat=*/false);
+				return this.TryToMoveAlongPath(unit, ref data.pathToDestination, /*allowCombat=*/false);
 			}
 		}
 
 		public string SummarizePlan() {
 			return "DefenderAI: " + data.ToString();
 		}
+
+		public void UpdateOnDeath() { }
 
 		/**
 		 * Finds a nearby city that could use extra defenders.

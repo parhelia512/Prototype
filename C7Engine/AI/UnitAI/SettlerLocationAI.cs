@@ -113,7 +113,7 @@ namespace C7Engine {
 		private static bool SettlerAlreadyMovingTowardsTile(Tile tile, List<MapUnit> playerSettlers) {
 			foreach (MapUnit otherSettler in playerSettlers) {
 				if (otherSettler.currentAI is SettlerAI otherSettlerAI) {
-					Tile otherDestination = ((SettlerAI)(otherSettler.currentAI)).settlerAi.destination;
+					Tile otherDestination = ((SettlerAI)(otherSettler.currentAI)).data.destination;
 					if (otherDestination == tile) {
 						return true;
 					}

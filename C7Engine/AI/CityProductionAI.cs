@@ -131,15 +131,25 @@ namespace C7Engine {
 			return items[0];    //TODO: Fallback
 		}
 
+		private static bool HasUnescortedSettler(City city) {
+			foreach (MapUnit u in city.location.unitsOnTile) {
+				if (u.currentAI is SettlerAI settlerAi && settlerAi.data.escort == null) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		private static float AdjustScoreForCity(City city, UnitPrototype unit, float score) {
-			// If the city is guarded, let our other priorities determine what
-			// we do.
-			if (city.location.unitsOnTile.Count(u => u.CanDefendOnLand()) > 0) {
+			bool cityGuarded = city.location.unitsOnTile.Count(u => u.CanDefendOnLand()) > 0;
+
+			// If the city is unguarded and we don't have an unescorted settler
+			// sitting around, let our other priorities determine what we do.
+			if (cityGuarded && !HasUnescortedSettler(city)) {
 				return score;
 			}
 
-			// Otherwise if we're unguarded, we should build a defending unit
-			// quickly
+			// Otherwise we should build a defending unit quickly.
 			if (unit.categories.Contains("Land") && unit.defense > 0) {
 				return score;
 			} else {
