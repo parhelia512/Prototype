@@ -45,7 +45,10 @@ public partial class Game : Node2D {
 	public class GotoInfo {
 		public Tile destinationTile = null;
 		public int moveCost = -1;
+		public TilePath path = null;
 		public HashSet<System.Numerics.Vector2> pathCoords;
+		public bool attackingMove = false;
+		public Player requiresWarDeclarationOnPlayer = null;
 	};
 	public GotoInfo gotoInfo = null;
 
@@ -477,13 +480,8 @@ public partial class Game : Node2D {
 				GetViewport().SetInputAsHandled();
 				if (eventMouseButton.IsPressed()) {
 					if (gotoInfo != null) {
+						HandleGotoClick(gotoInfo);
 						setGotoMode(false);
-						using (var gameDataAccess = new UIGameDataAccess()) {
-							var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
-							if (tile != null) {
-								new MsgSetUnitPath(CurrentlySelectedUnit.id, tile).send();
-							}
-						}
 					} else {
 						// Select unit on tile at mouse location
 						using (var gameDataAccess = new UIGameDataAccess()) {
@@ -562,24 +560,7 @@ public partial class Game : Node2D {
 				mapView.cameraLocation += OldPosition - eventMouseMotion.Position;
 				OldPosition = eventMouseMotion.Position;
 			} else if (gotoInfo != null) {
-				// We're in "goto" mode and moved the mouse over a tile.
-				//
-				// Figure out which tile it was.
-				using UIGameDataAccess gameDataAccess = new();
-				Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseMotion.Position);
-				gotoInfo.destinationTile = tile;
-
-				// Figure out what unit is in goto mode. If the tile we're hovering over is
-				// different than the tile the unit is on, calculate the path to move there.
-				MapUnit unit = tile == null ? null : gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
-				if (unit != null && unit.location != tile) {
-					TilePath path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
-					gotoInfo.moveCost = path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
-					gotoInfo.pathCoords = path.GetPathCoords();
-				} else {
-					// Hide the goto cursor, we don't have a valid move.
-					gotoInfo.moveCost = -1;
-				}
+				gotoInfo = GetGotoInfo(eventMouseMotion.Position);
 			}
 		} else if (@event is InputEventKey eventKeyDown && eventKeyDown.Pressed) {
 			if (eventKeyDown.Keycode == Godot.Key.O && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
@@ -768,6 +749,79 @@ public partial class Game : Node2D {
 		} else {
 			gotoInfo = null;
 		}
+	}
+
+	private void HandleGotoClick(GotoInfo info) {
+		if (info == null || info.moveCost == -1) {
+			return;
+		}
+
+		// If this move would require declaring war, display a popup that checks
+		// if the player really wants to declare war. If they do, declare the
+		// war for them, clear out the player, and call this method again.
+		if (info.requiresWarDeclarationOnPlayer != null) {
+			GotoInfo stashed = info;
+			popupOverlay.ShowPopup(new WarConfirmation(stashed.requiresWarDeclarationOnPlayer,
+				() => {
+					controller.DeclareWarOn(info.requiresWarDeclarationOnPlayer);
+					stashed.requiresWarDeclarationOnPlayer = null;
+					HandleGotoClick(stashed);
+				}), PopupOverlay.PopupCategory.Advisor);
+			return;
+		}
+
+		using UIGameDataAccess gameDataAccess = new();
+		new MsgSetUnitPath(CurrentlySelectedUnit.id, info.path).send();
+	}
+
+	private GotoInfo GetGotoInfo(Vector2 mousePos) {
+		GotoInfo result = new();
+
+		// We're in "goto" mode and moved the mouse over a tile.
+		//
+		// Figure out which tile it was.
+		using UIGameDataAccess gameDataAccess = new();
+		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, mousePos);
+		result.destinationTile = tile;
+
+		// Figure out what unit is in goto mode. If the tile we're hovering over is
+		// different than the tile the unit is on, calculate the path to move there.
+		MapUnit unit = tile == null ? null : gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
+		if (unit != null && unit.location != tile) {
+			result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
+			result.moveCost = result.path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
+			result.pathCoords = result.path.GetPathCoords();
+
+			// If we couldn't path onto the tile, but the tile is next to us and
+			// we could enter the tile if combat is allowed (or if we could
+			// declare war with the move) mark the path.
+			if (result.moveCost == -1
+					&& unit.location.distanceTo(tile) == 1
+					&& unit.CanEnterTile(tile, /*allowCombat=*/true, /*allowWarDeclaration=*/true)) {
+				Queue<Tile> pathQueue = new();
+				pathQueue.Enqueue(tile);
+
+				result.path = new TilePath(tile, pathQueue);
+				result.moveCost = result.path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
+				result.pathCoords = result.path.GetPathCoords();
+				result.attackingMove = true;
+
+				// If we couldn't enter this tile without a war declaration,
+				// record which civ we need to declare war on.
+				if (!unit.CanEnterTile(tile, /*allowCombat=*/true, /*allowWarDeclaration=*/false)) {
+					if (tile.cityAtTile != null) {
+						result.requiresWarDeclarationOnPlayer = tile.cityAtTile.owner;
+					} else {
+						result.requiresWarDeclarationOnPlayer = tile.unitsOnTile[0].owner;
+					}
+				}
+			}
+		} else {
+			// Hide the goto cursor, we don't have a valid move.
+			result.moveCost = -1;
+		}
+
+		return result;
 	}
 
 	private void _on_SlideToggle_toggled(bool buttonPressed) {

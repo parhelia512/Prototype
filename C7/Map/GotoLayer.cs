@@ -18,18 +18,23 @@ public partial class GotoLayer : LooseLayer {
 		gotoLabelFont = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf", null, ResourceLoader.CacheMode.Ignore);
 		gotoLabelFont.FixedSize = 25;
 
-		gotoLabelFontTheme.DefaultFont = gotoLabelFont;
-		gotoLabelFontTheme.SetColor("font_color", "Label", Color.Color8(255, 255, 255));
-		gotoLabelFontTheme.SetFontSize("font_size", "Label", 20);
+		whiteFontTheme.DefaultFont = gotoLabelFont;
+		whiteFontTheme.SetColor("font_color", "Label", Colors.White);
+		whiteFontTheme.SetFontSize("font_size", "Label", 20);
+
+		redFontTheme.DefaultFont = gotoLabelFont;
+		redFontTheme.SetColor("font_color", "Label", Colors.Red);
+		redFontTheme.SetFontSize("font_size", "Label", 20);
 	}
 
 	// The GoTo cursor and label fields.
 	private AnimatedSprite2D gotoCursorSprite = null;
 	private Label gotoLabel = null;
-	Theme gotoLabelFontTheme = new();
+	Theme whiteFontTheme = new();
+	Theme redFontTheme = new();
 	FontFile gotoLabelFont = new();
 
-	public void drawGotoCursor(LooseView looseView, Vector2 position, int moves) {
+	public void drawGotoCursor(LooseView looseView, Vector2 position, int moves, bool attackingMove) {
 		// Initialize cursor if necessary
 		if (gotoCursorSprite == null) {
 			gotoCursorSprite = new AnimatedSprite2D();
@@ -39,13 +44,14 @@ public partial class GotoLayer : LooseLayer {
 			gotoCursorSprite.Animation = "cursor"; // hardcoded in loadCursorAnimation
 
 			gotoLabel = new() {
-				Theme = gotoLabelFontTheme
+				Theme = whiteFontTheme
 			};
 
 			looseView.AddChild(gotoLabel);
 			looseView.AddChild(gotoCursorSprite);
 		}
 
+		gotoLabel.Theme = attackingMove ? redFontTheme : whiteFontTheme;
 		gotoLabel.Text = moves.ToString();
 		Vector2 labelSize = gotoLabelFont.GetStringSize(gotoLabel.Text);
 		gotoLabel.Position = position - labelSize / 2;
@@ -74,13 +80,18 @@ public partial class GotoLayer : LooseLayer {
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
+		if (looseView.mapView.game.gotoInfo == null) {
+			return;
+		}
+		Game.GotoInfo gotoInfo = looseView.mapView.game.gotoInfo;
+
 		// We set the move cost to -1 in Game.cs if the move is invalid for some reason.
-		if (looseView.mapView.game.gotoInfo?.destinationTile == tile && looseView.mapView.game.gotoInfo.moveCost >= 0) {
-			drawGotoCursor(looseView, tileCenter, looseView.mapView.game.gotoInfo.moveCost);
-		} else if (looseView.mapView.game.gotoInfo?.pathCoords
+		if (gotoInfo.destinationTile == tile && gotoInfo.moveCost >= 0) {
+			drawGotoCursor(looseView, tileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);
+		} else if (gotoInfo.pathCoords
 				?.Contains(new System.Numerics.Vector2(tile.XCoordinate, tile.YCoordinate)) == true) {
 			// If this tile is part of the path, draw a little dot to represent that.
-			looseView.DrawCircle(tileCenter, 5, Color.Color8(255, 255, 255));
+			looseView.DrawCircle(tileCenter, 5, Colors.White);
 		}
 	}
 }

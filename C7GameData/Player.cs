@@ -98,6 +98,18 @@ namespace C7GameData {
 			return true;
 		}
 
+		public void DeclareWarOn(Player other) {
+			if (!playerRelationships.ContainsKey(other.id)) {
+				playerRelationships.Add(other.id, new PlayerRelationship());
+			}
+			if (!other.playerRelationships.ContainsKey(this.id)) {
+				other.playerRelationships.Add(this.id, new PlayerRelationship());
+			}
+
+			playerRelationships[other.id].atWar = true;
+			other.playerRelationships[this.id].atWar = true;
+		}
+
 		public bool SitsOutFirstTurn() {
 			// TODO: Scenarios can also specify that certain players sit out the first turn. E.g. WW2 in the Pacific
 			return isBarbarians;
