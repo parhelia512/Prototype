@@ -34,28 +34,8 @@ public partial class DiplomacySelection : Popup {
 			vOffset += 25;
 		}
 
-		//Cancel/confirm buttons.  Note the X button is thinner than the O button.
-		// TODO: Push this shared logic up into Popup.cs
-		ImageTexture circleTexture= Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 1, 1, 19, 19);
-		ImageTexture xTexture = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 21, 1, 15, 19);
-		ImageTexture circleHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 37, 1, 19, 19);
-		ImageTexture xHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 57, 1, 15, 19);
-		ImageTexture circlePressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 73, 1, 19, 19);
-		ImageTexture xPressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 93, 1, 15, 19);
-		TextureButton confirmButton = new TextureButton();
-		confirmButton.TextureNormal = circleTexture;
-		confirmButton.TextureHover = circleHover;
-		confirmButton.TexturePressed = circlePressed;
-		confirmButton.SetPosition(new Vector2(width - 55, height - 47));
-		AddChild(confirmButton);
-		TextureButton cancelButton = new TextureButton();
-		cancelButton.TextureNormal = xTexture;
-		cancelButton.TextureHover = xHover;
-		cancelButton.TexturePressed = xPressed;
-		cancelButton.SetPosition(new Vector2(width - 30, height - 47));
-		AddChild(cancelButton);
-
 		// TODO: Do something when the confirm button is pressed.
-		cancelButton.Pressed += GetParent<PopupOverlay>().OnHidePopup;
+		AddConfirmButton(new Vector2(width - 55, height - 47), () => { });
+		AddCancelButton(new Vector2(width - 30, height - 47));
 	}
 }
