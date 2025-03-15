@@ -11,6 +11,10 @@ namespace C7GameData {
 		public int XCoordinate;
 		public int YCoordinate;
 
+		// Needed for coordinate wrapping.
+		[JsonIgnore]
+		public GameMap map;
+
 		// An arbitrary number indicating which landmass this tile is part of,
 		// for land-based tiles, or -1 for water.
 		//
@@ -152,14 +156,16 @@ namespace C7GameData {
 		}
 
 		public TileDirection directionTo(Tile other) {
-			// TODO: Consider edge wrapping, the direction should point along the shortest path as the crow flies.
-
 			if ((this == NONE) || (other == NONE))
 				throw new System.Exception("Can't get direction toward NONE Tile since it doesn't have a meaningful location");
 
-			// y calculation is reversed so dy is in typical Cartesian coords instead of tile coords, where y is inverted
-			int dx = other.XCoordinate - this.XCoordinate;
-			int dy = this.YCoordinate - other.YCoordinate;
+			// We have to use the map helper functions to handle edge wrapping
+			// correctly.
+			//
+			// y calculation is reversed so dy is in typical Cartesian coords
+			// instead of tile coords, where y is inverted
+			int dx = map.CalculateXDelta(other.XCoordinate, this.XCoordinate);
+			int dy = map.CalculateYDelta(this.YCoordinate, other.YCoordinate);
 			double angle = Math.Atan2(dy, dx); // angle is in interval [-pi, pi]
 
 			if (angle > 7.0 / 8.0 * Math.PI) return TileDirection.WEST;
@@ -178,7 +184,7 @@ namespace C7GameData {
 		 * This is a rough metric only.
 		 */
 		public int distanceTo(Tile other) {
-			return (Math.Abs(other.XCoordinate - this.XCoordinate) + Math.Abs(other.YCoordinate - this.YCoordinate)) / 2;
+			return (Math.Abs(map.CalculateXDelta(other.XCoordinate, this.XCoordinate)) + Math.Abs(map.CalculateYDelta(other.YCoordinate, this.YCoordinate))) / 2;
 		}
 
 		// Returns the number of "ranks" to another tile, where each rank is a
@@ -188,8 +194,8 @@ namespace C7GameData {
 			// We use sqrt(2) to try and "unskew" issues caused by the rotated
 			// rectangular grid. We need N/E/S/W tiles to be slightly further
 			// away than NE/SE/NW/SW tiles.
-			double deltaX = Math.Abs(other.XCoordinate - this.XCoordinate) * Math.Sqrt(2);
-			double deltaY = Math.Abs(other.YCoordinate - this.YCoordinate) * Math.Sqrt(2);
+			double deltaX = Math.Abs(map.CalculateXDelta(other.XCoordinate, this.XCoordinate)) * Math.Sqrt(2);
+			double deltaY = Math.Abs(map.CalculateYDelta(other.YCoordinate, this.YCoordinate)) * Math.Sqrt(2);
 
 			// Calculating the euclidian distance with an exponent of 1.8 instead
 			// of 2 gives us the correct results up to 99k culture (20k is a

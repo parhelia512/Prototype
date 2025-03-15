@@ -49,6 +49,7 @@ namespace C7GameData {
 					neighbors[direction] = tileNeighbor(tile, direction);
 				}
 				tile.neighbors = neighbors;
+				tile.map = this;
 			}
 		}
 
@@ -122,6 +123,36 @@ namespace C7GameData {
 			TileLocation neighbor = Tile.NeighborCoordinate(new TileLocation(center), direction);
 			//TODO: World wrap should also be accounted for.
 			return tileAt(neighbor.X, neighbor.Y);
+		}
+
+		// Calculates X1 - X2, handling world wrap.
+		public int CalculateXDelta(int X1, int X2) {
+			if (!wrapHorizontally) {
+				return X1 - X2;
+			}
+
+			int rawDelta = X1 - X2;
+			if (rawDelta > numTilesWide / 2) {
+				return rawDelta - numTilesWide;
+			} else if (rawDelta < -numTilesWide / 2) {
+				return rawDelta + numTilesWide;
+			}
+			return rawDelta;
+		}
+
+		// Calculates Y1 - Y2, handling world wrap.
+		public int CalculateYDelta(int Y1, int Y2) {
+			if (!wrapVertically) {
+				return Y1 - Y2;
+			}
+
+			int rawDelta = Y1 - Y2;
+			if (rawDelta > numTilesTall / 2) {
+				return rawDelta - numTilesTall;
+			} else if (rawDelta < -numTilesTall / 2) {
+				return rawDelta + numTilesTall;
+			}
+			return rawDelta;
 		}
 
 		public delegate int[,] TerrainNoiseMapGenerator(int rng, int width, int height);
