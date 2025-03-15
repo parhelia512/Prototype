@@ -352,6 +352,11 @@ namespace C7GameData {
 				foreach (RACE_City city in theBiq.RaceCityName[i]) {
 					civ.cityNames.Add(city.Name);
 				}
+				// Look up the image for non-barbarian civs.
+				string artName = pediaIcons.GetLeaderArtName(race.CivilopediaEntry);
+				if (artName != null) {
+					civ.leaderArtFile = artName;
+				}
 				save.Civilizations.Add(civ);
 				i++;
 			}

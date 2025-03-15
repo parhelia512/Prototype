@@ -30,7 +30,10 @@ public partial class DiplomacySelection : Popup {
 		int vOffset = 65;
 		foreach (KeyValuePair<ID, PlayerRelationship> kvp in player.playerRelationships) {
 			string status = kvp.Value.atWar ? "War" : "Peace";
-			AddButton($"{allPlayers.Find(x => x.id == kvp.Key).civilization.noun} (at {status})", vOffset, () => { });
+			AddButton($"{allPlayers.Find(x => x.id == kvp.Key).civilization.noun} (at {status})", vOffset, () => {
+				GetParent().EmitSignal(PopupOverlay.SignalName.DiplomacySelection, new ParameterWrapper<ID>(kvp.Key));
+				GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
+			});
 			vOffset += 25;
 		}
 

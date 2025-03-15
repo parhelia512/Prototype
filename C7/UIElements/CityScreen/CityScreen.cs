@@ -268,16 +268,7 @@ public partial class CityScreen : CenterContainer {
 		}
 		popHeads.Clear();
 
-		int eraNum = 0;
-		if (city.owner.eraCivilopediaName == "ERAS_Ancient_Times") {
-			eraNum = 0;
-		} else if (city.owner.eraCivilopediaName == "ERAS_Middle_Ages") {
-			eraNum = 1;
-		} else if (city.owner.eraCivilopediaName == "ERAS_Industrial_Age") {
-			eraNum = 2;
-		} else if (city.owner.eraCivilopediaName == "ERAS_Modern_Era") {
-			eraNum = 3;
-		}
+		int eraNum = city.owner.EraIndex();
 
 		// The pop head textures are 50 x 50, but have a 1px border on all sides
 		//

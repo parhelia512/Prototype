@@ -68400,6 +68400,7 @@
       "leader": "Caesar",
       "colorIndex": 1,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\CE_all.pcx",
       "cityNames": [
         "Rome",
         "Veii",
@@ -68457,6 +68458,7 @@
       "leader": "Cleopatra",
       "colorIndex": 3,
       "leaderGender": "female",
+      "leaderArtFile": "art\\advisors\\CL_all.pcx",
       "cityNames": [
         "Thebes",
         "Memphis",
@@ -68499,6 +68501,7 @@
       "leader": "Alexander",
       "colorIndex": 10,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\AL_all.pcx",
       "cityNames": [
         "Athens",
         "Sparta",
@@ -68541,6 +68544,7 @@
       "leader": "Hammurabi",
       "colorIndex": 1,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\HA_all.pcx",
       "cityNames": [
         "Babylon",
         "Nineveh",
@@ -68581,6 +68585,7 @@
       "leader": "Bismarck",
       "colorIndex": 6,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\BS_all.pcx",
       "cityNames": [
         "Berlin",
         "Leipzig",
@@ -68610,6 +68615,7 @@
       "leader": "Catherine",
       "colorIndex": 9,
       "leaderGender": "female",
+      "leaderArtFile": "art\\advisors\\CA_all.pcx",
       "cityNames": [
         "Moscow",
         "St. Petersburg",
@@ -68662,6 +68668,7 @@
       "leader": "Mao",
       "colorIndex": 5,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\MO_all.pcx",
       "cityNames": [
         "Beijing",
         "Shanghai",
@@ -68693,6 +68700,7 @@
       "leader": "Lincoln",
       "colorIndex": 5,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\AB_all.pcx",
       "cityNames": [
         "Washington",
         "New York",
@@ -68746,6 +68754,7 @@
       "leader": "Tokugawa",
       "colorIndex": 4,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\TO_all.pcx",
       "cityNames": [
         "Kyoto",
         "Osaka",
@@ -68785,6 +68794,7 @@
       "leader": "Joan d\u0027Arc",
       "colorIndex": 7,
       "leaderGender": "female",
+      "leaderArtFile": "art\\advisors\\JO_all.pcx",
       "cityNames": [
         "Paris",
         "Orleans",
@@ -68819,6 +68829,7 @@
       "leader": "Gandhi",
       "colorIndex": 8,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\GH_all.pcx",
       "cityNames": [
         "Delhi",
         "Bombay",
@@ -68849,6 +68860,7 @@
       "leader": "Xerxes",
       "colorIndex": 10,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\XE_all.pcx",
       "cityNames": [
         "Persepolis",
         "Pasargadae",
@@ -68891,6 +68903,7 @@
       "leader": "Montezuma",
       "colorIndex": 4,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\MN_all.pcx",
       "cityNames": [
         "Tenochtitlan",
         "Teotihuacan",
@@ -68940,6 +68953,7 @@
       "leader": "Shaka",
       "colorIndex": 3,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\ZU_all.pcx",
       "cityNames": [
         "Zimbabwe",
         "Ulundi",
@@ -68969,6 +68983,7 @@
       "leader": "Hiawatha",
       "colorIndex": 8,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\HI_all.pcx",
       "cityNames": [
         "Salamanca",
         "Niagara Falls",
@@ -69011,6 +69026,7 @@
       "leader": "Elizabeth",
       "colorIndex": 2,
       "leaderGender": "female",
+      "leaderArtFile": "art\\advisors\\LZ_all.pcx",
       "cityNames": [
         "London",
         "York",
@@ -69398,6 +69414,7 @@
       "leader": "Gilgamesh",
       "colorIndex": 5,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x2_Gilgamesh advisor.pcx",
       "cityNames": [
         "Ur",
         "Sumer",
@@ -69436,6 +69453,7 @@
       "leader": "Mursilis",
       "colorIndex": 14,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x2_Mursilis advisor.pcx",
       "cityNames": [
         "Hattusas",
         "Tarsus",
@@ -69474,6 +69492,7 @@
       "leader": "William",
       "colorIndex": 2,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x2_William advisor.pcx",
       "cityNames": [
         "Amsterdam",
         "Rotterdam",
@@ -69512,6 +69531,7 @@
       "leader": "Henry",
       "colorIndex": 8,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x2_Henry advisor.pcx",
       "cityNames": [
         "Lisbon",
         "Oporto",
@@ -69561,6 +69581,7 @@
       "leader": "Theodora",
       "colorIndex": 11,
       "leaderGender": "female",
+      "leaderArtFile": "art\\advisors\\x2_Theodora advisor.pcx",
       "cityNames": [
         "Constantinople",
         "Adrianople",
@@ -69599,6 +69620,7 @@
       "leader": "Pachacuti",
       "colorIndex": 7,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x2_Pachacuti advisor.pcx",
       "cityNames": [
         "Cuzco",
         "Tiwanaku",
@@ -69637,6 +69659,7 @@
       "leader": "Smoke-Jaguar",
       "colorIndex": 6,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x2_Smoke-Jaguar_advisor.pcx",
       "cityNames": [
         "Chich\u00E9n Itza",
         "Cop\u00E1n",

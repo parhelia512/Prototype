@@ -59,6 +59,19 @@ namespace C7GameData {
 		// The number of turns the player has been researching the current tech.
 		public int turnsResearched = 0;
 
+		public int EraIndex() {
+			if (eraCivilopediaName == "ERAS_Ancient_Times") {
+				return 0;
+			} else if (eraCivilopediaName == "ERAS_Middle_Ages") {
+				return 1;
+			} else if (eraCivilopediaName == "ERAS_Industrial_Age") {
+				return 2;
+			} else if (eraCivilopediaName == "ERAS_Modern_Era") {
+				return 3;
+			}
+			return -1;
+		}
+
 		public void AddUnit(MapUnit unit) {
 			this.units.Add(unit);
 		}
