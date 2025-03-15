@@ -102,7 +102,7 @@ public partial class TalkScreen : TextureRect {
 		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
 		GetParent<Diplomacy>().popupOverlay.ShowPopup(new WarConfirmation(opponentPlayer,
 				() => {
-					humanPlayer.DeclareWarOn(opponentPlayer);
+					humanPlayer.DeclareWarOn(opponentPlayer, gD.turn);
 					GetParent<Diplomacy>().Hide();
 				}), PopupOverlay.PopupCategory.Advisor);
 	}

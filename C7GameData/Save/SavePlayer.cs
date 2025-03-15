@@ -4,6 +4,18 @@ namespace C7GameData.Save {
 	// A class holding all the state of the relationship between two civs.
 	public class PlayerRelationship {
 		public bool atWar = false;
+
+		// p1.playerRelationships[p2].warDeclarationCount is the number of times
+		// p2 declared war on p1.
+		public int warDeclarationCount = 0;
+
+		// true if a war declaration happened with units inside the player's
+		// borders.
+		public bool wasSneakAttacked = false;
+
+		// If at war, refuse contact with the relevant player until this turn
+		// has been reached.
+		public int refuseContactUntilTurn = -1;
 	}
 
 	public class SavePlayer {

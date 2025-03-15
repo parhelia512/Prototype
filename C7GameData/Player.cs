@@ -117,20 +117,60 @@ namespace C7GameData {
 			return true;
 		}
 
-		public void DeclareWarOn(Player other) {
+		public void EnsureRelationshipExists(Player other) {
 			if (!playerRelationships.ContainsKey(other.id)) {
 				playerRelationships.Add(other.id, new PlayerRelationship());
 			}
 			if (!other.playerRelationships.ContainsKey(this.id)) {
 				other.playerRelationships.Add(this.id, new PlayerRelationship());
 			}
+		}
+
+		public void DeclareWarOn(Player other, int currentTurn) {
+			EnsureRelationshipExists(other);
 
 			playerRelationships[other.id].atWar = true;
-			other.playerRelationships[this.id].atWar = true;
+
+			PlayerRelationship pr = other.playerRelationships[this.id];
+			pr.atWar = true;
+			pr.warDeclarationCount += 1;
+
+			// Check to see if there was a sneak attack - we consider a sneak
+			// attack any attack where the player's units were inside the
+			// borders of the civ they're declaring war on.
+			foreach (Tile t in other.tileKnowledge.knownTiles) {
+				if (t.owningCity == null || t.owningCity.owner != other) {
+					continue;
+				}
+				if (t.unitsOnTile.Count == 0) {
+					continue;
+				}
+				if (t.unitsOnTile[0].owner == this) {
+					pr.wasSneakAttacked = true;
+					break;
+				}
+			}
+
+
+			// Refuse contact from the aggressor civ until enough turns have
+			// elapsed. The exact civ3 mechanism here is unknown, so we just
+			// pick some reasonable random number. To penalize sneak attacks we
+			// use a higher upper bound.
+			pr.refuseContactUntilTurn = currentTurn + new Random().Next(5, pr.wasSneakAttacked ? 16 : 12);
 
 			// Whenever war is declared, re-evaluate priorities.
 			turnsUntilPriorityReevaluation = 0;
 			other.turnsUntilPriorityReevaluation = 0;
+		}
+
+		public bool WillAcceptCommunicationFrom(Player other, int currentTurn) {
+			EnsureRelationshipExists(other);
+
+			PlayerRelationship pr = playerRelationships[other.id];
+			if (!pr.atWar) {
+				return true;
+			}
+			return currentTurn >= pr.refuseContactUntilTurn;
 		}
 
 		public bool SitsOutFirstTurn() {
