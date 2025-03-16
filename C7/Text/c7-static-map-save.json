@@ -65157,7 +65157,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 48,
-      "unproducible": false,
+      "unproducible": true,
       "categories": [
         "Land"
       ],

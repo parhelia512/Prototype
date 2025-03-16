@@ -689,7 +689,8 @@ namespace C7GameData {
 		private static bool IsUnproducible(PRTO prto) {
 			int[] availableTo = prto.AvailableTo.GetAvailableCivIndexes().ToArray();
 
-			return availableTo.Length == 0 || prto.ShieldCost < 1;
+			// TODO: Implement proper logic for Army production
+			return availableTo.Length == 0 || prto.ShieldCost < 1 || prto.Army;
 		}
 
 		private void ImportUnitPrototypes() {
