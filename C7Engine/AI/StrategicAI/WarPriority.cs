@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using C7Engine;
 using C7Engine.AI.StrategicAI;
+using C7GameData.Save;
 
 namespace C7GameData.AIData {
 	/// <summary>
@@ -14,9 +15,7 @@ namespace C7GameData.AIData {
 
 		private readonly int TEMP_WAR_PRIORITY_WEIGHT = 50; //temporary weight of this priority, if it isn't zero
 
-		public WarPriority() {
-			key = "WarPriority";
-		}
+		public WarPriority() { }
 
 		public override string ToString() {
 			return "WarPriority";
@@ -31,26 +30,35 @@ namespace C7GameData.AIData {
 		public override void CalculateWeightAndMetadata(Player player) {
 			if (player.cities.Count < 2) {
 				this.calculatedWeight = 0;
-			} else {
-				int landScore = UtilityCalculations.CalculateAvailableLandScore(player);
-				//N.B. Eventually this won't be an all-or-nothing proposition; if land is getting tight but not quite zero,
-				//the AI may decide it's time for the next phrase of the game, especially if it's aggressive.
+				return;
+			}
 
-				//nowhere else to expand
-				if (landScore == 0) {
-					//Figure out who to fight.  This should obviously be more sophisticated and should favor reachable opponents.
-					//However, we don't yet store info on who's been discovered, so for now we'll choose someone randomly
-					int opponentCount = EngineStorage.gameData.players.Count - 1;
-					foreach (Player nation in EngineStorage.gameData.players) {
-						if (nation != player) {
-							int rnd = GameData.rng.Next(opponentCount);
-							if (rnd == 0) {
-								//Let's fight this nation!
-								properties["opponent"] = nation.id.ToString();
-								calculatedWeight = TEMP_WAR_PRIORITY_WEIGHT;
-							} else {
-								opponentCount--;    //guarantees we'll eventually get an opponent selected
-							}
+			// If we're at war, make sure we're prioritizing war.
+			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
+				if (p.Value.atWar) {
+					this.calculatedWeight = 1000;
+					return;
+				}
+			}
+
+			int landScore = UtilityCalculations.CalculateAvailableLandScore(player);
+			//N.B. Eventually this won't be an all-or-nothing proposition; if land is getting tight but not quite zero,
+			//the AI may decide it's time for the next phrase of the game, especially if it's aggressive.
+
+			//nowhere else to expand
+			if (landScore == 0) {
+				//Figure out who to fight.  This should obviously be more sophisticated and should favor reachable opponents.
+				//However, we don't yet store info on who's been discovered, so for now we'll choose someone randomly
+				int opponentCount = EngineStorage.gameData.players.Count - 1;
+				foreach (Player nation in EngineStorage.gameData.players) {
+					if (nation != player) {
+						int rnd = GameData.rng.Next(opponentCount);
+						if (rnd == 0) {
+							//Let's fight this nation!
+							// TODO: declare war.
+							calculatedWeight = TEMP_WAR_PRIORITY_WEIGHT;
+						} else {
+							opponentCount--;    //guarantees we'll eventually get an opponent selected
 						}
 					}
 				}
