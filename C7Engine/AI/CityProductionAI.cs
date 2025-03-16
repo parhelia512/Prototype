@@ -47,9 +47,13 @@ namespace C7Engine {
 				float flatAdjustedScore = baseScore + flatAdjuster;
 				log.Debug($"  Flat-adjusted score for {unitPrototype} is {flatAdjustedScore}");
 
-				// Exclude naval units from land-only cities
-				if (unitPrototype.categories.Contains("Sea") && !city.location.NeighborsWater()) {
-					flatAdjustedScore = 0.0f;
+				// Handle excluding naval units for things like:
+				//  - inland cities
+				//  - having fully explored the ocean (we don't have logic to do
+				//    anything else with boats yet)
+				//  - having too many boats 
+				if (unitPrototype.categories.Contains("Sea")) {
+					flatAdjustedScore = ApplyNavalUnitAdjustments(flatAdjustedScore, unitPrototype, city);
 				}
 
 				// Exclude settlers if we don't have anywhere to build a city.
@@ -96,6 +100,33 @@ namespace C7Engine {
 				return baseScore;
 			}
 			return 0.0f;
+		}
+
+		private static float ApplyNavalUnitAdjustments(float score, UnitPrototype prototype, City city) {
+			// Exclude naval units from land-only cities
+			//
+			// TODO: this should also apply to inland seas
+			if (!city.location.NeighborsWater()) {
+				score = 0.0f;
+			}
+
+			// Don't build naval units if we can't explore anything more
+			// with them.
+			if (city.owner.tileKnowledge.fullyExploredOceans) {
+				score = 0;
+			}
+
+			int boats = 0;
+			foreach (MapUnit u in city.owner.units) {
+				if (!u.IsLandUnit()) {
+					++boats;
+				}
+			}
+			if (boats > PlayerAI.MAX_WATER_EXPLORERS) {
+				score = 0;
+			}
+
+			return score;
 		}
 
 		private static IProducible ChooseWeightedPriority(List<IProducible> items, List<float> weights, Weighting weighting) {

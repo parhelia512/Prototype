@@ -6,6 +6,10 @@ namespace C7GameData {
 		public HashSet<Tile> borderTiles { get; private set; } = new();
 		HashSet<Tile> visibleTiles = new();
 
+		// Has this player explored all known ocean tiles?
+		// TODO: this should be split out for coast/ocean
+		public bool fullyExploredOceans = false;
+
 		// The set of tiles this player currently has explorers headed towards.
 		public HashSet<Tile> aiExplorationTargets = new();
 

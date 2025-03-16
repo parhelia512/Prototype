@@ -120,7 +120,6 @@ namespace C7GameData {
 		}
 
 		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/
-
 		private City ResolveTileOwnershipConflict(City a, City b, Tile t) {
 			int aRank = a.location.rankDistanceTo(t);
 			int bRank = b.location.rankDistanceTo(t);

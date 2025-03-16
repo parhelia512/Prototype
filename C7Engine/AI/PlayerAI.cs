@@ -14,6 +14,9 @@ namespace C7Engine {
 	public class PlayerAI {
 		private static ILogger log = Log.ForContext<PlayerAI>();
 
+		public static readonly int MAX_LAND_EXPLORERS = 10;
+		public static readonly int MAX_WATER_EXPLORERS = 4;
+
 		public static void PlayTurn(Player player, Random rng, List<Tech> techs) {
 			if (player.isHuman || player.isBarbarians) {
 				return;
@@ -129,43 +132,44 @@ namespace C7Engine {
 			} else if (unit.unitType.name == "Catapult") {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
 				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
-			} else {
-				// If there's an unescorted settler, escort it.
-				EscortAIData? maybeEscortData = EscortAI.MaybeMakeAiData(unit, player);
-				if (maybeEscortData != null) {
-					return new EscortAI(maybeEscortData);
-				}
-
-				// As long as we don't have too many explorers yet of this unit's
-				// type (land vs sea), start a new exploring unit.
-				int numRelevantExplorers = 0;
-				foreach (MapUnit u in player.units) {
-					if (u.currentAI is ExplorerAI && u.IsLandUnit() == unit.IsLandUnit()) {
-						++numRelevantExplorers;
-					}
-				}
-
-				if (numRelevantExplorers < 10) {
-					ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
-					if (maybeAiData != null) {
-						return new ExplorerAI(maybeAiData);
-					}
-				}
-
-				//Nowhere to explore or too many explorers.  What to do now?
-				//Priority 1: Adequate defense of cities.
-				//Priority 2: Clearing out barbs
-				//Priority 3: Defending chokepoints
-				//Priority 4: ???
-				//Priority 5: Profit!
-				//(Realistically, as we evolve there will be a lot of options, such as defending borders from barbs, preparing attackers on other civs, defending
-				//resources.  I expect we'll have some sort of arbiter that decides between competing priorities, with each being given a score as to how important
-				//they are, including a weight by how far away the task is.  But this will evolve gradually over a long time)
-
-				//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
-				//and that's a problem.
-				return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player));
 			}
+
+			// If there's an unescorted settler, escort it.
+			EscortAIData? maybeEscortData = EscortAI.MaybeMakeAiData(unit, player);
+			if (maybeEscortData != null) {
+				return new EscortAI(maybeEscortData);
+			}
+
+			// As long as we don't have too many explorers yet of this unit's
+			// type (land vs sea), start a new exploring unit.
+			int numRelevantExplorers = 0;
+			int maxExplorers = unit.IsLandUnit() ? MAX_LAND_EXPLORERS : MAX_WATER_EXPLORERS;
+			foreach (MapUnit u in player.units) {
+				if (u.currentAI is ExplorerAI && u.IsLandUnit() == unit.IsLandUnit()) {
+					++numRelevantExplorers;
+				}
+			}
+
+			if (numRelevantExplorers < maxExplorers) {
+				ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(unit, player);
+				if (maybeAiData != null) {
+					return new ExplorerAI(maybeAiData);
+				}
+			}
+
+			//Nowhere to explore or too many explorers.  What to do now?
+			//Priority 1: Adequate defense of cities.
+			//Priority 2: Clearing out barbs
+			//Priority 3: Defending chokepoints
+			//Priority 4: ???
+			//Priority 5: Profit!
+			//(Realistically, as we evolve there will be a lot of options, such as defending borders from barbs, preparing attackers on other civs, defending
+			//resources.  I expect we'll have some sort of arbiter that decides between competing priorities, with each being given a score as to how important
+			//they are, including a weight by how far away the task is.  But this will evolve gradually over a long time)
+
+			//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
+			//and that's a problem.
+			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player));
 		}
 
 		private static UnitAI GetCombatAIIfUnitCanAttackNearbyBarbCamp(MapUnit unit, Player player) {
