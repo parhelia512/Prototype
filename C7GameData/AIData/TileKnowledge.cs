@@ -73,11 +73,29 @@ namespace C7GameData {
 			return list;
 		}
 
-		private void RecomputeActiveTiles() {
-			activeTiles = _player.cities
-				.SelectMany(x => x.GetTilesWithinBorders().SelectMany(y => y.neighbors.Values).Append(x.location))
-				.Concat(_player.units.SelectMany(x => x.location.neighbors.Values.Append(x.location)))
-				.ToHashSet();
+		public void RecomputeActiveTiles() {
+			activeTiles.Clear();
+			foreach (Tile t in knownTiles) {
+				// A tile within a city's borders and all of its neighbors are active.
+				if (t.owningCity != null && t.owningCity.owner == _player) {
+					activeTiles.Add(t);
+
+					foreach (Tile neighbor in t.neighbors.Values) {
+						activeTiles.Add(neighbor);
+					}
+					continue;
+				}
+
+				// A tile with a unit on it and all of its neighbors are active.
+				if (t.unitsOnTile.Count > 0 && t.unitsOnTile[0].owner == _player) {
+					activeTiles.Add(t);
+
+					foreach (Tile neighbor in t.neighbors.Values) {
+						activeTiles.Add(neighbor);
+					}
+					continue;
+				}
+			}
 		}
 	}
 }
