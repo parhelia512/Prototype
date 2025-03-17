@@ -3,6 +3,7 @@ using System;
 using C7GameData;
 using C7Engine;
 using Serilog;
+using ConvertCiv3Media;
 using System.Collections.Generic;
 
 
@@ -14,16 +15,33 @@ public partial class Diplomacy : CenterContainer {
 	public PopupOverlay popupOverlay;
 
 	private TalkScreen talkScreen;
+	private DealScreen dealScreen;
 
 	public override void _Ready() {
 		this.Hide();
 	}
 
-	public void ShowTalkScreenForPlayer(ID humanPlayer, ID opponentPlayer) {
+	private void RemoveOtherScreens() {
 		if (talkScreen != null) {
 			RemoveChild(talkScreen);
 			talkScreen = null;
 		}
+		if (dealScreen != null) {
+			RemoveChild(dealScreen);
+			dealScreen = null;
+		}
+	}
+
+	public void ShowDealScreenForPlayer(ID humanPlayer, ID opponentPlayer) {
+		RemoveOtherScreens();
+
+		dealScreen = new DealScreen(humanPlayer, opponentPlayer);
+		AddChild(dealScreen);
+		this.Show();
+	}
+
+	public void ShowTalkScreenForPlayer(ID humanPlayer, ID opponentPlayer) {
+		RemoveOtherScreens();
 
 		using (UIGameDataAccess gameDataAccess = new()) {
 			GameData gd = gameDataAccess.gameData;
@@ -41,5 +59,41 @@ public partial class Diplomacy : CenterContainer {
 		talkScreen = new TalkScreen(humanPlayer, opponentPlayer);
 		AddChild(talkScreen);
 		this.Show();
+	}
+
+	public void AddLeaderHeadAndLabel(TextureRect node, Player player, Theme fontTheme) {
+		ColorRect headBackground = new();
+		headBackground.Color = Colors.Black;
+		headBackground.Size = new Vector2(200, 240);
+		headBackground.SetPosition(new Vector2(512 - 100, 59));
+		node.AddChild(headBackground);
+
+		TextureRect leaderHead = new();
+		{
+			int xOffset = player.EraIndex() * 115;
+
+			// TODO: track mood in the player relationship data structure.
+			int yOffset = 115;  // 0 is annoyed, 115*2 is mad.
+
+			Pcx headPcx = Util.LoadPCX(player.civilization.leaderArtFile);
+			leaderHead.Texture = PCXToGodot.getImageTextureFromPCX(
+						headPcx,
+						new(xOffset, yOffset, 115, 115),
+						new(false, [255]));
+			leaderHead.Scale = new Vector2(1.7f, 1.7f);
+		}
+		leaderHead.SetPosition(new Vector2(512 - (115 * 1.7f) / 2, 59 + 120 - (115 * 1.7f) / 2));
+		node.AddChild(leaderHead);
+
+		string civNameText = $"{player.civilization.name} (Cautious)";
+		Label civName = new();
+		civName.SetPosition(new Vector2(0, 330));
+		node.AddChild(civName);
+		civName.Text = civNameText;
+		civName.HorizontalAlignment = HorizontalAlignment.Center;
+		civName.AnchorLeft = 0.5f;
+		civName.AnchorRight = 0.5f;
+		civName.OffsetLeft = -1 * (civName.Size.X / 2.0f);
+		civName.Theme = fontTheme;
 	}
 }

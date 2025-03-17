@@ -15,7 +15,6 @@ public partial class Game : Node2D {
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
 	[Signal] public delegate void NewAutoselectedUnitEventHandler();
 	[Signal] public delegate void NoMoreAutoselectableUnitsEventHandler();
-	[Signal] public delegate void UpdateTechProgressEventHandler();
 	[Signal] public delegate void ShowCityScreenEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
@@ -408,13 +407,6 @@ public partial class Game : Node2D {
 			}
 
 			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
-
-			Tech tech = gameDataAccess.gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
-			if (tech != null) {
-				EmitSignal(SignalName.UpdateTechProgress, tech.Name, player.EstimateTurnsToResearch(tech));
-			} else {
-				EmitSignal(SignalName.UpdateTechProgress, "Not selected", int.MaxValue);
-			}
 			CurrentState = GameState.PlayerTurn;
 
 			GetNextAutoselectedUnit(gameDataAccess.gameData);
@@ -476,6 +468,12 @@ public partial class Game : Node2D {
 	}
 
 	public override void _UnhandledInput(InputEvent @event) {
+		// Don't handle mouse actions if UI elements are visible
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible) {
+			IsMovingCamera = false;
+			return;
+		}
+
 		// Control node must not be in the way and/or have mouse pass enabled
 		if (@event is InputEventMouseButton eventMouseButton) {
 			if (eventMouseButton.ButtonIndex == MouseButton.Left) {
@@ -576,6 +574,7 @@ public partial class Game : Node2D {
 						popupOverlay.ShowPopup(
 							new TextDialog("How many turns to fast forward through?",
 											"Turns: ", "100",
+											BoxContainer.AlignmentMode.Begin,
 											(string turns) => { turnsLeftToFastForward = int.Parse(turns); }),
 								PopupOverlay.PopupCategory.Advisor);
 					} else {

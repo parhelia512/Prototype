@@ -6,14 +6,20 @@ public partial class TextDialog : Popup {
 	private string header;
 	private string prompt;
 	private string defaultText;
+	private BoxContainer.AlignmentMode alignment;
 	Action<string> handleText;
 
 
-	public TextDialog(string header, string prompt, string defaultText, Action<string> handleText) {
+	public TextDialog(string header,
+					  string prompt,
+					  string defaultText,
+					  BoxContainer.AlignmentMode alignment,
+					  Action<string> handleText) {
 		this.defaultText = defaultText;
 		this.prompt = prompt;
 		this.header = header;
 		this.handleText = handleText;
+		this.alignment = alignment;
 
 		textEditBox.Theme = ThemeFactory.DefaultTheme;
 		textEditBox.CaretBlink = true;
@@ -29,7 +35,7 @@ public partial class TextDialog : Popup {
 		AddHeader(header, 120);
 
 		HBoxContainer labelAndTextBox = new HBoxContainer();
-		labelAndTextBox.Alignment = BoxContainer.AlignmentMode.Begin;
+		labelAndTextBox.Alignment = alignment;
 		labelAndTextBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		labelAndTextBox.SizeFlagsStretchRatio = 1;
 		labelAndTextBox.AnchorLeft = 0.0f;

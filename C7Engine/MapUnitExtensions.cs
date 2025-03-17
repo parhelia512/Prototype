@@ -303,10 +303,10 @@ namespace C7Engine {
 			// tiles. Also civ3 only counts border-based discovery from rank 1
 			// tiles, not rank 2+.
 			foreach (Tile t in tile.neighbors.Values) {
-				if (t.unitsOnTile.Count > 0) {
+				if (t.unitsOnTile.Count > 0 && unit.owner != t.unitsOnTile[0].owner) {
 					unit.owner.EnsureRelationshipExists(t.unitsOnTile[0].owner);
 				}
-				if (t.owningCity != null) {
+				if (t.owningCity != null && unit.owner != t.owningCity.owner) {
 					unit.owner.EnsureRelationshipExists(t.owningCity.owner);
 				}
 			}
