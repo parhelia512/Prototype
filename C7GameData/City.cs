@@ -63,8 +63,11 @@ namespace C7GameData {
 			return MeetsProductionRequirements(proto) && !IsUnitObsolete(proto);
 		}
 
+		// TODO: Consider golden ages when determining whether a unit is obsolete.
+		// If a golden age has not yet been triggered and a unit can trigger one,  
+		// it shouldn't be marked as obsolete, even if its upgrade is available.
 		private bool IsUnitObsolete(UnitPrototype proto) {
-			var upgradeChain = owner.civilization.GetUpgradeChain(proto);
+			List<UnitPrototype> upgradeChain = owner.civilization.GetUpgradeChain(proto);
 
 			return upgradeChain.Any(MeetsProductionRequirements);
 		}
