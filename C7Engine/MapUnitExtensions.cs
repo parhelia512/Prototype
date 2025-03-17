@@ -413,6 +413,7 @@ namespace C7Engine {
 				float movementCost = TilePath.getMovementCost(unit.location, dir, newLoc);
 				if (!unit.location.unitsOnTile.Remove(unit))
 					throw new System.Exception("Failed to remove unit from tile it's supposed to be on");
+				// Make sure the unit is on the new location before claiming we have entered the tile
 				newLoc.unitsOnTile.Add(unit);
 				unit.location = newLoc;
 				unit.OnEnterTile(newLoc);
