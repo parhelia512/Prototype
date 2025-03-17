@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace C7GameData {
 	public class TileKnowledge {
-		HashSet<Tile> knownTiles = new();
+		public HashSet<Tile> knownTiles { get; private set; } = new();
 		public HashSet<Tile> borderTiles { get; private set; } = new();
 		HashSet<Tile> visibleTiles = new();
 

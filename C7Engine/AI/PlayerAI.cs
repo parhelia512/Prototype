@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.Pathing;
 using C7GameData;
+using C7GameData.Save;
 using C7GameData.AIData;
 using C7Engine.AI;
 using C7Engine.AI.StrategicAI;
@@ -36,6 +37,12 @@ namespace C7Engine {
 
 				string summary = string.Join(',', player.strategicPriorityData);
 				log.Information($"Player {player.civilization.name} now has priorities of: {summary}. {player.turnsUntilPriorityReevaluation} turns until next re-evaluation");
+
+				// Wake up any fortified units so our new strategy (if we have one)
+				// takes effect.
+				foreach (MapUnit u in player.units) {
+					u.wake();
+				}
 			} else {
 				player.turnsUntilPriorityReevaluation--;
 			}
@@ -134,6 +141,29 @@ namespace C7Engine {
 				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			}
 
+			// Special case: we're at war.
+			if (PlayerIsAtWarWithOtherPlayer(player)) {
+				// Priority 1: ensure we don't have any unguarded cities.
+				//
+				// If this is an offensive unit only go defend if there are
+				// fewer than 3 units in a city, otherwise consider offensive
+				// action.
+				int minDefenders = unit.unitType.attack >= unit.unitType.defense ? 3 : int.MaxValue;
+				DefenderAIData maybeDefend = DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, minDefenders);
+				if (maybeDefend != null) {
+					return new DefenderAI(maybeDefend);
+				}
+
+				// Priority 2: go on the offensive.
+				CombatAIData maybeCombat = CombatAI.MakeAiData(unit, player);
+				if (maybeCombat != null) {
+					return new CombatAI(maybeCombat);
+				}
+
+				// Priority 3: defend our cities.
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, /*minDefenders=*/int.MaxValue));
+			}
+
 			// If there's an unescorted settler, escort it.
 			EscortAIData? maybeEscortData = EscortAI.MaybeMakeAiData(unit, player);
 			if (maybeEscortData != null) {
@@ -169,7 +199,21 @@ namespace C7Engine {
 
 			//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
 			//and that's a problem.
-			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player));
+			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, /*minDefenders=*/int.MaxValue));
+		}
+
+		private static bool PlayerIsAtWarWithOtherPlayer(Player player) {
+			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
+				if (p.Value.atWar) {
+					Player other = EngineStorage.gameData.players.Find(x => x.id == p.Key);
+					if (other.isBarbarians) {
+						continue;
+					}
+
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private static UnitAI GetCombatAIIfUnitCanAttackNearbyBarbCamp(MapUnit unit, Player player) {
