@@ -9,6 +9,11 @@ namespace C7GameData {
 	 * For example, a Spearman might have 1 attack, 2 defense, and 1 movement.
 	 **/
 	public class UnitPrototype : IProducible {
+		public class Unique {
+			public Civilization civilization;
+			public UnitPrototype replace;
+		}
+
 		public string name { get; set; }
 		// The name to use when searching for animations for this unit.
 		public string artName { get; set; }
@@ -20,6 +25,9 @@ namespace C7GameData {
 		public int bombard { get; set; }
 		public int movement { get; set; }
 		public int iconIndex { get; set; }
+		public UnitPrototype upgradeTo;
+		public Unique unique;
+		public bool unproducible;
 
 		public HashSet<string> categories = new HashSet<string>();
 
@@ -29,12 +37,10 @@ namespace C7GameData {
 
 		public UnitPrototype() { }
 
-		public UnitPrototype(SaveUnitPrototype proto, Tech requiredTech) {
-			(name, artName, shieldCost, populationCost, attack, defense, bombard, movement, iconIndex) =
+		public UnitPrototype(SaveUnitPrototype proto) {
+			(name, artName, shieldCost, populationCost, attack, defense, bombard, movement, iconIndex, unproducible) =
 			(proto.name, proto.artName, proto.shieldCost, proto.populationCost,
-			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex);
-
-			this.requiredTech = requiredTech;
+			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex, proto.unproducible);
 
 			categories = new HashSet<string>(proto.categories);
 			actions = new HashSet<string>(proto.actions);

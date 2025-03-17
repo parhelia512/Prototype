@@ -63985,6 +63985,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 0,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64008,6 +64009,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 1,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64034,6 +64036,8 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 2,
+      "upgradeTo": "Explorer",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64057,6 +64061,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 3,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64080,6 +64085,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 4,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64103,6 +64109,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 5,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64125,6 +64132,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 6,
+      "upgradeTo": "Swordsman",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64148,6 +64157,8 @@
       "bombard": 1,
       "movement": 1,
       "iconIndex": 7,
+      "upgradeTo": "Longbowman",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64171,6 +64182,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 8,
+      "upgradeTo": "Pikeman",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64194,6 +64207,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 9,
+      "upgradeTo": "Medieval Infantry",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64217,6 +64232,8 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 10,
+      "upgradeTo": "Horseman",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64240,6 +64257,8 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 11,
+      "upgradeTo": "Knight",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64263,6 +64282,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 12,
+      "upgradeTo": "Musketman",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64286,6 +64307,8 @@
       "bombard": 2,
       "movement": 1,
       "iconIndex": 13,
+      "upgradeTo": "Guerilla",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64309,6 +64332,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 14,
+      "upgradeTo": "Rifleman",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64332,6 +64357,8 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 15,
+      "upgradeTo": "Cavalry",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64355,6 +64382,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 16,
+      "upgradeTo": "Infantry",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64378,6 +64407,7 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 17,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64401,6 +64431,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 18,
+      "upgradeTo": "Mech Infantry",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64424,6 +64456,8 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 19,
+      "upgradeTo": "Modern Armor",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64447,6 +64481,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 20,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64470,6 +64505,7 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 21,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64493,6 +64529,8 @@
       "bombard": 4,
       "movement": 1,
       "iconIndex": 22,
+      "upgradeTo": "Trebuchet",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64517,6 +64555,8 @@
       "bombard": 8,
       "movement": 1,
       "iconIndex": 23,
+      "upgradeTo": "Artillery",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64541,6 +64581,8 @@
       "bombard": 12,
       "movement": 1,
       "iconIndex": 24,
+      "upgradeTo": "Radar Artillery",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64565,6 +64607,7 @@
       "bombard": 16,
       "movement": 2,
       "iconIndex": 25,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64589,6 +64632,7 @@
       "bombard": 16,
       "movement": 1,
       "iconIndex": 26,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64612,6 +64656,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 27,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64636,6 +64681,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 28,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -64659,6 +64705,8 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 29,
+      "upgradeTo": "Caravel",
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64682,6 +64730,8 @@
       "bombard": 0,
       "movement": 4,
       "iconIndex": 30,
+      "upgradeTo": "Galleon",
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64705,6 +64755,7 @@
       "bombard": 3,
       "movement": 5,
       "iconIndex": 31,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64729,6 +64780,8 @@
       "bombard": 0,
       "movement": 4,
       "iconIndex": 32,
+      "upgradeTo": "Transport",
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64752,6 +64805,8 @@
       "bombard": 6,
       "movement": 3,
       "iconIndex": 33,
+      "upgradeTo": "Destroyer",
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64776,6 +64831,7 @@
       "bombard": 0,
       "movement": 6,
       "iconIndex": 34,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64799,6 +64855,7 @@
       "bombard": 0,
       "movement": 7,
       "iconIndex": 35,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64822,6 +64879,7 @@
       "bombard": 0,
       "movement": 4,
       "iconIndex": 36,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64845,6 +64903,7 @@
       "bombard": 6,
       "movement": 8,
       "iconIndex": 37,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64869,6 +64928,7 @@
       "bombard": 8,
       "movement": 5,
       "iconIndex": 38,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64893,6 +64953,7 @@
       "bombard": 6,
       "movement": 7,
       "iconIndex": 39,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64917,6 +64978,7 @@
       "bombard": 0,
       "movement": 5,
       "iconIndex": 40,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -64940,6 +65002,8 @@
       "bombard": 3,
       "movement": 1,
       "iconIndex": 41,
+      "upgradeTo": "Jet Fighter",
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -64961,6 +65025,7 @@
       "bombard": 12,
       "movement": 1,
       "iconIndex": 42,
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -64982,6 +65047,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 43,
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -65003,6 +65069,7 @@
       "bombard": 3,
       "movement": 1,
       "iconIndex": 44,
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -65024,6 +65091,7 @@
       "bombard": 6,
       "movement": 1,
       "iconIndex": 45,
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -65045,6 +65113,7 @@
       "bombard": 18,
       "movement": 1,
       "iconIndex": 46,
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -65065,6 +65134,7 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 47,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65087,6 +65157,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 48,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65110,6 +65181,11 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 49,
+      "upgradeTo": "Swordsman",
+      "unique": {
+        "civilization": "Aztecs"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65133,6 +65209,12 @@
       "bombard": 1,
       "movement": 1,
       "iconIndex": 50,
+      "upgradeTo": "Longbowman",
+      "unique": {
+        "replace": "Archer",
+        "civilization": "Babylon"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65156,6 +65238,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 51,
+      "upgradeTo": "Musketman",
+      "unique": {
+        "replace": "Spearman",
+        "civilization": "Greece"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65179,6 +65267,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 52,
+      "upgradeTo": "Musketman",
+      "unique": {
+        "replace": "Spearman",
+        "civilization": "Zululand"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65202,6 +65296,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 53,
+      "upgradeTo": "Medieval Infantry",
+      "unique": {
+        "replace": "Swordsman",
+        "civilization": "Rome"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65225,6 +65325,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 54,
+      "upgradeTo": "Medieval Infantry",
+      "unique": {
+        "replace": "Swordsman",
+        "civilization": "Persia"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65248,6 +65354,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 55,
+      "upgradeTo": "Knight",
+      "unique": {
+        "replace": "Chariot",
+        "civilization": "Egypt"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65271,6 +65383,12 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 56,
+      "upgradeTo": "Cavalry",
+      "unique": {
+        "replace": "Knight",
+        "civilization": "China"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65294,6 +65412,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 57,
+      "upgradeTo": "Knight",
+      "unique": {
+        "replace": "Horseman",
+        "civilization": "Iroquois"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65317,6 +65441,12 @@
       "bombard": 2,
       "movement": 1,
       "iconIndex": 58,
+      "upgradeTo": "Rifleman",
+      "unique": {
+        "replace": "Musketman",
+        "civilization": "France"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65340,6 +65470,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 59,
+      "upgradeTo": "Cavalry",
+      "unique": {
+        "replace": "Knight",
+        "civilization": "Japan"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65363,6 +65499,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 60,
+      "upgradeTo": "Cavalry",
+      "unique": {
+        "replace": "Knight",
+        "civilization": "India"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65386,6 +65528,11 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 61,
+      "unique": {
+        "replace": "Cavalry",
+        "civilization": "Russia"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65409,6 +65556,12 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 62,
+      "upgradeTo": "Modern Armor",
+      "unique": {
+        "replace": "Tank",
+        "civilization": "Germany"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65432,6 +65585,11 @@
       "bombard": 4,
       "movement": 5,
       "iconIndex": 63,
+      "unique": {
+        "replace": "Frigate",
+        "civilization": "England"
+      },
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -65456,6 +65614,11 @@
       "bombard": 6,
       "movement": 1,
       "iconIndex": 64,
+      "unique": {
+        "replace": "Jet Fighter",
+        "civilization": "America"
+      },
+      "unproducible": false,
       "categories": [
         "Air"
       ],
@@ -65477,6 +65640,7 @@
       "bombard": 3,
       "movement": 5,
       "iconIndex": 65,
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -65500,6 +65664,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 76,
+      "upgradeTo": "Cavalry",
+      "unique": {
+        "replace": "Knight",
+        "civilization": "Mongols"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65523,6 +65693,11 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 75,
+      "unique": {
+        "replace": "Explorer",
+        "civilization": "Spain"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65546,6 +65721,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 74,
+      "upgradeTo": "Guerilla",
+      "unique": {
+        "replace": "Longbowman",
+        "civilization": "Scandinavia"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65569,6 +65750,11 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 77,
+      "unique": {
+        "replace": "Cavalry",
+        "civilization": "Ottomans"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65592,6 +65778,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 78,
+      "upgradeTo": "Medieval Infantry",
+      "unique": {
+        "replace": "Swordsman",
+        "civilization": "Celts"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65615,6 +65807,12 @@
       "bombard": 0,
       "movement": 3,
       "iconIndex": 82,
+      "upgradeTo": "Cavalry",
+      "unique": {
+        "replace": "Knight",
+        "civilization": "Arabia"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65638,6 +65836,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 80,
+      "upgradeTo": "Pikeman",
+      "unique": {
+        "replace": "Spearman",
+        "civilization": "Carthage"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65661,6 +65865,11 @@
       "bombard": 8,
       "movement": 1,
       "iconIndex": 79,
+      "upgradeTo": "Artillery",
+      "unique": {
+        "civilization": "Korea"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65685,6 +65894,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 84,
+      "upgradeTo": "Guerilla",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65708,6 +65919,8 @@
       "bombard": 3,
       "movement": 1,
       "iconIndex": 85,
+      "upgradeTo": "TOW Infantry",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -65730,6 +65943,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 121,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65749,6 +65963,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 97,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65770,6 +65985,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 100,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65791,6 +66007,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 103,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65812,6 +66029,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 107,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65833,6 +66051,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 108,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65854,6 +66073,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 116,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65875,6 +66095,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 115,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65896,6 +66117,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 110,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65917,6 +66139,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 120,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65938,6 +66161,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 99,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65959,6 +66183,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 104,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -65980,6 +66205,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 105,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66001,6 +66227,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 117,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66022,6 +66249,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 98,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66043,6 +66271,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 101,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66064,6 +66293,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 114,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66085,6 +66315,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 113,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66106,6 +66337,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 109,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66127,6 +66359,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 119,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66148,6 +66381,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 102,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66169,6 +66403,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 111,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66190,6 +66425,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 106,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66211,6 +66447,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 112,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66232,6 +66469,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 118,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66253,6 +66491,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 175,
+      "upgradeTo": "Pikeman",
+      "unique": {
+        "replace": "Warrior",
+        "civilization": "Sumeria"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66276,6 +66520,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 186,
+      "upgradeTo": "Knight",
+      "unique": {
+        "replace": "Chariot",
+        "civilization": "Hittites"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66298,6 +66548,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 169,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66319,6 +66570,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 174,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66340,6 +66592,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 173,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66362,6 +66615,12 @@
       "bombard": 0,
       "movement": 4,
       "iconIndex": 198,
+      "upgradeTo": "Galleon",
+      "unique": {
+        "replace": "Caravel",
+        "civilization": "Portugal"
+      },
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -66385,6 +66644,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 181,
+      "upgradeTo": "Rifleman",
+      "unique": {
+        "replace": "Pikeman",
+        "civilization": "Netherlands"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66407,6 +66672,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 172,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66429,6 +66695,8 @@
       "bombard": 6,
       "movement": 1,
       "iconIndex": 190,
+      "upgradeTo": "Cannon",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66452,6 +66720,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 170,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66473,6 +66742,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 171,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66494,6 +66764,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 168,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66515,6 +66786,12 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 176,
+      "upgradeTo": "Explorer",
+      "unique": {
+        "replace": "Scout",
+        "civilization": "Inca"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66538,6 +66815,12 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 177,
+      "upgradeTo": "Longbowman",
+      "unique": {
+        "replace": "Archer",
+        "civilization": "Maya"
+      },
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66561,6 +66844,12 @@
       "bombard": 2,
       "movement": 3,
       "iconIndex": 196,
+      "upgradeTo": "Caravel",
+      "unique": {
+        "replace": "Galley",
+        "civilization": "Byzantines"
+      },
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -66585,6 +66874,8 @@
       "bombard": 7,
       "movement": 6,
       "iconIndex": 200,
+      "upgradeTo": "AEGIS Cruiser",
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -66608,6 +66899,7 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 180,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66630,6 +66922,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 187,
+      "unproducible": true,
       "categories": [
         "Land"
       ],
@@ -66653,6 +66946,8 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 195,
+      "upgradeTo": "Galley",
+      "unproducible": false,
       "categories": [
         "Sea"
       ],
@@ -66676,6 +66971,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 185,
+      "upgradeTo": "Modern Paratrooper",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66699,6 +66996,7 @@
       "bombard": 6,
       "movement": 1,
       "iconIndex": 203,
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66722,6 +67020,8 @@
       "bombard": 0,
       "movement": 1,
       "iconIndex": 205,
+      "upgradeTo": "Mobile SAM",
+      "unproducible": false,
       "categories": [
         "Land"
       ],
@@ -66745,6 +67045,7 @@
       "bombard": 0,
       "movement": 2,
       "iconIndex": 206,
+      "unproducible": false,
       "categories": [
         "Land"
       ],

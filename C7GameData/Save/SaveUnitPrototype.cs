@@ -2,6 +2,11 @@ using System.Collections.Generic;
 
 namespace C7GameData.Save {
 	public class SaveUnitPrototype {
+		public class Unique {
+			public string replace;
+			public string civilization;
+		};
+
 		public string name { get; set; }
 		public string artName { get; set; }
 		public int shieldCost { get; set; }
@@ -13,6 +18,10 @@ namespace C7GameData.Save {
 		public int movement { get; set; }
 		public int iconIndex { get; set; }
 
+		public string upgradeTo;
+		public Unique unique;
+		public bool unproducible;
+
 		public HashSet<string> categories = new HashSet<string>();
 
 		public HashSet<string> actions = new HashSet<string>();
@@ -22,13 +31,23 @@ namespace C7GameData.Save {
 		public SaveUnitPrototype() { }
 
 		public SaveUnitPrototype(UnitPrototype proto) {
-			(name, artName, shieldCost, populationCost,
+			(name, artName, shieldCost, populationCost, unproducible,
 			attack, defense, bombard, movement, iconIndex) =
-			(proto.name, proto.artName, proto.shieldCost, proto.populationCost,
+			(proto.name, proto.artName, proto.shieldCost, proto.populationCost, proto.unproducible,
 			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex);
 
 			if (proto.requiredTech != null)
 				requiredTech = proto.requiredTech.id;
+
+			if (proto.upgradeTo != null)
+				upgradeTo = proto.upgradeTo.name;
+
+			if (proto.unique != null) {
+				unique = new() {
+					civilization = proto.unique.civilization.name,
+					replace = proto.unique.replace?.name
+				};
+			}
 
 			categories = new HashSet<string>(proto.categories);
 			actions = new HashSet<string>(proto.actions);

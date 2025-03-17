@@ -44,6 +44,8 @@ namespace C7GameData {
 			ImportRaces();
 			ImportTechs();
 			ImportUnitPrototypes();
+			ImportUniqueUnitReplacements();
+			ImportUnitUpgrades();
 			ImportBuildings();
 			ImportCiv3TerrainTypes();
 			ImportCiv3ExperienceLevels();
@@ -659,6 +661,38 @@ namespace C7GameData {
 			}
 		}
 
+		private static IEnumerable<string> GetUnitActions(PRTO prto) {
+			if (prto.BuildCity) yield return C7Action.UnitBuildCity;
+			if (prto.BuildRoad) yield return C7Action.UnitBuildRoad;
+			if (prto.BuildMine) yield return C7Action.UnitBuildMine;
+			if (prto.Irrigate) yield return C7Action.UnitIrrigate;
+			if (prto.Bombard) yield return C7Action.UnitBombard;
+			if (prto.SkipTurn) yield return C7Action.UnitHold;
+			if (prto.Wait) yield return C7Action.UnitWait;
+			if (prto.Fortify) yield return C7Action.UnitFortify;
+			if (prto.Disband) yield return C7Action.UnitDisband;
+			if (prto.GoTo) yield return C7Action.UnitGoto;
+			if (prto.Explore) yield return C7Action.UnitExplore;
+			if (prto.Automate) yield return C7Action.UnitAutomate;
+		}
+
+		private SaveUnitPrototype.Unique ImportUniqueUnitData(PRTO prto) {
+			int civIndex = prto.AvailableTo.GetUniqueCivIndex();
+
+			if (civIndex == -1) {
+				return null;
+			}
+
+			return new() { civilization = save.Civilizations[civIndex].name };
+		}
+
+		private static bool IsUnproducible(PRTO prto) {
+			int[] availableTo = prto.AvailableTo.GetAvailableCivIndexes().ToArray();
+
+			// TODO: Implement proper logic for Army production
+			return availableTo.Length == 0 || prto.ShieldCost < 1 || prto.Army;
+		}
+
 		private void ImportUnitPrototypes() {
 			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
 			foreach (PRTO prto in Prto) {
@@ -670,6 +704,7 @@ namespace C7GameData {
 				} else if (prto.Type == PRTO.TYPE_AIR) {
 					prototype.categories.Add("Air");
 				}
+
 				prototype.name = prto.Name;
 				prototype.artName = pediaIcons.GetUnitArtName(prto.CivilopediaEntry);
 				prototype.attack = prto.Attack;
@@ -679,50 +714,134 @@ namespace C7GameData {
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
 				prototype.iconIndex = prto.IconIndex;
-				if (prto.BuildCity) {
-					prototype.actions.Add(C7Action.UnitBuildCity);
-				}
-				if (prto.BuildRoad) {
-					prototype.actions.Add(C7Action.UnitBuildRoad);
-				}
-				if (prto.BuildMine) {
-					prototype.actions.Add(C7Action.UnitBuildMine);
-				}
-				if (prto.Irrigate) {
-					prototype.actions.Add(C7Action.UnitIrrigate);
-				}
-				if (prto.Bombard) {
-					prototype.actions.Add(C7Action.UnitBombard);
-				}
-				if (prto.SkipTurn) {
-					prototype.actions.Add(C7Action.UnitHold);
-				}
-				if (prto.Wait) {
-					prototype.actions.Add(C7Action.UnitWait);
-				}
-				if (prto.Fortify) {
-					prototype.actions.Add(C7Action.UnitFortify);
-				}
-				if (prto.Disband) {
-					prototype.actions.Add(C7Action.UnitDisband);
-				}
-				if (prto.GoTo) {
-					prototype.actions.Add(C7Action.UnitGoto);
-				}
-				if (prto.Explore) {
-					prototype.actions.Add(C7Action.UnitExplore);
-				}
-				if (prto.Automate) {
-					prototype.actions.Add(C7Action.UnitAutomate);
-				}
-				//Temporary check until #329/#330 are finished
-				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
-					if (prto.Required != -1) {
-						prototype.requiredTech = save.Techs[prto.Required].id;
-					}
+				prototype.actions.UnionWith(GetUnitActions(prto));
 
+				prototype.unique = ImportUniqueUnitData(prto);
+				prototype.unproducible = IsUnproducible(prto);
+
+				if (prto.Required != -1) {
+					prototype.requiredTech = save.Techs[prto.Required].id;
+				}
+
+				//Temporary check until #330 is finished
+				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
 					save.UnitPrototypes.Add(prototype);
 				}
+			}
+		}
+
+		// This method assigns standard units that are replaced by unique units.
+		//
+		// A unique unit replaces a standard unit if both share the same tech requirement 
+		// and the standard unit is unproducible by the civilization to which the unique unit belongs.
+		// 
+		// For example, this method updates the Mounted Warrior prototype to indicate that it replaces the Horseman.
+		private void ImportUniqueUnitReplacements() {
+			var unitPrototypeDict = save.UnitPrototypes.ToDictionary(b => b.name);
+
+			// Group unique units by civilization.
+			// In the base ruleset a civilization only has one unique unit, 
+			// but this may vary in scenarios.
+			var uniqueUnitPrototypesByCiv = save.UnitPrototypes
+					.Where(u => u.unique != null)
+					.ToLookup(u => u.unique.civilization);
+
+			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
+
+			foreach (PRTO standardUnitPrto in Prto) {
+				string standardUnitName = standardUnitPrto.Name;
+				SaveUnitPrototype standardUnit = unitPrototypeDict[standardUnitName];
+
+				// Skip units that are either unique or unproducible (cannot be built normally)
+				if (standardUnit.unique != null) {
+					continue;
+				}
+
+				if (standardUnit.unproducible) {
+					continue;
+				}
+
+				// For each civilization that cannot build the standard unit
+				foreach (int civIndex in standardUnitPrto.AvailableTo.GetUnavailableCivIndexes()) {
+					if (civIndex >= save.Civilizations.Count) {
+						break;
+					}
+
+					var uniqueUnits = uniqueUnitPrototypesByCiv[save.Civilizations[civIndex].name];
+
+					foreach (SaveUnitPrototype uniqueUnit in uniqueUnits) {
+						// If the unique unit has the same tech requirement as the standard unit, 
+						// mark the unique unit as a replacement for the standard unit
+						if (uniqueUnit.requiredTech == standardUnit.requiredTech) {
+							uniqueUnit.unique.replace = standardUnitName;
+						}
+					}
+				}
+			}
+		}
+
+		// This method loads unit upgrades from CIV3 data. In CIV3, unique units are part of the upgrade chain. 
+		//
+		// For example, the upgrade path for Horseman looks like this:
+		// Horseman->Mounted Warrior->Three-Man Chariot->Knight->Keshik->Ansar Warrior->Rider->Samurai->War Elephant->Cavalry.
+		// see also: https://forums.civfanatics.com/threads/how-to-upgrade-regular-units-to-uus.108396/
+		//
+		// When loading this data, the method ignores the unique units in the upgrade chain.
+		// Instead, each unit of the chain will be assigned an upgrade that represents the closest non-unique unit 
+		// that also requires a tech advancement over the base unit.
+		//
+		// For example, this method will mark that Horseman upgrades to Knight and that Keshik upgrades to Cavalry.
+		private void ImportUnitUpgrades() {
+			Dictionary<SaveUnitPrototype, SaveUnitPrototype> upgradeDict = BuildUpgradeDict();
+
+			foreach (SaveUnitPrototype proto in save.UnitPrototypes) {
+				proto.upgradeTo = GetUnitUpgrade(proto, upgradeDict);
+			}
+		}
+
+		// This method builds a Dictionary of unit upgrades based on the CIV3 data.
+		// The dictionary represents the raw upgrade relationships as defined in the game files.
+		// The dictionary serves as an intermediate data structure for the ImportUnitUpgrades process,
+		// before filtering out unique units.
+		private Dictionary<SaveUnitPrototype, SaveUnitPrototype> BuildUpgradeDict() {
+			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
+			var unitPrototypeDict = save.UnitPrototypes.ToDictionary(b => b.name);
+
+			Dictionary<SaveUnitPrototype, SaveUnitPrototype> upgradeDict = [];
+
+			foreach (PRTO prto in Prto) {
+				SaveUnitPrototype upgradeFrom = unitPrototypeDict[prto.Name];
+				if (prto.UpgradeTo != -1) {
+					SaveUnitPrototype upgradeTo = unitPrototypeDict[Prto[prto.UpgradeTo].Name];
+					upgradeDict[upgradeFrom] = upgradeTo;
+				} else {
+					upgradeDict[upgradeFrom] = null;
+				}
+			}
+
+			return upgradeDict;
+		}
+
+		// This method returns the name of the first valid unit upgrade in the upgrade chain.
+		// A valid upgrade must require a different technology than the base unit and must not be a unique unit.
+		// If no valid upgrade is found, it returns null.
+		private static string GetUnitUpgrade(SaveUnitPrototype proto, Dictionary<SaveUnitPrototype, SaveUnitPrototype> upgradeDict) {
+			SaveUnitPrototype currentProto = proto;
+
+			while (true) {
+				// Check if there's an upgrade available
+				var upgrade = upgradeDict[currentProto];
+				if (upgrade == null) {
+					return null;
+				}
+
+				// If this upgrade represents a technology advancement over the base unit and is not a unique unit, return it
+				if (upgrade.requiredTech != proto.requiredTech && upgrade.unique == null) {
+					return upgrade.name;
+				}
+
+				// Otherwise, continue checking the upgrade chain
+				currentProto = upgrade;
 			}
 		}
 

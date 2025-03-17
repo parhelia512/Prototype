@@ -11,13 +11,12 @@ namespace C7GameData {
 		public bool isGreatWonder;
 		public bool isSmallWonder;
 
-		public Building(SaveBuilding building, Tech requiredTech) {
+		public Building(SaveBuilding building) {
 			name = building.name;
 			shieldCost = building.shieldCost;
 			populationCost = building.populationCost;
 			isGreatWonder = building.isGreatWonder;
 			isSmallWonder = building.isSmallWonder;
-			this.requiredTech = requiredTech;
 		}
 	}
 }
