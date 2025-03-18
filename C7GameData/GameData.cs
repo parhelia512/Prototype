@@ -107,6 +107,10 @@ namespace C7GameData {
 					t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
 				}
 			}
+
+			foreach (Player player in players) {
+				player.tileKnowledge.RecomputeActiveTiles();
+			}
 		}
 
 		public void UpdateTileOwnersOnCityDestruction(City city) {

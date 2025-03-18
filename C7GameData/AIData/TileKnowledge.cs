@@ -1,10 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace C7GameData {
 	public class TileKnowledge {
+		private readonly Player _player;
+
+		public TileKnowledge(Player player) {
+			_player = player;
+		}
+
 		public HashSet<Tile> knownTiles { get; private set; } = new();
 		public HashSet<Tile> borderTiles { get; private set; } = new();
-		HashSet<Tile> visibleTiles = new();
+		private HashSet<Tile> activeTiles = new HashSet<Tile>();
 
 		// Has this player explored all known ocean tiles?
 		// TODO: this should be split out for coast/ocean
@@ -27,6 +34,8 @@ namespace C7GameData {
 					}
 				}
 			}
+
+			RecomputeActiveTiles();
 		}
 
 		// neighboring tiles should not be added when loading tile knowledge
@@ -48,8 +57,8 @@ namespace C7GameData {
 			return knownTiles.Contains(t);
 		}
 
-		public bool isBorderOfTileKnowlege(Tile t) {
-			return borderTiles.Contains(t);
+		public bool isActiveTile(Tile t) {
+			return activeTiles.Contains(t);
 		}
 
 		/**
@@ -62,6 +71,31 @@ namespace C7GameData {
 				list.Add(t);
 			}
 			return list;
+		}
+
+		public void RecomputeActiveTiles() {
+			activeTiles.Clear();
+			foreach (Tile t in knownTiles) {
+				// A tile within a city's borders and all of its neighbors are active.
+				if (t.owningCity != null && t.owningCity.owner == _player) {
+					activeTiles.Add(t);
+
+					foreach (Tile neighbor in t.neighbors.Values) {
+						activeTiles.Add(neighbor);
+					}
+					continue;
+				}
+
+				// A tile with a unit on it and all of its neighbors are active.
+				if (t.unitsOnTile.Count > 0 && t.unitsOnTile[0].owner == _player) {
+					activeTiles.Add(t);
+
+					foreach (Tile neighbor in t.neighbors.Values) {
+						activeTiles.Add(neighbor);
+					}
+					continue;
+				}
+			}
 		}
 	}
 }

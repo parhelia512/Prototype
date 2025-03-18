@@ -512,7 +512,7 @@ public partial class LooseView : Node2D {
 			}
 
 			if (!gD.observerMode) {
-				foreach (LooseLayer layer in layers.FindAll(layer => layer is FogOfWarLayer)) {
+				foreach (FogOfWarLayer layer in layers.Where(layer => layer is FogOfWarLayer).Cast<FogOfWarLayer>()) {
 					for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++)
 						if (gD.map.isRowAt(Y))
 							for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {
@@ -531,7 +531,7 @@ public partial class LooseView : Node2D {
 			return true;
 		}
 		TileKnowledge knowledge = gameDataAccess.gameData.GetHumanPlayers()[0].tileKnowledge;
-		return tile != Tile.NONE && (knowledge.isTileKnown(tile) || knowledge.isBorderOfTileKnowlege(tile));
+		return tile != Tile.NONE && knowledge.isTileKnown(tile);
 	}
 }
 
