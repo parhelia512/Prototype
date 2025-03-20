@@ -174,17 +174,23 @@ public partial class RightClickTileMenu : RightClickMenu {
 		// are in a city. We can see the full list of units outside of a city, but in a city
 		// we can only see the top defender.
 		if (nonPlayerUnits.Count > 0) {
+			Action contactCiv = () => {
+				this.CloseAndDelete();
+				game.controller.EnsureRelationshipExists(nonPlayerUnits[0].owner);
+				game.OnDiplomacySelected(new ParameterWrapper<ID>(nonPlayerUnits[0].owner.id));
+			};
+
 			if (tile.cityAtTile == null) {
 				foreach (MapUnit unit in nonPlayerUnits) {
 					AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
 				}
-				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", null);
+				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 			} else {
 				// TODO: This isn't necessarily the top unit, get that code to an accessible
 				// location and then use it here.
 				MapUnit unit = nonPlayerUnits[0];
 				AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
-				AddItem($"Contact {unit.owner.civilization.name}", null);
+				AddItem($"Contact {unit.owner.civilization.name}", contactCiv);
 			}
 		}
 	}

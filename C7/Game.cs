@@ -867,7 +867,7 @@ public partial class Game : Node2D {
 		EmitSignal(SignalName.ShowCityScreen, new ParameterWrapper<City>(city));
 	}
 
-	private void OnDiplomacySelected(ParameterWrapper<ID> opponentPlayer) {
+	public void OnDiplomacySelected(ParameterWrapper<ID> opponentPlayer) {
 		diplomacy.ShowTalkScreenForPlayer(controller.id, opponentPlayer.Value);
 	}
 }
