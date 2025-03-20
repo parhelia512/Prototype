@@ -72,6 +72,7 @@ public partial class DealScreen : TextureRect {
 		GameData gD = gameDataAccess.gameData;
 		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
 		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
+		bool playersAtWar = humanPlayer.playerRelationships[opponentPlayer.id].atWar;
 		GetParent<Diplomacy>().AddLeaderHeadAndLabel(this, opponentPlayer, fontTheme);
 
 		// Figure out which technologies can be traded by each player, if any.
@@ -83,7 +84,7 @@ public partial class DealScreen : TextureRect {
 		});
 
 		// Left hand side UI components.
-		opponentTree = new TradingTree(fontTheme, opponentPlayer.gold, techsOpponentCanTrade, opponentOffer);
+		opponentTree = new TradingTree(fontTheme, opponentPlayer.gold, techsOpponentCanTrade, opponentOffer, playersAtWar);
 		AddChild(opponentTree);
 		opponentTree.Position = new Vector2(45, 220);
 
@@ -93,12 +94,12 @@ public partial class DealScreen : TextureRect {
 		weWant.Theme = blueFontTheme;
 		AddChild(weWant);
 
-		opponentOfferUi = new(fontTheme, techsOpponentCanTrade, opponentPlayer.gold, opponentOffer, HorizontalAlignment.Left);
+		opponentOfferUi = new(fontTheme, techsOpponentCanTrade, opponentPlayer.gold, opponentOffer, playersAtWar, HorizontalAlignment.Left);
 		AddChild(opponentOfferUi);
 		opponentOfferUi.Position = new Vector2(314, 453);
 
 		// Right hand side UI components.
-		humanTree = new TradingTree(fontTheme, humanPlayer.gold, techsHumanCanTrade, humanOffer);
+		humanTree = new TradingTree(fontTheme, humanPlayer.gold, techsHumanCanTrade, humanOffer, playersAtWar);
 		AddChild(humanTree);
 		humanTree.Position = new Vector2(789, 220);
 
@@ -108,26 +109,33 @@ public partial class DealScreen : TextureRect {
 		weOffer.Theme = blueFontTheme;
 		AddChild(weOffer);
 
-		humanOfferUi = new(fontTheme, techsHumanCanTrade, humanPlayer.gold, humanOffer, HorizontalAlignment.Right);
+		humanOfferUi = new(fontTheme, techsHumanCanTrade, humanPlayer.gold, humanOffer, playersAtWar, HorizontalAlignment.Right);
 		AddChild(humanOfferUi);
 		humanOfferUi.Position = new Vector2(527, 453);
 
+		var syncUis = () => {
+			opponentTree.RefreshUiForOffer();
+			humanTree.RefreshUiForOffer();
+			opponentOfferUi.RefreshUiForOffer();
+			humanOfferUi.RefreshUiForOffer();
+		};
+
 		// Link up the tree components appropriately.
 		opponentTree.HandleClicks(humanTree, () => {
-			opponentOfferUi.RefreshUiForOffer();
+			syncUis();
 			UpdateText();
 		});
 		humanTree.HandleClicks(opponentTree, () => {
-			humanOfferUi.RefreshUiForOffer();
+			syncUis();
 			UpdateText();
 		});
 
-		humanOfferUi.HandleClicks(() => {
-			humanTree.RefreshUiForOffer();
+		humanOfferUi.HandleClicks(opponentOfferUi, () => {
+			syncUis();
 			UpdateText();
 		});
-		opponentOfferUi.HandleClicks(() => {
-			opponentTree.RefreshUiForOffer();
+		opponentOfferUi.HandleClicks(humanOfferUi, () => {
+			syncUis();
 			UpdateText();
 		});
 
