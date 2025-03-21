@@ -89,11 +89,7 @@ public partial class Diplomacy : CenterContainer {
 		Label civName = new();
 		civName.SetPosition(new Vector2(0, 330));
 		node.AddChild(civName);
-		civName.Text = civNameText;
-		civName.HorizontalAlignment = HorizontalAlignment.Center;
-		civName.AnchorLeft = 0.5f;
-		civName.AnchorRight = 0.5f;
-		civName.OffsetLeft = -1 * (civName.Size.X / 2.0f);
 		civName.Theme = fontTheme;
+		civName.SetTextAndCenterLabel(civNameText);
 	}
 }

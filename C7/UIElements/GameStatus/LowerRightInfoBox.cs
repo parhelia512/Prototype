@@ -75,15 +75,15 @@ public partial class LowerRightInfoBox : TextureRect {
 
 		civAndGovt.SetPosition(new Vector2(0, 75));
 		boxRightRectangle.AddChild(civAndGovt);
-		SetTextAndCenterLabel(civAndGovt, "Carthage - Despotism (5.5.0)");
+		civAndGovt.SetTextAndCenterLabel("Carthage - Despotism (5.5.0)");
 
 		yearAndGold.SetPosition(new Vector2(0, 90));
 		boxRightRectangle.AddChild(yearAndGold);
-		SetTextAndCenterLabel(yearAndGold, "Turn 0  10 Gold (+0 per turn)");
+		yearAndGold.SetTextAndCenterLabel("Turn 0  10 Gold (+0 per turn)");
 
 		scienceProgress.SetPosition(new Vector2(0, 105));
 		boxRightRectangle.AddChild(scienceProgress);
-		SetTextAndCenterLabel(scienceProgress, "");
+		scienceProgress.SetTextAndCenterLabel("");
 
 		//Setup up, but do not start, the timer.
 		blinkingTimer.OneShot = false;
@@ -189,14 +189,14 @@ public partial class LowerRightInfoBox : TextureRect {
 				int turnsRemaining = tech == null ? int.MaxValue : player.EstimateTurnsToResearch(tech);
 
 				if (turnsRemaining >= int.MaxValue) {
-					SetTextAndCenterLabel(scienceProgress, $"{techName} (-- turns)");
+					scienceProgress.SetTextAndCenterLabel($"{techName} (-- turns)");
 				} else {
-					SetTextAndCenterLabel(scienceProgress, $"{techName} ({turnsRemaining} turns)");
+					scienceProgress.SetTextAndCenterLabel($"{techName} ({turnsRemaining} turns)");
 				}
 			}
 
 			// Civ and government.
-			SetTextAndCenterLabel(civAndGovt, $"{player.civilization.name} - Despotism (5.5.0)");
+			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - Despotism (5.5.0)");
 
 			// Only show the diplomacy button if we have civs to talk to.
 			if (player.playerRelationships.Count > 0 && !openDiplomacy.Visible) {
@@ -205,18 +205,6 @@ public partial class LowerRightInfoBox : TextureRect {
 		}
 
 		base._Process(delta);
-	}
-
-	private void SetTextAndCenterLabel(Label label, string text) {
-		//For the centered labels, we anchor them center, with equal weight on each side.
-		//Then, when they are visible, we add a left margin that's negative and equal to half
-		//their width.
-		//Seems like there probably is an easier way, but I haven't found it yet.
-		label.Text = text;
-		label.HorizontalAlignment = HorizontalAlignment.Center;
-		label.AnchorLeft = 0.5f;
-		label.AnchorRight = 0.5f;
-		label.OffsetLeft = -1 * (label.Size.X / 2.0f);
 	}
 
 	private void OpenDiplomacyPopup() {

@@ -264,7 +264,7 @@ public partial class RightClickCityMenu : RightClickMenu {
 public partial class RightClickChooseProductionMenu : RightClickMenu {
 	private ID cityID;
 
-	private ImageTexture GetProducibleIcon(IProducible producible) {
+	public static ImageTexture GetProducibleIcon(IProducible producible) {
 		if (producible is UnitPrototype proto) {
 			const int iconWidth = 32, iconHeight = 32, iconsPerRow = 14;
 			int x = 1 + 33 * (proto.iconIndex % iconsPerRow),
