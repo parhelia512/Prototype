@@ -120,6 +120,8 @@ public partial class CityScreen : CenterContainer {
 							RenderFoodDetails(tileAssignmentLayer.city);
 							RenderCommerceDetails(tileAssignmentLayer.city);
 							RenderProductionDetails(tileAssignmentLayer.city);
+
+							new MsgUpdateCityProductionUI(tileAssignmentLayer.city).send();
 						}
 					}
 				}

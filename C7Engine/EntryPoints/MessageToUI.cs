@@ -59,4 +59,8 @@ namespace C7Engine {
 			this.city = city;
 		}
 	}
+
+	public class MsgUpdateCityProductionUI(City city) : MessageToUI {
+		public City city = city;
+	}
 }

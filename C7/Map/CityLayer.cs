@@ -12,8 +12,18 @@ namespace C7.Map {
 
 		public void UpdateAfterCityDestruction(City city) {
 			citySceneLookup.Remove(city, out CityScene cityScene);
-			if (cityScene != null) {
-				cityScene.Hide();
+			cityScene?.Hide();
+		}
+
+		public void RedrawCities() {
+			foreach (CityScene scene in citySceneLookup.Values) {
+				scene.QueueRedraw();
+			}
+		}
+
+		public void RedrawCity(City city) {
+			if (citySceneLookup.TryGetValue(city, out CityScene cityScene)) {
+				cityScene.QueueRedraw();
 			}
 		}
 
@@ -27,9 +37,6 @@ namespace C7.Map {
 				CityScene cityScene = new CityScene(city, tile, new Vector2I((int)tileCenter.X, (int)tileCenter.Y));
 				looseView.AddChild(cityScene);
 				citySceneLookup[city] = cityScene;
-			} else {
-				CityScene scene = citySceneLookup[city];
-				scene._Draw();
 			}
 		}
 	}

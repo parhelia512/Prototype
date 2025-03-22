@@ -213,6 +213,7 @@ public partial class Game : Node2D {
 					}
 					break;
 				case MsgStartTurn mST:
+					mapView.cityLayer.RedrawCities();
 					OnPlayerStartTurn();
 					break;
 				case MsgCityCreated mCC:
@@ -253,6 +254,9 @@ public partial class Game : Node2D {
 					// F1 is the science advisor.
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
+					break;
+				case MsgUpdateCityProductionUI mCPC:
+					mapView.cityLayer.RedrawCity(mCPC.city);
 					break;
 			}
 		}

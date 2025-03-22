@@ -256,7 +256,7 @@ public partial class RightClickCityMenu : RightClickMenu {
 }
 
 public partial class RightClickChooseProductionMenu : RightClickMenu {
-	private ID cityID;
+	private City city;
 
 	private ImageTexture GetProducibleIcon(IProducible producible) {
 		if (producible is UnitPrototype proto) {
@@ -269,7 +269,7 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 	}
 
 	public RightClickChooseProductionMenu(Game game, City city) : base(game) {
-		cityID = city.id;
+		this.city = city;
 		foreach (IProducible option in city.ListProductionOptions()) {
 			int buildTime = city.TurnsToProduce(option);
 			AddItem($"{option.name} ({buildTime} turns)", () => ChooseProduction(option.name), GetProducibleIcon(option));
@@ -277,7 +277,8 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 	}
 
 	public void ChooseProduction(string producibleName) {
-		new MsgChooseProduction(cityID, producibleName).send();
+		new MsgChooseProduction(city.id, producibleName).send();
+		new MsgUpdateCityProductionUI(city).send();
 		CloseAndDelete();
 	}
 }
