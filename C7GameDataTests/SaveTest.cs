@@ -12,6 +12,7 @@ using C7Engine;
 using C7GameData.Save;
 using QueryCiv3;
 using System.Runtime.InteropServices;
+using C7Engine.Pathing;
 
 public class SaveTests {
 
@@ -186,6 +187,30 @@ public class SaveTests {
 		// And they should be the same, despite round-tripping through the GameData format.
 		Assert.Equal(directSaveLines, roundTrippedSaveLines);
 	}
+
+	[Fact]
+	public void WorldWrapDetails() {
+		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+		Player human = CreateHeadlessGame(developerSave);
+		WaitForStartTurnMessage();
+
+		using UIGameDataAccess gda = new();
+		GameData gd = gda.gameData;
+
+		Tile t0 = gd.map.tileAt(97, 33);
+		Tile t1 = gd.map.tileAt(99, 33);
+		Tile t2 = gd.map.tileAt(1, 33);
+
+		Assert.Equal(t0.distanceTo(t1), 1);
+		Assert.Equal(t1.distanceTo(t0), 1);
+
+		Assert.Equal(t1.distanceTo(t2), 1);
+		Assert.Equal(t2.distanceTo(t1), 1);
+
+		Assert.Equal(t0.distanceTo(t2), 2);
+		Assert.Equal(t2.distanceTo(t0), 2);
+	}
+
 
 	[Fact]
 	public async void LoadSampleSaves() {

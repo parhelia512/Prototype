@@ -25,10 +25,17 @@ namespace C7GameData {
 			borderTiles.Remove(unitLocation);
 
 			foreach (Tile t in unitLocation.neighbors.Values) {
+				if (t == Tile.NONE) {
+					continue;
+				}
+
 				knownTiles.Add(t);
 				borderTiles.Remove(t);
 
 				foreach (Tile border in t.neighbors.Values) {
+					if (border == Tile.NONE) {
+						continue;
+					}
 					if (!knownTiles.Contains(border)) {
 						borderTiles.Add(border);
 					}
@@ -45,6 +52,9 @@ namespace C7GameData {
 			borderTiles.Remove(unitLocation);
 
 			foreach (Tile border in unitLocation.neighbors.Values) {
+				if (border == Tile.NONE) {
+					continue;
+				}
 				if (!knownTiles.Contains(border)) {
 					borderTiles.Add(border);
 				}
