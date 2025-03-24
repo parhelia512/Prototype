@@ -31,8 +31,9 @@ public partial class DiplomacySelection : Popup {
 		foreach (KeyValuePair<ID, PlayerRelationship> kvp in player.playerRelationships) {
 			string status = kvp.Value.atWar ? "War" : "Peace";
 			AddButton($"{allPlayers.Find(x => x.id == kvp.Key).civilization.noun} (at {status})", vOffset, () => {
-				GetParent().EmitSignal(PopupOverlay.SignalName.DiplomacySelection, new ParameterWrapper<ID>(kvp.Key));
-				GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
+				Node parent = GetParent();
+				parent.EmitSignal(PopupOverlay.SignalName.HidePopup);
+				parent.EmitSignal(PopupOverlay.SignalName.DiplomacySelection, new ParameterWrapper<ID>(kvp.Key));
 			});
 			vOffset += 25;
 		}

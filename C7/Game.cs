@@ -762,6 +762,8 @@ public partial class Game : Node2D {
 		if (info == null || info.moveCost == -1) {
 			return;
 		}
+		using UIGameDataAccess gameDataAccess = new();
+		int currentTurn = gameDataAccess.gameData.turn;
 
 		// If this move would require declaring war, display a popup that checks
 		// if the player really wants to declare war. If they do, declare the
@@ -770,14 +772,13 @@ public partial class Game : Node2D {
 			GotoInfo stashed = info;
 			popupOverlay.ShowPopup(new WarConfirmation(stashed.requiresWarDeclarationOnPlayer,
 				() => {
-					controller.DeclareWarOn(info.requiresWarDeclarationOnPlayer);
+					controller.DeclareWarOn(info.requiresWarDeclarationOnPlayer, currentTurn);
 					stashed.requiresWarDeclarationOnPlayer = null;
 					HandleGotoClick(stashed);
 				}), PopupOverlay.PopupCategory.Advisor);
 			return;
 		}
 
-		using UIGameDataAccess gameDataAccess = new();
 		new MsgSetUnitPath(CurrentlySelectedUnit.id, info.path).send();
 	}
 

@@ -50,6 +50,7 @@ namespace C7GameData.Save {
 		public static SaveGame FromGameData(GameData data) {
 			SaveGame save = new SaveGame{
 				Seed = data.seed,
+				TurnNumber = data.turn,
 				Civilizations = data.civilizations,
 				Map = new SaveMap(data.map),
 				TerrainTypes = data.terrainTypes,
@@ -109,6 +110,7 @@ namespace C7GameData.Save {
 			// copy data without references
 			return new GameData {
 				seed = Seed,
+				turn = TurnNumber,
 				terrainTypes = TerrainTypes,
 				Resources = Resources,
 				scenarioSearchPath = ScenarioSearchPath,
@@ -271,6 +273,7 @@ namespace C7GameData.Save {
 
 		public string Version = "0.0.0";
 		public int Seed = -1;
+		public int TurnNumber = 0;
 		public SaveMap Map = new SaveMap();
 		public List<TerrainType> TerrainTypes = new List<TerrainType>();
 		public List<Resource> Resources = new List<Resource>();

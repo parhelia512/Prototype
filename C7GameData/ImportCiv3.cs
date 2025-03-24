@@ -71,6 +71,7 @@ namespace C7GameData {
 			savData = new SavData(Util.ReadFile(savePath), defaultBicBytes);
 			biq = savData.Bic;
 			pediaIcons = new(getPediaIconsPath(biq.Game[0].ScenarioSearchFolders));
+			save.TurnNumber = savData.Game.TurnNumber;
 
 			ImportSharedBiqData();
 			ImportSavLeaders();
@@ -452,10 +453,17 @@ namespace C7GameData {
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
 				List<int> contacts = leader.GetContact();
 				List<bool> warStatus = leader.GetWarStatuses();
+				List<int> refuseContactForTurns = leader.GetRefuseContactForTurns();
 				for (int j = 0; j < contacts.Count; ++j) {
 					if (contacts[j] > 0) {
+						QueryCiv3.Sav.LEAD_LEAD relationship = savData.ReputationRelationship[i][j];
 						save.Players[i].playerRelationships.Add(save.Players[j].id.ToString(), new PlayerRelationship() {
 							atWar = warStatus[j],
+							warDeclarationCount = relationship.WarDeclarationCount,
+							wasSneakAttacked = relationship.WasSneakAttacked == 1,
+							refuseContactUntilTurn =
+								refuseContactForTurns[j] > 0 ?
+									save.TurnNumber + refuseContactForTurns[j] : -1,
 						});
 					}
 				}
@@ -1190,8 +1198,15 @@ namespace C7GameData {
 		// comparing SAV files.
 		private void DumpObject(string label, object o) {
 			Console.WriteLine(label);
-			foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(o)) {
-				Console.WriteLine($"\t{descriptor.Name}={descriptor.GetValue(o)}");
+			foreach (System.Reflection.PropertyInfo propertyInfo in o.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) {
+				Console.WriteLine($"\t{propertyInfo.Name}={propertyInfo.GetValue(o)}");
+			}
+			foreach (System.Reflection.MethodInfo method in o.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) {
+				// Print the common case of methods returning lists with no argments
+				if (typeof(List<int>).IsAssignableFrom(method.ReturnType) && method.ReturnType != typeof(string)) {
+					List<int> result = (List<int>)method.Invoke(o, null);
+					Console.WriteLine($"\t{method.Name}=" + string.Join(", ", result));
+				}
 			}
 			foreach (System.Reflection.FieldInfo fieldInfo in o.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) {
 				Console.WriteLine($"\t{fieldInfo.Name}={fieldInfo.GetValue(o)}");

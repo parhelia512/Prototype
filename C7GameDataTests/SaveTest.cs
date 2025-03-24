@@ -237,6 +237,7 @@ public class SaveTests {
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			SaveGame game = null;
 			GameData gd = null;
+			Console.WriteLine(saveFileInfo.FullName);
 			Exception ex = Record.Exception(() => {
 				game = ImportCiv3.ImportSav(saveFileInfo.FullName, defaultBicPath, (relativeModePath) => {
 					return defaultPediaIconsPath;

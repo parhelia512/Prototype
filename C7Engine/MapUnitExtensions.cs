@@ -304,18 +304,11 @@ namespace C7Engine {
 			// tiles, not rank 2+.
 			foreach (Tile t in tile.neighbors.Values) {
 				if (t.unitsOnTile.Count > 0) {
-					MaybeAddPlayerKnowledge(t.unitsOnTile[0].owner, unit.owner);
+					unit.owner.EnsureRelationshipExists(t.unitsOnTile[0].owner);
 				}
 				if (t.owningCity != null) {
-					MaybeAddPlayerKnowledge(t.owningCity.owner, unit.owner);
+					unit.owner.EnsureRelationshipExists(t.owningCity.owner);
 				}
-			}
-		}
-
-		private static void MaybeAddPlayerKnowledge(Player a, Player b) {
-			if (a != b && !a.playerRelationships.ContainsKey(b.id)) {
-				a.playerRelationships.Add(b.id, new PlayerRelationship());
-				b.playerRelationships.Add(a.id, new PlayerRelationship());
 			}
 		}
 

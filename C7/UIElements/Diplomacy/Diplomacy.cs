@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using C7GameData;
+using C7Engine;
 using Serilog;
 using System.Collections.Generic;
 
@@ -22,6 +23,19 @@ public partial class Diplomacy : CenterContainer {
 		if (talkScreen != null) {
 			RemoveChild(talkScreen);
 			talkScreen = null;
+		}
+
+		using (UIGameDataAccess gameDataAccess = new()) {
+			GameData gd = gameDataAccess.gameData;
+			Player opponent = gd.players.Find(x => x.id == opponentPlayer);
+			Player human = gd.players.Find(x => x.id == humanPlayer);
+			if (!opponent.WillAcceptCommunicationFrom(human, gd.turn)) {
+				popupOverlay.ShowPopup(
+					new InformationalPopup(
+						$"The {opponent.civilization.noun} refused to acknowledge our envoy!"),
+						PopupOverlay.PopupCategory.Advisor);
+				return;
+			}
 		}
 
 		talkScreen = new TalkScreen(humanPlayer, opponentPlayer);

@@ -1,6 +1,7 @@
 {
   "version": "0.0.0",
   "seed": -1,
+  "turnNumber": 0,
   "map": {
     "tilesWide": 100,
     "tilesTall": 100,

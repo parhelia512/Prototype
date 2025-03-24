@@ -5,11 +5,19 @@ using System.Collections.Generic;
 namespace QueryCiv3.Sav {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public unsafe struct LEAD_LEAD {
-		private int UnknownBuffer;
+		// ReputationRelationship[i][j] is the number of times player j declared
+		// war on player i.
+		public int WarDeclarationCount;
+
 		public int CancelledDeal;
 		private long UnknownBuffer2;
 		public int CaughtSpy;
-		private int UnknownBuffer3;
+
+		// This is 1 for ReputationRelationship[i][j] if player j declared war
+		// on player i by attacking player i within player i's borders without
+		// declaring war first (i.e. a sneak attack).
+		public int WasSneakAttacked;
+
 		public int Tribute;
 		private long UnknownBuffer4;
 		public int Gift;
@@ -102,6 +110,15 @@ namespace QueryCiv3.Sav {
 
 		private fixed byte UnknownBuffer7[128];
 		public fixed int RefuseContactForTurns[32];
+
+		public List<int> GetRefuseContactForTurns() {
+			List<int> result = new();
+			for (int i = 0; i < 32; ++i) {
+				result.Add(RefuseContactForTurns[i]);
+			}
+			return result;
+		}
+
 		private fixed byte UnknownBuffer8[128];
 		private fixed int WarWearinessPoints[32];
 
