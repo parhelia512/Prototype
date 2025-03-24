@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
 using C7GameData.Save;
+using Serilog;
 
 namespace C7GameData {
 	public class Player {
+		private static ILogger log = Log.ForContext<Player>();
+
 		public ID id { get; internal set; }
 		public int colorIndex;
 		public bool isBarbarians = false;
@@ -211,21 +214,37 @@ namespace C7GameData {
 			return result;
 		}
 
+		public bool WouldAcceptDealFrom(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+			// TODO: consider any factors like trade reputations here
+			int theirGoldValue = theirOffer.GoldEquivalentFor(this);
+			int ourGoldValue = ourOffer.GoldEquivalentFor(this);
+			return theirGoldValue >= ourGoldValue;
+		}
+
+		public void ExecuteDeal(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+			if (ourOffer.gold.HasValue) {
+				other.gold += ourOffer.gold.Value;
+				this.gold -= ourOffer.gold.Value;
+				log.Information($"Moved {ourOffer.gold.Value} gold from {this} to {other}");
+			}
+			if (theirOffer.gold.HasValue) {
+				this.gold += theirOffer.gold.Value;
+				other.gold -= theirOffer.gold.Value;
+				log.Information($"Moved {theirOffer.gold.Value} gold from {other} to {this}");
+			}
+
+			foreach (Tech t in ourOffer.techs) {
+				other.knownTechs.Add(t.id);
+				log.Information($"{this} taught {t.Name} to {other}");
+			}
+
+			foreach (Tech t in theirOffer.techs) {
+				this.knownTechs.Add(t.id);
+				log.Information($"{other} taught {t.Name} to {this}");
+			}
+		}
+
 		public int EstimateTurnsToResearch(Tech tech) {
-			// Cost formula from https://forums.civfanatics.com/threads/research-cost-formula-v1-29f.29485/.
-			// Research Cost = [MM * [10*COST * (1 - N/[CL*1.75])]/(CF * 10)] - progress
-			//
-			// MM = map modifier (tiny=160, small=200, standard=240, large=320, huge=400)
-			// COST = tech cost
-			// CF = difficulty factor, range 10 (easy) to 6 (hard)
-			// N = number of known civs that have discovered the tech
-			// CL = civs left in game
-			//
-			// We also have the min/max turns to research of 4 and 50.
-			// TODO: the min/max costs are in the biq, we should load them.
-			// TODO: implement the civ-related parts of the equation
-			// TODO: figure out what map size we are
-			// TODO: See this this whole equation can be configurable
 			int beakersPerTurn = 0;
 			foreach (City city in cities) {
 				beakersPerTurn += city.CurrentCommerceYield().beakers;
@@ -236,10 +255,7 @@ namespace C7GameData {
 				return int.MaxValue;
 			}
 
-			int mapModifier = 160;  // small, to make testing faster
-			int difficultyFactor = 10; // easy difficulty
-			int researchCost = mapModifier * 10 * tech.Cost / (difficultyFactor * 10);
-			int remainingCost = researchCost - beakers;
+			int remainingCost = tech.TechCostFor(this) - beakers;
 			int turnsRemaining = (int)Math.Ceiling((double)remainingCost / beakersPerTurn);
 
 			// We never spend more than 50 turns per tech.
