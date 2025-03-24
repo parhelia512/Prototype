@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://UIElements/UnitButtons/UnitButtons.cs" id="12"]
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="12_yjlfl"]
 [ext_resource type="Script" path="res://UIElements/CityScreen/CityScreen.cs" id="13"]
+[ext_resource type="Script" path="res://UIElements/Diplomacy/Diplomacy.cs" id="14"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -60,29 +61,17 @@ _data = {
 "SlideOutAnimation": SubResource("1")
 }
 
-[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "slider", "animationPlayer")]
+[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
 cityScreen = NodePath("CanvasLayer/CityScreen")
 advisor = NodePath("CanvasLayer/Advisor")
+diplomacy = NodePath("CanvasLayer/Diplomacy")
 slider = NodePath("CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom")
 animationPlayer = NodePath("CanvasLayer/Control/SlideOutBar/AnimationPlayer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="PopupOverlay" type="HBoxContainer" parent="CanvasLayer" node_paths=PackedStringArray("control")]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 0
-size_flags_horizontal = 3
-alignment = 2
-script = ExtResource("9")
-control = NodePath("../Control")
-
-[node name="PopupSound" type="AudioStreamPlayer" parent="CanvasLayer/PopupOverlay"]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -270,6 +259,29 @@ script = ExtResource("13")
 unique_name_in_owner = true
 visible = false
 
+[node name="Diplomacy" type="CenterContainer" parent="CanvasLayer" node_paths=PackedStringArray("popupOverlay")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("10")
+script = ExtResource("14")
+popupOverlay = NodePath("../PopupOverlay")
+
+[node name="PopupOverlay" type="HBoxContainer" parent="CanvasLayer" node_paths=PackedStringArray("control")]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+size_flags_horizontal = 3
+alignment = 2
+script = ExtResource("9")
+control = NodePath("../Control")
+
+[node name="PopupSound" type="AudioStreamPlayer" parent="CanvasLayer/PopupOverlay"]
+
 [connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus" method="OnNewUnitSelected"]
 [connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/UnitButtons" method="OnNewUnitSelected"]
 [connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus" method="OnNoMoreAutoselectableUnits"]
@@ -282,6 +294,7 @@ visible = false
 [connection signal="Quit" from="CanvasLayer/PopupOverlay" to="." method="OnQuitTheGame"]
 [connection signal="Retire" from="CanvasLayer/PopupOverlay" to="." method="_on_QuitButton_pressed"]
 [connection signal="UnitDisbanded" from="CanvasLayer/PopupOverlay" to="." method="OnUnitDisbanded"]
+[connection signal="DiplomacySelection" from="CanvasLayer/PopupOverlay" to="." method="OnDiplomacySelected"]
 [connection signal="ActionRequested" from="CanvasLayer/Control/UnitButtons" to="." method="ProcessAction"]
 [connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus" to="." method="OnPlayerEndTurn"]
 [connection signal="pressed" from="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer/AdvisorButton" to="CanvasLayer/Advisor" method="ShowLatestAdvisor"]

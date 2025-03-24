@@ -629,6 +629,12 @@ namespace C7Engine {
 		}
 
 		public static void playAutomatedTurn(this MapUnit unit) {
+			if (unit.currentAI == null) {
+				// TODO: handle giving automated workers from loaded saves the
+				// proper unit ai.
+				unit.isAutomated = false;
+				return;
+			}
 			UnitAI.Result result = unit.currentAI.PlayTurn(unit.owner, unit);
 			if (result == UnitAI.Result.Done) {
 				if (unit.currentAI is WorkerAI) {
@@ -642,6 +648,5 @@ namespace C7Engine {
 			// nothing after an progress result, so that next turn continues the
 			// AI action.
 		}
-
 	}
 }

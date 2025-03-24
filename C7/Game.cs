@@ -76,6 +76,8 @@ public partial class Game : Node2D {
 	[Export]
 	private Advisors advisor;
 	[Export]
+	private Diplomacy diplomacy;
+	[Export]
 	private VSlider slider;
 	[Export]
 	private AnimationPlayer animationPlayer;
@@ -630,8 +632,13 @@ public partial class Game : Node2D {
 			return;
 		}
 
+		if (currentAction == C7Action.Escape && diplomacy.Visible) {
+			diplomacy.Hide();
+			return;
+		}
+
 		// never poll for actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible) {
 			return;
 		}
 
@@ -858,5 +865,9 @@ public partial class Game : Node2D {
 
 	public void ShowCityScreenForCity(City city) {
 		EmitSignal(SignalName.ShowCityScreen, new ParameterWrapper<City>(city));
+	}
+
+	private void OnDiplomacySelected(ParameterWrapper<ID> opponentPlayer) {
+		diplomacy.ShowTalkScreenForPlayer(controller.id, opponentPlayer.Value);
 	}
 }

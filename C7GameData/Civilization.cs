@@ -25,6 +25,9 @@ namespace C7GameData {
 		public int colorIndex;
 		public Gender leaderGender;
 
+		// Like `art\advisors\LZ_all.pcx` for the English.
+		public string leaderArtFile;
+
 		public List<string> cityNames = new List<string>();
 
 		// The IDs of all the techs that this civ starts with.

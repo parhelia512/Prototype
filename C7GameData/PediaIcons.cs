@@ -19,6 +19,11 @@ namespace C7GameData {
 		// the small icon used in the science advisor display.
 		private readonly Dictionary<string, string> techSmallIconMapping = new();
 
+		// A mapping from the all caps name of a race (BABYLON, GERMANS, 
+		// RUSSIAN, etc) to the art file with happy/neutral/mad images of the
+		// leader in each era, like `art\advisors\LZ_all.pcx`.
+		private readonly Dictionary<string, string> raceToArtMapping = new();
+
 		private readonly string pediaIconsPath;
 
 		public PediaIcons(string path) {
@@ -47,6 +52,12 @@ namespace C7GameData {
 					// and then the next line is the icon path.
 					techSmallIconMapping[lines[i].Substring(1)] = lines[i + 1];
 				}
+
+				if (lines[i].StartsWith("#RACE") && i + 2 < lines.Length) {
+					// +2 because the line at +1 is the leaderheads neutral
+					// victory image.
+					raceToArtMapping[lines[i]] = lines[i + 2];
+				}
 			}
 		}
 
@@ -61,6 +72,14 @@ namespace C7GameData {
 				return "Warrior";
 			}
 			return artName;
+		}
+
+		public string GetLeaderArtName(string civilopediaEntry) {
+			string key = "#" + civilopediaEntry;
+			if (!raceToArtMapping.ContainsKey(key)) {
+				return null;
+			}
+			return raceToArtMapping[key];
 		}
 	}
 

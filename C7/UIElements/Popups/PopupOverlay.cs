@@ -1,4 +1,5 @@
 using Godot;
+using C7GameData;
 using Serilog;
 
 [GlobalClass]
@@ -10,6 +11,7 @@ public partial class PopupOverlay : HBoxContainer {
 	[Signal] public delegate void QuitEventHandler();
 	[Signal] public delegate void RetireEventHandler();
 	[Signal] public delegate void BuildCityEventHandler(string name);
+	[Signal] public delegate void DiplomacySelectionEventHandler(ParameterWrapper<ID> opponentPlayer);
 	[Signal] public delegate void HidePopupEventHandler();
 
 	Control currentChild = null;
