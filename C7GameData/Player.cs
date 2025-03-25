@@ -62,6 +62,13 @@ namespace C7GameData {
 		// The number of turns the player has been researching the current tech.
 		public int turnsResearched = 0;
 
+		// If the government is anarchy (or a govt with the transition bool set
+		// to true), the number of turns left before switching is allowed.
+		public int anarchyTurnsLeft = 0;
+
+		// The current government of the player.
+		public Government government;
+
 		public int EraIndex() {
 			if (eraCivilopediaName == "ERAS_Ancient_Times") {
 				return 0;

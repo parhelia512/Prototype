@@ -443,6 +443,8 @@ namespace C7GameData {
 				player.scienceRate = leader.ScienceRate;
 				player.luxuryRate = leader.LuxuryRate;
 				player.taxRate = leader.TaxRate;
+				player.governmentId = save.Governments[leader.Government].id;
+				player.anarchyTurnsLeft = leader.AnarchyTurnsLeft;
 
 				save.Players.Add(player);
 				i++;

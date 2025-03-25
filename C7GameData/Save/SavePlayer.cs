@@ -65,7 +65,14 @@ namespace C7GameData.Save {
 		// The number of turns the player has been researching the current tech.
 		public int turnsResearched = 0;
 
-		public Player ToPlayer(GameMap map, List<Civilization> civilizations) {
+		// If the government is anarchy (or a govt with the transition bool set
+		// to true), the number of turns left before switching is allowed.
+		public int anarchyTurnsLeft = 0;
+
+		// The current government of the player.
+		public ID governmentId;
+
+		public Player ToPlayer(GameMap map, List<Civilization> civilizations, List<Government> governments) {
 			Player player = new Player{
 				id = id,
 				isBarbarians = barbarian,
@@ -81,6 +88,8 @@ namespace C7GameData.Save {
 				taxRate = taxRate,
 				gold = gold,
 				turnsUntilPriorityReevaluation = turnsUntilPriorityReevaluation,
+				anarchyTurnsLeft = anarchyTurnsLeft,
+				government = governments.Find(x => x.id == governmentId),
 			};
 			foreach (TileLocation tile in tileKnowledge) {
 				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.X, tile.Y));
@@ -127,6 +136,8 @@ namespace C7GameData.Save {
 			gold = player.gold;
 			beakers = player.beakers;
 			turnsResearched = player.turnsResearched;
+			anarchyTurnsLeft = player.anarchyTurnsLeft;
+			governmentId = player.government.id;
 
 			foreach (KeyValuePair<ID, PlayerRelationship> keyValuePair in player.playerRelationships) {
 				playerRelationships.Add(keyValuePair.Key.ToString(), keyValuePair.Value);

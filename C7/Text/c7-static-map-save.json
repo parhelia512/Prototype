@@ -67748,7 +67748,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-2",
@@ -67823,7 +67825,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-3",
@@ -67898,7 +67902,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-4",
@@ -67969,7 +67975,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-5",
@@ -68044,7 +68052,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-6",
@@ -68123,7 +68133,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-7",
@@ -68198,7 +68210,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-8",
@@ -68269,7 +68283,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     }
   ],
   "barbarianInfo": {

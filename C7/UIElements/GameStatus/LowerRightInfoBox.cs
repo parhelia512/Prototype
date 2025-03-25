@@ -196,7 +196,7 @@ public partial class LowerRightInfoBox : TextureRect {
 			}
 
 			// Civ and government.
-			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - Despotism (5.5.0)");
+			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - {player.government.name} (5.5.0)");
 
 			// Only show the diplomacy button if we have civs to talk to.
 			if (player.playerRelationships.Count > 0 && !openDiplomacy.Visible) {

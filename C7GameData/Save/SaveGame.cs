@@ -129,7 +129,7 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments));
 		}
 
 		private void ConvertTechnologies(GameData data) {
