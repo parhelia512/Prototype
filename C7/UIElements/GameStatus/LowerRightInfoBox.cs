@@ -178,7 +178,7 @@ public partial class LowerRightInfoBox : TextureRect {
 				if (goldPerTurn >= 0) {
 					yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (+{goldPerTurn} per turn)";
 				} else {
-					yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold (-{goldPerTurn} per turn)";
+					yearAndGold.Text = $"Turn {turnNumber}  {gold} Gold ({goldPerTurn} per turn)";
 				}
 			}
 

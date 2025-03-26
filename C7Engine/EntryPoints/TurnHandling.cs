@@ -45,6 +45,7 @@ namespace C7Engine {
 				gameData.turn++;
 				foreach (Player player in gameData.players) {
 					HandleCityResults(gameData, player);
+					player.DoPerTurnFinanceUpdates(gameData);
 
 					// TODO: This isn't quite accurate. This should only be
 					// incremented if the player is actually spending money on
@@ -184,9 +185,6 @@ namespace C7Engine {
 
 					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));
 				}
-
-				city.owner.gold += city.CurrentCommerceYield().taxes;
-				city.owner.beakers += city.CurrentCommerceYield().beakers;
 			}
 		}
 

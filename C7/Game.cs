@@ -298,6 +298,9 @@ public partial class Game : Node2D {
 				if (Input.IsKeyPressed(Godot.Key.F1)) {
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 				}
+				if (Input.IsKeyPressed(Godot.Key.F3)) {
+					EmitSignal(SignalName.ShowSpecificAdvisor, "F3");
+				}
 				if (Input.IsKeyPressed(Godot.Key.F6)) {
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 				}
