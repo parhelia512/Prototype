@@ -24,7 +24,7 @@ namespace C7.Map {
 
 			City city = tile.cityAtTile;
 			if (!citySceneLookup.ContainsKey(city)) {
-				CityScene cityScene = new CityScene(city, tile, new Vector2I((int)tileCenter.X, (int)tileCenter.Y));
+				CityScene cityScene = new CityScene(city, new Vector2I((int)tileCenter.X, (int)tileCenter.Y));
 				looseView.AddChild(cityScene);
 				citySceneLookup[city] = cityScene;
 			} else {

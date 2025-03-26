@@ -13,8 +13,8 @@ namespace C7.Map {
 		private TextureRect cityGraphics = new TextureRect();
 		private CityLabelScene cityLabelScene;
 
-		public CityScene(City city, Tile tile, Vector2I tileCenter) {
-			cityLabelScene = new CityLabelScene(city, tile, tileCenter);
+		public CityScene(City city, Vector2I tileCenter) {
+			cityLabelScene = new CityLabelScene(city, tileCenter);
 
 			//TODO: Generalize, support multiple city types, etc.
 			Pcx pcx = Util.LoadPCX("Art/Cities/rMIDEAST.PCX");
