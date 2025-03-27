@@ -15,10 +15,6 @@ namespace C7Engine {
 
 			foreach (MapUnit mapUnit in gameData.mapUnits)
 				mapUnit.OnBeginTurn();
-
-			foreach (Player player in gameData.players) {
-				player.hasPlayedThisTurn = false;
-			}
 		}
 
 		// Implements the game loop. This method is called when the game is started and when the player signals that they're done moving.
@@ -64,7 +60,16 @@ namespace C7Engine {
 						}
 					}
 				}
+
+				// Now that the turn is ending, do all the bookkeeping for the
+				// start of the next turn. We don't put the "hasPlayedThisTurn"
+				// logic in OnBeginTurn because OnBeginTurn is called when a
+				// save game is loaded, and that would erase the saved information
+				// about which players have played.
 				OnBeginTurn();
+				foreach (Player player in gameData.players) {
+					player.hasPlayedThisTurn = false;
+				}
 			}
 		}
 
@@ -76,29 +81,35 @@ namespace C7Engine {
 		/// <returns>true when it is time for the human to take control again</returns>
 		private static bool PlayPlayerTurns(GameData gameData, bool firstTurn) {
 			foreach (Player player in gameData.players) {
-				if ((!player.hasPlayedThisTurn) &&
-					!(firstTurn && player.SitsOutFirstTurn())) {
-					if (player.isBarbarians) {
-						//Call the barbarian AI
-						//TODO: The AIs should be stored somewhere on the game state as some of them will store state (plans,
-						//strategy, etc.) For now, we only have a random AI, so that will be in a future commit
-						new BarbarianAI().PlayTurn(player, gameData);
-						player.hasPlayedThisTurn = true;
-					} else if (!player.isHuman) {
-						PlayerAI.PlayTurn(player, GameData.rng, gameData.techs);
-						player.hasPlayedThisTurn = true;
-					} else if (player.id != EngineStorage.uiControllerID) {
-						player.hasPlayedThisTurn = true;
-					}
-					//Human player check.  Let the human see what's going on even if they are in observer mode.
-					if (player.id == EngineStorage.uiControllerID) {
-						new MsgStartTurn().send();
-						return true;
-					}
+				if (player.hasPlayedThisTurn) {
+					continue;
+				}
+
+				if (firstTurn && player.SitsOutFirstTurn()) {
+					continue;
+				}
+
+				if (player.isBarbarians) {
+					//Call the barbarian AI
+					//TODO: The AIs should be stored somewhere on the game state as some of them will store state (plans,
+					//strategy, etc.) For now, we only have a random AI, so that will be in a future commit
+					new BarbarianAI().PlayTurn(player, gameData);
+					player.hasPlayedThisTurn = true;
+				} else if (!player.isHuman) {
+					PlayerAI.PlayTurn(player, GameData.rng, gameData.techs);
+					player.hasPlayedThisTurn = true;
+				} else if (player.id != EngineStorage.uiControllerID) {
+					player.hasPlayedThisTurn = true;
+				}
+				//Human player check.  Let the human see what's going on even if they are in observer mode.
+				if (player.id == EngineStorage.uiControllerID) {
+					new MsgStartTurn().send();
+					return true;
 				}
 			}
 			return false;
 		}
+
 		private static void SpawnBarbarians(GameData gameData) {
 			//Generate new barbarian units.
 			Player barbPlayer = gameData.players.Find(player => player.isBarbarians);

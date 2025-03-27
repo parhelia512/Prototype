@@ -97,11 +97,11 @@ namespace QueryCiv3.Sav {
 		public fixed short UnitsPerStratInProd[32]; // ???
 		public int NumberOfArmies;
 		public int NumberOfUnits;
-		private fixed byte UnknownBuffer5[4];
+		public int NumberOfMilitaryUnits; // Courtesy of https://github.com/maxpetul/C3X/blob/master/Civ3Conquests.h
 		public int NumberOfCities;
 		public int NumberOfColonies;
 		public int NumberOfContinents;
-		private fixed byte UnknownBuffer6[4];
+		private int UnknownBuffer6;
 		public int LuxuryRate;
 		public int ScienceRate;
 		public int TaxRate;
@@ -109,6 +109,7 @@ namespace QueryCiv3.Sav {
 		// Length gap: there are 32 LEAD_LEAD structs here in Sav files
 
 		private fixed byte UnknownBuffer7[128];
+
 		public fixed int RefuseContactForTurns[32];
 
 		public List<int> GetRefuseContactForTurns() {

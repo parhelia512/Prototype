@@ -478,7 +478,10 @@ namespace C7GameData {
 				barbarian = isBarbarian,
 				human = isHuman,
 				civilization = civ.name,
-				hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
+
+				// Never let barbarians play before a real player.
+				hasPlayedCurrentTurn = isBarbarian,
+
 				cityNameIndex = cityNameIndex,
 				eraCivilopediaName = era,
 			};
