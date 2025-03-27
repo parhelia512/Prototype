@@ -51,6 +51,9 @@ jobs:
     - name: Run tests
       run: |
         dotnet test C7
+    - name: Verify formatting (`run dotnet format C7/C7.sln whitespace` to fix)
+      run: |
+        dotnet format C7/C7.sln whitespace --verify-no-changes
     - name: Copy Static Files
       run: |
         if cp -r ${EXPORT_NAME}/Text build/${FOLDER_NAME}/Text && cp -r ${EXPORT_NAME}/Art build/${FOLDER_NAME}/Art
@@ -84,6 +87,9 @@ jobs:
     - name: Run tests
       run: |
         dotnet test C7
+    - name: Verify formatting (`run dotnet format C7/C7.sln whitespace` to fix)
+      run: |
+        dotnet format C7/C7.sln whitespace --verify-no-changes
     - name: Copy Static Files
       run: |
         if cp -r ${EXPORT_NAME}/Text build/${FOLDER_NAME}/Text && cp -r ${EXPORT_NAME}/Art build/${FOLDER_NAME}/Art
@@ -120,6 +126,9 @@ jobs:
     - name: Run tests
       run: |
         dotnet test C7
+    - name: Verify formatting (`run dotnet format C7/C7.sln whitespace` to fix)
+      run: |
+        dotnet format C7/C7.sln whitespace --verify-no-changes
     - name: Copy Static Files
       run: |
         cd ${EXPORT_NAME}
