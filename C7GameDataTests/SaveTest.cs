@@ -100,12 +100,13 @@ public class SaveTests {
 		}
 	}
 
-	private Player CreateHeadlessGame(string path) {
-		return CreateGame.createGame(path, "",
-			(string unused) => {
-				// We don't care about pedia icons here.
-				return unused;
-			},
+	private Player CreateHeadlessGame(string path, string biqPath = "", Func<string, string> getPediaIconsPath = null) {
+		if (getPediaIconsPath == null) {
+			getPediaIconsPath = (string unused) => { return unused; };
+		}
+
+		return CreateGame.createGame(path, biqPath,
+			getPediaIconsPath,
 			(City c, CitizenType ct) => {
 				// We don't care about scenario tile assignment here.
 			});
@@ -266,11 +267,13 @@ public class SaveTests {
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) { return; }
 
-		CheckScenariosInCiv3Subfolder("Conquests/Conquests");
-		CheckScenariosInCiv3Subfolder("Conquests/Scenarios");
+		// Only bother running one turn of the newer scenarios, just to keep the
+		// tests faster.
+		CheckScenariosInCiv3Subfolder("Conquests/Conquests", /*runOneTurn=*/true);
+		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", /*runOneTurn=*/false);
 	}
 
-	private void CheckScenariosInCiv3Subfolder(string subfolder) {
+	private void CheckScenariosInCiv3Subfolder(string subfolder, bool runOneTurn) {
 		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
 		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
 		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi => {
@@ -286,14 +289,17 @@ public class SaveTests {
 			string name = saveFileInfo.Name;
 			SaveGame game = null;
 			GameData gd = null;
-			Exception ex = Record.Exception(() => {
-				game = ImportCiv3.ImportBiq(saveFileInfo.FullName, defaultBicPath, (relativeModPath) => {
-					if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-						relativeModPath = relativeModPath.Replace("\\conquests\\", "/Conquests/");
-					}
 
-					return Path.GetFullPath(Path.Combine(Civ3Location.GetCiv3Path(), subfolder, relativeModPath, "Text", "PediaIcons.txt"));
-				});
+			Func<string, string> getPediaIconsPath = (relativeModPath) => {
+				if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+					relativeModPath = relativeModPath.Replace("\\conquests\\", "/Conquests/");
+				}
+
+				return Path.GetFullPath(Path.Combine(Civ3Location.GetCiv3Path(), subfolder, relativeModPath, "Text", "PediaIcons.txt"));
+			};
+
+			Exception ex = Record.Exception(() => {
+				game = ImportCiv3.ImportBiq(saveFileInfo.FullName, defaultBicPath, getPediaIconsPath);
 			});
 			Assert.True(ex == null, name + ": " + ex?.ToString());
 			ex = Record.Exception(() => {
@@ -324,15 +330,6 @@ public class SaveTests {
 					}
 				}
 
-				// This debugging output is visible when run via
-				// `dotnet test -v n`
-				Console.WriteLine(name + " : " + player.civilization + " has " +
-									settlerCount + " settlers, " +
-									cityCount + " cities, " +
-									totalUnitCount + " units, and is " +
-									(player.human ? "" : "not ") +
-									"the human player");
-
 				// The human player should always have either a city or a settler.
 				if (player.human) {
 					Assert.True(cityCount + settlerCount > 0,
@@ -350,15 +347,7 @@ public class SaveTests {
 						++settlerCount;
 					}
 				}
-
 				int cityCount = player.cities.Count;
-
-				Console.WriteLine(name + " : " + player.civilization.name + " has " +
-									settlerCount + " settlers, " +
-									cityCount + " cities, " +
-									totalUnitCount + " units, and is " +
-									(player.isHuman ? "" : "not ") +
-									"the human player");
 
 				// The human player should always have either a city or a settler.
 				if (player.isHuman) {
@@ -368,6 +357,18 @@ public class SaveTests {
 			}
 
 			game.Save(Path.Combine(testDirectory, "data", "output", $"conquest_{name[0]}.json"));
+
+			// Finally, ensure we can run the first turn of the scenario.
+			if (runOneTurn) {
+				Player human = CreateHeadlessGame(saveFileInfo.FullName, defaultBicPath, getPediaIconsPath);
+
+				// Make all the players AI players while we run the game in headless mode.
+				human.isHuman = false;
+
+				WaitForStartTurnMessage();
+				new MsgEndTurn().send();
+				WaitForStartTurnMessage();
+			}
 		}
 	}
 }
