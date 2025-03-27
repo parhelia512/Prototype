@@ -11,6 +11,8 @@ public partial class TradingTree : Tree {
 	TreeItem techHeader;
 	TreeItem lumpSum;
 	List<TreeItem> techItems = new();
+	TreeItem diplomacyHeader;
+	TreeItem peaceTreaty;
 
 	List<Tech> tradeableTechs;
 	TradeOffer currentOffer;
@@ -19,7 +21,7 @@ public partial class TradingTree : Tree {
 	public TradingTree(Theme fontTheme,
 						int playerGold,
 						List<Tech> tradeableTechs,
-						TradeOffer currentOffer) {
+						TradeOffer currentOffer, bool requiresPeaceTreaty) {
 		this.tradeableTechs = tradeableTechs;
 		this.currentOffer = currentOffer;
 		this.playerGold = playerGold;
@@ -28,6 +30,17 @@ public partial class TradingTree : Tree {
 
 		// Match the size of the texture used in the deal screen.
 		this.Size = new Vector2(190, 400);
+
+		if (requiresPeaceTreaty) {
+			diplomacyHeader = this.CreateItem(root);
+			diplomacyHeader.SetText(0, "Diplomatic Agreements");
+			diplomacyHeader.Collapsed = false;
+
+			peaceTreaty = this.CreateItem(diplomacyHeader);
+			peaceTreaty.SetText(0, "Peace Treaty");
+
+			// TODO: right of passage, mutual protection pacts, ect.
+		}
 
 		// Gold
 		{
@@ -52,6 +65,8 @@ public partial class TradingTree : Tree {
 				techItems.Add(child);
 			}
 		}
+
+		RefreshUiForOffer();
 	}
 
 	public void HandleClicks(TradingTree other, Action offerUpdated) {
@@ -68,6 +83,9 @@ public partial class TradingTree : Tree {
 			}
 			if (ti == techHeader && other.techHeader != null) {
 				other.techHeader.Collapsed = techHeader.Collapsed;
+			}
+			if (ti == diplomacyHeader && other.diplomacyHeader != null) {
+				other.diplomacyHeader.Collapsed = diplomacyHeader.Collapsed;
 			}
 
 			// Handle techs being clicked on.
@@ -104,16 +122,35 @@ public partial class TradingTree : Tree {
 								PopupOverlay.PopupCategory.Advisor);
 			}
 
+			if (ti == peaceTreaty) {
+				currentOffer.partOfPeaceTreaty = true;
+				other.currentOffer.partOfPeaceTreaty = true;
+			}
+
 			offerUpdated();
 			RefreshUiForOffer();
 		};
 	}
 
 	public void RefreshUiForOffer() {
-		lumpSum.Visible = !currentOffer.gold.HasValue;
+		bool needsPeaceTreaty = peaceTreaty != null && !currentOffer.partOfPeaceTreaty;
 
-		foreach (TreeItem ti in techItems) {
-			ti.Visible = !currentOffer.techs.Any(x => x.Name == ti.GetText(0));
+		if (needsPeaceTreaty) {
+			goldHeader.Visible = false;
+			techHeader.Visible = false;
+			peaceTreaty.Visible = true;
+		} else {
+			goldHeader.Visible = true;
+			techHeader.Visible = true;
+			lumpSum.Visible = !currentOffer.gold.HasValue;
+
+			foreach (TreeItem ti in techItems) {
+				ti.Visible = !currentOffer.techs.Any(x => x.Name == ti.GetText(0));
+			}
+
+			if (peaceTreaty != null) {
+				peaceTreaty.Visible = false;
+			}
 		}
 	}
 

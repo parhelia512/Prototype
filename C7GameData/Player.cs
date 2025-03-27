@@ -216,12 +216,18 @@ namespace C7GameData {
 
 		public bool WouldAcceptDealFrom(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
 			// TODO: consider any factors like trade reputations here
+			// TODO: figure out when peace is acceptable
 			int theirGoldValue = theirOffer.GoldEquivalentFor(this);
 			int ourGoldValue = ourOffer.GoldEquivalentFor(this);
 			return theirGoldValue >= ourGoldValue;
 		}
 
 		public void ExecuteDeal(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+			if (theirOffer.partOfPeaceTreaty) {
+				this.playerRelationships[other.id].atWar = false;
+				other.playerRelationships[this.id].atWar = false;
+			}
+
 			if (ourOffer.gold.HasValue) {
 				other.gold += ourOffer.gold.Value;
 				this.gold -= ourOffer.gold.Value;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using ConvertCiv3Media;
 
 public partial class TradeOfferUi : Tree {
+	TreeItem peaceTreaty;
 	TreeItem lumpSumGold;
 	List<TreeItem> techs = new();
 	TradeOffer currentOffer;
@@ -14,7 +15,8 @@ public partial class TradeOfferUi : Tree {
 	int playerGold;
 
 	public TradeOfferUi(Theme fontTheme, List<Tech> tradeableTechs, int playerGold,
-						TradeOffer currentOffer, HorizontalAlignment alignment) {
+						TradeOffer currentOffer, bool requiresPeaceTreaty,
+						HorizontalAlignment alignment) {
 		this.currentOffer = currentOffer;
 		this.tradeableTechs = tradeableTechs;
 		this.playerGold = playerGold;
@@ -24,6 +26,12 @@ public partial class TradeOfferUi : Tree {
 
 		// Match the size of the texture used in the deal screen.
 		this.Size = new Vector2(190, 100);
+
+		if (requiresPeaceTreaty) {
+			peaceTreaty = this.CreateItem(root);
+			peaceTreaty.SetTextAlignment(0, alignment);
+			peaceTreaty.SetText(0, "Peace Treaty");
+		}
 
 		// Add tree items for all the possible things that could be traded - we
 		// determine whether they're visible based on the current offer in
@@ -41,7 +49,7 @@ public partial class TradeOfferUi : Tree {
 		RefreshUiForOffer();
 	}
 
-	public void HandleClicks(Action offerUpdated) {
+	public void HandleClicks(TradeOfferUi other, Action offerUpdated) {
 		this.ItemMouseSelected += (Vector2 mousePos, long mouseButtonIndex) => {
 			TreeItem ti = this.GetSelected();
 			ti.Deselect(0);
@@ -83,6 +91,17 @@ public partial class TradeOfferUi : Tree {
 								PopupOverlay.PopupCategory.Advisor);
 			}
 
+			if (ti == peaceTreaty) {
+				// If we click the peace treaty off the trading table, remove
+				// everything else too.
+				if (currentOffer.partOfPeaceTreaty) {
+					currentOffer.Clear();
+					other.currentOffer.Clear();
+				} else {
+					currentOffer.partOfPeaceTreaty = true;
+				}
+			}
+
 			offerUpdated();
 			RefreshUiForOffer();
 		};
@@ -98,6 +117,10 @@ public partial class TradeOfferUi : Tree {
 
 		foreach (TreeItem ti in techs) {
 			ti.Visible = currentOffer.techs.Any(x => x.Name == ti.GetText(0));
+		}
+
+		if (peaceTreaty != null) {
+			peaceTreaty.Visible = currentOffer.partOfPeaceTreaty;
 		}
 	}
 }

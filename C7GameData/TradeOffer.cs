@@ -4,6 +4,11 @@ using System.Collections.Generic;
 namespace C7GameData {
 	// A class representing one side of a diplomatic agreement between two civs.
 	public class TradeOffer {
+		// True if two players involved in the agreement were at war prior to
+		// the agreement.
+		public bool partOfPeaceTreaty = false;
+
+
 		public int? gold = null;
 		public List<Tech> techs = new();
 
@@ -20,6 +25,12 @@ namespace C7GameData {
 			}
 
 			return result;
+		}
+
+		public void Clear() {
+			partOfPeaceTreaty = false;
+			gold = null;
+			techs.Clear();
 		}
 	}
 }
