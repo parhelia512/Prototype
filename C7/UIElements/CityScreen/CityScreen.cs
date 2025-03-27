@@ -29,6 +29,14 @@ public partial class CityScreen : CenterContainer {
 	private Label commerceScienceDetails;
 	private Label commerceHappinessDetails;
 
+	private TextureButton productionButton;
+	private ProductionMenu productionMenu;
+
+	private ColorRect leftSidebar = new();
+	private ColorRect rightSidebar = new();
+	private ColorRect topSidebar = new();
+	private ColorRect bottomSidebar = new();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		background = new() {
@@ -36,6 +44,21 @@ public partial class CityScreen : CenterContainer {
 		};
 		AddChild(background);
 
+		// The sidebars.
+		background.AddChild(leftSidebar);
+		background.AddChild(rightSidebar);
+		background.AddChild(topSidebar);
+		background.AddChild(bottomSidebar);
+
+		leftSidebar.Color = Colors.Black;
+		rightSidebar.Color = Colors.Black;
+		topSidebar.Color = Colors.Black;
+		bottomSidebar.Color = Colors.Black;
+
+		UpdateSidebars();
+		GetViewport().SizeChanged += UpdateSidebars; // Update on resize
+
+		// The close button.
 		TextureButton close = new() {
 			TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 32, 48),
 			TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 32, 48),
@@ -98,6 +121,15 @@ public partial class CityScreen : CenterContainer {
 		};
 		background.AddChild(commerceHappinessDetails);
 
+		productionButton = new() {
+			TextureNormal = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 1, 0, 114, 95),
+			TextureHover = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 116, 0, 115, 95),
+			TexturePressed = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 231, 0, 115, 95)
+		};
+		productionButton.SetPosition(new Vector2(905, 515));
+		background.AddChild(productionButton);
+		productionButton.Pressed += () => { this.productionMenu.Visible = !this.productionMenu.Visible; };
+
 		this.Hide();
 	}
 
@@ -112,15 +144,17 @@ public partial class CityScreen : CenterContainer {
 			if (eventMouseButton.ButtonIndex == MouseButton.Left) {
 				GetViewport().SetInputAsHandled();
 				if (eventMouseButton.IsPressed()) {
-					using (UIGameDataAccess gameDataAccess = new()) {
-						Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
-						if (tile != null) {
-							HandleReassignment(tile);
-							RenderPopHeads(tileAssignmentLayer.city);
-							RenderFoodDetails(tileAssignmentLayer.city);
-							RenderCommerceDetails(tileAssignmentLayer.city);
-							RenderProductionDetails(tileAssignmentLayer.city);
-						}
+					using UIGameDataAccess gameDataAccess = new();
+					if (productionMenu != null) {
+						productionMenu.Visible = false;
+					}
+					Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+					if (tile != null) {
+						HandleReassignment(tile);
+						RenderPopHeads(tileAssignmentLayer.city);
+						RenderFoodDetails(tileAssignmentLayer.city);
+						RenderCommerceDetails(tileAssignmentLayer.city);
+						RenderProductionDetails(tileAssignmentLayer.city);
 					}
 				}
 			}
@@ -237,6 +271,65 @@ public partial class CityScreen : CenterContainer {
 
 	private void RenderProductionDetails(City city) {
 		productionDetails.Text = $"{city.CurrentProductionYield()} shields/turn  (0 corrupt). {city.shieldsStored} of {city.itemBeingProduced.shieldCost} stored. {city.TurnsUntilProductionFinished()} turns left.";
+
+		foreach (Node child in productionButton.GetChildren()) {
+			child.QueueFree();
+		}
+
+		if (city.itemBeingProduced is UnitPrototype up) {
+			// Get the flic data for the unit we're producing.
+			string path = new AnimationManager(null).getUnitFlicFilepath(up, MapUnit.AnimatedAction.DEFAULT);
+			ConvertCiv3Media.Flic flic = Util.LoadFlic(path);
+
+			// Set up a shader we can use to color the "tint" portion of the
+			// animation frame below.
+			ShaderMaterial material = new();
+			material.Shader = GD.Load<Shader>("res://UnitTint.gdshader");
+			Color civColor = Util.LoadColor(city.owner.colorIndex);
+			material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
+
+			// See flicRowToAnimationDirection for the mapping, row 2 is facing
+			// southeast, and we're just grabbing frame 0.
+			byte[] frame = flic.Images[2, 0];
+
+			// Each frame is split in two parts, the base image, and the "tint"
+			// of the image, which is the part of the unit that has civ-specific
+			// colors.
+			(ImageTexture baseImage, ImageTexture imageTint) = Util.LoadTextureFromFlicData(frame, flic.Palette, flic.Width, flic.Height);
+
+			// Add the base sprite.
+			Sprite2D baseImageSprite = new();
+			baseImageSprite.Texture = baseImage;
+			baseImageSprite.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
+			productionButton.AddChild(baseImageSprite);
+
+			// Add the tint sprite, hooking up the shader.
+			Sprite2D imageTintSprite = new Sprite2D();
+			imageTintSprite.Texture = imageTint;
+			imageTintSprite.Material = material;
+			imageTintSprite.Position = baseImageSprite.Position;
+			productionButton.AddChild(imageTintSprite);
+
+			Label productionButtonLabel = new();
+			productionButton.AddChild(productionButtonLabel);
+			productionButtonLabel.SetPosition(new Vector2(0, 65));
+			productionButtonLabel.SetTextAndCenterLabel($"{city.itemBeingProduced.name}");
+		}
+
+		bool wasVisible = false;
+		if (productionMenu != null) {
+			wasVisible = productionMenu.Visible;
+			productionMenu.QueueFree();
+			productionMenu = null;
+		}
+		productionMenu = new ProductionMenu(city, (IProducible p) => {
+			using UIGameDataAccess gameDataAccess = new();
+			city.SetItemBeingProduced(p);
+			RenderProductionDetails(city);
+		});
+		background.AddChild(productionMenu);
+		productionMenu.SetPosition(new Vector2(814, 135));
+		productionMenu.Visible = wasVisible;
 	}
 
 	private void RenderCulture(City city) {
@@ -336,10 +429,35 @@ public partial class CityScreen : CenterContainer {
 				RenderPopHeads(city);
 			};
 
-
 			background.AddChild(tb);
 			popHeads.Add(tb);
 			xPos += 48;
 		}
+	}
+
+	private void UpdateSidebars() {
+		Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+
+		float sidebarWidth = (viewportSize.X - background.Texture.GetWidth()) / 2;
+		float sidebarHeight = viewportSize.Y;
+
+		float topBottomBarHeight = (viewportSize.Y - background.Texture.GetHeight()) / 2;
+		float topBottomBarWidth = viewportSize.X;
+
+		// Left Sidebar
+		leftSidebar.Position = new Vector2(-sidebarWidth, 0);
+		leftSidebar.Size = new Vector2(sidebarWidth, sidebarHeight);
+
+		// Right Sidebar
+		rightSidebar.Position = new Vector2(background.Texture.GetWidth(), 0);
+		rightSidebar.Size = new Vector2(sidebarWidth, sidebarHeight);
+
+		// Top Sidebar
+		topSidebar.Position = new Vector2(0, -topBottomBarHeight);
+		topSidebar.Size = new Vector2(topBottomBarWidth, topBottomBarHeight);
+
+		// Bottom Sidebar
+		bottomSidebar.Position = new Vector2(0, background.Texture.GetHeight());
+		bottomSidebar.Size = new Vector2(topBottomBarWidth, topBottomBarHeight);
 	}
 }

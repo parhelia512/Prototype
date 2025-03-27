@@ -109,9 +109,9 @@ namespace C7GameData {
 			int additionalProductionNeeded = item.shieldCost - shieldsStored;
 			int turnsRoundedDown = additionalProductionNeeded / CurrentProductionYield();
 			if (additionalProductionNeeded % CurrentProductionYield() != 0) {
-				return turnsRoundedDown + 1;
+				return Math.Max(turnsRoundedDown + 1, 1);
 			}
-			return turnsRoundedDown;
+			return Math.Max(turnsRoundedDown, 1);
 		}
 
 		public int TurnsUntilProductionFinished() {

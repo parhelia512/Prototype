@@ -172,8 +172,15 @@ public partial class Util {
 		return (ImageTexture.CreateFromImage(baseImage), ImageTexture.CreateFromImage(tintImage));
 	}
 
+	private static Dictionary<string, Flic> flicCache = new();
+
 	static public Flic LoadFlic(string path) {
-		return new ConvertCiv3Media.Flic(Util.Civ3MediaPath(path));
+		if (flicCache.ContainsKey(path)) {
+			return flicCache[path];
+		}
+		Flic result = new ConvertCiv3Media.Flic(Util.Civ3MediaPath(path));
+		flicCache[path] = result;
+		return result;
 	}
 
 	static private string getProjectDirectoryPath() {
