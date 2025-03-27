@@ -25,9 +25,9 @@ public partial class TradeOfferUi : Tree {
 		// Match the size of the texture used in the deal screen.
 		this.Size = new Vector2(190, 100);
 
-        // Add tree items for all the possible things that could be traded - we
-        // determine whether they're visible based on the current offer in
-        // RefreshUiForOffer.
+		// Add tree items for all the possible things that could be traded - we
+		// determine whether they're visible based on the current offer in
+		// RefreshUiForOffer.
 		lumpSumGold = this.CreateItem(root);
 		lumpSumGold.SetTextAlignment(0, alignment);
 

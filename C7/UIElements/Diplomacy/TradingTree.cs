@@ -76,7 +76,7 @@ public partial class TradingTree : Tree {
 				currentOffer.techs.Add(t);
 			}
 
-            // Allow user input for gold amounts.
+			// Allow user input for gold amounts.
 			if (ti == lumpSum) {
 				var handleTextInput = (string input) => {
 					int gold = 0;
@@ -117,7 +117,7 @@ public partial class TradingTree : Tree {
 		}
 	}
 
-    // The central styling for the trading tree and trade offer ui trees.
+	// The central styling for the trading tree and trade offer ui trees.
 	public static TreeItem ConfigureTreeTheme(Tree tree, Theme fontTheme) {
 		// All trees have one root, but we don't want a single root, so hide it.
 		TreeItem root = tree.CreateItem();
