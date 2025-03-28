@@ -292,18 +292,6 @@ public partial class Game : Node2D {
 						 CurrentlySelectedUnit.isAutomated))
 						GetNextAutoselectedUnit(gameData);
 				}
-				//Listen to keys.  There is a C# Mono Godot bug where e.g. Godot.Key.F1 (etc.) doesn't work
-				//without a manual cast to int.
-				//https://github.com/godotengine/godot/issues/16388
-				if (Input.IsKeyPressed(Godot.Key.F1)) {
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
-				}
-				if (Input.IsKeyPressed(Godot.Key.F3)) {
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F3");
-				}
-				if (Input.IsKeyPressed(Godot.Key.F6)) {
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
-				}
 			}
 		}
 	}
@@ -479,135 +467,202 @@ public partial class Game : Node2D {
 
 		// Control node must not be in the way and/or have mouse pass enabled
 		if (@event is InputEventMouseButton eventMouseButton) {
-			if (eventMouseButton.ButtonIndex == MouseButton.Left) {
-				GetViewport().SetInputAsHandled();
-				if (eventMouseButton.IsPressed()) {
-					if (gotoInfo != null) {
-						HandleGotoClick(gotoInfo);
-						setGotoMode(false);
-					} else {
-						// Select unit on tile at mouse location
-						using (var gameDataAccess = new UIGameDataAccess()) {
-							var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
-							if (tile != null) {
-								// TODO: This should really be the top unit.
-								MapUnit to_select = tile.unitsOnTile.FirstOrDefault();
-								if (to_select != null && to_select.owner == controller) {
-									bool canMove = setSelectedUnit(to_select);
-									if (!canMove) {
-										TemporaryPopup popup = new("This unit has already moved.", 1);
-										popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
-										AddChild(popup);
-										popup.ShowPopup();
-									}
-								}
-							}
-						}
-
-						OldPosition = eventMouseButton.Position;
-						IsMovingCamera = true;
-					}
-				} else {
-					IsMovingCamera = false;
-				}
-			} else if (eventMouseButton.ButtonIndex == MouseButton.WheelUp) {
-				GetViewport().SetInputAsHandled();
-				AdjustZoomSlider(1, GetViewport().GetMousePosition());
-			} else if (eventMouseButton.ButtonIndex == MouseButton.WheelDown) {
-				GetViewport().SetInputAsHandled();
-				AdjustZoomSlider(-1, GetViewport().GetMousePosition());
-			} else if ((eventMouseButton.ButtonIndex == MouseButton.Right) && (!eventMouseButton.IsPressed())) {
-				setGotoMode(false);
-				using (var gameDataAccess = new UIGameDataAccess()) {
-					var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
-					if (tile != null) {
-						bool shiftDown = Input.IsKeyPressed(Godot.Key.Shift);
-
-						// Handle the shortcut of shift+right clicking a city to get the change production menu.
-						if (shiftDown && tile.cityAtTile?.owner == controller)
-							new RightClickChooseProductionMenu(this, tile.cityAtTile).Open(eventMouseButton.Position);
-						else if ((!shiftDown) && tile.unitsOnTile.Count > 0)
-							// There are units on this title, so open that menu.
-							new RightClickTileMenu(this, tile).Open(eventMouseButton.Position);
-						else if ((!shiftDown) && tile.cityAtTile?.owner == controller)
-							// There are no units, but this is the player's city.
-							new RightClickCityMenu(this, tile).Open(eventMouseButton.Position);
-
-						string yield = tile.YieldString(controller);
-						log.Debug($"({tile.XCoordinate}, {tile.YCoordinate}): {tile.overlayTerrainType.DisplayName} {yield}");
-
-						if (tile.cityAtTile != null) {
-							City city = tile.cityAtTile;
-							log.Debug($"  {city.name}, production {city.shieldsStored} of {city.itemBeingProduced.shieldCost}");
-							foreach (CityResident resident in city.residents) {
-								log.Debug($"  Resident working at {resident.tileWorked}");
-							}
-						}
-
-						if (tile.unitsOnTile.Count > 0) {
-							foreach (MapUnit unit in tile.unitsOnTile) {
-								log.Debug("  Unit on tile: " + unit);
-								if (unit.currentAI != null) {
-									log.Debug("  Strategy: " + unit.currentAI.SummarizePlan());
-								}
-							}
-						}
-					} else {
-						log.Debug("Didn't click on any tile");
-					}
-				}
-			}
+			HandleMouseButtonInput(eventMouseButton);
 		} else if (@event is InputEventMouseMotion eventMouseMotion) {
-			if (IsMovingCamera) {
-				GetViewport().SetInputAsHandled();
-				mapView.cameraLocation += OldPosition - eventMouseMotion.Position;
-				OldPosition = eventMouseMotion.Position;
-			} else if (gotoInfo != null) {
-				gotoInfo = GetGotoInfo(eventMouseMotion.Position);
-			}
+			HandleMouseMotionInput(eventMouseMotion);
 		} else if (@event is InputEventKey eventKeyDown && eventKeyDown.Pressed) {
-			if (eventKeyDown.Keycode == Godot.Key.O && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
-				using (UIGameDataAccess gameDataAccess = new UIGameDataAccess()) {
-					gameDataAccess.gameData.observerMode = !gameDataAccess.gameData.observerMode;
-					if (gameDataAccess.gameData.observerMode) {
-						foreach (Player player in gameDataAccess.gameData.players) {
-							player.isHuman = false;
-						}
-						SetAnimationsEnabled(false);
-						popupOverlay.ShowPopup(
-							new TextDialog("How many turns to fast forward through?",
-											"Turns: ", "100",
-											BoxContainer.AlignmentMode.Begin,
-											(string turns) => { turnsLeftToFastForward = int.Parse(turns); }),
-								PopupOverlay.PopupCategory.Advisor);
-					} else {
-						foreach (Player player in gameDataAccess.gameData.players) {
-							if (player.id == EngineStorage.uiControllerID) {
-								player.isHuman = true;
-							}
-						}
-					}
-				}
-			}
-			if (eventKeyDown.Keycode == Godot.Key.G && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
-				using (UIGameDataAccess gameDataAccess = new UIGameDataAccess()) {
-					gameDataAccess.gameData.showGridCoordinates = !gameDataAccess.gameData.showGridCoordinates;
-				}
-			}
+			HandleKeyboardInput(eventKeyDown);
 		} else if (@event is InputEventMagnifyGesture magnifyGesture) {
-			// UI slider has the min/max zoom settings for now
-			double newScale = mapView.cameraZoom * magnifyGesture.Factor;
-			if (newScale < slider.MinValue)
-				newScale = slider.MinValue;
-			else if (newScale > slider.MaxValue)
-				newScale = slider.MaxValue;
-			mapView.setCameraZoom((float)newScale, magnifyGesture.Position);
-			// Update the UI slider
-			slider.Value = newScale;
+			HandleMagnifyGesture(magnifyGesture);
 		}
 	}
 
-	// Handle Godot keybind actions
+	private void HandleMouseButtonInput(InputEventMouseButton eventMouseButton) {
+		if (eventMouseButton.ButtonIndex == MouseButton.Left) {
+			HandleLeftMouseButton(eventMouseButton);
+		} else if (eventMouseButton.ButtonIndex == MouseButton.Right && !eventMouseButton.IsPressed()) {
+			HandleRightMouseButton(eventMouseButton);
+		} else if (eventMouseButton.ButtonIndex == MouseButton.WheelUp) {
+			GetViewport().SetInputAsHandled();
+			AdjustZoomSlider(1, GetViewport().GetMousePosition());
+		} else if (eventMouseButton.ButtonIndex == MouseButton.WheelDown) {
+			GetViewport().SetInputAsHandled();
+			AdjustZoomSlider(-1, GetViewport().GetMousePosition());
+		}
+	}
+
+	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
+		GetViewport().SetInputAsHandled();
+		if (eventMouseButton.IsPressed()) {
+			if (gotoInfo != null) {
+				HandleGotoClick(gotoInfo);
+				setGotoMode(false);
+			} else {
+				// Select unit on tile at mouse location
+				HandleUnitSelection(eventMouseButton);
+				OldPosition = eventMouseButton.Position;
+				IsMovingCamera = true;
+			}
+		} else {
+			IsMovingCamera = false;
+		}
+	}
+
+	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
+		using var gameDataAccess = new UIGameDataAccess();
+
+		var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+		if (tile == null) {
+			return;
+		}
+
+		// TODO: This should really be the top unit.
+		MapUnit to_select = tile.unitsOnTile.FirstOrDefault();
+		if (to_select == null || to_select.owner != controller) {
+			return;
+		}
+
+		bool canMove = setSelectedUnit(to_select);
+		if (!canMove) {
+			TemporaryPopup popup = new("This unit has already moved.", 1);
+			popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
+			AddChild(popup);
+			popup.ShowPopup();
+		}
+	}
+
+	private void HandleRightMouseButton(InputEventMouseButton eventMouseButton) {
+		setGotoMode(false);
+		using var gameDataAccess = new UIGameDataAccess();
+		var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+		if (tile != null) {
+			HandleRightClickOnTile(tile, eventMouseButton);
+		} else {
+			log.Debug("Didn't click on any tile");
+		}
+	}
+
+	private void HandleRightClickOnTile(Tile tile, InputEventMouseButton eventMouseButton) {
+		bool shiftDown = Input.IsKeyPressed(Godot.Key.Shift);
+
+		// Handle the shortcut of shift+right clicking a city to get the change production menu.
+		if (shiftDown && tile.cityAtTile?.owner == controller)
+			new RightClickChooseProductionMenu(this, tile.cityAtTile).Open(eventMouseButton.Position);
+		else if ((!shiftDown) && tile.unitsOnTile.Count > 0)
+			// There are units on this title, so open that menu.
+			new RightClickTileMenu(this, tile).Open(eventMouseButton.Position);
+		else if ((!shiftDown) && tile.cityAtTile?.owner == controller)
+			// There are no units, but this is the player's city.
+			new RightClickCityMenu(this, tile).Open(eventMouseButton.Position);
+
+		LogTileDetails(tile);
+	}
+
+	private void LogTileDetails(Tile tile) {
+		string yield = tile.YieldString(controller);
+		log.Debug($"({tile.XCoordinate}, {tile.YCoordinate}): {tile.overlayTerrainType.DisplayName} {yield}");
+
+		if (tile.cityAtTile != null) {
+			LogCityDetails(tile.cityAtTile);
+		}
+
+		if (tile.unitsOnTile.Count > 0) {
+			LogUnitDetails(tile.unitsOnTile);
+		}
+	}
+
+	private void LogCityDetails(City city) {
+		log.Debug($"  {city.name}, production {city.shieldsStored} of {city.itemBeingProduced.shieldCost}");
+		foreach (CityResident resident in city.residents) {
+			log.Debug($"  Resident working at {resident.tileWorked}");
+		}
+	}
+
+	private void LogUnitDetails(List<MapUnit> unitsOnTile) {
+		foreach (MapUnit unit in unitsOnTile) {
+			log.Debug("  Unit on tile: " + unit);
+			if (unit.currentAI != null) {
+				log.Debug("  Strategy: " + unit.currentAI.SummarizePlan());
+			}
+		}
+	}
+
+	private void HandleMouseMotionInput(InputEventMouseMotion eventMouseMotion) {
+		if (IsMovingCamera) {
+			GetViewport().SetInputAsHandled();
+			mapView.cameraLocation += OldPosition - eventMouseMotion.Position;
+			OldPosition = eventMouseMotion.Position;
+		} else if (gotoInfo != null) {
+			gotoInfo = GetGotoInfo(eventMouseMotion.Position);
+		}
+	}
+
+	private void HandleKeyboardInput(InputEventKey eventKeyDown) {
+		if (eventKeyDown.Keycode == Godot.Key.O && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
+			ToggleObserverMode();
+		}
+		if (eventKeyDown.Keycode == Godot.Key.G && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
+			ToggleGridCoordinates();
+		}
+		if (eventKeyDown.Keycode == Godot.Key.F1) {
+			EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
+		}
+		if (eventKeyDown.Keycode == Godot.Key.F3) {
+			EmitSignal(SignalName.ShowSpecificAdvisor, "F3");
+		}
+		if (eventKeyDown.Keycode == Godot.Key.F6) {
+			EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
+		}
+	}
+
+	private void ToggleObserverMode() {
+		using UIGameDataAccess gameDataAccess = new UIGameDataAccess();
+		gameDataAccess.gameData.observerMode = !gameDataAccess.gameData.observerMode;
+		if (gameDataAccess.gameData.observerMode) {
+			SetObserverModeOn(gameDataAccess);
+		} else {
+			SetObserverModeOff(gameDataAccess);
+		}
+	}
+
+	private void SetObserverModeOn(UIGameDataAccess gameDataAccess) {
+		foreach (Player player in gameDataAccess.gameData.players) {
+			player.isHuman = false;
+		}
+		SetAnimationsEnabled(false);
+		popupOverlay.ShowPopup(
+			new TextDialog("How many turns to fast forward through?",
+							"Turns: ", "100",
+							BoxContainer.AlignmentMode.Begin,
+							(string turns) => { turnsLeftToFastForward = int.Parse(turns); }),
+				PopupOverlay.PopupCategory.Advisor);
+	}
+
+	private void SetObserverModeOff(UIGameDataAccess gameDataAccess) {
+		foreach (Player player in gameDataAccess.gameData.players) {
+			if (player.id == EngineStorage.uiControllerID) {
+				player.isHuman = true;
+			}
+		}
+	}
+
+	private void ToggleGridCoordinates() {
+		using UIGameDataAccess gameDataAccess = new UIGameDataAccess();
+		gameDataAccess.gameData.showGridCoordinates = !gameDataAccess.gameData.showGridCoordinates;
+	}
+
+	private void HandleMagnifyGesture(InputEventMagnifyGesture magnifyGesture) {
+		// UI slider has the min/max zoom settings for now
+		double newScale = mapView.cameraZoom * magnifyGesture.Factor;
+		if (newScale < slider.MinValue)
+			newScale = slider.MinValue;
+		else if (newScale > slider.MaxValue)
+			newScale = slider.MaxValue;
+		mapView.setCameraZoom((float)newScale, magnifyGesture.Position);
+		// Update the UI slider
+		slider.Value = newScale;
+	}
+
 	private void ProcessActions() {
 		Godot.Collections.Array<StringName> actions = InputMap.GetActions();
 
@@ -688,10 +743,9 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitWait) {
-			using (var gameDataAccess = new UIGameDataAccess()) {
-				UnitInteractions.waitUnit(gameDataAccess.gameData, CurrentlySelectedUnit.id);
-				GetNextAutoselectedUnit(gameDataAccess.gameData);
-			}
+			using var gameDataAccess = new UIGameDataAccess();
+			UnitInteractions.waitUnit(gameDataAccess.gameData, CurrentlySelectedUnit.id);
+			GetNextAutoselectedUnit(gameDataAccess.gameData);
 		}
 
 		if (currentAction == C7Action.UnitFortify) {
@@ -726,12 +780,11 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitBuildCity && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildCity() ?? false)) {
-			using (var gameDataAccess = new UIGameDataAccess()) {
-				MapUnit currentUnit = gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
-				log.Debug(currentUnit.Describe());
-				if (currentUnit.canBuildCity()) {
-					popupOverlay.ShowPopup(new BuildCityDialog(controller.GetNextCityName()), PopupOverlay.PopupCategory.Advisor);
-				}
+			using var gameDataAccess = new UIGameDataAccess();
+			MapUnit currentUnit = gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
+			log.Debug(currentUnit.Describe());
+			if (currentUnit.canBuildCity()) {
+				popupOverlay.ShowPopup(new BuildCityDialog(controller.GetNextCityName()), PopupOverlay.PopupCategory.Advisor);
 			}
 		}
 
