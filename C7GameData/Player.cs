@@ -106,12 +106,14 @@ namespace C7GameData {
 		}
 
 		public bool IsAtPeaceWith(Player other) {
-			if (other.isBarbarians || this.isBarbarians) {
-				return false;
-			}
-
+			// Evaluate this before checking for barbarians so barbarians don't
+			// attack themselves.
 			if (other == this) {
 				return true;
+			}
+
+			if (other.isBarbarians || this.isBarbarians) {
+				return false;
 			}
 
 			if (playerRelationships.ContainsKey(other.id)) {

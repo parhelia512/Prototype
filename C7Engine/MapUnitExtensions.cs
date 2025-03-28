@@ -133,7 +133,7 @@ namespace C7Engine {
 			double attackerStrength = attacker.unitType.attack  * StrengthBonus.ListToMultiplier(attackBonuses),
 			   defenderStrength = defender.unitType.defense * StrengthBonus.ListToMultiplier(defenseBonuses);
 
-			log.Information($"Combat log: {attacker.unitType.name} ({attackerStrength}) attacking {defender.unitType.name} ({defenderStrength})");
+			log.Information($"Combat log: {attacker} ({attackerStrength}) attacking {defender} ({defenderStrength})");
 			log.Information($"\tAttacker: {attacker.unitType.name}, base strength {attacker.unitType.BaseStrength(CombatRole.Attack)}");
 			foreach (StrengthBonus bonus in attackBonuses)
 				log.Information($"\t\t+{100.0 * bonus.amount}%\t{bonus.description}");
