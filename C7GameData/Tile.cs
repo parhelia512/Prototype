@@ -184,6 +184,10 @@ namespace C7GameData {
 		 * This is a rough metric only.
 		 */
 		public int distanceTo(Tile other) {
+			if (this == Tile.NONE || other == Tile.NONE) {
+				// We can't path to tiles that don't exist.
+				return int.MaxValue;
+			}
 			return (Math.Abs(map.CalculateXDelta(other.XCoordinate, this.XCoordinate)) + Math.Abs(map.CalculateYDelta(other.YCoordinate, this.YCoordinate))) / 2;
 		}
 
