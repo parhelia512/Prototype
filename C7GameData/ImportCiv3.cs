@@ -394,6 +394,8 @@ namespace C7GameData {
 				player.taxRate = 5;
 				player.luxuryRate = 0;
 
+				player.governmentId = save.Governments[lead.Government].id;
+
 				// Add the starting techs for scenarios.
 				if (theBiq.LeadTech != null) {
 					for (int j = 0; j < theBiq.LeadTech[leadIndex].Length; ++j) {
