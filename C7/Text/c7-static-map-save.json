@@ -67748,7 +67748,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-2",
@@ -67823,7 +67825,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-3",
@@ -67898,7 +67902,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-4",
@@ -67969,7 +67975,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-5",
@@ -68044,7 +68052,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-6",
@@ -68123,7 +68133,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-7",
@@ -68198,7 +68210,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     },
     {
       "id": "player-8",
@@ -68269,7 +68283,9 @@
       "taxRate": 5,
       "gold": 10,
       "beakers": 0,
-      "turnsResearched": 0
+      "turnsResearched": 0,
+      "anarchyTurnsLeft": 0,
+      "governmentId": "Government-2"
     }
   ],
   "barbarianInfo": {
@@ -70955,6 +70971,166 @@
       "turnsToComplete": 16,
       "requiredTech": "tech-21",
       "action": "unit_build_barricade"
+    }
+  ],
+  "governments": [
+    {
+      "id": "Government-1",
+      "name": "Anarchy",
+      "civilopediaEntry": "GOVT_Anarchy",
+      "defaultType": false,
+      "transitionType": true,
+      "hasTilePenalty": true,
+      "hasTradeBonus": false,
+      "corruptionType": "catastrophic",
+      "hurryingType": "cannotHurry",
+      "draftLimit": 0,
+      "militaryPoliceLimit": 0,
+      "workerRate": 1,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 0,
+      "freeUnitsPerCity": 0,
+      "freeUnitsPerMetropolis": 0,
+      "unitCost": 1
+    },
+    {
+      "id": "Government-2",
+      "name": "Despotism",
+      "civilopediaEntry": "GOVT_Despotism",
+      "defaultType": true,
+      "transitionType": false,
+      "hasTilePenalty": true,
+      "hasTradeBonus": false,
+      "corruptionType": "rampant",
+      "hurryingType": "forcedLabor",
+      "draftLimit": 2,
+      "militaryPoliceLimit": 2,
+      "workerRate": 2,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 4,
+      "freeUnitsPerCity": 4,
+      "freeUnitsPerMetropolis": 4,
+      "unitCost": 1
+    },
+    {
+      "id": "Government-3",
+      "name": "Monarchy",
+      "civilopediaEntry": "GOVT_Monarchy",
+      "prerequisiteTech": "tech-20",
+      "defaultType": false,
+      "transitionType": false,
+      "hasTilePenalty": false,
+      "hasTradeBonus": false,
+      "corruptionType": "problematic",
+      "hurryingType": "paidLabor",
+      "draftLimit": 2,
+      "militaryPoliceLimit": 3,
+      "workerRate": 2,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 2,
+      "freeUnitsPerCity": 4,
+      "freeUnitsPerMetropolis": 8,
+      "unitCost": 1
+    },
+    {
+      "id": "Government-4",
+      "name": "Communism",
+      "civilopediaEntry": "GOVT_Communism",
+      "prerequisiteTech": "tech-47",
+      "defaultType": false,
+      "transitionType": false,
+      "hasTilePenalty": false,
+      "hasTradeBonus": false,
+      "corruptionType": "communal",
+      "hurryingType": "forcedLabor",
+      "draftLimit": 2,
+      "militaryPoliceLimit": 4,
+      "workerRate": 2,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 6,
+      "freeUnitsPerCity": 6,
+      "freeUnitsPerMetropolis": 6,
+      "unitCost": 1
+    },
+    {
+      "id": "Government-5",
+      "name": "Republic",
+      "civilopediaEntry": "GOVT_Republic",
+      "prerequisiteTech": "tech-19",
+      "defaultType": false,
+      "transitionType": false,
+      "hasTilePenalty": false,
+      "hasTradeBonus": true,
+      "corruptionType": "nuisance",
+      "hurryingType": "paidLabor",
+      "draftLimit": 1,
+      "militaryPoliceLimit": 0,
+      "workerRate": 2,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 1,
+      "freeUnitsPerCity": 3,
+      "freeUnitsPerMetropolis": 4,
+      "unitCost": 2
+    },
+    {
+      "id": "Government-6",
+      "name": "Democracy",
+      "civilopediaEntry": "GOVT_Democracy",
+      "prerequisiteTech": "tech-35",
+      "defaultType": false,
+      "transitionType": false,
+      "hasTilePenalty": false,
+      "hasTradeBonus": true,
+      "corruptionType": "minimal",
+      "hurryingType": "paidLabor",
+      "draftLimit": 1,
+      "militaryPoliceLimit": 0,
+      "workerRate": 3,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 0,
+      "freeUnitsPerCity": 0,
+      "freeUnitsPerMetropolis": 0,
+      "unitCost": 1
+    },
+    {
+      "id": "Government-7",
+      "name": "Fascism",
+      "civilopediaEntry": "GOVT_Fascism",
+      "prerequisiteTech": "tech-83",
+      "defaultType": false,
+      "transitionType": false,
+      "hasTilePenalty": false,
+      "hasTradeBonus": false,
+      "corruptionType": "nuisance",
+      "hurryingType": "forcedLabor",
+      "draftLimit": 2,
+      "militaryPoliceLimit": 4,
+      "workerRate": 4,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 4,
+      "freeUnitsPerCity": 7,
+      "freeUnitsPerMetropolis": 10,
+      "unitCost": 1
+    },
+    {
+      "id": "Government-8",
+      "name": "Feudalism",
+      "civilopediaEntry": "GOVT_Feudalism",
+      "prerequisiteTech": "tech-23",
+      "defaultType": false,
+      "transitionType": false,
+      "hasTilePenalty": false,
+      "hasTradeBonus": false,
+      "corruptionType": "problematic",
+      "hurryingType": "forcedLabor",
+      "draftLimit": 2,
+      "militaryPoliceLimit": 3,
+      "workerRate": 2,
+      "allUnitsFree": false,
+      "freeUnitsPerTown": 5,
+      "freeUnitsPerCity": 2,
+      "freeUnitsPerMetropolis": 1,
+      "unitCost": 3
     }
   ]
 }

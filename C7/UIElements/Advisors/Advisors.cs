@@ -12,6 +12,7 @@ public partial class Advisors : CenterContainer {
 	private ILogger log = LogManager.ForContext<Advisors>();
 
 	private DomesticAdvisor domesticAdvisor;
+	private MilitaryAdvisor militaryAdvisor;
 	private ScienceAdvisor scienceAdvisor;
 
 	// A list of all the non-null advisors, so we can hide them whenever we
@@ -33,10 +34,6 @@ public partial class Advisors : CenterContainer {
 		this.Show();
 	}
 
-	private void _on_Advisor_hide() {
-		this.Hide();
-	}
-
 	private void OnShowSpecificAdvisor(string advisorType) {
 		// Hide any existing advisors so we can draw the requested one.
 		foreach (TextureRect tr in advisors) {
@@ -52,6 +49,17 @@ public partial class Advisors : CenterContainer {
 			domesticAdvisor = new DomesticAdvisor();
 			advisors.Add(domesticAdvisor);
 			AddChild(domesticAdvisor);
+			this.Show();
+		}
+		if (advisorType.Equals("F3")) {
+			if (militaryAdvisor != null) {
+				RemoveChild(militaryAdvisor);
+				militaryAdvisor = null;
+			}
+
+			militaryAdvisor = new MilitaryAdvisor();
+			advisors.Add(militaryAdvisor);
+			AddChild(militaryAdvisor);
 			this.Show();
 		}
 		if (advisorType.Equals("F6")) {

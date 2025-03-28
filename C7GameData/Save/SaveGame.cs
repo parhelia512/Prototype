@@ -77,6 +77,7 @@ namespace C7GameData.Save {
 			save.Techs = data.techs.ConvertAll(t => t.ToSaveTech());
 			save.CitizenTypes = data.citizenTypes;
 			save.TerraForms = data.Terraforms;
+			save.Governments = data.governments;
 			return save;
 		}
 
@@ -117,6 +118,7 @@ namespace C7GameData.Save {
 				civilizations = Civilizations,
 				citizenTypes = CitizenTypes,
 				Terraforms = TerraForms,
+				governments = Governments,
 				ids = new ID.Factory(this),
 				experienceLevels = ExperienceLevels,
 			};
@@ -127,7 +129,7 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments));
 		}
 
 		private void ConvertTechnologies(GameData data) {
@@ -291,6 +293,7 @@ namespace C7GameData.Save {
 		public List<SaveTech> Techs = new();
 		public List<CitizenType> CitizenTypes = new();
 		public List<Terraform> TerraForms = new();
+		public List<Government> Governments = new();
 		public string ScenarioSearchPath; // TODO: what is this
 		public void Save(string path) {
 			byte[] json = JsonSerializer.SerializeToUtf8Bytes(this, JsonOptions);

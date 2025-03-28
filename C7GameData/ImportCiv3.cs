@@ -58,6 +58,7 @@ namespace C7GameData {
 			ImportBarbarianInfo();
 			ImportCitizenTypes();
 			ImportTerraforms();
+			ImportGovernments();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -442,6 +443,8 @@ namespace C7GameData {
 				player.scienceRate = leader.ScienceRate;
 				player.luxuryRate = leader.LuxuryRate;
 				player.taxRate = leader.TaxRate;
+				player.governmentId = save.Governments[leader.Government].id;
+				player.anarchyTurnsLeft = leader.AnarchyTurnsLeft;
 
 				save.Players.Add(player);
 				i++;
@@ -1112,6 +1115,36 @@ namespace C7GameData {
 					return C7Action.UnitBuildBarricade;
 				default:
 					return null;
+			}
+		}
+
+		private void ImportGovernments() {
+			BiqData theBiq = biq.Govt is null ? defaultBiq : biq;
+
+			foreach (QueryCiv3.Biq.GOVT govt in theBiq.Govt) {
+				Government g = new();
+				g.id = ids.CreateID("Government");
+				g.name = govt.Name;
+				g.civilopediaEntry = govt.CivilopediaEntry;
+				if (govt.PrerequisiteTechnology != -1) {
+					g.prerequisiteTech = save.Techs[govt.PrerequisiteTechnology].id;
+				}
+				g.defaultType = govt.DefaultType == 1;
+				g.transitionType = govt.TransitionType == 1;
+				g.hasTilePenalty = govt.TilePenalty == 1;
+				g.hasTradeBonus = govt.TradeBonus == 1;
+				g.corruptionType = (Government.CorruptionType)govt.Corruption;
+				g.hurryingType = (Government.HurryProductionType)govt.Hurrying;
+				g.draftLimit = govt.DraftLimit;
+				g.militaryPoliceLimit = govt.MilitaryPoliceLimit;
+				g.workerRate = govt.WorkerRate;
+				g.allUnitsFree = govt.FreeUnits == 1;
+				g.freeUnitsPerTown = govt.FreeUnitsPerTown;
+				g.freeUnitsPerCity = govt.FreeUnitsPerCity;
+				g.freeUnitsPerMetropolis = govt.FreeUnitsPerMetropolis;
+				g.unitCost = govt.UnitCost;
+
+				save.Governments.Add(g);
 			}
 		}
 

@@ -38,13 +38,11 @@ namespace C7Engine {
 
 				SpawnBarbarians(gameData);
 
-				// TODO: Should we be iterating over players, and then over each
-				// player's city, instead of over all cities, irrespective of
-				// player order? See also https://github.com/C7-Game/Prototype/pull/529#discussion_r1935006632
-				HandleCityResults(gameData);
-
 				gameData.turn++;
 				foreach (Player player in gameData.players) {
+					HandleCityResults(gameData, player);
+					player.DoPerTurnFinanceUpdates(gameData);
+
 					// TODO: This isn't quite accurate. This should only be
 					// incremented if the player is actually spending money on
 					// research, or has a science specialist.
@@ -148,11 +146,11 @@ namespace C7Engine {
 				}
 			}
 		}
-		private static void HandleCityResults(GameData gameData) {
+	
+		private static void HandleCityResults(GameData gameData, Player player) {
+			log.Information($"\n*** City production for turn {gameData.turn}, player {player} ***");
 
-			log.Information("\n*** City production for turn " + gameData.turn + " ***");
-
-			foreach (City city in gameData.cities) {
+			foreach (City city in player.cities) {
 				int initialSize = city.size;
 				city.ComputeCityGrowth();
 				int newSize = city.size;
@@ -198,9 +196,6 @@ namespace C7Engine {
 
 					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));
 				}
-
-				city.owner.gold += city.CurrentCommerceYield().taxes;
-				city.owner.beakers += city.CurrentCommerceYield().beakers;
 			}
 		}
 

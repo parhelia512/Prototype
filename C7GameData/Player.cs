@@ -62,6 +62,13 @@ namespace C7GameData {
 		// The number of turns the player has been researching the current tech.
 		public int turnsResearched = 0;
 
+		// If the government is anarchy (or a govt with the transition bool set
+		// to true), the number of turns left before switching is allowed.
+		public int anarchyTurnsLeft = 0;
+
+		// The current government of the player.
+		public Government government;
+
 		public int EraIndex() {
 			if (eraCivilopediaName == "ERAS_Ancient_Times") {
 				return 0;
@@ -213,6 +220,11 @@ namespace C7GameData {
 			foreach (City city in cities) {
 				result += city.CurrentCommerceYield().taxes;
 			}
+			
+			// Subtract unit support costs, if any.
+			var (_, _, unitSupportCost) = TotalUnitsAllowedUnitsAndSupportCost();
+			result -= unitSupportCost;
+
 			return result;
 		}
 
@@ -276,6 +288,41 @@ namespace C7GameData {
 				return 4;
 			}
 			return result;
+		}
+
+		public void DoPerTurnFinanceUpdates(GameData gameData) {
+			// Process per-city contributions.
+			//
+			// TODO: consider making this return a tuple too. Or maybe return all
+			// the gold accounting stuff in a struct, for one pass over the cities.
+			foreach (City city in cities) {
+				beakers += city.CurrentCommerceYield().beakers;
+			}
+			gold += CalculateGoldPerTurn();
+		}
+
+		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
+			int freeUnits = 0;
+
+			foreach (City city in cities) {
+				// TODO: Import these sizes from Rule.cs in the biq. Maybe have
+				// them live in the city class?
+				if (city.size <= 6) {
+					freeUnits += government.freeUnitsPerTown;
+				} else if (city.size <= 12) {
+					freeUnits += government.freeUnitsPerCity;
+				} else {
+					freeUnits += government.freeUnitsPerMetropolis;
+				}
+			}
+			if (government.allUnitsFree) {
+				freeUnits = units.Count;
+			}
+
+			int totalUnits = units.Count;
+			int allowedUnits = freeUnits;
+			int unitSupportCost = Math.Max(0, (totalUnits - allowedUnits) * government.unitCost);
+			return (totalUnits, allowedUnits, unitSupportCost);
 		}
 	}
 
