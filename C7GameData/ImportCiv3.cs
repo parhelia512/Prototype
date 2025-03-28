@@ -367,6 +367,8 @@ namespace C7GameData {
 		private void ImportBicLeaders() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 
+			Government defaultGovernment = save.Governments.Find(g => g.defaultType) ?? save.Governments[0];
+
 			// Make a player for each civ. The barbarians are always civ 0.
 			for (int i = 0; i < save.Civilizations.Count; ++i) {
 				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
@@ -374,6 +376,12 @@ namespace C7GameData {
 									   /*isHuman=*/false,
 									   /*cityNameIndex=*/0,
 									   /*era=*/""));
+
+				// Set a government for players not associated with LEAD.
+				// Usually, this applies only to barbarians, but in some scenarios
+				// it may also include civilizations that exist in the game files
+				// but are not actually part of the gameplay.
+				save.Players.Last().governmentId = defaultGovernment.id;
 			}
 
 			// Now fill in the rest of the data using the leader struct.
@@ -393,6 +401,8 @@ namespace C7GameData {
 				player.scienceRate = 5;
 				player.taxRate = 5;
 				player.luxuryRate = 0;
+
+				player.governmentId = save.Governments[lead.Government].id;
 
 				// Add the starting techs for scenarios.
 				if (theBiq.LeadTech != null) {

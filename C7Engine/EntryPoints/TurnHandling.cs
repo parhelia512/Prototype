@@ -146,7 +146,7 @@ namespace C7Engine {
 				}
 			}
 		}
-	
+
 		private static void HandleCityResults(GameData gameData, Player player) {
 			log.Information($"\n*** City production for turn {gameData.turn}, player {player} ***");
 

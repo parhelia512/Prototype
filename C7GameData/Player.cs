@@ -220,7 +220,7 @@ namespace C7GameData {
 			foreach (City city in cities) {
 				result += city.CurrentCommerceYield().taxes;
 			}
-			
+
 			// Subtract unit support costs, if any.
 			var (_, _, unitSupportCost) = TotalUnitsAllowedUnitsAndSupportCost();
 			result -= unitSupportCost;
