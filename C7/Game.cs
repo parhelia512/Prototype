@@ -532,17 +532,14 @@ public partial class Game : Node2D {
 	}
 
 	private void OnDoubleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
-		using var gameDataAccess = new UIGameDataAccess();
-		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile?.cityAtTile?.owner == controller) {
 			ShowCityScreenForCity(tile.cityAtTile);
 		}
 	}
 
 	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
-		using var gameDataAccess = new UIGameDataAccess();
-
-		var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile == null) {
 			return;
 		}
@@ -564,8 +561,8 @@ public partial class Game : Node2D {
 
 	private void HandleRightMouseButton(InputEventMouseButton eventMouseButton) {
 		setGotoMode(false);
-		using var gameDataAccess = new UIGameDataAccess();
-		var tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+
+		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile != null) {
 			HandleRightClickOnTile(tile, eventMouseButton);
 		} else {
