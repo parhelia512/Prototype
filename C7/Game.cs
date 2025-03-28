@@ -501,8 +501,7 @@ public partial class Game : Node2D {
 
 			if (CanDoubleClick(eventMouseButton)) {
 				doubleClickHandler.Accept(eventMouseButton);
-			}
-			else {
+			} else {
 				OnSingleLeftMouseButtonClick(eventMouseButton);
 			}
 		} else {
@@ -519,7 +518,7 @@ public partial class Game : Node2D {
 	private bool CanDoubleClick(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
 
-		return gotoInfo == null && tile != null && tile.cityAtTile != null;
+		return gotoInfo == null && tile?.cityAtTile?.owner == controller;
 	}
 
 	private void OnSingleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
@@ -535,9 +534,9 @@ public partial class Game : Node2D {
 	private void OnDoubleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
 		using var gameDataAccess = new UIGameDataAccess();
 		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
-		if (tile == null || tile.cityAtTile == null) { return; }
-
-		ShowCityScreenForCity(tile.cityAtTile);
+		if (tile?.cityAtTile?.owner == controller) {
+			ShowCityScreenForCity(tile.cityAtTile);
+		}
 	}
 
 	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
