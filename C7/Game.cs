@@ -80,6 +80,8 @@ public partial class Game : Node2D {
 	private VSlider slider;
 	[Export]
 	private AnimationPlayer animationPlayer;
+	[Export]
+	private DoubleClickHandler doubleClickHandler;
 
 	bool errorOnLoad = false;
 
@@ -494,18 +496,48 @@ public partial class Game : Node2D {
 	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
 		GetViewport().SetInputAsHandled();
 		if (eventMouseButton.IsPressed()) {
-			if (gotoInfo != null) {
-				HandleGotoClick(gotoInfo);
-				setGotoMode(false);
-			} else {
-				// Select unit on tile at mouse location
-				HandleUnitSelection(eventMouseButton);
-				OldPosition = eventMouseButton.Position;
-				IsMovingCamera = true;
+			OldPosition = eventMouseButton.Position;
+			IsMovingCamera = true;
+
+			if (CanDoubleClick(eventMouseButton)) {
+				doubleClickHandler.Accept(eventMouseButton);
+			}
+			else {
+				OnSingleLeftMouseButtonClick(eventMouseButton);
 			}
 		} else {
 			IsMovingCamera = false;
 		}
+	}
+
+	private Tile PositionToTile(Vector2 position) {
+		using var gameDataAccess = new UIGameDataAccess();
+		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, position);
+		return tile;
+	}
+
+	private bool CanDoubleClick(InputEventMouseButton eventMouseButton) {
+		Tile tile = PositionToTile(eventMouseButton.Position);
+
+		return gotoInfo == null && tile != null && tile.cityAtTile != null;
+	}
+
+	private void OnSingleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
+		if (gotoInfo != null) {
+			HandleGotoClick(gotoInfo);
+			setGotoMode(false);
+		} else {
+			// Select unit on tile at mouse location
+			HandleUnitSelection(eventMouseButton);
+		}
+	}
+
+	private void OnDoubleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
+		using var gameDataAccess = new UIGameDataAccess();
+		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
+		if (tile == null || tile.cityAtTile == null) { return; }
+
+		ShowCityScreenForCity(tile.cityAtTile);
 	}
 
 	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
