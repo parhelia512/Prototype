@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=18 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" path="res://Game.cs" id="1"]
+[ext_resource type="Script" path="res://DoubleClickHandler.cs" id="2_t735q"]
 [ext_resource type="Script" path="res://UIElements/Advisors/Advisors.cs" id="3"]
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/MenuButton.cs" id="4"]
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/CivilopediaButton.cs" id="5"]
@@ -61,7 +62,7 @@ _data = {
 "SlideOutAnimation": SubResource("1")
 }
 
-[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer")]
+[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer", "doubleClickHandler")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
@@ -70,6 +71,10 @@ advisor = NodePath("CanvasLayer/Advisor")
 diplomacy = NodePath("CanvasLayer/Diplomacy")
 slider = NodePath("CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom")
 animationPlayer = NodePath("CanvasLayer/Control/SlideOutBar/AnimationPlayer")
+doubleClickHandler = NodePath("DoubleClickHandler")
+
+[node name="DoubleClickHandler" type="Node" parent="."]
+script = ExtResource("2_t735q")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -255,10 +260,6 @@ grow_vertical = 2
 theme = ExtResource("10")
 script = ExtResource("13")
 
-[node name="LoadDialog" parent="." instance=ExtResource("12_yjlfl")]
-unique_name_in_owner = true
-visible = false
-
 [node name="Diplomacy" type="CenterContainer" parent="CanvasLayer" node_paths=PackedStringArray("popupOverlay")]
 anchors_preset = 15
 anchor_right = 1.0
@@ -282,19 +283,19 @@ control = NodePath("../Control")
 
 [node name="PopupSound" type="AudioStreamPlayer" parent="CanvasLayer/PopupOverlay"]
 
-[connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus" method="OnNewUnitSelected"]
+[node name="LoadDialog" parent="." instance=ExtResource("12_yjlfl")]
+unique_name_in_owner = true
+visible = false
+
 [connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/UnitButtons" method="OnNewUnitSelected"]
-[connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus" method="OnNoMoreAutoselectableUnits"]
+[connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus" method="OnNewUnitSelected"]
 [connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/UnitButtons" method="OnNoMoreAutoselectableUnits"]
+[connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus" method="OnNoMoreAutoselectableUnits"]
 [connection signal="ShowCityScreen" from="." to="CanvasLayer/CityScreen" method="OnShowCityScreen"]
 [connection signal="ShowSpecificAdvisor" from="." to="CanvasLayer/Advisor" method="OnShowSpecificAdvisor"]
 [connection signal="TurnEnded" from="." to="CanvasLayer/Control/GameStatus" method="OnTurnEnded"]
-[connection signal="BuildCity" from="CanvasLayer/PopupOverlay" to="." method="OnBuildCity"]
-[connection signal="HidePopup" from="CanvasLayer/PopupOverlay" to="CanvasLayer/PopupOverlay" method="OnHidePopup"]
-[connection signal="Quit" from="CanvasLayer/PopupOverlay" to="." method="OnQuitTheGame"]
-[connection signal="Retire" from="CanvasLayer/PopupOverlay" to="." method="_on_QuitButton_pressed"]
-[connection signal="UnitDisbanded" from="CanvasLayer/PopupOverlay" to="." method="OnUnitDisbanded"]
-[connection signal="DiplomacySelection" from="CanvasLayer/PopupOverlay" to="." method="OnDiplomacySelected"]
+[connection signal="DoubleClick" from="DoubleClickHandler" to="." method="OnDoubleLeftMouseButtonClick"]
+[connection signal="SingleClick" from="DoubleClickHandler" to="." method="OnSingleLeftMouseButtonClick"]
 [connection signal="ActionRequested" from="CanvasLayer/Control/UnitButtons" to="." method="ProcessAction"]
 [connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus" to="." method="OnPlayerEndTurn"]
 [connection signal="pressed" from="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer/AdvisorButton" to="CanvasLayer/Advisor" method="ShowLatestAdvisor"]
@@ -306,3 +307,9 @@ control = NodePath("../Control")
 [connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/UpButton" to="." method="_on_UpButton_pressed"]
 [connection signal="value_changed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom" to="." method="_on_Zoom_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="BuildCity" from="CanvasLayer/PopupOverlay" to="." method="OnBuildCity"]
+[connection signal="DiplomacySelection" from="CanvasLayer/PopupOverlay" to="." method="OnDiplomacySelected"]
+[connection signal="HidePopup" from="CanvasLayer/PopupOverlay" to="CanvasLayer/PopupOverlay" method="OnHidePopup"]
+[connection signal="Quit" from="CanvasLayer/PopupOverlay" to="." method="OnQuitTheGame"]
+[connection signal="Retire" from="CanvasLayer/PopupOverlay" to="." method="_on_QuitButton_pressed"]
+[connection signal="UnitDisbanded" from="CanvasLayer/PopupOverlay" to="." method="OnUnitDisbanded"]
