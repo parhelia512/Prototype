@@ -1,5 +1,19 @@
 using Godot;
 
+/// <summary>
+/// A class for detecting double-clicks.
+///
+/// To differentiate between single and double clicks, this class uses
+/// a timer-based detection mechanism. When a click occurs, it waits
+/// for a short period (DOUBLE_CLICK_DELAY) to check if another click
+/// follows. If a second click happens, it emits a double-click
+/// signal; otherwise, it emits a single-click signal.
+///
+/// Although Godot provides built-in double-click detection, it does
+/// not allow handling single clicks separately. For example, with
+/// Godot’s built-in detection, clicking on a city that contains a
+/// unit would both zoom to the city and select the unit.
+/// </summary>
 [GlobalClass]
 public partial class DoubleClickHandler : Node {
 	int leftMouseButtonClickCount = 0;
