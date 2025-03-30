@@ -611,12 +611,14 @@ namespace C7GameData {
 
 		List<SaveCityBuilding> ImportCityBuildingsFromSav(int cityIndex) {
 			List<SaveCityBuilding> res = [];
+
+			var city = savData.City[cityIndex];
 			var cityBuildings = savData.CityBuilding[cityIndex];
 
 			for (int buildingIndex = 0; buildingIndex < cityBuildings.Length; ++buildingIndex) {
 				var building = cityBuildings[buildingIndex];
 
-				if (building.BuiltByPlayer != -1) {
+				if (building.BuiltByPlayer != -1 && city.Bitm.IsBuildingUsable(buildingIndex)) {
 					res.Add(new SaveCityBuilding {
 						building = save.Buildings[buildingIndex].name,
 						builtByPlayer = save.Players[building.BuiltByPlayer].id,
