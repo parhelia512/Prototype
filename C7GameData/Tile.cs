@@ -374,6 +374,16 @@ namespace C7GameData {
 			return $"{foodYield(player)}/{productionYield(player)}/{commerceYield(player)})";
 		}
 
+		public Player? OwningPlayer() {
+			if (cityAtTile != null) {
+				return cityAtTile.owner;
+			}
+			if (owningCity != null) {
+				return owningCity.owner;
+			}
+			return null;
+		}
+
 		// Returns the X and Y coordinates of the neighbor in the specified direction.
 		public static TileLocation NeighborCoordinate(TileLocation location, TileDirection direction) {
 			switch (direction) {

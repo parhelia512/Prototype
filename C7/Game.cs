@@ -257,6 +257,15 @@ public partial class Game : Node2D {
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 					break;
+				case MsgWarDeclaration mWD:
+					popupOverlay.ShowPopup(
+						new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
+						PopupOverlay.PopupCategory.Advisor);
+
+					// Break out of the fast forward mode when something 
+					// interesting happens.
+					turnsLeftToFastForward = 0;
+					break;
 			}
 		}
 	}
