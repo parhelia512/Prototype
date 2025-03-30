@@ -10,15 +10,23 @@ using C7Engine.AI;
 
 // Handles the city screen, where citizens can be assigned and other details of
 // the city can bee seen.
-public partial class CityScreen : CenterContainer {
+[Tool]
+public partial class CityScreen : Control {
 	private ILogger log = LogManager.ForContext<CityScreen>();
 	public TileAssignmentLayer tileAssignmentLayer;
 	public MapView mapView;
 	public List<CitizenType> citizenTypes;
-	private TextureRect background;
 	private List<TextureButton> popHeads = new();
-	private Label culturePerTurn;
-	private Label totalCulture;
+
+	[Export] private TextureRect background;
+	[Export] private VBoxContainer existingBuildings;
+	[Export] private Label culturePerTurn;
+	[Export] private Label totalCulture;
+
+	[Export] private TextureButton productionButton;
+	[Export] private TextureButton close;
+
+	private ProductionMenu productionMenu;
 
 	Theme yieldDetailsFontTheme = new();
 	FontFile yieldDetailsFont = new();
@@ -29,51 +37,16 @@ public partial class CityScreen : CenterContainer {
 	private Label commerceScienceDetails;
 	private Label commerceHappinessDetails;
 
-	private TextureButton productionButton;
-	private ProductionMenu productionMenu;
-
-	private ColorRect leftSidebar = new();
-	private ColorRect rightSidebar = new();
-	private ColorRect topSidebar = new();
-	private ColorRect bottomSidebar = new();
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background = new() {
-			Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx")
-		};
-		AddChild(background);
-
-		// The sidebars.
-		background.AddChild(leftSidebar);
-		background.AddChild(rightSidebar);
-		background.AddChild(topSidebar);
-		background.AddChild(bottomSidebar);
-
-		leftSidebar.Color = Colors.Black;
-		rightSidebar.Color = Colors.Black;
-		topSidebar.Color = Colors.Black;
-		bottomSidebar.Color = Colors.Black;
-
-		UpdateSidebars();
-		GetViewport().SizeChanged += UpdateSidebars; // Update on resize
+		background.Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx");
 
 		// The close button.
-		TextureButton close = new() {
-			TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 32, 48),
-			TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 32, 48),
-			TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 32, 48)
-		};
-		close.SetPosition(new Vector2(950, 20));
-		close.Pressed += () => { HideScreen(); };
-		background.AddChild(close);
+		close.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 32, 48);
+		close.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 32, 48);
+		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 32, 48);
 
-		background.AddChild(new Label() {
-			Text = "CULTURE",
-			OffsetLeft = 714,
-			OffsetTop = 4
-		});
-
+		close.Pressed += Hide;
 
 		// Load the font we'll use for the details.
 		//
@@ -121,16 +94,13 @@ public partial class CityScreen : CenterContainer {
 		};
 		background.AddChild(commerceHappinessDetails);
 
-		productionButton = new() {
-			TextureNormal = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 1, 0, 114, 95),
-			TextureHover = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 116, 0, 115, 95),
-			TexturePressed = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 231, 0, 115, 95)
-		};
-		productionButton.SetPosition(new Vector2(905, 515));
-		background.AddChild(productionButton);
+		productionButton.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 1, 0, 114, 95);
+		productionButton.TextureHover = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 116, 0, 115, 95);
+		productionButton.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 231, 0, 115, 95);
+
 		productionButton.Pressed += () => { this.productionMenu.Visible = !this.productionMenu.Visible; };
 
-		this.Hide();
+		Hidden += OnExit;
 	}
 
 	public override void _UnhandledInput(InputEvent @event) {
@@ -242,11 +212,6 @@ public partial class CityScreen : CenterContainer {
 		}
 	}
 
-	public void HideScreen() {
-		this.Hide();
-		tileAssignmentLayer.city = null;
-	}
-
 	private void OnShowCityScreen(ParameterWrapper<City> city) {
 		this.Show();
 		mapView.centerCameraOnTile(city.Value.location.neighbors[TileDirection.SOUTH]);
@@ -256,6 +221,29 @@ public partial class CityScreen : CenterContainer {
 		RenderFoodDetails(city.Value);
 		RenderCommerceDetails(city.Value);
 		RenderProductionDetails(city.Value);
+		RenderExistingBuildings(city.Value.buildings);
+	}
+
+	private void OnExit() {
+		if (productionMenu != null) {
+			productionMenu.QueueFree();
+			productionMenu = null;
+		}
+
+		tileAssignmentLayer.city = null;
+	}
+
+	private void RenderExistingBuildings(List<CityBuilding> buildings) {
+		foreach (var node in existingBuildings.GetChildren()) {
+			existingBuildings.RemoveChild(node);
+		}
+
+		foreach (CityBuilding building in buildings) {
+			Label label = new() {
+				Text = building.building.name
+			};
+			existingBuildings.AddChild(label);
+		}
 	}
 
 	private void RenderFoodDetails(City city) {
@@ -333,22 +321,8 @@ public partial class CityScreen : CenterContainer {
 	}
 
 	private void RenderCulture(City city) {
-		if (culturePerTurn == null) {
-			culturePerTurn = new Label() {
-				OffsetLeft = 790,
-				OffsetTop = 4
-			};
-			background.AddChild(culturePerTurn);
-		}
 		culturePerTurn.Text = "0/turn";  // TODO: fill this in
 
-		if (totalCulture == null) {
-			totalCulture = new Label() {
-				OffsetLeft = 714,
-				OffsetTop = 55
-			};
-			background.AddChild(totalCulture);
-		}
 		int nextCultureExpansion = (int)Math.Pow(10, city.GetBorderExpansionLevel());
 		totalCulture.Text = $"Total: {city.GetCulture()}/{nextCultureExpansion}";
 	}
@@ -433,31 +407,5 @@ public partial class CityScreen : CenterContainer {
 			popHeads.Add(tb);
 			xPos += 48;
 		}
-	}
-
-	private void UpdateSidebars() {
-		Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
-
-		float sidebarWidth = (viewportSize.X - background.Texture.GetWidth()) / 2;
-		float sidebarHeight = viewportSize.Y;
-
-		float topBottomBarHeight = (viewportSize.Y - background.Texture.GetHeight()) / 2;
-		float topBottomBarWidth = viewportSize.X;
-
-		// Left Sidebar
-		leftSidebar.Position = new Vector2(-sidebarWidth, 0);
-		leftSidebar.Size = new Vector2(sidebarWidth, sidebarHeight);
-
-		// Right Sidebar
-		rightSidebar.Position = new Vector2(background.Texture.GetWidth(), 0);
-		rightSidebar.Size = new Vector2(sidebarWidth, sidebarHeight);
-
-		// Top Sidebar
-		topSidebar.Position = new Vector2(0, -topBottomBarHeight);
-		topSidebar.Size = new Vector2(topBottomBarWidth, topBottomBarHeight);
-
-		// Bottom Sidebar
-		bottomSidebar.Position = new Vector2(0, background.Texture.GetHeight());
-		bottomSidebar.Size = new Vector2(topBottomBarWidth, topBottomBarHeight);
 	}
 }
