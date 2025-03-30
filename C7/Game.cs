@@ -223,19 +223,12 @@ public partial class Game : Node2D {
 					break;
 				case MsgCityDestroyed mCD:
 					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
+					break;
+				case MsgCivilizationDestroyed mCivD:
+					popupOverlay.ShowPopup(new CivilizationDestroyed(mCivD.civilization), PopupOverlay.PopupCategory.Advisor);
 
-					// If this was the last city of the civilization, display a popup
-					// noting that the civ is gone and destroy any remaining units.
-					//
-					// TODO: Implement the full set of conditions for destroying a civ;
-					// handling cases like 1 city elimination, regicide, settlers that
-					// are still alive, etc.
-					if (mCD.city.owner.RemainingCities() == 0) {
-						popupOverlay.ShowPopup(new CivilizationDestroyed(mCD.city.owner.civilization), PopupOverlay.PopupCategory.Advisor);
-						for (int i = 0; i < mCD.city.owner.units.Count; ++i) {
-							MapUnitExtensions.disband(mCD.city.owner.units[i]);
-						}
-					}
+					// Break out of fast forward mode after interesting events.
+					turnsLeftToFastForward = 0;
 					break;
 				case MsgUpdateUiAfterMove mUUAM:
 					// The unit finished moving and still has moves left, so we need to

@@ -45,6 +45,10 @@ namespace C7Engine {
 			EngineStorage.gameData.cities.Remove(tile.cityAtTile);
 			EngineStorage.gameData.UpdateTileOwnersOnCityDestruction(tile.cityAtTile);
 			new MsgCityDestroyed(tile.cityAtTile).send();
+			if (EngineStorage.gameData.CheckForCivDestruction(tile.cityAtTile.owner)) {
+				// Let the UI know about the civ destruction.
+				new MsgCivilizationDestroyed(tile.cityAtTile.owner.civilization).send();
+			}
 			tile.cityAtTile = null;
 			tile.overlays.road = false;
 		}

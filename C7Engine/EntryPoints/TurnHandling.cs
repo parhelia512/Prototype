@@ -79,7 +79,7 @@ namespace C7Engine {
 		/// <returns>true when it is time for the human to take control again</returns>
 		private static bool PlayPlayerTurns(GameData gameData, bool firstTurn) {
 			foreach (Player player in gameData.players) {
-				if (player.hasPlayedThisTurn) {
+				if (player.hasPlayedThisTurn || player.defeated) {
 					continue;
 				}
 

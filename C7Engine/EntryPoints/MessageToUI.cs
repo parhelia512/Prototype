@@ -62,6 +62,14 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgCivilizationDestroyed : MessageToUI {
+		public Civilization civilization;
+
+		public MsgCivilizationDestroyed(Civilization civ) {
+			this.civilization = civ;
+		}
+	}
+
 	public class MsgCityCreated : MessageToUI {
 		public City city;
 

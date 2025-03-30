@@ -471,26 +471,7 @@ namespace C7Engine {
 		}
 
 		public static void disband(this MapUnit unit) {
-			GameData gameData = EngineStorage.gameData;
-
-			// Set unit's hit points to zero to indicate that it's no longer alive. Ultimately we may not want to do this. I'm only doing it right
-			// now since this way all the UI needs to do to check if the selected unit has been destroyed is to check its hit points.
-			unit.hitPointsRemaining = 0;
-			unit.movementPoints.onConsumeAll();
-
-			if (unit.currentAI != null) {
-				unit.currentAI.UpdateOnDeath();
-				unit.currentAI = null;
-			}
-
-			// EngineStorage.animTracker.endAnimation(unit, false);   TODO: Must send message instead of call directly
-			unit.location.unitsOnTile.Remove(unit);
-			gameData.mapUnits.Remove(unit);
-			foreach (Player player in gameData.players) {
-				if (player.units.Contains(unit)) {
-					player.units.Remove(unit);
-				}
-			}
+			EngineStorage.gameData.DisbandUnit(unit);
 		}
 
 		public static bool canBuildCity(this MapUnit unit) {
