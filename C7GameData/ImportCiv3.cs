@@ -987,6 +987,7 @@ namespace C7GameData {
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
 					Cost = t.Cost,
+					RequiredForEraAdvancement = !t.NotRequiredForEraAdvancement,
 					EraCivilopediaName = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].CivilopediaEntry,
 					SmallIconPath = t.Era == -1 ? "" : pediaIcons.GetTechIconPath(t.CivilopediaEntry),
 					X = t.X,
