@@ -58,6 +58,11 @@ namespace C7Engine {
 				}
 			}
 
+			// Roughly every 4 turns, see if there are trades to be made.
+			if (GameData.rng.Next(100) < 25) {
+				AttemptTrading(player);
+			}
+
 			// Reorder the list so that settlers are last, giving our escorts a
 			// chance to configure themselves without wasting a turn.
 			player.units.Sort((x, y) => (x.unitType.name == "Settler").CompareTo(y.unitType.name == "Settler"));
@@ -276,6 +281,96 @@ namespace C7Engine {
 
 			// Details on how Civ3 does it: https://forums.civfanatics.com/threads/what-will-the-ai-research-next.45559/
 			return possibleTechs[(int)GameData.rng.NextInt64(possibleTechs.Count)];
+		}
+
+		private static void AttemptTrading(Player us) {
+			GameData gD = EngineStorage.gameData;
+
+			log.Information($"{us} is checking for trading opportunities");
+			foreach (Player them in EngineStorage.gameData.players) {
+				// We can't trade with players we don't know or players we're at
+				// war with.
+				if (!us.playerRelationships.ContainsKey(them.id) || us.playerRelationships[them.id].atWar) {
+					continue;
+				}
+
+				// TODO: Implement AI -> Human tech trading
+				if (them.isHuman) {
+					continue;
+				}
+
+				// Figure out what techs are available for trading.
+				List<Tech> techsTheyCanTrade = gD.techs.FindAll(x => {
+					return them.knownTechs.Contains(x.id) && !us.knownTechs.Contains(x.id);
+				});
+				techsTheyCanTrade.Sort((a, b) => { return b.TechCostFor(us).CompareTo(a.TechCostFor(us)); });
+
+				List<Tech> techsWeCanTrade = gD.techs.FindAll(x => {
+					return us.knownTechs.Contains(x.id) && !them.knownTechs.Contains(x.id);
+				});
+				techsWeCanTrade.Sort((a, b) => { return b.TechCostFor(them).CompareTo(a.TechCostFor(them)); });
+
+				// If we can't trade techs there's no point in continuing - we
+				// can't yet trade anything else interesting.
+				if (techsWeCanTrade.Count == 0 && techsTheyCanTrade.Count == 0) {
+					continue;
+				}
+
+				// Figure out the value of what we have available to trade.
+				TradeOffer weGive = new();
+				weGive.gold = Math.Max(0, us.gold);
+				foreach (Tech t in techsWeCanTrade) {
+					weGive.techs.Add(t);
+				}
+				int ourMaxPossibleOffer = weGive.GoldEquivalentFor(them);
+
+				// Going from the most to the least valuable valuable techs, see
+				// if we can afford them. This greedy algorithm should be good
+				// enough - we don't need perfect binpacking.
+				TradeOffer weWant = new();
+				foreach (Tech t in techsTheyCanTrade) {
+					if (t.TechCostFor(us) < ourMaxPossibleOffer) {
+						weWant.techs.Add(t);
+						ourMaxPossibleOffer -= t.TechCostFor(us);
+					}
+				}
+
+				// Also ask for any gold we can get.
+				weWant.gold = Math.Min(ourMaxPossibleOffer, Math.Max(0, them.gold));
+
+				// At this point we are getting as much as we possibly can get
+				// from the opponent. However, we might be overpaying, possibly
+				// by a significant amount. Keep removing techs from our offer
+				// as long as it doesn't make our offer worse than theirs.
+				int theirOfferValue = weWant.GoldEquivalentFor(us);
+				for (int i = 0; i < weGive.techs.Count;) {
+					if (weGive.GoldEquivalentFor(them) - weGive.techs[i].TechCostFor(them) >= theirOfferValue) {
+						weGive.techs.RemoveAt(0);
+					} else {
+						++i;
+					}
+				}
+
+				// Now use any gold to even things out, if possible.
+				int remainingDelta = weGive.GoldEquivalentFor(them) - theirOfferValue;
+				weGive.gold -= Math.Min(remainingDelta, weGive.gold.Value);
+
+				// And ensure we minimize the total gold traded, to keep the
+				// logs cleaner.
+				int redundantGold = Math.Min(weGive.gold.Value, weWant.gold.Value);
+				weGive.gold -= redundantGold;
+				weWant.gold -= redundantGold;
+
+				// Finally if the deal is too mismatched or only contains a swap
+				// of gold, abandon it. Otherwise we can execute the deal.
+				if (weGive.GoldEquivalentFor(them) > 1.1 * weWant.GoldEquivalentFor(us)) {
+					continue;
+				}
+				if (weGive.techs.Count == 0 && weWant.techs.Count == 0) {
+					continue;
+				}
+				us.ExecuteDeal(them, weWant, weGive);
+			}
 		}
 	}
 }
