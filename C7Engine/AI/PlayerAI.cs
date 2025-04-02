@@ -318,7 +318,7 @@ namespace C7Engine {
 
 				// Figure out the value of what we have available to trade.
 				TradeOffer weGive = new();
-				weGive.gold = Math.Max(0, us.gold);
+				weGive.gold = us.gold;
 				foreach (Tech t in techsWeCanTrade) {
 					weGive.techs.Add(t);
 				}
@@ -336,7 +336,7 @@ namespace C7Engine {
 				}
 
 				// Also ask for any gold we can get.
-				weWant.gold = Math.Min(ourMaxPossibleOffer, Math.Max(0, them.gold));
+				weWant.gold = Math.Min(ourMaxPossibleOffer, them.gold);
 
 				// At this point we are getting as much as we possibly can get
 				// from the opponent. However, we might be overpaying, possibly
