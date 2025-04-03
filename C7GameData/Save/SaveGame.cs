@@ -106,6 +106,9 @@ namespace C7GameData.Save {
 			data.defaultExperienceLevel = data.experienceLevels.Find(el => el.key == DefaultExperienceLevel);
 
 			data.UpdateTileOwners();
+			foreach (Player p in data.players) {
+				p.DoCorruptionCalculations(data);
+			}
 
 			return data;
 		}

@@ -465,6 +465,32 @@ namespace C7GameData {
 				return MilitaryStrength.EquivalentTo;
 			}
 		}
+
+		public void DoCorruptionCalculations(GameData gameData) {
+			if (cities.Count == 0) {
+				return;
+			}
+
+			// Order the cities by distance to the capitol, using OrderBy to get
+			// a stable sort (https://stackoverflow.com/a/148123). We want a
+			// stable sort, because if two cities are the same distance from the
+			// capitol, the tiebreaker is city age (which we don't track yet) and
+			// then order in the database, which a stable sort gives us.
+			//
+			// TODO: track city age.
+			City capitol = cities.Find(x => x.IsCapital());
+			if (capitol == null) {
+				capitol = cities[0];
+			}
+			List<City> citiesInRankOrdering = cities.OrderBy(x => x.location.rankDistanceTo(capitol.location)).ToList();
+			for (int i = 0; i < citiesInRankOrdering.Count; ++i) {
+				citiesInRankOrdering[i].rankIndex = i;
+
+				// For each city, calculate its corruption level so this
+				// calculation doesn't have to be done on the fly.
+				citiesInRankOrdering[i].CalculateCorruption(gameData);
+			}
+		}
 	}
 
 }
