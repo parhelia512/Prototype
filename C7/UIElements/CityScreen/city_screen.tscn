@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bo4yg85jcbgdx"]
+[gd_scene load_steps=4 format=3 uid="uid://bo4yg85jcbgdx"]
 
 [ext_resource type="Script" path="res://UIElements/CityScreen/CityScreen.cs" id="1_e5kig"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2_0mao8"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3_3cdyr"]
 
 [node name="CityScreen" type="VBoxContainer" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "productionButton", "close")]
 anchors_preset = 15
@@ -36,6 +38,7 @@ color = Color(0, 0, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("2_0mao8")
 
 [node name="Improvements" type="Label" parent="HBoxContainer/Background"]
 layout_mode = 2
@@ -85,6 +88,7 @@ offset_left = 906.0
 offset_top = 515.0
 offset_right = 1020.0
 offset_bottom = 610.0
+script = ExtResource("3_3cdyr")
 
 [node name="Close" type="TextureButton" parent="HBoxContainer/Background"]
 layout_mode = 0
@@ -92,6 +96,7 @@ offset_left = 950.0
 offset_top = 20.0
 offset_right = 990.0
 offset_bottom = 60.0
+script = ExtResource("3_3cdyr")
 
 [node name="ColorRect2" type="ColorRect" parent="HBoxContainer"]
 layout_mode = 2
