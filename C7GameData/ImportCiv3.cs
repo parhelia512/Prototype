@@ -59,6 +59,7 @@ namespace C7GameData {
 			ImportCitizenTypes();
 			ImportTerraforms();
 			ImportGovernments();
+			ImportDifficulties();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -78,6 +79,7 @@ namespace C7GameData {
 			ImportSavLeaders();
 			ImportSavUnits();
 			ImportSavCities();
+			save.GameDifficulty = save.Difficulties[savData.Game.DifficultyID];
 
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(savData, save);
@@ -1158,6 +1160,32 @@ namespace C7GameData {
 				g.unitCost = govt.UnitCost;
 
 				save.Governments.Add(g);
+			}
+		}
+
+		private void ImportDifficulties() {
+			BiqData theBiq = biq.Diff is null ? defaultBiq : biq;
+
+			foreach (QueryCiv3.Biq.DIFF diff in theBiq.Diff) {
+				Difficulty d = new();
+				d.id = ids.CreateID("Difficulty");
+				d.Name = diff.Name;
+				d.NumberOfCitizensBornContent = diff.NumberOfCitizensBornContent;
+				d.MaxAiGovernmentTransitionTime = diff.MaxGovernmentTransitionTime;
+				d.NumberOfAIDefensiveStartingUnits = diff.NumberOfAIDefensiveStartingUnits;
+				d.NumberOfAIOffensiveStartingUnits = diff.NumberOfAIOffensiveStartingUnits;
+				d.ExtraStartUnit1 = diff.ExtraStartUnit1;
+				d.ExtraStartUnit2 = diff.ExtraStartUnit2;
+				d.AdditionalFreeUnitSupport = diff.AdditionalFreeSupport;
+				d.UnitSupportBonusForEachSettlement = diff.UnitSupportBonusForEachSettlement;
+				d.AttackBonusAgainstBarbarians = diff.AttackBonusAgainstBarbarians;
+				d.CostFactor = diff.CostFactor;
+				d.PercentageOfOptimalCities = diff.PercentageOfOptimalCities;
+				d.AIToAITradeRate = diff.AIToAITradeRate;
+				d.CorruptionPercentage = diff.CorruptionPercentage;
+				d.MilitaryLaw = diff.MilitaryLaw;
+
+				save.Difficulties.Add(d);
 			}
 		}
 

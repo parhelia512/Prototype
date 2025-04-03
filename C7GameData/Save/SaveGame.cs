@@ -78,6 +78,8 @@ namespace C7GameData.Save {
 			save.CitizenTypes = data.citizenTypes;
 			save.TerraForms = data.Terraforms;
 			save.Governments = data.governments;
+			save.Difficulties = data.difficulties;
+			save.GameDifficulty = data.gameDifficulty;
 			return save;
 		}
 
@@ -119,6 +121,8 @@ namespace C7GameData.Save {
 				citizenTypes = CitizenTypes,
 				Terraforms = TerraForms,
 				governments = Governments,
+				difficulties = Difficulties,
+				gameDifficulty = GameDifficulty,
 				ids = new ID.Factory(this),
 				experienceLevels = ExperienceLevels,
 			};
@@ -295,6 +299,8 @@ namespace C7GameData.Save {
 		public List<Terraform> TerraForms = new();
 		public List<Government> Governments = new();
 		public string ScenarioSearchPath; // TODO: what is this
+		public List<Difficulty> Difficulties = new();
+		public Difficulty GameDifficulty = new();
 		public void Save(string path) {
 			byte[] json = JsonSerializer.SerializeToUtf8Bytes(this, JsonOptions);
 			File.WriteAllBytes(path, json);
