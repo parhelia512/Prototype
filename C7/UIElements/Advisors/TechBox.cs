@@ -62,5 +62,13 @@ public partial class TechBox : TextureButton {
 			OffsetTop = 12
 		};
 		AddChild(techName);
+
+		if (!tech.RequiredForEraAdvancement) {
+			TextureRect notRequired = new() {
+				Texture = Util.LoadTextureFromPCX("Art/Advisors/non_required.pcx"),
+			};
+			notRequired.SetPosition(new Vector2(85, 0));
+			AddChild(notRequired);
+		}
 	}
 }

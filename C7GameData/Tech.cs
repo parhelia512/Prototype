@@ -8,6 +8,7 @@ namespace C7GameData {
 		public string Name { get; set; }
 		public string CivilopediaEntry { get; set; }
 		public int Cost;
+		public bool RequiredForEraAdvancement;
 
 		// The civilopedia name of the era this tech is part of
 		// (like ERA_Ancient_Times). This is what art lookups are based on.
@@ -51,6 +52,7 @@ namespace C7GameData {
 				Name = this.Name,
 				CivilopediaEntry = this.CivilopediaEntry,
 				Cost = this.Cost,
+				RequiredForEraAdvancement = this.RequiredForEraAdvancement,
 				EraCivilopediaName = this.EraCivilopediaName,
 				SmallIconPath = this.SmallIconPath,
 				X = this.X,
