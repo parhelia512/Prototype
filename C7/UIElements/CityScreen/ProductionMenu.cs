@@ -4,28 +4,37 @@ using C7GameData;
 using C7Engine;
 using System;
 
-public partial class ProductionMenu : TextureRect {
+[Tool]
+[GlobalClass]
+public partial class ProductionMenu : Civ3TextureRect {
 	private Dictionary<TreeItem, IProducible> itemMapping = new();
 
-	public ProductionMenu(City city, Action<IProducible> chooseProduction) {
+	Tree tree = new();
+	Theme fontTheme = new();
+
+	public ProductionMenu() {
 		this.Texture = Util.LoadTextureFromPCX("Art/city screen/ProductionQueueBox.pcx");
 
 		// Load the font we'll use.
 		FontFile font = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf", null, ResourceLoader.CacheMode.Ignore);
 		font.FixedSize = 12;
-		Theme fontTheme = new();
 		fontTheme.DefaultFont = font;
 
 		// Set up the tree of items. We use a tree so we get a scroll bar and
 		// other niceties.
-		Tree tree = new();
 		AddChild(tree);
-
 		tree.Columns = 2;
-		TreeItem root = TradingTree.ConfigureTreeTheme(tree, fontTheme);
 
 		// Match the size of the texture used in the deal screen.
 		tree.Size = new Vector2(203, 360);
+
+		TradingTree.ConfigureTreeTheme(tree, fontTheme);
+	}
+
+	public void AddItems(City city, Action<IProducible> chooseProduction) {
+		tree.Clear();
+
+		TreeItem root = TradingTree.CreateTreeRoot(tree);
 
 		foreach (IProducible option in city.ListProductionOptions()) {
 			int buildTime = city.TurnsToProduce(option);

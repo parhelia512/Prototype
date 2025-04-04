@@ -26,7 +26,7 @@ public partial class CityScreen : Control {
 	[Export] private TextureButton productionButton;
 	[Export] private TextureButton close;
 
-	private ProductionMenu productionMenu;
+	[Export] private ProductionMenu productionMenu;
 
 	Theme yieldDetailsFontTheme = new();
 	FontFile yieldDetailsFont = new();
@@ -225,11 +225,7 @@ public partial class CityScreen : Control {
 	}
 
 	private void OnExit() {
-		if (productionMenu != null) {
-			productionMenu.QueueFree();
-			productionMenu = null;
-		}
-
+		productionMenu.Hide();
 		tileAssignmentLayer.city = null;
 	}
 
@@ -304,20 +300,11 @@ public partial class CityScreen : Control {
 			productionButtonLabel.SetTextAndCenterLabel($"{city.itemBeingProduced.name}");
 		}
 
-		bool wasVisible = false;
-		if (productionMenu != null) {
-			wasVisible = productionMenu.Visible;
-			productionMenu.QueueFree();
-			productionMenu = null;
-		}
-		productionMenu = new ProductionMenu(city, (IProducible p) => {
+		productionMenu.AddItems(city, (IProducible p) => {
 			using UIGameDataAccess gameDataAccess = new();
 			city.SetItemBeingProduced(p);
 			RenderProductionDetails(city);
 		});
-		background.AddChild(productionMenu);
-		productionMenu.SetPosition(new Vector2(814, 135));
-		productionMenu.Visible = wasVisible;
 	}
 
 	private void RenderCulture(City city) {
