@@ -324,6 +324,37 @@ namespace C7GameData {
 			int unitSupportCost = Math.Max(0, (totalUnits - allowedUnits) * government.unitCost);
 			return (totalUnits, allowedUnits, unitSupportCost);
 		}
+
+		// See https://forums.civfanatics.com/threads/military-advisor-relative-strength-assessment-definition.62980/post-1211499 and
+		// https://forums.civfanatics.com/threads/study-of-inner-workings-of-military-advisor.83599/
+		public float CalculateMilitaryStrength() {
+			float result = 4; // The +4 base is hypothesized to avoid div by 0 bugs.
+			foreach (MapUnit unit in units) {
+				UnitPrototype up = unit.unitType;
+				result += unit.maxHitPoints * (up.attack * 3 + up.defense * 2) + up.bombard;
+			}
+			return result;
+		}
+
+		public enum MilitaryStrength {
+			WeakTo,
+			EquivalentTo,
+			StrongTo,
+		};
+
+		// See https://forums.civfanatics.com/threads/study-of-inner-workings-of-military-advisor.83599/
+		public MilitaryStrength CompareMilitaryStrengthTo(Player other) {
+			float us = CalculateMilitaryStrength();
+			float them = other.CalculateMilitaryStrength();
+
+			if (us < 0.8 * them) {
+				return MilitaryStrength.WeakTo;
+			} else if (us > 1.2 * them) {
+				return MilitaryStrength.StrongTo;
+			} else {
+				return MilitaryStrength.EquivalentTo;
+			}
+		}
 	}
 
 }

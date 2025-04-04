@@ -44,6 +44,16 @@ namespace C7Engine {
 
 	public class MsgUpdateUiAfterSliderChange : MessageToUI { }
 
+	public class MsgWarDeclaration : MessageToUI {
+		public Player aggressor;
+		public Player opponent;
+
+		public MsgWarDeclaration(Player aggressor, Player opponent) {
+			this.aggressor = aggressor;
+			this.opponent = opponent;
+		}
+	}
+
 	public class MsgCityDestroyed : MessageToUI {
 		public City city;
 
