@@ -139,12 +139,18 @@ public partial class TradingTree : Tree {
 
 		if (needsPeaceTreaty) {
 			goldHeader.Visible = false;
-			techHeader.Visible = false;
 			peaceTreaty.Visible = true;
+
+			if (techHeader != null) {
+				techHeader.Visible = false;
+			}
 		} else {
 			goldHeader.Visible = true;
-			techHeader.Visible = true;
 			lumpSum.Visible = !currentOffer.gold.HasValue;
+
+			if (techHeader != null) {
+				techHeader.Visible = true;
+			}
 
 			foreach (TreeItem ti in techItems) {
 				ti.Visible = !currentOffer.techs.Any(x => x.Name == ti.GetText(0));
