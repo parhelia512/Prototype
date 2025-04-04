@@ -26,7 +26,9 @@ public partial class TradingTree : Tree {
 		this.currentOffer = currentOffer;
 		this.playerGold = playerGold;
 		this.Columns = 1;
-		TreeItem root = ConfigureTreeTheme(this, fontTheme);
+
+		ConfigureTreeTheme(this, fontTheme);
+		TreeItem root = CreateTreeRoot(this);
 
 		// Match the size of the texture used in the deal screen.
 		this.Size = new Vector2(190, 400);
@@ -137,12 +139,18 @@ public partial class TradingTree : Tree {
 
 		if (needsPeaceTreaty) {
 			goldHeader.Visible = false;
-			techHeader.Visible = false;
 			peaceTreaty.Visible = true;
+
+			if (techHeader != null) {
+				techHeader.Visible = false;
+			}
 		} else {
 			goldHeader.Visible = true;
-			techHeader.Visible = true;
 			lumpSum.Visible = !currentOffer.gold.HasValue;
+
+			if (techHeader != null) {
+				techHeader.Visible = true;
+			}
 
 			foreach (TreeItem ti in techItems) {
 				ti.Visible = !currentOffer.techs.Any(x => x.Name == ti.GetText(0));
@@ -154,13 +162,17 @@ public partial class TradingTree : Tree {
 		}
 	}
 
-	// The central styling for the trading tree and trade offer ui trees.
-	public static TreeItem ConfigureTreeTheme(Tree tree, Theme fontTheme) {
+	public static TreeItem CreateTreeRoot(Tree tree) {
 		// All trees have one root, but we don't want a single root, so hide it.
 		TreeItem root = tree.CreateItem();
 		tree.HideRoot = true;
 		tree.HideFolding = true;
 
+		return root;
+	}
+
+	// The central styling for the trading tree and trade offer ui trees.
+	public static void ConfigureTreeTheme(Tree tree, Theme fontTheme) {
 		// Configure the tree to look like we expect it to in civ - a transparent
 		// background with no lines between items.
 		Color transparent = new Color(0, 0, 0, 0);
@@ -179,7 +191,5 @@ public partial class TradingTree : Tree {
 		tree.AddThemeColorOverride("relationship_line_color", transparent);
 		tree.AddThemeColorOverride("guide_color", transparent);
 		tree.AddThemeConstantOverride("v_separation", 1);
-
-		return root;
 	}
 }

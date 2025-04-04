@@ -22,7 +22,8 @@ public partial class TradeOfferUi : Tree {
 		this.playerGold = playerGold;
 		this.Columns = 1;
 		this.AllowRmbSelect = true;
-		TreeItem root = TradingTree.ConfigureTreeTheme(this, fontTheme);
+		TradingTree.ConfigureTreeTheme(this, fontTheme);
+		TreeItem root = TradingTree.CreateTreeRoot(this);
 
 		// Match the size of the texture used in the deal screen.
 		this.Size = new Vector2(190, 100);

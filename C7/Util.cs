@@ -403,4 +403,20 @@ public partial class Util {
 
 		return wav;
 	}
+
+	// This method is intended for use within overrides of Godot object _ValidateProperty method.
+	// Its purpose is to prevent values of properties listed in validProperties from being saved as
+	// part of the scene.  It's useful when using [Tool] scripts to execute code in editor. It
+	// allows to load Civ3 textures as part of such scripts, but prevents these textures from being
+	// saved into the scene.
+	//
+	// See Godot docs on _ValidateProperty:
+	// https://docs.godotengine.org/en/4.2/classes/class_object.html#class-object-private-method-validate-property
+	public static void ApplyNoSaveFlag(Godot.Collections.Dictionary property, HashSet<StringName> validProperties) {
+		StringName propertyName = property["name"].AsStringName();
+
+		if (validProperties.Contains(propertyName)) {
+			property["usage"] = (int)PropertyUsageFlags.NoInstanceState;
+		}
+	}
 }
