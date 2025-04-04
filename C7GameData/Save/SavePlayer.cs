@@ -24,6 +24,7 @@ namespace C7GameData.Save {
 		public bool barbarian;
 		public bool human = false;
 		public bool hasPlayedCurrentTurn = false;
+		public bool defeated = false;
 
 		public string civilization;
 		public int cityNameIndex = 0;
@@ -78,6 +79,7 @@ namespace C7GameData.Save {
 				isBarbarians = barbarian,
 				isHuman = human,
 				hasPlayedThisTurn = hasPlayedCurrentTurn,
+				defeated = defeated,
 				colorIndex = colorIndex,
 				civilization = civilization is not null ? civilizations.Find(civ => civ.name == civilization) : null,
 				cityNameIndex = cityNameIndex,
@@ -121,6 +123,7 @@ namespace C7GameData.Save {
 			barbarian = player.isBarbarians;
 			human = player.isHuman;
 			hasPlayedCurrentTurn = player.hasPlayedThisTurn;
+			defeated = player.defeated;
 			civilization = player.civilization?.name;
 			// TODO: this should be computed by looking at cities defined in the save
 			// so that adding cities in the save structure doesn't require updating this value

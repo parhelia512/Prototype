@@ -17,6 +17,9 @@ namespace C7GameData {
 		public bool isHuman = false;
 		public bool hasPlayedThisTurn = false;
 
+		// Has this player been defeated?
+		public bool defeated = false;
+
 		public Civilization civilization;
 		internal int cityNameIndex = 0;
 

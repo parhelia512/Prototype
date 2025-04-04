@@ -67740,6 +67740,7 @@
       "barbarian": true,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "A Barbarian Chiefdom",
       "cityNameIndex": 0,
       "turnsUntilPriorityReevaluation": 0,
@@ -67758,6 +67759,7 @@
       "barbarian": false,
       "human": true,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "Carthage",
       "cityNameIndex": 0,
       "tileKnowledge": [
@@ -67835,6 +67837,7 @@
       "barbarian": false,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "America",
       "cityNameIndex": 0,
       "tileKnowledge": [
@@ -67912,6 +67915,7 @@
       "barbarian": false,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "Aztecs",
       "cityNameIndex": 0,
       "tileKnowledge": [
@@ -67985,6 +67989,7 @@
       "barbarian": false,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "Inca",
       "cityNameIndex": 0,
       "tileKnowledge": [
@@ -68062,6 +68067,7 @@
       "barbarian": false,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "Persia",
       "cityNameIndex": 0,
       "tileKnowledge": [
@@ -68143,6 +68149,7 @@
       "barbarian": false,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "Maya",
       "cityNameIndex": 0,
       "tileKnowledge": [
@@ -68220,6 +68227,7 @@
       "barbarian": false,
       "human": false,
       "hasPlayedCurrentTurn": false,
+      "defeated": false,
       "civilization": "Iroquois",
       "cityNameIndex": 0,
       "tileKnowledge": [

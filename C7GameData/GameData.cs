@@ -124,6 +124,52 @@ namespace C7GameData {
 			UpdateTileOwners();
 		}
 
+		public bool CheckForCivDestruction(Player player) {
+			// TODO: Implement the full set of conditions for destroying a civ;
+			// handling cases like 1 city elimination, regicide, settlers that
+			// are still alive, etc.
+			if (player.RemainingCities() > 0) {
+				return false;
+			}
+
+			// This was the last city of the civilization, so destroy remaining
+			// units.
+			player.defeated = true;
+			for (int i = 0; i < player.units.Count; ++i) {
+				DisbandUnit(player.units[i]);
+			}
+
+			// Remove this civ from all other player's relationships.
+			foreach (Player p in players) {
+				p.playerRelationships.Remove(player.id);
+			}
+
+			return true;
+		}
+
+		public void DisbandUnit(MapUnit unit) {
+			// Set unit's hit points to zero to indicate that it's no longer alive. Ultimately we may not want to do this. I'm only doing it right
+			// now since this way all the UI needs to do to check if the selected unit has been destroyed is to check its hit points.
+			unit.hitPointsRemaining = 0;
+			unit.movementPoints.onConsumeAll();
+
+			if (unit.currentAI != null) {
+				unit.currentAI.UpdateOnDeath();
+				unit.currentAI = null;
+			}
+
+			// EngineStorage.animTracker.endAnimation(unit, false);   TODO: Must send message instead of call directly
+			unit.location.unitsOnTile.Remove(unit);
+			mapUnits.Remove(unit);
+
+			// TODO: why not just do Player p = unit.owner; p.units.Remove(unit);?	
+			foreach (Player player in players) {
+				if (player.units.Contains(unit)) {
+					player.units.Remove(unit);
+				}
+			}
+		}
+
 		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/
 		private City ResolveTileOwnershipConflict(City a, City b, Tile t) {
 			int aRank = a.location.rankDistanceTo(t);

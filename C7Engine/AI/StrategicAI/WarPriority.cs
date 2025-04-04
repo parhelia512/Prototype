@@ -40,8 +40,6 @@ namespace C7GameData.AIData {
 			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
 				// TODO: Make sure having seen barbarians doesn't prevent us from
 				// declaring new wars.
-				//
-				// TODO: Make sure we update this when a civ is destroyed.
 				if (p.Value.atWar) {
 					this.calculatedWeight = 1000;
 					return;
