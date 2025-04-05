@@ -60,6 +60,7 @@ namespace C7GameData {
 			ImportTerraforms();
 			ImportGovernments();
 			ImportDifficulties();
+			ImportRules();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -1187,6 +1188,13 @@ namespace C7GameData {
 
 				save.Difficulties.Add(d);
 			}
+		}
+
+		private void ImportRules() {
+			BiqData theBiq = biq.Rule is null ? defaultBiq : biq;
+
+			save.Rules.MaximumResearchTime = theBiq.Rule[0].MaximumResearchTime;
+			save.Rules.MinimumResearchTime = theBiq.Rule[0].MinimumResearchTime;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

@@ -69747,6 +69747,10 @@
     "hostile_field": 0,
     "city": 2
   },
+  "rules": {
+    "maximumResearchTime": 50,
+    "minimumResearchTime": 4
+  },
   "techs": [
     {
       "name": "Bronze Working",

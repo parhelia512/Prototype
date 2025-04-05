@@ -80,6 +80,7 @@ namespace C7GameData.Save {
 			save.Governments = data.governments;
 			save.Difficulties = data.difficulties;
 			save.GameDifficulty = data.gameDifficulty;
+			save.Rules = data.rules;
 			return save;
 		}
 
@@ -125,6 +126,7 @@ namespace C7GameData.Save {
 				gameDifficulty = GameDifficulty,
 				ids = new ID.Factory(this),
 				experienceLevels = ExperienceLevels,
+				rules = Rules,
 			};
 		}
 
@@ -133,7 +135,7 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.rules));
 		}
 
 		private void ConvertTechnologies(GameData data) {
@@ -294,6 +296,7 @@ namespace C7GameData.Save {
 		public List<Civilization> Civilizations = new List<Civilization>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
+		public Rules Rules = new();
 		public List<SaveTech> Techs = new();
 		public List<CitizenType> CitizenTypes = new();
 		public List<Terraform> TerraForms = new();
