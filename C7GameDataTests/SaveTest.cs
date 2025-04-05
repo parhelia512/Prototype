@@ -60,7 +60,7 @@ public class SaveTests {
 
 		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
 
-		SaveGame saveNeverGameData = SaveGame.Load(developerSave);
+		SaveGame saveNeverGameData = SaveGame.Load(developerSave, (string unused) => { return unused; });
 
 		saveNeverGameData.Save(outputNeverGameDataPath);
 		GameData gameData = ToGameData(saveNeverGameData);
@@ -178,7 +178,7 @@ public class SaveTests {
 
 		// Load the saved game and save it again.
 		string roundTrippedSavePath = getDataPath("output/headless-game-round-tripped-save.json");
-		GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath));
+		GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath, (string unused) => { return unused; }));
 		SaveGame.FromGameData(roundTrippedGameData).Save(roundTrippedSavePath);
 
 		string[] directSaveLines = File.ReadAllLines(outputDirectSavePath);

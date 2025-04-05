@@ -301,7 +301,11 @@ namespace C7GameData.Save {
 		public List<CitizenType> CitizenTypes = new();
 		public List<Terraform> TerraForms = new();
 		public List<Government> Governments = new();
-		public string ScenarioSearchPath; // TODO: what is this
+
+		// The relative directory that can be used to find scenario-specific
+		// assets.
+		public string ScenarioSearchPath;
+
 		public List<Difficulty> Difficulties = new();
 		public Difficulty GameDifficulty = new();
 		public void Save(string path) {
@@ -309,8 +313,14 @@ namespace C7GameData.Save {
 			File.WriteAllBytes(path, json);
 		}
 
-		public static SaveGame Load(string path) {
-			return JsonSerializer.Deserialize<SaveGame>(File.ReadAllText(path), JsonOptions);
+		public static SaveGame Load(string path, Func<string, string> getPediaIconsPath) {
+			SaveGame result = JsonSerializer.Deserialize<SaveGame>(File.ReadAllText(path), JsonOptions);
+
+			// This lambda has side effects in the Game.cs code.
+			if (result.ScenarioSearchPath?.Count() > 0) {
+				getPediaIconsPath(result.ScenarioSearchPath);
+			}
+			return result;
 		}
 	}
 }
