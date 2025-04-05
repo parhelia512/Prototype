@@ -24,28 +24,6 @@ namespace C7GameData {
 
 		public List<Tech> Prerequisites = new();
 
-		public int TechCostFor(Player player) {
-			// Cost formula from https://forums.civfanatics.com/threads/research-cost-formula-v1-29f.29485/.
-			// Research Cost = [MM * [10*COST * (1 - N/[CL*1.75])]/(CF * 10)] - progress
-			//
-			// MM = map modifier (tiny=160, small=200, standard=240, large=320, huge=400)
-			// COST = tech cost
-			// CF = difficulty factor, range 10 (easy) to 6 (hard)
-			// N = number of known civs that have discovered the tech
-			// CL = civs left in game
-			//
-			// We also have the min/max turns to research of 4 and 50.
-			// TODO: the min/max costs are in the biq, we should load them.
-			// TODO: implement the civ-related parts of the equation
-			// TODO: figure out what map size we are
-			// TODO: See this this whole equation can be configurable
-			int mapModifier = 160;  // small, to make testing faster
-			int difficultyFactor = 10; // easy difficulty
-			int researchCost = mapModifier * 10 * Cost / (difficultyFactor * 10);
-
-			return researchCost;
-		}
-
 		public C7GameData.Save.SaveTech ToSaveTech() {
 			C7GameData.Save.SaveTech result = new() {
 				id = this.id,

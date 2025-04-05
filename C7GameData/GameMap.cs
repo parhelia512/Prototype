@@ -11,6 +11,8 @@ namespace C7GameData {
 		public int numTilesWide { get; set; }
 		public int numTilesTall { get; set; }
 		public bool wrapHorizontally, wrapVertically;
+		public int techRate;
+		public int optimalNumberOfCities;
 
 		// The terrainNoiseMap is a full width-by-height matrix unlike the normal game map which has only width/2 tiles per row which are staggered.
 		// This is kind of a temporary thing. The reason it works this way right now is because I'm just rearranging the generation code from

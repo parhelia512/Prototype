@@ -1215,6 +1215,8 @@ namespace C7GameData {
 			if (civ3Save is not null && civ3Save.Wrld.Height > 0 && civ3Save.Wrld.Width > 0) {
 				save.Map.tilesTall = civ3Save.Wrld.Height;
 				save.Map.tilesWide = civ3Save.Wrld.Width;
+				save.Map.techRate = civ3Save.Bic.Wsiz[civ3Save.Wrld.WsizID].TechRate;
+				save.Map.optimalNumberOfCities = civ3Save.Bic.Wsiz[civ3Save.Wrld.WsizID].OptimalNumberOfCities;
 			}
 		}
 
@@ -1222,6 +1224,8 @@ namespace C7GameData {
 			if (biq is not null && biq.Wmap is not null && biq.Wmap.Length > 0) {
 				save.Map.tilesTall = biq.Wmap[0].Height;
 				save.Map.tilesWide = biq.Wmap[0].Width;
+				save.Map.techRate = biq.Wsiz[biq.Wchr[0].WorldSize].TechRate;
+				save.Map.optimalNumberOfCities = biq.Wsiz[biq.Wchr[0].WorldSize].OptimalNumberOfCities;
 			}
 		}
 
