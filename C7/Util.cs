@@ -419,4 +419,13 @@ public partial class Util {
 			property["usage"] = (int)PropertyUsageFlags.NoInstanceState;
 		}
 	}
+
+	// Allow clearing the caches, so that scenarios with different files that
+	// have the same name can be loaded independently.
+	public static void ClearCaches() {
+		PcxCache.Clear();
+		ColorCache.Clear();
+		textureCache.Clear();
+		flicCache.Clear();
+	}
 }
