@@ -42,21 +42,7 @@ namespace C7Engine {
 				foreach (Player player in gameData.players) {
 					HandleCityResults(gameData, player);
 					player.DoPerTurnFinanceUpdates(gameData);
-
-					// TODO: This isn't quite accurate. This should only be
-					// incremented if the player is actually spending money on
-					// research, or has a science specialist.
-					player.turnsResearched++;
-
-					// Check to see if the player has finished researching their
-					// tech, and if they have, add it to the list of known techs
-					if (player.currentlyResearchedTech != null) {
-						Tech tech = gameData.techs.Find(x => x.id == player.currentlyResearchedTech);
-						if (player.EstimateTurnsToResearch(tech) <= 0) {
-							player.knownTechs.Add(player.currentlyResearchedTech);
-							player.SetCurrentlyResearchedTech(null);
-						}
-					}
+					player.DoPerTurnScienceUpdates(gameData);
 				}
 
 				// Now that the turn is ending, do all the bookkeeping for the

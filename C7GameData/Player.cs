@@ -73,16 +73,32 @@ namespace C7GameData {
 		public Government government;
 
 		public int EraIndex() {
-			if (eraCivilopediaName == "ERAS_Ancient_Times") {
+			return EraIndex(eraCivilopediaName);
+		}
+
+		public static int EraIndex(string era) {
+			if (era == "ERAS_Ancient_Times") {
 				return 0;
-			} else if (eraCivilopediaName == "ERAS_Middle_Ages") {
+			} else if (era == "ERAS_Middle_Ages") {
 				return 1;
-			} else if (eraCivilopediaName == "ERAS_Industrial_Age") {
+			} else if (era == "ERAS_Industrial_Age") {
 				return 2;
-			} else if (eraCivilopediaName == "ERAS_Modern_Era") {
+			} else if (era == "ERAS_Modern_Era") {
 				return 3;
 			}
 			return -1;
+		}
+
+		public static string EraIndexToEra(int index) {
+			if (index <= 0) {
+				return "ERAS_Ancient_Times";
+			} else if (index == 1) {
+				return "ERAS_Middle_Ages";
+			} else if (index == 2) {
+				return "ERAS_Industrial_Age";
+			} else {
+				return "ERAS_Modern_Era";
+			}
 		}
 
 		public void AddUnit(MapUnit unit) {
@@ -281,15 +297,13 @@ namespace C7GameData {
 			int remainingCost = tech.TechCostFor(this) - beakers;
 			int turnsRemaining = (int)Math.Ceiling((double)remainingCost / beakersPerTurn);
 
-			// We never spend more than 50 turns per tech.
+			// We never spend more than 50 turns per tech or less than 4.
 			int maxTurnsRemaining = 50 - turnsResearched;
+			int minTurnsRemaining = 4 - turnsResearched;
 
 			int result = Math.Min(turnsRemaining, maxTurnsRemaining);
+			result = Math.Max(result, minTurnsRemaining);
 
-			// Ensure every tech takes at least 4 turns.
-			if (result < 4 && turnsResearched < 4) {
-				return 4;
-			}
 			return result;
 		}
 
@@ -302,6 +316,51 @@ namespace C7GameData {
 				beakers += city.CurrentCommerceYield().beakers;
 			}
 			gold += CalculateGoldPerTurn();
+		}
+
+		public void DoPerTurnScienceUpdates(GameData gameData) {
+			if (currentlyResearchedTech == null) {
+				return;
+			}
+
+			// TODO: This isn't quite accurate. This should only be
+			// incremented if the player is actually spending money on
+			// research, or has a science specialist.
+			turnsResearched++;
+
+			// Check to see if the player has finished researching their
+			// tech, and if they have, add it to the list of known techs
+			Tech tech = gameData.techs.Find(x => x.id == currentlyResearchedTech);
+			if (EstimateTurnsToResearch(tech) > 0) {
+				return;
+			}
+
+			knownTechs.Add(currentlyResearchedTech);
+			SetCurrentlyResearchedTech(null);
+
+			if (CanAdvanceToNextEra(gameData)) {
+				eraCivilopediaName = EraIndexToEra(EraIndex() + 1);
+			}
+		}
+
+		private bool CanAdvanceToNextEra(GameData gameData) {
+			foreach (Tech t in gameData.techs) {
+				if (t.EraCivilopediaName != eraCivilopediaName) {
+					continue;
+				}
+
+				if (knownTechs.Contains(t.id)) {
+					continue;
+				}
+
+				// This is a tech in our era that we don't know. If it is
+				// required for era advancement we can't go to the next era yet.
+				if (t.RequiredForEraAdvancement) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
