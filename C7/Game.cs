@@ -96,6 +96,10 @@ public partial class Game : Node2D {
 		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 
 		try {
+			// Ensure we clear out our image caches, as scenarios and games will
+			// use the same filenames but have different content for them.
+			Util.ClearCaches();
+
 			var animSoundPlayer = new AudioStreamPlayer();
 			AddChild(animSoundPlayer);
 			civ3AnimData = new AnimationManager(animSoundPlayer);
