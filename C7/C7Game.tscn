@@ -65,7 +65,7 @@ _data = {
 "SlideOutAnimation": SubResource("1")
 }
 
-[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer", "doubleClickHandler")]
+[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer", "doubleClickHandler", "palaceScreen")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
@@ -75,6 +75,7 @@ diplomacy = NodePath("CanvasLayer/Diplomacy")
 slider = NodePath("CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom")
 animationPlayer = NodePath("CanvasLayer/Control/SlideOutBar/AnimationPlayer")
 doubleClickHandler = NodePath("DoubleClickHandler")
+palaceScreen = NodePath("CanvasLayer/PalaceScreen")
 
 [node name="DoubleClickHandler" type="Node" parent="."]
 script = ExtResource("2_t735q")
