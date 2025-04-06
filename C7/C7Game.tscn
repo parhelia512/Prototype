@@ -79,12 +79,6 @@ doubleClickHandler = NodePath("DoubleClickHandler")
 [node name="DoubleClickHandler" type="Node" parent="."]
 script = ExtResource("2_t735q")
 
-[node name="TextureRect" type="TextureRect" parent="DoubleClickHandler"]
-offset_left = -10.0
-offset_top = 3.0
-offset_right = 30.0
-offset_bottom = 43.0
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -151,9 +145,10 @@ grow_horizontal = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/ToolBar/MarginContainer"]
 layout_mode = 2
 
-[node name="MenuButton" type="TextureButton" parent="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer"]
+[node name="MenuButton" type="TextureButton" parent="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer" node_paths=PackedStringArray("popupOverlay")]
 layout_mode = 2
 script = ExtResource("4")
+popupOverlay = NodePath("../../../../../PopupOverlay")
 
 [node name="CivilopediaButton" type="TextureButton" parent="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer"]
 layout_mode = 2

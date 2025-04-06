@@ -25,7 +25,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	bool timerStarted = false;  //This "isStopped" returns false if it's never been started.  So we need this to know if we've ever started it.
 
 	[Signal] public delegate void BlinkyEndTurnButtonPressedEventHandler();
-	
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		this.CreateUI();
