@@ -1180,7 +1180,7 @@ namespace C7GameData {
 				d.AdditionalFreeUnitSupport = diff.AdditionalFreeSupport;
 				d.UnitSupportBonusForEachSettlement = diff.UnitSupportBonusForEachSettlement;
 				d.AttackBonusAgainstBarbarians = diff.AttackBonusAgainstBarbarians;
-				d.CostFactor = diff.CostFactor;
+				d.AiCostFactor = diff.CostFactor;
 				d.PercentageOfOptimalCities = diff.PercentageOfOptimalCities;
 				d.AIToAITradeRate = diff.AIToAITradeRate;
 				d.CorruptionPercentage = diff.CorruptionPercentage;
@@ -1195,6 +1195,7 @@ namespace C7GameData {
 
 			save.Rules.MaximumResearchTime = theBiq.Rule[0].MaximumResearchTime;
 			save.Rules.MinimumResearchTime = theBiq.Rule[0].MinimumResearchTime;
+			save.GameDifficulty = save.Difficulties[theBiq.Rule[0].DefaultDifficultyLevel];
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

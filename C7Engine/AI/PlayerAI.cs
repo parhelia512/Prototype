@@ -294,6 +294,11 @@ namespace C7Engine {
 					continue;
 				}
 
+				// Barbarians can't trade.
+				if (them.isBarbarians || us.isBarbarians) {
+					continue;
+				}
+
 				// TODO: Implement AI -> Human tech trading
 				if (them.isHuman) {
 					continue;
@@ -353,7 +358,7 @@ namespace C7Engine {
 				}
 
 				// Now use any gold to even things out, if possible.
-				int remainingDelta = weGive.GoldEquivalentFor(gD, them) - theirOfferValue;
+				int remainingDelta = Math.Max(0, weGive.GoldEquivalentFor(gD, them) - theirOfferValue);
 				weGive.gold -= Math.Min(remainingDelta, weGive.gold.Value);
 
 				// And ensure we minimize the total gold traded, to keep the

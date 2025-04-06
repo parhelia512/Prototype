@@ -28,7 +28,8 @@ namespace C7GameData {
 
 		// The cost factor for techs, growth, and production, 10 is a neutral
 		// value.
-		public int CostFactor;
+		public int AiCostFactor;
+		public int HumanCostFactor = 10;
 
 		public int PercentageOfOptimalCities;
 
