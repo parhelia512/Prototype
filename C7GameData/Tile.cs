@@ -195,16 +195,13 @@ namespace C7GameData {
 		// border expansion due to culture. So rank 1 is immediate neighbors,
 		// rank 2 is the "big fat cross", etc.
 		public int rankDistanceTo(Tile other) {
-			// We use sqrt(2) to try and "unskew" issues caused by the rotated
-			// rectangular grid. We need N/E/S/W tiles to be slightly further
-			// away than NE/SE/NW/SW tiles.
-			double deltaX = Math.Abs(map.CalculateXDelta(other.XCoordinate, this.XCoordinate)) * Math.Sqrt(2);
-			double deltaY = Math.Abs(map.CalculateYDelta(other.YCoordinate, this.YCoordinate)) * Math.Sqrt(2);
+			// Get the x and y deltas in the standard grid coordinates.
+			int dx = Math.Abs(map.CalculateXDelta(other.XCoordinate, this.XCoordinate));
+			int dy = Math.Abs(map.CalculateYDelta(other.YCoordinate, this.YCoordinate));
 
-			// Calculating the euclidian distance with an exponent of 1.8 instead
-			// of 2 gives us the correct results up to 99k culture (20k is a
-			// victory condition). Credit to KulkoBSW for this observation.
-			return (int)Math.Round(Math.Pow(Math.Pow(deltaX, 1.8) + Math.Pow(deltaY, 1.8), 1 / 1.8) / 2);
+			// Transform that to the rank distance using the formula from 
+			// https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/post-1551201
+			return (dx + dy) / 2 + Math.Abs(dx - dy) / 4;
 		}
 
 		public int foodYield(Player player) {
