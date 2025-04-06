@@ -1,6 +1,16 @@
 using Godot;
 using System;
 
+/// <summary>
+/// ConsoleButton is a custom control node that displays a textured button with a
+/// label. During gameplay the button is hidden by default.
+///
+/// This control is specifically made to be used inside a BoxContainer. Even
+/// when the button is hidden, the ConsoleButton node maintains its size to avoid
+/// triggering layout recalculations.
+///
+/// The button's tooltip and label text are customizable via exports.
+/// </summary>
 [GlobalClass]
 [Tool]
 public partial class ConsoleButton : Control {
