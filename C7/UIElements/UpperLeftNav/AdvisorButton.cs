@@ -1,7 +1,8 @@
 using Godot;
 using ConvertCiv3Media;
 
-public partial class AdvisorButton : TextureButton {
+[Tool]
+public partial class AdvisorButton : Civ3TextureButton {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		Pcx buttonPcx = new Pcx(Util.Civ3MediaPath("Art/interface/menuButtons.pcx"));
