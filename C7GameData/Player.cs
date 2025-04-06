@@ -256,7 +256,11 @@ namespace C7GameData {
 		}
 
 		public void ExecuteDeal(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+			log.Information($"Executing trade between {this} and {other}");
+			log.Information($"  {this} gives {ourOffer.ToString()}, worth {ourOffer.GoldEquivalentFor(other)} gold");
+			log.Information($"  {other} gives {theirOffer.ToString()}, worth {theirOffer.GoldEquivalentFor(this)} gold)");
 			if (theirOffer.partOfPeaceTreaty) {
+				log.Information($"  {this} is now at peace with {other}");
 				this.playerRelationships[other.id].atWar = false;
 				other.playerRelationships[this.id].atWar = false;
 			}
@@ -264,22 +268,18 @@ namespace C7GameData {
 			if (ourOffer.gold.HasValue) {
 				other.gold += ourOffer.gold.Value;
 				this.gold -= ourOffer.gold.Value;
-				log.Information($"Moved {ourOffer.gold.Value} gold from {this} to {other}");
 			}
 			if (theirOffer.gold.HasValue) {
 				this.gold += theirOffer.gold.Value;
 				other.gold -= theirOffer.gold.Value;
-				log.Information($"Moved {theirOffer.gold.Value} gold from {other} to {this}");
 			}
 
 			foreach (Tech t in ourOffer.techs) {
 				other.knownTechs.Add(t.id);
-				log.Information($"{this} taught {t.Name} to {other}");
 			}
 
 			foreach (Tech t in theirOffer.techs) {
 				this.knownTechs.Add(t.id);
-				log.Information($"{other} taught {t.Name} to {this}");
 			}
 		}
 
@@ -316,6 +316,7 @@ namespace C7GameData {
 				beakers += city.CurrentCommerceYield().beakers;
 			}
 			gold += CalculateGoldPerTurn();
+			// TODO: ensure we never go below zero.
 		}
 
 		public void DoPerTurnScienceUpdates(GameData gameData) {

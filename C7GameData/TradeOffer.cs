@@ -8,7 +8,6 @@ namespace C7GameData {
 		// the agreement.
 		public bool partOfPeaceTreaty = false;
 
-
 		public int? gold = null;
 		public List<Tech> techs = new();
 
@@ -31,6 +30,20 @@ namespace C7GameData {
 			partOfPeaceTreaty = false;
 			gold = null;
 			techs.Clear();
+		}
+
+		public string ToString() {
+			List<string> pieces = new();
+			if (partOfPeaceTreaty) {
+				pieces.Add("peace treaty");
+			}
+			if (gold != null) {
+				pieces.Add($"{gold.Value} gold");
+			}
+			foreach (Tech t in techs) {
+				pieces.Add(t.Name);
+			}
+			return string.Join(",", pieces);
 		}
 	}
 }
