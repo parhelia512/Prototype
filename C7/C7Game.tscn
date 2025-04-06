@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=22 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" path="res://Game.cs" id="1"]
 [ext_resource type="Script" path="res://DoubleClickHandler.cs" id="2_t735q"]
@@ -6,14 +6,18 @@
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/MenuButton.cs" id="4"]
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/CivilopediaButton.cs" id="5"]
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/AdvisorButton.cs" id="6"]
+[ext_resource type="Script" path="res://UIElements/GameStatus/LowerRightInfoBox.cs" id="6_24l34"]
 [ext_resource type="Script" path="res://UIElements/GameStatus/GameStatus.cs" id="7"]
+[ext_resource type="Script" path="res://UIElements/GameStatus/StatusMenu.cs" id="7_yn4xe"]
 [ext_resource type="Script" path="res://UIElements/UnitButtons/RenameButton.cs" id="8"]
+[ext_resource type="Script" path="res://UIElements/GameStatus/ConsoleButton.cs" id="8_7a2mf"]
 [ext_resource type="Script" path="res://UIElements/Popups/PopupOverlay.cs" id="9"]
 [ext_resource type="Theme" uid="uid://c1jpmssnhvodi" path="res://C7Theme.tres" id="10"]
 [ext_resource type="PackedScene" uid="uid://bo4yg85jcbgdx" path="res://UIElements/CityScreen/city_screen.tscn" id="11_12lt4"]
 [ext_resource type="Script" path="res://UIElements/UnitButtons/UnitButtons.cs" id="12"]
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="12_yjlfl"]
 [ext_resource type="Script" path="res://UIElements/Diplomacy/Diplomacy.cs" id="14"]
+[ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -76,6 +80,12 @@ doubleClickHandler = NodePath("DoubleClickHandler")
 [node name="DoubleClickHandler" type="Node" parent="."]
 script = ExtResource("2_t735q")
 
+[node name="TextureRect" type="TextureRect" parent="DoubleClickHandler"]
+offset_left = -10.0
+offset_top = 3.0
+offset_right = 30.0
+offset_bottom = 43.0
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -125,18 +135,6 @@ layout_mode = 2
 size_flags_vertical = 0
 alignment = 1
 
-[node name="GameStatus" type="MarginContainer" parent="CanvasLayer/Control" node_paths=PackedStringArray("popupOverlay")]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 0
-script = ExtResource("7")
-popupOverlay = NodePath("../../PopupOverlay")
-
 [node name="ToolBar" type="Control" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 10
@@ -148,16 +146,15 @@ mouse_filter = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 80.0
+offset_bottom = 29.0
 grow_horizontal = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/ToolBar/MarginContainer"]
 layout_mode = 2
 
-[node name="MenuButton" type="TextureButton" parent="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer" node_paths=PackedStringArray("popupOverlay")]
+[node name="MenuButton" type="TextureButton" parent="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 script = ExtResource("4")
-popupOverlay = NodePath("../../../../../PopupOverlay")
 
 [node name="CivilopediaButton" type="TextureButton" parent="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -180,8 +177,8 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 80.0
-offset_right = -108.0
-offset_bottom = -170.0
+offset_right = 9324.0
+offset_bottom = 1086.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 1
@@ -242,6 +239,73 @@ libraries = {
 "": SubResource("AnimationLibrary_bowxq")
 }
 
+[node name="GameStatus" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("lowerRightInfoBox")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -301.0
+offset_top = -139.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("7")
+lowerRightInfoBox = NodePath("LowerRightInfoBox")
+
+[node name="LowerRightInfoBox" type="TextureRect" parent="CanvasLayer/Control/GameStatus"]
+layout_mode = 2
+script = ExtResource("6_24l34")
+
+[node name="StatusMenu" type="VBoxContainer" parent="CanvasLayer/Control/GameStatus" node_paths=PackedStringArray("openDiplomacy", "openPalaceScreen", "popupOverlay", "palaceScreen")]
+layout_mode = 2
+offset_left = 272.0
+offset_top = 31.0
+offset_right = 288.0
+offset_bottom = 115.0
+size_flags_horizontal = 8
+theme_override_constants/separation = 1
+script = ExtResource("7_yn4xe")
+openDiplomacy = NodePath("Diplomacy")
+openPalaceScreen = NodePath("Palace")
+popupOverlay = NodePath("../../../PopupOverlay")
+palaceScreen = NodePath("../../../PalaceScreen")
+
+[node name="Diplomacy" type="Control" parent="CanvasLayer/Control/GameStatus/StatusMenu"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("8_7a2mf")
+text = "D"
+tooltipText = "Start Diplomacy"
+
+[node name="Espionage" type="Control" parent="CanvasLayer/Control/GameStatus/StatusMenu"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("8_7a2mf")
+text = "E"
+tooltipText = "Espionage"
+
+[node name="Palace" type="Control" parent="CanvasLayer/Control/GameStatus/StatusMenu"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("8_7a2mf")
+text = "P"
+tooltipText = "Palace View"
+
+[node name="Victory" type="Control" parent="CanvasLayer/Control/GameStatus/StatusMenu"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("8_7a2mf")
+text = "V"
+tooltipText = "Victory Status Screen"
+
+[node name="Spaceship" type="Control" parent="CanvasLayer/Control/GameStatus/StatusMenu"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("8_7a2mf")
+text = "S"
+tooltipText = "Spaceship"
+
 [node name="Advisor" type="CenterContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -252,6 +316,9 @@ theme = ExtResource("10")
 script = ExtResource("3")
 
 [node name="CityScreen" parent="CanvasLayer" instance=ExtResource("11_12lt4")]
+visible = false
+
+[node name="PalaceScreen" parent="CanvasLayer" instance=ExtResource("14_ud8vi")]
 visible = false
 
 [node name="Diplomacy" type="CenterContainer" parent="CanvasLayer" node_paths=PackedStringArray("popupOverlay")]
@@ -291,7 +358,6 @@ visible = false
 [connection signal="DoubleClick" from="DoubleClickHandler" to="." method="OnDoubleLeftMouseButtonClick"]
 [connection signal="SingleClick" from="DoubleClickHandler" to="." method="OnSingleLeftMouseButtonClick"]
 [connection signal="ActionRequested" from="CanvasLayer/Control/UnitButtons" to="." method="ProcessAction"]
-[connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus" to="." method="OnPlayerEndTurn"]
 [connection signal="pressed" from="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer/AdvisorButton" to="CanvasLayer/Advisor" method="ShowLatestAdvisor"]
 [connection signal="pressed" from="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer/UiBarEndTurnButton" to="." method="_onEndTurnButtonPressed"]
 [connection signal="toggled" from="CanvasLayer/Control/SlideOutBar/SlideToggle" to="." method="_on_SlideToggle_toggled"]
@@ -301,6 +367,7 @@ visible = false
 [connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/UpButton" to="." method="_on_UpButton_pressed"]
 [connection signal="value_changed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom" to="." method="_on_Zoom_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus" to="." method="OnPlayerEndTurn"]
 [connection signal="BuildCity" from="CanvasLayer/PopupOverlay" to="." method="OnBuildCity"]
 [connection signal="DiplomacySelection" from="CanvasLayer/PopupOverlay" to="." method="OnDiplomacySelected"]
 [connection signal="HidePopup" from="CanvasLayer/PopupOverlay" to="CanvasLayer/PopupOverlay" method="OnHidePopup"]

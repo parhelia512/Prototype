@@ -4,7 +4,9 @@ using C7GameData;
 using Serilog;
 using C7Engine;
 
-public partial class LowerRightInfoBox : TextureRect {
+[GlobalClass]
+[Tool]
+public partial class LowerRightInfoBox : Civ3TextureRect {
 	private ILogger log = LogManager.ForContext<LowerRightInfoBox>();
 
 	TextureButton nextTurnButton = new TextureButton();
@@ -18,8 +20,6 @@ public partial class LowerRightInfoBox : TextureRect {
 	Label terrainType = new Label();
 	Label yearAndGold = new Label();
 	Label scienceProgress = new();
-
-	TextureButton openDiplomacy = new ();
 
 	Timer blinkingTimer = new Timer();
 	bool timerStarted = false;  //This "isStopped" returns false if it's never been started.  So we need this to know if we've ever started it.
@@ -90,23 +90,6 @@ public partial class LowerRightInfoBox : TextureRect {
 		blinkingTimer.WaitTime = 0.6f;
 		blinkingTimer.Timeout += toggleEndTurnButton;
 		AddChild(blinkingTimer);
-
-		// Add the diplomacy button, with a "D" label on it.
-		openDiplomacy.TextureNormal = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 1, 1, 16, 16);
-		openDiplomacy.TextureHover = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 17, 1, 16, 16);
-		openDiplomacy.TexturePressed = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 33, 1, 16, 16);
-		openDiplomacy.SetPosition(new Vector2(268, 34));
-		openDiplomacy.Pressed += OpenDiplomacyPopup;
-		openDiplomacy.TooltipText = "Diplomacy";
-		AddChild(openDiplomacy);
-		openDiplomacy.Hide();
-
-		Label openDiplomacyLabel = new();
-		openDiplomacyLabel.Text = "D";
-		openDiplomacyLabel.OffsetLeft = 3;
-		openDiplomacyLabel.OffsetTop = -3;
-		openDiplomacyLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
-		openDiplomacy.AddChild(openDiplomacyLabel);
 	}
 
 	public void SetEndOfTurnStatus() {
@@ -162,6 +145,9 @@ public partial class LowerRightInfoBox : TextureRect {
 	}
 
 	public override void _Process(double delta) {
+		if (Engine.IsEditorHint())
+			return;
+
 		// Update our information each time we're drawn, just like the tile and
 		// city scenes.
 		using (UIGameDataAccess gameDataAccess = new()) {
@@ -197,22 +183,8 @@ public partial class LowerRightInfoBox : TextureRect {
 
 			// Civ and government.
 			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - {player.government.name} (5.5.0)");
-
-			// Only show the diplomacy button if we have civs to talk to.
-			if (player.playerRelationships.Count > 0 && !openDiplomacy.Visible) {
-				openDiplomacy.Show();
-			}
 		}
 
 		base._Process(delta);
-	}
-
-	private void OpenDiplomacyPopup() {
-		using (UIGameDataAccess gameDataAccess = new()) {
-			GameData gD = gameDataAccess.gameData;
-			Player player = gD.GetHumanPlayers()[0];
-
-			GetParent<GameStatus>().popupOverlay.ShowPopup(new DiplomacySelection(player, gD.players), PopupOverlay.PopupCategory.Info);
-		}
 	}
 }
