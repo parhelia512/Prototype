@@ -631,6 +631,9 @@ public partial class Game : Node2D {
 		if (eventKeyDown.Keycode == Godot.Key.F6) {
 			EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 		}
+		if (eventKeyDown.Keycode == Godot.Key.F9) {
+			palaceScreen.Show();
+		}
 	}
 
 	private void ToggleObserverMode() {
