@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=21 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" path="res://Game.cs" id="1"]
 [ext_resource type="Script" path="res://DoubleClickHandler.cs" id="2_t735q"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/CivilopediaButton.cs" id="5"]
 [ext_resource type="Script" path="res://UIElements/UpperLeftNav/AdvisorButton.cs" id="6"]
 [ext_resource type="Script" path="res://UIElements/GameStatus/LowerRightInfoBox.cs" id="6_24l34"]
-[ext_resource type="Script" path="res://UIElements/GameStatus/GameStatus.cs" id="7"]
 [ext_resource type="Script" path="res://UIElements/GameStatus/StatusMenu.cs" id="7_yn4xe"]
 [ext_resource type="Script" path="res://UIElements/UnitButtons/RenameButton.cs" id="8"]
 [ext_resource type="Script" path="res://UIElements/GameStatus/ConsoleButton.cs" id="8_7a2mf"]
@@ -239,7 +238,7 @@ libraries = {
 "": SubResource("AnimationLibrary_bowxq")
 }
 
-[node name="GameStatus" type="Control" parent="CanvasLayer/Control" node_paths=PackedStringArray("lowerRightInfoBox")]
+[node name="GameStatus" type="Control" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -250,8 +249,6 @@ offset_left = -301.0
 offset_top = -139.0
 grow_horizontal = 0
 grow_vertical = 0
-script = ExtResource("7")
-lowerRightInfoBox = NodePath("LowerRightInfoBox")
 
 [node name="LowerRightInfoBox" type="TextureRect" parent="CanvasLayer/Control/GameStatus"]
 layout_mode = 2
@@ -349,12 +346,12 @@ unique_name_in_owner = true
 visible = false
 
 [connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/UnitButtons" method="OnNewUnitSelected"]
-[connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus" method="OnNewUnitSelected"]
+[connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="OnNewUnitSelected"]
 [connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/UnitButtons" method="OnNoMoreAutoselectableUnits"]
-[connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus" method="OnNoMoreAutoselectableUnits"]
+[connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="SetEndOfTurnStatus"]
 [connection signal="ShowCityScreen" from="." to="CanvasLayer/CityScreen" method="OnShowCityScreen"]
 [connection signal="ShowSpecificAdvisor" from="." to="CanvasLayer/Advisor" method="OnShowSpecificAdvisor"]
-[connection signal="TurnEnded" from="." to="CanvasLayer/Control/GameStatus" method="OnTurnEnded"]
+[connection signal="TurnEnded" from="." to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="StopToggling"]
 [connection signal="DoubleClick" from="DoubleClickHandler" to="." method="OnDoubleLeftMouseButtonClick"]
 [connection signal="SingleClick" from="DoubleClickHandler" to="." method="OnSingleLeftMouseButtonClick"]
 [connection signal="ActionRequested" from="CanvasLayer/Control/UnitButtons" to="." method="ProcessAction"]
@@ -367,7 +364,7 @@ visible = false
 [connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/UpButton" to="." method="_on_UpButton_pressed"]
 [connection signal="value_changed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom" to="." method="_on_Zoom_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
-[connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus" to="." method="OnPlayerEndTurn"]
+[connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus/LowerRightInfoBox" to="." method="OnPlayerEndTurn"]
 [connection signal="BuildCity" from="CanvasLayer/PopupOverlay" to="." method="OnBuildCity"]
 [connection signal="DiplomacySelection" from="CanvasLayer/PopupOverlay" to="." method="OnDiplomacySelected"]
 [connection signal="HidePopup" from="CanvasLayer/PopupOverlay" to="CanvasLayer/PopupOverlay" method="OnHidePopup"]

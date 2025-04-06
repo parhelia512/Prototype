@@ -24,6 +24,8 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	Timer blinkingTimer = new Timer();
 	bool timerStarted = false;  //This "isStopped" returns false if it's never been started.  So we need this to know if we've ever started it.
 
+	[Signal] public delegate void BlinkyEndTurnButtonPressedEventHandler();
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		this.CreateUI();
@@ -92,7 +94,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		AddChild(blinkingTimer);
 	}
 
-	public void SetEndOfTurnStatus() {
+	private void SetEndOfTurnStatus() {
 		lblUnitSelected.Text = "ENTER or SPACEBAR for next turn";
 		attackDefenseMovement.Visible = false;
 		terrainType.Visible = false;
@@ -117,7 +119,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		}
 	}
 
-	public void StopToggling() {
+	private void StopToggling() {
 		nextTurnButton.TextureNormal = nextTurnOffTexture;
 		lblUnitSelected.Text = "Please wait...";
 		lblUnitSelected.Visible = true;
@@ -127,10 +129,10 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 	private void turnEnded() {
 		log.Debug("Emitting the blinky button pressed signal");
-		GetParent().EmitSignal(GameStatus.SignalName.BlinkyEndTurnButtonPressed);
+		EmitSignal(SignalName.BlinkyEndTurnButtonPressed);
 	}
 
-	public void UpdateUnitInfo(MapUnit NewUnit, TerrainType terrain) {
+	private void UpdateUnitInfo(MapUnit NewUnit, TerrainType terrain) {
 		terrainType.Text = terrain.DisplayName;
 		terrainType.Visible = true;
 		lblUnitSelected.Text = NewUnit.unitType.name;
@@ -186,5 +188,11 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		}
 
 		base._Process(delta);
+	}
+
+	private void OnNewUnitSelected(ParameterWrapper<MapUnit> wrappedMapUnit) {
+		MapUnit newUnit = wrappedMapUnit.Value;
+		log.Information("Selected unit: " + newUnit + " at " + newUnit.location);
+		UpdateUnitInfo(newUnit, newUnit.location.overlayTerrainType);
 	}
 }
