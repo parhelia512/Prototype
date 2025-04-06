@@ -227,6 +227,10 @@ public partial class UnitLayer : LooseLayer {
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
+		if (!UnitsVisible(gameData, tile)) {
+			return;
+		}
+
 		// First draw animated effects. These will always appear over top of units regardless of draw order due to z-index.
 		C7Animation tileEffect = looseView.mapView.game.animTracker.getTileEffect(tile);
 		if (tileEffect != null) {
@@ -285,5 +289,15 @@ public partial class UnitLayer : LooseLayer {
 				looseView.DrawLine(lineStart + new Vector2(0, 1), lineStart + new Vector2(8, 1), Color.Color8(75, 75, 75));
 			}
 		}
+	}
+
+	private bool UnitsVisible(GameData gameData, Tile t) {
+		if (gameData.observerMode) {
+			return true;
+		}
+
+		// Only draw units on active tiles - otherwise if the tile is only known
+		// but not actively seen, we can't see units.
+		return gameData.GetHumanPlayers()[0].tileKnowledge.isActiveTile(t);
 	}
 }
