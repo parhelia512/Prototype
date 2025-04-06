@@ -315,8 +315,40 @@ namespace C7GameData {
 			foreach (City city in cities) {
 				beakers += city.CurrentCommerceYield().beakers;
 			}
+
+			// Ensure we never go below 0 gold.
+			while (gold + CalculateGoldPerTurn() < 0) {
+				// Start by disbanding units to get things under control.
+				var (_, _, unitSupportCost) = TotalUnitsAllowedUnitsAndSupportCost();
+				if (unitSupportCost > 0) {
+					for (int i = 0; i < unitSupportCost / government.unitCost; ++i) {
+						MapUnit unitToDisband = units[GameData.rng.Next(units.Count)];
+						log.Information($"{this} is out of gold, disbanding {unitToDisband} to being unit support costs under control");
+						gameData.DisbandUnit(unitToDisband);
+					}
+					continue;
+				}
+
+				// If we're under the unit support cap, try lowering our science
+				// budget.
+				if (scienceRate > 0) {
+					--scienceRate;
+					++taxRate;
+					continue;
+				}
+
+				// If that wasn't sufficient, go after luxuries.
+				if (scienceRate > 0) {
+					--luxuryRate;
+					++taxRate;
+					continue;
+				}
+
+				// If the budget still isn't under control, something is wrong.
+				throw new Exception($"{this} was unable to get the budget under control despite being under the unit support cap and zeroing out the sliders");
+			}
+
 			gold += CalculateGoldPerTurn();
-			// TODO: ensure we never go below zero.
 		}
 
 		public void DoPerTurnScienceUpdates(GameData gameData) {

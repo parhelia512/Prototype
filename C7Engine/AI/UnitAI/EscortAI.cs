@@ -17,6 +17,10 @@ namespace C7Engine {
 		}
 
 		public void UpdateOnDeath() {
+			if (data.unitToEscort == null) {
+				return;
+			}
+
 			// When we're destroyed, clear out our reference to the unit we're
 			// escorting, and clear our their reference to us.
 			if (data.unitToEscort.currentAI is SettlerAI settlerAi) {
