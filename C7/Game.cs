@@ -82,6 +82,8 @@ public partial class Game : Node2D {
 	private AnimationPlayer animationPlayer;
 	[Export]
 	private DoubleClickHandler doubleClickHandler;
+	[Export]
+	private PalaceScreen palaceScreen;
 
 	bool errorOnLoad = false;
 
@@ -629,6 +631,9 @@ public partial class Game : Node2D {
 		if (eventKeyDown.Keycode == Godot.Key.F6) {
 			EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 		}
+		if (eventKeyDown.Keycode == Godot.Key.F9) {
+			palaceScreen.Show();
+		}
 	}
 
 	private void ToggleObserverMode() {
@@ -700,6 +705,11 @@ public partial class Game : Node2D {
 			return;
 		}
 
+		if (currentAction == C7Action.Escape && palaceScreen.Visible) {
+			palaceScreen.Hide();
+			return;
+		}
+
 		if (currentAction == C7Action.Escape && advisor.Visible) {
 			advisor.Hide();
 			return;
@@ -711,7 +721,7 @@ public partial class Game : Node2D {
 		}
 
 		// never poll for actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScreen.Visible) {
 			return;
 		}
 

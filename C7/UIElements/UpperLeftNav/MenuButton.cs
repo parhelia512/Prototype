@@ -1,7 +1,8 @@
 using Godot;
 using ConvertCiv3Media;
 
-public partial class MenuButton : TextureButton {
+[Tool]
+public partial class MenuButton : Civ3TextureButton {
 
 	[Export]
 	private PopupOverlay popupOverlay;

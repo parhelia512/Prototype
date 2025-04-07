@@ -1,7 +1,8 @@
 using Godot;
 using ConvertCiv3Media;
 
-public partial class CivilopediaButton : TextureButton {
+[Tool]
+public partial class CivilopediaButton : Civ3TextureButton {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {

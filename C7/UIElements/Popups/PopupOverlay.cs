@@ -3,6 +3,7 @@ using C7GameData;
 using Serilog;
 
 [GlobalClass]
+[Tool]
 public partial class PopupOverlay : HBoxContainer {
 
 	private ILogger log = LogManager.ForContext<PopupOverlay>();

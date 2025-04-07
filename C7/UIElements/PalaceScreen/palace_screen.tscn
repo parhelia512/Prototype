@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkcu255o1qrt1"]
+
+[ext_resource type="PackedScene" uid="uid://bnvwn0hhrsn82" path="res://UIElements/black_sidebars.tscn" id="1_a64pg"]
+[ext_resource type="Script" path="res://UIElements/PalaceScreen/PalaceScreen.cs" id="2_er1um"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2_p0gtj"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="4_yi45k"]
+
+[node name="PalaceScreen" node_paths=PackedStringArray("background", "close") instance=ExtResource("1_a64pg")]
+script = ExtResource("2_er1um")
+background = NodePath("HBoxContainer/Background")
+close = NodePath("HBoxContainer/Background/Close")
+
+[node name="Background" type="TextureRect" parent="HBoxContainer" index="1"]
+layout_mode = 2
+script = ExtResource("2_p0gtj")
+
+[node name="Close" type="TextureButton" parent="HBoxContainer/Background" index="0"]
+layout_mode = 0
+offset_left = 979.0
+offset_top = 11.0
+offset_right = 1011.0
+offset_bottom = 59.0
+script = ExtResource("4_yi45k")

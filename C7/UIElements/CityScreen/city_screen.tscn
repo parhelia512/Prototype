@@ -1,17 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bo4yg85jcbgdx"]
+[gd_scene load_steps=6 format=3 uid="uid://bo4yg85jcbgdx"]
 
 [ext_resource type="Script" path="res://UIElements/CityScreen/CityScreen.cs" id="1_e5kig"]
+[ext_resource type="PackedScene" uid="uid://bnvwn0hhrsn82" path="res://UIElements/black_sidebars.tscn" id="1_hl43g"]
 [ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2_0mao8"]
 [ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3_3cdyr"]
 [ext_resource type="Script" path="res://UIElements/CityScreen/ProductionMenu.cs" id="4_xfbtv"]
 
-[node name="CityScreen" type="VBoxContainer" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "productionButton", "close", "productionMenu")]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
+[node name="CityScreen" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "productionButton", "close", "productionMenu") instance=ExtResource("1_hl43g")]
 script = ExtResource("1_e5kig")
 background = NodePath("HBoxContainer/Background")
 existingBuildings = NodePath("HBoxContainer/Background/ScrollContainer/ExistingBuildings")
@@ -21,28 +16,13 @@ productionButton = NodePath("HBoxContainer/Background/ProductionButton")
 close = NodePath("HBoxContainer/Background/Close")
 productionMenu = NodePath("HBoxContainer/Background/ProductionMenu")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 2
-size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
-
-[node name="Background" type="TextureRect" parent="HBoxContainer"]
+[node name="Background" type="TextureRect" parent="HBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("2_0mao8")
 
-[node name="Improvements" type="Label" parent="HBoxContainer/Background"]
+[node name="Improvements" type="Label" parent="HBoxContainer/Background" index="0"]
 layout_mode = 2
 offset_left = 7.0
 offset_top = 514.0
@@ -50,17 +30,17 @@ offset_right = 116.0
 offset_bottom = 534.0
 text = "IMPROVEMENTS"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Background"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Background" index="1"]
 layout_mode = 2
 offset_left = 7.0
 offset_top = 537.0
 offset_right = 153.0
 offset_bottom = 759.0
 
-[node name="ExistingBuildings" type="VBoxContainer" parent="HBoxContainer/Background/ScrollContainer"]
+[node name="ExistingBuildings" type="VBoxContainer" parent="HBoxContainer/Background/ScrollContainer" index="0"]
 layout_mode = 2
 
-[node name="Culture" type="Label" parent="HBoxContainer/Background"]
+[node name="Culture" type="Label" parent="HBoxContainer/Background" index="2"]
 layout_mode = 0
 offset_left = 714.0
 offset_top = 4.0
@@ -68,7 +48,7 @@ offset_right = 775.0
 offset_bottom = 24.0
 text = "CULTURE"
 
-[node name="CulturePerTurn" type="Label" parent="HBoxContainer/Background"]
+[node name="CulturePerTurn" type="Label" parent="HBoxContainer/Background" index="3"]
 layout_mode = 0
 offset_left = 790.0
 offset_top = 4.0
@@ -76,7 +56,7 @@ offset_right = 830.0
 offset_bottom = 24.0
 text = "-1/turn"
 
-[node name="TotalCulture" type="Label" parent="HBoxContainer/Background"]
+[node name="TotalCulture" type="Label" parent="HBoxContainer/Background" index="4"]
 layout_mode = 0
 offset_left = 714.0
 offset_top = 60.0
@@ -84,7 +64,7 @@ offset_right = 815.0
 offset_bottom = 80.0
 text = "Total: 123/1234"
 
-[node name="ProductionButton" type="TextureButton" parent="HBoxContainer/Background"]
+[node name="ProductionButton" type="TextureButton" parent="HBoxContainer/Background" index="5"]
 layout_mode = 0
 offset_left = 906.0
 offset_top = 515.0
@@ -92,7 +72,7 @@ offset_right = 1020.0
 offset_bottom = 610.0
 script = ExtResource("3_3cdyr")
 
-[node name="Close" type="TextureButton" parent="HBoxContainer/Background"]
+[node name="Close" type="TextureButton" parent="HBoxContainer/Background" index="6"]
 layout_mode = 0
 offset_left = 950.0
 offset_top = 20.0
@@ -100,7 +80,7 @@ offset_right = 990.0
 offset_bottom = 60.0
 script = ExtResource("3_3cdyr")
 
-[node name="ProductionMenu" type="TextureRect" parent="HBoxContainer/Background"]
+[node name="ProductionMenu" type="TextureRect" parent="HBoxContainer/Background" index="7"]
 visible = false
 layout_mode = 0
 offset_left = 814.0
@@ -108,14 +88,3 @@ offset_top = 135.0
 offset_right = 1017.0
 offset_bottom = 495.0
 script = ExtResource("4_xfbtv")
-
-[node name="ColorRect2" type="ColorRect" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
-
-[node name="ColorRect2" type="ColorRect" parent="."]
-layout_mode = 2
-size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
