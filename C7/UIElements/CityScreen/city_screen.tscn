@@ -1,19 +1,42 @@
-[gd_scene load_steps=6 format=3 uid="uid://bo4yg85jcbgdx"]
+[gd_scene load_steps=12 format=3 uid="uid://bo4yg85jcbgdx"]
 
 [ext_resource type="Script" path="res://UIElements/CityScreen/CityScreen.cs" id="1_e5kig"]
 [ext_resource type="PackedScene" uid="uid://bnvwn0hhrsn82" path="res://UIElements/black_sidebars.tscn" id="1_hl43g"]
 [ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2_0mao8"]
 [ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3_3cdyr"]
 [ext_resource type="Script" path="res://UIElements/CityScreen/ProductionMenu.cs" id="4_xfbtv"]
+[ext_resource type="FontFile" uid="uid://c1qd602n7xu3h" path="res://Fonts/NotoSans-Regular.ttf" id="5_hld1k"]
 
-[node name="CityScreen" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "productionButton", "close", "productionMenu") instance=ExtResource("1_hl43g")]
+[sub_resource type="InputEventKey" id="InputEventKey_ce4da"]
+device = -1
+keycode = 4194319
+
+[sub_resource type="Shortcut" id="Shortcut_ub3nk"]
+events = [SubResource("InputEventKey_ce4da")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_5maft"]
+device = -1
+keycode = 4194321
+
+[sub_resource type="Shortcut" id="Shortcut_o26ee"]
+events = [SubResource("InputEventKey_5maft")]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wgpk8"]
+font = ExtResource("5_hld1k")
+font_size = 28
+font_color = Color(0, 0, 0, 1)
+
+[node name="CityScreen" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "cityName", "productionButton", "close", "previousCity", "nextCity", "productionMenu") instance=ExtResource("1_hl43g")]
 script = ExtResource("1_e5kig")
 background = NodePath("HBoxContainer/Background")
 existingBuildings = NodePath("HBoxContainer/Background/ScrollContainer/ExistingBuildings")
 culturePerTurn = NodePath("HBoxContainer/Background/CulturePerTurn")
 totalCulture = NodePath("HBoxContainer/Background/TotalCulture")
+cityName = NodePath("HBoxContainer/Background/CityName")
 productionButton = NodePath("HBoxContainer/Background/ProductionButton")
 close = NodePath("HBoxContainer/Background/Close")
+previousCity = NodePath("HBoxContainer/Background/PreviousCity")
+nextCity = NodePath("HBoxContainer/Background/NextCity")
 productionMenu = NodePath("HBoxContainer/Background/ProductionMenu")
 
 [node name="Background" type="TextureRect" parent="HBoxContainer" index="1"]
@@ -88,3 +111,31 @@ offset_top = 135.0
 offset_right = 1017.0
 offset_bottom = 495.0
 script = ExtResource("4_xfbtv")
+
+[node name="PreviousCity" type="TextureButton" parent="HBoxContainer/Background" index="8"]
+layout_mode = 0
+offset_left = 359.0
+offset_top = 31.0
+offset_right = 399.0
+offset_bottom = 79.0
+shortcut = SubResource("Shortcut_ub3nk")
+script = ExtResource("3_3cdyr")
+
+[node name="NextCity" type="TextureButton" parent="HBoxContainer/Background" index="9"]
+layout_mode = 0
+offset_left = 625.0
+offset_top = 31.0
+offset_right = 665.0
+offset_bottom = 79.0
+shortcut = SubResource("Shortcut_o26ee")
+script = ExtResource("3_3cdyr")
+
+[node name="CityName" type="Label" parent="HBoxContainer/Background" index="10"]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 18.0
+offset_right = 630.0
+offset_bottom = 60.0
+text = "Placeholder City"
+label_settings = SubResource("LabelSettings_wgpk8")
+horizontal_alignment = 1
