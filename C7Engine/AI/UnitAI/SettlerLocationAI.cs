@@ -73,9 +73,9 @@ namespace C7Engine {
 		}
 
 		private static int GetTileYieldScore(Tile t, Player owner) {
-			int score = t.foodYield(owner) * 5;
-			score += t.productionYield(owner) * 3;
-			score += t.commerceYield(owner) * 2;
+			int score = t.foodYield(owner).yield * 5;
+			score += t.productionYield(owner).yield * 3;
+			score += t.commerceYield(owner).yield * 2;
 			if (owner.KnowsAboutResource(t.Resource)) {
 				if (t.Resource.Category == ResourceCategory.STRATEGIC) {
 					score += STRATEGIC_RESOURCE_BONUS;

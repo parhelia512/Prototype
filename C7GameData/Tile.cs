@@ -6,6 +6,17 @@ namespace C7GameData {
 	using C7GameData.Save;
 
 	public class Tile {
+		public class TileYield {
+			public TileYield(int yield, Player player) {
+				bool despotismPenalty = player.government.hasTilePenalty;
+				this.penalty = yield > 2 && despotismPenalty ? 1 : 0;
+				this.yield = yield - penalty;
+			}
+
+			public int penalty = 0;
+			public int yield = 0;
+		}
+
 		public ID Id { get; internal set; }
 		public Civ3ExtraInfo ExtraInfo;
 		public int XCoordinate;
@@ -204,7 +215,7 @@ namespace C7GameData {
 			return (dx + dy) / 2 + Math.Abs(dx - dy) / 4;
 		}
 
-		public int foodYield(Player player) {
+		public TileYield foodYield(Player player) {
 			int yield = overlayTerrainType.baseFoodProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.FoodBonus;
@@ -228,10 +239,10 @@ namespace C7GameData {
 				// water source or has already reached city size (≥ 7)
 			}
 
-			return yield;
+			return new TileYield(yield, player);
 		}
 
-		public int productionYield(Player player) {
+		public TileYield productionYield(Player player) {
 			int yield = overlayTerrainType.baseShieldProduction;
 			if (overlayTerrainType.Key == "grassland" && this.isBonusShield) {
 				yield++;
@@ -266,10 +277,10 @@ namespace C7GameData {
 				}
 			}
 
-			return yield;
+			return new TileYield(yield, player);
 		}
 
-		public int commerceYield(Player player) {
+		public TileYield commerceYield(Player player) {
 			int yield = overlayTerrainType.baseCommerceProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.CommerceBonus;
@@ -309,7 +320,7 @@ namespace C7GameData {
 			// TODO: handle the commerce bonus for costal cities+seafaring
 			// TODO: handle the commerce bonus for commerial civs
 			// TODO: handle the commerce bonus from Republic/Democracy.
-			return yield;
+			return new TileYield(yield, player);
 		}
 
 		public bool BordersRiver() {
@@ -368,7 +379,7 @@ namespace C7GameData {
 
 		//Convenience method for printing the yield
 		public string YieldString(Player player) {
-			return $"{foodYield(player)}/{productionYield(player)}/{commerceYield(player)})";
+			return $"{foodYield(player).yield}/{productionYield(player).yield}/{commerceYield(player).yield})";
 		}
 
 		public Player? OwningPlayer() {

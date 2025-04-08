@@ -4,10 +4,12 @@ using Xunit;
 public class CityTest {
 	[Fact]
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf9_of_10ProductionDone() {
+		Player player = new();
+		player.government = new Government();
 		UnitPrototype warrior = new UnitPrototype();
 		warrior.shieldCost = 10;
 
-		City city = new City(Tile.NONE, null, "Fighter Town, USA", ID.None("city"));
+		City city = new City(Tile.NONE, player, "Fighter Town, USA", ID.None("city"));
 		city.itemBeingProduced = warrior;
 		city.shieldsStored = 9;
 
@@ -27,11 +29,13 @@ public class CityTest {
 
 	[Fact]
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf19_of_20FoodDone() {
+		Player player = new();
+		player.government = new Government();
 		TerrainType oneShield = new TerrainType();
 		oneShield.baseShieldProduction = 1;
 		Tile tile = new Tile(ID.None("tile"));
 
-		City city = new City(tile, null, "Gotham", ID.None("city"));
+		City city = new City(tile, player, "Gotham", ID.None("city"));
 		city.foodStored = 19;
 		city.size = 1;
 		tile.cityAtTile = city;

@@ -188,9 +188,9 @@ public partial class CityScreen : Control {
 			CityResident worst = null;
 
 			foreach (CityResident cr in city.residents) {
-				int tileYield = cr.tileWorked.foodYield(city.owner) +
-								cr.tileWorked.productionYield(city.owner) +
-								cr.tileWorked.commerceYield(city.owner);
+				int tileYield = cr.tileWorked.foodYield(city.owner).yield +
+								cr.tileWorked.productionYield(city.owner).yield +
+								cr.tileWorked.commerceYield(city.owner).yield;
 				if (tileYield < worstYield) {
 					worstYield = tileYield;
 					worst = cr;

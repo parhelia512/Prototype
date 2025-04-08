@@ -51,25 +51,43 @@ namespace C7.Map {
 				return;
 			}
 
-			int food = tile.foodYield(city.owner);
-			int shields = tile.productionYield(city.owner);
-			int gold = tile.commerceYield(city.owner);
+			Tile.TileYield food = tile.foodYield(city.owner);
+			Tile.TileYield shields = tile.productionYield(city.owner);
+			Tile.TileYield gold = tile.commerceYield(city.owner);
 
-			int totalWidth = (food * foodTexture.GetWidth()) +
-						(shields * shieldTexture.GetWidth()) +
-						(gold * goldTexture.GetWidth());
+			int totalWidth = ((food.penalty + food.yield) * foodTexture.GetWidth()) +
+						((shields.penalty + shields.yield) * shieldTexture.GetWidth()) +
+						((gold.penalty + gold.yield) * goldTexture.GetWidth());
 			int currentXOffset = -totalWidth / 2;
 
-			for (int i = 0; i < food; ++i) {
+			for (int i = 0; i < food.yield; ++i) {
 				looseView.DrawTexture(foodTexture, tileCenter + new Vector2(currentXOffset, -15));
 				currentXOffset += foodTexture.GetWidth();
 			}
-			for (int i = 0; i < shields; ++i) {
+			for (int i = 0; i < food.penalty; ++i) {
+				looseView.DrawTexture(foodTexture, tileCenter + new Vector2(currentXOffset, -15));
+				DrawX(looseView, foodTexture, tileCenter + new Vector2(currentXOffset, -15));
+				currentXOffset += foodTexture.GetWidth();
+			}
+
+			for (int i = 0; i < shields.yield; ++i) {
 				looseView.DrawTexture(shieldTexture, tileCenter + new Vector2(currentXOffset, -15));
 				currentXOffset += shieldTexture.GetWidth();
 			}
-			for (int i = 0; i < gold; ++i) {
+			for (int i = 0; i < shields.penalty; ++i) {
+				looseView.DrawTexture(shieldTexture, tileCenter + new Vector2(currentXOffset, -15));
+				// Make the X wider by passing in the gold texture.
+				DrawX(looseView, goldTexture, tileCenter + new Vector2(currentXOffset, -15));
+				currentXOffset += shieldTexture.GetWidth();
+			}
+
+			for (int i = 0; i < gold.yield; ++i) {
 				looseView.DrawTexture(goldTexture, tileCenter + new Vector2(currentXOffset, -15));
+				currentXOffset += goldTexture.GetWidth();
+			}
+			for (int i = 0; i < gold.penalty; ++i) {
+				looseView.DrawTexture(goldTexture, tileCenter + new Vector2(currentXOffset, -15));
+				DrawX(looseView, goldTexture, tileCenter + new Vector2(currentXOffset, -15));
 				currentXOffset += goldTexture.GetWidth();
 			}
 		}
@@ -141,6 +159,23 @@ namespace C7.Map {
 			looseView.DrawLine(tileCenter + new Vector2(tileWidth / 2, 0),
 								tileCenter + new Vector2(0, tileHeight / 2),
 								color, lineWidth);
+		}
+
+		private void DrawX(LooseView looseView, ImageTexture texture, Vector2 upperLeft) {
+			upperLeft += new Vector2(0, 5);
+			Vector2 upperRight = upperLeft + new Vector2(texture.GetWidth() - 5, 0);
+			Vector2 lowerLeft = upperLeft + new Vector2(0, texture.GetHeight() - 10);
+			Vector2 lowerRight = upperRight + new Vector2(0, texture.GetHeight() - 10);
+
+			Color color = Colors.Red;
+			int lineWidth = 2;
+			looseView.DrawLine(upperLeft, lowerRight, color, lineWidth);
+			looseView.DrawLine(lowerLeft, upperRight, color, lineWidth);
+
+
+			looseView.DrawString(ThemeDB.FallbackFont,
+								 upperLeft + new Vector2(-8, 0), "Desp",
+								 HorizontalAlignment.Left, -1, 13, Colors.Black);
 		}
 	}
 }
