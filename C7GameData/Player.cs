@@ -221,12 +221,11 @@ namespace C7GameData {
 			return isBarbarians;
 		}
 
-		// Once we have technologies, not all resources will be known at the start.
-		// Eventually, perhaps there will be other gates around resource access as well
-		// For now, just always return true, but have this method so we have that structure
-		// in place.
 		public bool KnowsAboutResource(Resource resource) {
-			return true;
+			if (resource.Prerequisite == null) {
+				return true;
+			}
+			return knownTechs.Contains(resource.Prerequisite);
 		}
 
 		public int RemainingCities() {
