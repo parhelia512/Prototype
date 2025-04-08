@@ -22,9 +22,12 @@ public partial class CityScreen : Control {
 	[Export] private VBoxContainer existingBuildings;
 	[Export] private Label culturePerTurn;
 	[Export] private Label totalCulture;
+	[Export] private Label cityName;
 
 	[Export] private TextureButton productionButton;
 	[Export] private TextureButton close;
+	[Export] private TextureButton previousCity;
+	[Export] private TextureButton nextCity;
 
 	[Export] private ProductionMenu productionMenu;
 
@@ -47,6 +50,16 @@ public partial class CityScreen : Control {
 		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 32, 48);
 
 		close.Pressed += Hide;
+
+		previousCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 1, 40, 48);
+		previousCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 50, 40, 48);
+		previousCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 99, 40, 48);
+		previousCity.Pressed += SwitchToPreviousCity;
+
+		nextCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 1, 40, 48);
+		nextCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 50, 40, 48);
+		nextCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 99, 40, 48);
+		nextCity.Pressed += SwitchToNextCity;
 
 		// Load the font we'll use for the details.
 		//
@@ -216,6 +229,7 @@ public partial class CityScreen : Control {
 		this.Show();
 		mapView.centerCameraOnTile(city.Value.location.neighbors[TileDirection.SOUTH]);
 		tileAssignmentLayer.city = city.Value;
+		cityName.Text = city.Value.name;
 		RenderPopHeads(city.Value);
 		RenderCulture(city.Value);
 		RenderFoodDetails(city.Value);
@@ -394,5 +408,19 @@ public partial class CityScreen : Control {
 			popHeads.Add(tb);
 			xPos += 48;
 		}
+	}
+
+	private void SwitchToNextCity() {
+		City currentCity = tileAssignmentLayer.city;
+		List<City> cities = currentCity.owner.cities;
+		City nextCity = cities[(cities.IndexOf(currentCity) + 1) % cities.Count];
+		OnShowCityScreen(new ParameterWrapper<City>(nextCity));
+	}
+
+	private void SwitchToPreviousCity() {
+		City currentCity = tileAssignmentLayer.city;
+		List<City> cities = currentCity.owner.cities;
+		City previousCity = cities[(cities.IndexOf(currentCity) + cities.Count - 1) % cities.Count];
+		OnShowCityScreen(new ParameterWrapper<City>(previousCity));
 	}
 }
