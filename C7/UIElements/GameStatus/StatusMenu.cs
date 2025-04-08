@@ -19,6 +19,10 @@ public partial class StatusMenu : Control {
 	public override void _Process(double delta) {
 		using UIGameDataAccess gameDataAccess = new();
 		GameData gD = gameDataAccess.gameData;
+		if (gD.observerMode) {
+			return;
+		}
+
 		Player player = gD.GetHumanPlayers()[0];
 
 		// Only show the diplomacy button if we have civs to talk to.
