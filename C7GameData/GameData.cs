@@ -91,6 +91,10 @@ namespace C7GameData {
 		// TODO: This is a placeholder method for calculating tile owners.
 		// Currently, it marks a tile as owned only if it is a city tile or adjacent to a city.
 		public void UpdateTileOwners() {
+			// We do this at the end of the method - we don't need to do this
+			// for each tile we add in the loop below.
+			bool recomputeActiveTiles = false;
+
 			foreach (City city in cities) {
 				if (city.size == 0) {
 					continue; // skip destroyed cities
@@ -103,12 +107,12 @@ namespace C7GameData {
 					// that conflict.
 					if (t.owningCity != null) {
 						t.owningCity = ResolveTileOwnershipConflict(t.owningCity, city, t);
-						t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
+						t.owningCity.owner.tileKnowledge.AddTilesToKnown(t, recomputeActiveTiles);
 						continue;
 					}
 
 					t.owningCity = city;
-					t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
+					t.owningCity.owner.tileKnowledge.AddTilesToKnown(t, recomputeActiveTiles);
 				}
 			}
 

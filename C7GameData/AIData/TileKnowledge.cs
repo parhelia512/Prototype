@@ -20,7 +20,7 @@ namespace C7GameData {
 		// The set of tiles this player currently has explorers headed towards.
 		public HashSet<Tile> aiExplorationTargets = new();
 
-		public void AddTilesToKnown(Tile unitLocation) {
+		public void AddTilesToKnown(Tile unitLocation, bool recomputeActiveTiles = true) {
 			knownTiles.Add(unitLocation);
 			borderTiles.Remove(unitLocation);
 
@@ -42,7 +42,9 @@ namespace C7GameData {
 				}
 			}
 
-			RecomputeActiveTiles();
+			if (recomputeActiveTiles) {
+				RecomputeActiveTiles();
+			}
 		}
 
 		// neighboring tiles should not be added when loading tile knowledge
