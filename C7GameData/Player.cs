@@ -323,7 +323,7 @@ namespace C7GameData {
 				if (unitSupportCost > 0) {
 					for (int i = 0; i < unitSupportCost / government.unitCost; ++i) {
 						MapUnit unitToDisband = units[GameData.rng.Next(units.Count)];
-						log.Information($"{this} is out of gold, disbanding {unitToDisband} to being unit support costs under control");
+						log.Information($"{this} is out of gold, disbanding {unitToDisband} at {unitToDisband.location} to being unit support costs under control");
 						gameData.DisbandUnit(unitToDisband);
 					}
 					continue;
