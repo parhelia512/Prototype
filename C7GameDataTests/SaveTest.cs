@@ -138,7 +138,10 @@ public class SaveTests {
 					if (settlerAi.data.escort != null) {
 						Assert.Equal(settlerAi.data.escort.location, u.location);
 					} else {
-						Assert.True(u.location.unitsOnTile.Count > 1);
+						// This assertion is tempting, but will sometimes fire
+						// if the escort is disbanded due to unit support costs.
+						//
+						// Assert.True(u.location.unitsOnTile.Count > 1, $"{u} {u.location}");
 					}
 				}
 			}
