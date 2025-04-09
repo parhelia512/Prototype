@@ -59,4 +59,19 @@ namespace C7Engine.Pathing {
 			return result;
 		}
 	}
+
+	public class TradeNetworkWalker : EdgeWalker<Tile> {
+		public override IEnumerable<Edge<Tile>> getEdges(Tile node) {
+			List<Edge<Tile>> result = [];
+
+			// TODO: When buildings are implemented, the logic for airports and harbors should also be included.
+			foreach (Tile neighbor in node.neighbors.Values) {
+				if (neighbor.HasCity || neighbor.overlays.road) {
+					result.Add(new Edge<Tile>(node, neighbor, 1));
+				}
+			}
+
+			return result;
+		}
+	}
 }
