@@ -321,6 +321,15 @@ namespace C7GameData {
 			return result;
 		}
 
+		public string SummarizeScience(GameData gD) {
+			Tech tech = gD.techs.Find(x => x.id == currentlyResearchedTech);
+			if (tech == null) {
+				return "Not selected (-- turns)";
+			}
+
+			return $"{tech.Name} ({EstimateTurnsToResearch(gD, tech)} turns)";
+		}
+
 		public void DoPerTurnFinanceUpdates(GameData gameData) {
 			if (isBarbarians) {
 				return;

@@ -8,6 +8,16 @@ using System;
 public partial class DomesticAdvisor : Control {
 	[Export] TextureRect background;
 	[Export] TextureButton close;
+	[Export] TextureButton changeGovernment;
+	[Export] Label governmentLabel;
+	[Export] Label scienceStatus;
+	[Export] Label treasury;
+	[Export] Label incomeDetails;
+	[Export] Label expenseDetails;
+	[Export] Label incomeSummary;
+	[Export] Label expenseSummary;
+	[Export] Label sumSummary;
+	[Export] Label growth;
 
 	TextureRect scienceSliderIcon = new();
 	Label scienceSliderLabel = new();
@@ -55,6 +65,11 @@ public partial class DomesticAdvisor : Control {
 		close.TextureHover = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 72, 0, 72, 48);
 		close.TexturePressed = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 144, 0, 72, 48);
 		close.Pressed += Hide;
+
+		changeGovernment.TextureNormal = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 1, 145, 24);
+		changeGovernment.TextureHover = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 26, 145, 24);
+		changeGovernment.TexturePressed = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 52, 145, 24);
+		// TODO: implement changing governments
 
 		ImageTexture scienceSliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 34, 2, 30, 30);
 		ImageTexture luxurySliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 376, 2, 30, 30);
@@ -110,18 +125,38 @@ public partial class DomesticAdvisor : Control {
 	public void ShowAdvisor() {
 		Show();
 
-		int scienceRate = 5;
-		int luxuryRate = 5;
-		using (UIGameDataAccess gameDataAccess = new()) {
-			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
-			scienceRate = player.scienceRate;
-			luxuryRate = player.luxuryRate;
-		}
+		using UIGameDataAccess gameDataAccess = new();
+		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+
+		int scienceRate = player.scienceRate;
+		int luxuryRate = player.luxuryRate;
 
 		scienceSliderIcon.SetPosition(new Vector2(CalculateSliderXPos(scienceRate), scienceSliderY));
 		luxurySliderIcon.SetPosition(new Vector2(CalculateSliderXPos(luxuryRate), luxurySliderY));
 		scienceSliderLabel.Text = $"{scienceRate * 10}%";
 		luxurySliderLabel.Text = $"{luxuryRate * 10}%";
+
+		governmentLabel.Text = $"{player.government.name}";
+		scienceStatus.Text = player.SummarizeScience(gameDataAccess.gameData);
+		treasury.Text = $"Treasury: {player.gold}";
+
+		// TODO: fill these in.
+		incomeDetails.Text = "From cities: +??\nFrom taxmen: +??\nFrom other civs: +??\nFrom interest: +??";
+		expenseDetails.Text = "-??: Science\n-??: Entertainment\n-??: Corruption\n-??: Maintenance\n-??: Unit costs\n-??: To other civs";
+		incomeSummary.Text = "??";
+		expenseSummary.Text = "??";
+
+		int goldPerTurn = player.CalculateGoldPerTurn();
+		if (goldPerTurn > 0) {
+			sumSummary.Text = $"Net gain: {goldPerTurn}";
+			growth.Text = "Growing!";
+		} else if (goldPerTurn < 0) {
+			sumSummary.Text = $"Net loss: {goldPerTurn}";
+			growth.Text = "Shrinking!";
+		} else {
+			sumSummary.Text = $"Neutral: {goldPerTurn}";
+			growth.Text = "Balanced";
+		}
 	}
 
 	private int CalculateSliderXPos(int sliderRate) {
