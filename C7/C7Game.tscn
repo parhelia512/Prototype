@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=22 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" path="res://Game.cs" id="1"]
 [ext_resource type="Script" path="res://DoubleClickHandler.cs" id="2_t735q"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="12_yjlfl"]
 [ext_resource type="Script" path="res://UIElements/Diplomacy/Diplomacy.cs" id="14"]
 [ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
+[ext_resource type="PackedScene" uid="uid://da7hbbufyfllg" path="res://UIElements/Advisors/domestic_advisor.tscn" id="15"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -299,7 +300,7 @@ script = ExtResource("8_7a2mf")
 text = "S"
 tooltipText = "Spaceship"
 
-[node name="Advisor" type="CenterContainer" parent="CanvasLayer"]
+[node name="Advisor" type="CenterContainer" parent="CanvasLayer" node_paths=PackedStringArray("domesticAdvisor")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -307,6 +308,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("10")
 script = ExtResource("3")
+domesticAdvisor = NodePath("DomesticAdvisor")
+
+[node name="DomesticAdvisor" parent="CanvasLayer/Advisor" instance=ExtResource("15")]
+visible = false
+layout_mode = 2
 
 [node name="CityScreen" parent="CanvasLayer" instance=ExtResource("11_12lt4")]
 visible = false

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 public partial class Advisors : CenterContainer {
 	private ILogger log = LogManager.ForContext<Advisors>();
 
-	private DomesticAdvisor domesticAdvisor;
+	[Export] private DomesticAdvisor domesticAdvisor;
 	private MilitaryAdvisor militaryAdvisor;
 	private ScienceAdvisor scienceAdvisor;
 
@@ -39,16 +39,10 @@ public partial class Advisors : CenterContainer {
 		foreach (TextureRect tr in advisors) {
 			tr.Hide();
 		}
+		domesticAdvisor.Hide();
 
 		if (advisorType.Equals("F1")) {
-			if (domesticAdvisor != null) {
-				RemoveChild(domesticAdvisor);
-				domesticAdvisor = null;
-			}
-
-			domesticAdvisor = new DomesticAdvisor();
-			advisors.Add(domesticAdvisor);
-			AddChild(domesticAdvisor);
+			domesticAdvisor.ShowAdvisor();
 			this.Show();
 		}
 		if (advisorType.Equals("F3")) {
