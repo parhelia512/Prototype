@@ -634,6 +634,15 @@ public partial class Game : Node2D {
 		if (eventKeyDown.Keycode == Godot.Key.F9) {
 			palaceScreen.Show();
 		}
+		if (eventKeyDown.Keycode == Godot.Key.C && HasCurrentlySelectedUnit()) {
+			mapView.centerCameraOnTile(CurrentlySelectedUnit.location);
+		}
+		if (eventKeyDown.Keycode == Godot.Key.H) {
+			City capital = controller.cities.Find(c => c.IsCapital());
+			if (capital != null) {
+				mapView.centerCameraOnTile(capital.location);
+			}
+		}
 	}
 
 	private void ToggleObserverMode() {
