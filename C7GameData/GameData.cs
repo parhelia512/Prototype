@@ -30,6 +30,7 @@ namespace C7GameData {
 		public Difficulty gameDifficulty = new();
 		public string defaultExperienceLevelKey;
 		public ExperienceLevel defaultExperienceLevel;
+		public Rules rules;
 
 		public BarbarianInfo barbarianInfo = new BarbarianInfo();
 

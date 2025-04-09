@@ -72,6 +72,9 @@ namespace C7GameData {
 		// The current government of the player.
 		public Government government;
 
+		// The rules of this game.
+		public Rules rules;
+
 		public int EraIndex() {
 			return EraIndex(eraCivilopediaName);
 		}
@@ -297,9 +300,8 @@ namespace C7GameData {
 			int remainingCost = tech.TechCostFor(this) - beakers;
 			int turnsRemaining = (int)Math.Ceiling((double)remainingCost / beakersPerTurn);
 
-			// We never spend more than 50 turns per tech or less than 4.
-			int maxTurnsRemaining = 50 - turnsResearched;
-			int minTurnsRemaining = 4 - turnsResearched;
+			int maxTurnsRemaining = rules.MaximumResearchTime - turnsResearched;
+			int minTurnsRemaining = rules.MinimumResearchTime - turnsResearched;
 
 			int result = Math.Min(turnsRemaining, maxTurnsRemaining);
 			result = Math.Max(result, minTurnsRemaining);
