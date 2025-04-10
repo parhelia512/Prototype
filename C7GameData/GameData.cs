@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Serilog;
 
 namespace C7GameData {
@@ -88,8 +89,6 @@ namespace C7GameData {
 			return Terraforms.Find(tf => tf.Action == action);
 		}
 
-		// TODO: This is a placeholder method for calculating tile owners.
-		// Currently, it marks a tile as owned only if it is a city tile or adjacent to a city.
 		public void UpdateTileOwners() {
 			// We do this at the end of the method - we don't need to do this
 			// for each tile we add in the loop below.
@@ -118,6 +117,7 @@ namespace C7GameData {
 
 			foreach (Player player in players) {
 				player.tileKnowledge.RecomputeActiveTiles();
+				player.UpdateResourcesInBorders(map.tiles.Where(t => t.owningCity?.owner == player));
 			}
 		}
 

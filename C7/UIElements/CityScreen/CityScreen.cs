@@ -249,11 +249,7 @@ public partial class CityScreen : Control {
 	}
 
 	private void RenderStrategicResources(City city) {
-		Dictionary<C7GameData.Resource, int> resourceCounter;
-
-		using (UIGameDataAccess gameDataAccess = new()) {
-			resourceCounter = city.GetStrategicResources(gameDataAccess.gameData);
-		};
+		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetStrategicResources();
 
 		foreach (var child in strategicResources.GetChildren()) {
 			strategicResources.RemoveChild(child);
@@ -278,11 +274,7 @@ public partial class CityScreen : Control {
 	}
 
 	private void RenderLuxuries(City city) {
-		Dictionary<C7GameData.Resource, int> resourceCounter;
-
-		using (UIGameDataAccess gameDataAccess = new()) {
-			resourceCounter = city.GetLuxuries(gameDataAccess.gameData);
-		};
+		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetLuxuries();
 
 		foreach (var child in luxuriesContainer.GetChildren()) {
 			luxuriesContainer.RemoveChild(child);
