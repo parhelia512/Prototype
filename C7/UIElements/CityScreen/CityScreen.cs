@@ -31,6 +31,9 @@ public partial class CityScreen : Control {
 
 	[Export] private ProductionMenu productionMenu;
 
+	[Export] private HBoxContainer strategicResources;
+	[Export] private VBoxContainer luxuriesContainer;
+
 	Theme yieldDetailsFontTheme = new();
 	FontFile yieldDetailsFont = new();
 
@@ -236,11 +239,71 @@ public partial class CityScreen : Control {
 		RenderCommerceDetails(city.Value);
 		RenderProductionDetails(city.Value);
 		RenderExistingBuildings(city.Value.buildings);
+		RenderStrategicResources(city.Value);
+		RenderLuxuries(city.Value);
 	}
 
 	private void OnExit() {
 		productionMenu.Hide();
 		tileAssignmentLayer.city = null;
+	}
+
+	private void RenderStrategicResources(City city) {
+		Dictionary<C7GameData.Resource, int> resourceCounter;
+
+		using (UIGameDataAccess gameDataAccess = new()) {
+			resourceCounter = city.GetStrategicResources(gameDataAccess.gameData);
+		};
+
+		foreach (var child in strategicResources.GetChildren()) {
+			strategicResources.RemoveChild(child);
+		}
+
+		foreach ((C7GameData.Resource resource, int count) in resourceCounter) {
+			VBoxContainer resourceContainer = new();
+
+			Label resourceName = new() {
+				Text = resource.Name
+			};
+
+			Label resourceLabel = new() {
+				Text = count.ToString()
+			};
+
+			resourceContainer.AddChild(resourceName);
+			resourceContainer.AddChild(resourceLabel);
+
+			strategicResources.AddChild(resourceContainer);
+		}
+	}
+
+	private void RenderLuxuries(City city) {
+		Dictionary<C7GameData.Resource, int> resourceCounter;
+
+		using (UIGameDataAccess gameDataAccess = new()) {
+			resourceCounter = city.GetLuxuries(gameDataAccess.gameData);
+		};
+
+		foreach (var child in luxuriesContainer.GetChildren()) {
+			luxuriesContainer.RemoveChild(child);
+		}
+
+		foreach ((C7GameData.Resource resource, int count) in resourceCounter) {
+			HBoxContainer resourceContainer = new();
+
+			Label resourceName = new() {
+				Text = resource.Name
+			};
+
+			Label resourceLabel = new() {
+				Text = count.ToString()
+			};
+
+			resourceContainer.AddChild(resourceName);
+			resourceContainer.AddChild(resourceLabel);
+
+			luxuriesContainer.AddChild(resourceContainer);
+		}
 	}
 
 	private void RenderExistingBuildings(List<CityBuilding> buildings) {
