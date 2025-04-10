@@ -170,8 +170,8 @@ public partial class DealScreen : TextureRect {
 
 		// If the deal is acceptable, execute it and go back to the previous
 		// screen.
-		if (opponentPlayer.WouldAcceptDealFrom(humanPlayer, humanOffer, opponentOffer)) {
-			opponentPlayer.ExecuteDeal(humanPlayer, humanOffer, opponentOffer);
+		if (opponentPlayer.WouldAcceptDealFrom(gD, humanPlayer, humanOffer, opponentOffer)) {
+			opponentPlayer.ExecuteDeal(gD, humanPlayer, humanOffer, opponentOffer);
 
 			GetParent<Diplomacy>().ShowTalkScreenForPlayer(humanPlayerId, opponentPlayerId);
 			return;
@@ -184,8 +184,8 @@ public partial class DealScreen : TextureRect {
 		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
 		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
 
-		int theirGoldValue = opponentOffer.GoldEquivalentFor(opponentPlayer);
-		int ourGoldValue = humanOffer.GoldEquivalentFor(opponentPlayer);
+		int theirGoldValue = opponentOffer.GoldEquivalentFor(gD, opponentPlayer);
+		int ourGoldValue = humanOffer.GoldEquivalentFor(gD, opponentPlayer);
 		opponentResponse.Text = $"\"I value my offer at {theirGoldValue} gold and I value your offer at {ourGoldValue} gold\"";
 	}
 }

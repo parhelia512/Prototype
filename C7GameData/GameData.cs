@@ -173,6 +173,25 @@ namespace C7GameData {
 			}
 		}
 
+		public int TechCostFor(Tech tech, Player player) {
+			// Cost formula from https://forums.civfanatics.com/threads/research-cost-formula-v1-29f.29485/.
+			// Research Cost = [MM * [10*COST * (1 - N/[CL*1.75])]/(CF * 10)] - progress
+			//
+			// MM = map modifier (tiny=160, small=200, standard=240, large=320, huge=400)
+			// COST = tech cost
+			// CF = difficulty factor, range 10 (easy) to 6 (hard)
+			// N = number of known civs that have discovered the tech
+			// CL = civs left in game
+			//
+			// We also have the min/max turns to research of 4 and 50.
+			// TODO: implement the civ-related parts of the equation
+			// TODO: See this this whole equation can be configurable
+			int difficultyFactor = 10; // easy difficulty
+			int researchCost = map.techRate * 10 * tech.Cost / (difficultyFactor * 10);
+
+			return researchCost;
+		}
+
 		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/
 		private City ResolveTileOwnershipConflict(City a, City b, Tile t) {
 			int aRank = a.location.rankDistanceTo(t);
@@ -195,17 +214,6 @@ namespace C7GameData {
 			// If the cultures are equal the oldest city gets the tile.
 			// TODO: track city age - for now we just return the first.
 			return a;
-		}
-
-		/**
-		 * This is intended as a place to set up post-load actions on the save, regardless of
-		 * whether it is loaded from a legacy Civ3 file or a C7 native file.
-		 * This likely is any sort of calculation which is useful to have in the game state, but
-		 * can be re-generated from save data and does not make sense to serialize.
-		 **/
-		public void PerformPostLoadActions() {
-			//Let each tile know who its neighbors are.  It needs to know this so its graphics can be selected appropriately.
-			map.computeNeighbors();
 		}
 	}
 }

@@ -303,12 +303,12 @@ namespace C7Engine {
 				List<Tech> techsTheyCanTrade = gD.techs.FindAll(x => {
 					return them.knownTechs.Contains(x.id) && !us.knownTechs.Contains(x.id);
 				});
-				techsTheyCanTrade.Sort((a, b) => { return b.TechCostFor(us).CompareTo(a.TechCostFor(us)); });
+				techsTheyCanTrade.Sort((a, b) => { return gD.TechCostFor(b, us).CompareTo(gD.TechCostFor(a, us)); });
 
 				List<Tech> techsWeCanTrade = gD.techs.FindAll(x => {
 					return us.knownTechs.Contains(x.id) && !them.knownTechs.Contains(x.id);
 				});
-				techsWeCanTrade.Sort((a, b) => { return b.TechCostFor(them).CompareTo(a.TechCostFor(them)); });
+				techsWeCanTrade.Sort((a, b) => { return gD.TechCostFor(b, them).CompareTo(gD.TechCostFor(a, them)); });
 
 				// If we can't trade techs there's no point in continuing - we
 				// can't yet trade anything else interesting.
@@ -322,16 +322,17 @@ namespace C7Engine {
 				foreach (Tech t in techsWeCanTrade) {
 					weGive.techs.Add(t);
 				}
-				int ourMaxPossibleOffer = weGive.GoldEquivalentFor(them);
+				int ourMaxPossibleOffer = weGive.GoldEquivalentFor(gD, them);
 
 				// Going from the most to the least valuable valuable techs, see
 				// if we can afford them. This greedy algorithm should be good
 				// enough - we don't need perfect binpacking.
 				TradeOffer weWant = new();
 				foreach (Tech t in techsTheyCanTrade) {
-					if (t.TechCostFor(us) < ourMaxPossibleOffer) {
+					int cost = gD.TechCostFor(t, us);
+					if (cost < ourMaxPossibleOffer) {
 						weWant.techs.Add(t);
-						ourMaxPossibleOffer -= t.TechCostFor(us);
+						ourMaxPossibleOffer -= cost;
 					}
 				}
 
@@ -342,9 +343,9 @@ namespace C7Engine {
 				// from the opponent. However, we might be overpaying, possibly
 				// by a significant amount. Keep removing techs from our offer
 				// as long as it doesn't make our offer worse than theirs.
-				int theirOfferValue = weWant.GoldEquivalentFor(us);
+				int theirOfferValue = weWant.GoldEquivalentFor(gD, us);
 				for (int i = 0; i < weGive.techs.Count;) {
-					if (weGive.GoldEquivalentFor(them) - weGive.techs[i].TechCostFor(them) >= theirOfferValue) {
+					if (weGive.GoldEquivalentFor(gD, them) - gD.TechCostFor(weGive.techs[i], them) >= theirOfferValue) {
 						weGive.techs.RemoveAt(0);
 					} else {
 						++i;
@@ -352,7 +353,7 @@ namespace C7Engine {
 				}
 
 				// Now use any gold to even things out, if possible.
-				int remainingDelta = weGive.GoldEquivalentFor(them) - theirOfferValue;
+				int remainingDelta = weGive.GoldEquivalentFor(gD, them) - theirOfferValue;
 				weGive.gold -= Math.Min(remainingDelta, weGive.gold.Value);
 
 				// And ensure we minimize the total gold traded, to keep the
@@ -363,13 +364,13 @@ namespace C7Engine {
 
 				// Finally if the deal is too mismatched or only contains a swap
 				// of gold, abandon it. Otherwise we can execute the deal.
-				if (weGive.GoldEquivalentFor(them) > 1.1 * weWant.GoldEquivalentFor(us)) {
+				if (weGive.GoldEquivalentFor(gD, them) > 1.1 * weWant.GoldEquivalentFor(gD, us)) {
 					continue;
 				}
 				if (weGive.techs.Count == 0 && weWant.techs.Count == 0) {
 					continue;
 				}
-				us.ExecuteDeal(them, weWant, weGive);
+				us.ExecuteDeal(gD, them, weWant, weGive);
 			}
 		}
 	}

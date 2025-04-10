@@ -174,7 +174,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 			{
 				Tech tech = gD.techs.Find(x => x.id == player.currentlyResearchedTech);
 				string techName = tech == null ? "Not selected" : tech.Name;
-				int turnsRemaining = tech == null ? int.MaxValue : player.EstimateTurnsToResearch(tech);
+				int turnsRemaining = tech == null ? int.MaxValue : player.EstimateTurnsToResearch(gD, tech);
 
 				if (turnsRemaining >= int.MaxValue) {
 					scienceProgress.SetTextAndCenterLabel($"{techName} (-- turns)");

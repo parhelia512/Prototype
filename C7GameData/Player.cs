@@ -250,18 +250,18 @@ namespace C7GameData {
 			return result;
 		}
 
-		public bool WouldAcceptDealFrom(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+		public bool WouldAcceptDealFrom(GameData gameData, Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
 			// TODO: consider any factors like trade reputations here
 			// TODO: figure out when peace is acceptable
-			int theirGoldValue = theirOffer.GoldEquivalentFor(this);
-			int ourGoldValue = ourOffer.GoldEquivalentFor(this);
+			int theirGoldValue = theirOffer.GoldEquivalentFor(gameData, this);
+			int ourGoldValue = ourOffer.GoldEquivalentFor(gameData, this);
 			return theirGoldValue >= ourGoldValue;
 		}
 
-		public void ExecuteDeal(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+		public void ExecuteDeal(GameData gameData, Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
 			log.Information($"Executing trade between {this} and {other}");
-			log.Information($"  {this} gives {ourOffer.ToString()}, worth {ourOffer.GoldEquivalentFor(other)} gold");
-			log.Information($"  {other} gives {theirOffer.ToString()}, worth {theirOffer.GoldEquivalentFor(this)} gold)");
+			log.Information($"  {this} gives {ourOffer.ToString()}, worth {ourOffer.GoldEquivalentFor(gameData, other)} gold");
+			log.Information($"  {other} gives {theirOffer.ToString()}, worth {theirOffer.GoldEquivalentFor(gameData, this)} gold)");
 			if (theirOffer.partOfPeaceTreaty) {
 				log.Information($"  {this} is now at peace with {other}");
 				this.playerRelationships[other.id].atWar = false;
@@ -286,7 +286,7 @@ namespace C7GameData {
 			}
 		}
 
-		public int EstimateTurnsToResearch(Tech tech) {
+		public int EstimateTurnsToResearch(GameData gameData, Tech tech) {
 			int beakersPerTurn = 0;
 			foreach (City city in cities) {
 				beakersPerTurn += city.CurrentCommerceYield().beakers;
@@ -297,7 +297,7 @@ namespace C7GameData {
 				return int.MaxValue;
 			}
 
-			int remainingCost = tech.TechCostFor(this) - beakers;
+			int remainingCost = gameData.TechCostFor(tech, this) - beakers;
 			int turnsRemaining = (int)Math.Ceiling((double)remainingCost / beakersPerTurn);
 
 			int maxTurnsRemaining = rules.MaximumResearchTime - turnsResearched;
@@ -366,7 +366,7 @@ namespace C7GameData {
 			// Check to see if the player has finished researching their
 			// tech, and if they have, add it to the list of known techs
 			Tech tech = gameData.techs.Find(x => x.id == currentlyResearchedTech);
-			if (EstimateTurnsToResearch(tech) > 0) {
+			if (EstimateTurnsToResearch(gameData, tech) > 0) {
 				return;
 			}
 

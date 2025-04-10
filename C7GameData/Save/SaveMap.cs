@@ -6,6 +6,8 @@ namespace C7GameData.Save {
 	public class SaveMap {
 		public int tilesWide, tilesTall;
 		public bool wrapHorizontally, wrapVertically;
+		public int techRate;
+		public int optimalNumberOfCities;
 		public List<SaveTile> tiles = new List<SaveTile>();
 		public SaveMap() { }
 
@@ -14,6 +16,8 @@ namespace C7GameData.Save {
 			tilesTall = map.numTilesTall;
 			wrapHorizontally = map.wrapHorizontally;
 			wrapVertically = map.wrapVertically;
+			techRate = map.techRate;
+			optimalNumberOfCities = map.optimalNumberOfCities;
 			tiles = map.tiles.ConvertAll(tile => new SaveTile(tile));
 		}
 		public GameMap ToGameMap(GameData gd) {
@@ -22,6 +26,8 @@ namespace C7GameData.Save {
 				numTilesTall = tilesTall,
 				wrapHorizontally = wrapHorizontally,
 				wrapVertically = wrapVertically,
+				techRate = techRate,
+				optimalNumberOfCities = optimalNumberOfCities,
 				tiles = tiles.ConvertAll(tile => tile.ToTile(gd.terrainTypes, gd.Resources)),
 			};
 			gameMap.computeNeighbors();

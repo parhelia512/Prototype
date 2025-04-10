@@ -7,6 +7,8 @@
     "tilesTall": 100,
     "wrapHorizontally": true,
     "wrapVertically": false,
+    "techRate": 240,
+    "optimalNumberOfCities": 20,
     "tiles": [
       {
         "extraInfo": {
