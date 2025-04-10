@@ -56,7 +56,16 @@ namespace C7GameData {
 		public int taxRate = 5;
 
 		// The amount of gold this player has.
-		public int gold = 0;
+		private int _gold = 0;
+		public int gold {
+			get => _gold;
+			set {
+				if (value < 0) {
+					throw new Exception($"bad gold value of {value} for {this}");
+				}
+				_gold = value;
+			}
+		}
 
 		// The number of "beakers" (gold) spent on the currently researched
 		// tech.
@@ -71,6 +80,9 @@ namespace C7GameData {
 
 		// The current government of the player.
 		public Government government;
+
+		// The rules of this game.
+		public Rules rules;
 
 		public int EraIndex() {
 			return EraIndex(eraCivilopediaName);
@@ -247,18 +259,18 @@ namespace C7GameData {
 			return result;
 		}
 
-		public bool WouldAcceptDealFrom(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+		public bool WouldAcceptDealFrom(GameData gameData, Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
 			// TODO: consider any factors like trade reputations here
 			// TODO: figure out when peace is acceptable
-			int theirGoldValue = theirOffer.GoldEquivalentFor(this);
-			int ourGoldValue = ourOffer.GoldEquivalentFor(this);
+			int theirGoldValue = theirOffer.GoldEquivalentFor(gameData, this);
+			int ourGoldValue = ourOffer.GoldEquivalentFor(gameData, this);
 			return theirGoldValue >= ourGoldValue;
 		}
 
-		public void ExecuteDeal(Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
+		public void ExecuteDeal(GameData gameData, Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
 			log.Information($"Executing trade between {this} and {other}");
-			log.Information($"  {this} gives {ourOffer.ToString()}, worth {ourOffer.GoldEquivalentFor(other)} gold");
-			log.Information($"  {other} gives {theirOffer.ToString()}, worth {theirOffer.GoldEquivalentFor(this)} gold)");
+			log.Information($"  {this} gives {ourOffer.ToString()}, worth {ourOffer.GoldEquivalentFor(gameData, other)} gold");
+			log.Information($"  {other} gives {theirOffer.ToString()}, worth {theirOffer.GoldEquivalentFor(gameData, this)} gold)");
 			if (theirOffer.partOfPeaceTreaty) {
 				log.Information($"  {this} is now at peace with {other}");
 				this.playerRelationships[other.id].atWar = false;
@@ -283,7 +295,7 @@ namespace C7GameData {
 			}
 		}
 
-		public int EstimateTurnsToResearch(Tech tech) {
+		public int EstimateTurnsToResearch(GameData gameData, Tech tech) {
 			int beakersPerTurn = 0;
 			foreach (City city in cities) {
 				beakersPerTurn += city.CurrentCommerceYield().beakers;
@@ -294,12 +306,11 @@ namespace C7GameData {
 				return int.MaxValue;
 			}
 
-			int remainingCost = tech.TechCostFor(this) - beakers;
+			int remainingCost = gameData.TechCostFor(tech, this);
 			int turnsRemaining = (int)Math.Ceiling((double)remainingCost / beakersPerTurn);
 
-			// We never spend more than 50 turns per tech or less than 4.
-			int maxTurnsRemaining = 50 - turnsResearched;
-			int minTurnsRemaining = 4 - turnsResearched;
+			int maxTurnsRemaining = rules.MaximumResearchTime - turnsResearched;
+			int minTurnsRemaining = rules.MinimumResearchTime - turnsResearched;
 
 			int result = Math.Min(turnsRemaining, maxTurnsRemaining);
 			result = Math.Max(result, minTurnsRemaining);
@@ -308,6 +319,10 @@ namespace C7GameData {
 		}
 
 		public void DoPerTurnFinanceUpdates(GameData gameData) {
+			if (isBarbarians) {
+				return;
+			}
+
 			// Process per-city contributions.
 			//
 			// TODO: consider making this return a tuple too. Or maybe return all
@@ -323,7 +338,7 @@ namespace C7GameData {
 				if (unitSupportCost > 0) {
 					for (int i = 0; i < unitSupportCost / government.unitCost; ++i) {
 						MapUnit unitToDisband = units[GameData.rng.Next(units.Count)];
-						log.Information($"{this} is out of gold, disbanding {unitToDisband} to being unit support costs under control");
+						log.Information($"{this} is out of gold, disbanding {unitToDisband} at {unitToDisband.location} to being unit support costs under control");
 						gameData.DisbandUnit(unitToDisband);
 					}
 					continue;
@@ -345,7 +360,7 @@ namespace C7GameData {
 				}
 
 				// If the budget still isn't under control, something is wrong.
-				throw new Exception($"{this} was unable to get the budget under control despite being under the unit support cap and zeroing out the sliders");
+				throw new Exception($"{this} was unable to get the budget under control despite being under the unit support cap and zeroing out the sliders (gold={gold}, gpt={CalculateGoldPerTurn()})");
 			}
 
 			gold += CalculateGoldPerTurn();
@@ -364,7 +379,7 @@ namespace C7GameData {
 			// Check to see if the player has finished researching their
 			// tech, and if they have, add it to the list of known techs
 			Tech tech = gameData.techs.Find(x => x.id == currentlyResearchedTech);
-			if (EstimateTurnsToResearch(tech) > 0) {
+			if (EstimateTurnsToResearch(gameData, tech) > 0) {
 				return;
 			}
 

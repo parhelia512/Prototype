@@ -54,11 +54,13 @@ namespace C7GameData {
 			save.HealRates["neutral_field"] = 1;
 			save.HealRates["hostile_field"] = 0;
 			save.HealRates["city"] = 2;
-			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
+			save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
 			ImportCitizenTypes();
 			ImportTerraforms();
 			ImportGovernments();
+			ImportDifficulties();
+			ImportRules();
 		}
 
 		public static SaveGame ImportSav(string savePath, string defaultBicPath, Func<string, string> getPediaIconsPath) {
@@ -78,6 +80,7 @@ namespace C7GameData {
 			ImportSavLeaders();
 			ImportSavUnits();
 			ImportSavCities();
+			save.GameDifficulty = save.Difficulties[savData.Game.DifficultyID];
 
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(savData, save);
@@ -1161,6 +1164,40 @@ namespace C7GameData {
 			}
 		}
 
+		private void ImportDifficulties() {
+			BiqData theBiq = biq.Diff is null ? defaultBiq : biq;
+
+			foreach (QueryCiv3.Biq.DIFF diff in theBiq.Diff) {
+				Difficulty d = new();
+				d.id = ids.CreateID("Difficulty");
+				d.Name = diff.Name;
+				d.NumberOfCitizensBornContent = diff.NumberOfCitizensBornContent;
+				d.MaxAiGovernmentTransitionTime = diff.MaxGovernmentTransitionTime;
+				d.NumberOfAIDefensiveStartingUnits = diff.NumberOfAIDefensiveStartingUnits;
+				d.NumberOfAIOffensiveStartingUnits = diff.NumberOfAIOffensiveStartingUnits;
+				d.ExtraStartUnit1 = diff.ExtraStartUnit1;
+				d.ExtraStartUnit2 = diff.ExtraStartUnit2;
+				d.AdditionalFreeUnitSupport = diff.AdditionalFreeSupport;
+				d.UnitSupportBonusForEachSettlement = diff.UnitSupportBonusForEachSettlement;
+				d.AttackBonusAgainstBarbarians = diff.AttackBonusAgainstBarbarians;
+				d.AiCostFactor = diff.CostFactor;
+				d.PercentageOfOptimalCities = diff.PercentageOfOptimalCities;
+				d.AIToAITradeRate = diff.AIToAITradeRate;
+				d.CorruptionPercentage = diff.CorruptionPercentage;
+				d.MilitaryLaw = diff.MilitaryLaw;
+
+				save.Difficulties.Add(d);
+			}
+		}
+
+		private void ImportRules() {
+			BiqData theBiq = biq.Rule is null ? defaultBiq : biq;
+
+			save.Rules.MaximumResearchTime = theBiq.Rule[0].MaximumResearchTime;
+			save.Rules.MinimumResearchTime = theBiq.Rule[0].MinimumResearchTime;
+			save.GameDifficulty = save.Difficulties[theBiq.Rule[0].DefaultDifficultyLevel];
+		}
+
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {
 			if (civ3Save is not null && civ3Save.Wrld.Height > 0 && civ3Save.Wrld.Width > 0) {
 				save.Map.wrapHorizontally = civ3Save.Wrld.XWrapping;
@@ -1179,6 +1216,8 @@ namespace C7GameData {
 			if (civ3Save is not null && civ3Save.Wrld.Height > 0 && civ3Save.Wrld.Width > 0) {
 				save.Map.tilesTall = civ3Save.Wrld.Height;
 				save.Map.tilesWide = civ3Save.Wrld.Width;
+				save.Map.techRate = civ3Save.Bic.Wsiz[civ3Save.Wrld.WsizID].TechRate;
+				save.Map.optimalNumberOfCities = civ3Save.Bic.Wsiz[civ3Save.Wrld.WsizID].OptimalNumberOfCities;
 			}
 		}
 
@@ -1186,6 +1225,8 @@ namespace C7GameData {
 			if (biq is not null && biq.Wmap is not null && biq.Wmap.Length > 0) {
 				save.Map.tilesTall = biq.Wmap[0].Height;
 				save.Map.tilesWide = biq.Wmap[0].Width;
+				save.Map.techRate = biq.Wsiz[biq.Wchr[0].WorldSize].TechRate;
+				save.Map.optimalNumberOfCities = biq.Wsiz[biq.Wchr[0].WorldSize].OptimalNumberOfCities;
 			}
 		}
 

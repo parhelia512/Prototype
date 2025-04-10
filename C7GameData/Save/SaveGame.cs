@@ -78,6 +78,9 @@ namespace C7GameData.Save {
 			save.CitizenTypes = data.citizenTypes;
 			save.TerraForms = data.Terraforms;
 			save.Governments = data.governments;
+			save.Difficulties = data.difficulties;
+			save.GameDifficulty = data.gameDifficulty;
+			save.Rules = data.rules;
 			return save;
 		}
 
@@ -119,8 +122,11 @@ namespace C7GameData.Save {
 				citizenTypes = CitizenTypes,
 				Terraforms = TerraForms,
 				governments = Governments,
+				difficulties = Difficulties,
+				gameDifficulty = GameDifficulty,
 				ids = new ID.Factory(this),
 				experienceLevels = ExperienceLevels,
+				rules = Rules,
 			};
 		}
 
@@ -129,7 +135,7 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.rules));
 		}
 
 		private void ConvertTechnologies(GameData data) {
@@ -290,18 +296,31 @@ namespace C7GameData.Save {
 		public List<Civilization> Civilizations = new List<Civilization>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
+		public Rules Rules = new();
 		public List<SaveTech> Techs = new();
 		public List<CitizenType> CitizenTypes = new();
 		public List<Terraform> TerraForms = new();
 		public List<Government> Governments = new();
-		public string ScenarioSearchPath; // TODO: what is this
+
+		// The relative directory that can be used to find scenario-specific
+		// assets.
+		public string ScenarioSearchPath;
+
+		public List<Difficulty> Difficulties = new();
+		public Difficulty GameDifficulty = new();
 		public void Save(string path) {
 			byte[] json = JsonSerializer.SerializeToUtf8Bytes(this, JsonOptions);
 			File.WriteAllBytes(path, json);
 		}
 
-		public static SaveGame Load(string path) {
-			return JsonSerializer.Deserialize<SaveGame>(File.ReadAllText(path), JsonOptions);
+		public static SaveGame Load(string path, Func<string, string> getPediaIconsPath) {
+			SaveGame result = JsonSerializer.Deserialize<SaveGame>(File.ReadAllText(path), JsonOptions);
+
+			// This lambda has side effects in the Game.cs code.
+			if (result.ScenarioSearchPath?.Count() > 0) {
+				getPediaIconsPath(result.ScenarioSearchPath);
+			}
+			return result;
 		}
 	}
 }

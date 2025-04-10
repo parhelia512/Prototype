@@ -14,13 +14,13 @@ namespace C7GameData {
 		// Calculate how much this trade offer is worth for a given player. This
 		// has to be per-player because tech costs vary based on how many civs
 		// a player have already researched the tech.
-		public int GoldEquivalentFor(Player p) {
+		public int GoldEquivalentFor(GameData gameData, Player p) {
 			int result = 0;
 			if (gold.HasValue) {
 				result += gold.Value;
 			}
 			foreach (Tech t in techs) {
-				result += t.TechCostFor(p);
+				result += gameData.TechCostFor(t, p);
 			}
 
 			return result;

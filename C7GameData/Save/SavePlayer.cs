@@ -73,7 +73,7 @@ namespace C7GameData.Save {
 		// The current government of the player.
 		public ID governmentId;
 
-		public Player ToPlayer(GameMap map, List<Civilization> civilizations, List<Government> governments) {
+		public Player ToPlayer(GameMap map, List<Civilization> civilizations, List<Government> governments, Rules rules) {
 			Player player = new Player{
 				id = id,
 				isBarbarians = barbarian,
@@ -92,6 +92,7 @@ namespace C7GameData.Save {
 				turnsUntilPriorityReevaluation = turnsUntilPriorityReevaluation,
 				anarchyTurnsLeft = anarchyTurnsLeft,
 				government = governments.Find(x => x.id == governmentId),
+				rules = rules,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
 				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.X, tile.Y));
