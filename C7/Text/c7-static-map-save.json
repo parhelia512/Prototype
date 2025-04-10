@@ -63343,7 +63343,8 @@
       "appearanceRatio": 160,
       "disappearanceRatio": 0,
       "name": "Horses",
-      "civilopediaEntry": "GOOD_Horses"
+      "civilopediaEntry": "GOOD_Horses",
+      "prerequisite": "tech-5"
     },
     {
       "key": "Iron",
@@ -63356,7 +63357,8 @@
       "appearanceRatio": 160,
       "disappearanceRatio": 800,
       "name": "Iron",
-      "civilopediaEntry": "GOOD_Iron"
+      "civilopediaEntry": "GOOD_Iron",
+      "prerequisite": "tech-8"
     },
     {
       "key": "Saltpeter",
@@ -63369,7 +63371,8 @@
       "appearanceRatio": 120,
       "disappearanceRatio": 800,
       "name": "Saltpeter",
-      "civilopediaEntry": "GOOD_Saltpeter"
+      "civilopediaEntry": "GOOD_Saltpeter",
+      "prerequisite": "tech-31"
     },
     {
       "key": "Coal",
@@ -63382,7 +63385,8 @@
       "appearanceRatio": 120,
       "disappearanceRatio": 400,
       "name": "Coal",
-      "civilopediaEntry": "GOOD_Coal"
+      "civilopediaEntry": "GOOD_Coal",
+      "prerequisite": "tech-45"
     },
     {
       "key": "Oil",
@@ -63395,7 +63399,8 @@
       "appearanceRatio": 120,
       "disappearanceRatio": 200,
       "name": "Oil",
-      "civilopediaEntry": "GOOD_Oil"
+      "civilopediaEntry": "GOOD_Oil",
+      "prerequisite": "tech-54"
     },
     {
       "key": "Rubber",
@@ -63408,7 +63413,8 @@
       "appearanceRatio": 120,
       "disappearanceRatio": 0,
       "name": "Rubber",
-      "civilopediaEntry": "GOOD_Rubber"
+      "civilopediaEntry": "GOOD_Rubber",
+      "prerequisite": "tech-58"
     },
     {
       "key": "Aluminum",
@@ -63421,7 +63427,8 @@
       "appearanceRatio": 120,
       "disappearanceRatio": 400,
       "name": "Aluminum",
-      "civilopediaEntry": "GOOD_Aluminum"
+      "civilopediaEntry": "GOOD_Aluminum",
+      "prerequisite": "tech-65"
     },
     {
       "key": "Uranium",
@@ -63434,7 +63441,8 @@
       "appearanceRatio": 100,
       "disappearanceRatio": 100,
       "name": "Uranium",
-      "civilopediaEntry": "GOOD_Uranium"
+      "civilopediaEntry": "GOOD_Uranium",
+      "prerequisite": "tech-66"
     },
     {
       "key": "Wines",

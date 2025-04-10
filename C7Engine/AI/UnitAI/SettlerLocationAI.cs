@@ -71,14 +71,17 @@ namespace C7Engine {
 			}
 			return scores;
 		}
+
 		private static int GetTileYieldScore(Tile t, Player owner) {
 			int score = t.foodYield(owner) * 5;
 			score += t.productionYield(owner) * 3;
 			score += t.commerceYield(owner) * 2;
-			if (t.Resource.Category == ResourceCategory.STRATEGIC) {
-				score += STRATEGIC_RESOURCE_BONUS;
-			} else if (t.Resource.Category == ResourceCategory.LUXURY) {
-				score += LUXURY_RESOURCE_BONUS;
+			if (owner.KnowsAboutResource(t.Resource)) {
+				if (t.Resource.Category == ResourceCategory.STRATEGIC) {
+					score += STRATEGIC_RESOURCE_BONUS;
+				} else if (t.Resource.Category == ResourceCategory.LUXURY) {
+					score += LUXURY_RESOURCE_BONUS;
+				}
 			}
 			return score;
 		}

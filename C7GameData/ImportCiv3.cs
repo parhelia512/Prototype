@@ -334,7 +334,9 @@ namespace C7GameData {
 				if (resource.Category == ResourceCategory.NONE) {
 					log.Warning("WARNING!  Unknown resource category for " + good);
 				}
-				//TODO: Technologies, once they exist
+				if (good.Prerequisite > -1) {
+					resource.Prerequisite = save.Techs[good.Prerequisite].id;
+				}
 
 				save.Resources.Add(resource);
 				resourcesByIndex[g] = resource;

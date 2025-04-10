@@ -11,7 +11,7 @@ namespace C7GameData {
 		public int DisappearanceRatio { get; set; }
 		public string Name { get; set; }
 		public string CivilopediaEntry { get; set; }
-		//public Technology Prerequisite { get; set; }	//Uncomment when we have technologies
+		public ID Prerequisite { get; set; }
 
 		public static readonly Resource NONE = new Resource
 		{
