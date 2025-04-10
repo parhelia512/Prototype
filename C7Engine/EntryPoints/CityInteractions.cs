@@ -34,12 +34,17 @@ namespace C7Engine {
 			tileWithNewCity.overlays.mine = false;
 			tileWithNewCity.overlays.irrigation = false;
 
+			// Redo corruption calculations after a city is created, since it
+			// may change rank corruption values.
+			owner.DoCorruptionCalculations(EngineStorage.gameData);
+
 			return newCity;
 		}
 
 		public static void DestroyCity(int X, int Y) {
 			Tile tile = EngineStorage.gameData.map.tileAt(X, Y);
 			tile.DisbandNonDefendingUnits();
+			Player owner = tile.cityAtTile.owner;
 			tile.cityAtTile.RemoveAllCitizens();
 			tile.cityAtTile.owner.cities.Remove(tile.cityAtTile);
 			EngineStorage.gameData.cities.Remove(tile.cityAtTile);
@@ -51,6 +56,10 @@ namespace C7Engine {
 			}
 			tile.cityAtTile = null;
 			tile.overlays.road = false;
+
+			// Redo corruption calculations after a city is destroyed, since it
+			// may change rank corruption values.
+			owner.DoCorruptionCalculations(EngineStorage.gameData);
 		}
 	}
 }
