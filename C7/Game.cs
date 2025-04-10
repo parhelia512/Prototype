@@ -10,7 +10,6 @@ using System.Linq;
 using C7Engine.AI;
 
 public partial class Game : Node2D {
-	[Signal] public delegate void TurnStartedEventHandler();
 	[Signal] public delegate void TurnEndedEventHandler();
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
 	[Signal] public delegate void NewAutoselectedUnitEventHandler();
@@ -201,6 +200,9 @@ public partial class Game : Node2D {
 		cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
 		cityScreen.mapView = mapView;
 		cityScreen.citizenTypes = gameDataAccess.gameData.citizenTypes;
+
+		// Allow the domestic advisor to trigger popups.
+		advisor.domesticAdvisor.SetPopupOverlay(popupOverlay);
 	}
 
 	// Must only be called while holding the game data mutex
@@ -210,7 +212,7 @@ public partial class Game : Node2D {
 			switch (msg) {
 				case MsgStartUnitAnimation mSUA:
 					MapUnit unit = gameData.GetUnit(mSUA.unitID);
-					if (unit != null && (controller.tileKnowledge.isTileKnown(unit.location) || controller.tileKnowledge.isTileKnown(unit.previousLocation))) {
+					if (unit != null && (controller.tileKnowledge.isActiveTile(unit.location) || controller.tileKnowledge.isActiveTile(unit.previousLocation))) {
 						// TODO: This needs to be extended so that the player is shown when AIs found cities, when they move units
 						// (optionally, depending on preferences) and generalized so that modders can specify whether custom
 						// animations should be shown to the player.
@@ -228,7 +230,7 @@ public partial class Game : Node2D {
 					int X, Y;
 					gameData.map.tileIndexToCoords(mSEA.tileIndex, out X, out Y);
 					Tile tile = gameData.map.tileAt(X, Y);
-					if (tile != Tile.NONE && controller.tileKnowledge.isTileKnown(tile))
+					if (tile != Tile.NONE && controller.tileKnowledge.isActiveTile(tile))
 						animTracker.startAnimation(tile, mSEA.effect, mSEA.completionEvent, mSEA.ending);
 					else {
 						if (mSEA.completionEvent != null)
@@ -265,7 +267,7 @@ public partial class Game : Node2D {
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 					break;
-				case MsgUpdateUiAfterSliderChange mUUASC:
+				case MsgUpdateUiAfterDomesticChange mUUASC:
 					// F1 is the science advisor.
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
@@ -391,23 +393,28 @@ public partial class Game : Node2D {
 	}
 
 	private void OnPlayerStartTurn() {
+		using UIGameDataAccess gameDataAccess = new();
 		log.Information("Starting player turn");
-		using (var gameDataAccess = new UIGameDataAccess()) {
-			int turnNumber = TurnHandling.GetTurnNumber();
-			Player player = controller;
 
-			// Allow fast forwarding in observer mode.
-			if (gameDataAccess.gameData.observerMode && turnsLeftToFastForward > 0) {
-				--turnsLeftToFastForward;
-				new MsgEndTurn().send();
-				return;
-			}
-
-			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
-			CurrentState = GameState.PlayerTurn;
-
-			GetNextAutoselectedUnit(gameDataAccess.gameData);
+		// If the player can now pick a new government, force them to do so.
+		// When the popup is closed we call OnPlayerStartTurn again. This isn't
+		// ideal, but we don't yet have a general purpose "show a popup and
+		// wait for the player to acknowledge it" system.
+		if (controller.government.transitionType && TurnHandling.GetTurnNumber() >= controller.inAnarchyUntilTurn) {
+			popupOverlay.ShowPopup(
+				new GovernmentSelection(controller, controller.GetAvailableGovernments(gameDataAccess.gameData)),
+				PopupOverlay.PopupCategory.Info);
 		}
+
+		// Allow fast forwarding in observer mode.
+		if (gameDataAccess.gameData.observerMode && turnsLeftToFastForward > 0) {
+			--turnsLeftToFastForward;
+			new MsgEndTurn().send();
+			return;
+		}
+
+		CurrentState = GameState.PlayerTurn;
+		GetNextAutoselectedUnit(gameDataAccess.gameData);
 	}
 
 	private void OnPlayerEndTurn() {
@@ -466,7 +473,7 @@ public partial class Game : Node2D {
 
 	public override void _UnhandledInput(InputEvent @event) {
 		// Don't handle mouse actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScreen.Visible) {
 			IsMovingCamera = false;
 			return;
 		}

@@ -102,6 +102,40 @@ namespace C7Engine {
 		}
 	}
 
+	// Switches the player government to anarchy and determines when the player
+	// can exit anarchy.
+	public class StartGovernmentTransitionMsg : MessageToEngine {
+		private Player player;
+
+		public StartGovernmentTransitionMsg(Player p) {
+			player = p;
+		}
+
+		public override void process() {
+			GameData gD = EngineStorage.gameData;
+			Government transitionGovt = gD.governments.Find(x => x.transitionType);
+			player.government = transitionGovt;
+			player.inAnarchyUntilTurn = gD.turn + player.GetTurnsOfAnarchyForTransition(gD);
+
+			// Update the domestic advisor once we know how long the anarchy is.
+			new MsgUpdateUiAfterDomesticChange().send();
+		}
+	}
+
+	public class SelectGovernmentMsg : MessageToEngine {
+		private Player player;
+		private Government government;
+
+		public SelectGovernmentMsg(Player player, Government government) {
+			this.player = player;
+			this.government = government;
+		}
+
+		public override void process() {
+			player.government = government;
+		}
+	}
+
 	// A Class that allows the UI to have the game engine run some
 	// terraform action.
 	public class MsgStartWorkerJob : MessageToEngine {
@@ -225,7 +259,7 @@ namespace C7Engine {
 			}
 
 			// Update the ui to reflect our changes.
-			new MsgUpdateUiAfterSliderChange().send();
+			new MsgUpdateUiAfterDomesticChange().send();
 		}
 	}
 

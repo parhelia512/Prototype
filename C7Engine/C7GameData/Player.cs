@@ -330,6 +330,22 @@ namespace C7GameData {
 			return $"{tech.Name} ({EstimateTurnsToResearch(gD, tech)} turns)";
 		}
 
+		public List<Government> GetAvailableGovernments(GameData gameData) {
+			List<Government> result = new();
+			foreach (Government g in gameData.governments) {
+				// You can't deliberately switch into the transition type, you
+				// have to switch from one non-transitional type to another.
+				if (g.transitionType) {
+					continue;
+				}
+
+				if (g.prerequisiteTech == null || knownTechs.Contains(g.prerequisiteTech)) {
+					result.Add(g);
+				}
+			}
+			return result;
+		}
+
 		// See https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/
 		//
 		// This is the empire-wide information factored out of the rank corruption
@@ -361,6 +377,45 @@ namespace C7GameData {
 			float result = mapOptimalCityNumber * percentOptimalCitiesForDifficultyLevel / 100.0f
 				  * (1 + commercialCivFactor + govtFactor + communalCorruptionFactor * numCorruptionReducingSmallWondersInEmpire);
 			return (int)result;
+		}
+
+		// Notes:
+		//  - see https://www.civforum.de/showthread.php?3153-Anarchie-Wieviel-Runden-welche-Strategie&p=67682&viewfull=1#post67682 (in German)
+		//    This claims Soren Johnson said the time is 
+		//    1-5 years, random + 0-3 years, depending on the number of cities.
+		//    I think the 1-5 is actually 2 to 6, since the min is 2.
+		//
+		//  - https://forums.civfanatics.com/threads/frequently-asked-questions-civ3-play-the-world-conquests.170282/
+		//    For Religious civilizations, anarchy only lasts 1 turn in Vanilla 
+		//    and Play the World, and 2 turns in Conquests. For non-Religious 
+		//    civilizations, the formula is: 1 (2 for Conquests) + random number
+		//    between 1-4 + number between 0-3 depending on size of your empire.
+		public int GetTurnsOfAnarchyForTransition(GameData gameData) {
+			// TODO: if religious, return 2.
+
+			// We add Next(3)+Next(3) to roughly approximate a normal 
+			// distribution. With the base of 2, this gets us a random value 
+			// between 2 and 6.
+			int randomPortion = 2 + GameData.rng.Next(3) + GameData.rng.Next(3);
+
+			// Now we use the OCN to determine the city factor, which is between
+			// 0 and 3. This means that sprawling empires will have longer
+			// anarchy, but this will scale with map size.
+			float numCities = cities.Count;
+			int cityPortion = (int)Math.Min(3f, 3f * numCities / GetAdjustedOptimalCityNumber(gameData));
+
+			// The result is the sume of the random portion and the city portion,
+			// with the AI cap applied if relevant for this difficulty.
+			//
+			// Note that this AI transition time is applied after the early
+			// return for religious civs. There is a known strategy on higher
+			// difficulty levels of using religious civs to help cut down on the
+			// AI advantage due to this fact.
+			int result = randomPortion + cityPortion;
+			if (!isHuman && gameData.gameDifficulty.MaxAiGovernmentTransitionTime > 0) {
+				result = Math.Min(result, gameData.gameDifficulty.MaxAiGovernmentTransitionTime);
+			}
+			return result;
 		}
 
 		public void DoPerTurnFinanceUpdates(GameData gameData) {

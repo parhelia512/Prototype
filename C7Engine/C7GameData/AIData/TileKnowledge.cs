@@ -70,6 +70,9 @@ namespace C7GameData {
 		}
 
 		public bool isActiveTile(Tile t) {
+			if (t == Tile.NONE) {
+				return false;
+			}
 			return activeTiles.Contains(t);
 		}
 
