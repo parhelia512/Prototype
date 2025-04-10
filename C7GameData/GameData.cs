@@ -179,17 +179,35 @@ namespace C7GameData {
 			//
 			// MM = map modifier (tiny=160, small=200, standard=240, large=320, huge=400)
 			// COST = tech cost
-			// CF = difficulty factor, range 10 (easy) to 6 (hard)
+			// CF = difficulty factor
 			// N = number of known civs that have discovered the tech
 			// CL = civs left in game
 			//
-			// We also have the min/max turns to research of 4 and 50.
-			// TODO: implement the civ-related parts of the equation
+			// We also have the min/max turns to research of 4 and 50 (defined
+			// in the rules)
 			// TODO: See this this whole equation can be configurable
-			int difficultyFactor = 10; // easy difficulty
-			int researchCost = map.techRate * 10 * tech.Cost / (difficultyFactor * 10);
+			int knownCivsThatKnowTheTech = 0;
+			int civsLeft = 0;
+			foreach (Player p in players) {
+				if (player.playerRelationships.ContainsKey(p.id) && p.knownTechs.Contains(tech.id)) {
+					++knownCivsThatKnowTheTech;
+				}
+				if (!p.isBarbarians && !p.defeated) {
+					++civsLeft;
+				}
+			}
 
-			return researchCost;
+			int difficultyFactor = player.isHuman ? gameDifficulty.HumanCostFactor : gameDifficulty.AiCostFactor;
+			float knowledgeFactor = 1.0f - knownCivsThatKnowTheTech / (civsLeft * 1.75f);
+			float researchCost = map.techRate * 10 * tech.Cost  * knowledgeFactor/ (difficultyFactor * 10);
+
+			// Only include the progress factor if this is the tech actively
+			// being researched.
+			if (player.currentlyResearchedTech == tech.id) {
+				researchCost -= player.beakers;
+			}
+
+			return (int)Math.Max(Math.Floor(researchCost), 0);
 		}
 
 		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/

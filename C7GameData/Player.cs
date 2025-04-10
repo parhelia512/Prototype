@@ -56,7 +56,16 @@ namespace C7GameData {
 		public int taxRate = 5;
 
 		// The amount of gold this player has.
-		public int gold = 0;
+		private int _gold = 0;
+		public int gold {
+			get => _gold;
+			set {
+				if (value < 0) {
+					throw new Exception($"bad gold value of {value} for {this}");
+				}
+				_gold = value;
+			}
+		}
 
 		// The number of "beakers" (gold) spent on the currently researched
 		// tech.
@@ -297,7 +306,7 @@ namespace C7GameData {
 				return int.MaxValue;
 			}
 
-			int remainingCost = gameData.TechCostFor(tech, this) - beakers;
+			int remainingCost = gameData.TechCostFor(tech, this);
 			int turnsRemaining = (int)Math.Ceiling((double)remainingCost / beakersPerTurn);
 
 			int maxTurnsRemaining = rules.MaximumResearchTime - turnsResearched;
@@ -310,6 +319,10 @@ namespace C7GameData {
 		}
 
 		public void DoPerTurnFinanceUpdates(GameData gameData) {
+			if (isBarbarians) {
+				return;
+			}
+
 			// Process per-city contributions.
 			//
 			// TODO: consider making this return a tuple too. Or maybe return all
@@ -347,7 +360,7 @@ namespace C7GameData {
 				}
 
 				// If the budget still isn't under control, something is wrong.
-				throw new Exception($"{this} was unable to get the budget under control despite being under the unit support cap and zeroing out the sliders");
+				throw new Exception($"{this} was unable to get the budget under control despite being under the unit support cap and zeroing out the sliders (gold={gold}, gpt={CalculateGoldPerTurn()})");
 			}
 
 			gold += CalculateGoldPerTurn();
