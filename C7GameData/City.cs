@@ -13,9 +13,27 @@ namespace C7GameData {
 	}
 
 	public struct CommerceBreakdown {
+		public int corrupted;
 		public int taxes;
 		public int beakers;
 		public int happiness;
+	}
+
+	public struct CorruptableValue {
+		public CorruptableValue(int value, float corruption) {
+			// Apply the corruption amount, ensuring that there is always at
+			// least one shield/commerce if we started with at least one.
+			useful = (int)Math.Round(value * (1 - corruption));
+			if (value > 0) {
+				useful = Math.Max(1, useful);
+			}
+
+			// Whatever is left over is corrupt.
+			corrupt = value - useful;
+		}
+
+		public int useful;
+		public int corrupt;
 	}
 
 	public class City {
@@ -36,6 +54,16 @@ namespace C7GameData {
 		public Player owner { get; set; }
 		public List<CityResident> residents = new List<CityResident>();
 		public List<CityBuilding> buildings = [];
+
+		// The order of this city within all the cities of a player for the
+		// purposes of rank corruption calculations.
+		//
+		// This is updated each turn to avoid each city needing to do an O(n)
+		// scan of the list, which would cause an O(n^2) overall calcuation.
+		public int rankIndex = -1;
+
+		// The amount of corruption, between 0 and 1.
+		public float corruption = 0;
 
 		public static City NONE = new City(Tile.NONE, null, "Dummy City", ID.None("city"));
 
@@ -107,8 +135,9 @@ namespace C7GameData {
 
 		public int TurnsToProduce(IProducible item) {
 			int additionalProductionNeeded = item.shieldCost - shieldsStored;
-			int turnsRoundedDown = additionalProductionNeeded / CurrentProductionYield();
-			if (additionalProductionNeeded % CurrentProductionYield() != 0) {
+			int usefulShields = CurrentProductionYield().useful;
+			int turnsRoundedDown = additionalProductionNeeded / usefulShields;
+			if (additionalProductionNeeded % usefulShields != 0) {
 				return Math.Max(turnsRoundedDown + 1, 1);
 			}
 			return Math.Max(turnsRoundedDown, 1);
@@ -134,8 +163,7 @@ namespace C7GameData {
 		 * returns the item that is built.  Otherwise, returns null.
 		 */
 		public IProducible ComputeTurnProduction() {
-
-			shieldsStored += CurrentProductionYield();
+			shieldsStored += CurrentProductionYield().useful;
 			if (shieldsStored >= itemBeingProduced.shieldCost && size > itemBeingProduced.populationCost) {
 				shieldsStored = 0;
 				size -= itemBeingProduced.populationCost;
@@ -154,24 +182,27 @@ namespace C7GameData {
 			return yield;
 		}
 
-		public int CurrentProductionYield() {
+		public CorruptableValue CurrentProductionYield() {
 			int yield = location.productionYield(owner);
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.productionYield(owner);
 			}
-			return yield;
+			return new CorruptableValue(yield, corruption);
 		}
 
 		public CommerceBreakdown CurrentCommerceYield() {
-			int yield = location.commerceYield(owner);
+			int uncorruptedCommerce = location.commerceYield(owner);
 			foreach (CityResident r in residents) {
-				yield += r.tileWorked.commerceYield(owner);
+				uncorruptedCommerce += r.tileWorked.commerceYield(owner);
 			}
 
-			CommerceBreakdown result = new CommerceBreakdown();
-			result.beakers = (int)Math.Floor(yield * owner.scienceRate / 10.0);
-			result.happiness = (int)Math.Floor(yield * owner.luxuryRate / 10.0);
-			result.taxes = yield - result.beakers - result.happiness;
+			CorruptableValue commerce = new CorruptableValue(uncorruptedCommerce, corruption);
+
+			CommerceBreakdown result = new();
+			result.corrupted = commerce.corrupt;
+			result.beakers = (int)Math.Floor(commerce.useful * owner.scienceRate / 10.0);
+			result.happiness = (int)Math.Floor(commerce.useful * owner.luxuryRate / 10.0);
+			result.taxes = commerce.useful - result.beakers - result.happiness;
 
 			return result;
 		}
@@ -294,6 +325,105 @@ namespace C7GameData {
 			}
 
 			return result;
+		}
+
+		// See https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/
+		private float CalculateDistanceCorruption(int numAntiCorruptionBuildings) {
+			float maxD = (location.map.numTilesWide + location.map.numTilesTall) / 4;
+
+			// TODO: This should also look for the forbidden palace and secret
+			// police headquarters.
+			City capitol = owner.cities.Find(x => x.IsCapital());
+			if (capitol == null) {
+				// TODO: Ensure we always have a capitol, even in scenarios
+				// without palaces added.
+				capitol = owner.cities[0];
+			}
+			float distanceToPalace = location.rankDistanceTo(capitol.location);
+			if (owner.government.corruptionType == Government.CorruptionType.Communal) {
+				distanceToPalace = maxD / 4;
+			}
+
+			// TODO: Update this once we track trade networks.
+			bool connectedToCapitol = false;
+			float tradeFactor = connectedToCapitol ? 1.0f : 5.0f/4.0f;
+
+			float govtFactor = owner.government.corruptionType switch {
+				Government.CorruptionType.Minimal => 3.0f/4.0f,
+				Government.CorruptionType.Nuisance => 1f,
+				Government.CorruptionType.Problematic => 1f,
+				Government.CorruptionType.Rampant => 3.0f/2.0f,
+				Government.CorruptionType.Catastrophic => 1f, // anarchy, special cased
+				Government.CorruptionType.Communal => 1f,
+				Government.CorruptionType.Off => 0f
+			};
+
+
+			float adjustedDistance =
+					(float)Math.Pow(0.5f, numAntiCorruptionBuildings)
+					* Math.Min(govtFactor * tradeFactor * distanceToPalace, maxD);
+			return adjustedDistance / maxD;
+		}
+
+		// See https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/
+		private float CalculateRankCorruption(GameData gameData, int numAntiCorruptionBuildings, int numCorruptionReducingWonders) {
+			int rank = rankIndex;
+			if (owner.government.corruptionType == Government.CorruptionType.Communal) {
+				rank = owner.cities.Count / 2;
+			}
+
+			int mapOptimalCityNumber = gameData.map.optimalNumberOfCities;
+			int percentOptimalCitiesForDifficultyLevel = gameData.gameDifficulty.PercentageOfOptimalCities;
+
+			// TODO: track traits.
+			bool isCommercialCiv = false;
+			float commercialCivFactor = isCommercialCiv ? .25f : 0;
+
+			float govtFactor = owner.government.corruptionType switch {
+				Government.CorruptionType.Minimal => .1f,
+				Government.CorruptionType.Nuisance => .1f,
+				Government.CorruptionType.Problematic => 0,
+				Government.CorruptionType.Rampant => 0,
+				Government.CorruptionType.Catastrophic => 0, // anarchy, special cased
+				Government.CorruptionType.Communal => 2,
+				Government.CorruptionType.Off => 0
+			};
+
+			float communalCorruptionFactor =
+				owner.government.corruptionType == Government.CorruptionType.Communal ? 3.0f : 3.0f/8.0f;
+
+			float nOpt = Math.Max(
+				1,
+				mapOptimalCityNumber * percentOptimalCitiesForDifficultyLevel / 100.0f
+				  * (1 + commercialCivFactor + govtFactor + communalCorruptionFactor * numCorruptionReducingWonders)
+				  + .25f * numAntiCorruptionBuildings);
+
+			if (rank < nOpt) {
+				return rank / (2 * nOpt);
+			} else {
+				return (2 * rank - nOpt) / (2 * nOpt);
+			}
+		}
+
+		public void CalculateCorruption(GameData gameData) {
+			// TODO: Once we import ReducesCorruption from Bldg.cs, count the
+			// number of buildings with this set.
+			int numAntiCorruptionBuildings = 0;
+
+			// TODO: Also handle the forbidden palace and SPHQ.
+			int numCorruptionReducingWonders = IsCapital() ? 1 : 0;
+
+			corruption = CalculateDistanceCorruption(numAntiCorruptionBuildings)
+					+ CalculateRankCorruption(gameData, numAntiCorruptionBuildings, numCorruptionReducingWonders);
+			// TODO: apply policeman modifiers, before applying the max
+
+			// Corruption maxes out at 90%, and this max can be reduced further
+			// via courthouses/police stations, and the forbidden palace/SPHQ.
+			float maxCorruption = Math.Max(
+				0,
+				.9f - (.1f * numAntiCorruptionBuildings + .7f * numCorruptionReducingWonders));
+			corruption = Math.Max(corruption, 0);
+			corruption = Math.Min(corruption, maxCorruption);
 		}
 	}
 }

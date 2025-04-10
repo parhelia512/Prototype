@@ -325,13 +325,14 @@ public partial class CityScreen : Control {
 
 	private void RenderCommerceDetails(City city) {
 		CommerceBreakdown breakdown = city.CurrentCommerceYield();
-		commerceTaxesDetails.Text = $"{breakdown.taxes} gold/turn to taxes (0 corrupt)";
-		commerceScienceDetails.Text = $"{breakdown.beakers} gold/turn to science  (0 corrupt)";
-		commerceHappinessDetails.Text = $"{breakdown.happiness} gold/turn to happiness (0 corrupt)";
+		commerceTaxesDetails.Text = $"{breakdown.taxes} gold/turn to taxes";
+		commerceScienceDetails.Text = $"{breakdown.beakers} gold/turn to science  ({breakdown.corrupted} corrupt)";
+		commerceHappinessDetails.Text = $"{breakdown.happiness} gold/turn to happiness";
 	}
 
 	private void RenderProductionDetails(City city) {
-		productionDetails.Text = $"{city.CurrentProductionYield()} shields/turn  (0 corrupt). {city.shieldsStored} of {city.itemBeingProduced.shieldCost} stored. {city.TurnsUntilProductionFinished()} turns left.";
+		CorruptableValue shields = city.CurrentProductionYield();
+		productionDetails.Text = $"{shields.useful + shields.corrupt} shields/turn ({shields.useful} usable, {shields.corrupt} corrupt). {city.shieldsStored} of {city.itemBeingProduced.shieldCost} stored. {city.TurnsUntilProductionFinished()} turns left";
 
 		foreach (Node child in productionButton.GetChildren()) {
 			child.QueueFree();
