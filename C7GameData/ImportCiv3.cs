@@ -54,7 +54,7 @@ namespace C7GameData {
 			save.HealRates["neutral_field"] = 1;
 			save.HealRates["hostile_field"] = 0;
 			save.HealRates["city"] = 2;
-			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
+			save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
 			ImportCitizenTypes();
 			ImportTerraforms();
