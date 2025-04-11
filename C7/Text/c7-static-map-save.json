@@ -67884,7 +67884,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -67962,7 +67962,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -68040,7 +68040,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -68114,7 +68114,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -68192,7 +68192,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -68274,7 +68274,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -68352,7 +68352,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     },
     {
@@ -68426,7 +68426,7 @@
       "gold": 10,
       "beakers": 0,
       "turnsResearched": 0,
-      "anarchyTurnsLeft": 0,
+      "inAnarchyUntilTurn": 0,
       "governmentId": "Government-2"
     }
   ],
