@@ -15,18 +15,6 @@ public partial class MilitaryAdvisor : TextureRect {
 	private void CreateUI() {
 		this.Texture = Util.LoadTextureFromPCX("Art/Advisors/military.pcx");
 
-		//TODO: Age-based background.  Only use Ancient for now.
-		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupMILITARY.pcx", 1, 40, 149, 110);
-		ImageTexture AdvisorAngry = Util.LoadTextureFromPCX("Art/SmallHeads/popupMILITARY.pcx", 151, 40, 149, 110);
-		ImageTexture AdvisorSad = Util.LoadTextureFromPCX("Art/SmallHeads/popupMILITARY.pcx", 301, 40, 149, 110);
-		ImageTexture AdvisorSurprised = Util.LoadTextureFromPCX("Art/SmallHeads/popupMILITARY.pcx", 451, 40, 149, 110);
-
-		TextureRect AdvisorHead = new TextureRect();
-		//TODO: Randomize or set logically
-		AdvisorHead.Texture = AdvisorSurprised;
-		AdvisorHead.SetPosition(new Vector2(851, 0));
-		AddChild(AdvisorHead);
-
 		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
 		TextureButton DialogBox = new TextureButton();
 		DialogBox.TextureNormal = DialogBoxTexture;
@@ -64,6 +52,12 @@ public partial class MilitaryAdvisor : TextureRect {
 			unitSupportCostLabel.SetPosition(new Vector2(0, 188));
 			unitSupportCostLabel.SetTextAndCenterLabel($"Unit Support Cost\n{unitSupportCost} gold/turn");
 			unitSupportCostLabel.Position += new Vector2(-50, 0);
+
+			TextureRect advisorHead = new();
+			//TODO: Randomize or set logically
+			advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Military, AdvisorHead.Mood.Happy, player.EraIndex());
+			advisorHead.SetPosition(new Vector2(851, 0));
+			AddChild(advisorHead);
 		}
 
 	}

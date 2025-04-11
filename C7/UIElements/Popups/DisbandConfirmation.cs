@@ -37,12 +37,11 @@ public partial class DisbandConfirmation : Popup {
 		// out the size of this TextureRect, and it won't be able to align it properly.
 		AddTexture(530, 320);
 
-		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupDOMESTIC.pcx", 1, 40, 149, 110, false);
-		TextureRect AdvisorHead = new TextureRect();
-		AdvisorHead.Texture = AdvisorHappy;
+		TextureRect advisorHead = new TextureRect();
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Surprised, /*eraIndex=*/0);
 		//Appears at 400, 110 in game, but leftmost 25px are transparent with default graphics
-		AdvisorHead.SetPosition(new Vector2(375, 0));
-		AddChild(AdvisorHead);
+		advisorHead.SetPosition(new Vector2(375, 0));
+		AddChild(advisorHead);
 
 		//TODO: Almost all (135 ms) of the disband confirmation creation, after the first time, is in the
 		//background creation.  90 ms or so on the first time is before this point (and is well-cached later on).

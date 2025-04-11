@@ -20,12 +20,11 @@ public partial class WarConfirmation : Popup {
 
 		AddTexture(530, 320);
 
-		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupFOREIGN.pcx", 1, 40, 149, 110, false);
-		TextureRect AdvisorHead = new TextureRect();
-		AdvisorHead.Texture = AdvisorHappy;
+		TextureRect advisorHead = new();
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Foreign, AdvisorHead.Mood.Surprised, /*eraIndex=*/0);
 		//Appears at 400, 110 in game, but leftmost 25px are transparent with default graphics
-		AdvisorHead.SetPosition(new Vector2(375, 0));
-		AddChild(AdvisorHead);
+		advisorHead.SetPosition(new Vector2(375, 0));
+		AddChild(advisorHead);
 
 		AddBackground(530, 210, 110);
 		AddHeader("Foreign Advisor", 120);

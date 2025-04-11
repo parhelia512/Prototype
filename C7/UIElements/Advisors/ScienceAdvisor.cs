@@ -12,6 +12,7 @@ public partial class ScienceAdvisor : TextureRect {
 	private TextureButton nextEra;
 	private TextureButton previousEra;
 	private List<TechBox> techBoxes = new();
+	private TextureRect advisorHead = new();
 
 	// Stored separately so we can modify this without mutating the player.
 	private string eraName;
@@ -35,19 +36,9 @@ public partial class ScienceAdvisor : TextureRect {
 		IndustrialBackground = Util.LoadTextureFromPCX("Art/Advisors/science_industrial_new.pcx");
 		ModernBackground = Util.LoadTextureFromPCX("Art/Advisors/science_modern.pcx");
 
-		// TODO: Age-based background.  Only use Ancient for now.
-		// TODO: Consider moving this to an advisor utility, since we're copying
-		// these X,Y coordinates in multiple places.
-		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupSCIENCE.pcx", 1, 40, 149, 110);
-		ImageTexture AdvisorAngry = Util.LoadTextureFromPCX("Art/SmallHeads/popupSCIENCE.pcx", 151, 40, 149, 110);
-		ImageTexture AdvisorSad = Util.LoadTextureFromPCX("Art/SmallHeads/popupSCIENCE.pcx", 301, 40, 149, 110);
-		ImageTexture AdvisorSurprised = Util.LoadTextureFromPCX("Art/SmallHeads/popupSCIENCE.pcx", 451, 40, 149, 110);
-
-		TextureRect AdvisorHead = new();
-		//TODO: Randomize or set logically
-		AdvisorHead.Texture = AdvisorSurprised;
-		AdvisorHead.SetPosition(new Vector2(851, 0));
-		AddChild(AdvisorHead);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.SetPosition(new Vector2(851, 0));
+		AddChild(advisorHead);
 
 		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
 		TextureButton DialogBox = new TextureButton();
@@ -122,6 +113,7 @@ public partial class ScienceAdvisor : TextureRect {
 			this.Texture = ModernBackground;
 			nextEra.Hide();
 		}
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, player.EraIndex());
 
 		foreach (Tech tech in allTechs) {
 			if (tech.EraCivilopediaName != eraName) {
