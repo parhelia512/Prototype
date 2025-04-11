@@ -257,16 +257,21 @@ public partial class CityScreen : Control {
 
 		foreach ((C7GameData.Resource resource, int count) in resourceCounter) {
 			VBoxContainer resourceContainer = new();
+			resourceContainer.AddThemeConstantOverride("separation", 0);
 
-			Label resourceName = new() {
-				Text = resource.Name
+			var texture = Util.GetResourceTexture(resource);
+			texture.SetSizeOverride(new(45, 45));
+
+			TextureRect resourceRect = new() {
+				Texture = texture,
 			};
 
 			Label resourceLabel = new() {
-				Text = count.ToString()
+				Text = count.ToString(),
+				HorizontalAlignment = HorizontalAlignment.Center
 			};
 
-			resourceContainer.AddChild(resourceName);
+			resourceContainer.AddChild(resourceRect);
 			resourceContainer.AddChild(resourceLabel);
 
 			strategicResources.AddChild(resourceContainer);
@@ -283,16 +288,16 @@ public partial class CityScreen : Control {
 		foreach ((C7GameData.Resource resource, int count) in resourceCounter) {
 			HBoxContainer resourceContainer = new();
 
+			Label resourceCount = new() {
+				Text = "(" + count.ToString() + ")"
+			};
+
 			Label resourceName = new() {
 				Text = resource.Name
 			};
 
-			Label resourceLabel = new() {
-				Text = count.ToString()
-			};
-
+			resourceContainer.AddChild(resourceCount);
 			resourceContainer.AddChild(resourceName);
-			resourceContainer.AddChild(resourceLabel);
 
 			luxuriesContainer.AddChild(resourceContainer);
 		}

@@ -161,7 +161,7 @@ text = "Placeholder City"
 label_settings = SubResource("LabelSettings_wgpk8")
 horizontal_alignment = 1
 
-[node name="StrategicResourceLabel" type="Label" parent="HBoxContainer/Background" index="18"]
+[node name="StrategicResourceLabel" type="Label" parent="HBoxContainer/Background" index="13"]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 4.0
@@ -169,12 +169,13 @@ offset_right = 45.0
 offset_bottom = 24.0
 text = "STRATEGIC RESOURCES"
 
-[node name="ScrollContainerStrategicResources" type="ScrollContainer" parent="HBoxContainer/Background" index="19"]
+[node name="ScrollContainerStrategicResources" type="ScrollContainer" parent="HBoxContainer/Background" index="14"]
 layout_mode = 0
 offset_left = 4.0
-offset_top = 31.0
+offset_top = 24.0
 offset_right = 294.0
-offset_bottom = 86.0
+offset_bottom = 89.0
 
 [node name="StrategicResourceContainer" type="HBoxContainer" parent="HBoxContainer/Background/ScrollContainerStrategicResources" index="0"]
 layout_mode = 2
+theme_override_constants/separation = 0
