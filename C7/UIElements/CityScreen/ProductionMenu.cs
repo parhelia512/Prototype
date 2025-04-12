@@ -9,7 +9,7 @@ using System;
 public partial class ProductionMenu : Civ3TextureRect {
 	private Dictionary<TreeItem, IProducible> itemMapping = new();
 
-	Tree tree = new();
+	Tree tree;
 	Theme fontTheme = new();
 
 	public ProductionMenu() {
@@ -19,20 +19,22 @@ public partial class ProductionMenu : Civ3TextureRect {
 		FontFile font = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf", null, ResourceLoader.CacheMode.Ignore);
 		font.FixedSize = 12;
 		fontTheme.DefaultFont = font;
+	}
+
+	public void AddItems(City city, Action<IProducible> chooseProduction) {
+		if (tree != null) {
+			itemMapping.Clear();
+			RemoveChild(tree);
+			tree = null;
+		}
+		tree = new();
 
 		// Set up the tree of items. We use a tree so we get a scroll bar and
 		// other niceties.
 		AddChild(tree);
 		tree.Columns = 2;
-
-		// Match the size of the texture used in the deal screen.
 		tree.Size = new Vector2(203, 360);
-
 		TradingTree.ConfigureTreeTheme(tree, fontTheme);
-	}
-
-	public void AddItems(City city, Action<IProducible> chooseProduction) {
-		tree.Clear();
 
 		TreeItem root = TradingTree.CreateTreeRoot(tree);
 
@@ -56,18 +58,5 @@ public partial class ProductionMenu : Civ3TextureRect {
 			ti.Deselect(0);
 			chooseProduction(itemMapping[ti]);
 		};
-	}
-
-	private void AddItem(string text, System.Action action, Texture2D icon = null) {
-		Button button = new Button();
-		button.Text = text;
-		if (icon != null) {
-			button.Icon = icon;
-		}
-		button.Alignment = HorizontalAlignment.Left;
-		if (action != null) {
-			button.Pressed += action;
-		}
-		this.AddChild(button);
 	}
 }
