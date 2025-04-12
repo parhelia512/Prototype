@@ -36,6 +36,8 @@ namespace C7GameData {
 		// The list of techs known by this player.
 		public HashSet<ID> knownTechs = new();
 
+		// A mapping of resource types to their corresponding tiles within player territory.
+		// Provides lookup of controlled resources without scanning the entire map.
 		public Dictionary<Resource, List<Tile>> resourcesInBorders;
 
 		// The tech the player is currently researching.
