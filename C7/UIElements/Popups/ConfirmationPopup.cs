@@ -4,21 +4,22 @@ using System.Diagnostics;
 using C7GameData;
 using Serilog;
 
-public partial class DisbandConfirmation : Popup {
-	private ILogger log = LogManager.ForContext<DisbandConfirmation>();
-
-	string unitType = "";
+public partial class ConfirmationPopup : Popup {
+	private ILogger log = LogManager.ForContext<ConfirmationPopup>();
 
 	Stopwatch loadTimer = new Stopwatch();
+	string message;
+	string yesText;
+	string noText;
+	Action yesAction;
 
-	//So Godot doesn't print error " Cannot construct temporary MonoObject because the class does not define a parameterless constructor"
-	//Not sure how important that is *shrug*
-	public DisbandConfirmation() { }
-
-	public DisbandConfirmation(MapUnit unit) {
+	public ConfirmationPopup(string message, string yesText, string noText, Action yesAction) {
 		alignment = BoxContainer.AlignmentMode.End;
 		margins = new Margins(right: 10);
-		unitType = unit.unitType.name;
+		this.message = message;
+		this.yesText = yesText;
+		this.noText = noText;
+		this.yesAction = yesAction;
 	}
 
 	public override void _EnterTree() {
@@ -51,26 +52,25 @@ public partial class DisbandConfirmation : Popup {
 
 		AddHeader("Domestic Advisor", 120);
 
-		Label warningMessage = new Label();
+		Label warningMessage = new();
 		//TODO: General-purpose text breaking up util.  Instead of \n
 		//This appears to be the way to do multi line labels, see: https://godotengine.org/qa/11126/how-to-break-line-on-the-label-using-gdscript
 		//Maybe there's an awesomer control we can user instead
-		warningMessage.Text = "Disband " + unitType + "?  Pardon me but these are OUR people. Do \nyou really want to disband them?";
+		warningMessage.Text = message; //"Disband " + unitType + "?  Pardon me but these are OUR people. Do \nyou really want to disband them?";
 
 		warningMessage.SetPosition(new Vector2(25, 170));
 		AddChild(warningMessage);
 
-		AddButton("Yes, we need to!", 215, disband);
-		AddButton("No. Maybe you are right, advisor.", 245, cancel);
+		AddButton(yesText, 215, confirmed);
+		AddButton(noText, 245, cancel);
 
 		loadTimer.Stop();
 		TimeSpan stopwatchElapsed = loadTimer.Elapsed;
-		log.Verbose("Disband popup load time: " + Convert.ToInt32(stopwatchElapsed.TotalMilliseconds) + " ms");
+		log.Verbose("Confirmation popup load time: " + Convert.ToInt32(stopwatchElapsed.TotalMilliseconds) + " ms");
 	}
 
-	private void disband() {
-		//tell the game to disband it.  right now we're doing that first, which is WRONG!
-		GetParent().EmitSignal(PopupOverlay.SignalName.UnitDisbanded);
+	private void confirmed() {
+		yesAction();
 		GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 	}
 

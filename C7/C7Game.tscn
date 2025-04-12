@@ -372,4 +372,3 @@ visible = false
 [connection signal="HidePopup" from="CanvasLayer/PopupOverlay" to="CanvasLayer/PopupOverlay" method="OnHidePopup"]
 [connection signal="Quit" from="CanvasLayer/PopupOverlay" to="." method="OnQuitTheGame"]
 [connection signal="Retire" from="CanvasLayer/PopupOverlay" to="." method="_on_QuitButton_pressed"]
-[connection signal="UnitDisbanded" from="CanvasLayer/PopupOverlay" to="." method="OnUnitDisbanded"]

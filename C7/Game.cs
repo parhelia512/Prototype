@@ -788,7 +788,15 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitDisband) {
-			popupOverlay.ShowPopup(new DisbandConfirmation(CurrentlySelectedUnit), PopupOverlay.PopupCategory.Advisor);
+			popupOverlay.ShowPopup(
+				new ConfirmationPopup(
+					$"Disband {CurrentlySelectedUnit.unitType.name}? Pardon me but these are OUR people. Do \nyou really want to disband them?",
+					"Yes, we need to!",
+					"No. Maybe you are right, advisor.",
+					() => {
+						new ActionToEngineMsg(() => CurrentlySelectedUnit?.disband()).send();
+					}),
+				PopupOverlay.PopupCategory.Advisor);
 		}
 
 		// unit_goto's behavior is more complicated than other actions - it
@@ -928,11 +936,6 @@ public partial class Game : Node2D {
 		} else {
 			animationPlayer.Play("SlideOutAnimation");
 		}
-	}
-
-	// Called by the disband popup
-	private void OnUnitDisbanded() {
-		new ActionToEngineMsg(() => CurrentlySelectedUnit?.disband()).send();
 	}
 
 	/**
