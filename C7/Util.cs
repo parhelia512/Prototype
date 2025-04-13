@@ -428,4 +428,32 @@ public partial class Util {
 		textureCache.Clear();
 		flicCache.Clear();
 	}
+
+	public static Rect2 GetResourceRect(C7GameData.Resource resource) {
+		ImageTexture resourceTexture = LoadTextureFromPCX("Art/resources.pcx");
+		Vector2 resourceSize = new(50, 50);
+
+		int maxRow = (resourceTexture.GetHeight() / 50) - 1;
+
+		int icon = resource.Icon;
+		int row = icon / 6;
+		int col = icon % 6;
+
+		if (row > maxRow) {
+			throw new ArgumentOutOfRangeException(nameof(resource), $"Icon row {row} exceeds maxRow {maxRow}");
+		}
+
+		return new Rect2(col * resourceSize.X, row * resourceSize.Y, resourceSize);
+	}
+
+	public static ImageTexture GetResourceTexture(C7GameData.Resource resource) {
+		Rect2 rect = GetResourceRect(resource);
+
+		int x = (int)rect.Position.X;
+		int y = (int)rect.Position.Y;
+		int width = (int)rect.Size.X;
+		int height = (int)rect.Size.Y;
+
+		return LoadTextureFromPCX("Art/resources.pcx", x, y, width, height);
+	}
 }

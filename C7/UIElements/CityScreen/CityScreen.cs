@@ -31,6 +31,9 @@ public partial class CityScreen : Control {
 
 	[Export] private ProductionMenu productionMenu;
 
+	[Export] private HBoxContainer strategicResources;
+	[Export] private VBoxContainer luxuriesContainer;
+
 	Theme yieldDetailsFontTheme = new();
 	FontFile yieldDetailsFont = new();
 
@@ -236,11 +239,68 @@ public partial class CityScreen : Control {
 		RenderCommerceDetails(city.Value);
 		RenderProductionDetails(city.Value);
 		RenderExistingBuildings(city.Value.buildings);
+		RenderStrategicResources(city.Value);
+		RenderLuxuries(city.Value);
 	}
 
 	private void OnExit() {
 		productionMenu.Hide();
 		tileAssignmentLayer.city = null;
+	}
+
+	private void RenderStrategicResources(City city) {
+		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetStrategicResources();
+
+		foreach (var child in strategicResources.GetChildren()) {
+			strategicResources.RemoveChild(child);
+		}
+
+		foreach ((C7GameData.Resource resource, int count) in resourceCounter) {
+			VBoxContainer resourceContainer = new();
+			resourceContainer.AddThemeConstantOverride("separation", 0);
+
+			var texture = Util.GetResourceTexture(resource);
+			texture.SetSizeOverride(new(45, 45));
+
+			TextureRect resourceRect = new() {
+				Texture = texture,
+			};
+
+			Label resourceLabel = new() {
+				Text = count.ToString(),
+				HorizontalAlignment = HorizontalAlignment.Center
+			};
+
+			resourceContainer.AddChild(resourceRect);
+			resourceContainer.AddChild(resourceLabel);
+
+			strategicResources.AddChild(resourceContainer);
+		}
+	}
+
+	private void RenderLuxuries(City city) {
+		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetLuxuries();
+
+		foreach (var child in luxuriesContainer.GetChildren()) {
+			luxuriesContainer.RemoveChild(child);
+		}
+
+		foreach ((C7GameData.Resource resource, int count) in resourceCounter) {
+			HBoxContainer resourceContainer = new();
+
+			Label resourceCount = new() {
+				Text = "(" + count.ToString() + ")"
+			};
+
+			Label resourceName = new() {
+				Text = resource.Name
+			};
+
+			resourceContainer.AddChild(resourceCount);
+			resourceContainer.AddChild(resourceName);
+
+			luxuriesContainer.AddChild(resourceContainer);
+		}
 	}
 
 	private void RenderExistingBuildings(List<CityBuilding> buildings) {

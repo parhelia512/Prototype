@@ -20,7 +20,6 @@ namespace C7Engine.Pathing {
 	// for some useful details.
 	public class AStarAlgorithm : PathingAlgorithm {
 		private readonly EdgeWalker<Tile> edgeWalker;
-		private readonly MapUnit unit;
 
 		// An estimate of the cost between two tiles, usually between a tile in
 		// the search and the destination tile. This allows targeting the search
@@ -28,10 +27,14 @@ namespace C7Engine.Pathing {
 		// the destination instead of expanding outwards in all directions.
 		private Func<Tile, Tile, double> costHeuristic;
 
-		public AStarAlgorithm(EdgeWalker<Tile> edgeWalker, MapUnit unit, Func<Tile, Tile, double> costHeuristic) {
+		// A delegate that determines if a tile is passable during pathfinding.
+		// Receives the tile being evaluated and the final destination tile.
+		private Func<Tile, Tile, bool> isPassable;
+
+		public AStarAlgorithm(EdgeWalker<Tile> edgeWalker, Func<Tile, Tile, double> costHeuristic, Func<Tile, Tile, bool> isPassable) {
 			this.edgeWalker = edgeWalker;
 			this.costHeuristic = costHeuristic;
-			this.unit = unit;
+			this.isPassable = isPassable;
 		}
 
 		public override TilePath PathFrom(Tile start, Tile destination) {
@@ -73,18 +76,13 @@ namespace C7Engine.Pathing {
 				foreach (Edge<Tile> neighborEdge in edgeWalker.getEdges(current)) {
 					Tile neighbor = neighborEdge.current;
 
-					// Only allow a potentially attacking move for the last step,
-					// to allow pathing to attack. We don't want to try and path
-					// through opponents on the way to our destination though,
-					// as we can get stuck.
-					bool allowCombat = neighbor == destination;
-					if (!unit.CanEnterTile(neighbor, allowCombat)) {
+					if (!isPassable(neighbor, destination)) {
 						continue;
 					}
 
 					double newCost = neighborEdge.distanceToCurrent + knownCosts[current];
 
-					// If we didn't know the cost to get to this neighbor, or 
+					// If we didn't know the cost to get to this neighbor, or
 					// this new path is now cheaper, update our data structures.
 					if (!knownCosts.ContainsKey(neighbor) || newCost < knownCosts[neighbor]) {
 						UpdateDictionary(knownCosts, neighbor, newCost);

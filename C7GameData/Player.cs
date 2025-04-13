@@ -36,6 +36,10 @@ namespace C7GameData {
 		// The list of techs known by this player.
 		public HashSet<ID> knownTechs = new();
 
+		// A mapping of resource types to their corresponding tiles within player territory.
+		// Provides lookup of controlled resources without scanning the entire map.
+		public Dictionary<Resource, List<Tile>> resourcesInBorders;
+
 		// The tech the player is currently researching.
 		public ID currentlyResearchedTech { get; private set; }
 
@@ -489,6 +493,13 @@ namespace C7GameData {
 				// calculation doesn't have to be done on the fly.
 				citiesInRankOrdering[i].CalculateCorruption(gameData);
 			}
+		}
+
+		public void UpdateResourcesInBorders(IEnumerable<Tile> ownedTiles) {
+			resourcesInBorders = ownedTiles
+								.Where(t => t.Resource != null)
+								.GroupBy(t => t.Resource)
+								.ToDictionary(g => g.Key, g => g.ToList());
 		}
 	}
 
