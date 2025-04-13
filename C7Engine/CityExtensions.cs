@@ -24,20 +24,6 @@ namespace C7Engine {
 			return city.location == tile || pathing.PathFrom(city.location, tile).path.Count > 0;
 		}
 
-		public static bool HasResource(this City city, Resource resource) {
-			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
-
-			if (!city.owner.KnowsAboutResource(resource)) {
-				return false;
-			}
-
-			if (city.owner.resourcesInBorders.TryGetValue(resource, out var resTiles)) {
-				return resTiles.Where(t => city.HasTradeAccess(t, pathing)).Any();
-			}
-
-			return false;
-		}
-
 		public static Dictionary<Resource, int> GetStrategicResources(this City city) {
 			return ListResourceAccess(city, ResourceCategory.STRATEGIC);
 		}
