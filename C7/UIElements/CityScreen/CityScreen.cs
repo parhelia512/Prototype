@@ -383,7 +383,7 @@ public partial class CityScreen : Control {
 	}
 
 	private void RenderCulture(City city) {
-		culturePerTurn.Text = "0/turn";  // TODO: fill this in
+		culturePerTurn.Text = $"{city.GetCulturePerTurn()}/turn";
 
 		int nextCultureExpansion = (int)Math.Pow(10, city.GetBorderExpansionLevel());
 		totalCulture.Text = $"Total: {city.GetCulture()}/{nextCultureExpansion}";

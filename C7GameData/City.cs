@@ -241,6 +241,14 @@ namespace C7GameData {
 			return perPlayerCulture[owner];
 		}
 
+		public int GetCulturePerTurn() {
+			int result = 0;
+			foreach (CityBuilding cb in buildings) {
+				result += cb.building.culturePerTurn;
+			}
+			return result;
+		}
+
 		public int GetBorderExpansionLevel() {
 			// Give ourselves a minimum of 1 culture to avoid taking the log of 0
 			int culture = Math.Max(1, GetCulture());
@@ -424,6 +432,17 @@ namespace C7GameData {
 				.9f - (.1f * numAntiCorruptionBuildings + .7f * numCorruptionReducingWonders));
 			corruption = Math.Max(corruption, 0);
 			corruption = Math.Min(corruption, maxCorruption);
+		}
+
+		// Does the per turn culture updating for the city and returns whether
+		// the borders need to be updated.
+		public bool UpdateCultureAndCheckForExpansion() {
+			int start = GetBorderExpansionLevel();
+			foreach (CityBuilding cb in buildings) {
+				cb.totalCulture += cb.building.culturePerTurn;
+				perPlayerCulture[owner] += cb.building.culturePerTurn;
+			}
+			return start != GetBorderExpansionLevel();
 		}
 	}
 }
