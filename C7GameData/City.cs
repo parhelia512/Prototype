@@ -175,25 +175,25 @@ namespace C7GameData {
 		}
 
 		public int CurrentFoodYield() {
-			int yield = location.foodYield(owner);
+			int yield = location.foodYield(owner).yield;
 			foreach (CityResident r in residents) {
-				yield += r.tileWorked.foodYield(owner);
+				yield += r.tileWorked.foodYield(owner).yield;
 			}
 			return yield;
 		}
 
 		public CorruptableValue CurrentProductionYield() {
-			int yield = location.productionYield(owner);
+			int yield = location.productionYield(owner).yield;
 			foreach (CityResident r in residents) {
-				yield += r.tileWorked.productionYield(owner);
+				yield += r.tileWorked.productionYield(owner).yield;
 			}
 			return new CorruptableValue(yield, corruption);
 		}
 
 		public CommerceBreakdown CurrentCommerceYield() {
-			int uncorruptedCommerce = location.commerceYield(owner);
+			int uncorruptedCommerce = location.commerceYield(owner).yield;
 			foreach (CityResident r in residents) {
-				uncorruptedCommerce += r.tileWorked.commerceYield(owner);
+				uncorruptedCommerce += r.tileWorked.commerceYield(owner).yield;
 			}
 
 			CorruptableValue commerce = new CorruptableValue(uncorruptedCommerce, corruption);

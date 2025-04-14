@@ -44,8 +44,10 @@ namespace C7Engine.AI {
 		}
 
 		public static double CalculateTileYieldScore(Tile t, int targetFoodAmount, Player player) {
-			int score = t.foodYield(player) * foodPriorityRate + t.productionYield(player) * productionPriorityRate + t.commerceYield(player) * commercePriorityRate;
-			int penalty = (targetFoodAmount - t.foodYield(player));
+			int score = t.foodYield(player).yield * foodPriorityRate
+				+ t.productionYield(player).yield * productionPriorityRate
+				+ t.commerceYield(player).yield * commercePriorityRate;
+			int penalty = (targetFoodAmount - t.foodYield(player).yield);
 			if (penalty <= 0) {
 				return score;
 			}
