@@ -40,7 +40,7 @@ namespace C7Engine {
 
 	public class MsgUpdateUiAfterMove : MessageToUI { }
 
-	public class MsgUpdateUiAfterTechSelection : MessageToUI { }
+	public class MsgShowScienceAdvisor : MessageToUI { }
 
 	public class MsgUpdateUiAfterDomesticChange : MessageToUI { }
 

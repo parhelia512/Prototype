@@ -176,8 +176,10 @@ namespace C7Engine {
 
 	public class MsgChooseResearch : MessageToEngine {
 		private ID techId;
-		public MsgChooseResearch(ID techId) {
+		private bool showAdvisor;
+		public MsgChooseResearch(ID techId, bool showAdvisor) {
 			this.techId = techId;
+			this.showAdvisor = showAdvisor;
 		}
 
 		public override void process() {
@@ -198,7 +200,9 @@ namespace C7Engine {
 
 			// Start researching this tech and update the UI.
 			player.SetCurrentlyResearchedTech(requestedTech.id);
-			new MsgUpdateUiAfterTechSelection().send();
+			if (showAdvisor) {
+				new MsgShowScienceAdvisor().send();
+			}
 		}
 	}
 

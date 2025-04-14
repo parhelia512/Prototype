@@ -25,7 +25,7 @@ public partial class ScienceAdvisor : TextureRect {
 		List<Tech> techs = gameDataAccess.gameData.techs;
 		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
 		eraName = player.eraCivilopediaName;
-		this.DrawTechTree(eraName, player, techs);
+		this.DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameDataAccess.gameData));
 	}
 
 	private void CreateUI() {
@@ -96,7 +96,7 @@ public partial class ScienceAdvisor : TextureRect {
 		nextEraLabel.Position += new Vector2(0, 7);
 	}
 
-	void DrawTechTree(string eraName, Player player, List<Tech> allTechs) {
+	void DrawTechTree(string eraName, Player player, List<Tech> allTechs, HashSet<Tech> availableTechsToResearch) {
 		HashSet<ID> knownTechs = player.knownTechs;
 		previousEra.Show();
 		nextEra.Show();
@@ -125,21 +125,16 @@ public partial class ScienceAdvisor : TextureRect {
 				techState = TechBox.TechState.kKnown;
 			} else if (player.currentlyResearchedTech == tech.id) {
 				techState = TechBox.TechState.kInProgress;
+			} else if (availableTechsToResearch.Contains(tech)) {
+				techState = TechBox.TechState.kPossible;
 			} else {
-				bool prereqsKnown = true;
-				foreach (Tech prereq in tech.Prerequisites) {
-					if (!knownTechs.Contains(prereq.id)) {
-						prereqsKnown = false;
-						break;
-					}
-				}
-				techState = prereqsKnown ? TechBox.TechState.kPossible : TechBox.TechState.kBlocked;
+				techState = TechBox.TechState.kBlocked;
 			}
 
 			TechBox techButton = new(tech, techState);
 			techButton.SetPosition(new Vector2(tech.X, tech.Y));
 			techButton.Pressed += () => {
-				new MsgChooseResearch(tech.id).send();
+				new MsgChooseResearch(tech.id, /*showAdvisor=*/true).send();
 			};
 			AddChild(techButton);
 			techBoxes.Add(techButton);
@@ -157,7 +152,7 @@ public partial class ScienceAdvisor : TextureRect {
 		List<Tech> techs = gameDataAccess.gameData.techs;
 		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
 		eraName = Player.EraIndexToEra(Player.EraIndex(eraName) + delta);
-		DrawTechTree(eraName, player, techs);
+		DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameDataAccess.gameData));
 	}
 
 	private void ReturnToMenu() {

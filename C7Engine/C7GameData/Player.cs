@@ -326,8 +326,36 @@ namespace C7GameData {
 			if (tech == null) {
 				return "Not selected (-- turns)";
 			}
+			int turns = EstimateTurnsToResearch(gD, tech);
+			if (turns == int.MaxValue) {
+				return $"{tech.Name} (-- turns)";
+			}
 
-			return $"{tech.Name} ({EstimateTurnsToResearch(gD, tech)} turns)";
+			return $"{tech.Name} ({turns} turns)";
+		}
+
+		public HashSet<Tech> GetAvailableTechsToResearch(GameData gameData) {
+			HashSet<Tech> result = new();
+			foreach (Tech tech in gameData.techs) {
+				if (knownTechs.Contains(tech.id)) {
+					continue;
+				}
+				if (EraIndex(tech.EraCivilopediaName) > EraIndex()) {
+					continue;
+				}
+
+				bool prereqsKnown = true;
+				foreach (Tech prereq in tech.Prerequisites) {
+					if (!knownTechs.Contains(prereq.id)) {
+						prereqsKnown = false;
+						break;
+					}
+				}
+				if (prereqsKnown) {
+					result.Add(tech);
+				}
+			}
+			return result;
 		}
 
 		public List<Government> GetAvailableGovernments(GameData gameData) {
