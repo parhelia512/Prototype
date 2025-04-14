@@ -483,18 +483,18 @@ namespace C7GameData {
 				return;
 			}
 
-			// Order the cities by distance to the capitol, using OrderBy to get
+			// Order the cities by distance to the capital, using OrderBy to get
 			// a stable sort (https://stackoverflow.com/a/148123). We want a
 			// stable sort, because if two cities are the same distance from the
-			// capitol, the tiebreaker is city age (which we don't track yet) and
+			// capital, the tiebreaker is city age (which we don't track yet) and
 			// then order in the database, which a stable sort gives us.
 			//
 			// TODO: track city age.
-			City capitol = cities.Find(x => x.IsCapital());
-			if (capitol == null) {
-				capitol = cities[0];
+			City capital = cities.Find(x => x.IsCapital());
+			if (capital == null) {
+				capital = cities[0];
 			}
-			List<City> citiesInRankOrdering = cities.OrderBy(x => x.location.rankDistanceTo(capitol.location)).ToList();
+			List<City> citiesInRankOrdering = cities.OrderBy(x => x.location.rankDistanceTo(capital.location)).ToList();
 			for (int i = 0; i < citiesInRankOrdering.Count; ++i) {
 				citiesInRankOrdering[i].rankIndex = i;
 
