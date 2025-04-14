@@ -199,6 +199,9 @@ namespace C7.Map {
 
 			cityNameLabel.Text = $"{city.name} : {turnsUntilGrowthText}";
 			productionLabel.Text = $"{city.itemBeingProduced.name} : {city.TurnsUntilProductionFinished()}";
+			if (city.TurnsUntilProductionFinished() == int.MaxValue) {
+				productionLabel.Text = $"{city.itemBeingProduced.name} : --";
+			}
 			popSizeLabel.Text = city.size.ToString();
 
 			// Update population label color based on growth

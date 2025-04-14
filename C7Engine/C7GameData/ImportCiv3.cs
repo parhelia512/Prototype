@@ -1167,7 +1167,7 @@ namespace C7GameData {
 				g.draftLimit = govt.DraftLimit;
 				g.militaryPoliceLimit = govt.MilitaryPoliceLimit;
 				g.workerRate = govt.WorkerRate;
-				g.allUnitsFree = govt.FreeUnits == 1;
+				g.allUnitsFree = govt.FreeUnits == -1;
 				g.freeUnitsPerTown = govt.FreeUnitsPerTown;
 				g.freeUnitsPerCity = govt.FreeUnitsPerCity;
 				g.freeUnitsPerMetropolis = govt.FreeUnitsPerMetropolis;

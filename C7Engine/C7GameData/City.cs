@@ -138,6 +138,10 @@ namespace C7GameData {
 		public int TurnsToProduce(IProducible item) {
 			int additionalProductionNeeded = item.shieldCost - shieldsStored;
 			int usefulShields = CurrentProductionYield().useful;
+			if (usefulShields == 0) {
+				return int.MaxValue;
+			}
+
 			int turnsRoundedDown = additionalProductionNeeded / usefulShields;
 			if (additionalProductionNeeded % usefulShields != 0) {
 				return Math.Max(turnsRoundedDown + 1, 1);
@@ -189,7 +193,21 @@ namespace C7GameData {
 			foreach (CityResident r in residents) {
 				yield += r.tileWorked.productionYield(owner).yield;
 			}
-			return new CorruptableValue(yield, corruption);
+			CorruptableValue result = new(yield, corruption);
+
+			// Using our value of corruption, figure out how much useful
+			// production we have to work with. Special case anarchy, where no
+			// useful production is available. We do this here rather than 
+			// setting corruption to 100% because CorruptableValue would give us
+			// one useful commerce in that situation.
+			if (owner.government.transitionType) {
+				result.useful = 0;
+				result.corrupt = yield;
+			}
+
+			// TODO: add specialist shields here.
+
+			return result;
 		}
 
 		public CommerceBreakdown CurrentCommerceYield() {
@@ -198,8 +216,18 @@ namespace C7GameData {
 				uncorruptedCommerce += r.tileWorked.commerceYield(owner).yield;
 			}
 
+			// Using our value of corruption, figure out how much useful
+			// commerce we have to work with. Special case anarchy, where no
+			// useful commerce is available. We do this here rather than setting
+			// corruption to 100% because CorruptableValue would give us one
+			// useful commerce in that situation.
 			CorruptableValue commerce = new CorruptableValue(uncorruptedCommerce, corruption);
+			if (owner.government.transitionType) {
+				commerce.useful = 0;
+				commerce.corrupt = uncorruptedCommerce;
+			}
 
+			// TODO: Add specialist income, which is unaffected by corruption.
 			CommerceBreakdown result = new();
 			result.corrupted = commerce.corrupt;
 			result.beakers = (int)Math.Floor(commerce.useful * owner.scienceRate / 10.0);

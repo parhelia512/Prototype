@@ -329,7 +329,8 @@ public partial class CityScreen : Control {
 
 	private void RenderProductionDetails(City city) {
 		CorruptableValue shields = city.CurrentProductionYield();
-		productionDetails.Text = $"{shields.useful + shields.corrupt} shields/turn ({shields.useful} usable, {shields.corrupt} corrupt). {city.shieldsStored} of {city.itemBeingProduced.shieldCost} stored. {city.TurnsUntilProductionFinished()} turns left";
+		string turnsLeft = city.TurnsUntilProductionFinished() == int.MaxValue ? "--" : $"{city.TurnsUntilProductionFinished()} turns left";
+		productionDetails.Text = $"{shields.useful + shields.corrupt} shields/turn ({shields.useful} usable, {shields.corrupt} corrupt). {city.shieldsStored} of {city.itemBeingProduced.shieldCost} stored. {turnsLeft}";
 
 		foreach (Node child in productionButton.GetChildren()) {
 			child.QueueFree();
