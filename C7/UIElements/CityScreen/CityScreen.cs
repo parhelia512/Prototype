@@ -43,6 +43,8 @@ public partial class CityScreen : Control {
 	private Label commerceScienceDetails;
 	private Label commerceHappinessDetails;
 
+	private const int HEAD_SIZE = 48;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		background.Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx");
@@ -411,20 +413,30 @@ public partial class CityScreen : Control {
 		// type, and again 10 columns per row. This time they are
 		// (ancient, middle, industrial, modern, blank) for male and female heads
 		//
-		// TODO: handle citizen moods
 		// TODO: handle per-civ regions
 		// TODO: handle male/female citizens
 
 		// Start by splitting the default residents from the specialists, since
 		// they are spaced apart in the UI.
-		List<CityResident> defaultResidents = city.residents.FindAll(x => x.citizenType.IsDefaultCitizen);
+		List<CityResident> happyResidents =
+			city.residents.FindAll(x => x.citizenType.IsDefaultCitizen && x.mood == CityResident.Mood.Happy);
+		List<CityResident> contentResidents =
+			city.residents.FindAll(x => x.citizenType.IsDefaultCitizen && x.mood == CityResident.Mood.Content);
+		List<CityResident> unhappyResidents =
+			city.residents.FindAll(x => x.citizenType.IsDefaultCitizen && x.mood == CityResident.Mood.Unhappy);
 		List<CityResident> specialists = city.residents.FindAll(x => !x.citizenType.IsDefaultCitizen);
 
-		// Each head is 48px, so leave a 1 head gap if we have specialists.
-		int width = city.residents.Count * 48;
+		// Leave a 1 head gap if we have specialists.
+		int width = city.residents.Count * HEAD_SIZE;
 		if (specialists.Count > 0) {
-			width += 48;
+			width += HEAD_SIZE;
 		}
+
+		// Leave a 1 head gap between each section of moods.
+		int numMoodsPresent = (happyResidents.Count > 0 ? 1 : 0)
+			+ (contentResidents.Count > 0 ? 1: 0)
+			+ (unhappyResidents.Count > 0 ? 1: 0);
+		width += (numMoodsPresent - 1) * HEAD_SIZE;
 
 		// Track the x position of each head so that we're centered in the screen
 		int xPos = background.Texture.GetWidth() / 2 + -width / 2;
@@ -432,14 +444,20 @@ public partial class CityScreen : Control {
 		// Add each of the default citizens. These are buttons with the idea that
 		// we can eventually support clicking on the heads to view details, such
 		// as the reason for unhappiness.
-		foreach (CityResident cr in defaultResidents) {
-			TextureButton tb = new();
-			tb.TextureNormal = Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
-														0 + 1, 200 * eraNum + 1, 48, 48);
-			tb.SetPosition(new Vector2(xPos, 440));
-			background.AddChild(tb);
-			popHeads.Add(tb);
-			xPos += 48;
+		foreach (CityResident cr in happyResidents) {
+			xPos = AddDefaultCitizen(cr, xPos, eraNum);
+		}
+		if (happyResidents.Count > 0 && (contentResidents.Count > 0 || unhappyResidents.Count > 0)) {
+			xPos += HEAD_SIZE;
+		}
+		foreach (CityResident cr in contentResidents) {
+			xPos = AddDefaultCitizen(cr, xPos, eraNum);
+		}
+		if (contentResidents.Count > 0 && unhappyResidents.Count > 0) {
+			xPos += HEAD_SIZE;
+		}
+		foreach (CityResident cr in unhappyResidents) {
+			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 
 		// Add space before specialists.
@@ -455,7 +473,7 @@ public partial class CityScreen : Control {
 			int numRowsOfLaborers = 16;
 			int textY = 50 * numRowsOfLaborers + 50 * (cr.citizenType.SpecialistIndex - 1);
 			tb.TextureNormal = Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
-														textX + 1, textY + 1, 48, 48);
+														textX + 1, textY + 1, HEAD_SIZE, HEAD_SIZE);
 			tb.SetPosition(new Vector2(xPos, 440));
 
 			List<CitizenType> specialistTypes = GetKnownSpecialists(city.owner);
@@ -468,7 +486,7 @@ public partial class CityScreen : Control {
 
 			background.AddChild(tb);
 			popHeads.Add(tb);
-			xPos += 48;
+			xPos += HEAD_SIZE;
 		}
 	}
 
@@ -484,5 +502,24 @@ public partial class CityScreen : Control {
 		List<City> cities = currentCity.owner.cities;
 		City previousCity = cities[(cities.IndexOf(currentCity) + cities.Count - 1) % cities.Count];
 		OnShowCityScreen(new ParameterWrapper<City>(previousCity));
+	}
+
+	private int AddDefaultCitizen(CityResident cr, int xPos, int eraNum) {
+		int column = cr.mood switch {
+			CityResident.Mood.Content => 0,
+			CityResident.Mood.Happy => 1,
+			CityResident.Mood.Unhappy => 3,
+		};
+		int headWithBorderSize = HEAD_SIZE + 2;
+
+		TextureButton tb = new();
+		tb.TextureNormal = Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
+													0 + 1,
+													200 * eraNum + headWithBorderSize * column + 1,
+													HEAD_SIZE, HEAD_SIZE);
+		tb.SetPosition(new Vector2(xPos, 440));
+		background.AddChild(tb);
+		popHeads.Add(tb);
+		return xPos + 48;
 	}
 }

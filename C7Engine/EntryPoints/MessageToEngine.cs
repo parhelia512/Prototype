@@ -262,6 +262,12 @@ namespace C7Engine {
 				player.taxRate++;
 			}
 
+			// Update citizen moods in all cities, as changing the sliders can
+			// change moods.
+			foreach (City city in player.cities) {
+				city.RecalculateCitizenMoods(EngineStorage.gameData);
+			}
+
 			// Update the ui to reflect our changes.
 			new MsgUpdateUiAfterDomesticChange().send();
 		}

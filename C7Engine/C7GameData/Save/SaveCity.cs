@@ -75,6 +75,7 @@ namespace C7GameData.Save {
 					nationality = resident.nationality?.name,
 					city = resident.city.id,
 					tileWorked = new TileLocation(resident.tileWorked),
+					citizenType = resident.citizenType.Id,
 				};
 			});
 			buildings = city.buildings.ConvertAll(building => new SaveCityBuilding(building));

@@ -229,6 +229,18 @@ namespace C7GameData {
 		private void RemoveCitizen() {
 			residents[residents.Count - 1].tileWorked.personWorkingTile = null;
 			residents.RemoveAt(residents.Count - 1);
+
+			// We changed citizens, which may have changed yields, so 
+			// recalculate happiness.
+			RecalculateCitizenMoods(EngineStorage.gameData);
+		}
+
+		public void AddCitizen(CityResident cr) {
+			residents.Add(cr);
+
+			// We changed citizens, which may have changed yields, so 
+			// recalculate happiness.
+			RecalculateCitizenMoods(EngineStorage.gameData);
 		}
 
 		public void RemoveCitizens(int number) {
@@ -451,6 +463,110 @@ namespace C7GameData {
 				perPlayerCulture[owner] += cb.building.culturePerTurn;
 			}
 			return start != GetBorderExpansionLevel();
+		}
+
+		// Initializes the citizen moods, before positive and negative
+		// influcences are added. A fixed number of citizens are born content,
+		// based on the difficulty level, and after that all citizens are born
+		// unhappy. Specialists and resisters are excluded from this.
+		private void InitializeMoodsForDifficulty(Difficulty gameDifficulty) {
+			int numLaborers = residents.Count(x => x.citizenType.IsDefaultCitizen);
+			int content = Math.Min(gameDifficulty.NumberOfCitizensBornContent, numLaborers);
+
+			foreach (CityResident r in residents) {
+				if (!r.citizenType.IsDefaultCitizen) {
+					continue;
+				}
+
+				if (content > 0) {
+					--content;
+					r.mood = CityResident.Mood.Content;
+				} else {
+					r.mood = CityResident.Mood.Unhappy;
+				}
+			}
+		}
+
+		// Attemps to move the specified number of citizens that have mood `from`
+		// to mood `to`, returning the actual number changed.
+		private int ApplyMoodChange(int count, CityResident.Mood from, CityResident.Mood to) {
+			int result = 0;
+
+			foreach (CityResident r in residents) {
+				if (!r.citizenType.IsDefaultCitizen) {
+					continue;
+				}
+
+				if (count <= 0) {
+					break;
+				}
+
+				if (r.mood == from) {
+					--count;
+					++result;
+					r.mood = to;
+				}
+			}
+
+			return result;
+		}
+
+		// This function does the heavy lifting of happiness calculations,
+		// combining the various bonuses and penalties that affect citizen moods.
+		//
+		// Some references:
+		//  - https://forums.civfanatics.com/threads/how-is-happiness-calculated.74966/
+		//  - https://codehappy.net/apolyton/threads/83368-1.htm
+		//
+		public void RecalculateCitizenMoods(GameData gameData) {
+			CityResident.Mood happy = CityResident.Mood.Happy;
+			CityResident.Mood content = CityResident.Mood.Content;
+			CityResident.Mood unhappy = CityResident.Mood.Unhappy;
+			InitializeMoodsForDifficulty(gameData.gameDifficulty);
+
+			// We want to track the move deltas from content to happy and unhappy
+			// to content. We can also move from unhappy straight to content,
+			// but it costs 2 "points" from the contentToHappy counter, and is
+			// only applied if there are no content faces.
+			int contentToHappyMoves = 0;
+			int unhappyToContentMoves = 0;
+
+			// TODO: add penalty for poprushing
+			// TODO: add penalty for drafting
+			// TODO: add penalty for building with unhappiness (in city and global)
+			// TODO: add penalty for war weariness
+			// TODO: add penalty for aggression against home country
+
+			// Luxuries move content faces to happy faces.
+			contentToHappyMoves += CurrentCommerceYield().happiness;
+
+			// TODO: count luxuries
+			// TODO: account for marketplaces
+			// TODO: account for building happiness (wonders, non wonders, and global/continent)
+
+			if (contentToHappyMoves >= 0) {
+				if (unhappyToContentMoves >= 0) {
+					// First apply all the unhappy->content moves. If there are
+					// left over content faces that's ok, they can't be used to
+					// get a citizen to happy.
+					ApplyMoodChange(unhappyToContentMoves, unhappy, content);
+
+					// Now move content faces to happy faces.
+					contentToHappyMoves -= ApplyMoodChange(contentToHappyMoves, content, happy);
+
+					// If there are moves left over we can try moving unhappy
+					// faces to happy, but it takes two "points".
+					contentToHappyMoves -= 2 * ApplyMoodChange(contentToHappyMoves / 2, unhappy, happy);
+
+					// Account for the remainder of the integer division
+					// (ApplyMoodChange ignores a negative input). 
+					ApplyMoodChange(contentToHappyMoves, unhappy, content);
+				} else {
+					// TODO: handle this once we support penalties
+				}
+			} else {
+				// TODO: handle this once we support penalties.
+			}
 		}
 
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {

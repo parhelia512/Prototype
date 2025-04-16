@@ -107,6 +107,7 @@ namespace C7GameData.Save {
 
 			data.UpdateTileOwners();
 			foreach (Player p in data.players) {
+				p.RecalculateCitizenMoods(data);
 				p.DoCorruptionCalculations(data);
 			}
 
