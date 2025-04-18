@@ -4,7 +4,16 @@
 [ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2"]
 [ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3"]
 
-[node name="DomesticAdvisor" type="CenterContainer" node_paths=PackedStringArray("background", "close")]
+[sub_resource type="LabelSettings" id="LabelSettings_0b8py"]
+font_size = 13
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_61gj0"]
+line_spacing = 0.0
+font_size = 11
+font_color = Color(0, 0, 0, 1)
+
+[node name="DomesticAdvisor" type="CenterContainer" node_paths=PackedStringArray("background", "close", "changeGovernment", "governmentLabel", "scienceStatus", "treasury", "incomeDetails", "expenseDetails", "incomeSummary", "expenseSummary", "sumSummary", "growth")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,6 +22,16 @@ grow_vertical = 2
 script = ExtResource("1")
 background = NodePath("Background")
 close = NodePath("Background/Close")
+changeGovernment = NodePath("Background/ChangeGovernment")
+governmentLabel = NodePath("Background/ChangeGovernment/GovernmentLabel")
+scienceStatus = NodePath("Background/ScienceStatus")
+treasury = NodePath("Background/Treasury")
+incomeDetails = NodePath("Background/IncomeDetails")
+expenseDetails = NodePath("Background/ExpenseDetails")
+incomeSummary = NodePath("Background/IncomeSummary")
+expenseSummary = NodePath("Background/ExpenseSummary")
+sumSummary = NodePath("Background/SumSummary")
+growth = NodePath("Background/Growth")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2
@@ -25,3 +44,103 @@ offset_top = 720.0
 offset_right = 1024.0
 offset_bottom = 768.0
 script = ExtResource("3")
+
+[node name="ChangeGovernment" type="TextureButton" parent="Background" index="1"]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 186.0
+offset_right = 795.0
+offset_bottom = 210.0
+script = ExtResource("3")
+
+[node name="GovernmentLabel" type="Label" parent="Background/ChangeGovernment" index="0"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 2.0
+offset_right = 139.0
+offset_bottom = 22.0
+text = "Despotism"
+
+[node name="Label" type="Label" parent="Background" index="2"]
+layout_mode = 0
+offset_left = 559.0
+offset_top = 189.0
+offset_right = 642.0
+offset_bottom = 209.0
+text = "Government"
+label_settings = SubResource("LabelSettings_0b8py")
+
+[node name="ScienceStatus" type="Label" parent="Background" index="3"]
+layout_mode = 0
+offset_left = 565.0
+offset_top = 165.0
+offset_right = 711.0
+offset_bottom = 185.0
+text = "Placeholder (25 turns)"
+
+[node name="Treasury" type="Label" parent="Background" index="4"]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 193.0
+offset_right = 237.0
+offset_bottom = 213.0
+text = "Treasury: 12345 gold"
+
+[node name="IncomeDetails" type="Label" parent="Background" index="5"]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 98.0
+offset_right = 222.0
+offset_bottom = 165.0
+text = "From cities: + 1234
+From taxmen: +0
+From other civs: +0
+From interest: +0"
+label_settings = SubResource("LabelSettings_61gj0")
+horizontal_alignment = 2
+
+[node name="ExpenseDetails" type="Label" parent="Background" index="6"]
+layout_mode = 0
+offset_left = 379.0
+offset_top = 87.0
+offset_right = 537.0
+offset_bottom = 183.0
+text = "-123: Science
+-18: Entertainment
+-100: Corruption
+-19: Maintenance
+-5: Unit costs
+-8: To other civs"
+label_settings = SubResource("LabelSettings_61gj0")
+
+[node name="IncomeSummary" type="Label" parent="Background" index="7"]
+layout_mode = 0
+offset_left = 254.0
+offset_top = 102.0
+offset_right = 294.0
+offset_bottom = 122.0
+text = "Income: 1234"
+
+[node name="ExpenseSummary" type="Label" parent="Background" index="8"]
+layout_mode = 0
+offset_left = 254.0
+offset_top = 152.0
+offset_right = 294.0
+offset_bottom = 172.0
+text = "Expenses: 4567"
+
+[node name="SumSummary" type="Label" parent="Background" index="9"]
+layout_mode = 0
+offset_left = 254.0
+offset_top = 193.0
+offset_right = 294.0
+offset_bottom = 213.0
+text = "Net loss: -18"
+
+[node name="Growth" type="Label" parent="Background" index="10"]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 195.0
+offset_right = 459.0
+offset_bottom = 215.0
+text = "Shrinking!"

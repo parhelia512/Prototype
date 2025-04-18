@@ -171,17 +171,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 			}
 
 			// Tech progress.
-			{
-				Tech tech = gD.techs.Find(x => x.id == player.currentlyResearchedTech);
-				string techName = tech == null ? "Not selected" : tech.Name;
-				int turnsRemaining = tech == null ? int.MaxValue : player.EstimateTurnsToResearch(gD, tech);
-
-				if (turnsRemaining >= int.MaxValue) {
-					scienceProgress.SetTextAndCenterLabel($"{techName} (-- turns)");
-				} else {
-					scienceProgress.SetTextAndCenterLabel($"{techName} ({turnsRemaining} turns)");
-				}
-			}
+			scienceProgress.SetTextAndCenterLabel(player.SummarizeScience(gD));
 
 			// Civ and government.
 			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - {player.government.name} (5.5.0)");
