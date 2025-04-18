@@ -341,20 +341,20 @@ namespace C7GameData {
 
 			// TODO: This should also look for the forbidden palace and secret
 			// police headquarters.
-			City capital = owner.cities.Find(x => x.IsCapital());
-			if (capital == null) {
-				// TODO: Ensure we always have a capital, even in scenarios
+			City capitol = owner.cities.Find(x => x.IsCapital());
+			if (capitol == null) {
+				// TODO: Ensure we always have a capitol, even in scenarios
 				// without palaces added.
-				capital = owner.cities[0];
+				capitol = owner.cities[0];
 			}
-			float distanceToPalace = location.rankDistanceTo(capital.location);
+			float distanceToPalace = location.rankDistanceTo(capitol.location);
 			if (owner.government.corruptionType == Government.CorruptionType.Communal) {
 				distanceToPalace = maxD / 4;
 			}
 
 			// TODO: Update this once we track trade networks.
-			bool connectedTocapital = false;
-			float tradeFactor = connectedTocapital ? 1.0f : 5.0f/4.0f;
+			bool connectedToCapitol = false;
+			float tradeFactor = connectedToCapitol ? 1.0f : 5.0f/4.0f;
 
 			float govtFactor = owner.government.corruptionType switch {
 				Government.CorruptionType.Minimal => 3.0f/4.0f,
