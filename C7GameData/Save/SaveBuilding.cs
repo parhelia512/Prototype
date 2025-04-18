@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace C7GameData.Save {
 	public class SaveBuilding {
@@ -17,6 +18,8 @@ namespace C7GameData.Save {
 		// rather than as booleans to avoid bloating the json file.
 		public HashSet<string> flags = new();
 
+		public HashSet<string> requiredResources = [];
+
 		public SaveBuilding() { }
 
 		public SaveBuilding(Building b) {
@@ -32,6 +35,8 @@ namespace C7GameData.Save {
 
 			if (b.requiredBuilding != null)
 				requiredBuilding = b.requiredBuilding.name;
+
+			requiredResources = b.requiredResources.Select(r => r.Key).ToHashSet();
 		}
 	}
 }

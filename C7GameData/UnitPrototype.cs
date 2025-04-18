@@ -35,6 +35,8 @@ namespace C7GameData {
 
 		public HashSet<string> attributes = new HashSet<string>();
 
+		public HashSet<Resource> requiredResources { get; set; } = [];
+
 		public UnitPrototype() { }
 
 		public UnitPrototype(SaveUnitPrototype proto) {
