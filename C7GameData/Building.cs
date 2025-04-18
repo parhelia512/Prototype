@@ -10,6 +10,9 @@ namespace C7GameData {
 		public Building requiredBuilding;
 		public bool isGreatWonder;
 		public bool isSmallWonder;
+		public bool isCenterOfEmpire;
+
+		public int culturePerTurn = 0;
 
 		public Building(SaveBuilding building) {
 			name = building.name;
@@ -17,6 +20,8 @@ namespace C7GameData {
 			populationCost = building.populationCost;
 			isGreatWonder = building.isGreatWonder;
 			isSmallWonder = building.isSmallWonder;
+			culturePerTurn = building.culturePerTurn;
+			isCenterOfEmpire = building.flags.Contains(SaveBuilding.IS_CENTER_OF_EMPIRE);
 		}
 	}
 }

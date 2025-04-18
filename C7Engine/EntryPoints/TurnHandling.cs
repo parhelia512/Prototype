@@ -156,8 +156,9 @@ namespace C7Engine {
 					}
 				}
 
-				// TODO: Update culture and check for border expansion. Call
-				// gameData.UpdateTileOwners if borders did expand.
+				if (city.UpdateCultureAndCheckForExpansion()) {
+					gameData.UpdateTileOwners();
+				}
 
 				IProducible producedItem = city.ComputeTurnProduction();
 				if (producedItem != null) {

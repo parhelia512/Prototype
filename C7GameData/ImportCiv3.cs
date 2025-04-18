@@ -891,6 +891,7 @@ namespace C7GameData {
 					populationCost=0, // In Civ3, a building cannot have a population cost
 					isSmallWonder=bldg.SmallWonder,
 					isGreatWonder=bldg.Wonder,
+					culturePerTurn=bldg.Culture,
 				};
 
 				if (bldg.RequiredAdvance != -1) {
@@ -899,6 +900,10 @@ namespace C7GameData {
 
 				if (bldg.RequiredBuilding != -1) {
 					building.requiredBuilding = Bldg[bldg.RequiredBuilding].Name;
+				}
+
+				if (bldg.CenterOfEmpire) {
+					building.flags.Add(SaveBuilding.IS_CENTER_OF_EMPIRE);
 				}
 
 				save.Buildings.Add(building);
