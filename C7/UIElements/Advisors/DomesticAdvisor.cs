@@ -3,7 +3,12 @@ using C7GameData;
 using Godot;
 using System;
 
-public partial class DomesticAdvisor : TextureRect {
+[GlobalClass]
+[Tool]
+public partial class DomesticAdvisor : Control {
+	[Export] TextureRect background;
+	[Export] TextureButton close;
+
 	TextureRect scienceSliderIcon = new();
 	Label scienceSliderLabel = new();
 	TextureRect luxurySliderIcon = new();
@@ -20,7 +25,7 @@ public partial class DomesticAdvisor : TextureRect {
 
 	private void CreateUI() {
 		ImageTexture DomesticBackground = Util.LoadTextureFromPCX("Art/Advisors/domestic.pcx");
-		this.Texture = DomesticBackground;
+		background.Texture = DomesticBackground;
 
 		//TODO: Age-based background.  Only use Ancient for now.
 		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupDOMESTIC.pcx", 1, 40, 149, 110);
@@ -32,53 +37,47 @@ public partial class DomesticAdvisor : TextureRect {
 		//TODO: Randomize or set logically
 		AdvisorHead.Texture = AdvisorSurprised;
 		AdvisorHead.SetPosition(new Vector2(851, 0));
-		AddChild(AdvisorHead);
+		background.AddChild(AdvisorHead);
 
 		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
 		TextureButton DialogBox = new TextureButton();
 		DialogBox.TextureNormal = DialogBoxTexture;
 		DialogBox.SetPosition(new Vector2(806, 110));
-		AddChild(DialogBox);
+		background.AddChild(DialogBox);
 
 		//TODO: Multi-line capabilities
 		Label DialogBoxAdvise = new Label();
 		DialogBoxAdvise.Text = "You are running C7!";
 		DialogBoxAdvise.SetPosition(new Vector2(815, 119));
-		AddChild(DialogBoxAdvise);
+		background.AddChild(DialogBoxAdvise);
 
-		ImageTexture GoBackTexture = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
-		TextureButton GoBackButton = new TextureButton();
-		GoBackButton.TextureNormal = GoBackTexture;
-		GoBackButton.SetPosition(new Vector2(952, 720));
-		AddChild(GoBackButton);
-		GoBackButton.Pressed += ReturnToMenu;
+		close.TextureNormal = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
+		close.TextureHover = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 72, 0, 72, 48);
+		close.TexturePressed = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 144, 0, 72, 48);
+		close.Pressed += Hide;
 
 		ImageTexture scienceSliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 34, 2, 30, 30);
 		ImageTexture luxurySliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 376, 2, 30, 30);
 
-		int scienceRate;
-		int luxuryRate;
-		using (UIGameDataAccess gameDataAccess = new()) {
-			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
-			scienceRate = player.scienceRate;
-			luxuryRate = player.luxuryRate;
-		}
+		// Placeholder values
+		int scienceRate = 5;
+		int luxuryRate = 5;
 
 		scienceSliderIcon.Texture = scienceSliderTexture;
 		scienceSliderIcon.SetPosition(new Vector2(CalculateSliderXPos(scienceRate), scienceSliderY));
-		AddChild(scienceSliderIcon);
+		background.AddChild(scienceSliderIcon);
 
 		luxurySliderIcon.Texture = luxurySliderTexture;
 		luxurySliderIcon.SetPosition(new Vector2(CalculateSliderXPos(luxuryRate), luxurySliderY));
-		AddChild(luxurySliderIcon);
+		background.AddChild(luxurySliderIcon);
 
 		scienceSliderLabel.Text = $"{scienceRate * 10}%";
 		scienceSliderLabel.SetPosition(new Vector2(760, scienceSliderY + 6));
-		AddChild(scienceSliderLabel);
+		background.AddChild(scienceSliderLabel);
 
 		luxurySliderLabel.Text = $"{luxuryRate * 10}%";
 		luxurySliderLabel.SetPosition(new Vector2(760, luxurySliderY + 4));
-		AddChild(luxurySliderLabel);
+		background.AddChild(luxurySliderLabel);
 
 		ImageTexture plusTexture = Util.LoadTextureFromPCX("Art/Advisors/domestic_icons_aux.pcx", 75, 1, 22, 22);
 		ImageTexture minusTexture = Util.LoadTextureFromPCX("Art/Advisors/domestic_icons_aux.pcx", 51, 1, 22, 22);
@@ -87,29 +86,42 @@ public partial class DomesticAdvisor : TextureRect {
 		moreScience.TextureNormal = plusTexture;
 		moreScience.SetPosition(new Vector2(725, scienceSliderY + 25));
 		moreScience.Pressed += () => { new MsgChangeSliders(true, false, false, false).send(); };
-		AddChild(moreScience);
+		background.AddChild(moreScience);
 
 		TextureButton lessScience = new();
 		lessScience.TextureNormal = minusTexture;
 		lessScience.SetPosition(new Vector2(575, scienceSliderY + 25));
 		lessScience.Pressed += () => { new MsgChangeSliders(false, true, false, false).send(); };
-		AddChild(lessScience);
+		background.AddChild(lessScience);
 
 		TextureButton moreLuxury = new();
 		moreLuxury.TextureNormal = plusTexture;
 		moreLuxury.SetPosition(new Vector2(725, luxurySliderY - 5));
 		moreLuxury.Pressed += () => { new MsgChangeSliders(false, false, true, false).send(); };
-		AddChild(moreLuxury);
+		background.AddChild(moreLuxury);
 
 		TextureButton lessLuxury = new();
 		lessLuxury.TextureNormal = minusTexture;
 		lessLuxury.SetPosition(new Vector2(575, luxurySliderY - 5));
 		lessLuxury.Pressed += () => { new MsgChangeSliders(false, false, false, true).send(); };
-		AddChild(lessLuxury);
+		background.AddChild(lessLuxury);
 	}
 
-	private void ReturnToMenu() {
-		GetParent<Advisors>().Hide();
+	public void ShowAdvisor() {
+		Show();
+
+		int scienceRate = 5;
+		int luxuryRate = 5;
+		using (UIGameDataAccess gameDataAccess = new()) {
+			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+			scienceRate = player.scienceRate;
+			luxuryRate = player.luxuryRate;
+		}
+
+		scienceSliderIcon.SetPosition(new Vector2(CalculateSliderXPos(scienceRate), scienceSliderY));
+		luxurySliderIcon.SetPosition(new Vector2(CalculateSliderXPos(luxuryRate), luxurySliderY));
+		scienceSliderLabel.Text = $"{scienceRate * 10}%";
+		luxurySliderLabel.Text = $"{luxuryRate * 10}%";
 	}
 
 	private int CalculateSliderXPos(int sliderRate) {

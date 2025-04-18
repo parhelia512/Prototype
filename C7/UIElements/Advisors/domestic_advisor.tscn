@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://da7hbbufyfllg"]
+
+[ext_resource type="Script" path="res://UIElements/Advisors/DomesticAdvisor.cs" id="1"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3"]
+
+[node name="DomesticAdvisor" type="CenterContainer" node_paths=PackedStringArray("background", "close")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+background = NodePath("Background")
+close = NodePath("Background/Close")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 2
+script = ExtResource("2")
+
+[node name="Close" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 952.0
+offset_top = 720.0
+offset_right = 1024.0
+offset_bottom = 768.0
+script = ExtResource("3")
