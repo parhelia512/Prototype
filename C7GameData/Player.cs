@@ -330,6 +330,39 @@ namespace C7GameData {
 			return $"{tech.Name} ({EstimateTurnsToResearch(gD, tech)} turns)";
 		}
 
+		// See https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/
+		//
+		// This is the empire-wide information factored out of the rank corruption
+		// calculations so it can be reused for anarchy calculations.
+		public int GetAdjustedOptimalCityNumber(GameData gameData) {
+			int mapOptimalCityNumber = gameData.map.optimalNumberOfCities;
+			int percentOptimalCitiesForDifficultyLevel = gameData.gameDifficulty.PercentageOfOptimalCities;
+
+			// TODO: track traits.
+			bool isCommercialCiv = false;
+			float commercialCivFactor = isCommercialCiv ? .25f : 0;
+
+			// TODO: Handle the forbidden palace and SPHQ.
+			int numCorruptionReducingSmallWondersInEmpire = 0;
+
+			float govtFactor = government.corruptionType switch {
+				Government.CorruptionType.Minimal => .1f,
+				Government.CorruptionType.Nuisance => .1f,
+				Government.CorruptionType.Problematic => 0,
+				Government.CorruptionType.Rampant => 0,
+				Government.CorruptionType.Catastrophic => 0, // anarchy, special cased
+				Government.CorruptionType.Communal => 2,
+				Government.CorruptionType.Off => 0
+			};
+
+			float communalCorruptionFactor =
+				government.corruptionType == Government.CorruptionType.Communal ? 3.0f : 3.0f/8.0f;
+
+			float result = mapOptimalCityNumber * percentOptimalCitiesForDifficultyLevel / 100.0f
+				  * (1 + commercialCivFactor + govtFactor + communalCorruptionFactor * numCorruptionReducingSmallWondersInEmpire);
+			return (int)result;
+		}
+
 		public void DoPerTurnFinanceUpdates(GameData gameData) {
 			if (isBarbarians) {
 				return;

@@ -374,37 +374,15 @@ namespace C7GameData {
 		}
 
 		// See https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/
-		private float CalculateRankCorruption(GameData gameData, int numAntiCorruptionBuildings, int numCorruptionReducingWonders) {
+		private float CalculateRankCorruption(GameData gameData, int numAntiCorruptionBuildings) {
 			int rank = rankIndex;
 			if (owner.government.corruptionType == Government.CorruptionType.Communal) {
 				rank = owner.cities.Count / 2;
 			}
 
-			int mapOptimalCityNumber = gameData.map.optimalNumberOfCities;
-			int percentOptimalCitiesForDifficultyLevel = gameData.gameDifficulty.PercentageOfOptimalCities;
-
-			// TODO: track traits.
-			bool isCommercialCiv = false;
-			float commercialCivFactor = isCommercialCiv ? .25f : 0;
-
-			float govtFactor = owner.government.corruptionType switch {
-				Government.CorruptionType.Minimal => .1f,
-				Government.CorruptionType.Nuisance => .1f,
-				Government.CorruptionType.Problematic => 0,
-				Government.CorruptionType.Rampant => 0,
-				Government.CorruptionType.Catastrophic => 0, // anarchy, special cased
-				Government.CorruptionType.Communal => 2,
-				Government.CorruptionType.Off => 0
-			};
-
-			float communalCorruptionFactor =
-				owner.government.corruptionType == Government.CorruptionType.Communal ? 3.0f : 3.0f/8.0f;
-
 			float nOpt = Math.Max(
 				1,
-				mapOptimalCityNumber * percentOptimalCitiesForDifficultyLevel / 100.0f
-				  * (1 + commercialCivFactor + govtFactor + communalCorruptionFactor * numCorruptionReducingWonders)
-				  + .25f * numAntiCorruptionBuildings);
+				owner.GetAdjustedOptimalCityNumber(gameData) + .25f * numAntiCorruptionBuildings);
 
 			if (rank < nOpt) {
 				return rank / (2 * nOpt);
@@ -418,18 +396,18 @@ namespace C7GameData {
 			// number of buildings with this set.
 			int numAntiCorruptionBuildings = 0;
 
-			// TODO: Also handle the forbidden palace and SPHQ.
-			int numCorruptionReducingWonders = IsCapital() ? 1 : 0;
+			// TODO: Handle the forbidden palace and SPHQ.
+			int numCorruptionReducingSmallWondersInCity = 0;
 
 			corruption = CalculateDistanceCorruption(numAntiCorruptionBuildings)
-					+ CalculateRankCorruption(gameData, numAntiCorruptionBuildings, numCorruptionReducingWonders);
+					+ CalculateRankCorruption(gameData, numAntiCorruptionBuildings);
 			// TODO: apply policeman modifiers, before applying the max
 
 			// Corruption maxes out at 90%, and this max can be reduced further
 			// via courthouses/police stations, and the forbidden palace/SPHQ.
 			float maxCorruption = Math.Max(
 				0,
-				.9f - (.1f * numAntiCorruptionBuildings + .7f * numCorruptionReducingWonders));
+				.9f - (.1f * numAntiCorruptionBuildings + .7f * numCorruptionReducingSmallWondersInCity));
 			corruption = Math.Max(corruption, 0);
 			corruption = Math.Min(corruption, maxCorruption);
 		}
