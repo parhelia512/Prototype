@@ -79,8 +79,8 @@ namespace C7GameData {
 		public int turnsResearched = 0;
 
 		// If the government is anarchy (or a govt with the transition bool set
-		// to true), the number of turns left before switching is allowed.
-		public int anarchyTurnsLeft = 0;
+		// to true), the turn number at which switching governments is allowed.
+		public int inAnarchyUntilTurn = 0;
 
 		// The current government of the player.
 		public Government government;

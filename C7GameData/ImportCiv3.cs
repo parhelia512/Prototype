@@ -449,7 +449,7 @@ namespace C7GameData {
 				player.luxuryRate = leader.LuxuryRate;
 				player.taxRate = leader.TaxRate;
 				player.governmentId = save.Governments[leader.Government].id;
-				player.anarchyTurnsLeft = leader.AnarchyTurnsLeft;
+				player.inAnarchyUntilTurn = save.TurnNumber + leader.AnarchyTurnsLeft;
 
 				save.Players.Add(player);
 				i++;
