@@ -64081,6 +64081,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Rubber"
       ]
     },
     {
@@ -64105,6 +64108,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
@@ -64204,6 +64211,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -64229,6 +64239,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -64254,6 +64267,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -64279,6 +64295,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -64329,6 +64348,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Saltpeter"
       ]
     },
     {
@@ -64354,6 +64376,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses",
+        "Iron"
       ]
     },
     {
@@ -64403,6 +64429,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses",
+        "Saltpeter"
       ]
     },
     {
@@ -64428,6 +64458,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Rubber"
       ]
     },
     {
@@ -64453,6 +64486,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
@@ -64477,6 +64514,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
@@ -64501,6 +64542,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
@@ -64553,6 +64598,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron",
+        "Saltpeter"
       ]
     },
     {
@@ -64604,6 +64653,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Aluminum"
       ]
     },
     {
@@ -64628,6 +64680,9 @@
         "unit_fortify",
         "unit_disband",
         "unit_goto"
+      ],
+      "requiredResources": [
+        "Aluminum"
       ]
     },
     {
@@ -64653,6 +64708,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Aluminum",
+        "Uranium"
       ]
     },
     {
@@ -64677,6 +64736,10 @@
         "unit_fortify",
         "unit_disband",
         "unit_goto"
+      ],
+      "requiredResources": [
+        "Aluminum",
+        "Uranium"
       ]
     },
     {
@@ -64752,6 +64815,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron",
+        "Saltpeter"
       ]
     },
     {
@@ -64803,6 +64870,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron",
+        "Coal"
       ]
     },
     {
@@ -64827,6 +64898,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -64851,6 +64925,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -64875,6 +64952,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -64900,6 +64980,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -64925,6 +65008,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -64950,6 +65036,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Aluminum",
+        "Uranium"
       ]
     },
     {
@@ -64974,6 +65064,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Uranium"
       ]
     },
     {
@@ -64997,6 +65090,9 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -65019,6 +65115,9 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -65041,6 +65140,10 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
@@ -65063,6 +65166,10 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Aluminum"
       ]
     },
     {
@@ -65085,6 +65192,10 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Aluminum"
       ]
     },
     {
@@ -65107,6 +65218,10 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Aluminum"
       ]
     },
     {
@@ -65297,6 +65412,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -65326,6 +65444,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -65355,6 +65476,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -65384,6 +65508,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses",
+        "Iron"
       ]
     },
     {
@@ -65413,6 +65541,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -65442,6 +65573,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Saltpeter"
       ]
     },
     {
@@ -65471,6 +65605,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -65528,6 +65665,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses",
+        "Saltpeter"
       ]
     },
     {
@@ -65557,6 +65698,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
@@ -65586,6 +65731,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron",
+        "Saltpeter"
       ]
     },
     {
@@ -65612,6 +65761,10 @@
         "unit_wait",
         "unit_fortify",
         "unit_disband"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Aluminum"
       ]
     },
     {
@@ -65636,6 +65789,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron",
+        "Saltpeter"
       ]
     },
     {
@@ -65665,6 +65822,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -65693,6 +65853,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -65750,6 +65913,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses",
+        "Saltpeter"
       ]
     },
     {
@@ -65779,6 +65946,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -65808,6 +65978,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses",
+        "Iron"
       ]
     },
     {
@@ -65866,6 +66040,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Saltpeter"
       ]
     },
     {
@@ -65891,6 +66068,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -66521,6 +66701,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Horses"
       ]
     },
     {
@@ -66645,6 +66828,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Iron"
       ]
     },
     {
@@ -66872,6 +67058,9 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil"
       ]
     },
     {
@@ -66968,6 +67157,10 @@
         "unit_disband",
         "unit_goto",
         "unit_explore"
+      ],
+      "requiredResources": [
+        "Oil",
+        "Rubber"
       ]
     },
     {
