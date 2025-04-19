@@ -24,6 +24,8 @@ public partial class DomesticAdvisor : Control {
 	TextureRect luxurySliderIcon = new();
 	Label luxurySliderLabel = new();
 
+	TextureRect advisorHead = new();
+
 	// The Y position of the two sliders.
 	private int scienceSliderY = 84;
 	private int luxurySliderY = 130;
@@ -37,17 +39,9 @@ public partial class DomesticAdvisor : Control {
 		ImageTexture DomesticBackground = Util.LoadTextureFromPCX("Art/Advisors/domestic.pcx");
 		background.Texture = DomesticBackground;
 
-		//TODO: Age-based background.  Only use Ancient for now.
-		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupDOMESTIC.pcx", 1, 40, 149, 110);
-		ImageTexture AdvisorAngry = Util.LoadTextureFromPCX("Art/SmallHeads/popupDOMESTIC.pcx", 151, 40, 149, 110);
-		ImageTexture AdvisorSad = Util.LoadTextureFromPCX("Art/SmallHeads/popupDOMESTIC.pcx", 301, 40, 149, 110);
-		ImageTexture AdvisorSurprised = Util.LoadTextureFromPCX("Art/SmallHeads/popupDOMESTIC.pcx", 451, 40, 149, 110);
-
-		TextureRect AdvisorHead = new TextureRect();
-		//TODO: Randomize or set logically
-		AdvisorHead.Texture = AdvisorSurprised;
-		AdvisorHead.SetPosition(new Vector2(851, 0));
-		background.AddChild(AdvisorHead);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.SetPosition(new Vector2(851, 0));
+		background.AddChild(advisorHead);
 
 		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
 		TextureButton DialogBox = new TextureButton();
@@ -157,6 +151,9 @@ public partial class DomesticAdvisor : Control {
 			sumSummary.Text = $"Neutral: {goldPerTurn}";
 			growth.Text = "Balanced";
 		}
+
+		//TODO: Randomize or set logically
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, player.EraIndex());
 	}
 
 	private int CalculateSliderXPos(int sliderRate) {

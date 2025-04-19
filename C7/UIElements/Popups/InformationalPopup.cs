@@ -22,11 +22,10 @@ public partial class InformationalPopup : Popup {
 		int width = 430;
 		int height = 230;
 
-		ImageTexture AdvisorHappy = Util.LoadTextureFromPCX("Art/SmallHeads/popupFOREIGN.pcx", 1, 40, 149, 110, false);
-		TextureRect AdvisorHead = new TextureRect();
-		AdvisorHead.Texture = AdvisorHappy;
-		AdvisorHead.SetPosition(new Vector2(275, 0));
-		AddChild(AdvisorHead);
+		TextureRect advisorHead = new();
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Foreign, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.SetPosition(new Vector2(275, 0));
+		AddChild(advisorHead);
 
 		AddTexture(width, height);
 		AddBackground(width, height - 110, 110);
