@@ -4,6 +4,7 @@ namespace C7GameData {
 	using System.Collections.Generic;
 	using System.Linq;
 	using C7GameData.Save;
+	using C7Engine;
 
 	public class Tile {
 		public class TileYield {
@@ -210,7 +211,7 @@ namespace C7GameData {
 			int dx = Math.Abs(map.CalculateXDelta(other.XCoordinate, this.XCoordinate));
 			int dy = Math.Abs(map.CalculateYDelta(other.YCoordinate, this.YCoordinate));
 
-			// Transform that to the rank distance using the formula from 
+			// Transform that to the rank distance using the formula from
 			// https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/post-1551201
 			return (dx + dy) / 2 + Math.Abs(dx - dy) / 4;
 		}
@@ -339,7 +340,7 @@ namespace C7GameData {
 		//  - inland lakes/seas: we need to figure out what is fresh/salt water
 		//  - Electricity tech, to allow irrigating w/o fresh water access
 		public bool CanBeIrrigated(Player player) {
-			// Irrigation can't be done if there is no irrigation bonus for the 
+			// Irrigation can't be done if there is no irrigation bonus for the
 			// tile or if there's already an improvement or city on the tile.
 			if (overlayTerrainType.irrigationBonus == 0 ||
 				overlays.mine ||
@@ -425,6 +426,81 @@ namespace C7GameData {
 					break;
 			}
 			return location;
+		}
+		public MapUnit FindTopDefender(MapUnit opponent) {
+			if (unitsOnTile.Count > 0) {
+				IEnumerable<MapUnit> potentialDefenders = unitsOnTile.Where(u => u.CanDefendAgainst(opponent));
+				if (potentialDefenders.Count() == 0) {
+					return MapUnit.NONE;
+				}
+
+				MapUnit leadingCandidate = unitsOnTile[0];
+				foreach (MapUnit u in unitsOnTile)
+					if (u.HasPriorityAsDefender(leadingCandidate, opponent))
+						leadingCandidate = u;
+				return leadingCandidate;
+			} else
+				return MapUnit.NONE;
+		}
+
+		/// <summary>
+		/// Disbands non-defending units on a tile.  This should only be called when all defending units have been destroyed,
+		/// hence its name.  E.g. if only air/sea units remain after a land battle, this should be called.
+		///
+		/// Eventually, we should also have a method to make relevant units (workers, artillery, etc.) be captured.
+		/// </summary>
+		/// <param name="tile"></param>
+		public void DisbandNonDefendingUnits() {
+			//There may have been naval units, if so, disband them
+			if (unitsOnTile.Count > 0) {
+				//Copy to a separate array so we don't crash due to concurrent modification exceptions
+				MapUnit[] unitsOnTile = new MapUnit[this.unitsOnTile.Count];
+				this.unitsOnTile.CopyTo(unitsOnTile);
+				foreach (MapUnit destroyedUnit in unitsOnTile) {
+					destroyedUnit.disband();
+				}
+			}
+		}
+
+		/// <summary>
+		/// After a WorkerJob has finished, Cclean up all the WorkerJobs and set the correct overlay
+		/// </summary>
+		/// <param name="tile">the current tile</param>
+		/// <param name="currentWorkerJob">the worker job currently finished, must not be null</param>
+		public void FinishWorkerJob(Terraform currentWorkerJob) {
+			// Reset All Workers working on the finished Job
+			foreach (MapUnit unit in unitsOnTile) {
+				if (currentWorkerJob == unit.WorkerJob) {
+					unit.resetWorkerJob();
+				}
+			}
+
+			SetTerraformOverlay(currentWorkerJob);
+		}
+
+		private void SetTerraformOverlay(Terraform currentWorkerJob) {
+			switch (currentWorkerJob.Action) {
+				case C7Action.UnitIrrigate:
+					overlays.irrigation = true;
+					break;
+				case C7Action.UnitBuildMine:
+					overlays.mine = true;
+					break;
+				case C7Action.UnitBuildRoad:
+					overlays.road = true;
+					break;
+			}
+		}
+
+		public void Animate(AnimatedEffect effect, bool wait) {
+			if (EngineStorage.animationsEnabled) {
+				new MsgStartEffectAnimation(this, effect, wait ? EngineStorage.uiEvent : null, AnimationEnding.Stop).send();
+				if (wait) {
+					EngineStorage.gameDataMutex.ReleaseMutex();
+					EngineStorage.uiEvent.WaitOne();
+					EngineStorage.gameDataMutex.WaitOne();
+				}
+			}
 		}
 	}
 
