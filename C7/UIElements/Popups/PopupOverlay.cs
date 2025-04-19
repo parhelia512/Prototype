@@ -8,7 +8,6 @@ public partial class PopupOverlay : HBoxContainer {
 
 	private ILogger log = LogManager.ForContext<PopupOverlay>();
 
-	[Signal] public delegate void UnitDisbandedEventHandler();
 	[Signal] public delegate void QuitEventHandler();
 	[Signal] public delegate void RetireEventHandler();
 	[Signal] public delegate void BuildCityEventHandler(string name);
