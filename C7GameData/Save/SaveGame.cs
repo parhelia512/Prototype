@@ -161,6 +161,7 @@ namespace C7GameData.Save {
 
 			var buildingDict = data.Buildings.ToDictionary(b => b.name);
 			var techDict = data.techs.ToDictionary(t => t.id);
+			var resDict = data.Resources.ToDictionary(r => r.Key);
 
 			foreach (SaveBuilding saveBuilding in Buildings) {
 				Building building = buildingDict[saveBuilding.name];
@@ -172,6 +173,8 @@ namespace C7GameData.Save {
 				if (saveBuilding.requiredTech != null) {
 					building.requiredTech = techDict[saveBuilding.requiredTech];
 				}
+
+				building.requiredResources = saveBuilding.requiredResources.Select(a => resDict[a]).ToHashSet();
 			}
 		}
 
@@ -181,6 +184,7 @@ namespace C7GameData.Save {
 			var techDict = data.techs.ToDictionary(t => t.id);
 			var unitPrototypeDict = data.unitPrototypes.ToDictionary(b => b.name);
 			var civDict = data.civilizations.ToDictionary(c => c.name);
+			var resDict = data.Resources.ToDictionary(r => r.Key);
 
 			foreach (SaveUnitPrototype saveProto in UnitPrototypes) {
 				UnitPrototype proto = unitPrototypeDict[saveProto.name];
@@ -206,6 +210,8 @@ namespace C7GameData.Save {
 
 					civ.uniqueUnit = proto;
 				}
+
+				proto.requiredResources = saveProto.requiredResources.Select(a => resDict[a]).ToHashSet();
 			}
 
 			// map units need game map and players to populate location and owner

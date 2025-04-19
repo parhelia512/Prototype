@@ -63334,7 +63334,6 @@
   "resources": [
     {
       "key": "Horses",
-      "index": 0,
       "icon": 0,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63348,7 +63347,6 @@
     },
     {
       "key": "Iron",
-      "index": 1,
       "icon": 1,
       "foodBonus": 0,
       "shieldsBonus": 1,
@@ -63362,7 +63360,6 @@
     },
     {
       "key": "Saltpeter",
-      "index": 2,
       "icon": 2,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63376,7 +63373,6 @@
     },
     {
       "key": "Coal",
-      "index": 3,
       "icon": 3,
       "foodBonus": 0,
       "shieldsBonus": 2,
@@ -63390,7 +63386,6 @@
     },
     {
       "key": "Oil",
-      "index": 4,
       "icon": 4,
       "foodBonus": 0,
       "shieldsBonus": 1,
@@ -63404,7 +63399,6 @@
     },
     {
       "key": "Rubber",
-      "index": 5,
       "icon": 5,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63418,7 +63412,6 @@
     },
     {
       "key": "Aluminum",
-      "index": 6,
       "icon": 6,
       "foodBonus": 0,
       "shieldsBonus": 2,
@@ -63432,7 +63425,6 @@
     },
     {
       "key": "Uranium",
-      "index": 7,
       "icon": 7,
       "foodBonus": 0,
       "shieldsBonus": 2,
@@ -63446,7 +63438,6 @@
     },
     {
       "key": "Wines",
-      "index": 8,
       "icon": 8,
       "foodBonus": 1,
       "shieldsBonus": 0,
@@ -63459,7 +63450,6 @@
     },
     {
       "key": "Furs",
-      "index": 9,
       "icon": 9,
       "foodBonus": 0,
       "shieldsBonus": 1,
@@ -63472,7 +63462,6 @@
     },
     {
       "key": "Dyes",
-      "index": 10,
       "icon": 10,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63485,7 +63474,6 @@
     },
     {
       "key": "Incense",
-      "index": 11,
       "icon": 11,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63498,7 +63486,6 @@
     },
     {
       "key": "Spices",
-      "index": 12,
       "icon": 12,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63511,7 +63498,6 @@
     },
     {
       "key": "Ivory",
-      "index": 13,
       "icon": 13,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63524,7 +63510,6 @@
     },
     {
       "key": "Silks",
-      "index": 14,
       "icon": 14,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63537,7 +63522,6 @@
     },
     {
       "key": "Gems",
-      "index": 15,
       "icon": 15,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63550,7 +63534,6 @@
     },
     {
       "key": "Whales",
-      "index": 16,
       "icon": 16,
       "foodBonus": 1,
       "shieldsBonus": 1,
@@ -63563,7 +63546,6 @@
     },
     {
       "key": "Game",
-      "index": 17,
       "icon": 17,
       "foodBonus": 2,
       "shieldsBonus": 0,
@@ -63576,7 +63558,6 @@
     },
     {
       "key": "Fish",
-      "index": 18,
       "icon": 18,
       "foodBonus": 2,
       "shieldsBonus": 0,
@@ -63589,7 +63570,6 @@
     },
     {
       "key": "Cattle",
-      "index": 19,
       "icon": 19,
       "foodBonus": 2,
       "shieldsBonus": 1,
@@ -63602,7 +63582,6 @@
     },
     {
       "key": "Wheat",
-      "index": 20,
       "icon": 20,
       "foodBonus": 2,
       "shieldsBonus": 0,
@@ -63615,7 +63594,6 @@
     },
     {
       "key": "Gold",
-      "index": 21,
       "icon": 21,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -63628,7 +63606,6 @@
     },
     {
       "key": "Sugar",
-      "index": 22,
       "icon": 24,
       "foodBonus": 1,
       "shieldsBonus": 0,
@@ -63641,7 +63618,6 @@
     },
     {
       "key": "Tropical Fruit",
-      "index": 23,
       "icon": 22,
       "foodBonus": 1,
       "shieldsBonus": 0,
@@ -63654,7 +63630,6 @@
     },
     {
       "key": "Oasis",
-      "index": 24,
       "icon": 23,
       "foodBonus": 2,
       "shieldsBonus": 0,
@@ -63667,7 +63642,6 @@
     },
     {
       "key": "Tobacco",
-      "index": 25,
       "icon": 25,
       "foodBonus": 0,
       "shieldsBonus": 0,
@@ -67200,7 +67174,10 @@
       "requiredTech": "tech-48",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Iron"
+      ]
     },
     {
       "name": "Manufacturing Plant",
@@ -67229,7 +67206,10 @@
       "requiredBuilding": "Factory",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Coal"
+      ]
     },
     {
       "name": "Hydro Plant",
@@ -67249,7 +67229,10 @@
       "requiredBuilding": "Factory",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Uranium"
+      ]
     },
     {
       "name": "Hospital",
@@ -67277,7 +67260,10 @@
       "requiredTech": "tech-73",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Rubber"
+      ]
     },
     {
       "name": "SAM Missile Battery",
@@ -67286,7 +67272,10 @@
       "requiredTech": "tech-65",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "Coastal Fortress",
@@ -67295,7 +67284,11 @@
       "requiredTech": "tech-39",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Iron",
+        "Saltpeter"
+      ]
     },
     {
       "name": "Solar Plant",
@@ -67538,7 +67531,10 @@
       "requiredTech": "tech-66",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "requiredResources": [
+        "Uranium"
+      ]
     },
     {
       "name": "Cure for Cancer",
@@ -67581,7 +67577,11 @@
       "populationCost": 0,
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "requiredResources": [
+        "Iron",
+        "Coal"
+      ]
     },
     {
       "name": "Forbidden Palace",
@@ -67624,7 +67624,10 @@
       "requiredTech": "tech-69",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "Strategic Missile Defense",
@@ -67661,7 +67664,10 @@
       "requiredTech": "tech-75",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Engine",
@@ -67670,7 +67676,10 @@
       "requiredTech": "tech-69",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Docking Bay",
@@ -67679,7 +67688,10 @@
       "requiredTech": "tech-69",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Cockpit",
@@ -67688,7 +67700,10 @@
       "requiredTech": "tech-69",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Fuel Cells",
@@ -67697,7 +67712,10 @@
       "requiredTech": "tech-71",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Uranium"
+      ]
     },
     {
       "name": "SS Life Support System",
@@ -67706,7 +67724,10 @@
       "requiredTech": "tech-71",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Stasis Chamber",
@@ -67715,7 +67736,11 @@
       "requiredTech": "tech-80",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum",
+        "Uranium"
+      ]
     },
     {
       "name": "SS Storage/Supply",
@@ -67724,7 +67749,10 @@
       "requiredTech": "tech-74",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Planetary Party Lounge",
@@ -67733,7 +67761,10 @@
       "requiredTech": "tech-76",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum"
+      ]
     },
     {
       "name": "SS Exterior Casing",
@@ -67742,7 +67773,11 @@
       "requiredTech": "tech-74",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "requiredResources": [
+        "Aluminum",
+        "Rubber"
+      ]
     },
     {
       "name": "The Internet",
@@ -67799,7 +67834,10 @@
       "requiredTech": "tech-11",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "requiredResources": [
+        "Ivory"
+      ]
     },
     {
       "name": "The Mausoleum of Mausollos",

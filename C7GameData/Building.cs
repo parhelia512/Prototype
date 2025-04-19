@@ -14,6 +14,8 @@ namespace C7GameData {
 
 		public int culturePerTurn = 0;
 
+		public HashSet<Resource> requiredResources { get; set; } = [];
+
 		public Building(SaveBuilding building) {
 			name = building.name;
 			shieldCost = building.shieldCost;

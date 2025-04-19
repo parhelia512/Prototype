@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace C7GameData.Save {
 	public class SaveUnitPrototype {
@@ -28,6 +29,8 @@ namespace C7GameData.Save {
 
 		public HashSet<string> attributes = new HashSet<string>();
 
+		public HashSet<string> requiredResources = [];
+
 		public SaveUnitPrototype() { }
 
 		public SaveUnitPrototype(UnitPrototype proto) {
@@ -52,6 +55,8 @@ namespace C7GameData.Save {
 			categories = new HashSet<string>(proto.categories);
 			actions = new HashSet<string>(proto.actions);
 			attributes = new HashSet<string>(proto.attributes);
+
+			requiredResources = proto.requiredResources.Select(r => r.Key).ToHashSet();
 		}
 	}
 }
