@@ -18,6 +18,7 @@ public partial class DomesticAdvisor : Control {
 	[Export] Label expenseSummary;
 	[Export] Label sumSummary;
 	[Export] Label growth;
+	PopupOverlay popupOverlay;
 
 	TextureRect scienceSliderIcon = new();
 	Label scienceSliderLabel = new();
@@ -25,6 +26,7 @@ public partial class DomesticAdvisor : Control {
 	Label luxurySliderLabel = new();
 
 	TextureRect advisorHead = new();
+	Label DialogBoxAdvise = new();
 
 	// The Y position of the two sliders.
 	private int scienceSliderY = 84;
@@ -50,7 +52,6 @@ public partial class DomesticAdvisor : Control {
 		background.AddChild(DialogBox);
 
 		//TODO: Multi-line capabilities
-		Label DialogBoxAdvise = new Label();
 		DialogBoxAdvise.Text = "You are running C7!";
 		DialogBoxAdvise.SetPosition(new Vector2(815, 119));
 		background.AddChild(DialogBoxAdvise);
@@ -63,7 +64,7 @@ public partial class DomesticAdvisor : Control {
 		changeGovernment.TextureNormal = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 1, 145, 24);
 		changeGovernment.TextureHover = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 26, 145, 24);
 		changeGovernment.TexturePressed = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 52, 145, 24);
-		// TODO: implement changing governments
+		changeGovernment.Pressed += ChangeGovernments;
 
 		ImageTexture scienceSliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 34, 2, 30, 30);
 		ImageTexture luxurySliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 376, 2, 30, 30);
@@ -154,6 +155,14 @@ public partial class DomesticAdvisor : Control {
 
 		//TODO: Randomize or set logically
 		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, player.EraIndex());
+
+		// Disable the change government button unless we have a government to
+		// switch to.
+		changeGovernment.Disabled = player.GetAvailableGovernments(gameDataAccess.gameData).Count == 1;
+
+		if (player.government.transitionType && player.inAnarchyUntilTurn > gameDataAccess.gameData.turn) {
+			DialogBoxAdvise.Text = $"{player.inAnarchyUntilTurn - gameDataAccess.gameData.turn} turns of anarchy left";
+		}
 	}
 
 	private int CalculateSliderXPos(int sliderRate) {
@@ -161,5 +170,31 @@ public partial class DomesticAdvisor : Control {
 		int maxX = 725;
 
 		return minX + (int)((maxX - minX) * (sliderRate / 10.0));
+	}
+
+	public void SetPopupOverlay(PopupOverlay po) {
+		popupOverlay = po;
+	}
+
+	private void ChangeGovernments() {
+		using UIGameDataAccess gameDataAccess = new();
+		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+
+		if (player.government.transitionType) {
+			popupOverlay.ShowPopup(
+				new InformationalPopup("You already started a revolution. Remember?"),
+				PopupOverlay.PopupCategory.Advisor);
+			return;
+		}
+
+		popupOverlay.ShowPopup(
+				new ConfirmationPopup(
+					"You say you want a revolution?",
+					"Yes, you know it's gonna be alright.",
+					"No. You can count me out.",
+					() => {
+						new StartGovernmentTransitionMsg(player).send();
+					}),
+				PopupOverlay.PopupCategory.Advisor);
 	}
 }

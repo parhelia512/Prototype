@@ -163,8 +163,11 @@ public partial class DealScreen : TextureRect {
 	}
 
 	private void AttemptDeal() {
+		// TODO: This seems to be only usage of UIGameDataAccess that mutates
+		// state - can this be a message instead?
 		using UIGameDataAccess gameDataAccess = new();
 		GameData gD = gameDataAccess.gameData;
+
 		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
 		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
 

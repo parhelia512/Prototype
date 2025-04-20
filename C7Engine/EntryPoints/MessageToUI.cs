@@ -42,7 +42,7 @@ namespace C7Engine {
 
 	public class MsgUpdateUiAfterTechSelection : MessageToUI { }
 
-	public class MsgUpdateUiAfterSliderChange : MessageToUI { }
+	public class MsgUpdateUiAfterDomesticChange : MessageToUI { }
 
 	public class MsgWarDeclaration : MessageToUI {
 		public Player aggressor;

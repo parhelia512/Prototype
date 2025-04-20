@@ -11,7 +11,7 @@ using System.Collections.Generic;
 public partial class Advisors : CenterContainer {
 	private ILogger log = LogManager.ForContext<Advisors>();
 
-	[Export] private DomesticAdvisor domesticAdvisor;
+	[Export] public DomesticAdvisor domesticAdvisor;
 	private MilitaryAdvisor militaryAdvisor;
 	private ScienceAdvisor scienceAdvisor;
 
