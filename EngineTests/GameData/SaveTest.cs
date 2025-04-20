@@ -16,7 +16,7 @@ using C7Engine.Pathing;
 
 public class SaveTests {
 
-	private static readonly string C7GameDataTestsFolderName = "C7GameDataTests";
+	private static readonly string C7GameDataTestsFolderName = "EngineTests";
 
 	private static string getBasePath(string file) => Path.Combine(testDirectory, file);
 

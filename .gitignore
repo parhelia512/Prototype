@@ -15,7 +15,7 @@ C7/Exports
 Exports/
 
 # Test runtime files
-C7GameDataTests/data/
+EngineTests/data/
 
 # Mono-specific ignores
 .mono/
