@@ -25,5 +25,9 @@ namespace C7GameData {
 			culturePerTurn = building.culturePerTurn;
 			isCenterOfEmpire = building.flags.Contains(SaveBuilding.IS_CENTER_OF_EMPIRE);
 		}
+
+		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
+			return false;
+		}
 	}
 }

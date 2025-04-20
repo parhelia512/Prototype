@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace C7GameData {
 	using System;
+	using System.Linq;
 	using C7GameData.Save;
 
 	/**
@@ -72,5 +73,40 @@ namespace C7GameData {
 			instance.movementPoints.reset(movement);
 			return instance;
 		}
+
+		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
+			return MeetsProductionRequirements(city, accessibleResources) && !IsUnitObsolete(city, accessibleResources);
+		}
+
+		// TODO: Consider golden ages when determining whether a unit is obsolete.
+		// If a golden age has not yet been triggered and a unit can trigger one,  
+		// it shouldn't be marked as obsolete, even if its upgrade is available.
+		private bool IsUnitObsolete(City city, HashSet<Resource> accessibleResources) {
+			List<UnitPrototype> upgradeChain = city.owner.civilization.GetUpgradeChain(this);
+
+			return upgradeChain.Any(upgrade => upgrade.MeetsProductionRequirements(city, accessibleResources));
+		}
+
+		private bool MeetsProductionRequirements(City city, HashSet<Resource> accessibleResources) {
+			if (!city.owner.civilization.IsUnitAvailable(this)) {
+				return false;
+			}
+
+			if (!city.owner.HasRequiredTechnology(this)) {
+				return false;
+			}
+
+			if (categories.Contains("Sea") && !city.location.NeighborsWater()) {
+				return false;
+			}
+
+			if (!requiredResources.All(accessibleResources.Contains)) {
+				return false;
+			}
+
+			return true;
+		}
+
+
 	}
 }

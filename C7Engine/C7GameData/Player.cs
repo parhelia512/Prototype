@@ -543,6 +543,12 @@ namespace C7GameData {
 								.GroupBy(t => t.Resource)
 								.ToDictionary(g => g.Key, g => g.ToList());
 		}
+
+		public bool HasRequiredTechnology(IProducible producible) {
+			return producible.requiredTech == null ||
+				   knownTechs.Contains(producible.requiredTech.id);
+		}
+
 	}
 
 }
