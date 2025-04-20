@@ -9,6 +9,7 @@ using QueryCiv3;
 
 public partial class Util {
 	static public string Civ3Root = Civ3Location.GetCiv3Path();
+	static public bool CheckForModernFiles = true;
 
 	static public string GetCiv3Path() {
 		string path = C7Settings.GetSettingValue("locations", "civ3InstallDir");
@@ -161,6 +162,20 @@ public partial class Util {
 		if (textureCache.ContainsKey(relPath)) {
 			return textureCache[relPath];
 		}
+
+		// As a hack, whenever we try to load a legacy pcx file, first check if
+		// there is a .png file with the same name, and if it exists, prefer
+		// that instead. This is a little inefficient, but the loading is all
+		// cached and it makes it easy to incrementally add our own graphics.
+		if (CheckForModernFiles) {
+			try {
+				Image image = Image.LoadFromFile(Civ3MediaPath(relPath.Replace(".pcx", ".png")));
+				ImageTexture t = ImageTexture.CreateFromImage(image);
+				textureCache[relPath] = t;
+				return t;
+			} catch (Exception e) { }
+		}
+
 		Pcx NewPCX = LoadPCX(relPath);
 		ImageTexture texture = PCXToGodot.getImageTextureFromPCX(NewPCX);
 		textureCache[relPath] = texture;
@@ -206,6 +221,20 @@ public partial class Util {
 		if (textureCache.ContainsKey(key)) {
 			return textureCache[key];
 		}
+
+		// As a hack, whenever we try to load a legacy pcx file, first check if
+		// there is a .png file with the same name, and if it exists, prefer
+		// that instead. This is a little inefficient, but the loading is all
+		// cached and it makes it easy to incrementally add our own graphics.
+		if (CheckForModernFiles) {
+			try {
+				Image image = Image.LoadFromFile(Civ3MediaPath(relPath.Replace(".pcx", ".png")));
+				ImageTexture t = ImageTexture.CreateFromImage(image.GetRegion(new Rect2I(leftStart, topStart, width, height)));
+				textureCache[key] = t;
+				return t;
+			} catch (Exception e) { }
+		}
+
 		Pcx NewPCX = LoadPCX(relPath);
 		ImageTexture texture = PCXToGodot.getImageTextureFromPCX(NewPCX, new(leftStart, topStart, width, height), shadows);
 		textureCache[key] = texture;

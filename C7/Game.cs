@@ -138,32 +138,7 @@ public partial class Game : Node2D {
 			}); // Spawns engine thread
 			Global.ResetLoadGamePath();
 
-			using (var gameDataAccess = new UIGameDataAccess()) {
-				GameMap map = gameDataAccess.gameData.map;
-				mapView = new MapView(this, map.numTilesWide, map.numTilesTall, map.wrapHorizontally, map.wrapVertically);
-				AddChild(mapView);
-
-				mapView.cameraZoom = (float)1.0;
-				mapView.gridLayer.visible = false;
-
-				// Set initial camera location. If the UI controller has any cities, focus on their capital. Otherwise, focus on their
-				// starting settler.
-				if (controller.cities.Count > 0) {
-					City capital = controller.cities.Find(c => c.IsCapital());
-					if (capital != null)
-						mapView.centerCameraOnTile(capital.location);
-				} else {
-					MapUnit startingSettler = controller.units.Find(u => u.unitType.actions.Contains(C7Action.UnitBuildCity));
-					if (startingSettler != null)
-						mapView.centerCameraOnTile(startingSettler.location);
-				}
-
-				// Allow the city screen to control whether tile assignments
-				// are visible and map UI locations back to map locations.
-				cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
-				cityScreen.mapView = mapView;
-				cityScreen.citizenTypes = gameDataAccess.gameData.citizenTypes;
-			}
+			InitializeMapView();
 
 			//TODO: What was this supposed to do?  It throws errors and occasinally causes crashes now, because _OnViewportSizeChanged doesn't exist
 			// GetTree().Root.Connect("size_changed",new Callable(this,"_OnViewportSizeChanged"));
@@ -187,6 +162,45 @@ public partial class Game : Node2D {
 			popupOverlay.ShowPopup(new ErrorMessage(message), PopupOverlay.PopupCategory.Advisor);
 			log.Error(ex, "Unexpected error in Game.cs _Ready");
 		}
+	}
+
+	private void InitializeMapView() {
+		using UIGameDataAccess gameDataAccess = new();
+		GameMap map = gameDataAccess.gameData.map;
+
+		Vector2? cameraLocation = null;
+		if (mapView != null) {
+			cameraLocation = mapView.cameraLocation;
+			RemoveChild(mapView);
+		}
+
+		mapView = new MapView(this, map.numTilesWide, map.numTilesTall, map.wrapHorizontally, map.wrapVertically);
+		AddChild(mapView);
+
+		mapView.cameraZoom = (float)1.0;
+		mapView.gridLayer.visible = false;
+
+		if (!cameraLocation.HasValue) {
+			// Set initial camera location. If the UI controller has any cities, focus on their capital. Otherwise, focus on their
+			// starting settler.
+			if (controller.cities.Count > 0) {
+				City capital = controller.cities.Find(c => c.IsCapital());
+				if (capital != null)
+					mapView.centerCameraOnTile(capital.location);
+			} else {
+				MapUnit startingSettler = controller.units.Find(u => u.unitType.actions.Contains(C7Action.UnitBuildCity));
+				if (startingSettler != null)
+					mapView.centerCameraOnTile(startingSettler.location);
+			}
+		} else {
+			mapView.cameraLocation = cameraLocation.Value;
+		}
+
+		// Allow the city screen to control whether tile assignments
+		// are visible and map UI locations back to map locations.
+		cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
+		cityScreen.mapView = mapView;
+		cityScreen.citizenTypes = gameDataAccess.gameData.citizenTypes;
 	}
 
 	// Must only be called while holding the game data mutex
@@ -622,6 +636,9 @@ public partial class Game : Node2D {
 		if (eventKeyDown.Keycode == Godot.Key.G && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
 			ToggleGridCoordinates();
 		}
+		if (eventKeyDown.Keycode == Godot.Key.T && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
+			ToggleC7Graphics();
+		}
 		if (eventKeyDown.Keycode == Godot.Key.F1) {
 			EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 		}
@@ -679,6 +696,12 @@ public partial class Game : Node2D {
 	private void ToggleGridCoordinates() {
 		using UIGameDataAccess gameDataAccess = new UIGameDataAccess();
 		gameDataAccess.gameData.showGridCoordinates = !gameDataAccess.gameData.showGridCoordinates;
+	}
+
+	private void ToggleC7Graphics() {
+		Util.CheckForModernFiles = !Util.CheckForModernFiles;
+		Util.ClearCaches();
+		InitializeMapView();
 	}
 
 	private void HandleMagnifyGesture(InputEventMagnifyGesture magnifyGesture) {
