@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\QueryCiv3\QueryCiv3.csproj" />
-    <ProjectReference Include="..\..\C7GameData\C7GameData.csproj" />
+    <ProjectReference Include="..\..\C7Engine\C7Engine.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

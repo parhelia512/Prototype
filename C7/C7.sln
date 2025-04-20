@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
@@ -6,8 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C7", "C7.csproj", "{5DF4328C-C326-46C6-8718-320FF6071871}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C7Engine", "..\C7Engine\C7Engine.csproj", "{FD440E96-DAB8-48DF-85FD-72F75384CA62}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C7GameData", "..\C7GameData\C7GameData.csproj", "{4ECB5932-6D85-4953-B3D8-BD8334D792DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConvertCiv3Media", "..\ConvertCiv3Media\ConvertCiv3Media.csproj", "{A1DD1E87-6D05-49CA-8B41-5404D3727174}"
 EndProject
