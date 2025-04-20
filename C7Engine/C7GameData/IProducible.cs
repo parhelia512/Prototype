@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace C7GameData {
 	/**
 	 * Represents something that can be produced by a city.
@@ -8,5 +10,6 @@ namespace C7GameData {
 		int shieldCost { get; set; }
 		int populationCost { get; set; }
 		Tech requiredTech { get; set; }
+		HashSet<Resource> requiredResources { get; set; }
 	}
 }

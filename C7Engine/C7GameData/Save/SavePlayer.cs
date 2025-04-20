@@ -67,8 +67,8 @@ namespace C7GameData.Save {
 		public int turnsResearched = 0;
 
 		// If the government is anarchy (or a govt with the transition bool set
-		// to true), the number of turns left before switching is allowed.
-		public int anarchyTurnsLeft = 0;
+		// to true), the turn number at which switching governments is allowed.
+		public int inAnarchyUntilTurn = 0;
 
 		// The current government of the player.
 		public ID governmentId;
@@ -90,7 +90,7 @@ namespace C7GameData.Save {
 				taxRate = taxRate,
 				gold = gold,
 				turnsUntilPriorityReevaluation = turnsUntilPriorityReevaluation,
-				anarchyTurnsLeft = anarchyTurnsLeft,
+				inAnarchyUntilTurn = inAnarchyUntilTurn,
 				government = governments.Find(x => x.id == governmentId),
 				rules = rules,
 			};
@@ -140,7 +140,7 @@ namespace C7GameData.Save {
 			gold = player.gold;
 			beakers = player.beakers;
 			turnsResearched = player.turnsResearched;
-			anarchyTurnsLeft = player.anarchyTurnsLeft;
+			inAnarchyUntilTurn = player.inAnarchyUntilTurn;
 			governmentId = player.government.id;
 
 			foreach (KeyValuePair<ID, PlayerRelationship> keyValuePair in player.playerRelationships) {

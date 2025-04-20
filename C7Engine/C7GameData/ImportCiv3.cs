@@ -43,6 +43,7 @@ namespace C7GameData {
 		private void ImportSharedBiqData() {
 			ImportRaces();
 			ImportTechs();
+			ImportCiv3Resources();
 			ImportUnitPrototypes();
 			ImportUniqueUnitReplacements();
 			ImportUnitUpgrades();
@@ -82,7 +83,6 @@ namespace C7GameData {
 			ImportSavCities();
 			save.GameDifficulty = save.Difficulties[savData.Game.DifficultyID];
 
-			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(savData, save);
 			SetWorldWrap(savData, save);
 
@@ -151,9 +151,8 @@ namespace C7GameData {
 				if (civ3Tile.Irrigation) {
 					tile.overlays.Add("irrigation");
 				}
-				Resource tileResource = resourcesByIndex[civ3Tile.ResourceID];
-				if (tileResource != Resource.NONE) {
-					tile.resource = tileResource.Key;
+				if (civ3Tile.ResourceID != -1) {
+					tile.resource = save.Resources[civ3Tile.ResourceID].Key;
 				}
 				save.Map.tiles.Add(tile);
 				for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
@@ -186,7 +185,6 @@ namespace C7GameData {
 			ImportBicUnits();
 			ImportBicCities();
 
-			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(biq, save);
 			SetWorldWrap(biq, save);
 
@@ -253,9 +251,8 @@ namespace C7GameData {
 				if (civ3Tile.Irrigation) {
 					tile.overlays.Add("irrigation");
 				}
-				Resource tileResource = resourcesByIndex[civ3Tile.Resource];
-				if (tileResource != Resource.NONE) {
-					tile.resource = tileResource.Key;
+				if (civ3Tile.Resource != -1) {
+					tile.resource = save.Resources[civ3Tile.Resource].Key;
 				}
 
 				// Some tiles are known ahead of time, like all of europe in age of
@@ -307,15 +304,11 @@ namespace C7GameData {
 			return (X, Y);
 		}
 
-		private Dictionary<int, Resource> ImportCiv3Resources() {
+		private void ImportCiv3Resources() {
 			GOOD[] Good = biq?.Good ?? defaultBiq.Good;
-			int g = 0;
-			Dictionary<int, Resource> resourcesByIndex = new Dictionary<int, Resource>(); //will we want to have this for reference later?  Maybe.
-			resourcesByIndex[-1] = Resource.NONE;
 			foreach (GOOD good in Good) {
 				Resource resource = new Resource {
 					Key = good.Name,
-					Index = g,
 					Name = good.Name,
 					Icon = good.Icon,
 					FoodBonus = good.FoodBonus,
@@ -339,10 +332,7 @@ namespace C7GameData {
 				}
 
 				save.Resources.Add(resource);
-				resourcesByIndex[g] = resource;
-				g++;
 			}
-			return resourcesByIndex;
 		}
 
 		private void ImportRaces() {
@@ -459,7 +449,7 @@ namespace C7GameData {
 				player.luxuryRate = leader.LuxuryRate;
 				player.taxRate = leader.TaxRate;
 				player.governmentId = save.Governments[leader.Government].id;
-				player.anarchyTurnsLeft = leader.AnarchyTurnsLeft;
+				player.inAnarchyUntilTurn = save.TurnNumber + leader.AnarchyTurnsLeft;
 
 				save.Players.Add(player);
 				i++;
@@ -759,6 +749,14 @@ namespace C7GameData {
 					prototype.requiredTech = save.Techs[prto.Required].id;
 				}
 
+				if (prto.RequiredResource1 != -1) {
+					prototype.requiredResources.Add(save.Resources[prto.RequiredResource1].Key);
+				}
+
+				if (prto.RequiredResource2 != -1) {
+					prototype.requiredResources.Add(save.Resources[prto.RequiredResource2].Key);
+				}
+
 				//Temporary check until #330 is finished
 				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
 					save.UnitPrototypes.Add(prototype);
@@ -768,15 +766,15 @@ namespace C7GameData {
 
 		// This method assigns standard units that are replaced by unique units.
 		//
-		// A unique unit replaces a standard unit if both share the same tech requirement 
+		// A unique unit replaces a standard unit if both share the same tech requirement
 		// and the standard unit is unproducible by the civilization to which the unique unit belongs.
-		// 
+		//
 		// For example, this method updates the Mounted Warrior prototype to indicate that it replaces the Horseman.
 		private void ImportUniqueUnitReplacements() {
 			var unitPrototypeDict = save.UnitPrototypes.ToDictionary(b => b.name);
 
 			// Group unique units by civilization.
-			// In the base ruleset a civilization only has one unique unit, 
+			// In the base ruleset a civilization only has one unique unit,
 			// but this may vary in scenarios.
 			var uniqueUnitPrototypesByCiv = save.UnitPrototypes
 					.Where(u => u.unique != null)
@@ -806,7 +804,7 @@ namespace C7GameData {
 					var uniqueUnits = uniqueUnitPrototypesByCiv[save.Civilizations[civIndex].name];
 
 					foreach (SaveUnitPrototype uniqueUnit in uniqueUnits) {
-						// If the unique unit has the same tech requirement as the standard unit, 
+						// If the unique unit has the same tech requirement as the standard unit,
 						// mark the unique unit as a replacement for the standard unit
 						if (uniqueUnit.requiredTech == standardUnit.requiredTech) {
 							uniqueUnit.unique.replace = standardUnitName;
@@ -816,14 +814,14 @@ namespace C7GameData {
 			}
 		}
 
-		// This method loads unit upgrades from CIV3 data. In CIV3, unique units are part of the upgrade chain. 
+		// This method loads unit upgrades from CIV3 data. In CIV3, unique units are part of the upgrade chain.
 		//
 		// For example, the upgrade path for Horseman looks like this:
 		// Horseman->Mounted Warrior->Three-Man Chariot->Knight->Keshik->Ansar Warrior->Rider->Samurai->War Elephant->Cavalry.
 		// see also: https://forums.civfanatics.com/threads/how-to-upgrade-regular-units-to-uus.108396/
 		//
 		// When loading this data, the method ignores the unique units in the upgrade chain.
-		// Instead, each unit of the chain will be assigned an upgrade that represents the closest non-unique unit 
+		// Instead, each unit of the chain will be assigned an upgrade that represents the closest non-unique unit
 		// that also requires a tech advancement over the base unit.
 		//
 		// For example, this method will mark that Horseman upgrades to Knight and that Keshik upgrades to Cavalry.
@@ -900,6 +898,14 @@ namespace C7GameData {
 
 				if (bldg.RequiredBuilding != -1) {
 					building.requiredBuilding = Bldg[bldg.RequiredBuilding].Name;
+				}
+
+				if (bldg.RequiredResource1 != -1) {
+					building.requiredResources.Add(save.Resources[bldg.RequiredResource1].Key);
+				}
+
+				if (bldg.RequiredResource2 != -1) {
+					building.requiredResources.Add(save.Resources[bldg.RequiredResource2].Key);
 				}
 
 				if (bldg.CenterOfEmpire) {
