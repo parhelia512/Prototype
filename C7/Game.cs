@@ -262,7 +262,7 @@ public partial class Game : Node2D {
 						setSelectedUnit(CurrentlySelectedUnit);
 					}
 					break;
-				case MsgUpdateUiAfterTechSelection mUUATS:
+				case MsgShowScienceAdvisor mSSA:
 					// F6 is the science advisor.
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
@@ -404,6 +404,16 @@ public partial class Game : Node2D {
 			popupOverlay.ShowPopup(
 				new GovernmentSelection(controller, controller.GetAvailableGovernments(gameDataAccess.gameData)),
 				PopupOverlay.PopupCategory.Info);
+		}
+
+		// If the player can pick a new tech to research, prompt them to do so
+		// once they have a city.
+		if (controller.cities.Count > 0
+				&& controller.currentlyResearchedTech == null
+				&& controller.GetAvailableTechsToResearch(gameDataAccess.gameData).Count > 0) {
+			popupOverlay.ShowPopup(
+					new ScienceSelection(controller),
+					PopupOverlay.PopupCategory.Info);
 		}
 
 		// Allow fast forwarding in observer mode.
