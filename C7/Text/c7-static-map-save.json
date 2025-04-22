@@ -71409,7 +71409,7 @@
       "draftLimit": 0,
       "militaryPoliceLimit": 0,
       "workerRate": 1,
-      "allUnitsFree": false,
+      "allUnitsFree": true,
       "freeUnitsPerTown": 0,
       "freeUnitsPerCity": 0,
       "freeUnitsPerMetropolis": 0,
