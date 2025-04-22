@@ -33,7 +33,7 @@ namespace QueryCiv3.Sav {
 		public int Constructing; // Index into BLDG or UNIT
 		public int ConstructingType; // 0: wealth, 1: building, 2: unit
 		public int YearBuilt;
-		private fixed byte UnknownBuffer2[4];
+		private int UnknownBuffer2;
 
 		// The power of 10 that will result in the next culture expansion.
 		// 1 = 10, 2=100, 3=1000, etc.
@@ -41,10 +41,19 @@ namespace QueryCiv3.Sav {
 		public int MilitaryPolice;
 		public int LuxuryConnectedCount;
 		public IntBitmap LuxuryConnectedBits;
-		private fixed byte UnknownBuffer3[4];
-		public int DraftTurnsLeft;
-		private fixed byte UnknownBuffer4[52];
-		private fixed byte HeaderText2[4];
+		public int NumUnitsDraftedThisTurn;
+		public int TurnsOfUnhappinessDueToDrafting;
+		private fixed int UnknownBuffer4[13];
+
+		public List<int> GetUnknownBuffer4() {
+			List<int> result = new();
+			for (int i = 0; i < 13; ++i) {
+				result.Add(UnknownBuffer4[i]);
+			}
+			return result;
+		}
+
+		private int HeaderText2;
 		public int Length2;
 		public byte UnhappyNoReasonPercent;
 		public byte UnhappyCrowdedPercent;
@@ -55,11 +64,21 @@ namespace QueryCiv3.Sav {
 		public byte UnhappyOppressionPercent;
 		public byte UnhappyThisCityImprovementsPercent;
 		public byte UnhappyOtherCityImprovementsPercent;
-		private fixed byte UnknownBuffer5[7];
-		private fixed byte HeaderText3[4];
+		private byte UnknownByte1;
+		private byte UnknownByte2;
+		private byte UnknownByte3;
+		private int UnknownBuffer5;
+		private int HeaderText3;
 		public int Length3;
-		private fixed byte UnknownBuffer6[36];
-		private fixed byte HeaderText4[4];
+		private fixed int UnknownBuffer6[9];
+		public List<int> GetUnknownBuffer6() {
+			List<int> result = new();
+			for (int i = 0; i < 13; ++i) {
+				result.Add(UnknownBuffer6[i]);
+			}
+			return result;
+		}
+		private int HeaderText4;
 		public int Length4;
 		public int CulturePerTurn;
 		private fixed int CulturePerLead[32];
@@ -73,12 +92,17 @@ namespace QueryCiv3.Sav {
 			}
 			return result;
 		}
-		private fixed byte UnknownBuffer7[8];
+
+		public int UnhappinessDueToPropaganda; // Exact mechanism unknown
+		public int TurnsOfUnhappinessDueToPopRushing;
+
 		public int FoodPerTurn;
 		public int ShieldsPerTurn;
 		public int CommercePerTurn;
-		private fixed byte UnknownBuffer8[12];
-		private fixed byte HeaderText5[4];
+		private int UnknownBuffer9;
+		private int UnknownBuffer10;
+		private int UnknownBuffer11;
+		private int HeaderText5;
 		public int Length5;
 
 		private fixed byte Text[24];
