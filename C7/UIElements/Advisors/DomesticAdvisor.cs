@@ -1,6 +1,7 @@
 using C7Engine;
 using C7GameData;
 using Godot;
+using System.Collections.Generic;
 using System;
 
 [GlobalClass]
@@ -70,7 +71,9 @@ public partial class DomesticAdvisor : Control {
 		close.TextureNormal = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
 		close.TextureHover = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 72, 0, 72, 48);
 		close.TexturePressed = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 144, 0, 72, 48);
-		close.Pressed += Hide;
+		close.Pressed += () => {
+			GetParent<Advisors>().Hide();
+		};
 
 		changeGovernment.TextureNormal = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 1, 145, 24);
 		changeGovernment.TextureHover = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 26, 145, 24);
@@ -245,7 +248,7 @@ public partial class DomesticAdvisor : Control {
 		cityName.ClipText = true;
 		cityName.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
 		cityName.Pressed += () => {
-			this.Hide();
+			GetParent<Advisors>().Hide();
 			new MsgShowCityScreen(city).send();
 		};
 		hboxContainer.AddChild(cityName);
@@ -328,9 +331,9 @@ public partial class DomesticAdvisor : Control {
 		hSeparator3.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
 		hboxContainer.AddChild(hSeparator3);
 
-		PanelContainer popuplationContainer = new();
+		Control popuplationContainer = new();
 		popuplationContainer.CustomMinimumSize = new Vector2(220, 0);
-		popuplationContainer.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+		AddPopHeads(city, popuplationContainer, 220);
 		hboxContainer.AddChild(popuplationContainer);
 
 		PanelContainer productionContainer = new();
@@ -362,5 +365,75 @@ public partial class DomesticAdvisor : Control {
 			result += " ";
 		}
 		return result;
+	}
+
+	void AddPopHeads(City city, Node node, int maxWidth) {
+		int eraNum = city.owner.EraIndex();
+
+		// Start by splitting the default residents from the specialists, since
+		// they are spaced apart in the UI.
+		List<CityResident> happyResidents =
+			city.residents.FindAll(x => x.citizenType.IsDefaultCitizen && x.mood == CityResident.Mood.Happy);
+		List<CityResident> contentResidents =
+			city.residents.FindAll(x => x.citizenType.IsDefaultCitizen && x.mood == CityResident.Mood.Content);
+		List<CityResident> unhappyResidents =
+			city.residents.FindAll(x => x.citizenType.IsDefaultCitizen && x.mood == CityResident.Mood.Unhappy);
+		List<CityResident> specialists = city.residents.FindAll(x => !x.citizenType.IsDefaultCitizen);
+
+		// Leave a 1 head gap if we have specialists.
+		int width = city.residents.Count * PopHeads.HEAD_SIZE;
+		if (specialists.Count > 0) {
+			width += PopHeads.HEAD_SIZE;
+		}
+
+		// Leave a 1 head gap between each section of moods.
+		int numMoodsPresent = (happyResidents.Count > 0 ? 1 : 0)
+			+ (contentResidents.Count > 0 ? 1: 0)
+			+ (unhappyResidents.Count > 0 ? 1: 0);
+		width += (numMoodsPresent - 1) * PopHeads.HEAD_SIZE;
+
+		// Figure out the actual spacing we'll use, to ensure we fit withing the
+		// bounds of our container.
+		int spacer = PopHeads.HEAD_SIZE;
+		if (width > maxWidth) {
+			spacer = (int)((float)maxWidth / width * spacer);
+		}
+
+		int xPos = 0;
+
+		// Add each of the default citizens. These are buttons with the idea that
+		// we can eventually support clicking on the heads to view details, such
+		// as the reason for unhappiness.
+		foreach (CityResident cr in happyResidents) {
+			xPos = AddCitizen(node, cr, xPos, spacer, eraNum);
+		}
+		if (happyResidents.Count > 0 && (contentResidents.Count > 0 || unhappyResidents.Count > 0)) {
+			xPos += spacer;
+		}
+		foreach (CityResident cr in contentResidents) {
+			xPos = AddCitizen(node, cr, xPos, spacer, eraNum);
+		}
+		if (contentResidents.Count > 0 && unhappyResidents.Count > 0) {
+			xPos += spacer;
+		}
+		foreach (CityResident cr in unhappyResidents) {
+			xPos = AddCitizen(node, cr, xPos, spacer, eraNum);
+		}
+
+		// Add space before specialists.
+		xPos += spacer;
+
+		// Add the specialists.
+		foreach (CityResident cr in specialists) {
+			xPos = AddCitizen(node, cr, xPos, spacer, eraNum);
+		}
+	}
+
+	private int AddCitizen(Node node, CityResident cr, int xPos, int spacer, int eraNum) {
+		TextureRect tr = new();
+		tr.Texture = PopHeads.GetPopHead(cr, eraNum);
+		tr.SetPosition(new Vector2(xPos, 0));
+		node.AddChild(tr);
+		return xPos + spacer;
 	}
 }
