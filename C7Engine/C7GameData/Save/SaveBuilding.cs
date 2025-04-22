@@ -8,7 +8,8 @@ namespace C7GameData.Save {
 			VeteranGroundUnits,
 			VeteranSeaUnits,
 			MustBeCoastal,
-			MustBeNearRiver
+			MustBeNearRiver,
+			IncreasesLuxuryTrade
 		}
 
 		public string name;
