@@ -240,6 +240,9 @@ public partial class Game : Node2D {
 				case MsgStartTurn mST:
 					OnPlayerStartTurn();
 					break;
+				case MsgShowCityScreen mSCS:
+					ShowCityScreenForCity(mSCS.city);
+					break;
 				case MsgCityCreated mCC:
 					ShowCityScreenForCity(mCC.city);
 					break;

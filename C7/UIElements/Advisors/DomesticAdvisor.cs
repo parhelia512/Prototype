@@ -18,6 +18,17 @@ public partial class DomesticAdvisor : Control {
 	[Export] Label expenseSummary;
 	[Export] Label sumSummary;
 	[Export] Label growth;
+	[Export] VBoxContainer cityListContainer;
+	[Export] TextureButton eatenFood;
+	[Export] TextureButton fullFood;
+	[Export] TextureButton wastedShield;
+	[Export] TextureButton goodShield;
+	[Export] TextureButton wastedGold;
+	[Export] TextureButton goodGold;
+	[Export] TextureButton happyFace;
+	[Export] TextureButton contentFace;
+	[Export] TextureButton beaker;
+	[Export] TextureButton treasuryIcon;
 	PopupOverlay popupOverlay;
 
 	TextureRect scienceSliderIcon = new();
@@ -115,6 +126,18 @@ public partial class DomesticAdvisor : Control {
 		lessLuxury.SetPosition(new Vector2(575, luxurySliderY - 5));
 		lessLuxury.Pressed += () => { new MsgChangeSliders(false, false, false, true).send(); };
 		background.AddChild(lessLuxury);
+
+		// Column header icons.
+		eatenFood.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 218, 2, 29, 29);
+		fullFood.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 188, 2, 29, 29);
+		wastedShield.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 157, 2, 29, 29);
+		goodShield.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 125, 2, 29, 29);
+		wastedGold.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 95, 2, 29, 29);
+		goodGold.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 64, 2, 29, 29);
+		happyFace.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 373, 2, 29, 29);
+		contentFace.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 591, 2, 29, 29);
+		beaker.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 34, 2, 29, 29);
+		treasuryIcon.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 746, 2, 29, 29);
 	}
 
 	public void ShowAdvisor() {
@@ -163,6 +186,15 @@ public partial class DomesticAdvisor : Control {
 		if (player.government.transitionType && player.inAnarchyUntilTurn > gameDataAccess.gameData.turn) {
 			DialogBoxAdvise.Text = $"{player.inAnarchyUntilTurn - gameDataAccess.gameData.turn} turns of anarchy left";
 		}
+
+		foreach (var node in cityListContainer.GetChildren()) {
+			cityListContainer.RemoveChild(node);
+			node.QueueFree();
+		}
+
+		foreach (City city in player.cities) {
+			cityListContainer.AddChild(MakeCityRow(city));
+		}
 	}
 
 	private int CalculateSliderXPos(int sliderRate) {
@@ -196,5 +228,139 @@ public partial class DomesticAdvisor : Control {
 						new StartGovernmentTransitionMsg(player).send();
 					}),
 				PopupOverlay.PopupCategory.Advisor);
+	}
+
+	private HBoxContainer MakeCityRow(City city) {
+		HBoxContainer hboxContainer = new();
+
+		// Use an empty pany container to make it blank, unlike an HSeparator
+		PanelContainer hSeparator1 = new();
+		hSeparator1.CustomMinimumSize = new Vector2(30, 50);
+		hSeparator1.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+		hboxContainer.AddChild(hSeparator1);
+
+		Button cityName = new();
+		cityName.CustomMinimumSize = new Vector2(127, 0);
+		cityName.Text = city.name;
+		cityName.ClipText = true;
+		cityName.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
+		cityName.Pressed += () => {
+			this.Hide();
+			new MsgShowCityScreen(city).send();
+		};
+		hboxContainer.AddChild(cityName);
+
+		Label foodLabel = new();
+		foodLabel.CustomMinimumSize = new Vector2(40, 0);
+		foodLabel.Text = SpaceAlignedDotFormat(city.FoodConsumedPerTurn(), city.FoodGrowthPerTurn());
+		foodLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		hboxContainer.AddChild(foodLabel);
+
+		Label shieldsLabel = new();
+		shieldsLabel.CustomMinimumSize = new Vector2(40, 0);
+		{
+			CorruptableValue prod = city.CurrentProductionYield();
+			shieldsLabel.Text = SpaceAlignedDotFormat(prod.corrupt, prod.useful);
+		}
+		shieldsLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		hboxContainer.AddChild(shieldsLabel);
+
+		Label commerceLabel = new();
+		commerceLabel.CustomMinimumSize = new Vector2(40, 0);
+		CommerceBreakdown commerce = city.CurrentCommerceYield();
+		commerceLabel.Text = SpaceAlignedDotFormat(commerce.corrupted, commerce.taxes + commerce.beakers + commerce.happiness);
+		commerceLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		hboxContainer.AddChild(commerceLabel);
+
+		// Use an empty pany container to make it blank, unlike an HSeparator
+		PanelContainer hSeparator2 = new();
+		hSeparator2.CustomMinimumSize = new Vector2(25, 0);
+		hSeparator2.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+		hboxContainer.AddChild(hSeparator2);
+
+		Label maintenanceLabel = new();
+		maintenanceLabel.CustomMinimumSize = new Vector2(40, 0);
+		maintenanceLabel.Text = "0";  // TODO: track maintenance
+		maintenanceLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		maintenanceLabel.VerticalAlignment = VerticalAlignment.Center;
+		maintenanceLabel.ClipText = true;
+		hboxContainer.AddChild(maintenanceLabel);
+
+		Label happinessLabel = new();
+		happinessLabel.CustomMinimumSize = new Vector2(40, 0);
+		{
+			int happy = 0;
+			int content = 0;
+			foreach (CityResident cr in city.residents) {
+				if (cr.citizenType.IsDefaultCitizen && cr.mood == CityResident.Mood.Happy) {
+					++happy;
+				}
+				if (cr.citizenType.IsDefaultCitizen && cr.mood == CityResident.Mood.Content) {
+					++content;
+				}
+			}
+			happinessLabel.Text = SpaceAlignedDotFormat(happy, content);
+		}
+		happinessLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		happinessLabel.VerticalAlignment = VerticalAlignment.Center;
+		happinessLabel.ClipText = true;
+		hboxContainer.AddChild(happinessLabel);
+
+		Label scienceLabel = new();
+		scienceLabel.CustomMinimumSize = new Vector2(40, 0);
+		scienceLabel.Text = $"{commerce.beakers}"; ;
+		scienceLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		scienceLabel.VerticalAlignment = VerticalAlignment.Center;
+		scienceLabel.ClipText = true;
+		hboxContainer.AddChild(scienceLabel);
+
+		Label taxesLabel = new();
+		taxesLabel.CustomMinimumSize = new Vector2(40, 0);
+		taxesLabel.Text = $"{commerce.taxes}"; ;
+		taxesLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		taxesLabel.VerticalAlignment = VerticalAlignment.Center;
+		taxesLabel.ClipText = true;
+		hboxContainer.AddChild(taxesLabel);
+
+		// Use an empty pany container to make it blank, unlike an HSeparator
+		PanelContainer hSeparator3 = new();
+		hSeparator3.CustomMinimumSize = new Vector2(25, 0);
+		hSeparator3.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+		hboxContainer.AddChild(hSeparator3);
+
+		PanelContainer popuplationContainer = new();
+		popuplationContainer.CustomMinimumSize = new Vector2(220, 0);
+		popuplationContainer.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+		hboxContainer.AddChild(popuplationContainer);
+
+		PanelContainer productionContainer = new();
+		productionContainer.CustomMinimumSize = new Vector2(50, 0);
+		productionContainer.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+		hboxContainer.AddChild(productionContainer);
+
+		Label productionLabel = new();
+		productionLabel.CustomMinimumSize = new Vector2(75, 0);
+		string turnsLeft = city.TurnsUntilProductionFinished() == int.MaxValue ? "(9999999 turns)" : $"({city.TurnsUntilProductionFinished()} turns)";
+		productionLabel.Text = $"{city.itemBeingProduced.name}\n{turnsLeft}";
+		productionLabel.VerticalAlignment = VerticalAlignment.Center;
+		productionLabel.ClipText = true;
+		productionLabel.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
+		hboxContainer.AddChild(productionLabel);
+
+		return hboxContainer;
+	}
+
+	// Returns a.b, always taking up 5 characters as long as a and b are less
+	// than 100, adding leading or trailing spaces if necessary.
+	string SpaceAlignedDotFormat(int a, int b) {
+		string result = "";
+		if (a < 10) {
+			result += " ";
+		}
+		result += $"{a}.{b}";
+		if (b < 10) {
+			result += " ";
+		}
+		return result;
 	}
 }
