@@ -88,6 +88,8 @@ namespace C7GameData {
 		// The rules of this game.
 		public Rules rules;
 
+		public List<City> citiesWithCorruptionWonders = new();
+
 		public int EraIndex() {
 			return EraIndex(eraCivilopediaName);
 		}
@@ -386,8 +388,15 @@ namespace C7GameData {
 			bool isCommercialCiv = false;
 			float commercialCivFactor = isCommercialCiv ? .25f : 0;
 
-			// TODO: Handle the forbidden palace and SPHQ.
+			// TODO: Handle the SPHQ.
 			int numCorruptionReducingSmallWondersInEmpire = 0;
+			foreach (City c in cities) {
+				foreach (CityBuilding cb in c.buildings) {
+					if (cb.building.isForbiddenPalace) {
+						++numCorruptionReducingSmallWondersInEmpire;
+					}
+				}
+			}
 
 			float govtFactor = government.corruptionType switch {
 				Government.CorruptionType.Minimal => .1f,
@@ -597,6 +606,24 @@ namespace C7GameData {
 		public void DoCorruptionCalculations(GameData gameData) {
 			if (cities.Count == 0) {
 				return;
+			}
+
+			// Precalculate the cities of interest for distance corruption.
+			citiesWithCorruptionWonders.Clear();
+			bool foundCapital = false;
+			foreach (City c in cities) {
+				if (c.IsCapital()) {
+					citiesWithCorruptionWonders.Add(c);
+					foundCapital = true;
+				}
+				if (c.buildings.Any(x => x.building.isForbiddenPalace)) {
+					citiesWithCorruptionWonders.Add(c);
+				}
+			}
+			if (!foundCapital) {
+				// TODO: Ensure we always have a capital, even in scenarios
+				// without palaces added.
+				citiesWithCorruptionWonders.Add(cities[0]);
 			}
 
 			// Order the cities by distance to the capital, using OrderBy to get
