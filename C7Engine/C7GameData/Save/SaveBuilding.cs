@@ -3,7 +3,13 @@ using System.Linq;
 
 namespace C7GameData.Save {
 	public class SaveBuilding {
-		public const string IS_CENTER_OF_EMPIRE = "isCenterOfEmpire";
+		public enum Flag {
+			IsCenterOfEmpire,
+			VeteranGroundUnits,
+			VeteranSeaUnits,
+			MustBeCoastal,
+			MustBeNearRiver
+		}
 
 		public string name;
 		public int shieldCost;
@@ -16,27 +22,10 @@ namespace C7GameData.Save {
 
 		// Assorted boolean flags for the building. They're stored in this set
 		// rather than as booleans to avoid bloating the json file.
-		public HashSet<string> flags = new();
+		public HashSet<Flag> flags = new();
 
 		public HashSet<string> requiredResources = [];
 
 		public SaveBuilding() { }
-
-		public SaveBuilding(Building b) {
-			(name, shieldCost, populationCost, isGreatWonder, isSmallWonder, culturePerTurn) =
-			(b.name, b.shieldCost, b.populationCost, b.isGreatWonder, b.isSmallWonder, b.culturePerTurn);
-
-			if (b.isCenterOfEmpire) {
-				flags.Add(IS_CENTER_OF_EMPIRE);
-			}
-
-			if (b.requiredTech != null)
-				requiredTech = b.requiredTech.id;
-
-			if (b.requiredBuilding != null)
-				requiredBuilding = b.requiredBuilding.name;
-
-			requiredResources = b.requiredResources.Select(r => r.Key).ToHashSet();
-		}
 	}
 }
