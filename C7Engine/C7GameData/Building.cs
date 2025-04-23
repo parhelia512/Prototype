@@ -11,6 +11,24 @@ namespace C7GameData {
 			{ SaveBuilding.Flag.MustBeNearRiver, MustBeNearRiver }
 		};
 
+		public static Dictionary<SaveBuilding.Flag, Action<MapUnit>> unitProductionEffects = new()
+		{
+			{ SaveBuilding.Flag.VeteranGroundUnits, VeteranGroundUnits },
+			{ SaveBuilding.Flag.VeteranSeaUnits, VeteranSeaUnits }
+		};
+
+		private static void VeteranGroundUnits(MapUnit unit) {
+			if (unit.unitType.categories.Contains("Land")) {
+				unit.Promote();
+			}
+		}
+
+		private static void VeteranSeaUnits(MapUnit unit) {
+			if (unit.unitType.categories.Contains("Sea")) {
+				unit.Promote();
+			}
+		}
+
 		private static bool MustBeCoastal(City city) {
 			return city.location.NeighborsWater();
 		}
@@ -28,6 +46,8 @@ namespace C7GameData {
 		public Building requiredBuilding;
 
 		List<Func<City, bool>> productionPrerequisites = [];
+		public Action<MapUnit> onFinishedUnitProduction;
+
 		public bool isGreatWonder;
 		public bool isSmallWonder;
 		public bool isCenterOfEmpire;
@@ -54,6 +74,11 @@ namespace C7GameData {
 				}
 			}
 
+			foreach (var kvp in BuildingRules.unitProductionEffects) {
+				if (building.flags.Contains(kvp.Key)) {
+					onFinishedUnitProduction += kvp.Value;
+				}
+			}
 		}
 
 		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {

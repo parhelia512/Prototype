@@ -257,6 +257,21 @@ namespace C7GameData {
 			});
 		}
 
+		public void AddUnit(UnitPrototype prototype, GameData gameData) {
+			MapUnit newUnit = prototype.GetInstance(gameData);
+			newUnit.owner = owner;
+			newUnit.location = location;
+			newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
+			newUnit.experienceLevel = gameData.defaultExperienceLevel;
+			newUnit.facingDirection = TileDirection.SOUTHWEST;
+
+			location.unitsOnTile.Add(newUnit);
+			gameData.mapUnits.Add(newUnit);
+			owner.AddUnit(newUnit);
+
+			buildings.ForEach(b => b.building.onFinishedUnitProduction?.Invoke(newUnit));
+		}
+
 		// The list of tiles that could be worked by this city.
 		// This isn't necessarily a subset of our borders, because we're allowed
 		// to work tiles owned by our civ in our big fat cross, even if our
