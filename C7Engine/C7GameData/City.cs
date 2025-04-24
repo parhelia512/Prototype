@@ -166,17 +166,17 @@ namespace C7GameData {
 		}
 
 		public int CurrentFoodYield() {
-			int yield = location.foodYield(owner).yield;
+			int yield = location.foodYield(this).yield;
 			foreach (CityResident r in residents) {
-				yield += r.tileWorked.foodYield(owner).yield;
+				yield += r.tileWorked.foodYield(this).yield;
 			}
 			return yield;
 		}
 
 		public CorruptableValue CurrentProductionYield() {
-			int yield = location.productionYield(owner).yield;
+			int yield = location.productionYield(this).yield;
 			foreach (CityResident r in residents) {
-				yield += r.tileWorked.productionYield(owner).yield;
+				yield += r.tileWorked.productionYield(this).yield;
 			}
 			CorruptableValue result = new(yield, corruption);
 
@@ -196,9 +196,9 @@ namespace C7GameData {
 		}
 
 		public CommerceBreakdown CurrentCommerceYield() {
-			int uncorruptedCommerce = location.commerceYield(owner).yield;
+			int uncorruptedCommerce = location.commerceYield(this).yield;
 			foreach (CityResident r in residents) {
-				uncorruptedCommerce += r.tileWorked.commerceYield(owner).yield;
+				uncorruptedCommerce += r.tileWorked.commerceYield(this).yield;
 			}
 
 			// Using our value of corruption, figure out how much useful

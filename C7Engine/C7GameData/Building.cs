@@ -47,6 +47,7 @@ namespace C7GameData {
 
 		List<Func<City, bool>> productionPrerequisites = [];
 		public Action<MapUnit> onFinishedUnitProduction;
+		public Action<Tile.Yield, Tile.YieldType> tileModifier;
 
 		public bool isGreatWonder;
 		public bool isSmallWonder;
