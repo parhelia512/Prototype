@@ -926,6 +926,8 @@ namespace C7GameData {
 				(bldg.VeteranGroundUnits, SaveBuilding.Flag.VeteranGroundUnits),
 				(bldg.VeteranSeaUnits, SaveBuilding.Flag.VeteranSeaUnits),
 				(bldg.IncreasesLuxuryTrade, SaveBuilding.Flag.IncreasesLuxuryTrade),
+				(bldg.ReducesCorruption, SaveBuilding.Flag.ReducesCorruption),
+				(bldg.ForbiddenPalace, SaveBuilding.Flag.ForbiddenPalace),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);

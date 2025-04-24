@@ -9,7 +9,9 @@ namespace C7GameData.Save {
 			VeteranSeaUnits,
 			MustBeCoastal,
 			MustBeNearRiver,
-			IncreasesLuxuryTrade
+			IncreasesLuxuryTrade,
+			ReducesCorruption,
+			ForbiddenPalace
 		}
 
 		public string name;

@@ -67307,7 +67307,10 @@
       "requiredTech": "tech-13",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "reducesCorruption"
+      ]
     },
     {
       "name": "Walls",
@@ -67546,7 +67549,10 @@
       "requiredTech": "tech-47",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "reducesCorruption"
+      ]
     },
     {
       "name": "The Pyramids",
@@ -67805,7 +67811,10 @@
       "populationCost": 0,
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "flags": [
+        "forbiddenPalace"
+      ]
     },
     {
       "name": "Military Academy",

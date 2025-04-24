@@ -52,6 +52,8 @@ namespace C7GameData {
 		public bool isSmallWonder;
 		public bool isCenterOfEmpire;
 		public bool increasesLuxuryTrade;
+		public bool reducesCorruption;
+		public bool isForbiddenPalace;
 
 		public int culturePerTurn = 0;
 
@@ -68,6 +70,8 @@ namespace C7GameData {
 			culturePerTurn = building.culturePerTurn;
 			isCenterOfEmpire = building.flags.Contains(SaveBuilding.Flag.IsCenterOfEmpire);
 			increasesLuxuryTrade = building.flags.Contains(SaveBuilding.Flag.IncreasesLuxuryTrade);
+			reducesCorruption = building.flags.Contains(SaveBuilding.Flag.ReducesCorruption);
+			isForbiddenPalace = building.flags.Contains(SaveBuilding.Flag.ForbiddenPalace);
 			dataSource = building;
 
 			foreach (var kvp in BuildingRules.productionRules) {

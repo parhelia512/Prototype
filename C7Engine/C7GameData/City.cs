@@ -386,15 +386,7 @@ namespace C7GameData {
 		private float CalculateDistanceCorruption(int numAntiCorruptionBuildings) {
 			float maxD = (location.map.numTilesWide + location.map.numTilesTall) / 4;
 
-			// TODO: This should also look for the forbidden palace and secret
-			// police headquarters.
-			City capital = owner.cities.Find(x => x.IsCapital());
-			if (capital == null) {
-				// TODO: Ensure we always have a capital, even in scenarios
-				// without palaces added.
-				capital = owner.cities[0];
-			}
-			float distanceToPalace = location.rankDistanceTo(capital.location);
+			float distanceToPalace = owner.citiesWithCorruptionWonders.Min(x => location.rankDistanceTo(x.location));
 			if (owner.government.corruptionType == Government.CorruptionType.Communal) {
 				distanceToPalace = maxD / 4;
 			}
@@ -439,12 +431,10 @@ namespace C7GameData {
 		}
 
 		public void CalculateCorruption(GameData gameData) {
-			// TODO: Once we import ReducesCorruption from Bldg.cs, count the
-			// number of buildings with this set.
-			int numAntiCorruptionBuildings = 0;
+			int numAntiCorruptionBuildings = buildings.Count(x => x.building.reducesCorruption);
 
-			// TODO: Handle the forbidden palace and SPHQ.
-			int numCorruptionReducingSmallWondersInCity = 0;
+			// TODO: Handle the SPHQ.
+			int numCorruptionReducingSmallWondersInCity = buildings.Count(x => x.building.isForbiddenPalace);
 
 			corruption = CalculateDistanceCorruption(numAntiCorruptionBuildings)
 					+ CalculateRankCorruption(gameData, numAntiCorruptionBuildings);
