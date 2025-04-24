@@ -43,8 +43,6 @@ public partial class CityScreen : Control {
 	private Label commerceScienceDetails;
 	private Label commerceHappinessDetails;
 
-	private const int HEAD_SIZE = 48;
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		background.Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx");
@@ -427,16 +425,16 @@ public partial class CityScreen : Control {
 		List<CityResident> specialists = city.residents.FindAll(x => !x.citizenType.IsDefaultCitizen);
 
 		// Leave a 1 head gap if we have specialists.
-		int width = city.residents.Count * HEAD_SIZE;
+		int width = city.residents.Count * PopHeads.HEAD_SIZE;
 		if (specialists.Count > 0) {
-			width += HEAD_SIZE;
+			width += PopHeads.HEAD_SIZE;
 		}
 
 		// Leave a 1 head gap between each section of moods.
 		int numMoodsPresent = (happyResidents.Count > 0 ? 1 : 0)
 			+ (contentResidents.Count > 0 ? 1: 0)
 			+ (unhappyResidents.Count > 0 ? 1: 0);
-		width += (numMoodsPresent - 1) * HEAD_SIZE;
+		width += (numMoodsPresent - 1) * PopHeads.HEAD_SIZE;
 
 		// Track the x position of each head so that we're centered in the screen
 		int xPos = background.Texture.GetWidth() / 2 + -width / 2;
@@ -448,20 +446,20 @@ public partial class CityScreen : Control {
 			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 		if (happyResidents.Count > 0 && (contentResidents.Count > 0 || unhappyResidents.Count > 0)) {
-			xPos += HEAD_SIZE;
+			xPos += PopHeads.HEAD_SIZE;
 		}
 		foreach (CityResident cr in contentResidents) {
 			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 		if (contentResidents.Count > 0 && unhappyResidents.Count > 0) {
-			xPos += HEAD_SIZE;
+			xPos += PopHeads.HEAD_SIZE;
 		}
 		foreach (CityResident cr in unhappyResidents) {
 			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 
 		// Add space before specialists.
-		xPos += 48;
+		xPos += PopHeads.HEAD_SIZE;
 
 		// Add each of the specialists.
 		//
@@ -469,11 +467,7 @@ public partial class CityScreen : Control {
 		// in the corner of the head.
 		foreach (CityResident cr in specialists) {
 			TextureButton tb = new();
-			int textX = 50 * eraNum;
-			int numRowsOfLaborers = 16;
-			int textY = 50 * numRowsOfLaborers + 50 * (cr.citizenType.SpecialistIndex - 1);
-			tb.TextureNormal = Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
-														textX + 1, textY + 1, HEAD_SIZE, HEAD_SIZE);
+			tb.TextureNormal = PopHeads.GetPopHead(cr, eraNum);
 			tb.SetPosition(new Vector2(xPos, 440));
 
 			List<CitizenType> specialistTypes = GetKnownSpecialists(city.owner);
@@ -486,7 +480,7 @@ public partial class CityScreen : Control {
 
 			background.AddChild(tb);
 			popHeads.Add(tb);
-			xPos += HEAD_SIZE;
+			xPos += PopHeads.HEAD_SIZE;
 		}
 	}
 
@@ -505,21 +499,11 @@ public partial class CityScreen : Control {
 	}
 
 	private int AddDefaultCitizen(CityResident cr, int xPos, int eraNum) {
-		int column = cr.mood switch {
-			CityResident.Mood.Content => 0,
-			CityResident.Mood.Happy => 1,
-			CityResident.Mood.Unhappy => 3,
-		};
-		int headWithBorderSize = HEAD_SIZE + 2;
-
 		TextureButton tb = new();
-		tb.TextureNormal = Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
-													0 + 1,
-													200 * eraNum + headWithBorderSize * column + 1,
-													HEAD_SIZE, HEAD_SIZE);
+		tb.TextureNormal = PopHeads.GetPopHead(cr, eraNum);
 		tb.SetPosition(new Vector2(xPos, 440));
 		background.AddChild(tb);
 		popHeads.Add(tb);
-		return xPos + 48;
+		return xPos + PopHeads.HEAD_SIZE;
 	}
 }
