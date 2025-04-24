@@ -542,11 +542,16 @@ namespace C7GameData {
 			// TODO: add penalty for war weariness
 			// TODO: add penalty for aggression against home country
 
-			// Luxuries move content faces to happy faces.
+			// Luxury spending moves content faces to happy faces.
 			contentToHappyMoves += CurrentCommerceYield().happiness;
 
-			// TODO: count luxuries
-			// TODO: account for marketplaces
+			// As do luxury resources, which can be boosted by marketplaces.
+			int effectiveLux = GetLuxuries().Keys.Count;
+			if (buildings.Any(x => x.building.increasesLuxuryTrade)) {
+				effectiveLux = (int)(Math.Floor(effectiveLux / 2f) * Math.Ceiling(effectiveLux / 2f) + Math.Ceiling(effectiveLux / 2f));
+			}
+			contentToHappyMoves += effectiveLux;
+
 			// TODO: account for building happiness (wonders, non wonders, and global/continent)
 
 			if (contentToHappyMoves >= 0) {

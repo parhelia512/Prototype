@@ -107,8 +107,11 @@ namespace C7GameData.Save {
 
 			data.UpdateTileOwners();
 			foreach (Player p in data.players) {
-				p.RecalculateCitizenMoods(data);
+				// TODO: this may require more than one loop, because if all the
+				// citizens are happy it reduces wasted shields via we love the
+				// king day.
 				p.DoCorruptionCalculations(data);
+				p.RecalculateCitizenMoods(data);
 			}
 
 			return data;

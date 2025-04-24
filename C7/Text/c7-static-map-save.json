@@ -67286,7 +67286,10 @@
       "requiredTech": "tech-18",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "increasesLuxuryTrade"
+      ]
     },
     {
       "name": "Library",

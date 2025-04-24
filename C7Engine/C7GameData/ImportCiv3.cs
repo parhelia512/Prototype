@@ -925,6 +925,7 @@ namespace C7GameData {
 				(bldg.MustBeNearRiver, SaveBuilding.Flag.MustBeNearRiver),
 				(bldg.VeteranGroundUnits, SaveBuilding.Flag.VeteranGroundUnits),
 				(bldg.VeteranSeaUnits, SaveBuilding.Flag.VeteranSeaUnits),
+				(bldg.IncreasesLuxuryTrade, SaveBuilding.Flag.IncreasesLuxuryTrade),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);
