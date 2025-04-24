@@ -6,6 +6,13 @@ namespace C7GameData {
 		public Tile tileWorked = Tile.NONE;
 		public Civilization nationality;
 		public City city;
-		//Eventually more things like happiness
+
+		// Only relevant if citizenType.IsDefaultCitizen == true
+		public enum Mood {
+			Happy,
+			Content,
+			Unhappy
+		};
+		public Mood mood;
 	}
 }

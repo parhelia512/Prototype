@@ -40,7 +40,7 @@ namespace C7Engine.AI {
 			newResident.tileWorked = preferredTile;
 			preferredTile.personWorkingTile = newResident;
 
-			city.residents.Add(newResident);
+			city.AddCitizen(newResident);
 		}
 
 		public static double CalculateTileYieldScore(Tile t, int targetFoodAmount, Player player) {

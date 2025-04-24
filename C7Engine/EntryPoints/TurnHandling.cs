@@ -40,6 +40,7 @@ namespace C7Engine {
 
 				gameData.turn++;
 				foreach (Player player in gameData.players) {
+					player.RecalculateCitizenMoods(gameData);
 					player.DoCorruptionCalculations(gameData);
 					HandleCityResults(gameData, player);
 					player.DoPerTurnFinanceUpdates(gameData);

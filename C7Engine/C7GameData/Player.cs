@@ -620,6 +620,12 @@ namespace C7GameData {
 			}
 		}
 
+		public void RecalculateCitizenMoods(GameData gameData) {
+			foreach (City c in cities) {
+				c.RecalculateCitizenMoods(gameData);
+			}
+		}
+
 		public void UpdateResourcesInBorders(IEnumerable<Tile> ownedTiles) {
 			resourcesInBorders = ownedTiles
 								.Where(t => t.Resource != null)
