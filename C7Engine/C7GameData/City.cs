@@ -223,7 +223,12 @@ namespace C7GameData {
 		}
 
 		public int FoodGrowthPerTurn() {
-			return CurrentFoodYield() - size * 2;
+			return CurrentFoodYield() - FoodConsumedPerTurn();
+		}
+
+		public int FoodConsumedPerTurn() {
+			// TODO: exclude resisters in the future.
+			return size * 2;
 		}
 
 		private void RemoveCitizen() {

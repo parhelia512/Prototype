@@ -77,4 +77,12 @@ namespace C7Engine {
 			this.city = city;
 		}
 	}
+
+	public class MsgShowCityScreen : MessageToUI {
+		public City city;
+
+		public MsgShowCityScreen(City city) {
+			this.city = city;
+		}
+	}
 }
