@@ -883,6 +883,10 @@ namespace C7GameData {
 			BLDG[] Bldg = biq.Bldg ?? defaultBiq.Bldg;
 
 			foreach (BLDG bldg in Bldg) {
+				if (bldg.Name == "Wealth") {
+					continue; // We don't consider Wealth as a building
+				}
+
 				SaveBuilding building = new() {
 					name=bldg.Name,
 					shieldCost=bldg.Cost * 10, // In Civ3 files, building costs are stored at 1/10th of their actual value
@@ -908,12 +912,22 @@ namespace C7GameData {
 					building.requiredResources.Add(save.Resources[bldg.RequiredResource2].Key);
 				}
 
-				if (bldg.CenterOfEmpire) {
-					building.flags.Add(SaveBuilding.IS_CENTER_OF_EMPIRE);
-				}
+				building.flags = LoadBuildingFlags(bldg).ToHashSet();
 
 				save.Buildings.Add(building);
 			}
+		}
+
+		private static IEnumerable<SaveBuilding.Flag> LoadBuildingFlags(BLDG bldg) {
+			return new[] {
+				(bldg.CenterOfEmpire, SaveBuilding.Flag.IsCenterOfEmpire),
+				(bldg.CoastalInstallation, SaveBuilding.Flag.MustBeCoastal),
+				(bldg.MustBeNearRiver, SaveBuilding.Flag.MustBeNearRiver),
+				(bldg.VeteranGroundUnits, SaveBuilding.Flag.VeteranGroundUnits),
+				(bldg.VeteranSeaUnits, SaveBuilding.Flag.VeteranSeaUnits),
+			}
+			.Where(t => t.Item1)
+			.Select(t => t.Item2);
 		}
 
 		private void ImportCiv3TerrainTypes() {

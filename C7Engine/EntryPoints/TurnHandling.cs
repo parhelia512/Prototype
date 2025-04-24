@@ -164,16 +164,7 @@ namespace C7Engine {
 				if (producedItem != null) {
 					log.Debug($"Produced {producedItem} in {city}");
 					if (producedItem is UnitPrototype prototype) {
-						MapUnit newUnit = prototype.GetInstance(gameData);
-						newUnit.owner = city.owner;
-						newUnit.location = city.location;
-						newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
-						newUnit.experienceLevel = gameData.defaultExperienceLevel;
-						newUnit.facingDirection = TileDirection.SOUTHWEST;
-
-						city.location.unitsOnTile.Add(newUnit);
-						gameData.mapUnits.Add(newUnit);
-						city.owner.AddUnit(newUnit);
+						city.AddUnit(prototype, gameData);
 					} else if (producedItem is Building building) {
 						city.AddBuilding(building);
 					}

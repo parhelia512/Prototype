@@ -67256,7 +67256,10 @@
       "populationCost": 0,
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "veteranGroundUnits"
+      ]
     },
     {
       "name": "Granary",
@@ -67412,7 +67415,10 @@
       "requiredBuilding": "Factory",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "mustBeNearRiver"
+      ]
     },
     {
       "name": "Nuclear Plant",
@@ -67478,6 +67484,9 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "flags": [
+        "mustBeCoastal"
+      ],
       "requiredResources": [
         "Iron",
         "Saltpeter"
@@ -67500,7 +67509,11 @@
       "requiredTech": "tech-15",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "mustBeCoastal",
+        "veteranSeaUnits"
+      ]
     },
     {
       "name": "Offshore Platform",
@@ -67509,7 +67522,10 @@
       "requiredTech": "tech-72",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "mustBeCoastal"
+      ]
     },
     {
       "name": "Airport",
@@ -67525,14 +67541,6 @@
       "shieldCost": 160,
       "populationCost": 0,
       "requiredTech": "tech-47",
-      "isGreatWonder": false,
-      "isSmallWonder": false,
-      "culturePerTurn": 0
-    },
-    {
-      "name": "Wealth",
-      "shieldCost": 0,
-      "populationCost": 0,
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0
@@ -67562,7 +67570,10 @@
       "requiredTech": "tech-1",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "flags": [
+        "mustBeCoastal"
+      ]
     },
     {
       "name": "The Great Lighthouse",
@@ -67571,7 +67582,10 @@
       "requiredTech": "tech-15",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "flags": [
+        "mustBeCoastal"
+      ]
     },
     {
       "name": "The Great Library",
@@ -67625,7 +67639,10 @@
       "requiredTech": "tech-37",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "flags": [
+        "mustBeCoastal"
+      ]
     },
     {
       "name": "Copernicus\u0027 Observatory",
@@ -67697,7 +67714,10 @@
       "requiredTech": "tech-62",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "flags": [
+        "mustBeNearRiver"
+      ]
     },
     {
       "name": "Theory of Evolution",

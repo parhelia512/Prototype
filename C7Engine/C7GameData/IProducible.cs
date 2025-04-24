@@ -11,5 +11,7 @@ namespace C7GameData {
 		int populationCost { get; set; }
 		Tech requiredTech { get; set; }
 		HashSet<Resource> requiredResources { get; set; }
+
+		bool CanProduce(City city, HashSet<Resource> accessibleResources);
 	}
 }

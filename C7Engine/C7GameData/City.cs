@@ -89,38 +89,23 @@ namespace C7GameData {
 			return capital;
 		}
 
-		public bool CanBuildUnit(UnitPrototype proto) {
-			return MeetsProductionRequirements(proto) && !IsUnitObsolete(proto);
+		public IEnumerable<IProducible> ListProductionOptions() {
+			HashSet<Resource> accessibleResources = GetAccessibleResources();
+
+			IEnumerable<IProducible> producibles = EngineStorage.gameData.unitPrototypes.Cast<IProducible>()
+													.Concat(EngineStorage.gameData.Buildings.Cast<IProducible>());
+
+			return producibles.Where(p => p.CanProduce(this, accessibleResources));
 		}
 
-		// TODO: Consider golden ages when determining whether a unit is obsolete.
-		// If a golden age has not yet been triggered and a unit can trigger one,  
-		// it shouldn't be marked as obsolete, even if its upgrade is available.
-		private bool IsUnitObsolete(UnitPrototype proto) {
-			List<UnitPrototype> upgradeChain = owner.civilization.GetUpgradeChain(proto);
+		private HashSet<Resource> GetAccessibleResources() {
+			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
 
-			return upgradeChain.Any(MeetsProductionRequirements);
-		}
-
-		private bool HasRequiredTechnology(IProducible producible) {
-			return producible.requiredTech == null ||
-				   owner.knownTechs.Contains(producible.requiredTech.id);
-		}
-
-		private bool MeetsProductionRequirements(UnitPrototype proto) {
-			if (!owner.civilization.IsUnitAvailable(proto)) {
-				return false;
-			}
-
-			if (!HasRequiredTechnology(proto)) {
-				return false;
-			}
-
-			if (proto.categories.Contains("Sea") && !location.NeighborsWater()) {
-				return false;
-			}
-
-			return true;
+			return owner.resourcesInBorders
+						.Where(kv => owner.KnowsAboutResource(kv.Key))
+						.Where(kv => kv.Value.Any(t => HasTradeAccess(t, pathing)))
+						.Select(kv => kv.Key)
+						.ToHashSet();
 		}
 
 		public int TurnsUntilGrowth() {
@@ -300,6 +285,21 @@ namespace C7GameData {
 			});
 		}
 
+		public void AddUnit(UnitPrototype prototype, GameData gameData) {
+			MapUnit newUnit = prototype.GetInstance(gameData);
+			newUnit.owner = owner;
+			newUnit.location = location;
+			newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
+			newUnit.experienceLevel = gameData.defaultExperienceLevel;
+			newUnit.facingDirection = TileDirection.SOUTHWEST;
+
+			location.unitsOnTile.Add(newUnit);
+			gameData.mapUnits.Add(newUnit);
+			owner.AddUnit(newUnit);
+
+			buildings.ForEach(b => b.building.onFinishedUnitProduction?.Invoke(newUnit));
+		}
+
 		// The list of tiles that could be worked by this city.
 		// This isn't necessarily a subset of our borders, because we're allowed
 		// to work tiles owned by our civ in our big fat cross, even if our
@@ -451,10 +451,6 @@ namespace C7GameData {
 				perPlayerCulture[owner] += cb.building.culturePerTurn;
 			}
 			return start != GetBorderExpansionLevel();
-		}
-
-		public IEnumerable<IProducible> ListProductionOptions() {
-			return EngineStorage.gameData.unitPrototypes.Where(CanBuildUnit);
 		}
 
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {

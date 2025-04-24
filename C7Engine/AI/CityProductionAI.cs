@@ -30,7 +30,7 @@ namespace C7Engine {
 		 */
 		public static IProducible GetNextItemToBeProduced(City city, IProducible lastProduced) {
 			List<StrategicPriority> priorities = city.owner.strategicPriorityData;
-			IEnumerable<IProducible> unitPrototypes = city.ListProductionOptions();
+			IEnumerable<IProducible> producibles = city.ListProductionOptions();
 
 			log.Debug($"Choosing what to produce next in {city.name}");
 
@@ -39,7 +39,7 @@ namespace C7Engine {
 
 			//N.B. This implicitly casts to UnitPrototype.  For now this is fine but once we add buildings, this (or the source of the list)
 			//will have to get smarter.
-			foreach (UnitPrototype unitPrototype in unitPrototypes) {
+			foreach (UnitPrototype unitPrototype in producibles.Where(p => p is UnitPrototype)) {
 				float baseScore = GetItemScore(unitPrototype);
 				log.Debug($" Base score for {unitPrototype} is {baseScore}");
 				// There may eventually be some additive adjusters (or that may play into the previous)

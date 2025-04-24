@@ -234,13 +234,17 @@ namespace C7GameData {
 			// TODO: Double promotionChance if unit is owned by a militaristic civ
 
 			if (GameData.rng.NextDouble() < promotionChance) {
-				ExperienceLevel nextLevel = EngineStorage.gameData.GetExperienceLevelAfter(experienceLevel);
-				if (nextLevel != null) {
-					experienceLevelKey = nextLevel.key;
-					experienceLevel = nextLevel;
-					hitPointsRemaining++;
-					animate(MapUnit.AnimatedAction.VICTORY, waitForAnimation);
-				}
+				Promote();
+				animate(MapUnit.AnimatedAction.VICTORY, waitForAnimation);
+			}
+		}
+
+		public void Promote() {
+			ExperienceLevel nextLevel = EngineStorage.gameData.GetExperienceLevelAfter(experienceLevel);
+			if (nextLevel != null) {
+				experienceLevelKey = nextLevel.key;
+				experienceLevel = nextLevel;
+				hitPointsRemaining++;
 			}
 		}
 
