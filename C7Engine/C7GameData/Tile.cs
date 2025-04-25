@@ -14,31 +14,36 @@ namespace C7GameData {
 		}
 
 		public class Yield {
-			public static Yield GetYield(int yield, YieldType type, City city) {
-				Yield res = new(yield);
-
-				city.owner.government.tileModifier?.Invoke(res, type);
-				city.buildings.ForEach(b => b.building.tileModifier?.Invoke(res, type));
-
-				return res;
+			public static Yield CalculateForCity(Tile tile, int yield, YieldType type, City city) {
+				return new Yield(tile, yield, type).ApplyPlayerModifiers(city.owner).ApplyCityModifiers(city);
 			}
 
-			public static Yield GetYield(int yield, YieldType type, Player player) {
-				Yield res = new(yield);
-
-				player.government.tileModifier?.Invoke(res, type);
-
-				return res;
+			public static Yield CalculateForPlayer(Tile tile, int yield, YieldType type, Player player) {
+				return new Yield(tile, yield, type).ApplyPlayerModifiers(player);
 			}
 
-			public Yield(int yield) {
-				_yield = yield;
+			public Yield(Tile tile, int baseYield, YieldType type) {
+				this.tile = tile;
+				this.baseYield = baseYield;
+				this.type = type;
 			}
 
+			private Yield ApplyPlayerModifiers(Player player) {
+				player.government.tileModifier?.Invoke(this);
+				return this;
+			}
+
+			private Yield ApplyCityModifiers(City city) {
+				city.buildings.ForEach(b => b.building.tileModifier?.Invoke(this));
+				return this;
+			}
+
+			public readonly Tile tile;
+			public readonly YieldType type;
 			public int penalty = 0;
 			public int bonus = 0;
-			public int yield { get => _yield + bonus - penalty; }
-			private int _yield = 0;
+			public readonly int baseYield = 0;
+			public int yield { get => baseYield + bonus - penalty; }
 		}
 
 		public ID Id { get; internal set; }
@@ -268,12 +273,12 @@ namespace C7GameData {
 
 		public Yield foodYield(Player player) {
 			int yield = baseFoodYield(player);
-			return Yield.GetYield(yield, YieldType.Food, player);
+			return Yield.CalculateForPlayer(this, yield, YieldType.Food, player);
 		}
 
 		public Yield foodYield(City city) {
 			int yield = baseFoodYield(city.owner);
-			return Yield.GetYield(yield, YieldType.Food, city);
+			return Yield.CalculateForCity(this, yield, YieldType.Food, city);
 		}
 
 		private int baseProductionYield(Player player) {
@@ -316,12 +321,12 @@ namespace C7GameData {
 
 		public Yield productionYield(Player player) {
 			int yield = baseProductionYield(player);
-			return Yield.GetYield(yield, YieldType.Production, player);
+			return Yield.CalculateForPlayer(this, yield, YieldType.Production, player);
 		}
 
 		public Yield productionYield(City city) {
 			int yield = baseProductionYield(city.owner);
-			return Yield.GetYield(yield, YieldType.Production, city);
+			return Yield.CalculateForCity(this, yield, YieldType.Production, city);
 		}
 
 		private int baseCommerceYield(Player player) {
@@ -369,13 +374,13 @@ namespace C7GameData {
 
 			// TODO: handle the commerce bonus for costal cities+seafaring
 			// TODO: handle the commerce bonus for commerial civs
-			return Yield.GetYield(yield, YieldType.Commerce, player);
+			return Yield.CalculateForPlayer(this, yield, YieldType.Commerce, player);
 		}
 
 		public Yield commerceYield(City city) {
 			int yield = baseCommerceYield(city.owner);
 
-			return Yield.GetYield(yield, YieldType.Commerce, city);
+			return Yield.CalculateForCity(this, yield, YieldType.Commerce, city);
 		}
 
 		public bool BordersRiver() {

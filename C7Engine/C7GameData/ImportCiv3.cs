@@ -928,6 +928,9 @@ namespace C7GameData {
 				(bldg.IncreasesLuxuryTrade, SaveBuilding.Flag.IncreasesLuxuryTrade),
 				(bldg.ReducesCorruption, SaveBuilding.Flag.ReducesCorruption),
 				(bldg.ForbiddenPalace, SaveBuilding.Flag.ForbiddenPalace),
+				(bldg.IncreasesShieldsInWater, SaveBuilding.Flag.IncreasesShieldsInWater),
+				(bldg.IncreasesFoodInWater, SaveBuilding.Flag.IncreasesFoodInWater),
+				(bldg.IncreasesTradeInWater, SaveBuilding.Flag.IncreasesTradeInWater)
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);

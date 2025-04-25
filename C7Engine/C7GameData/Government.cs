@@ -43,7 +43,7 @@ namespace C7GameData {
 		private bool _hasTradeBonus;
 
 		[JsonIgnore]
-		public Action<Tile.Yield, Tile.YieldType> tileModifier;
+		public Action<Tile.Yield> tileModifier;
 
 		// See https://codehappy.net/apolyton/threads/46801-1.htm and
 		// https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/.
@@ -75,14 +75,14 @@ namespace C7GameData {
 		public int freeUnitsPerMetropolis;
 		public int unitCost;
 
-		private static void TradeBonus(Tile.Yield yield, Tile.YieldType yieldType) {
-			if (yieldType == Tile.YieldType.Commerce && yield.yield > 0) {
+		private static void TradeBonus(Tile.Yield yield) {
+			if (yield.type == Tile.YieldType.Commerce && yield.baseYield > 0) {
 				yield.bonus += 1;
 			}
 		}
 
-		private static void TilePenalty(Tile.Yield yield, Tile.YieldType yieldType) {
-			yield.penalty += yield.yield > 2 ? 1 : 0;
+		private static void TilePenalty(Tile.Yield yield) {
+			yield.penalty += yield.baseYield > 2 ? 1 : 0;
 		}
 	}
 }
