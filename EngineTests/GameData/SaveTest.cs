@@ -12,7 +12,7 @@ using C7Engine;
 using C7GameData.Save;
 using QueryCiv3;
 using System.Runtime.InteropServices;
-using C7Engine.Pathing;
+using Newtonsoft.Json.Linq;
 
 public class SaveTests {
 
@@ -75,9 +75,17 @@ public class SaveTests {
 		Assert.NotEmpty(savedNeverGameData);
 		Assert.NotEmpty(savedWasGameData);
 
+		string originalText = File.ReadAllText(developerSave);
+		string neverGameDataText = File.ReadAllText(outputNeverGameDataPath);
+		string wasGameDataText = File.ReadAllText(outputWasGameDataPath);
+
+		JObject originalJson = JObject.Parse(originalText);
+		JObject neverGameDataJson = JObject.Parse(neverGameDataText);
+		JObject wasGameDataJson = JObject.Parse(wasGameDataText);
+
 		// saved files should be the same as the original
-		Assert.Equal(original, savedNeverGameData);
-		Assert.Equal(original, savedWasGameData);
+		Assert.True(JToken.DeepEquals(originalJson, neverGameDataJson));
+		Assert.True(JToken.DeepEquals(originalJson, wasGameDataJson));
 	}
 
 	private void WaitForStartTurnMessage() {
