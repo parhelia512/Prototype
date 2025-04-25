@@ -164,6 +164,12 @@ public partial class RightClickTileMenu : RightClickMenu {
 				this.CloseAndDelete();
 				new RightClickChooseProductionMenu(game, tile.cityAtTile).Open(this.position);
 			});
+			AddItem("Hurry Production", () => {
+				this.CloseAndDelete();
+				using UIGameDataAccess gDA = new();
+				City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
+				new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
+			});
 			AddItem("Zoom to city", () => {
 				this.CloseAndDelete();
 				using UIGameDataAccess gDA = new();
@@ -253,6 +259,12 @@ public partial class RightClickCityMenu : RightClickMenu {
 				// Close the first menu before opening the second menu.
 				this.CloseAndDelete();
 				new RightClickChooseProductionMenu(game, tile.cityAtTile).Open(this.position);
+			});
+			AddItem("Hurry Production", () => {
+				this.CloseAndDelete();
+				using UIGameDataAccess gDA = new();
+				City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
+				new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
 			});
 			AddItem("Zoom to city", () => {
 				this.CloseAndDelete();

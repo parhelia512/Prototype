@@ -299,6 +299,17 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgDoHurryProduction : MessageToEngine {
+		private City city;
+		public MsgDoHurryProduction(City c) {
+			city = c;
+		}
+
+		public override void process() {
+			city.HurryProduction();
+		}
+	}
+
 	public class MsgSetAnimationsEnabled : MessageToEngine {
 		private bool enabled;
 

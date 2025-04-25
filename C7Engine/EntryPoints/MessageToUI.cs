@@ -78,6 +78,16 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgDisplayHurryProductionPopup : MessageToUI {
+		public City city;
+		public City.HurryProductionDetails details;
+
+		public MsgDisplayHurryProductionPopup(City c, City.HurryProductionDetails d) {
+			city = c;
+			details = d;
+		}
+	}
+
 	public class MsgShowCityScreen : MessageToUI {
 		public City city;
 

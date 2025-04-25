@@ -70218,7 +70218,9 @@
   },
   "rules": {
     "maximumResearchTime": 50,
-    "minimumResearchTime": 4
+    "minimumResearchTime": 4,
+    "shieldValueInGold": 4,
+    "citizenValueInShields": 20
   },
   "techs": [
     {

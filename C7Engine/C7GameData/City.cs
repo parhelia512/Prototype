@@ -137,6 +137,78 @@ namespace C7GameData {
 			return TurnsToProduce(itemBeingProduced);
 		}
 
+		private int ShieldCostForHurrying() {
+			// If there are no shields in the box, hurrying costs double.
+			if (shieldsStored == 0) {
+				return itemBeingProduced.shieldCost * 2;
+			}
+			return itemBeingProduced.shieldCost - shieldsStored;
+		}
+
+		// Returns the feasibility of hurrying production
+		public class HurryProductionDetails {
+			public string? errorMessage;
+			public string? costMessage;
+
+			public int popCost = -1;
+			public int goldCost = -1;
+		}
+		public HurryProductionDetails GetHurryProductionDetails() {
+			Rules rules = EngineStorage.gameData.rules;
+			int shieldCost = ShieldCostForHurrying();
+
+			switch (owner.government.hurryingType) {
+				case Government.HurryProductionType.CannotHurry:
+					return new HurryProductionDetails() { errorMessage = "We cannot hurry production with this government." };
+
+				case Government.HurryProductionType.ForcedLabor:
+					int popCost = (int)Math.Ceiling((float)shieldCost / rules.CitizenValueInShields);
+					if (popCost > residents.Count / 2f) {
+						return new HurryProductionDetails() { errorMessage = $"Hurrying production would take the lives of too many citizens ({popCost})." };
+					}
+					return new HurryProductionDetails() {
+						costMessage = $"Hurrying production will take the lives of {popCost} citizen(s), are you sure?",
+						popCost = popCost,
+					};
+
+				case Government.HurryProductionType.PaidLabor:
+					int goldCost = shieldCost * rules.ShieldValueInGold;
+					if (goldCost > owner.gold) {
+						return new HurryProductionDetails() { errorMessage = $"Hurrying production would cost too much gold! ({goldCost})." };
+					}
+					return new HurryProductionDetails() {
+						costMessage = $"Hurrying production will cost {goldCost} gold, are you sure?",
+						goldCost = goldCost,
+					};
+			}
+			throw new Exception($"Unknown hurrying type: {owner.government.hurryingType}");
+		}
+
+		public void HurryProduction() {
+			HurryProductionDetails details = GetHurryProductionDetails();
+
+			switch (owner.government.hurryingType) {
+				case Government.HurryProductionType.CannotHurry:
+					throw new Exception("Unexpectedly trying to hurry production with a government that doesn't support it.");
+
+				case Government.HurryProductionType.ForcedLabor:
+					if (details.popCost <= 0) {
+						throw new Exception(details.errorMessage);
+					}
+					RemoveCitizens(details.popCost);
+					shieldsStored = itemBeingProduced.shieldCost;
+					break;
+
+				case Government.HurryProductionType.PaidLabor:
+					if (details.goldCost <= 0) {
+						throw new Exception(details.errorMessage);
+					}
+					owner.gold -= details.goldCost;
+					shieldsStored = itemBeingProduced.shieldCost;
+					break;
+			}
+		}
+
 		public void HandleCityGrowth(GameData gameData) {
 			foodStored += FoodGrowthPerTurn();
 			if (foodStored >= foodNeededToGrow) {
