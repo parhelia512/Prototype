@@ -67518,7 +67518,8 @@
       "culturePerTurn": 0,
       "flags": [
         "mustBeCoastal",
-        "veteranSeaUnits"
+        "veteranSeaUnits",
+        "increasesFoodInWater"
       ]
     },
     {
@@ -67530,7 +67531,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "flags": [
-        "mustBeCoastal"
+        "mustBeCoastal",
+        "increasesShieldsInWater"
       ]
     },
     {
@@ -68041,7 +68043,10 @@
       "requiredBuilding": "Harbor",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "increasesTradeInWater"
+      ]
     },
     {
       "name": "The Temple of Artemis",
@@ -68089,7 +68094,10 @@
       "requiredTech": "tech-52",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "flags": [
+        "forbiddenPalace"
+      ]
     }
   ],
   "players": [
