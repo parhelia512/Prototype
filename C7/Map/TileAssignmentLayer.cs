@@ -51,9 +51,9 @@ namespace C7.Map {
 				return;
 			}
 
-			Tile.TileYield food = tile.foodYield(city.owner);
-			Tile.TileYield shields = tile.productionYield(city.owner);
-			Tile.TileYield gold = tile.commerceYield(city.owner);
+			Tile.Yield food = tile.foodYield(city);
+			Tile.Yield shields = tile.productionYield(city);
+			Tile.Yield gold = tile.commerceYield(city);
 
 			int totalWidth = ((food.penalty + food.yield) * foodTexture.GetWidth()) +
 						((shields.penalty + shields.yield) * shieldTexture.GetWidth()) +

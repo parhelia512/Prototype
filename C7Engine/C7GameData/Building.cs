@@ -17,6 +17,30 @@ namespace C7GameData {
 			{ SaveBuilding.Flag.VeteranSeaUnits, VeteranSeaUnits }
 		};
 
+		public static Dictionary<SaveBuilding.Flag, Action<Tile.Yield>> tileModifiers = new(){
+			{ SaveBuilding.Flag.IncreasesFoodInWater, IncreaseFoodInWater },
+			{ SaveBuilding.Flag.IncreasesShieldsInWater, IncreaseShieldInWater},
+			{ SaveBuilding.Flag.IncreasesTradeInWater, IncreaseTradeInWater}
+		};
+
+		private static void IncreaseTradeInWater(Tile.Yield yield) {
+			if (yield.type == Tile.YieldType.Commerce && yield.tile.IsWater() && yield.baseYield > 0) {
+				yield.bonus += 1;
+			}
+		}
+
+		private static void IncreaseShieldInWater(Tile.Yield yield) {
+			if (yield.type == Tile.YieldType.Production && yield.tile.IsWater()) {
+				yield.bonus += 1;
+			}
+		}
+
+		private static void IncreaseFoodInWater(Tile.Yield yield) {
+			if (yield.type == Tile.YieldType.Food && yield.tile.IsWater()) {
+				yield.bonus += 1;
+			}
+		}
+
 		private static void VeteranGroundUnits(MapUnit unit) {
 			if (unit.unitType.categories.Contains("Land")) {
 				unit.Promote();
@@ -47,6 +71,7 @@ namespace C7GameData {
 
 		List<Func<City, bool>> productionPrerequisites = [];
 		public Action<MapUnit> onFinishedUnitProduction;
+		public Action<Tile.Yield> tileModifier;
 
 		public bool isGreatWonder;
 		public bool isSmallWonder;
@@ -83,6 +108,12 @@ namespace C7GameData {
 			foreach (var kvp in BuildingRules.unitProductionEffects) {
 				if (building.flags.Contains(kvp.Key)) {
 					onFinishedUnitProduction += kvp.Value;
+				}
+			}
+
+			foreach (var kvp in BuildingRules.tileModifiers) {
+				if (building.flags.Contains(kvp.Key)) {
+					tileModifier += kvp.Value;
 				}
 			}
 		}

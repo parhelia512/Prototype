@@ -7,15 +7,43 @@ namespace C7GameData {
 	using C7Engine;
 
 	public class Tile {
-		public class TileYield {
-			public TileYield(int yield, Player player) {
-				bool despotismPenalty = player.government.hasTilePenalty;
-				this.penalty = yield > 2 && despotismPenalty ? 1 : 0;
-				this.yield = yield - penalty;
+		public enum YieldType {
+			Commerce,
+			Food,
+			Production
+		}
+
+		public class Yield {
+			public static Yield CalculateForCity(Tile tile, int yield, YieldType type, City city) {
+				return new Yield(tile, yield, type).ApplyPlayerModifiers(city.owner).ApplyCityModifiers(city);
 			}
 
+			public static Yield CalculateForPlayer(Tile tile, int yield, YieldType type, Player player) {
+				return new Yield(tile, yield, type).ApplyPlayerModifiers(player);
+			}
+
+			public Yield(Tile tile, int baseYield, YieldType type) {
+				this.tile = tile;
+				this.baseYield = baseYield;
+				this.type = type;
+			}
+
+			private Yield ApplyPlayerModifiers(Player player) {
+				player.government.tileModifier?.Invoke(this);
+				return this;
+			}
+
+			private Yield ApplyCityModifiers(City city) {
+				city.buildings.ForEach(b => b.building.tileModifier?.Invoke(this));
+				return this;
+			}
+
+			public readonly Tile tile;
+			public readonly YieldType type;
 			public int penalty = 0;
-			public int yield = 0;
+			public int bonus = 0;
+			public readonly int baseYield = 0;
+			public int yield { get => baseYield + bonus - penalty; }
 		}
 
 		public ID Id { get; internal set; }
@@ -216,7 +244,7 @@ namespace C7GameData {
 			return (dx + dy) / 2 + Math.Abs(dx - dy) / 4;
 		}
 
-		public TileYield foodYield(Player player) {
+		private int baseFoodYield(Player player) {
 			int yield = overlayTerrainType.baseFoodProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.FoodBonus;
@@ -240,10 +268,20 @@ namespace C7GameData {
 				// water source or has already reached city size (≥ 7)
 			}
 
-			return new TileYield(yield, player);
+			return yield;
 		}
 
-		public TileYield productionYield(Player player) {
+		public Yield foodYield(Player player) {
+			int yield = baseFoodYield(player);
+			return Yield.CalculateForPlayer(this, yield, YieldType.Food, player);
+		}
+
+		public Yield foodYield(City city) {
+			int yield = baseFoodYield(city.owner);
+			return Yield.CalculateForCity(this, yield, YieldType.Food, city);
+		}
+
+		private int baseProductionYield(Player player) {
 			int yield = overlayTerrainType.baseShieldProduction;
 			if (overlayTerrainType.Key == "grassland" && this.isBonusShield) {
 				yield++;
@@ -278,10 +316,20 @@ namespace C7GameData {
 				}
 			}
 
-			return new TileYield(yield, player);
+			return yield;
 		}
 
-		public TileYield commerceYield(Player player) {
+		public Yield productionYield(Player player) {
+			int yield = baseProductionYield(player);
+			return Yield.CalculateForPlayer(this, yield, YieldType.Production, player);
+		}
+
+		public Yield productionYield(City city) {
+			int yield = baseProductionYield(city.owner);
+			return Yield.CalculateForCity(this, yield, YieldType.Production, city);
+		}
+
+		private int baseCommerceYield(Player player) {
 			int yield = overlayTerrainType.baseCommerceProduction;
 			if (this.Resource != Resource.NONE && player.KnowsAboutResource(Resource)) {
 				yield += this.Resource.CommerceBonus;
@@ -318,10 +366,21 @@ namespace C7GameData {
 				yield = Math.Max(regularCityYield, capitalCityYield);
 			}
 
+			return yield;
+		}
+
+		public Yield commerceYield(Player player) {
+			int yield = baseCommerceYield(player);
+
 			// TODO: handle the commerce bonus for costal cities+seafaring
 			// TODO: handle the commerce bonus for commerial civs
-			// TODO: handle the commerce bonus from Republic/Democracy.
-			return new TileYield(yield, player);
+			return Yield.CalculateForPlayer(this, yield, YieldType.Commerce, player);
+		}
+
+		public Yield commerceYield(City city) {
+			int yield = baseCommerceYield(city.owner);
+
+			return Yield.CalculateForCity(this, yield, YieldType.Commerce, city);
 		}
 
 		public bool BordersRiver() {

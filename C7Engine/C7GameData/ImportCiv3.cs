@@ -610,12 +610,14 @@ namespace C7GameData {
 			var city = savData.City[cityIndex];
 			var cityBuildings = savData.CityBuilding[cityIndex];
 
+			BiqData theBiq = biq.Bldg is null ? defaultBiq : biq;
+
 			for (int buildingIndex = 0; buildingIndex < cityBuildings.Length; ++buildingIndex) {
 				var building = cityBuildings[buildingIndex];
 
 				if (building.BuiltByPlayer != -1 && city.Bitm.IsBuildingUsable(buildingIndex)) {
 					res.Add(new SaveCityBuilding {
-						building = save.Buildings[buildingIndex].name,
+						building = theBiq.Bldg[buildingIndex].Name,
 						builtByPlayer = save.Players[building.BuiltByPlayer].id,
 						year = building.Year,
 						totalCulture = building.Culture,
@@ -928,6 +930,9 @@ namespace C7GameData {
 				(bldg.IncreasesLuxuryTrade, SaveBuilding.Flag.IncreasesLuxuryTrade),
 				(bldg.ReducesCorruption, SaveBuilding.Flag.ReducesCorruption),
 				(bldg.ForbiddenPalace, SaveBuilding.Flag.ForbiddenPalace),
+				(bldg.IncreasesShieldsInWater, SaveBuilding.Flag.IncreasesShieldsInWater),
+				(bldg.IncreasesFoodInWater, SaveBuilding.Flag.IncreasesFoodInWater),
+				(bldg.IncreasesTradeInWater, SaveBuilding.Flag.IncreasesTradeInWater)
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);

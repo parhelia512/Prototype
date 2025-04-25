@@ -1,3 +1,5 @@
+using System;
+using System.Text.Json.Serialization;
 
 namespace C7GameData {
 	public class Government {
@@ -17,10 +19,31 @@ namespace C7GameData {
 		// The "despotism penalty" applies for this goverment; reduces all 
 		// commerce, production and food output done by citizen laborers by -1 
 		// when they produce more than 2.
-		public bool hasTilePenalty;
+		public bool hasTilePenalty {
+			get => _hasTilePenalty;
+			set {
+				_hasTilePenalty = value;
+				if (value) {
+					tileModifier += TilePenalty;
+				}
+			}
+		}
+		private bool _hasTilePenalty;
 
 		// +1 commerce any tile with at least 1 commerce.
-		public bool hasTradeBonus;
+		public bool hasTradeBonus {
+			get => _hasTradeBonus;
+			set {
+				_hasTradeBonus = value;
+				if (value) {
+					tileModifier += TradeBonus;
+				}
+			}
+		}
+		private bool _hasTradeBonus;
+
+		[JsonIgnore]
+		public Action<Tile.Yield> tileModifier;
 
 		// See https://codehappy.net/apolyton/threads/46801-1.htm and
 		// https://forums.civfanatics.com/threads/everything-about-corruption-c3c-edition.76619/.
@@ -51,5 +74,15 @@ namespace C7GameData {
 		public int freeUnitsPerCity;
 		public int freeUnitsPerMetropolis;
 		public int unitCost;
+
+		private static void TradeBonus(Tile.Yield yield) {
+			if (yield.type == Tile.YieldType.Commerce && yield.baseYield > 0) {
+				yield.bonus += 1;
+			}
+		}
+
+		private static void TilePenalty(Tile.Yield yield) {
+			yield.penalty += yield.baseYield > 2 ? 1 : 0;
+		}
 	}
 }

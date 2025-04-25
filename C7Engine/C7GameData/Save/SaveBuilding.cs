@@ -11,9 +11,11 @@ namespace C7GameData.Save {
 			MustBeNearRiver,
 			IncreasesLuxuryTrade,
 			ReducesCorruption,
-			ForbiddenPalace
+			ForbiddenPalace,
+			IncreasesShieldsInWater,
+			IncreasesFoodInWater,
+			IncreasesTradeInWater,
 		}
-
 		public string name;
 		public int shieldCost;
 		public int populationCost;
