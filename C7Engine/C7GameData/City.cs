@@ -234,18 +234,10 @@ namespace C7GameData {
 		private void RemoveCitizen() {
 			residents[residents.Count - 1].tileWorked.personWorkingTile = null;
 			residents.RemoveAt(residents.Count - 1);
-
-			// We changed citizens, which may have changed yields, so 
-			// recalculate happiness.
-			RecalculateCitizenMoods(EngineStorage.gameData);
 		}
 
 		public void AddCitizen(CityResident cr) {
 			residents.Add(cr);
-
-			// We changed citizens, which may have changed yields, so 
-			// recalculate happiness.
-			RecalculateCitizenMoods(EngineStorage.gameData);
 		}
 
 		public void RemoveCitizens(int number) {
@@ -300,10 +292,6 @@ namespace C7GameData {
 				year = 1, // TODO: Implement in-game year tracking
 				totalCulture = 0
 			});
-
-			// Recalculate moods after adding a building, since buildings can
-			// affect moods.
-			RecalculateCitizenMoods(EngineStorage.gameData);
 		}
 
 		public void AddUnit(UnitPrototype prototype, GameData gameData) {

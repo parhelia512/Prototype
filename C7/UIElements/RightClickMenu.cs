@@ -166,7 +166,8 @@ public partial class RightClickTileMenu : RightClickMenu {
 			});
 			AddItem("Zoom to city", () => {
 				this.CloseAndDelete();
-				game.ShowCityScreenForCity(tile.cityAtTile);
+				using UIGameDataAccess gDA = new();
+				game.ShowCityScreenForCity(gDA.gameData, tile.cityAtTile);
 			});
 		}
 
@@ -255,7 +256,8 @@ public partial class RightClickCityMenu : RightClickMenu {
 			});
 			AddItem("Zoom to city", () => {
 				this.CloseAndDelete();
-				game.ShowCityScreenForCity(tile.cityAtTile);
+				using UIGameDataAccess gDA = new();
+				game.ShowCityScreenForCity(gDA.gameData, tile.cityAtTile);
 			});
 		}
 	}
