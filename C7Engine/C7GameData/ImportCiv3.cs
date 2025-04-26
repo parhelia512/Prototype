@@ -649,10 +649,11 @@ namespace C7GameData {
 
 		private (string, ProducibleType) CityToProducible(QueryCiv3.Sav.CITY city) {
 			PRTO[] unitPrototypes = biq.Prto ?? defaultBiq.Prto;
+			BiqData theBiq = biq.Bldg is null ? defaultBiq : biq;
 
 			return city.ConstructingType switch {
 				0 => ("Worker", ProducibleType.UNIT), // TODO: Wealth production is not implemented yet
-				1 => (save.Buildings[city.Constructing].name, ProducibleType.BUILDING),
+				1 => (theBiq.Bldg[city.Constructing].Name, ProducibleType.BUILDING),
 				2 => (unitPrototypes[city.Constructing].Name, ProducibleType.UNIT),
 				_ => throw new NotImplementedException()
 			};
