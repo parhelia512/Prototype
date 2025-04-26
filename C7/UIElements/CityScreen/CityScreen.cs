@@ -137,6 +137,10 @@ public partial class CityScreen : Control {
 					Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
 					if (tile != null) {
 						HandleReassignment(tile);
+
+						// Recalculate moods after changing tile assignments.
+						tileAssignmentLayer.city.RecalculateCitizenMoods(gameDataAccess.gameData);
+
 						RenderPopHeads(tileAssignmentLayer.city);
 						RenderFoodDetails(tileAssignmentLayer.city);
 						RenderCommerceDetails(tileAssignmentLayer.city);
@@ -184,8 +188,6 @@ public partial class CityScreen : Control {
 
 		// We've clicked on an unworked tile, move the "worst" citizen to that
 		// tile.
-		//
-		// TODO: only allow this within the city's borders/BFC.
 		if (tile.cityAtTile == null) {
 			int worstYield = int.MaxValue;
 			CityResident worst = null;
@@ -485,16 +487,20 @@ public partial class CityScreen : Control {
 	}
 
 	private void SwitchToNextCity() {
+		using UIGameDataAccess gameDataAccess = new();
 		City currentCity = tileAssignmentLayer.city;
 		List<City> cities = currentCity.owner.cities;
 		City nextCity = cities[(cities.IndexOf(currentCity) + 1) % cities.Count];
+		nextCity.RecalculateCitizenMoods(gameDataAccess.gameData);
 		OnShowCityScreen(new ParameterWrapper<City>(nextCity));
 	}
 
 	private void SwitchToPreviousCity() {
+		using UIGameDataAccess gameDataAccess = new();
 		City currentCity = tileAssignmentLayer.city;
 		List<City> cities = currentCity.owner.cities;
 		City previousCity = cities[(cities.IndexOf(currentCity) + cities.Count - 1) % cities.Count];
+		previousCity.RecalculateCitizenMoods(gameDataAccess.gameData);
 		OnShowCityScreen(new ParameterWrapper<City>(previousCity));
 	}
 

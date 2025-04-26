@@ -241,10 +241,10 @@ public partial class Game : Node2D {
 					OnPlayerStartTurn();
 					break;
 				case MsgShowCityScreen mSCS:
-					ShowCityScreenForCity(mSCS.city);
+					ShowCityScreenForCity(gameData, mSCS.city);
 					break;
 				case MsgCityCreated mCC:
-					ShowCityScreenForCity(mCC.city);
+					ShowCityScreenForCity(gameData, mCC.city);
 					break;
 				case MsgCityDestroyed mCD:
 					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
@@ -271,8 +271,14 @@ public partial class Game : Node2D {
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 					break;
 				case MsgUpdateUiAfterDomesticChange mUUASC:
-					// F1 is the science advisor.
+					// F1 is the domestic advisor.
 					// TODO: Move the F* key strings to a set of constants/enum.
+
+					// Ensure the citizen moods are correct before displaying
+					// them.
+					foreach (City c in controller.cities) {
+						c.RecalculateCitizenMoods(gameData);
+					}
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 					break;
 				case MsgWarDeclaration mWD:
@@ -558,7 +564,8 @@ public partial class Game : Node2D {
 	private void OnDoubleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile?.cityAtTile?.owner == controller) {
-			ShowCityScreenForCity(tile.cityAtTile);
+			using UIGameDataAccess gDA = new();
+			ShowCityScreenForCity(gDA.gameData, tile.cityAtTile);
 		}
 	}
 
@@ -1000,7 +1007,8 @@ public partial class Game : Node2D {
 		}).send();
 	}
 
-	public void ShowCityScreenForCity(City city) {
+	public void ShowCityScreenForCity(GameData gameData, City city) {
+		city.RecalculateCitizenMoods(gameData);
 		EmitSignal(SignalName.ShowCityScreen, new ParameterWrapper<City>(city));
 	}
 
