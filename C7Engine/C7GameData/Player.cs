@@ -238,7 +238,7 @@ namespace C7GameData {
 			int result = 0;
 			foreach (City city in cities) {
 				// Destroyed cities have a size of zero.
-				if (city.size > 0) {
+				if (city.residents.Count > 0) {
 					++result;
 				}
 			}
@@ -503,6 +503,12 @@ namespace C7GameData {
 			gold += CalculateGoldPerTurn();
 		}
 
+		public void HandleCityGrowth(GameData gameData) {
+			foreach (City c in cities) {
+				c.HandleCityGrowth(gameData);
+			}
+		}
+
 		public void DoPerTurnScienceUpdates(GameData gameData) {
 			if (currentlyResearchedTech == null) {
 				return;
@@ -554,9 +560,9 @@ namespace C7GameData {
 			foreach (City city in cities) {
 				// TODO: Import these sizes from Rule.cs in the biq. Maybe have
 				// them live in the city class?
-				if (city.size <= 6) {
+				if (city.residents.Count <= 6) {
 					freeUnits += government.freeUnitsPerTown;
-				} else if (city.size <= 12) {
+				} else if (city.residents.Count <= 12) {
 					freeUnits += government.freeUnitsPerCity;
 				} else {
 					freeUnits += government.freeUnitsPerMetropolis;

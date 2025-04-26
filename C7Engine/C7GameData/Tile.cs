@@ -294,9 +294,9 @@ namespace C7GameData {
 				yield = 1;
 
 				// There is a size bonus for larger cities.
-				if (cityAtTile.size >= 7 && cityAtTile.size < 13) {
+				if (cityAtTile.residents.Count >= 7 && cityAtTile.residents.Count < 13) {
 					yield += 1;
-				} else if (cityAtTile.size >= 13) {
+				} else if (cityAtTile.residents.Count >= 13) {
 					yield += 2;
 
 					// TODO: +1 more for industrial civs.
@@ -344,9 +344,9 @@ namespace C7GameData {
 			// See https://wiki.civforum.de/wiki/Stadtfeldertrag_(Civ3)
 			if (HasCity) {
 				int regularCityYield;
-				if (cityAtTile.size < 7) {
+				if (cityAtTile.residents.Count < 7) {
 					regularCityYield = 1;
-				} else if (cityAtTile.size < 13) {
+				} else if (cityAtTile.residents.Count < 13) {
 					regularCityYield = 2;
 				} else {
 					regularCityYield = 3;

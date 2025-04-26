@@ -202,7 +202,7 @@ namespace C7.Map {
 			if (city.TurnsUntilProductionFinished() == int.MaxValue) {
 				productionLabel.Text = $"{city.itemBeingProduced.name} : --";
 			}
-			popSizeLabel.Text = city.size.ToString();
+			popSizeLabel.Text = city.residents.Count.ToString();
 
 			// Update population label color based on growth
 			if (city.TurnsUntilGrowth() < 0) {

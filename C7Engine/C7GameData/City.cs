@@ -42,7 +42,6 @@ namespace C7GameData {
 		public ID id { get; set; }
 		public Tile location { get; internal set; }
 		public string name;
-		public int size = 1;
 		public Dictionary<Player, int> perPlayerCulture = new();
 
 		//Temporary production code because production is fun.
@@ -138,13 +137,19 @@ namespace C7GameData {
 			return TurnsToProduce(itemBeingProduced);
 		}
 
-		public void ComputeCityGrowth() {
+		public void HandleCityGrowth(GameData gameData) {
 			foodStored += FoodGrowthPerTurn();
 			if (foodStored >= foodNeededToGrow) {
-				size++;
+				CityResident newResident = new CityResident();
+				newResident.nationality = owner.civilization;
+				newResident.city = this;
+				newResident.citizenType = gameData.citizenTypes.Find(x => x.IsDefaultCitizen);
+				AddCitizen(newResident);
+				C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
+
 				foodStored = 0;
 			} else if (foodStored < 0) {
-				size--;
+				RemoveCitizen();
 				foodStored = 0;
 			}
 		}
@@ -155,9 +160,9 @@ namespace C7GameData {
 		 */
 		public IProducible ComputeTurnProduction() {
 			shieldsStored += CurrentProductionYield().useful;
-			if (shieldsStored >= itemBeingProduced.shieldCost && size > itemBeingProduced.populationCost) {
+			if (shieldsStored >= itemBeingProduced.shieldCost && residents.Count > itemBeingProduced.populationCost) {
 				shieldsStored = 0;
-				size -= itemBeingProduced.populationCost;
+				RemoveCitizens(itemBeingProduced.populationCost);
 				return itemBeingProduced;
 			}
 
@@ -228,7 +233,7 @@ namespace C7GameData {
 
 		public int FoodConsumedPerTurn() {
 			// TODO: exclude resisters in the future.
-			return size * 2;
+			return residents.Count * 2;
 		}
 
 		private void RemoveCitizen() {
@@ -258,7 +263,7 @@ namespace C7GameData {
 		}
 
 		public override string ToString() {
-			return $"{name} ({size})";
+			return $"{name} ({residents.Count})";
 		}
 
 		public int GetCulture() {

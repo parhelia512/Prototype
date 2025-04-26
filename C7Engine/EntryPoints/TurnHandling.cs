@@ -42,7 +42,13 @@ namespace C7Engine {
 				foreach (Player player in gameData.players) {
 					player.RecalculateCitizenMoods(gameData);
 					player.DoCorruptionCalculations(gameData);
+
+					// Note that we do growth after calculating citizen moods,
+					// to ensure that the player has a chance to deal with the
+					// unhappiness of a new citizen during their turn.
+					player.HandleCityGrowth(gameData);
 					HandleCityResults(gameData, player);
+
 					player.DoPerTurnFinanceUpdates(gameData);
 					player.DoPerTurnScienceUpdates(gameData);
 				}
@@ -139,24 +145,6 @@ namespace C7Engine {
 			log.Information($"\n*** City production for turn {gameData.turn}, player {player} ***");
 
 			foreach (City city in player.cities) {
-				int initialSize = city.size;
-				city.ComputeCityGrowth();
-				int newSize = city.size;
-				if (newSize > initialSize) {
-					CityResident newResident = new CityResident();
-					newResident.nationality = city.owner.civilization;
-					newResident.city = city;
-					newResident.citizenType = gameData.citizenTypes.Find(x => x.IsDefaultCitizen);
-					CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
-				} else if (newSize < initialSize) {
-					int diff = initialSize - newSize;
-					if (newSize <= 0) {
-						log.Error($"Attempting to remove the last resident from {city}");
-					} else {
-						city.RemoveCitizens(diff);
-					}
-				}
-
 				if (city.UpdateCultureAndCheckForExpansion()) {
 					gameData.UpdateTileOwners();
 				}
@@ -168,10 +156,6 @@ namespace C7Engine {
 						city.AddUnit(prototype, gameData);
 					} else if (producedItem is Building building) {
 						city.AddBuilding(building);
-					}
-
-					if (producedItem.populationCost > 0) {
-						city.RemoveCitizens(producedItem.populationCost);
 					}
 
 					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));

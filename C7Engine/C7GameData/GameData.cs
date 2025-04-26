@@ -95,7 +95,7 @@ namespace C7GameData {
 			bool recomputeActiveTiles = false;
 
 			foreach (City city in cities) {
-				if (city.size == 0) {
+				if (city.residents.Count == 0) {
 					continue; // skip destroyed cities
 				}
 

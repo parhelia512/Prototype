@@ -14,11 +14,12 @@ namespace C7Engine.AI {
 
 		private static ILogger log = Log.ForContext<CityTileAssignmentAI>();
 
+		// Assigns a citizen, which is alredy part of a city, to a tile, if possible.
 		public static void AssignNewCitizenToTile(CityResident newResident) {
 			City city = newResident.city;
 			int foodYield = city.CurrentFoodYield();
 
-			int desiredFoodRate = city.size * FOOD_PER_CITIZEN + DesiredFoodSurplusPerTurn;
+			int desiredFoodRate = city.residents.Count * FOOD_PER_CITIZEN + DesiredFoodSurplusPerTurn;
 			int targetTileFoodAmount = desiredFoodRate - foodYield;
 
 			double maxScore = 0;
@@ -37,10 +38,10 @@ namespace C7Engine.AI {
 			string yield = city.location.YieldString(city.owner);
 			log.Information($"Assigning new citizen of {city.name} to tile {preferredTile} with yield {yield}");
 
+			// TODO: if the preferred tile is NONE we should make them an
+			// entertainer.
 			newResident.tileWorked = preferredTile;
 			preferredTile.personWorkingTile = newResident;
-
-			city.AddCitizen(newResident);
 		}
 
 		public static double CalculateTileYieldScore(Tile t, int targetFoodAmount, Player player) {

@@ -19,14 +19,17 @@ namespace C7Engine {
 			owner.cities.Add(newCity);
 			tileWithNewCity.cityAtTile = newCity;
 
-			// Update owners before we assign the citizen so the tile owners are
-			// accurate.
-			gameData.UpdateTileOwners();
-
 			CityResident firstResident = new CityResident();
 			firstResident.city = newCity;
 			firstResident.citizenType = gameData.citizenTypes.Find(x => x.IsDefaultCitizen);
+			newCity.AddCitizen(firstResident);
+
+			// Update owners before we assign the citizen so the tile owners are
+			// accurate. We do this after adding the resident though, because
+			// cities with zero residents are considered destroyed.
+			gameData.UpdateTileOwners();
 			CityTileAssignmentAI.AssignNewCitizenToTile(firstResident);
+
 			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
 
 			// Cities are treated as though they have a road, but if

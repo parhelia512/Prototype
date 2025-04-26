@@ -13,13 +13,12 @@ namespace C7Engine {
 		 * hopefully it won't be too much of a goose hunt to refactor it later if we decide to do so.
 		 **/
 		public static Player createGame(string loadFilePath, string defaultBicPath,
-										Func<string, string> getPediaIconsPath,
-										Action<City, CitizenType> assignScenarioResidents) {
+										Func<string, string> getPediaIconsPath) {
 			EngineStorage.createThread();
 			EngineStorage.gameDataMutex.WaitOne();
 
 			SaveGame save = SaveManager.LoadSave(loadFilePath, defaultBicPath, getPediaIconsPath);
-			GameData gameData = save.ToGameData(assignScenarioResidents);
+			GameData gameData = save.ToGameData();
 
 			EngineStorage.gameData = gameData;
 
