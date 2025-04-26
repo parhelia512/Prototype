@@ -280,8 +280,8 @@ public class SaveTests {
 
 		// Only bother running one turn of the newer scenarios, just to keep the
 		// tests faster.
-		CheckScenariosInCiv3Subfolder("Conquests/Conquests", /*runOneTurn=*/true);
-		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", /*runOneTurn=*/false);
+		CheckScenariosInCiv3Subfolder("Conquests/Conquests", runOneTurn: true);
+		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", runOneTurn: false);
 	}
 
 	private void CheckScenariosInCiv3Subfolder(string subfolder, bool runOneTurn) {

@@ -41,7 +41,7 @@ public partial class ScienceSelection : Popup {
 		optionButton.SetPosition(new Vector2(25, 190));
 
 		AddButton("OK. Sounds good.", 235, () => {
-			new MsgChooseResearch(options[optionButton.Selected].id, /*showAdvisor=*/false).send();
+			new MsgChooseResearch(options[optionButton.Selected].id, showAdvisor: false).send();
 			GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 		});
 		AddButton("What's the big picture?", 265, () => {
@@ -50,7 +50,7 @@ public partial class ScienceSelection : Popup {
 		});
 
 		AddConfirmButton(new Vector2(width - 40, height - 40), () => {
-			new MsgChooseResearch(options[optionButton.Selected].id, /*showAdvisor=*/false).send();
+			new MsgChooseResearch(options[optionButton.Selected].id, showAdvisor: false).send();
 			GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 		});
 	}

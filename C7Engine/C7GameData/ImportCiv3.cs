@@ -367,10 +367,10 @@ namespace C7GameData {
 			// Make a player for each civ. The barbarians are always civ 0.
 			for (int i = 0; i < save.Civilizations.Count; ++i) {
 				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
-									   /*isBarbarian=*/i == 0,
-									   /*isHuman=*/false,
-									   /*cityNameIndex=*/0,
-									   /*era=*/""));
+									   isBarbarian: i == 0,
+									   isHuman: false,
+									   cityNameIndex: 0,
+									   era: ""));
 
 				// Set a government for players not associated with LEAD.
 				// Usually, this applies only to barbarians, but in some scenarios
@@ -425,10 +425,10 @@ namespace C7GameData {
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];
 				SavePlayer player = MakeSavePlayerFromCiv(civ,
-										  /*isBarbarian=*/i == 0,
-										  /*isHuman=*/i == 1,
-										  /*cityNameIndex=*/leader.FoundedCities,
-										  /*era=*/theBiq.Eras[leader.Era].CivilopediaEntry);
+										  isBarbarian: i == 0,
+										  isHuman: i == 1,
+										  cityNameIndex: leader.FoundedCities,
+										  era: theBiq.Eras[leader.Era].CivilopediaEntry);
 
 				// Record what the player is currently researching.
 				if (leader.Researching > -1) {

@@ -166,7 +166,7 @@ namespace C7Engine {
 				}
 
 				// Priority 3: defend our cities.
-				return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, /*minDefenders=*/int.MaxValue));
+				return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, minDefenders: int.MaxValue));
 			}
 
 			// If there's an unescorted settler, escort it.
@@ -204,7 +204,7 @@ namespace C7Engine {
 
 			//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
 			//and that's a problem.
-			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, /*minDefenders=*/int.MaxValue));
+			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, minDefenders: int.MaxValue));
 		}
 
 		private static bool PlayerIsAtWarWithOtherPlayer(Player player) {

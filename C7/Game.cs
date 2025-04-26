@@ -953,7 +953,7 @@ public partial class Game : Node2D {
 			// declare war with the move) mark the path.
 			if (result.moveCost == -1
 					&& unit.location.distanceTo(tile) == 1
-					&& unit.CanEnterTile(tile, /*allowCombat=*/true, /*allowWarDeclaration=*/true)) {
+					&& unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: true)) {
 				Queue<Tile> pathQueue = new();
 				pathQueue.Enqueue(tile);
 
@@ -964,7 +964,7 @@ public partial class Game : Node2D {
 
 				// If we couldn't enter this tile without a war declaration,
 				// record which civ we need to declare war on.
-				if (!unit.CanEnterTile(tile, /*allowCombat=*/true, /*allowWarDeclaration=*/false)) {
+				if (!unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: false)) {
 					if (tile.cityAtTile != null) {
 						result.requiresWarDeclarationOnPlayer = tile.cityAtTile.owner;
 					} else {

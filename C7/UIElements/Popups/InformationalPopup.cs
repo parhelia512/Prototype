@@ -23,7 +23,7 @@ public partial class InformationalPopup : Popup {
 		int height = 230;
 
 		TextureRect advisorHead = new();
-		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Foreign, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Foreign, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(275, 0));
 		AddChild(advisorHead);
 

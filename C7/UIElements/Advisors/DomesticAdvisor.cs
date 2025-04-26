@@ -53,7 +53,7 @@ public partial class DomesticAdvisor : Control {
 		ImageTexture DomesticBackground = Util.LoadTextureFromPCX("Art/Advisors/domestic.pcx");
 		background.Texture = DomesticBackground;
 
-		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(851, 0));
 		background.AddChild(advisorHead);
 
