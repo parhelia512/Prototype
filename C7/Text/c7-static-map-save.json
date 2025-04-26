@@ -67246,6 +67246,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 1,
+      "contentFacesInCity": 0,
       "flags": [
         "isCenterOfEmpire"
       ]
@@ -67257,6 +67258,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "veteranGroundUnits"
       ]
@@ -67268,7 +67270,8 @@
       "requiredTech": "tech-4",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Temple",
@@ -67277,7 +67280,8 @@
       "requiredTech": "tech-7",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 1
     },
     {
       "name": "Marketplace",
@@ -67287,6 +67291,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "increasesLuxuryTrade"
       ]
@@ -67298,7 +67303,8 @@
       "requiredTech": "tech-14",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 0
     },
     {
       "name": "Courthouse",
@@ -67308,6 +67314,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "reducesCorruption"
       ]
@@ -67319,7 +67326,8 @@
       "requiredTech": "tech-2",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Aqueduct",
@@ -67328,7 +67336,8 @@
       "requiredTech": "tech-21",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Bank",
@@ -67338,7 +67347,8 @@
       "requiredBuilding": "Marketplace",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Cathedral",
@@ -67348,7 +67358,8 @@
       "requiredBuilding": "Temple",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 3
     },
     {
       "name": "University",
@@ -67358,7 +67369,8 @@
       "requiredBuilding": "Library",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "Colosseum",
@@ -67367,7 +67379,8 @@
       "requiredTech": "tech-21",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 2
     },
     {
       "name": "Factory",
@@ -67377,6 +67390,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Iron"
       ]
@@ -67389,7 +67403,8 @@
       "requiredBuilding": "Factory",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Recycling Center",
@@ -67398,7 +67413,8 @@
       "requiredTech": "tech-68",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Coal Plant",
@@ -67409,6 +67425,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Coal"
       ]
@@ -67422,6 +67439,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeNearRiver"
       ]
@@ -67435,6 +67453,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Uranium"
       ]
@@ -67446,7 +67465,8 @@
       "requiredTech": "tech-51",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Research Lab",
@@ -67456,7 +67476,8 @@
       "requiredBuilding": "University",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 0
     },
     {
       "name": "Mass Transit System",
@@ -67466,6 +67487,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Rubber"
       ]
@@ -67478,6 +67500,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67490,6 +67513,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeCoastal"
       ],
@@ -67506,7 +67530,8 @@
       "requiredBuilding": "Factory",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Harbor",
@@ -67516,6 +67541,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeCoastal",
         "veteranSeaUnits",
@@ -67530,6 +67556,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeCoastal",
         "increasesShieldsInWater"
@@ -67542,7 +67569,8 @@
       "requiredTech": "tech-59",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Police Station",
@@ -67552,6 +67580,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "reducesCorruption"
       ]
@@ -67563,7 +67592,8 @@
       "requiredTech": "tech-2",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "The Hanging Gardens",
@@ -67572,7 +67602,8 @@
       "requiredTech": "tech-20",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 3
     },
     {
       "name": "The Colossus",
@@ -67582,6 +67613,7 @@
       "isGreatWonder": true,
       "isSmallWonder": false,
       "culturePerTurn": 3,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeCoastal"
       ]
@@ -67594,6 +67626,7 @@
       "isGreatWonder": true,
       "isSmallWonder": false,
       "culturePerTurn": 2,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeCoastal"
       ]
@@ -67605,7 +67638,8 @@
       "requiredTech": "tech-14",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 6
+      "culturePerTurn": 6,
+      "contentFacesInCity": 0
     },
     {
       "name": "The Oracle",
@@ -67614,7 +67648,8 @@
       "requiredTech": "tech-10",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "The Great Wall",
@@ -67623,7 +67658,8 @@
       "requiredTech": "tech-21",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 0
     },
     {
       "name": "Sun Tzu\u0027s Art of War",
@@ -67632,7 +67668,8 @@
       "requiredTech": "tech-23",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 0
     },
     {
       "name": "Sistine Chapel",
@@ -67641,7 +67678,8 @@
       "requiredTech": "tech-25",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 6
+      "culturePerTurn": 6,
+      "contentFacesInCity": 0
     },
     {
       "name": "Magellan\u0027s Voyage",
@@ -67651,6 +67689,7 @@
       "isGreatWonder": true,
       "isSmallWonder": false,
       "culturePerTurn": 3,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeCoastal"
       ]
@@ -67662,7 +67701,8 @@
       "requiredTech": "tech-33",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "Shakespeare\u0027s Theater",
@@ -67671,7 +67711,8 @@
       "requiredTech": "tech-40",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 8
+      "culturePerTurn": 8,
+      "contentFacesInCity": 8
     },
     {
       "name": "Leonardo\u0027s Workshop",
@@ -67680,7 +67721,8 @@
       "requiredTech": "tech-27",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 0
     },
     {
       "name": "JS Bach\u0027s Cathedral",
@@ -67689,7 +67731,8 @@
       "requiredTech": "tech-29",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 6
+      "culturePerTurn": 6,
+      "contentFacesInCity": 2
     },
     {
       "name": "Newton\u0027s University",
@@ -67698,7 +67741,8 @@
       "requiredTech": "tech-41",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 6
+      "culturePerTurn": 6,
+      "contentFacesInCity": 0
     },
     {
       "name": "Smith\u0027s Trading Company",
@@ -67707,7 +67751,8 @@
       "requiredTech": "tech-36",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 0
     },
     {
       "name": "Universal Suffrage",
@@ -67716,7 +67761,8 @@
       "requiredTech": "tech-48",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "Hoover Dam",
@@ -67726,6 +67772,7 @@
       "isGreatWonder": true,
       "isSmallWonder": false,
       "culturePerTurn": 2,
+      "contentFacesInCity": 0,
       "flags": [
         "mustBeNearRiver"
       ]
@@ -67737,7 +67784,8 @@
       "requiredTech": "tech-50",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 0
     },
     {
       "name": "The United Nations",
@@ -67746,7 +67794,8 @@
       "requiredTech": "tech-66",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "The Manhattan Project",
@@ -67756,6 +67805,7 @@
       "isGreatWonder": true,
       "isSmallWonder": false,
       "culturePerTurn": 2,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Uranium"
       ]
@@ -67767,7 +67817,8 @@
       "requiredTech": "tech-77",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 1
     },
     {
       "name": "Longevity",
@@ -67776,7 +67827,8 @@
       "requiredTech": "tech-77",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 0
     },
     {
       "name": "SETI program",
@@ -67785,7 +67837,8 @@
       "requiredTech": "tech-67",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 3
+      "culturePerTurn": 3,
+      "contentFacesInCity": 0
     },
     {
       "name": "Heroic Epic",
@@ -67793,7 +67846,8 @@
       "populationCost": 0,
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "Iron Works",
@@ -67802,6 +67856,7 @@
       "isGreatWonder": false,
       "isSmallWonder": true,
       "culturePerTurn": 2,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Iron",
         "Coal"
@@ -67814,6 +67869,7 @@
       "isGreatWonder": false,
       "isSmallWonder": true,
       "culturePerTurn": 2,
+      "contentFacesInCity": 0,
       "flags": [
         "forbiddenPalace"
       ]
@@ -67825,7 +67881,8 @@
       "requiredTech": "tech-43",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 1
+      "culturePerTurn": 1,
+      "contentFacesInCity": 0
     },
     {
       "name": "The Pentagon",
@@ -67833,7 +67890,8 @@
       "populationCost": 0,
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 1
+      "culturePerTurn": 1,
+      "contentFacesInCity": 0
     },
     {
       "name": "Wall Street",
@@ -67842,7 +67900,8 @@
       "requiredBuilding": "Stock Exchange",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 0
     },
     {
       "name": "Apollo Program",
@@ -67852,6 +67911,7 @@
       "isGreatWonder": false,
       "isSmallWonder": true,
       "culturePerTurn": 2,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67864,7 +67924,8 @@
       "requiredBuilding": "SAM Missile Battery",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 1
+      "culturePerTurn": 1,
+      "contentFacesInCity": 0
     },
     {
       "name": "Intelligence Agency",
@@ -67873,7 +67934,8 @@
       "requiredTech": "tech-52",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 1
+      "culturePerTurn": 1,
+      "contentFacesInCity": 0
     },
     {
       "name": "Battlefield Medicine",
@@ -67882,7 +67944,8 @@
       "requiredBuilding": "Hospital",
       "isGreatWonder": false,
       "isSmallWonder": true,
-      "culturePerTurn": 1
+      "culturePerTurn": 1,
+      "contentFacesInCity": 0
     },
     {
       "name": "SS Thrusters",
@@ -67892,6 +67955,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67904,6 +67968,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67916,6 +67981,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67928,6 +67994,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67940,6 +68007,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Uranium"
       ]
@@ -67952,6 +68020,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67964,6 +68033,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum",
         "Uranium"
@@ -67977,6 +68047,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -67989,6 +68060,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum"
       ]
@@ -68001,6 +68073,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Aluminum",
         "Rubber"
@@ -68013,7 +68086,8 @@
       "requiredTech": "tech-72",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "Civil Defense",
@@ -68023,7 +68097,8 @@
       "requiredBuilding": "Barracks",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Stock Exchange",
@@ -68033,7 +68108,8 @@
       "requiredBuilding": "Bank",
       "isGreatWonder": false,
       "isSmallWonder": false,
-      "culturePerTurn": 0
+      "culturePerTurn": 0,
+      "contentFacesInCity": 0
     },
     {
       "name": "Commercial Dock",
@@ -68044,6 +68120,7 @@
       "isGreatWonder": false,
       "isSmallWonder": false,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "increasesTradeInWater"
       ]
@@ -68055,7 +68132,8 @@
       "requiredTech": "tech-17",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 4
+      "culturePerTurn": 4,
+      "contentFacesInCity": 0
     },
     {
       "name": "The Statue of Zeus",
@@ -68065,6 +68143,7 @@
       "isGreatWonder": true,
       "isSmallWonder": false,
       "culturePerTurn": 4,
+      "contentFacesInCity": 0,
       "requiredResources": [
         "Ivory"
       ]
@@ -68076,7 +68155,8 @@
       "requiredTech": "tech-12",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 3
     },
     {
       "name": "Knights Templar",
@@ -68085,7 +68165,8 @@
       "requiredTech": "tech-26",
       "isGreatWonder": true,
       "isSmallWonder": false,
-      "culturePerTurn": 2
+      "culturePerTurn": 2,
+      "contentFacesInCity": 0
     },
     {
       "name": "Secret Police HQ",
@@ -68095,6 +68176,7 @@
       "isGreatWonder": false,
       "isSmallWonder": true,
       "culturePerTurn": 0,
+      "contentFacesInCity": 0,
       "flags": [
         "forbiddenPalace"
       ]

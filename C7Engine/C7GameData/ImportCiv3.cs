@@ -896,6 +896,7 @@ namespace C7GameData {
 					isSmallWonder=bldg.SmallWonder,
 					isGreatWonder=bldg.Wonder,
 					culturePerTurn=bldg.Culture,
+					contentFacesInCity=bldg.ContentFaces - bldg.UnhappyFaces,
 				};
 
 				if (bldg.RequiredAdvance != -1) {

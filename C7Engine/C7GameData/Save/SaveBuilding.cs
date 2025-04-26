@@ -24,6 +24,7 @@ namespace C7GameData.Save {
 		public bool isGreatWonder;
 		public bool isSmallWonder;
 		public int culturePerTurn;
+		public int contentFacesInCity;
 
 		// Assorted boolean flags for the building. They're stored in this set
 		// rather than as booleans to avoid bloating the json file.

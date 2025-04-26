@@ -300,6 +300,10 @@ namespace C7GameData {
 				year = 1, // TODO: Implement in-game year tracking
 				totalCulture = 0
 			});
+
+			// Recalculate moods after adding a building, since buildings can
+			// affect moods.
+			RecalculateCitizenMoods(EngineStorage.gameData);
 		}
 
 		public void AddUnit(UnitPrototype prototype, GameData gameData) {
@@ -506,6 +510,26 @@ namespace C7GameData {
 			return result;
 		}
 
+		// Handles the process of consuming content to happy moves, first making
+		// content faces happy, then unhappy to happy at 1/2 the rate, and then
+		// applying the remainder of unhappy->content, if any.
+		private void ConsumeContentToHappyMoves(int contentToHappyMoves) {
+			CityResident.Mood happy = CityResident.Mood.Happy;
+			CityResident.Mood content = CityResident.Mood.Content;
+			CityResident.Mood unhappy = CityResident.Mood.Unhappy;
+
+			// Now move content faces to happy faces.
+			contentToHappyMoves -= ApplyMoodChange(contentToHappyMoves, content, happy);
+
+			// If there are moves left over we can try moving unhappy
+			// faces to happy, but it takes two "points".
+			contentToHappyMoves -= 2 * ApplyMoodChange(contentToHappyMoves / 2, unhappy, happy);
+
+			// Account for the remainder of the integer division
+			// (ApplyMoodChange ignores a negative input). 
+			ApplyMoodChange(contentToHappyMoves, unhappy, content);
+		}
+
 		// This function does the heavy lifting of happiness calculations,
 		// combining the various bonuses and penalties that affect citizen moods.
 		//
@@ -528,9 +552,16 @@ namespace C7GameData {
 
 			// TODO: add penalty for poprushing
 			// TODO: add penalty for drafting
-			// TODO: add penalty for building with unhappiness (in city and global)
+			// TODO: add penalty for building with unhappiness (global/continental)
 			// TODO: add penalty for war weariness
 			// TODO: add penalty for aggression against home country
+
+			// Building happiness/unhappiness, which only affects the unhappy to
+			// content transition, nothing with happy faces.
+			foreach (CityBuilding cb in buildings) {
+				unhappyToContentMoves -= cb.building.unhappyFacesInCity;
+				unhappyToContentMoves += cb.building.contentFacesInCity;
+			}
 
 			// Luxury spending moves content faces to happy faces.
 			contentToHappyMoves += CurrentCommerceYield().happiness;
@@ -551,18 +582,24 @@ namespace C7GameData {
 					// get a citizen to happy.
 					ApplyMoodChange(unhappyToContentMoves, unhappy, content);
 
-					// Now move content faces to happy faces.
-					contentToHappyMoves -= ApplyMoodChange(contentToHappyMoves, content, happy);
-
-					// If there are moves left over we can try moving unhappy
-					// faces to happy, but it takes two "points".
-					contentToHappyMoves -= 2 * ApplyMoodChange(contentToHappyMoves / 2, unhappy, happy);
-
-					// Account for the remainder of the integer division
-					// (ApplyMoodChange ignores a negative input). 
-					ApplyMoodChange(contentToHappyMoves, unhappy, content);
+					// Then do the same for content->happy moves, which can also
+					// make unhappy->happy moves.
+					ConsumeContentToHappyMoves(contentToHappyMoves);
 				} else {
-					// TODO: handle this once we support penalties
+					int happyPoints = contentToHappyMoves;
+					int sadPoints = -unhappyToContentMoves; // Deal with positive numbers
+
+					// Each "sadness point" wipes away a content->happy move,
+					// so netralize things out.
+					contentToHappyMoves = Math.Max(0, happyPoints - sadPoints);
+					sadPoints = Math.Max(0, sadPoints - happyPoints);
+
+					// Use up all our content to happy moves.
+					ConsumeContentToHappyMoves(contentToHappyMoves);
+
+					// Now apply any remaining "sadness points", moving happy
+					// faces back to content.
+					ApplyMoodChange(sadPoints, happy, content);
 				}
 			} else {
 				// TODO: handle this once we support penalties.

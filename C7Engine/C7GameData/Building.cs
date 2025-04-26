@@ -82,6 +82,16 @@ namespace C7GameData {
 
 		public int culturePerTurn = 0;
 
+		// The number of unhappy faces that become content in the city with this
+		// building.
+		public int contentFacesInCity = 0;
+
+		// The number of happy faces that become content in the city with this
+		// building. Note that this is less powerful than other sources of
+		// unhappiness, like drafting or poprushing, which converts happy faces
+		// to sad faces.
+		public int unhappyFacesInCity = 0;
+
 		public HashSet<Resource> requiredResources { get; set; } = [];
 
 		SaveBuilding dataSource;
@@ -93,6 +103,11 @@ namespace C7GameData {
 			isGreatWonder = building.isGreatWonder;
 			isSmallWonder = building.isSmallWonder;
 			culturePerTurn = building.culturePerTurn;
+			if (building.contentFacesInCity < 0) {
+				unhappyFacesInCity = -building.contentFacesInCity;
+			} else {
+				contentFacesInCity = building.contentFacesInCity;
+			}
 			isCenterOfEmpire = building.flags.Contains(SaveBuilding.Flag.IsCenterOfEmpire);
 			increasesLuxuryTrade = building.flags.Contains(SaveBuilding.Flag.IncreasesLuxuryTrade);
 			reducesCorruption = building.flags.Contains(SaveBuilding.Flag.ReducesCorruption);
