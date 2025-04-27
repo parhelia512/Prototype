@@ -70,7 +70,7 @@ namespace C7Engine {
 				return PerformWorkerMove(unit, improvement);
 			}
 
-			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, /*allowCombat=*/false);
+			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, allowCombat: false);
 		}
 
 		private static string? GetTileImprovement(Tile t, Player player) {

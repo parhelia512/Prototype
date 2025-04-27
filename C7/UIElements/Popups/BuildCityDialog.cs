@@ -25,7 +25,7 @@ public partial class BuildCityDialog : Popup {
 		AddTexture(530, 260);
 
 		TextureRect advisorHead = new();
-		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Culture, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Culture, AdvisorHead.Mood.Happy, eraIndex: 0);
 		//Appears at 400, 110 in game, but leftmost 25px are transparent with default graphics
 		advisorHead.SetPosition(new Vector2(375, 0));
 		AddChild(advisorHead);

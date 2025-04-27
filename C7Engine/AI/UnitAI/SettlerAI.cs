@@ -66,7 +66,7 @@ namespace C7Engine {
 						unit.movementPoints.onConsumeAll();
 						return C7GameData.UnitAI.Result.InProgress;
 					} else {
-						return this.TryToMoveAlongPath(unit, ref data.pathToDestination, /*allowCombat=*/false);
+						return this.TryToMoveAlongPath(unit, ref data.pathToDestination, allowCombat: false);
 					}
 					break;
 				case SettlerAIData.SettlerGoal.JOIN_CITY:

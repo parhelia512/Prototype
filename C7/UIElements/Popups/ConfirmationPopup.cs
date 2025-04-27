@@ -39,7 +39,7 @@ public partial class ConfirmationPopup : Popup {
 		AddTexture(530, 320);
 
 		TextureRect advisorHead = new TextureRect();
-		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Surprised, /*eraIndex=*/0);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Surprised, eraIndex: 0);
 		//Appears at 400, 110 in game, but leftmost 25px are transparent with default graphics
 		advisorHead.SetPosition(new Vector2(375, 0));
 		AddChild(advisorHead);

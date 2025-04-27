@@ -36,7 +36,7 @@ public partial class ScienceAdvisor : TextureRect {
 		IndustrialBackground = Util.LoadTextureFromPCX("Art/Advisors/science_industrial_new.pcx");
 		ModernBackground = Util.LoadTextureFromPCX("Art/Advisors/science_modern.pcx");
 
-		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, /*eraIndex=*/0);
+		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(851, 0));
 		AddChild(advisorHead);
 
@@ -134,7 +134,7 @@ public partial class ScienceAdvisor : TextureRect {
 			TechBox techButton = new(tech, techState);
 			techButton.SetPosition(new Vector2(tech.X, tech.Y));
 			techButton.Pressed += () => {
-				new MsgChooseResearch(tech.id, /*showAdvisor=*/true).send();
+				new MsgChooseResearch(tech.id, showAdvisor: true).send();
 			};
 			AddChild(techButton);
 			techBoxes.Add(techButton);

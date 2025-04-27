@@ -445,7 +445,7 @@ namespace C7GameData {
 		}
 
 		public bool CanEnterTile(Tile tile, bool allowCombat) {
-			return CanEnterTile(tile, allowCombat, /*allowWarDeclaration=*/false);
+			return CanEnterTile(tile, allowCombat, allowWarDeclaration: false);
 		}
 
 		// Like above, but allows specifying that we want to handle the case

@@ -21,7 +21,7 @@ public partial class CivilizationDestroyed : Popup {
 		AddTexture(530, 260);
 
 		TextureRect advisorHead = new() {
-			Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Military, AdvisorHead.Mood.Happy, /*eraIndex=*/0),
+			Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Military, AdvisorHead.Mood.Happy, eraIndex: 0),
 		};
 		//Appears at 400, 110 in game, but leftmost 25px are transparent with default graphics
 		advisorHead.SetPosition(new Vector2(375, 0));
