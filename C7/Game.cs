@@ -123,17 +123,6 @@ public partial class Game : Node2D {
 				Util.setModPath(scenarioSearchPath);
 				log.Debug("RelativeModPath ", scenarioSearchPath);
 				return Util.Civ3MediaPath("Text/PediaIcons.txt");
-			}, (City city, CitizenType ct) => {
-				// Provide tile assignments for scenarios, which don't specify
-				// this in the BIC file.
-				for (int i = 0; i < city.size; ++i) {
-					CityResident newResident = new() {
-						citizenType = ct,
-						nationality = city.owner.civilization,
-						city = city
-					};
-					CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
-				}
 			}); // Spawns engine thread
 			Global.ResetLoadGamePath();
 

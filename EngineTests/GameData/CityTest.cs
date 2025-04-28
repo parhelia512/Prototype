@@ -37,7 +37,6 @@ public class CityTest {
 
 		City city = new City(tile, player, "Gotham", ID.None("city"));
 		city.foodStored = 19;
-		city.size = 1;
 		tile.cityAtTile = city;
 
 		TerrainType grassland = new TerrainType();

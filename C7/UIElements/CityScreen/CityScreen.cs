@@ -225,6 +225,7 @@ public partial class CityScreen : Control {
 					nationality = city.owner.civilization,
 					city = city
 				};
+				city.AddCitizen(newResident);
 				CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
 			}
 		}

@@ -61,7 +61,6 @@ namespace C7GameData.Save {
 			capital = city.capital;
 			location = new TileLocation(city.location);
 			name = city.name;
-			size = city.size;
 			producible = city.itemBeingProduced.name;
 			producibleType = city.itemBeingProduced switch {
 				UnitPrototype => ProducibleType.UNIT,
@@ -90,14 +89,12 @@ namespace C7GameData.Save {
 							List<UnitPrototype> unitPrototypes,
 							List<Civilization> civilizations,
 							List<Building> buildings,
-							List<CitizenType> citizenTypes,
-							Action<City, CitizenType> assignScenarioResidents) {
+							List<CitizenType> citizenTypes) {
 			City city = new City{
 				id = id,
 				location = gameMap.tileAt(location.X, location.Y),
 				owner = players.Find(p => p.id == owner),
 				name = name,
-				size = size,
 				itemBeingProduced = producibleType switch {
 					ProducibleType.UNIT => unitPrototypes.Find(proto => proto.name == producible),
 					ProducibleType.BUILDING => buildings.Find(building => building.name == producible),
@@ -128,11 +125,20 @@ namespace C7GameData.Save {
 			}
 
 			// Scenarios don't specify the citizens of each city, only the city
-			// size. So we need to do that assignment now. This requires using
-			// the tile assignment AI, which due to dependency reasons we can't
-			// access directly, so we do this via a lambda.
+			// size. So we need to add the appropriate residents here.
+			//
+			// We wait to assign them to tiles until after tile ownership has
+			// been established in SaveGame.cs.
 			if (city.residents.Count == 0) {
-				assignScenarioResidents(city, citizenTypes.Find(x => x.IsDefaultCitizen));
+				CitizenType ct = citizenTypes.Find(x => x.IsDefaultCitizen);
+				for (int i = 0; i < size; ++i) {
+					CityResident newResident = new() {
+						citizenType = ct,
+						nationality = city.owner.civilization,
+						city = city
+					};
+					city.residents.Add(newResident);
+				}
 			}
 
 			return city;

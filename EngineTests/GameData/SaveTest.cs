@@ -113,17 +113,11 @@ public class SaveTests {
 			getPediaIconsPath = (string unused) => { return unused; };
 		}
 
-		return CreateGame.createGame(path, biqPath,
-			getPediaIconsPath,
-			(City c, CitizenType ct) => {
-				// We don't care about scenario tile assignment here.
-			});
+		return CreateGame.createGame(path, biqPath, getPediaIconsPath);
 	}
 
 	private GameData ToGameData(SaveGame game) {
-		return game.ToGameData((City c, CitizenType ct) => {
-			// We don't care about scenario tile assignment here.
-		});
+		return game.ToGameData();
 	}
 
 	private void CheckAiInvariants() {

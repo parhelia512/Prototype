@@ -192,7 +192,7 @@ namespace C7Engine {
 		public static float AdjustScoreByPopCost(City city, UnitPrototype unitPrototype, float baseScore) {
 			//If the city isn't going to grow in time, return 0
 			if (unitPrototype.populationCost > 0) {
-				int size = city.size;
+				int size = city.residents.Count;
 				//Don't allow starting on something that costs more pop than we have
 				if (unitPrototype.populationCost > size) {
 					return 0.0f;

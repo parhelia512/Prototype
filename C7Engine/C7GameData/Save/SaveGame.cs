@@ -91,13 +91,13 @@ namespace C7GameData.Save {
 			}
 		}
 
-		public GameData ToGameData(Action<City, CitizenType> assignScenarioResidents) {
+		public GameData ToGameData() {
 			GameData data = InitializeGameData();
 			ConvertMapAndPlayers(data);
 			ConvertTechnologies(data);
 			ConvertBuildings(data);
 			ConvertUnits(data);
-			ConvertCities(data, assignScenarioResidents);
+			ConvertCities(data);
 			ConvertBarbarianInfo(data);
 			ConvertStrengthBonuses(data);
 			ConvertHealRates(data);
@@ -107,6 +107,15 @@ namespace C7GameData.Save {
 
 			data.UpdateTileOwners();
 			foreach (Player p in data.players) {
+				// Backfill citizen assignments for scenarios that don't specify
+				// them.
+				foreach (City c in p.cities) {
+					foreach (CityResident cr in c.residents) {
+						if (cr.citizenType.IsDefaultCitizen && cr.tileWorked == Tile.NONE) {
+							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(cr);
+						}
+					}
+				}
 				// TODO: this may require more than one loop, because if all the
 				// citizens are happy it reduces wasted shields via we love the
 				// king day.
@@ -230,10 +239,10 @@ namespace C7GameData.Save {
 			});
 		}
 
-		private void ConvertCities(GameData data, Action<City, CitizenType> assignScenarioResidents) {
+		private void ConvertCities(GameData data) {
 			// cities require game map for location and players for city owner
 			data.cities = Cities.ConvertAll(city =>
-				city.ToCity(data.map, data.players, data.unitPrototypes, Civilizations, data.Buildings, CitizenTypes, assignScenarioResidents)
+				city.ToCity(data.map, data.players, data.unitPrototypes, Civilizations, data.Buildings, CitizenTypes)
 			);
 
 			// add references to map tiles after units and cities are defined
