@@ -66,6 +66,11 @@ namespace C7GameData {
 		// The amount of corruption, between 0 and 1.
 		public float corruption = 0;
 
+		// The number of turns of unhappiness this city will experience due to
+		// pop rushing. Larger values result in larger numbers of citizens being
+		// unhappy as well, in addition to the time penalty.
+		public int turnsOfUnhappinessDueToPopRushing = 0;
+
 		public static City NONE = new City(Tile.NONE, null, "Dummy City", ID.None("city"));
 
 		public City(Tile location, Player owner, string name, ID id) {
@@ -185,6 +190,7 @@ namespace C7GameData {
 		}
 
 		public void HurryProduction() {
+			Rules rules = EngineStorage.gameData.rules;
 			HurryProductionDetails details = GetHurryProductionDetails();
 
 			switch (owner.government.hurryingType) {
@@ -196,6 +202,7 @@ namespace C7GameData {
 						throw new Exception(details.errorMessage);
 					}
 					RemoveCitizens(details.popCost);
+					turnsOfUnhappinessDueToPopRushing += rules.TurnPenaltyForEachHurrySacrifice * details.popCost;
 					shieldsStored = itemBeingProduced.shieldCost;
 					break;
 
@@ -615,14 +622,20 @@ namespace C7GameData {
 			int contentToHappyMoves = 0;
 			int unhappyToContentMoves = 0;
 
-			// TODO: add penalty for poprushing
+			// Each citizen lost to pop rushing has a 20 turn penalty, so
+			// multiple citizens lost causes multiple unhappy faces. 
+			if (turnsOfUnhappinessDueToPopRushing > 0) {
+				contentToHappyMoves -= (turnsOfUnhappinessDueToPopRushing - 1) / gameData.rules.TurnPenaltyForEachHurrySacrifice + 1;
+			}
+
 			// TODO: add penalty for drafting
-			// TODO: add penalty for building with unhappiness (global/continental)
 			// TODO: add penalty for war weariness
 			// TODO: add penalty for aggression against home country
 
 			// Building happiness/unhappiness, which only affects the unhappy to
 			// content transition, nothing with happy faces.
+			//
+			// TODO: account for wonders and buildings with global/continental effects.
 			foreach (CityBuilding cb in buildings) {
 				unhappyToContentMoves -= cb.building.unhappyFacesInCity;
 				unhappyToContentMoves += cb.building.contentFacesInCity;
@@ -637,8 +650,6 @@ namespace C7GameData {
 				effectiveLux = (int)(Math.Floor(effectiveLux / 2f) * Math.Ceiling(effectiveLux / 2f) + Math.Ceiling(effectiveLux / 2f));
 			}
 			contentToHappyMoves += effectiveLux;
-
-			// TODO: account for building happiness (wonders, non wonders, and global/continent)
 
 			if (contentToHappyMoves >= 0) {
 				if (unhappyToContentMoves >= 0) {
@@ -667,7 +678,33 @@ namespace C7GameData {
 					ApplyMoodChange(sadPoints, happy, content);
 				}
 			} else {
-				// TODO: handle this once we support penalties.
+				if (unhappyToContentMoves >= 0) {
+					int sadPoints = -contentToHappyMoves; // Deal with positive numbers
+					int contentPoints = unhappyToContentMoves;
+
+					// Each H->C move point wipes away a content move, so
+					// netralize things out.
+					unhappyToContentMoves = Math.Max(0, contentPoints - sadPoints);
+					sadPoints = Math.Max(0, sadPoints - contentPoints);
+
+					// Content faces get moved to unhappy by the penalty. We
+					// start with some content based on the difficulty level so
+					// this is meaningful. We don't need to worry about H->U
+					// moves because there is no way to have happy faces on this
+					// code path.
+					ApplyMoodChange(sadPoints, content, unhappy);
+
+					// Then our positive U->C moves get applied.
+					ApplyMoodChange(unhappyToContentMoves, unhappy, content);
+				} else {
+					int sadPoints = -contentToHappyMoves; // Deal with positive numbers
+
+					// We have buildings that make happy faces go to content
+					// faces, but there is no way to have happy faces on this
+					// code path, so we just need to move content faces to
+					// unhappy faces with the main penalty.
+					ApplyMoodChange(sadPoints, content, unhappy);
+				}
 			}
 		}
 

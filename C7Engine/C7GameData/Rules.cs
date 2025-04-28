@@ -4,5 +4,6 @@ namespace C7GameData {
 		public int MinimumResearchTime;
 		public int ShieldValueInGold;
 		public int CitizenValueInShields;
+		public int TurnPenaltyForEachHurrySacrifice;
 	}
 }
