@@ -17,6 +17,16 @@ namespace C7GameData {
 		public List<Tile> tiles { get; set; }
 		public List<Tile> barbarianCamps = new List<Tile>();
 
+		// The list of continents, with continents[0] being the largest continent.
+		//
+		// A "water" continent is an ocean.
+		public List<HashSet<Tile>> continents = new();
+
+		// The list of starting locations.
+		//
+		// TODO: How is this saved in editor generated scenarios?
+		public List<Tile> startingLocations = new();
+
 		public GameMap() {
 			this.tiles = new List<Tile>();
 		}
@@ -147,6 +157,41 @@ namespace C7GameData {
 				return rawDelta + numTilesTall;
 			}
 			return rawDelta;
+		}
+
+		public void recomputeContinents() {
+			int nextContinent = 0;
+			HashSet<Tile> currentContinent = new();
+			HashSet<Tile> seen = new();
+
+			foreach (Tile t in tiles) {
+				if (seen.Contains(t)) {
+					continue;
+				}
+				seen.Add(t);
+
+				Queue<Tile> toCheck = new();
+				toCheck.Enqueue(t);
+
+				while (toCheck.Count > 0) {
+					Tile x = toCheck.Dequeue();
+					x.continent = nextContinent;
+					currentContinent.Add(x);
+
+					foreach (Tile n in x.neighbors.Values) {
+						if (!seen.Contains(n) && n.IsLand() == x.IsLand()) {
+							seen.Add(n);
+							toCheck.Enqueue(n);
+						}
+					}
+				}
+				++nextContinent;
+				continents.Add(currentContinent);
+				currentContinent = new();
+			}
+
+			// Sort by size, descending.
+			continents.Sort((x, y) => y.Count.CompareTo(x.Count));
 		}
 	}
 }

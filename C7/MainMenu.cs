@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using C7Engine;
+using C7GameData;
+using C7GameData.Save;
 using Serilog;
 
 public partial class MainMenu : Node2D {
@@ -48,8 +50,8 @@ public partial class MainMenu : Node2D {
 			InactiveButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 1, 1, 20, 20, false);
 			HoverButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 22, 1, 20, 20, false);
 
-			AddButton("New Game", 0, StartGame);
-			AddButton("Quick Start", 35, StartGame);
+			AddButton("New Game", 0, GenerateNewGame);
+			AddButton("Quick Start", 35, GenerateNewGame);
 			AddButton("Tutorial", 70, StartGame);
 			AddButton("Load Game", 105, LoadGame);
 			AddButton("Load Scenario", 140, LoadScenario);
@@ -92,6 +94,87 @@ public partial class MainMenu : Node2D {
 		newButtonLabel.SetPosition(new Vector2(MENU_OFFSET_FROM_LEFT + 25, MENU_OFFSET_FROM_TOP + verticalPosition + BUTTON_LABEL_OFFSET));
 		MainMenuBackground.AddChild(newButtonLabel);
 		newButtonLabel.Pressed += action;
+	}
+
+	public void GenerateNewGame() {
+		log.Information("generating new map");
+		PlayButtonPressedSound();
+
+		int mapSeed = new Random().Next(int.MaxValue);
+		Random rand = new(mapSeed + 0x987);
+
+		WorldCharacteristics.OceanCoverage[] oceans = {
+			WorldCharacteristics.OceanCoverage.Percent_60,
+			WorldCharacteristics.OceanCoverage.Percent_70,
+			WorldCharacteristics.OceanCoverage.Percent_80,
+		};
+		WorldCharacteristics.Age[] ages = {
+			WorldCharacteristics.Age.Billion_3,
+			WorldCharacteristics.Age.Billion_4,
+			WorldCharacteristics.Age.Billion_5,
+		};
+		WorldCharacteristics.Temperature[] temps = {
+			WorldCharacteristics.Temperature.Cool,
+			WorldCharacteristics.Temperature.Temperate,
+			WorldCharacteristics.Temperature.Warm,
+		};
+		WorldCharacteristics.Climate[] climates = {
+			WorldCharacteristics.Climate.Wet,
+			WorldCharacteristics.Climate.Normal,
+			WorldCharacteristics.Climate.Arid,
+		};
+
+		SaveGame save = SaveManager.LoadSave(Global.DefaultGamePath, Global.DefaultBicPath, (string unused) => { return unused; });
+		save.Map = new SaveMap(MapGenerator.GenerateMap(new WorldCharacteristics() {
+			// Use pangaea to start until we implement more boat logic
+			landform = WorldCharacteristics.Landform.Pangaea,
+			oceanCoverage = oceans[rand.Next(3)],
+			age = ages[rand.Next(3)],
+			climate = climates[rand.Next(3)],
+			temperature = temps[rand.Next(3)],
+			worldSize = new WorldSize() {
+				width = 100,
+				height = 100,
+				numberOfCivs = 8,
+				distanceBetweenCivs = 12,
+				techRate = 240,
+				optimalNumberOfCities = 20,
+			},
+			terrainTypes = save.TerrainTypes,
+			resources = save.Resources,
+			defaultGovernment = save.Governments.Find(x => x.defaultType),
+			mapSeed = mapSeed,
+		}));
+
+		// Hack: reposition the initial units to the starting locations from the
+		// generated map. Longer term we'll need to split out our own 
+		// "conquests.bic" type file and load that - until then we'll use this
+		// hack of grabbing it from the static save.
+		//
+		// Start at index 1 to skip the barbarians.
+		for (int i = 1; i < save.Players.Count; ++i) {
+			SaveTile startingTile = save.Map.startingLocations[i - 1];
+			TileLocation startingLocation = new TileLocation(startingTile.X, startingTile.Y);
+			SavePlayer player = save.Players[i];
+
+			foreach (SaveUnit unit in save.Units) {
+				if (unit.owner == player.id) {
+					unit.currentLocation = startingLocation;
+				}
+			}
+			player.tileKnowledge.Clear();
+			player.tileKnowledge.Add(startingLocation);
+			foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
+				player.tileKnowledge.Add(Tile.NeighborCoordinate(startingLocation, direction));
+			}
+		}
+
+		log.Information("saving generated map");
+		save.Save(Global.DefaultGeneratedGamePath);
+		Global.LoadGamePath = Global.DefaultGeneratedGamePath;
+
+		log.Information("opening map");
+		GetTree().ChangeSceneToFile("res://C7Game.tscn");
 	}
 
 	public void StartGame() {
