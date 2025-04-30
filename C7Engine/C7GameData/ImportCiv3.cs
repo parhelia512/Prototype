@@ -945,9 +945,15 @@ namespace C7GameData {
 
 		private void ImportCiv3TerrainTypes() {
 			TERR[] Terr = biq.Terr ?? defaultBiq.Terr;
+			bool[,] TerrGood = biq.TerrGood ?? defaultBiq.TerrGood;
 			int civ3Index = 0;
 			foreach (TERR terrain in Terr) {
 				TerrainType c7TerrainType = TerrainType.ImportFromCiv3(civ3Index, terrain);
+				for (int i = 0; i < TerrGood.GetLength(1); ++i) {
+					if (TerrGood[civ3Index, i]) {
+						c7TerrainType.allowedResources.Add(save.Resources[i].Key);
+					}
+				}
 				save.TerrainTypes.Add(c7TerrainType);
 				civ3Index++;
 			}

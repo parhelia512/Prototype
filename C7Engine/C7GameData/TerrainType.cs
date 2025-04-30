@@ -22,6 +22,7 @@ namespace C7GameData {
 		public int roadBonus { get; set; }
 		public HashSet<string> allowedWorkerActions = [];
 		public StrengthBonus defenseBonus;
+		public HashSet<string> allowedResources = new();
 
 		//some stuff about graphics would probably make sense, too
 
