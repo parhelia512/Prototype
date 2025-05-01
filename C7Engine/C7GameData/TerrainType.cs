@@ -2,6 +2,7 @@ namespace C7GameData {
 	using QueryCiv3;
 	using QueryCiv3.Biq;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	public class TerrainType {
 		//The "key" is a language-independent name for the terrain.  Civ3 relies on their index in the list to know
@@ -19,6 +20,7 @@ namespace C7GameData {
 		public int miningBonus { get; set; }
 		public int irrigationBonus { get; set; }
 		public int roadBonus { get; set; }
+		public HashSet<string> allowedWorkerActions;
 		public StrengthBonus defenseBonus;
 
 		//some stuff about graphics would probably make sense, too
@@ -48,22 +50,31 @@ namespace C7GameData {
 
 
 		public static TerrainType ImportFromCiv3(int civ3Index, TERR civ3Terrain) {
-			TerrainType c7Terrain = new TerrainType();
-			c7Terrain.Key = civTerrainKeyLookup[civ3Index];
-			c7Terrain.DisplayName = civ3Terrain.Name;
-			c7Terrain.baseFoodProduction = civ3Terrain.Food;
-			c7Terrain.baseShieldProduction = civ3Terrain.Shields;
-			c7Terrain.baseCommerceProduction = civ3Terrain.Commerce;
-			c7Terrain.movementCost = civ3Terrain.MovementCost;
-			c7Terrain.allowCities = civ3Terrain.AllowCities != 0;
-			c7Terrain.defenseBonus = new StrengthBonus {
-				description = civ3Terrain.Name,
-				amount = civ3Terrain.DefenseBonus / 100.0
+			TerrainType c7Terrain = new() {
+				Key = civTerrainKeyLookup[civ3Index],
+				DisplayName = civ3Terrain.Name,
+				baseFoodProduction = civ3Terrain.Food,
+				baseShieldProduction = civ3Terrain.Shields,
+				baseCommerceProduction = civ3Terrain.Commerce,
+				movementCost = civ3Terrain.MovementCost,
+				allowCities = civ3Terrain.AllowCities != 0,
+				defenseBonus = new StrengthBonus {
+					description = civ3Terrain.Name,
+					amount = civ3Terrain.DefenseBonus / 100.0
+				},
+				miningBonus = civ3Terrain.MiningBonus,
+				roadBonus = civ3Terrain.RoadBonus,
+				irrigationBonus = civ3Terrain.IrrigationBonus,
+				allowedWorkerActions = LoadWorkerActions(civ3Terrain).ToHashSet(),
 			};
-			c7Terrain.miningBonus = civ3Terrain.MiningBonus;
-			c7Terrain.roadBonus = civ3Terrain.RoadBonus;
-			c7Terrain.irrigationBonus = civ3Terrain.IrrigationBonus;
+
 			return c7Terrain;
+		}
+
+		private static IEnumerable<string> LoadWorkerActions(TERR civ3Terrain) {
+			if (civ3Terrain.CanChopForest) yield return C7Action.UnitClearForest;
+			if (civ3Terrain.CanClearWetlands) yield return C7Action.UnitClearWetlands;
+			if (civ3Terrain.CanPlantForest) yield return C7Action.UnitPlantForest;
 		}
 
 		//This only works for Conquests due to the new terrains being added in the middle of the list.

@@ -63,8 +63,8 @@ public partial class UnitButtons : VBoxContainer {
 		AddNewButton(specializedControls, new UnitControlButton("barricade", 4, 4, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildMine, 1, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitIrrigate, 2, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("chopForest", 3, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("chopJungle", 4, 3, onButtonPressed));
+		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitClearForest, 3, 3, onButtonPressed));
+		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitClearWetlands, 4, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton("plantForest", 5, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton("clearDamage", 6, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitAutomate, 7, 3, onButtonPressed));

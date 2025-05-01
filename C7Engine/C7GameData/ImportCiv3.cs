@@ -695,6 +695,8 @@ namespace C7GameData {
 			if (prto.BuildRoad) yield return C7Action.UnitBuildRoad;
 			if (prto.BuildMine) yield return C7Action.UnitBuildMine;
 			if (prto.Irrigate) yield return C7Action.UnitIrrigate;
+			if (prto.ClearJungle) yield return C7Action.UnitClearWetlands;
+			if (prto.ClearForest) yield return C7Action.UnitClearForest;
 			if (prto.Bombard) yield return C7Action.UnitBombard;
 			if (prto.SkipTurn) yield return C7Action.UnitHold;
 			if (prto.Wait) yield return C7Action.UnitWait;

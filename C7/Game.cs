@@ -881,15 +881,9 @@ public partial class Game : Node2D {
 			}
 		}
 
-		if (currentAction == C7Action.UnitBuildRoad && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildRoad() ?? false)) {
-			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
-		}
-
-		if (currentAction == C7Action.UnitBuildMine && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildMine() ?? false)) {
-			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
-		}
-
-		if (currentAction == C7Action.UnitIrrigate && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canIrrigate() ?? false)) {
+		if (C7Action.terraformActions.Contains(currentAction)
+			&& CurrentlySelectedUnit != MapUnit.NONE
+			&& CurrentlySelectedUnit.canPerformTerraformAction(currentAction)) {
 			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
 	}

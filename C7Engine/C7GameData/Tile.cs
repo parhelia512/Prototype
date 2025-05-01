@@ -534,21 +534,7 @@ namespace C7GameData {
 				}
 			}
 
-			SetTerraformOverlay(currentWorkerJob);
-		}
-
-		private void SetTerraformOverlay(Terraform currentWorkerJob) {
-			switch (currentWorkerJob.Action) {
-				case C7Action.UnitIrrigate:
-					overlays.irrigation = true;
-					break;
-				case C7Action.UnitBuildMine:
-					overlays.mine = true;
-					break;
-				case C7Action.UnitBuildRoad:
-					overlays.road = true;
-					break;
-			}
+			currentWorkerJob.OnComplete(this);
 		}
 
 		public void Animate(AnimatedEffect effect, bool wait) {
@@ -560,6 +546,11 @@ namespace C7GameData {
 					EngineStorage.gameDataMutex.WaitOne();
 				}
 			}
+		}
+
+		public void ClearTerrainOverlay() {
+			overlayTerrainType = baseTerrainType;
+			overlayTerrainTypeKey = baseTerrainTypeKey;
 		}
 	}
 

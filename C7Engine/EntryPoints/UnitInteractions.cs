@@ -51,22 +51,11 @@ namespace C7Engine {
 				}
 			}
 
+			result.AddRange(C7Action.terraformActions.Where(unit.canPerformTerraformAction));
+
 			if (unit.canBuildCity()) {
 				result.Add(C7Action.UnitBuildCity);
 			}
-
-			if (unit.canBuildRoad()) {
-				result.Add(C7Action.UnitBuildRoad);
-			}
-
-			if (unit.canBuildMine()) {
-				result.Add(C7Action.UnitBuildMine);
-			}
-
-			if (unit.canIrrigate()) {
-				result.Add(C7Action.UnitIrrigate);
-			}
-
 			if (unit.canExplore()) {
 				result.Add(C7Action.UnitExplore);
 			}
