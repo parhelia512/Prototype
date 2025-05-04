@@ -63133,6 +63133,9 @@
       "miningBonus": 1,
       "irrigationBonus": 1,
       "roadBonus": 1,
+      "allowedWorkerActions": [
+        "unit_plant_forest"
+      ],
       "defenseBonus": {
         "description": "Plains",
         "amount": 0.1
@@ -63149,6 +63152,9 @@
       "miningBonus": 1,
       "irrigationBonus": 1,
       "roadBonus": 1,
+      "allowedWorkerActions": [
+        "unit_plant_forest"
+      ],
       "defenseBonus": {
         "description": "Grassland",
         "amount": 0.1
@@ -63165,6 +63171,9 @@
       "miningBonus": 1,
       "irrigationBonus": 0,
       "roadBonus": 1,
+      "allowedWorkerActions": [
+        "unit_plant_forest"
+      ],
       "defenseBonus": {
         "description": "Tundra",
         "amount": 0.1
@@ -63229,6 +63238,9 @@
       "miningBonus": 0,
       "irrigationBonus": 0,
       "roadBonus": 1,
+      "allowedWorkerActions": [
+        "unit_clear_forest"
+      ],
       "defenseBonus": {
         "description": "Forest",
         "amount": 0.25
@@ -63245,6 +63257,9 @@
       "miningBonus": 0,
       "irrigationBonus": 0,
       "roadBonus": 1,
+      "allowedWorkerActions": [
+        "unit_clear_wetlands"
+      ],
       "defenseBonus": {
         "description": "Jungle",
         "amount": 0.25
@@ -63261,6 +63276,9 @@
       "miningBonus": 0,
       "irrigationBonus": 0,
       "roadBonus": 1,
+      "allowedWorkerActions": [
+        "unit_clear_wetlands"
+      ],
       "defenseBonus": {
         "description": "Marsh",
         "amount": 0.2
@@ -64002,6 +64020,8 @@
         "unit_build_road",
         "unit_build_mine",
         "unit_irrigate",
+        "unit_clear_wetlands",
+        "unit_clear_forest",
         "unit_hold",
         "unit_wait",
         "unit_fortify",

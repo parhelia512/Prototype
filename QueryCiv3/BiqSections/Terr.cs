@@ -25,7 +25,10 @@ namespace QueryCiv3.Biq {
 		public int Shields;
 		public int Commerce;
 		// Which worker job (TFRM) can be performed on this terrain type
-		public int WorkerJobAllowed;
+		private int WorkerJobAllowed;
+		public readonly bool CanPlantForest { get => WorkerJobAllowed == 5; }
+		public readonly bool CanChopForest { get => WorkerJobAllowed == 6; }
+		public readonly bool CanClearWetlands { get => WorkerJobAllowed == 7; }
 		// Which Terrain this Terrain becomes if affected by pollution.  -1 = not affected.  14 = Base Terrain Type (probably 12 in Vanilla/PTW)
 		public int PollutionEffect;
 		public byte AllowCities;

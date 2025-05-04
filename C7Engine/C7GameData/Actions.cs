@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace C7GameData {
 	// The strings for each action correspond to values in project.godot for keyboard shortcuts
 	public static class C7Action {
@@ -38,6 +41,23 @@ namespace C7GameData {
 		public const string UnitSentry = "unit_sentry";
 		public const string UnitSentryEnemyOnly = "unit_sentry_enemy_only";
 		public const string UnitWait = "unit_wait";
+
+		public static HashSet<string> terraformActions = [
+			UnitBuildMine,
+			UnitIrrigate,
+			UnitBuildRoad,
+			UnitBuildRailroad,
+			UnitClearForest,
+			UnitClearWetlands,
+			UnitPlantForest,
+			UnitClearDamage,
+			UnitBuildBarricade,
+			UnitBuildFortress,
+			UnitBuildOutpost,
+			UnitBuildAirfield,
+			UnitClearDamage,
+			UnitBuildRadarTower
+		];
 
 		// This method transforms an action string into a TileDirection.
 		// A null value will be returned if the conversion is unsuccessful.

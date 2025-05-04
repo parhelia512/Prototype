@@ -636,16 +636,8 @@ namespace C7GameData {
 		}
 
 		public bool canPerformTerraformAction(string action) {
-			switch (action) {
-				case C7Action.UnitIrrigate:
-					return canIrrigate();
-				case C7Action.UnitBuildMine:
-					return canBuildMine();
-				case C7Action.UnitBuildRoad:
-					return canBuildRoad();
-				default:
-					return true;
-			}
+			Terraform terraform = EngineStorage.gameData.Terraforms.Find(t => t.Action == action);
+			return unitType.actions.Contains(action) && terraform.MeetsRequirements(owner, location);
 		}
 
 		public bool canBuildRoad() {
@@ -695,6 +687,12 @@ namespace C7GameData {
 					return;
 				case C7Action.UnitBuildRoad:
 					animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
+					return;
+				case C7Action.UnitClearForest:
+					animate(MapUnit.AnimatedAction.FOREST, false, AnimationEnding.Repeat);
+					return;
+				case C7Action.UnitClearWetlands:
+					animate(MapUnit.AnimatedAction.JUNGLE, false, AnimationEnding.Repeat);
 					return;
 				default:
 					// do nothing;
