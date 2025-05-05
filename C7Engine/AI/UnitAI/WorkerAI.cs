@@ -65,7 +65,7 @@ namespace C7Engine {
 			//
 			// This also functions as a way to build a road network, since we
 			// will eventually road between all worked tiles of all cities.
-			string? improvement = GetTileImprovement(unit.location, unit.owner);
+			Terraform? improvement = GetTileImprovement(unit.location, unit);
 			if (improvement != null) {
 				return PerformWorkerMove(unit, improvement);
 			}
@@ -73,84 +73,75 @@ namespace C7Engine {
 			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, allowCombat: false);
 		}
 
-		private static string? GetTileImprovement(Tile t, Player player) {
+		private static Terraform? GetTileImprovement(Tile t, MapUnit unit) {
 			if (!t.IsLand()) {
 				return null;
 			}
 
+			HashSet<Terraform> accessibleTerraforms = EngineStorage.gameData.Terraforms
+													.Where(terr => unit.canPerformTerraformAction(terr, t))
+													.ToHashSet();
+
+			if (accessibleTerraforms.Count == 0) {
+				return null;
+			}
+
+			Player player = unit.owner;
+
 			// Don't waste worker moves on unowned tiles. We do allow roading
 			// unowned tiles though.
 			if (t.owningCity == null || t.owningCity.owner != player) {
-				if (t.CanBeRoaded()) {
-					return C7Action.UnitBuildRoad;
+				Terraform buildRoad = C7Action.ToTerraform(C7Action.UnitBuildRoad);
+
+				if (accessibleTerraforms.Contains(buildRoad)) {
+					return buildRoad;
 				}
 				return null;
 			}
 
-			// "Mine green, irrigate brown"
-			if (t.overlayTerrainType.Key == "grassland" || t.overlayTerrainType.Key == "hills" || t.overlayTerrainType.Key == "mountains") {
-				if (t.CanBeMined()) {
-					return C7Action.UnitBuildMine;
+			int initialCommerce = t.commerceYield(player).yield;
+			int initialShields = t.productionYield(player).yield;
+			int initialFood = t.foodYield(player).yield;
+
+			int bestScore = 0;
+			Terraform? bestTerraform = null;
+
+			const int CommercePoints = 1;
+			const int ShieldPoints = 3;
+			const int FoodPoints = 5;
+
+			foreach (Terraform terraform in accessibleTerraforms) {
+				Tile tAfterImprovement = t.ShallowCopy();
+				terraform.OnComplete(tAfterImprovement);
+
+				int newCommerce = tAfterImprovement.commerceYield(player).yield;
+				int newShields = tAfterImprovement.productionYield(player).yield;
+				int newFood = tAfterImprovement.foodYield(player).yield;
+
+				int commerceDiff = newCommerce - initialCommerce;
+				int shieldDiff = newShields - initialShields;
+				int foodDiff = newFood - initialFood;
+
+				int currentScore = commerceDiff * CommercePoints +
+						  shieldDiff * ShieldPoints +
+						  foodDiff * FoodPoints;
+
+				if (currentScore > bestScore) {
+					bestScore = currentScore;
+					bestTerraform = terraform;
 				}
-				if (t.CanBeRoaded()) {
-					return C7Action.UnitBuildRoad;
-				}
-				return null;
 			}
 
-			if (t.overlayTerrainType.Key == "desert" || t.overlayTerrainType.Key == "plains" || t.overlayTerrainType.Key == "flood plain") {
-				if (t.CanBeIrrigated(player)) {
-					return C7Action.UnitIrrigate;
-				} else {
-					// TODO: We should check to see if we can chain irrigate.
-				}
-				if (t.CanBeRoaded()) {
-					return C7Action.UnitBuildRoad;
-				}
-				if (t.CanBeMined()) {
-					return C7Action.UnitBuildMine;
-				}
-				return null;
-			}
-
-			// TODO: handle clearing forest/jungle/marsh
-			if (t.CanBeRoaded()) {
-				return C7Action.UnitBuildRoad;
-			}
-			return null;
+			return bestTerraform;
 		}
 
-		private UnitAI.Result PerformWorkerMove(MapUnit unit, string workerMove) {
-			if (workerMove == C7Action.UnitBuildRoad) {
-				if (unit.canBuildRoad()) {
-					unit.PerformTerraformAction(C7Action.UnitBuildRoad);
-					return UnitAI.Result.InProgress;
-				}
-				if (unit.location.overlays.road) {
-					return UnitAI.Result.Done;
-				}
-				return UnitAI.Result.Error;
-			} else if (workerMove == C7Action.UnitBuildMine) {
-				if (unit.canBuildMine()) {
-					unit.PerformTerraformAction(C7Action.UnitBuildMine);
-					return UnitAI.Result.InProgress;
-				}
-				if (unit.location.overlays.mine) {
-					return UnitAI.Result.Done;
-				}
-				return UnitAI.Result.Error;
-			} else if (workerMove == C7Action.UnitIrrigate) {
-				if (unit.canIrrigate()) {
-					unit.PerformTerraformAction(C7Action.UnitIrrigate);
-					return UnitAI.Result.InProgress;
-				}
-				if (unit.location.overlays.irrigation) {
-					return UnitAI.Result.Done;
-				}
-				return UnitAI.Result.Error;
-			} else {
-				throw new ArgumentOutOfRangeException("Invalid worker move" + data.workerMove);
+		private UnitAI.Result PerformWorkerMove(MapUnit unit, Terraform workerMove) {
+			if (unit.canPerformTerraformAction(workerMove)) {
+				unit.PerformTerraformAction(workerMove);
+				return UnitAI.Result.InProgress;
 			}
+
+			return UnitAI.Result.Done;
 		}
 
 		// Given a list of tile candidates, return a plan to improve the nearest
@@ -161,7 +152,7 @@ namespace C7Engine {
 					.ThenByDescending(x => CityTileAssignmentAI.CalculateTileYieldScore(x, 2, player))
 					.ToList();
 			foreach (Tile t in nearestWorkedTiles) {
-				string? improvement = GetTileImprovement(t, unit.owner);
+				Terraform? improvement = GetTileImprovement(t, unit);
 				if (improvement != null) {
 					WorkerAIData result = new () {
 						workerMove = improvement,

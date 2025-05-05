@@ -1,6 +1,6 @@
 namespace C7GameData.AIData {
 	public class WorkerAIData : UnitAIData {
-		public string workerMove;
+		public Terraform workerMove;
 		public Tile destination;
 		public TilePath pathToDestination;
 

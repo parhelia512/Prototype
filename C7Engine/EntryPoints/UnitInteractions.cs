@@ -51,7 +51,7 @@ namespace C7Engine {
 				}
 			}
 
-			result.AddRange(C7Action.terraformActions.Where(unit.canPerformTerraformAction));
+			result.AddRange(EngineStorage.gameData.Terraforms.Where(unit.canPerformTerraformAction).Select(t => t.Action));
 
 			if (unit.canBuildCity()) {
 				result.Add(C7Action.UnitBuildCity);

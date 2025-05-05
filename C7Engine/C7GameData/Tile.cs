@@ -552,6 +552,10 @@ namespace C7GameData {
 			overlayTerrainType = baseTerrainType;
 			overlayTerrainTypeKey = baseTerrainTypeKey;
 		}
+
+		public Tile ShallowCopy() {
+			return (Tile)MemberwiseClone();
+		}
 	}
 
 	public enum TileDirection {
@@ -595,11 +599,14 @@ namespace C7GameData {
 		}
 	}
 
-	public class TileOverlays {
+	public struct TileOverlays {
 		public bool road = false;
 		// assume that railroad contains road too
 		public bool railroad = false;
 		public bool mine = false;
 		public bool irrigation = false;
+
+		public TileOverlays() {
+		}
 	}
 }

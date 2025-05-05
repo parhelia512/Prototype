@@ -148,7 +148,7 @@ namespace C7Engine {
 
 		public override void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(UnitID);
-			unit?.PerformTerraformAction(Action);
+			unit?.PerformTerraformAction(C7Action.ToTerraform(Action));
 		}
 	}
 

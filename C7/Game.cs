@@ -870,9 +870,9 @@ public partial class Game : Node2D {
 			}
 		}
 
-		if (C7Action.terraformActions.Contains(currentAction)
+		if (C7Action.ToTerraform(currentAction) != null
 			&& CurrentlySelectedUnit != MapUnit.NONE
-			&& CurrentlySelectedUnit.canPerformTerraformAction(currentAction)) {
+			&& CurrentlySelectedUnit.canPerformTerraformAction(C7Action.ToTerraform(currentAction))) {
 			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
 		}
 	}
