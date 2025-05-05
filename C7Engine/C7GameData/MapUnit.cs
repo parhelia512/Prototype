@@ -635,34 +635,21 @@ namespace C7GameData {
 			return city;
 		}
 
-		public bool canPerformTerraformAction(string action) {
-			Terraform terraform = EngineStorage.gameData.Terraforms.Find(t => t.Action == action);
-			return unitType.actions.Contains(action) && terraform.MeetsRequirements(owner, location);
+		public bool canPerformTerraformAction(Terraform terraform) {
+			return unitType.actions.Contains(terraform.Action) && terraform.MeetsRequirements(owner, location);
 		}
 
-		public bool canBuildRoad() {
-			return unitType.actions.Contains(C7Action.UnitBuildRoad) && location.CanBeRoaded();
+		public bool canPerformTerraformAction(Terraform terraform, Tile tile) {
+			return unitType.actions.Contains(terraform.Action) && terraform.MeetsRequirements(owner, tile);
 		}
 
-		public bool canBuildMine() {
-			// Mines can only be built on tiles with a mining bonus, if there is
-			// no mine/irrigation already there, and if there isn't a city.
-			return unitType.actions.Contains(C7Action.UnitBuildMine) &&
-				location.CanBeMined();
-		}
-
-		public bool canIrrigate() {
-			return unitType.actions.Contains(C7Action.UnitIrrigate) && location.CanBeIrrigated(owner);
-		}
-
-		public void PerformTerraformAction(string action) {
-			if (!canPerformTerraformAction(action)) {
-				log.Warning($"can't perform {action} by {this}");
+		public void PerformTerraformAction(Terraform terraform) {
+			if (!canPerformTerraformAction(terraform)) {
+				log.Warning($"can't perform {terraform.Action} by {this}");
 				return;
 			}
-			Terraform workerJob = EngineStorage.gameData.GetTerraformByAction(action);
-			WorkerJob = workerJob;
-			setWorkerJobAnimation(action);
+			WorkerJob = terraform;
+			setWorkerJobAnimation(terraform.Action);
 			PerformBusyAction();
 		}
 

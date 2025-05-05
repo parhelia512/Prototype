@@ -20,7 +20,7 @@ namespace C7GameData {
 		public int miningBonus { get; set; }
 		public int irrigationBonus { get; set; }
 		public int roadBonus { get; set; }
-		public HashSet<string> allowedWorkerActions;
+		public HashSet<string> allowedWorkerActions = [];
 		public StrengthBonus defenseBonus;
 
 		//some stuff about graphics would probably make sense, too
