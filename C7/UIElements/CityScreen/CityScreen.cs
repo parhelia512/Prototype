@@ -48,20 +48,20 @@ public partial class CityScreen : Control {
 		background.Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx");
 
 		// The close button.
-		close.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 32, 48);
-		close.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 32, 48);
-		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 32, 48);
+		close.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 48, 48);
+		close.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 48, 48);
+		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 48, 48);
 
 		close.Pressed += Hide;
 
-		previousCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 1, 40, 48);
-		previousCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 50, 40, 48);
-		previousCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 99, 40, 48);
+		previousCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 1, 48, 48);
+		previousCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 50, 48, 48);
+		previousCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 99, 48, 48);
 		previousCity.Pressed += SwitchToPreviousCity;
 
-		nextCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 1, 40, 48);
-		nextCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 50, 40, 48);
-		nextCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 99, 40, 48);
+		nextCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 1, 48, 48);
+		nextCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 50, 48, 48);
+		nextCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 99, 48, 48);
 		nextCity.Pressed += SwitchToNextCity;
 
 		// Load the font we'll use for the details.
