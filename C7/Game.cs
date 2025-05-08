@@ -270,6 +270,22 @@ public partial class Game : Node2D {
 					}
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 					break;
+				case MsgDisplayHurryProductionPopup mDHPP:
+					if (mDHPP.details.errorMessage != null) {
+						popupOverlay.ShowPopup(
+							new InformationalPopup(mDHPP.details.errorMessage),
+							PopupOverlay.PopupCategory.Advisor);
+					} else {
+						popupOverlay.ShowPopup(
+							new ConfirmationPopup(message: mDHPP.details.costMessage,
+												  yesText: "Yes I'm sure!",
+												  noText: "Maybe you're right. Nevermind.",
+												  yesAction: () => {
+													  new MsgDoHurryProduction(mDHPP.city).send();
+												  }),
+							PopupOverlay.PopupCategory.Advisor);
+					}
+					break;
 				case MsgWarDeclaration mWD:
 					popupOverlay.ShowPopup(
 						new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),

@@ -1231,10 +1231,13 @@ namespace C7GameData {
 
 		private void ImportRules() {
 			BiqData theBiq = biq.Rule is null ? defaultBiq : biq;
+			RULE rule = theBiq.Rule[0];
 
-			save.Rules.MaximumResearchTime = theBiq.Rule[0].MaximumResearchTime;
-			save.Rules.MinimumResearchTime = theBiq.Rule[0].MinimumResearchTime;
-			save.GameDifficulty = save.Difficulties[theBiq.Rule[0].DefaultDifficultyLevel];
+			save.Rules.MaximumResearchTime = rule.MaximumResearchTime;
+			save.Rules.MinimumResearchTime = rule.MinimumResearchTime;
+			save.Rules.ShieldValueInGold = rule.ShieldValueInGold;
+			save.Rules.CitizenValueInShields = rule.CitizenValueInShields;
+			save.GameDifficulty = save.Difficulties[rule.DefaultDifficultyLevel];
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {
