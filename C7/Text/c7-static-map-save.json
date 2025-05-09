@@ -63120,7 +63120,13 @@
       "defenseBonus": {
         "description": "Desert",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Saltpeter",
+        "Oil",
+        "Incense",
+        "Oasis"
+      ]
     },
     {
       "key": "plains",
@@ -63139,7 +63145,15 @@
       "defenseBonus": {
         "description": "Plains",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Horses",
+        "Wines",
+        "Ivory",
+        "Cattle",
+        "Wheat",
+        "Sugar"
+      ]
     },
     {
       "key": "grassland",
@@ -63158,7 +63172,14 @@
       "defenseBonus": {
         "description": "Grassland",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Horses",
+        "Wines",
+        "Cattle",
+        "Wheat",
+        "Tobacco"
+      ]
     },
     {
       "key": "tundra",
@@ -63177,7 +63198,13 @@
       "defenseBonus": {
         "description": "Tundra",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Oil",
+        "Aluminum",
+        "Furs",
+        "Game"
+      ]
     },
     {
       "key": "flood plain",
@@ -63193,7 +63220,10 @@
       "defenseBonus": {
         "description": "Flood Plain",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Wheat"
+      ]
     },
     {
       "key": "hills",
@@ -63209,7 +63239,19 @@
       "defenseBonus": {
         "description": "Hills",
         "amount": 0.5
-      }
+      },
+      "allowedResources": [
+        "Horses",
+        "Iron",
+        "Saltpeter",
+        "Coal",
+        "Aluminum",
+        "Wines",
+        "Incense",
+        "Gold",
+        "Sugar",
+        "Tobacco"
+      ]
     },
     {
       "key": "mountains",
@@ -63225,7 +63267,15 @@
       "defenseBonus": {
         "description": "Mountains",
         "amount": 1
-      }
+      },
+      "allowedResources": [
+        "Iron",
+        "Saltpeter",
+        "Coal",
+        "Uranium",
+        "Gems",
+        "Gold"
+      ]
     },
     {
       "key": "forest",
@@ -63244,7 +63294,17 @@
       "defenseBonus": {
         "description": "Forest",
         "amount": 0.25
-      }
+      },
+      "allowedResources": [
+        "Rubber",
+        "Uranium",
+        "Furs",
+        "Dyes",
+        "Spices",
+        "Ivory",
+        "Silks",
+        "Game"
+      ]
     },
     {
       "key": "jungle",
@@ -63263,7 +63323,16 @@
       "defenseBonus": {
         "description": "Jungle",
         "amount": 0.25
-      }
+      },
+      "allowedResources": [
+        "Coal",
+        "Rubber",
+        "Dyes",
+        "Spices",
+        "Silks",
+        "Gems",
+        "Tropical Fruit"
+      ]
     },
     {
       "key": "marsh",
@@ -63282,7 +63351,13 @@
       "defenseBonus": {
         "description": "Marsh",
         "amount": 0.2
-      }
+      },
+      "allowedResources": [
+        "Oil",
+        "Rubber",
+        "Game",
+        "Fish"
+      ]
     },
     {
       "key": "volcano",
@@ -63314,7 +63389,10 @@
       "defenseBonus": {
         "description": "Coast",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Fish"
+      ]
     },
     {
       "key": "sea",
@@ -63330,7 +63408,11 @@
       "defenseBonus": {
         "description": "Sea",
         "amount": 0.1
-      }
+      },
+      "allowedResources": [
+        "Whales",
+        "Fish"
+      ]
     },
     {
       "key": "ocean",
