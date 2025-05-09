@@ -66,7 +66,7 @@ namespace C7Engine.Pathing {
 
 			// TODO: When buildings are implemented, the logic for airports and harbors should also be included.
 			foreach (Tile neighbor in node.neighbors.Values) {
-				if (neighbor.overlays.road) {
+				if (neighbor.overlays.HasRoad()) {
 					result.Add(new Edge<Tile>(node, neighbor, 1));
 				}
 			}

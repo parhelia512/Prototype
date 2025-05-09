@@ -77,7 +77,7 @@ namespace EngineTests {
 
 			// Set up a neighbor with a road.
 			Tile end = plains;
-			end.overlays.road = true;
+			end.overlays.Add(TerrainImprovement.road);
 			start.neighbors[TileDirection.NORTH] = end;
 
 			// The road shouldn't matter, since we don't have a road.
@@ -89,7 +89,7 @@ namespace EngineTests {
 		[Fact]
 		void testRoadOnStartNotOnDestination() {
 			Tile start = hill;
-			start.overlays.road = true;
+			start.overlays.Add(TerrainImprovement.road);
 
 			// Set up a neighbor without a road.
 			Tile end = plains;
@@ -104,11 +104,11 @@ namespace EngineTests {
 		[Fact]
 		void testRoadOnStartAndDestination() {
 			Tile start = hill;
-			start.overlays.road = true;
+			start.overlays.Add(TerrainImprovement.road);
 
 			// Set up a neighbor with a road.
 			Tile end = plains;
-			end.overlays.road = true;
+			end.overlays.Add(TerrainImprovement.road);
 			start.neighbors[TileDirection.NORTH] = end;
 
 			// The cost should be adjusted because we both have a road.

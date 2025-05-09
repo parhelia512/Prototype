@@ -37,24 +37,13 @@ namespace C7GameData.Save {
 			if (tile.hasBarbarianCamp) {
 				features.Add("barbarianCamp");
 			}
-			if (tile.overlays.road) {
-				overlays.Add("road");
-			}
-			if (tile.overlays.railroad) {
-				overlays.Add("railroad");
-			}
-			if (tile.overlays.mine) {
-				overlays.Add("mine");
-			}
-			if (tile.overlays.irrigation) {
-				overlays.Add("irrigation");
-			}
+
+			overlays.AddRange(tile.overlays.GetImprovements().Select(i => i.key));
 		}
 
 		// TODO: if this is slow, features can be read from JSON and then hashed so the Contains check is faster
 		public Tile ToTile(List<TerrainType> terrainTypes, List<Resource> resources) {
-			Tile tile = new Tile{
-				Id = id,
+			Tile tile = new Tile(id){
 				ExtraInfo = extraInfo,
 				XCoordinate = X,
 				YCoordinate = Y,
@@ -77,15 +66,10 @@ namespace C7GameData.Save {
 				isBonusShield = features.Contains("bonusShield"),
 				isSnowCapped = features.Contains("snowCapped"),
 				isPineForest = features.Contains("pineForest"),
-				overlays = new TileOverlays{
-					road = overlays.Contains("road"),
-					railroad = overlays.Contains("railroad"),
-					mine = overlays.Contains("mine"),
-					irrigation = overlays.Contains("irrigation"),
-				},
 			};
 
 			tile.Resource = tile.ResourceKey == Resource.NONE.Key ? Resource.NONE : resources.Find(r => r.Key == tile.ResourceKey);
+			overlays.ForEach(key => tile.overlays.Add(TerrainImprovement.FromKey(key)));
 
 			return tile;
 		}

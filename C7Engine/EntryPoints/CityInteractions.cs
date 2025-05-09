@@ -32,12 +32,6 @@ namespace C7Engine {
 
 			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
 
-			// Cities are treated as though they have a road, but if
-			// a city is build on a mine, the mine should be removed.
-			tileWithNewCity.overlays.road = true;
-			tileWithNewCity.overlays.mine = false;
-			tileWithNewCity.overlays.irrigation = false;
-
 			// Redo corruption calculations after a city is created, since it
 			// may change rank corruption values.
 			owner.DoCorruptionCalculations(EngineStorage.gameData);
@@ -59,7 +53,6 @@ namespace C7Engine {
 				new MsgCivilizationDestroyed(tile.cityAtTile.owner.civilization).send();
 			}
 			tile.cityAtTile = null;
-			tile.overlays.road = false;
 
 			// Redo corruption calculations after a city is destroyed, since it
 			// may change rank corruption values.

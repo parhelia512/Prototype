@@ -111,7 +111,7 @@ namespace C7Engine {
 			const int FoodPoints = 5;
 
 			foreach (Terraform terraform in accessibleTerraforms) {
-				Tile tAfterImprovement = t.ShallowCopy();
+				Tile tAfterImprovement = t.Copy();
 				terraform.OnComplete(tAfterImprovement);
 
 				int newCommerce = tAfterImprovement.commerceYield(player).yield;
