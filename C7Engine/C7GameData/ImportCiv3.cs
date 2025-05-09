@@ -573,6 +573,7 @@ namespace C7GameData {
 					foodStored = city.TotalFood,
 					buildings = ImportCityBuildingsFromSav(i),
 					foodNeededToGrow = 20, // HACK: don't know where to find this
+					turnsOfUnhappinessDueToPopRushing = city.TurnsOfUnhappinessDueToPopRushing,
 				};
 
 				List<int> culturePerLeader = city.GetCulturePerLeader();
@@ -1237,6 +1238,7 @@ namespace C7GameData {
 			save.Rules.MinimumResearchTime = rule.MinimumResearchTime;
 			save.Rules.ShieldValueInGold = rule.ShieldValueInGold;
 			save.Rules.CitizenValueInShields = rule.CitizenValueInShields;
+			save.Rules.TurnPenaltyForEachHurrySacrifice = rule.TurnPenaltyForEachHurrySacrifice;
 			save.GameDifficulty = save.Difficulties[rule.DefaultDifficultyLevel];
 		}
 
