@@ -279,13 +279,18 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 	private ID cityID;
 
 	public static ImageTexture GetProducibleIcon(IProducible producible) {
+		const int iconWidth = 32, iconHeight = 32;
 		if (producible is UnitPrototype proto) {
-			const int iconWidth = 32, iconHeight = 32, iconsPerRow = 14;
+			const int iconsPerRow = 14;
 			int x = 1 + 33 * (proto.iconIndex % iconsPerRow),
 				y = 1 + 33 * (proto.iconIndex / iconsPerRow);
 			return Util.LoadTextureFromPCX("Art/Units/units_32.pcx", x, y, iconWidth, iconHeight);
-		} else
+		} else if (producible is Building b) {
+			int y = 1 + 33 * (1 + b.dataSource.iconRowIndex);
+			return Util.LoadTextureFromPCX("Art/city screen/buildings-small.pcx", 33, y, iconWidth, iconHeight);
+		} else {
 			return null;
+		}
 	}
 
 	public RightClickChooseProductionMenu(Game game, City city) : base(game) {

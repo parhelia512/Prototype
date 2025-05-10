@@ -94,7 +94,7 @@ namespace C7GameData {
 
 		public HashSet<Resource> requiredResources { get; set; } = [];
 
-		SaveBuilding dataSource;
+		public SaveBuilding dataSource;
 
 		public Building(SaveBuilding building) {
 			name = building.name;

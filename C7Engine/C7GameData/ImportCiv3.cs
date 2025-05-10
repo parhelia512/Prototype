@@ -901,6 +901,7 @@ namespace C7GameData {
 					isGreatWonder=bldg.Wonder,
 					culturePerTurn=bldg.Culture,
 					contentFacesInCity=bldg.ContentFaces - bldg.UnhappyFaces,
+					iconRowIndex=pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
 				};
 
 				if (bldg.RequiredAdvance != -1) {
