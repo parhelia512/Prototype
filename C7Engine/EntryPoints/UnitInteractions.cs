@@ -36,16 +36,16 @@ namespace C7Engine {
 		 * Helper function to add the available actions to a unit
 		 * based on what terrain it is on.
 		 **/
-		public static List<string> GetAvailableActions(MapUnit unit) {
-			List<string> result = new();
+		public static List<UnitAction> GetAvailableActions(MapUnit unit) {
+			List<UnitAction> result = new();
 			if (unit == MapUnit.NONE) {
 				return result;
 			}
 
 			// Eventually, we should look this up somewhere to see what all actions we have (and mods might add more)
 			// For now, this is still an improvement over the last iteration.
-			string[] implementedActions = { C7Action.UnitHold, C7Action.UnitWait, C7Action.UnitFortify, C7Action.UnitDisband, C7Action.UnitGoto, C7Action.UnitBombard };
-			foreach (string action in implementedActions) {
+			UnitAction[] implementedActions = { UnitAction.Hold, UnitAction.Wait, UnitAction.Fortify, UnitAction.Disband, UnitAction.Goto, UnitAction.Bombard };
+			foreach (UnitAction action in implementedActions) {
 				if (unit.unitType.actions.Contains(action)) {
 					result.Add(action);
 				}
@@ -54,14 +54,14 @@ namespace C7Engine {
 			result.AddRange(EngineStorage.gameData.Terraforms.Where(unit.canPerformTerraformAction).Select(t => t.Action));
 
 			if (unit.canBuildCity()) {
-				result.Add(C7Action.UnitBuildCity);
+				result.Add(UnitAction.BuildCity);
 			}
 			if (unit.canExplore()) {
-				result.Add(C7Action.UnitExplore);
+				result.Add(UnitAction.Explore);
 			}
 
 			if (unit.canAutomate()) {
-				result.Add(C7Action.UnitAutomate);
+				result.Add(UnitAction.Automate);
 			}
 
 			// Eventually we will have advanced actions too, whose availability will rely on their base actions' availability.

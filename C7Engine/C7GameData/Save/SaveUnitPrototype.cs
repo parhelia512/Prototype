@@ -25,7 +25,7 @@ namespace C7GameData.Save {
 
 		public HashSet<string> categories = new HashSet<string>();
 
-		public HashSet<string> actions = new HashSet<string>();
+		public HashSet<UnitAction> actions = [];
 
 		public HashSet<string> attributes = new HashSet<string>();
 
@@ -53,7 +53,7 @@ namespace C7GameData.Save {
 			}
 
 			categories = new HashSet<string>(proto.categories);
-			actions = new HashSet<string>(proto.actions);
+			actions = proto.actions;
 			attributes = new HashSet<string>(proto.attributes);
 
 			requiredResources = proto.requiredResources.Select(r => r.Key).ToHashSet();

@@ -91,7 +91,7 @@ namespace C7Engine {
 			// Don't waste worker moves on unowned tiles. We do allow roading
 			// unowned tiles though.
 			if (t.owningCity == null || t.owningCity.owner != player) {
-				Terraform buildRoad = C7Action.ToTerraform(C7Action.UnitBuildRoad);
+				Terraform buildRoad = UnitAction.BuildRoad.ToTerraform();
 
 				if (accessibleTerraforms.Contains(buildRoad)) {
 					return buildRoad;

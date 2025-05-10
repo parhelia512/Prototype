@@ -3,7 +3,33 @@ using System.Collections.Generic;
 namespace C7GameData {
 	using System;
 	using System.Linq;
+	using C7Engine;
 	using C7GameData.Save;
+
+	public enum UnitAction {
+		BuildCity,
+		BuildRoad,
+		BuildRailroad,
+		BuildMine,
+		BuildFortress,
+		ClearDamage,
+		BuildAirfield,
+		BuildRadarTower,
+		BuildOutpost,
+		BuildBarricade,
+		Irrigate,
+		ClearWetlands,
+		ClearForest,
+		PlantForest,
+		Bombard,
+		Hold,
+		Wait,
+		Fortify,
+		Disband,
+		Goto,
+		Explore,
+		Automate
+	}
 
 	/**
 	 * The prototype for a unit, which defines the characteristics of a unit.
@@ -32,7 +58,7 @@ namespace C7GameData {
 
 		public HashSet<string> categories = new HashSet<string>();
 
-		public HashSet<string> actions = new HashSet<string>();
+		public HashSet<UnitAction> actions = [];
 
 		public HashSet<string> attributes = new HashSet<string>();
 
@@ -46,7 +72,7 @@ namespace C7GameData {
 			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex, proto.unproducible);
 
 			categories = new HashSet<string>(proto.categories);
-			actions = new HashSet<string>(proto.actions);
+			actions = proto.actions;
 			attributes = new HashSet<string>(proto.attributes);
 		}
 
@@ -79,7 +105,7 @@ namespace C7GameData {
 		}
 
 		// TODO: Consider golden ages when determining whether a unit is obsolete.
-		// If a golden age has not yet been triggered and a unit can trigger one,  
+		// If a golden age has not yet been triggered and a unit can trigger one,
 		// it shouldn't be marked as obsolete, even if its upgrade is available.
 		private bool IsUnitObsolete(City city, HashSet<Resource> accessibleResources) {
 			List<UnitPrototype> upgradeChain = city.owner.civilization.GetUpgradeChain(this);
@@ -106,7 +132,11 @@ namespace C7GameData {
 
 			return true;
 		}
+	}
 
-
+	public static class UnitActionExtension {
+		public static Terraform? ToTerraform(this UnitAction action) {
+			return EngineStorage.gameData.Terraforms.Find(t => t.Action == action);
+		}
 	}
 }

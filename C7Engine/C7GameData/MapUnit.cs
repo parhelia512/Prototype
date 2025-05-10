@@ -51,7 +51,7 @@ namespace C7GameData {
 
 
 		[JsonIgnore]
-		public List<string> availableActions = new List<string>();
+		public List<UnitAction> availableActions = [];
 		public UnitAI currentAI;
 
 		public MapUnit(ID id) {
@@ -607,7 +607,7 @@ namespace C7GameData {
 		}
 
 		public bool canBuildCity() {
-			if (!unitType.actions.Contains(C7Action.UnitBuildCity)) {
+			if (!unitType.actions.Contains(UnitAction.BuildCity)) {
 				return false;
 			}
 			if (location.HasCity || !location.IsAllowCities()) {
@@ -664,21 +664,21 @@ namespace C7GameData {
 			animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
 		}
 
-		private void setWorkerJobAnimation(string action) {
+		private void setWorkerJobAnimation(UnitAction action) {
 			switch (action) {
-				case C7Action.UnitIrrigate:
+				case UnitAction.Irrigate:
 					animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
 					return;
-				case C7Action.UnitBuildMine:
+				case UnitAction.BuildMine:
 					animate(MapUnit.AnimatedAction.MINE, false, AnimationEnding.Repeat);
 					return;
-				case C7Action.UnitBuildRoad:
+				case UnitAction.BuildRoad:
 					animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
 					return;
-				case C7Action.UnitClearForest:
+				case UnitAction.ClearForest:
 					animate(MapUnit.AnimatedAction.FOREST, false, AnimationEnding.Repeat);
 					return;
-				case C7Action.UnitClearWetlands:
+				case UnitAction.ClearWetlands:
 					animate(MapUnit.AnimatedAction.JUNGLE, false, AnimationEnding.Repeat);
 					return;
 				default:
@@ -688,7 +688,7 @@ namespace C7GameData {
 		}
 
 		public bool canAutomate() {
-			return unitType.actions.Contains(C7Action.UnitAutomate);
+			return unitType.actions.Contains(UnitAction.Automate);
 		}
 
 		public void automate() {
@@ -704,7 +704,7 @@ namespace C7GameData {
 		}
 
 		public bool canExplore() {
-			return unitType.actions.Contains(C7Action.UnitExplore);
+			return unitType.actions.Contains(UnitAction.Explore);
 		}
 
 		public void explore() {

@@ -140,15 +140,15 @@ namespace C7Engine {
 	// terraform action.
 	public class MsgStartWorkerJob : MessageToEngine {
 		private ID UnitID;
-		private string Action;
-		public MsgStartWorkerJob(ID unitID, string action) {
+		private Terraform Action;
+		public MsgStartWorkerJob(ID unitID, Terraform action) {
 			this.UnitID = unitID;
 			this.Action = action;
 		}
 
 		public override void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(UnitID);
-			unit?.PerformTerraformAction(C7Action.ToTerraform(Action));
+			unit?.PerformTerraformAction(Action);
 		}
 	}
 

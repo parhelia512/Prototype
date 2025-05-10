@@ -57,7 +57,7 @@ namespace C7Engine {
 				}
 
 				// Exclude settlers if we don't have anywhere to build a city.
-				if (unitPrototype.actions.Contains(C7Action.UnitBuildCity) && SettlerLocationAI.findSettlerLocation(city.location, city.owner) == Tile.NONE) {
+				if (unitPrototype.actions.Contains(UnitAction.BuildCity) && SettlerLocationAI.findSettlerLocation(city.location, city.owner) == Tile.NONE) {
 					flatAdjustedScore = 0;
 				}
 

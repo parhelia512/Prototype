@@ -176,7 +176,7 @@ public partial class Game : Node2D {
 				if (capital != null)
 					mapView.centerCameraOnTile(capital.location);
 			} else {
-				MapUnit startingSettler = controller.units.Find(u => u.unitType.actions.Contains(C7Action.UnitBuildCity));
+				MapUnit startingSettler = controller.units.Find(u => u.unitType.actions.Contains(UnitAction.BuildCity));
 				if (startingSettler != null)
 					mapView.centerCameraOnTile(startingSettler.location);
 			}
@@ -291,7 +291,7 @@ public partial class Game : Node2D {
 						new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
 						PopupOverlay.PopupCategory.Advisor);
 
-					// Break out of the fast forward mode when something 
+					// Break out of the fast forward mode when something
 					// interesting happens.
 					turnsLeftToFastForward = 0;
 					break;
@@ -886,10 +886,12 @@ public partial class Game : Node2D {
 			}
 		}
 
-		if (C7Action.ToTerraform(currentAction) != null
+		Terraform terraform = C7Action.ToTerraform(currentAction);
+
+		if (terraform != null
 			&& CurrentlySelectedUnit != MapUnit.NONE
-			&& CurrentlySelectedUnit.canPerformTerraformAction(C7Action.ToTerraform(currentAction))) {
-			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, currentAction).send();
+			&& CurrentlySelectedUnit.canPerformTerraformAction(terraform)) {
+			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, terraform).send();
 		}
 	}
 
