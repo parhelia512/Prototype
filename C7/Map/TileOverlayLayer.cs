@@ -166,7 +166,7 @@ namespace C7.Map {
 		}
 
 		private static bool hasRoad(Tile tile) {
-			return tile.overlays.HasImprovement(TerrainImprovement.road);
+			return tile.overlays.HasImprovement(TerrainImprovement.road) || tile.HasCity;
 		}
 
 		private static bool hasRailRoad(Tile tile) {

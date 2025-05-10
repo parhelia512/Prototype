@@ -59,7 +59,7 @@ namespace C7Engine {
 					if (unit.location == data.destination) {
 						log.Information("Building city with " + unit);
 						//TODO: This should use a message, and the message handler should cause the disbanding to happen.
-						CityInteractions.BuildCity(unit.location.XCoordinate, unit.location.YCoordinate, player.id, unit.owner.GetNextCityName());
+						CityInteractions.BuildCity(unit.location, player, unit.owner.GetNextCityName());
 						unit.disband();
 					} else if (data.escort == null) {
 						log.Information($"Settler {unit.id} is waiting for an escort");
