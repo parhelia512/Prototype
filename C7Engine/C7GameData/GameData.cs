@@ -85,10 +85,6 @@ namespace C7GameData {
 			return Terraforms.Find(tf => tf.Id == id);
 		}
 
-		public Terraform GetTerraformByAction(string action) {
-			return Terraforms.Find(tf => tf.Action == action);
-		}
-
 		public void UpdateTileOwners() {
 			// We do this at the end of the method - we don't need to do this
 			// for each tile we add in the loop below.

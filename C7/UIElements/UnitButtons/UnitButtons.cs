@@ -95,9 +95,10 @@ public partial class UnitButtons : VBoxContainer {
 		// as visible. We do this rather than using the unit prototype's actions
 		// so that we don't display buttons that do nothing - we don't want to
 		// show the "road" button if we can't build a road, etc.
-		foreach (string action in unit.availableActions) {
-			if (buttonMap.ContainsKey(action)) {
-				buttonMap[action].Visible = true;
+		foreach (UnitAction action in unit.availableActions) {
+			string actionKey = C7Action.ToActionString(action);
+			if (buttonMap.ContainsKey(actionKey)) {
+				buttonMap[actionKey].Visible = true;
 			} else {
 				log.Warning("Could not find button " + action);
 			}

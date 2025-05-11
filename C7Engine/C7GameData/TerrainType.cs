@@ -20,7 +20,7 @@ namespace C7GameData {
 		public int miningBonus { get; set; }
 		public int irrigationBonus { get; set; }
 		public int roadBonus { get; set; }
-		public HashSet<string> allowedWorkerActions = [];
+		public HashSet<UnitAction> allowedWorkerActions = [];
 		public StrengthBonus defenseBonus;
 		public HashSet<string> allowedResources = new();
 
@@ -72,10 +72,10 @@ namespace C7GameData {
 			return c7Terrain;
 		}
 
-		private static IEnumerable<string> LoadWorkerActions(TERR civ3Terrain) {
-			if (civ3Terrain.CanChopForest) yield return C7Action.UnitClearForest;
-			if (civ3Terrain.CanClearWetlands) yield return C7Action.UnitClearWetlands;
-			if (civ3Terrain.CanPlantForest) yield return C7Action.UnitPlantForest;
+		private static IEnumerable<UnitAction> LoadWorkerActions(TERR civ3Terrain) {
+			if (civ3Terrain.CanChopForest) yield return UnitAction.ClearForest;
+			if (civ3Terrain.CanClearWetlands) yield return UnitAction.ClearWetlands;
+			if (civ3Terrain.CanPlantForest) yield return UnitAction.PlantForest;
 		}
 
 		//This only works for Conquests due to the new terrains being added in the middle of the list.

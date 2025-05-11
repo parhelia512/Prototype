@@ -6,7 +6,6 @@ using QueryCiv3;
 using QueryCiv3.Biq;
 using C7GameData.Save;
 using System.Reflection;
-using System.ComponentModel;
 
 /*
   This will read a Civ3 sav into C7 native format for immediate use or saving to native JSON save
@@ -691,21 +690,21 @@ namespace C7GameData {
 			}
 		}
 
-		private static IEnumerable<string> GetUnitActions(PRTO prto) {
-			if (prto.BuildCity) yield return C7Action.UnitBuildCity;
-			if (prto.BuildRoad) yield return C7Action.UnitBuildRoad;
-			if (prto.BuildMine) yield return C7Action.UnitBuildMine;
-			if (prto.Irrigate) yield return C7Action.UnitIrrigate;
-			if (prto.ClearJungle) yield return C7Action.UnitClearWetlands;
-			if (prto.ClearForest) yield return C7Action.UnitClearForest;
-			if (prto.Bombard) yield return C7Action.UnitBombard;
-			if (prto.SkipTurn) yield return C7Action.UnitHold;
-			if (prto.Wait) yield return C7Action.UnitWait;
-			if (prto.Fortify) yield return C7Action.UnitFortify;
-			if (prto.Disband) yield return C7Action.UnitDisband;
-			if (prto.GoTo) yield return C7Action.UnitGoto;
-			if (prto.Explore) yield return C7Action.UnitExplore;
-			if (prto.Automate) yield return C7Action.UnitAutomate;
+		private static IEnumerable<UnitAction> GetUnitActions(PRTO prto) {
+			if (prto.BuildCity) yield return UnitAction.BuildCity;
+			if (prto.BuildRoad) yield return UnitAction.BuildRoad;
+			if (prto.BuildMine) yield return UnitAction.BuildMine;
+			if (prto.Irrigate) yield return UnitAction.Irrigate;
+			if (prto.ClearJungle) yield return UnitAction.ClearWetlands;
+			if (prto.ClearForest) yield return UnitAction.ClearForest;
+			if (prto.Bombard) yield return UnitAction.Bombard;
+			if (prto.SkipTurn) yield return UnitAction.Hold;
+			if (prto.Wait) yield return UnitAction.Wait;
+			if (prto.Fortify) yield return UnitAction.Fortify;
+			if (prto.Disband) yield return UnitAction.Disband;
+			if (prto.GoTo) yield return UnitAction.Goto;
+			if (prto.Explore) yield return UnitAction.Explore;
+			if (prto.Automate) yield return UnitAction.Automate;
 		}
 
 		private SaveUnitPrototype.Unique ImportUniqueUnitData(PRTO prto) {
@@ -1139,8 +1138,8 @@ namespace C7GameData {
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
 					TurnsToComplete = t.TurnsToComplete,
+					Action = ConvertCiv3OrderToAction(t.Order)
 				};
-				tf.Action = ConvertCiv3OrderToAction(t.Order);
 				if (t.Required > -1) {
 					tf.RequiredTech = save.Techs[t.Required].id;
 				}
@@ -1148,37 +1147,23 @@ namespace C7GameData {
 			}
 		}
 
-		private static string ConvertCiv3OrderToAction(string order) {
-			switch (order) {
-				case "Build Mine":
-					return C7Action.UnitBuildMine;
-				case "Irrigate":
-					return C7Action.UnitIrrigate;
-				case "Build Fortress":
-					return C7Action.UnitBuildFortress;
-				case "Build Road":
-					return C7Action.UnitBuildRoad;
-				case "Build Railroad":
-					return C7Action.UnitBuildRailroad;
-				case "Plant Forest":
-					return C7Action.UnitPlantForest;
-				case "Clear Forest":
-					return C7Action.UnitClearForest;
-				case "Clear Wetlands":
-					return C7Action.UnitClearWetlands;
-				case "Clear Damage":
-					return C7Action.UnitClearDamage;
-				case "Build Airfield":
-					return C7Action.UnitBuildAirfield;
-				case "Build Radar Tower":
-					return C7Action.UnitBuildRadarTower;
-				case "Build Outpost":
-					return C7Action.UnitBuildOutpost;
-				case "Build Barricade":
-					return C7Action.UnitBuildBarricade;
-				default:
-					return null;
-			}
+		private static UnitAction ConvertCiv3OrderToAction(string order) {
+			return order switch {
+				"Build Mine" => UnitAction.BuildMine,
+				"Irrigate" => UnitAction.Irrigate,
+				"Build Fortress" => UnitAction.BuildFortress,
+				"Build Road" => UnitAction.BuildRoad,
+				"Build Railroad" => UnitAction.BuildRailroad,
+				"Plant Forest" => UnitAction.PlantForest,
+				"Clear Forest" => UnitAction.ClearForest,
+				"Clear Wetlands" => UnitAction.ClearWetlands,
+				"Clear Damage" => UnitAction.ClearDamage,
+				"Build Airfield" => UnitAction.BuildAirfield,
+				"Build Radar Tower" => UnitAction.BuildRadarTower,
+				"Build Outpost" => UnitAction.BuildOutpost,
+				"Build Barricade" or "Build Barricades" => UnitAction.BuildBarricade,
+				_ => throw new NotSupportedException($"Unknown order: {order}"),
+			};
 		}
 
 		private void ImportGovernments() {

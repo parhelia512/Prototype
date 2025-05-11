@@ -5,22 +5,22 @@ using System.Text.Json.Serialization;
 namespace C7GameData;
 
 public static class TerraformRules {
-	public static readonly Dictionary<string, Action<Tile>> OnCompleteActions = new() {
-		{C7Action.UnitBuildMine, tile => tile.overlays.Add(TerrainImprovement.mine)},
-		{C7Action.UnitIrrigate, tile => tile.overlays.Add(TerrainImprovement.irrigation)},
-		{C7Action.UnitBuildRoad, tile => tile.overlays.Add(TerrainImprovement.road)},
-		{C7Action.UnitBuildRailroad, tile => tile.overlays.Add(TerrainImprovement.railroad)},
-		{C7Action.UnitClearWetlands, tile => tile.ClearTerrainOverlay()},
+	public static readonly Dictionary<UnitAction, Action<Tile>> OnCompleteActions = new() {
+		{UnitAction.BuildMine, tile => tile.overlays.Add(TerrainImprovement.mine)},
+		{UnitAction.Irrigate, tile => tile.overlays.Add(TerrainImprovement.irrigation)},
+		{UnitAction.BuildRoad, tile => tile.overlays.Add(TerrainImprovement.road)},
+		{UnitAction.BuildRailroad, tile => tile.overlays.Add(TerrainImprovement.railroad)},
+		{UnitAction.ClearWetlands, tile => tile.ClearTerrainOverlay()},
 		// TODO: add bonus shields to the nearest city - should only happen the first time a forest is cleared
-		{C7Action.UnitClearForest, tile => tile.ClearTerrainOverlay()},
+		{UnitAction.ClearForest, tile => tile.ClearTerrainOverlay()},
 	};
 
-	public static readonly Dictionary<string, Func<Player, Tile, bool>> ActionValidators = new() {
-		{C7Action.UnitBuildMine, (_, tile) => tile.CanBeMined()},
-		{C7Action.UnitIrrigate, (player, tile) => tile.CanBeIrrigated(player)},
-		{C7Action.UnitBuildRoad, (_, tile) => tile.overlays.CanAdd(TerrainImprovement.road)},
-		{C7Action.UnitClearWetlands, (_, tile) => tile.overlayTerrainType.allowedWorkerActions.Contains(C7Action.UnitClearWetlands)},
-		{C7Action.UnitClearForest, (_, tile) =>  tile.overlayTerrainType.allowedWorkerActions.Contains(C7Action.UnitClearForest)}
+	public static readonly Dictionary<UnitAction, Func<Player, Tile, bool>> ActionValidators = new() {
+		{UnitAction.BuildMine, (_, tile) => tile.CanBeMined()},
+		{UnitAction.Irrigate, (player, tile) => tile.CanBeIrrigated(player)},
+		{UnitAction.BuildRoad, (_, tile) => tile.overlays.CanAdd(TerrainImprovement.road)},
+		{UnitAction.ClearWetlands, (_, tile) => tile.overlayTerrainType.allowedWorkerActions.Contains(UnitAction.ClearWetlands)},
+		{UnitAction.ClearForest, (_, tile) =>  tile.overlayTerrainType.allowedWorkerActions.Contains(UnitAction.ClearForest)}
 	};
 }
 
@@ -43,14 +43,10 @@ public class Terraform {
 	[JsonIgnore]
 	public Func<Player, Tile, bool> MeetsRequirements;
 
-	public string Action {
+	public UnitAction Action {
 		get => _action;
 		set {
 			_action = value;
-
-			if (value == null) {
-				return;
-			}
 
 			if (TerraformRules.OnCompleteActions.TryGetValue(value, out var onComplete)) {
 				OnComplete = onComplete;
@@ -63,5 +59,5 @@ public class Terraform {
 			}
 		}
 	}
-	private string _action;
+	private UnitAction _action;
 }

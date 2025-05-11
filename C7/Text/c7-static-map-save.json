@@ -63140,7 +63140,7 @@
       "irrigationBonus": 1,
       "roadBonus": 1,
       "allowedWorkerActions": [
-        "unit_plant_forest"
+        "plantForest"
       ],
       "defenseBonus": {
         "description": "Plains",
@@ -63167,7 +63167,7 @@
       "irrigationBonus": 1,
       "roadBonus": 1,
       "allowedWorkerActions": [
-        "unit_plant_forest"
+        "plantForest"
       ],
       "defenseBonus": {
         "description": "Grassland",
@@ -63193,7 +63193,7 @@
       "irrigationBonus": 0,
       "roadBonus": 1,
       "allowedWorkerActions": [
-        "unit_plant_forest"
+        "plantForest"
       ],
       "defenseBonus": {
         "description": "Tundra",
@@ -63289,7 +63289,7 @@
       "irrigationBonus": 0,
       "roadBonus": 1,
       "allowedWorkerActions": [
-        "unit_clear_forest"
+        "clearForest"
       ],
       "defenseBonus": {
         "description": "Forest",
@@ -63318,7 +63318,7 @@
       "irrigationBonus": 0,
       "roadBonus": 1,
       "allowedWorkerActions": [
-        "unit_clear_wetlands"
+        "clearWetlands"
       ],
       "defenseBonus": {
         "description": "Jungle",
@@ -63346,7 +63346,7 @@
       "irrigationBonus": 0,
       "roadBonus": 1,
       "allowedWorkerActions": [
-        "unit_clear_wetlands"
+        "clearWetlands"
       ],
       "defenseBonus": {
         "description": "Marsh",
@@ -64062,7 +64062,7 @@
   "unitPrototypes": [
     {
       "name": "Settler",
-      "artName": "Settler",
+      "artName": "Settler Modern Times",
       "shieldCost": 30,
       "populationCost": 2,
       "attack": 0,
@@ -64075,18 +64075,18 @@
         "Land"
       ],
       "actions": [
-        "unit_build_city",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "buildCity",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
       "name": "Worker",
-      "artName": "Worker",
+      "artName": "Worker Modern Times",
       "shieldCost": 10,
       "populationCost": 1,
       "attack": 0,
@@ -64099,18 +64099,18 @@
         "Land"
       ],
       "actions": [
-        "unit_build_road",
-        "unit_build_mine",
-        "unit_irrigate",
-        "unit_clear_wetlands",
-        "unit_clear_forest",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore",
-        "unit_automate"
+        "buildRoad",
+        "buildMine",
+        "irrigate",
+        "clearWetlands",
+        "clearForest",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore",
+        "automate"
       ]
     },
     {
@@ -64129,12 +64129,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64153,12 +64153,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64177,12 +64177,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Rubber"
@@ -64204,12 +64204,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil",
@@ -64232,12 +64232,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64257,12 +64257,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64282,12 +64282,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64307,12 +64307,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -64335,12 +64335,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -64363,12 +64363,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -64391,12 +64391,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -64419,12 +64419,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64444,12 +64444,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Saltpeter"
@@ -64472,12 +64472,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses",
@@ -64501,12 +64501,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64525,12 +64525,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses",
@@ -64554,12 +64554,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Rubber"
@@ -64582,12 +64582,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil",
@@ -64610,12 +64610,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil",
@@ -64638,12 +64638,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil",
@@ -64667,13 +64667,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64693,13 +64693,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron",
@@ -64723,13 +64723,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64748,13 +64748,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Aluminum"
@@ -64776,12 +64776,12 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto"
       ],
       "requiredResources": [
         "Aluminum"
@@ -64803,13 +64803,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Aluminum",
@@ -64832,12 +64832,12 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto"
       ],
       "requiredResources": [
         "Aluminum",
@@ -64861,12 +64861,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64886,12 +64886,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64910,13 +64910,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron",
@@ -64940,12 +64940,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -64965,13 +64965,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron",
@@ -64994,12 +64994,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil"
@@ -65021,12 +65021,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil"
@@ -65048,12 +65048,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil"
@@ -65075,13 +65075,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil"
@@ -65103,13 +65103,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil"
@@ -65131,13 +65131,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Aluminum",
@@ -65160,12 +65160,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Uranium"
@@ -65188,10 +65188,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil"
@@ -65213,10 +65213,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil"
@@ -65238,10 +65238,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil",
@@ -65264,10 +65264,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil",
@@ -65290,10 +65290,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil",
@@ -65316,10 +65316,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil",
@@ -65341,12 +65341,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65364,12 +65364,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65392,12 +65392,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65421,12 +65421,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65450,12 +65450,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65479,12 +65479,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65508,12 +65508,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -65540,12 +65540,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -65572,12 +65572,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -65604,12 +65604,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses",
@@ -65637,12 +65637,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -65669,12 +65669,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Saltpeter"
@@ -65701,12 +65701,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -65733,12 +65733,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -65761,12 +65761,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses",
@@ -65794,12 +65794,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil",
@@ -65826,13 +65826,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron",
@@ -65859,10 +65859,10 @@
         "Air"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband"
+        "hold",
+        "wait",
+        "fortify",
+        "disband"
       ],
       "requiredResources": [
         "Oil",
@@ -65885,12 +65885,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron",
@@ -65918,12 +65918,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -65949,12 +65949,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -65981,12 +65981,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66009,12 +66009,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses",
@@ -66042,12 +66042,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -66074,12 +66074,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses",
@@ -66107,12 +66107,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66135,13 +66135,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Saltpeter"
@@ -66164,12 +66164,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -66192,12 +66192,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66215,9 +66215,9 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify"
+        "hold",
+        "wait",
+        "fortify"
       ]
     },
     {
@@ -66235,11 +66235,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66257,11 +66257,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66279,11 +66279,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66301,11 +66301,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66323,11 +66323,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66345,11 +66345,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66367,11 +66367,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66389,11 +66389,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66411,11 +66411,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66433,11 +66433,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66455,11 +66455,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66477,11 +66477,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66499,11 +66499,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66521,11 +66521,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66543,11 +66543,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66565,11 +66565,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66587,11 +66587,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66609,11 +66609,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66631,11 +66631,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66653,11 +66653,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66675,11 +66675,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66697,11 +66697,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66719,11 +66719,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66741,11 +66741,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66768,12 +66768,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66797,12 +66797,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Horses"
@@ -66823,11 +66823,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66845,11 +66845,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66867,11 +66867,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66895,12 +66895,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66924,12 +66924,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Iron"
@@ -66950,11 +66950,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66974,13 +66974,13 @@
         "Land"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -66998,11 +66998,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67020,11 +67020,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67042,11 +67042,11 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67069,12 +67069,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67098,12 +67098,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67127,13 +67127,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67153,13 +67153,13 @@
         "Sea"
       ],
       "actions": [
-        "unit_bombard",
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "bombard",
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil"
@@ -67180,12 +67180,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67203,12 +67203,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67228,12 +67228,12 @@
         "Sea"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67253,12 +67253,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ],
       "requiredResources": [
         "Oil",
@@ -67281,12 +67281,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67306,12 +67306,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     },
     {
@@ -67330,12 +67330,12 @@
         "Land"
       ],
       "actions": [
-        "unit_hold",
-        "unit_wait",
-        "unit_fortify",
-        "unit_disband",
-        "unit_goto",
-        "unit_explore"
+        "hold",
+        "wait",
+        "fortify",
+        "disband",
+        "goto",
+        "explore"
       ]
     }
   ],
@@ -71606,102 +71606,102 @@
   ],
   "terraForms": [
     {
+      "action": "buildMine",
       "id": "Terraform-1",
       "name": "Mine",
       "civilopediaEntry": "TFRM_Mine",
-      "turnsToComplete": 12,
-      "action": "unit_build_mine"
+      "turnsToComplete": 12
     },
     {
+      "action": "irrigate",
       "id": "Terraform-2",
       "name": "Irrigation",
       "civilopediaEntry": "TFRM_Irrigation",
-      "turnsToComplete": 8,
-      "action": "unit_irrigate"
+      "turnsToComplete": 8
     },
     {
+      "action": "buildFortress",
       "id": "Terraform-3",
       "name": "Fortress",
       "civilopediaEntry": "TFRM_Fortress",
       "turnsToComplete": 16,
-      "requiredTech": "tech-21",
-      "action": "unit_build_fortress"
+      "requiredTech": "tech-21"
     },
     {
+      "action": "buildRoad",
       "id": "Terraform-4",
       "name": "Road",
       "civilopediaEntry": "TFRM_Road",
-      "turnsToComplete": 6,
-      "action": "unit_build_road"
+      "turnsToComplete": 6
     },
     {
+      "action": "buildRailroad",
       "id": "Terraform-5",
       "name": "Railroad",
       "civilopediaEntry": "TFRM_Railroad",
       "turnsToComplete": 12,
-      "requiredTech": "tech-45",
-      "action": "unit_build_railroad"
+      "requiredTech": "tech-45"
     },
     {
+      "action": "plantForest",
       "id": "Terraform-6",
       "name": "Plant Forest",
       "civilopediaEntry": "TFRM_Plant_Forest",
       "turnsToComplete": 18,
-      "requiredTech": "tech-24",
-      "action": "unit_plant_forest"
+      "requiredTech": "tech-24"
     },
     {
+      "action": "clearForest",
       "id": "Terraform-7",
       "name": "Clear Forest",
       "civilopediaEntry": "TFRM_Clear_Forest",
-      "turnsToComplete": 4,
-      "action": "unit_clear_forest"
+      "turnsToComplete": 4
     },
     {
+      "action": "clearWetlands",
       "id": "Terraform-8",
       "name": "Clear Wetlands",
       "civilopediaEntry": "TFRM_Clear_Wetlands",
-      "turnsToComplete": 16,
-      "action": "unit_clear_wetlands"
+      "turnsToComplete": 16
     },
     {
+      "action": "clearDamage",
       "id": "Terraform-9",
       "name": "Clear Damage",
       "civilopediaEntry": "TFRM_Clear_Damage",
-      "turnsToComplete": 24,
-      "action": "unit_clear_damage"
+      "turnsToComplete": 24
     },
     {
+      "action": "buildAirfield",
       "id": "Terraform-10",
       "name": "Airfield",
       "civilopediaEntry": "TFRM_Airfield",
       "turnsToComplete": 1,
-      "requiredTech": "tech-59",
-      "action": "unit_build_airfield"
+      "requiredTech": "tech-59"
     },
     {
+      "action": "buildRadarTower",
       "id": "Terraform-11",
       "name": "Radar Tower",
       "civilopediaEntry": "TFRM_Radar_Tower",
       "turnsToComplete": 1,
-      "requiredTech": "tech-64",
-      "action": "unit_build_radar_tower"
+      "requiredTech": "tech-64"
     },
     {
+      "action": "buildOutpost",
       "id": "Terraform-12",
       "name": "Outpost",
       "civilopediaEntry": "TFRM_Outpost",
       "turnsToComplete": 1,
-      "requiredTech": "tech-2",
-      "action": "unit_build_outpost"
+      "requiredTech": "tech-2"
     },
     {
+      "action": "buildBarricade",
       "id": "Terraform-13",
       "name": "Barricade",
       "civilopediaEntry": "TFRM_Barricades",
       "turnsToComplete": 16,
-      "requiredTech": "tech-21",
-      "action": "unit_build_barricade"
+      "requiredTech": "tech-21"
     }
   ],
   "governments": [
