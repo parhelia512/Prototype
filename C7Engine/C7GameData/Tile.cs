@@ -52,7 +52,6 @@ namespace C7GameData {
 		public int YCoordinate;
 
 		// Needed for coordinate wrapping.
-		[JsonIgnore]
 		public GameMap map;
 
 		// An arbitrary number indicating which landmass this tile is part of,
@@ -64,13 +63,22 @@ namespace C7GameData {
 
 		public City owningCity; // The city whose border contains this tile
 		public string baseTerrainTypeKey { get; set; }
-		[JsonIgnore]
 		public TerrainType baseTerrainType = TerrainType.NONE;
 		public string overlayTerrainTypeKey { get; set; }
-		[JsonIgnore]
 		public TerrainType overlayTerrainType = TerrainType.NONE;
-		public City cityAtTile;
-		[JsonIgnore]
+
+		private City _cityAtTile;
+		public City cityAtTile {
+			get { return _cityAtTile; }
+			set {
+				_cityAtTile = value;
+				if (value != null) {
+					ClearTerrainOverlay();
+					overlays.Clear();
+				}
+			}
+		}
+
 		public bool HasCity => cityAtTile != null && cityAtTile != City.NONE;
 		public CityResident personWorkingTile = null;   //allows us to see if another city is working this tile
 		public bool hasBarbarianCamp = false;
@@ -82,7 +90,6 @@ namespace C7GameData {
 		//has the best defense, or which tile a unit is on when viewing the Military Advisor.
 		public List<MapUnit> unitsOnTile = new List<MapUnit>();
 		public string ResourceKey { get; set; }
-		[JsonIgnore]
 		public Resource Resource { get; set; }
 
 		public Dictionary<TileDirection, Tile> neighbors { get; set; } = new Dictionary<TileDirection, Tile>();
@@ -102,15 +109,14 @@ namespace C7GameData {
 		public bool riverWest;
 		public bool riverNorthwest;
 
-		public TileOverlays overlays = new TileOverlays();
+		public TileOverlays overlays;
 
 		public Tile(ID id) {
 			this.Id = id;
 			unitsOnTile = new List<MapUnit>();
 			Resource = Resource.NONE;
+			overlays = new(this);
 		}
-
-		internal Tile() { }
 
 		// TODO: this should be either an extension in C7Engine, or otherwise
 		// calculated somewhere else, but it's not obvious to someone unfamiliar
@@ -250,9 +256,9 @@ namespace C7GameData {
 				yield += this.Resource.FoodBonus;
 			}
 
-			if (this.overlays.irrigation) {
+			if (this.overlays.HasImprovement(TerrainImprovement.irrigation)) {
 				yield += this.overlayTerrainType.irrigationBonus;
-				if (this.overlays.railroad) {
+				if (this.overlays.HasImprovement(TerrainImprovement.railroad)) {
 					yield += 1;
 				}
 			}
@@ -309,9 +315,9 @@ namespace C7GameData {
 				yield += this.Resource.ShieldsBonus;
 			}
 
-			if (this.overlays.mine) {
+			if (this.overlays.HasImprovement(TerrainImprovement.mine)) {
 				yield += this.overlayTerrainType.miningBonus;
-				if (this.overlays.railroad) {
+				if (this.overlays.HasImprovement(TerrainImprovement.railroad)) {
 					yield += 1;
 				}
 			}
@@ -337,7 +343,7 @@ namespace C7GameData {
 			if (BordersRiver()) {
 				yield += 1;
 			}
-			if (overlays.road) {
+			if (overlays.HasRoad()) {
 				yield += overlayTerrainType.roadBonus;
 			}
 
@@ -388,11 +394,7 @@ namespace C7GameData {
 		}
 
 		public bool CanBeMined() {
-			return overlayTerrainType.miningBonus > 0 && !overlays.mine && !overlays.irrigation && cityAtTile == null;
-		}
-
-		public bool CanBeRoaded() {
-			return IsLand() && !overlays.road;
+			return overlayTerrainType.miningBonus > 0 && overlays.CanAdd(TerrainImprovement.mine);
 		}
 
 		// TODO: This method doesn't handle two important irrigation cases:
@@ -401,9 +403,8 @@ namespace C7GameData {
 		public bool CanBeIrrigated(Player player) {
 			// Irrigation can't be done if there is no irrigation bonus for the
 			// tile or if there's already an improvement or city on the tile.
-			if (overlayTerrainType.irrigationBonus == 0 ||
-				overlays.mine ||
-				overlays.irrigation ||
+			if (!overlays.CanAdd(TerrainImprovement.irrigation) ||
+				overlayTerrainType.irrigationBonus == 0 ||
 				cityAtTile != null) {
 				return false;
 			}
@@ -415,7 +416,7 @@ namespace C7GameData {
 
 			foreach (KeyValuePair<TileDirection, Tile> dirToTile in neighbors) {
 				// If a neighboring tile is irrigated, this tile has fresh water access.
-				if (dirToTile.Value.overlays.irrigation) {
+				if (dirToTile.Value.overlays.HasImprovement(TerrainImprovement.irrigation)) {
 					return true;
 				}
 
@@ -427,7 +428,7 @@ namespace C7GameData {
 					}
 
 					foreach (var (dir, tile) in dirToTile.Value.neighbors) {
-						if (tile.overlays.irrigation) {
+						if (tile.overlays.HasImprovement(TerrainImprovement.irrigation)) {
 							return true;
 						}
 					}
@@ -553,8 +554,10 @@ namespace C7GameData {
 			overlayTerrainTypeKey = baseTerrainTypeKey;
 		}
 
-		public Tile ShallowCopy() {
-			return (Tile)MemberwiseClone();
+		public Tile Copy() {
+			Tile clone = (Tile)MemberwiseClone();
+			clone.overlays = new TileOverlays(overlays);
+			return clone;
 		}
 	}
 
@@ -599,14 +602,66 @@ namespace C7GameData {
 		}
 	}
 
-	public struct TileOverlays {
-		public bool road = false;
-		// assume that railroad contains road too
-		public bool railroad = false;
-		public bool mine = false;
-		public bool irrigation = false;
+	public class TileOverlays {
+		private readonly Tile tile;
+		private Dictionary<TerrainImprovement.Layer, TerrainImprovement> terrainImprovementByLayer = [];
 
-		public TileOverlays() {
+		public TileOverlays(Tile tile) {
+			this.tile = tile;
+		}
+
+		public TileOverlays(TileOverlays other)
+			: this(other.tile) {
+			terrainImprovementByLayer = new(other.terrainImprovementByLayer);
+		}
+
+		public void Add(TerrainImprovement improvement) {
+			if (!CanAdd(improvement))
+				throw new InvalidOperationException($"Cannot add {improvement.key} to the tile");
+
+			terrainImprovementByLayer[improvement.layer] = improvement;
+		}
+
+		public bool HasImprovement(TerrainImprovement improvement) {
+			return terrainImprovementByLayer.TryGetValue(improvement.layer, out TerrainImprovement val) && val == improvement;
+		}
+
+		public IEnumerable<TerrainImprovement> GetImprovements() {
+			return terrainImprovementByLayer.Values;
+		}
+
+		public bool CanAdd(TerrainImprovement improvement) {
+			if (tile.HasCity)
+				return false;
+
+			if (!terrainImprovementByLayer.TryGetValue(improvement.layer, out var current))
+				return improvement.upgradesFrom == null;
+
+			if (current == improvement || current.upgradesFrom == improvement)
+				return false;
+
+			return improvement.upgradesFrom == current;
+		}
+
+		public bool HasRoad() {
+			return terrainImprovementByLayer.ContainsKey(TerrainImprovement.Layer.Roads) || tile.HasCity;
+		}
+
+		// Will return a -1 if the tile movement cost is unaffected by the improvements
+		public float MovementCost() {
+			if (terrainImprovementByLayer.TryGetValue(TerrainImprovement.Layer.Roads, out TerrainImprovement road)) {
+				return road.movementCost;
+			}
+
+			if (tile.HasCity) {
+				return 0;
+			}
+
+			return -1;
+		}
+
+		public void Clear() {
+			terrainImprovementByLayer.Clear();
 		}
 	}
 }

@@ -5,6 +5,11 @@ namespace C7GameData {
 		public string description;
 		public double amount; // e.g. 0.25 = +25% strength
 
+		public StrengthBonus(string description, double amount) {
+			this.description = description;
+			this.amount = amount;
+		}
+
 		// Converts a list of strength bonuses to a multiplier on strength. For example, a list of two bonuses of +10% and +25% would return a
 		// multiplier of 1.35. Multipliers cannot be less than zero.
 		public static double ListToMultiplier(IEnumerable<StrengthBonus> bonuses) {

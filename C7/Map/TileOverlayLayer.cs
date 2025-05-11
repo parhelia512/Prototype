@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using C7GameData;
 using Godot;
 
@@ -45,12 +46,12 @@ namespace C7.Map {
 			Rect2 screenTarget = new Rect2(tileCenter - tileSize / 2, tileSize);
 
 			// Irrigation shows up under roads, so draw that first.
-			if (tile.overlays.irrigation) {
+			if (tile.overlays.HasImprovement(TerrainImprovement.irrigation)) {
 				// Figure out which index into the irrigation texture to use for
 				// this tile.
 				int irrigationIndex = 0;
 				foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-					if (dirToTile.Value.overlays.irrigation) {
+					if (dirToTile.Value.overlays.HasImprovement(TerrainImprovement.irrigation)) {
 						irrigationIndex |= getIrrigationFlag(dirToTile.Key);
 					}
 				}
@@ -72,10 +73,10 @@ namespace C7.Map {
 				looseView.DrawTextureRectRegion(texture, screenTarget, getIrrigationRect(irrigationIndex));
 			}
 
-			if (hasRoad(tile) && !hasRailRoad(tile)) {
+			if (hasRoad(tile)) {
 				int roadIndex = 0;
 				foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-					if (hasRoad(dirToTile.Value)) {
+					if (hasRoad(dirToTile.Value) || dirToTile.Value.HasCity) {
 						roadIndex |= getRoadFlag(dirToTile.Key);
 					}
 				}
@@ -86,7 +87,7 @@ namespace C7.Map {
 				int roadIndex = 0;
 				int railroadIndex = 0;
 				foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-					if (hasRailRoad(dirToTile.Value)) {
+					if (hasRailRoad(dirToTile.Value) || dirToTile.Value.HasCity) {
 						railroadIndex |= getRoadFlag(dirToTile.Key);
 					} else if (hasRoad(dirToTile.Value)) {
 						roadIndex |= getRoadFlag(dirToTile.Key);
@@ -99,7 +100,7 @@ namespace C7.Map {
 			}
 
 			// Mines go over roads, so draw those last.
-			if (tile.overlays.mine) {
+			if (tile.overlays.HasImprovement(TerrainImprovement.mine)) {
 				looseView.DrawTexture(mineTexture, screenTarget.Position);
 			}
 		}
@@ -161,18 +162,15 @@ namespace C7.Map {
 		}
 
 		private static bool HasAnyOverlays(Tile tile) {
-			return tile.overlays.road ||
-				tile.overlays.railroad ||
-				tile.overlays.mine ||
-				tile.overlays.irrigation;
+			return tile.overlays.GetImprovements().Any();
 		}
 
 		private static bool hasRoad(Tile tile) {
-			return tile.overlays.road;
+			return tile.overlays.HasImprovement(TerrainImprovement.road);
 		}
 
 		private static bool hasRailRoad(Tile tile) {
-			return tile.overlays.railroad;
+			return tile.overlays.HasImprovement(TerrainImprovement.railroad);
 		}
 	}
 }

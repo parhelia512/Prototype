@@ -93,18 +93,18 @@ namespace C7GameData {
 			// River crossings disrupt roads, so check that first.
 			if (from.HasRiverCrossing(dir)) return newLocation.MovementCost();
 
-			// Travelling between two tiles with railroads is free.
-			if (from.overlays.railroad && newLocation.overlays.railroad) return 0;
-
-			// Traveling from a railroad/road to a road has the cost of a road; 1/3.
-			if ((from.overlays.railroad || from.overlays.road) && newLocation.overlays.road) return 1.0f / 3;
-
 			// Special case: if we are a water unit, traveling from the water into
 			// a city, it doesn't matter if the city is on hills or on grassland,
 			// the cost should always be 1.
 			if (from.IsWater() && newLocation.HasCity) return 1;
 
-			return newLocation.MovementCost();
+			// Movement costs of terrain improvements (roads and railroads)
+			float fromCost = from.overlays.MovementCost();
+			float toCost = newLocation.overlays.MovementCost();
+
+			return (fromCost == -1 || toCost == -1)
+				? newLocation.MovementCost() // terrrain movement cost
+				: Math.Max(fromCost, toCost);
 		}
 	}
 }
