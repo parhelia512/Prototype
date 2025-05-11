@@ -57,10 +57,10 @@ public partial class UnitButtons : VBoxContainer {
 		AddNewButton(specializedControls, new UnitControlButton("buildColony", 4, 2, onButtonPressed)); //validate
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildCity, 5, 2, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildRoad, 6, 2, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("buildRailroad", 7, 2, onButtonPressed));
+		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildRailroad, 7, 2, onButtonPressed));
 
-		AddNewButton(specializedControls, new UnitControlButton("fortress", 0, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("barricade", 4, 4, onButtonPressed));
+		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildFortress, 0, 3, onButtonPressed));
+		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildBarricade, 4, 4, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildMine, 1, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitIrrigate, 2, 3, onButtonPressed));
 		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitClearForest, 3, 3, onButtonPressed));

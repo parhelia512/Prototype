@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Serilog;
 using C7Engine;
-using C7Engine.Pathing;
 
 namespace C7GameData {
 	public class CityBuilding {
@@ -103,11 +102,9 @@ namespace C7GameData {
 		}
 
 		private HashSet<Resource> GetAccessibleResources() {
-			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
-
 			return owner.resourcesInBorders
 						.Where(kv => owner.KnowsAboutResource(kv.Key))
-						.Where(kv => kv.Value.Any(t => HasTradeAccess(t, pathing)))
+						.Where(kv => kv.Value.Any(t => owner.HasTradeAccess(location, t)))
 						.Select(kv => kv.Key)
 						.ToHashSet();
 		}
@@ -709,17 +706,11 @@ namespace C7GameData {
 		}
 
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {
-			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
-
 			return owner.resourcesInBorders
 				.Where(kv => kv.Key.Category == category && owner.KnowsAboutResource(kv.Key))
-				.Select(kv => (kv.Key, kv.Value.Where(t => HasTradeAccess(t, pathing)).Count()))
+				.Select(kv => (kv.Key, kv.Value.Where(t => owner.HasTradeAccess(location, t)).Count()))
 				.Where(rc => rc.Item2 > 0)
 				.ToDictionary();
-		}
-
-		private bool HasTradeAccess(Tile tile, PathingAlgorithm pathing) {
-			return location == tile || pathing.PathFrom(location, tile).path.Count > 0;
 		}
 
 		public Dictionary<Resource, int> GetStrategicResources() {

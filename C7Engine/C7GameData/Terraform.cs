@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
+using System.Linq;
+using C7GameData.Save;
 
 namespace C7GameData;
 
 public static class TerraformRules {
-	public static readonly Dictionary<UnitAction, Action<Tile>> OnCompleteActions = new() {
+	public static readonly Dictionary<UnitAction, Action<Tile>> ActionEffects = new() {
 		{UnitAction.BuildMine, tile => tile.overlays.Add(TerrainImprovement.mine)},
 		{UnitAction.Irrigate, tile => tile.overlays.Add(TerrainImprovement.irrigation)},
 		{UnitAction.BuildRoad, tile => tile.overlays.Add(TerrainImprovement.road)},
@@ -19,6 +20,7 @@ public static class TerraformRules {
 		{UnitAction.BuildMine, (_, tile) => tile.CanBeMined()},
 		{UnitAction.Irrigate, (player, tile) => tile.CanBeIrrigated(player)},
 		{UnitAction.BuildRoad, (_, tile) => tile.overlays.CanAdd(TerrainImprovement.road)},
+		{UnitAction.BuildRailroad, (_, tile) => tile.overlays.CanAdd(TerrainImprovement.railroad)},
 		{UnitAction.ClearWetlands, (_, tile) => tile.overlayTerrainType.allowedWorkerActions.Contains(UnitAction.ClearWetlands)},
 		{UnitAction.ClearForest, (_, tile) =>  tile.overlayTerrainType.allowedWorkerActions.Contains(UnitAction.ClearForest)}
 	};
@@ -26,38 +28,60 @@ public static class TerraformRules {
 
 public class Terraform {
 	public ID Id;
-
 	public string Name;
-
 	public string CivilopediaEntry;
-
 	public int TurnsToComplete;
-
 	public ID RequiredTech;
+	public UnitAction Action;
 
-	public List<ID> RequiredResources = new();
+	public List<Resource> RequiredResources = [];
 
-	[JsonIgnore]
 	public Action<Tile> OnComplete;
+	private Func<Player, Tile, bool> ActionValidator;
 
-	[JsonIgnore]
-	public Func<Player, Tile, bool> MeetsRequirements;
+	private SaveTerraform dataSource;
 
-	public UnitAction Action {
-		get => _action;
-		set {
-			_action = value;
+	public Terraform(SaveTerraform saveTerraform, GameData gameData) {
+		Id = saveTerraform.Id;
+		Name = saveTerraform.Name;
+		CivilopediaEntry = saveTerraform.CivilopediaEntry;
+		TurnsToComplete = saveTerraform.TurnsToComplete;
+		RequiredTech = saveTerraform.RequiredTech;
+		Action = saveTerraform.Action;
+		dataSource = saveTerraform;
+		RequiredResources = saveTerraform.RequiredResources.ConvertAll(resKey => gameData.Resources.Find(res => res.Key == resKey));
 
-			if (TerraformRules.OnCompleteActions.TryGetValue(value, out var onComplete)) {
-				OnComplete = onComplete;
-			}
+		SetRules();
+	}
 
-			if (TerraformRules.ActionValidators.TryGetValue(value, out var prerequisite)) {
-				MeetsRequirements = prerequisite;
-			} else {
-				MeetsRequirements = (_, _) => false;
-			}
+	private void SetRules() {
+		if (TerraformRules.ActionEffects.TryGetValue(Action, out var onComplete)) {
+			OnComplete = onComplete;
+		} else {
+			OnComplete = (_) => { };
+		}
+
+		if (TerraformRules.ActionValidators.TryGetValue(Action, out var prerequisite)) {
+			ActionValidator = prerequisite;
+		} else {
+			ActionValidator = (_, _) => false;
 		}
 	}
-	private UnitAction _action;
+
+	public bool MeetsRequirements(Player player, Tile tile) {
+		bool hasTech = RequiredTech == null || player.knownTechs.Contains(RequiredTech);
+
+		bool hasResources = RequiredResources.All(
+			res =>
+				player.KnowsAboutResource(res) &&
+				player.resourcesInBorders.ContainsKey(res) &&
+				player.resourcesInBorders[res].Any(resTile => player.HasTradeAccess(tile, resTile))
+		);
+
+		return hasTech && hasResources && ActionValidator(player, tile);
+	}
+
+	public SaveTerraform ToSaveTerraform() {
+		return dataSource;
+	}
 }

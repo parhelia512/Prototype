@@ -672,6 +672,7 @@ namespace C7GameData {
 				case UnitAction.BuildMine:
 					animate(MapUnit.AnimatedAction.MINE, false, AnimationEnding.Repeat);
 					return;
+				case UnitAction.BuildRailroad:
 				case UnitAction.BuildRoad:
 					animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
 					return;

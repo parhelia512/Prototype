@@ -48,7 +48,7 @@ namespace C7GameData.Save {
 		public SaveGame() { }
 
 		public static SaveGame FromGameData(GameData data) {
-			SaveGame save = new SaveGame{
+			SaveGame save = new SaveGame {
 				Seed = data.seed,
 				TurnNumber = data.turn,
 				Civilizations = data.civilizations,
@@ -62,6 +62,15 @@ namespace C7GameData.Save {
 				Players = data.players.ConvertAll(player => new SavePlayer(player)),
 				Cities = data.cities.ConvertAll(city => new SaveCity(city)),
 				ExperienceLevels = data.experienceLevels,
+				ScenarioSearchPath = data.scenarioSearchPath,
+				DefaultExperienceLevel = data.defaultExperienceLevelKey,
+				Techs = data.techs.ConvertAll(t => t.ToSaveTech()),
+				CitizenTypes = data.citizenTypes,
+				TerraForms = data.Terraforms.ConvertAll(t => t.ToSaveTerraform()),
+				Governments = data.governments,
+				Difficulties = data.difficulties,
+				GameDifficulty = data.gameDifficulty,
+				Rules = data.rules
 			};
 			save.StrengthBonuses.Add(data.fortificationBonus);
 			save.StrengthBonuses.Add(data.riverCrossingBonus);
@@ -72,15 +81,7 @@ namespace C7GameData.Save {
 			save.HealRates["neutral_field"] = data.healRateInNeutralField;
 			save.HealRates["hostile_field"] = data.healRateInHostileField;
 			save.HealRates["city"] = data.healRateInCity;
-			save.ScenarioSearchPath = data.scenarioSearchPath;
-			save.DefaultExperienceLevel = data.defaultExperienceLevelKey;
-			save.Techs = data.techs.ConvertAll(t => t.ToSaveTech());
-			save.CitizenTypes = data.citizenTypes;
-			save.TerraForms = data.Terraforms;
-			save.Governments = data.governments;
-			save.Difficulties = data.difficulties;
-			save.GameDifficulty = data.gameDifficulty;
-			save.Rules = data.rules;
+
 			return save;
 		}
 
@@ -93,6 +94,7 @@ namespace C7GameData.Save {
 
 		public GameData ToGameData() {
 			GameData data = InitializeGameData();
+			ConvertTerraforms(data);
 			ConvertMapAndPlayers(data);
 			ConvertTechnologies(data);
 			ConvertBuildings(data);
@@ -136,7 +138,6 @@ namespace C7GameData.Save {
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
 				citizenTypes = CitizenTypes,
-				Terraforms = TerraForms,
 				governments = Governments,
 				difficulties = Difficulties,
 				gameDifficulty = GameDifficulty,
@@ -144,6 +145,10 @@ namespace C7GameData.Save {
 				experienceLevels = ExperienceLevels,
 				rules = Rules,
 			};
+		}
+
+		private void ConvertTerraforms(GameData data) {
+			data.Terraforms = TerraForms.ConvertAll(st => new Terraform(st, data));
 		}
 
 		private void ConvertMapAndPlayers(GameData data) {
@@ -321,7 +326,7 @@ namespace C7GameData.Save {
 		public Rules Rules = new();
 		public List<SaveTech> Techs = new();
 		public List<CitizenType> CitizenTypes = new();
-		public List<Terraform> TerraForms = new();
+		public List<SaveTerraform> TerraForms = new();
 		public List<Government> Governments = new();
 
 		// The relative directory that can be used to find scenario-specific

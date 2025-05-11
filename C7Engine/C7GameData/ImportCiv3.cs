@@ -693,6 +693,7 @@ namespace C7GameData {
 		private static IEnumerable<UnitAction> GetUnitActions(PRTO prto) {
 			if (prto.BuildCity) yield return UnitAction.BuildCity;
 			if (prto.BuildRoad) yield return UnitAction.BuildRoad;
+			if (prto.BuildRailroad) yield return UnitAction.BuildRailroad;
 			if (prto.BuildMine) yield return UnitAction.BuildMine;
 			if (prto.Irrigate) yield return UnitAction.Irrigate;
 			if (prto.ClearJungle) yield return UnitAction.ClearWetlands;
@@ -1133,7 +1134,7 @@ namespace C7GameData {
 			for (int i = 0; i < theBiq.Tfrm.Length; ++i) {
 				TFRM t = theBiq.Tfrm[i];
 
-				Terraform tf = new() {
+				SaveTerraform tf = new() {
 					Id = ids.CreateID("Terraform"),
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
@@ -1142,6 +1143,12 @@ namespace C7GameData {
 				};
 				if (t.Required > -1) {
 					tf.RequiredTech = save.Techs[t.Required].id;
+				}
+				if (t.RequiredResource1 > -1) {
+					tf.RequiredResources.Add(save.Resources[t.RequiredResource1].Key);
+				}
+				if (t.RequiredResource2 > -1) {
+					tf.RequiredResources.Add(save.Resources[t.RequiredResource2].Key);
 				}
 				save.TerraForms.Add(tf);
 			}

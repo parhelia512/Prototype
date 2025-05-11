@@ -64062,7 +64062,7 @@
   "unitPrototypes": [
     {
       "name": "Settler",
-      "artName": "Settler Modern Times",
+      "artName": "Settler",
       "shieldCost": 30,
       "populationCost": 2,
       "attack": 0,
@@ -64086,7 +64086,7 @@
     },
     {
       "name": "Worker",
-      "artName": "Worker Modern Times",
+      "artName": "Worker",
       "shieldCost": 10,
       "populationCost": 1,
       "attack": 0,
@@ -71606,102 +71606,106 @@
   ],
   "terraForms": [
     {
-      "action": "buildMine",
       "id": "Terraform-1",
       "name": "Mine",
       "civilopediaEntry": "TFRM_Mine",
-      "turnsToComplete": 12
+      "turnsToComplete": 12,
+      "action": "buildMine"
     },
     {
-      "action": "irrigate",
       "id": "Terraform-2",
       "name": "Irrigation",
       "civilopediaEntry": "TFRM_Irrigation",
-      "turnsToComplete": 8
+      "turnsToComplete": 8,
+      "action": "irrigate"
     },
     {
-      "action": "buildFortress",
       "id": "Terraform-3",
       "name": "Fortress",
       "civilopediaEntry": "TFRM_Fortress",
       "turnsToComplete": 16,
-      "requiredTech": "tech-21"
+      "requiredTech": "tech-21",
+      "action": "buildFortress"
     },
     {
-      "action": "buildRoad",
       "id": "Terraform-4",
       "name": "Road",
       "civilopediaEntry": "TFRM_Road",
-      "turnsToComplete": 6
+      "turnsToComplete": 6,
+      "action": "buildRoad"
     },
     {
-      "action": "buildRailroad",
       "id": "Terraform-5",
       "name": "Railroad",
       "civilopediaEntry": "TFRM_Railroad",
       "turnsToComplete": 12,
-      "requiredTech": "tech-45"
+      "requiredTech": "tech-45",
+      "requiredResources": [
+        "Iron",
+        "Coal"
+      ],
+      "action": "buildRailroad"
     },
     {
-      "action": "plantForest",
       "id": "Terraform-6",
       "name": "Plant Forest",
       "civilopediaEntry": "TFRM_Plant_Forest",
       "turnsToComplete": 18,
-      "requiredTech": "tech-24"
+      "requiredTech": "tech-24",
+      "action": "plantForest"
     },
     {
-      "action": "clearForest",
       "id": "Terraform-7",
       "name": "Clear Forest",
       "civilopediaEntry": "TFRM_Clear_Forest",
-      "turnsToComplete": 4
+      "turnsToComplete": 4,
+      "action": "clearForest"
     },
     {
-      "action": "clearWetlands",
       "id": "Terraform-8",
       "name": "Clear Wetlands",
       "civilopediaEntry": "TFRM_Clear_Wetlands",
-      "turnsToComplete": 16
+      "turnsToComplete": 16,
+      "action": "clearWetlands"
     },
     {
-      "action": "clearDamage",
       "id": "Terraform-9",
       "name": "Clear Damage",
       "civilopediaEntry": "TFRM_Clear_Damage",
-      "turnsToComplete": 24
+      "turnsToComplete": 24,
+      "action": "clearDamage"
     },
     {
-      "action": "buildAirfield",
       "id": "Terraform-10",
       "name": "Airfield",
       "civilopediaEntry": "TFRM_Airfield",
       "turnsToComplete": 1,
-      "requiredTech": "tech-59"
+      "requiredTech": "tech-59",
+      "action": "buildAirfield"
     },
     {
-      "action": "buildRadarTower",
       "id": "Terraform-11",
       "name": "Radar Tower",
       "civilopediaEntry": "TFRM_Radar_Tower",
       "turnsToComplete": 1,
-      "requiredTech": "tech-64"
+      "requiredTech": "tech-64",
+      "action": "buildRadarTower"
     },
     {
-      "action": "buildOutpost",
       "id": "Terraform-12",
       "name": "Outpost",
       "civilopediaEntry": "TFRM_Outpost",
       "turnsToComplete": 1,
-      "requiredTech": "tech-2"
+      "requiredTech": "tech-2",
+      "action": "buildOutpost"
     },
     {
-      "action": "buildBarricade",
       "id": "Terraform-13",
       "name": "Barricade",
       "civilopediaEntry": "TFRM_Barricades",
       "turnsToComplete": 16,
-      "requiredTech": "tech-21"
+      "requiredTech": "tech-21",
+      "action": "buildBarricade"
     }
   ],
   "governments": [
