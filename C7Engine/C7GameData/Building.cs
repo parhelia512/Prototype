@@ -94,7 +94,9 @@ namespace C7GameData {
 
 		public HashSet<Resource> requiredResources { get; set; } = [];
 
-		public SaveBuilding dataSource;
+		public int iconRowIndex = 0;
+
+		SaveBuilding dataSource;
 
 		public Building(SaveBuilding building) {
 			name = building.name;
@@ -103,6 +105,7 @@ namespace C7GameData {
 			isGreatWonder = building.isGreatWonder;
 			isSmallWonder = building.isSmallWonder;
 			culturePerTurn = building.culturePerTurn;
+			iconRowIndex = building.iconRowIndex;
 			if (building.contentFacesInCity < 0) {
 				unhappyFacesInCity = -building.contentFacesInCity;
 			} else {

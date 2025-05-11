@@ -373,7 +373,7 @@ public partial class CityScreen : Control {
 			imageTintSprite.Position = baseImageSprite.Position;
 			productionButton.AddChild(imageTintSprite);
 		} else if (city.itemBeingProduced is Building b) {
-			int y = 32 + 1 + 41 * b.dataSource.iconRowIndex;
+			int y = 32 + 1 + 41 * b.iconRowIndex;
 			const int iconWidth = 50, iconHeight = 40;
 
 			Sprite2D icon = new();

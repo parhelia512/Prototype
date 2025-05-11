@@ -286,7 +286,7 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 				y = 1 + 33 * (proto.iconIndex / iconsPerRow);
 			return Util.LoadTextureFromPCX("Art/Units/units_32.pcx", x, y, iconWidth, iconHeight);
 		} else if (producible is Building b) {
-			int y = 1 + 33 * (1 + b.dataSource.iconRowIndex);
+			int y = 1 + 33 * (1 + b.iconRowIndex);
 			return Util.LoadTextureFromPCX("Art/city screen/buildings-small.pcx", 33, y, iconWidth, iconHeight);
 		} else {
 			return null;
