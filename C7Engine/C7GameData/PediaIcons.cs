@@ -24,6 +24,10 @@ namespace C7GameData {
 		// leader in each era, like `art\advisors\LZ_all.pcx`.
 		private readonly Dictionary<string, string> raceToArtMapping = new();
 
+		// A mapping from the building civilopedia name to the row within the
+		// building icon art file.
+		public readonly Dictionary<string, int> buildingToRowNumberMapping = new();
+
 		private readonly string pediaIconsPath;
 
 		public PediaIcons(string path) {
@@ -57,6 +61,13 @@ namespace C7GameData {
 					// +2 because the line at +1 is the leaderheads neutral
 					// victory image.
 					raceToArtMapping[lines[i]] = lines[i + 2];
+				}
+
+				if (lines[i].StartsWith("#ICON_BLDG") && i + 2 < lines.Length) {
+					// +2 because +1 specifies if the building has different
+					// columns for culture groups or by era. We don't try to
+					// support that yet.
+					buildingToRowNumberMapping[lines[i].Substring(6)] = Int32.Parse(lines[i + 2]);
 				}
 			}
 		}

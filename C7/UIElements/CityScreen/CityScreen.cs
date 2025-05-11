@@ -372,12 +372,20 @@ public partial class CityScreen : Control {
 			imageTintSprite.Material = material;
 			imageTintSprite.Position = baseImageSprite.Position;
 			productionButton.AddChild(imageTintSprite);
+		} else if (city.itemBeingProduced is Building b) {
+			int y = 32 + 1 + 41 * b.iconRowIndex;
+			const int iconWidth = 50, iconHeight = 40;
 
-			Label productionButtonLabel = new();
-			productionButton.AddChild(productionButtonLabel);
-			productionButtonLabel.SetPosition(new Vector2(0, 65));
-			productionButtonLabel.SetTextAndCenterLabel($"{city.itemBeingProduced.name}");
+			Sprite2D icon = new();
+			icon.Texture = Util.LoadTextureFromPCX("Art/city screen/buildings-large.pcx", 33, y, iconWidth, iconHeight);
+			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
+			productionButton.AddChild(icon);
 		}
+
+		Label productionButtonLabel = new();
+		productionButton.AddChild(productionButtonLabel);
+		productionButtonLabel.SetPosition(new Vector2(0, 65));
+		productionButtonLabel.SetTextAndCenterLabel($"{city.itemBeingProduced.name}");
 
 		productionMenu.AddItems(city, (IProducible p) => {
 			using UIGameDataAccess gameDataAccess = new();
