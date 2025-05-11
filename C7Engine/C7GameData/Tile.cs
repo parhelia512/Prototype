@@ -654,7 +654,7 @@ namespace C7GameData {
 			}
 
 			if (tile.HasCity) {
-				return TerrainImprovement.road.movementCost;
+				return 0;
 			}
 
 			return -1;
