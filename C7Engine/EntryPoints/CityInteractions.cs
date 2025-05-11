@@ -6,10 +6,8 @@ namespace C7Engine {
 	using C7GameData;
 
 	public class CityInteractions {
-		public static City BuildCity(int X, int Y, ID playerID, string name) {
+		public static City BuildCity(Tile tileWithNewCity, Player owner, string name) {
 			GameData gameData = EngineStorage.gameData;
-			Player owner = gameData.GetPlayer(playerID);
-			Tile tileWithNewCity = gameData.map.tileAt(X, Y);
 			City newCity = new City(tileWithNewCity, owner, name, gameData.ids.CreateID("city"));
 			if (owner.cities.Count == 0) {
 				newCity.capital = true;

@@ -52,7 +52,6 @@ namespace C7GameData {
 		public int YCoordinate;
 
 		// Needed for coordinate wrapping.
-		[JsonIgnore]
 		public GameMap map;
 
 		// An arbitrary number indicating which landmass this tile is part of,
@@ -64,13 +63,22 @@ namespace C7GameData {
 
 		public City owningCity; // The city whose border contains this tile
 		public string baseTerrainTypeKey { get; set; }
-		[JsonIgnore]
 		public TerrainType baseTerrainType = TerrainType.NONE;
 		public string overlayTerrainTypeKey { get; set; }
-		[JsonIgnore]
 		public TerrainType overlayTerrainType = TerrainType.NONE;
-		public City cityAtTile;
-		[JsonIgnore]
+
+		private City _cityAtTile;
+		public City cityAtTile {
+			get { return _cityAtTile; }
+			set {
+				_cityAtTile = value;
+				if (value != null) {
+					ClearTerrainOverlay();
+					overlays.Clear();
+				}
+			}
+		}
+
 		public bool HasCity => cityAtTile != null && cityAtTile != City.NONE;
 		public CityResident personWorkingTile = null;   //allows us to see if another city is working this tile
 		public bool hasBarbarianCamp = false;
@@ -82,7 +90,6 @@ namespace C7GameData {
 		//has the best defense, or which tile a unit is on when viewing the Military Advisor.
 		public List<MapUnit> unitsOnTile = new List<MapUnit>();
 		public string ResourceKey { get; set; }
-		[JsonIgnore]
 		public Resource Resource { get; set; }
 
 		public Dictionary<TileDirection, Tile> neighbors { get; set; } = new Dictionary<TileDirection, Tile>();
@@ -647,10 +654,14 @@ namespace C7GameData {
 			}
 
 			if (tile.HasCity) {
-				return TerrainImprovement.road.movementCost;
+				return 0;
 			}
 
 			return -1;
+		}
+
+		public void Clear() {
+			terrainImprovementByLayer.Clear();
 		}
 	}
 }

@@ -76,7 +76,7 @@ namespace C7.Map {
 			if (hasRoad(tile)) {
 				int roadIndex = 0;
 				foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-					if (hasRoad(dirToTile.Value)) {
+					if (hasRoad(dirToTile.Value) || dirToTile.Value.HasCity) {
 						roadIndex |= getRoadFlag(dirToTile.Key);
 					}
 				}
@@ -87,7 +87,7 @@ namespace C7.Map {
 				int roadIndex = 0;
 				int railroadIndex = 0;
 				foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-					if (hasRailRoad(dirToTile.Value)) {
+					if (hasRailRoad(dirToTile.Value) || dirToTile.Value.HasCity) {
 						railroadIndex |= getRoadFlag(dirToTile.Key);
 					} else if (hasRoad(dirToTile.Value)) {
 						roadIndex |= getRoadFlag(dirToTile.Key);
