@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
 using C7GameData.Save;
+using C7Engine.Pathing;
 using Serilog;
 
 namespace C7GameData {
@@ -661,7 +662,7 @@ namespace C7GameData {
 
 		public void UpdateResourcesInBorders(IEnumerable<Tile> ownedTiles) {
 			resourcesInBorders = ownedTiles
-								.Where(t => t.Resource != null)
+								.Where(t => t.Resource != Resource.NONE)
 								.GroupBy(t => t.Resource)
 								.ToDictionary(g => g.Key, g => g.ToList());
 		}
@@ -671,6 +672,12 @@ namespace C7GameData {
 				   knownTechs.Contains(producible.requiredTech.id);
 		}
 
+		// TODO: Take wars into account. Trade networks cannot pass through civilizations the player's at war with
+		public bool HasTradeAccess(Tile from, Tile to) {
+			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
+
+			return from == to || pathing.PathFrom(from, to).path.Count > 0;
+		}
 	}
 
 }
