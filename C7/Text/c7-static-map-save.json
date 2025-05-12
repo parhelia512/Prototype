@@ -63126,7 +63126,8 @@
         "Oil",
         "Incense",
         "Oasis"
-      ]
+      ],
+      "height": 0
     },
     {
       "key": "plains",
@@ -63153,7 +63154,8 @@
         "Cattle",
         "Wheat",
         "Sugar"
-      ]
+      ],
+      "height": 0
     },
     {
       "key": "grassland",
@@ -63179,7 +63181,8 @@
         "Cattle",
         "Wheat",
         "Tobacco"
-      ]
+      ],
+      "height": 0
     },
     {
       "key": "tundra",
@@ -63204,7 +63207,8 @@
         "Aluminum",
         "Furs",
         "Game"
-      ]
+      ],
+      "height": 0
     },
     {
       "key": "flood plain",
@@ -63223,7 +63227,8 @@
       },
       "allowedResources": [
         "Wheat"
-      ]
+      ],
+      "height": 0
     },
     {
       "key": "hills",
@@ -63251,7 +63256,8 @@
         "Gold",
         "Sugar",
         "Tobacco"
-      ]
+      ],
+      "height": 2
     },
     {
       "key": "mountains",
@@ -63275,7 +63281,8 @@
         "Uranium",
         "Gems",
         "Gold"
-      ]
+      ],
+      "height": 4
     },
     {
       "key": "forest",
@@ -63304,7 +63311,8 @@
         "Ivory",
         "Silks",
         "Game"
-      ]
+      ],
+      "height": 1
     },
     {
       "key": "jungle",
@@ -63332,7 +63340,8 @@
         "Silks",
         "Gems",
         "Tropical Fruit"
-      ]
+      ],
+      "height": 1
     },
     {
       "key": "marsh",
@@ -63357,7 +63366,8 @@
         "Rubber",
         "Game",
         "Fish"
-      ]
+      ],
+      "height": -2
     },
     {
       "key": "volcano",
@@ -63373,7 +63383,8 @@
       "defenseBonus": {
         "description": "Volcano",
         "amount": 0.8
-      }
+      },
+      "height": 4
     },
     {
       "key": "coast",
@@ -63392,7 +63403,8 @@
       },
       "allowedResources": [
         "Fish"
-      ]
+      ],
+      "height": -2
     },
     {
       "key": "sea",
@@ -63412,7 +63424,8 @@
       "allowedResources": [
         "Whales",
         "Fish"
-      ]
+      ],
+      "height": -2
     },
     {
       "key": "ocean",
@@ -63428,7 +63441,8 @@
       "defenseBonus": {
         "description": "Ocean",
         "amount": 0.1
-      }
+      },
+      "height": -2
     }
   ],
   "resources": [

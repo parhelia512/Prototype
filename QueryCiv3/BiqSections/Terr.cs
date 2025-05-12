@@ -39,7 +39,7 @@ namespace QueryCiv3.Biq {
 		public byte AllowForts;
 		public byte AllowOutposts;
 		public byte AllowRadarTowers;
-		private fixed byte Unknown[4];
+		private int Unknown;
 		public byte LandmarkEnabled;
 		public int LandmarkFood;
 		public int LandmarkShields;
@@ -54,7 +54,7 @@ namespace QueryCiv3.Biq {
 		public string LandmarkName { get => Util.GetString(ref this, 157, 32); }
 		public string LandmarkCivilopediaEntry { get => Util.GetString(ref this, 189, 32); }
 
-		private fixed byte Unknown2[4];
+		private int Unknown2;
 		public int TerrainFlags;
 		public int DiseaseStrength;
 	}

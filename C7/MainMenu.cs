@@ -163,10 +163,6 @@ public partial class MainMenu : Node2D {
 				}
 			}
 			player.tileKnowledge.Clear();
-			player.tileKnowledge.Add(startingLocation);
-			foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
-				player.tileKnowledge.Add(Tile.NeighborCoordinate(startingLocation, direction));
-			}
 		}
 
 		log.Information("saving generated map");

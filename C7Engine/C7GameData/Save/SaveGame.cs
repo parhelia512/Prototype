@@ -118,6 +118,12 @@ namespace C7GameData.Save {
 						}
 					}
 				}
+
+				// Backfill visibility.
+				foreach (MapUnit u in p.units) {
+					p.tileKnowledge.AddTilesToKnown(u.location);
+				}
+
 				// TODO: this may require more than one loop, because if all the
 				// citizens are happy it reduces wasted shields via we love the
 				// king day.
