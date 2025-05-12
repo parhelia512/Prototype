@@ -24,6 +24,9 @@ namespace C7Engine {
 		}
 
 		public static void SetValue(string section, string key, string value) {
+			if (settings == null) {
+				LoadSettings();
+			}
 			settings[section][key] = value;
 		}
 
