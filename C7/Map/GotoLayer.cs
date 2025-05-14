@@ -40,8 +40,8 @@ public partial class GotoLayer : LooseLayer {
 			gotoCursorSprite = new AnimatedSprite2D();
 			SpriteFrames frames = new SpriteFrames();
 			gotoCursorSprite.SpriteFrames = frames;
-			AnimationManager.loadCursorAnimation("Art/Animations/Cursor/Cursor.flc", ref frames);
-			gotoCursorSprite.Animation = "cursor"; // hardcoded in loadCursorAnimation
+			AnimationManager.loadNonTintedAnimation("Art/Animations/Cursor/Cursor.flc", "cursor", ref frames);
+			gotoCursorSprite.Animation = "cursor";
 
 			gotoLabel = new() {
 				Theme = whiteFontTheme
@@ -49,22 +49,14 @@ public partial class GotoLayer : LooseLayer {
 
 			looseView.AddChild(gotoLabel);
 			looseView.AddChild(gotoCursorSprite);
+			gotoCursorSprite.Play("cursor");
 		}
 
 		gotoLabel.Theme = attackingMove ? redFontTheme : whiteFontTheme;
 		gotoLabel.Text = moves.ToString();
 		Vector2 labelSize = gotoLabelFont.GetStringSize(gotoLabel.Text);
 		gotoLabel.Position = position - labelSize / 2;
-
-		// This logic is copied from UnitLayer.cs
-		const double period = 2.5;
-		double repCount = (double)Time.GetTicksMsec() / 1000.0 / period;
-		float progress = (float)(repCount - Math.Floor(repCount));
 		gotoCursorSprite.Position = position;
-		int frameCount = gotoCursorSprite.SpriteFrames.GetFrameCount("cursor");
-		int nextFrame = (int)((float)frameCount * progress);
-		nextFrame = nextFrame >= frameCount ? frameCount - 1 : (nextFrame < 0 ? 0 : nextFrame);
-		gotoCursorSprite.Frame = nextFrame;
 
 		// Now that we're positioned our objects, we can display them again.
 		gotoCursorSprite.Show();

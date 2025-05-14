@@ -26,6 +26,25 @@ namespace C7Engine {
 			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
 
+			MaybeDoPriorityReevaluation(player);
+			MaybePickTechToResearch(player, techs);
+
+			// Roughly every 4 turns, see if there are trades to be made.
+			if (GameData.rng.Next(100) < 25) {
+				AttemptTrading(player);
+			}
+
+			DoUnitActions(player);
+
+			// Before ending the turn, adjust our sliders. We do this after unit
+			// moves so that any worker moves that finished during the unit moves
+			// will be usable (like if a luxury got hooked up).
+			AdjustSliders(player);
+
+			log.Information("-> End " + player.civilization.cityNames[0] + $" turn {stopwatch.ElapsedMilliseconds} milliseconds");
+		}
+
+		private static void MaybeDoPriorityReevaluation(Player player) {
 			if (player.turnsUntilPriorityReevaluation == 0) {
 				log.Information("Re-evaluating strategic priorities for " + player);
 				List<StrategicPriority> priorities = StrategicPriorityArbitrator.Arbitrate(player);
@@ -46,7 +65,9 @@ namespace C7Engine {
 			} else {
 				player.turnsUntilPriorityReevaluation--;
 			}
+		}
 
+		private static void MaybePickTechToResearch(Player player, List<Tech> techs) {
 			if (player.currentlyResearchedTech == null) {
 				Tech toResearch = PickTechToResearch(player, techs);
 				if (toResearch == null) {
@@ -57,12 +78,9 @@ namespace C7Engine {
 					player.SetCurrentlyResearchedTech(toResearch.id);
 				}
 			}
+		}
 
-			// Roughly every 4 turns, see if there are trades to be made.
-			if (GameData.rng.Next(100) < 25) {
-				AttemptTrading(player);
-			}
-
+		private static void DoUnitActions(Player player) {
 			// Reorder the list so that settlers are last, giving our escorts a
 			// chance to configure themselves without wasting a turn.
 			player.units.Sort((x, y) => (x.unitType.name == "Settler").CompareTo(y.unitType.name == "Settler"));
@@ -125,8 +143,6 @@ namespace C7Engine {
 
 				player.tileKnowledge.AddTilesToKnown(unit.location);
 			}
-
-			log.Information("-> End " + player.civilization.cityNames[0] + $" turn {stopwatch.ElapsedMilliseconds} milliseconds");
 		}
 
 		public static UnitAI GetAIForUnit(MapUnit unit, Player player) {
@@ -376,6 +392,70 @@ namespace C7Engine {
 					continue;
 				}
 				us.ExecuteDeal(gD, them, weWant, weGive);
+			}
+		}
+
+		private static void AdjustSliders(Player player) {
+			const int MAX_SLIDER_VALUE = 10;
+			const int MAX_AI_LUXURY_SLIDER = 5;
+
+			// Start by zeroing out the sliders.
+			player.luxuryRate = 0;
+			player.scienceRate = 0;
+			player.taxRate = 0;
+
+			// Increase the luxury slider until only a small handful of cities
+			// are unhappy (sometimes making all cities happy with the luxury
+			// slider is too expensive and it's easier to just use entertainers
+			// there).
+			while (MostCitiesUnhappy(player) && player.luxuryRate < MAX_AI_LUXURY_SLIDER) {
+				++player.luxuryRate;
+			}
+
+			// Fix up any remaining unhappy cities.
+			FixRemainingUnhappyCities(player);
+
+			// Now max out the science slider and then decrease it (increasing
+			// the tax rate) until we're not losing money.
+			player.scienceRate = MAX_SLIDER_VALUE - player.luxuryRate;
+			while (player.CalculateGoldPerTurn() < 0 && player.scienceRate > 0) {
+				player.scienceRate--;
+				player.taxRate++;
+			}
+
+			log.Information($"{player} slider values: Science: {player.scienceRate}, Luxury: {player.luxuryRate}, Tax: {player.taxRate}");
+		}
+
+		// Returns true if more than 10% of the player's cities are unhappy with
+		// current settings.
+		private static bool MostCitiesUnhappy(Player player) {
+			int unhappyCities = 0;
+			foreach (City city in player.cities) {
+				city.RecalculateCitizenMoods(EngineStorage.gameData);
+				if (city.isCityUnhappy()) {
+					++unhappyCities;
+				}
+			}
+			return unhappyCities / (double)player.cities.Count > .1;
+		}
+
+		// In each city, reassign citizens, managing moods, to ensure that we
+		// don't have any cities that will riot.
+		private static void FixRemainingUnhappyCities(Player player) {
+			foreach (City city in player.cities) {
+				// TODO: This throws away existing nationalities, fix that.
+				int numResidents = city.residents.Count;
+				city.RemoveAllCitizens();
+
+				for (int i = 0; i < numResidents; ++i) {
+					CityResident newResident = new() {
+						citizenType = EngineStorage.gameData.citizenTypes.Find(x => x.IsDefaultCitizen),
+						nationality = city.owner.civilization,
+						city = city
+					};
+					city.AddCitizen(newResident);
+					CityTileAssignmentAI.AssignNewCitizenToTile(newResident, manageMoods: true);
+				}
 			}
 		}
 	}

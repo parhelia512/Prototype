@@ -141,13 +141,6 @@ public partial class CityScreen : Control {
 		}
 	}
 
-	// Returns a list of specialists that this player can use.
-	private List<CitizenType> GetKnownSpecialists(Player player) {
-		return citizenTypes.FindAll(x => {
-			return !x.IsDefaultCitizen && (x.PrerequisiteTech == null || player.knownTechs.Contains(x.PrerequisiteTech));
-		});
-	}
-
 	private void HandleReassignment(Tile tile) {
 		City city = tileAssignmentLayer.city;
 
@@ -172,7 +165,7 @@ public partial class CityScreen : Control {
 			CityResident resident = tile.personWorkingTile;
 			tile.personWorkingTile = null;
 			resident.tileWorked = Tile.NONE;
-			resident.citizenType = GetKnownSpecialists(city.owner)[0];
+			resident.citizenType = city.owner.GetKnownSpecialists()[0];
 			return;
 		}
 
@@ -202,7 +195,8 @@ public partial class CityScreen : Control {
 		}
 
 		// If we've clicked the city center, re-assign all the citizens using
-		// the basic AI.
+		// the basic AI, but specify that we want to manage moods by using
+		// entertainers if necessary.
 		//
 		// TODO: This throws away existing nationalities, fix that.
 		if (tile.cityAtTile == city) {
@@ -216,7 +210,7 @@ public partial class CityScreen : Control {
 					city = city
 				};
 				city.AddCitizen(newResident);
-				CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
+				CityTileAssignmentAI.AssignNewCitizenToTile(newResident, manageMoods: true);
 			}
 		}
 	}
@@ -471,12 +465,15 @@ public partial class CityScreen : Control {
 			tb.TextureNormal = PopHeads.GetPopHead(cr, eraNum);
 			tb.SetPosition(new Vector2(xPos, 440));
 
-			List<CitizenType> specialistTypes = GetKnownSpecialists(city.owner);
+			List<CitizenType> specialistTypes = city.owner.GetKnownSpecialists();
 			int index = specialistTypes.FindIndex(x => x.Id == cr.citizenType.Id);
 			tb.Pressed += () => {
 				cr.citizenType = specialistTypes[(index + 1) % specialistTypes.Count];
 				++index;
 				RenderPopHeads(city);
+
+				using UIGameDataAccess gDa = new();
+				RenderCommerceDetails(city);
 			};
 
 			background.AddChild(tb);

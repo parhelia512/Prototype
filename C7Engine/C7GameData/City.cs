@@ -38,6 +38,8 @@ namespace C7GameData {
 	}
 
 	public class City {
+		private static ILogger log = Log.ForContext<City>();
+
 		public ID id { get; set; }
 		public Tile location { get; internal set; }
 		public string name;
@@ -69,6 +71,8 @@ namespace C7GameData {
 		// pop rushing. Larger values result in larger numbers of citizens being
 		// unhappy as well, in addition to the time penalty.
 		public int turnsOfUnhappinessDueToPopRushing = 0;
+
+		public bool isInCivilDisorder = false;
 
 		public static City NONE = new City(Tile.NONE, null, "Dummy City", ID.None("city"));
 
@@ -158,6 +162,10 @@ namespace C7GameData {
 		public HurryProductionDetails GetHurryProductionDetails() {
 			Rules rules = EngineStorage.gameData.rules;
 			int shieldCost = ShieldCostForHurrying();
+
+			if (isInCivilDisorder) {
+				return new HurryProductionDetails() { errorMessage = "The city is in disorder and cannot hurry production." };
+			}
 
 			switch (owner.government.hurryingType) {
 				case Government.HurryProductionType.CannotHurry:
@@ -266,12 +274,15 @@ namespace C7GameData {
 			// useful production is available. We do this here rather than 
 			// setting corruption to 100% because CorruptableValue would give us
 			// one useful commerce in that situation.
-			if (owner.government.transitionType) {
+			//
+			// The same is true for civil disorder.
+			if (owner.government.transitionType || isInCivilDisorder) {
 				result.useful = 0;
 				result.corrupt = yield;
 			}
 
-			// TODO: add specialist shields here.
+			// TODO: add specialist shields here. Do specialists still work in
+			// civil disorder?
 
 			return result;
 		}
@@ -287,18 +298,25 @@ namespace C7GameData {
 			// useful commerce is available. We do this here rather than setting
 			// corruption to 100% because CorruptableValue would give us one
 			// useful commerce in that situation.
+			//
+			// The same is true in civil disorder.
 			CorruptableValue commerce = new CorruptableValue(uncorruptedCommerce, corruption);
-			if (owner.government.transitionType) {
+			if (owner.government.transitionType || isInCivilDisorder) {
 				commerce.useful = 0;
 				commerce.corrupt = uncorruptedCommerce;
 			}
 
-			// TODO: Add specialist income, which is unaffected by corruption.
 			CommerceBreakdown result = new();
 			result.corrupted = commerce.corrupt;
 			result.beakers = (int)Math.Floor(commerce.useful * owner.scienceRate / 10.0);
 			result.happiness = (int)Math.Floor(commerce.useful * owner.luxuryRate / 10.0);
 			result.taxes = commerce.useful - result.beakers - result.happiness;
+
+			foreach (CityResident cr in residents) {
+				result.beakers += cr.citizenType.Research;
+				result.happiness += cr.citizenType.Luxuries;
+				result.taxes += cr.citizenType.Taxes;
+			}
 
 			return result;
 		}
@@ -606,7 +624,7 @@ namespace C7GameData {
 		//  - https://forums.civfanatics.com/threads/how-is-happiness-calculated.74966/
 		//  - https://codehappy.net/apolyton/threads/83368-1.htm
 		//
-		public void RecalculateCitizenMoods(GameData gameData) {
+		public void RecalculateCitizenMoods(GameData gameData, bool goIntoDisorderIfUnhappy = false) {
 			CityResident.Mood happy = CityResident.Mood.Happy;
 			CityResident.Mood content = CityResident.Mood.Content;
 			CityResident.Mood unhappy = CityResident.Mood.Unhappy;
@@ -703,6 +721,24 @@ namespace C7GameData {
 					ApplyMoodChange(sadPoints, content, unhappy);
 				}
 			}
+
+			if (goIntoDisorderIfUnhappy) {
+				isInCivilDisorder = isCityUnhappy();
+				if (isInCivilDisorder) {
+					log.Information($"City {this} for player {owner} is in civil disorder.");
+				}
+			}
+		}
+
+		// Required: RecalculateCitizenMoods must be called first.
+		public bool isCityUnhappy() {
+			int happyCount = 0;
+			int unhappyCount = 0;
+			foreach (CityResident cr in residents) {
+				if (cr.mood == CityResident.Mood.Happy) { ++happyCount; }
+				if (cr.mood == CityResident.Mood.Unhappy) { ++unhappyCount; }
+			}
+			return unhappyCount > 0 && unhappyCount > happyCount;
 		}
 
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {

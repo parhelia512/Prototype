@@ -654,10 +654,17 @@ namespace C7GameData {
 			}
 		}
 
-		public void RecalculateCitizenMoods(GameData gameData) {
+		public void RecalculateCitizenMoods(GameData gameData, bool goIntoDisorderIfUnhappy = false) {
 			foreach (City c in cities) {
-				c.RecalculateCitizenMoods(gameData);
+				c.RecalculateCitizenMoods(gameData, goIntoDisorderIfUnhappy);
 			}
+		}
+
+		// Returns a list of specialists that this player can use.
+		public List<CitizenType> GetKnownSpecialists() {
+			return C7Engine.EngineStorage.gameData.citizenTypes.FindAll(x => {
+				return !x.IsDefaultCitizen && (x.PrerequisiteTech == null || knownTechs.Contains(x.PrerequisiteTech));
+			});
 		}
 
 		public void UpdateResourcesInBorders(IEnumerable<Tile> ownedTiles) {

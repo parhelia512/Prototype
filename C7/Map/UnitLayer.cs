@@ -170,19 +170,13 @@ public partial class UnitLayer : LooseLayer {
 			cursorSprite = new AnimatedSprite2D();
 			SpriteFrames frames = new SpriteFrames();
 			cursorSprite.SpriteFrames = frames;
-			AnimationManager.loadCursorAnimation("Art/Animations/Cursor/Cursor.flc", ref frames);
-			cursorSprite.Animation = "cursor"; // hardcoded in loadCursorAnimation
+			AnimationManager.loadNonTintedAnimation("Art/Animations/Cursor/Cursor.flc", "cursor", ref frames);
+			cursorSprite.Animation = "cursor";
 			looseView.AddChild(cursorSprite);
+			cursorSprite.Play("cursor");
 		}
 
-		const double period = 2.5; // TODO: Just eyeballing this for now. Read the actual period from the INI or something.
-		double repCount = (double)Time.GetTicksMsec() / 1000.0 / period;
-		float progress = (float)(repCount - Math.Floor(repCount));
 		cursorSprite.Position = position;
-		int frameCount = cursorSprite.SpriteFrames.GetFrameCount("cursor");
-		int nextFrame = (int)((float)frameCount * progress);
-		nextFrame = nextFrame >= frameCount ? frameCount - 1 : (nextFrame < 0 ? 0 : nextFrame);
-		cursorSprite.Frame = nextFrame;
 		cursorSprite.Show();
 	}
 
