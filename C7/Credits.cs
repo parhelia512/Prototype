@@ -18,8 +18,8 @@ public partial class Credits : Node2D {
 	}
 
 	private void ShowCredits() {
-		ImageTexture creditsTexture = Util.LoadTextureFromPCX("Art/Credits/credits_background.pcx");
-		ImageTexture goBackTexture = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
+		ImageTexture creditsTexture = TextureLoader.Load("credit.background");
+		ImageTexture goBackTexture = TextureLoader.Load("ui.exit.normal");
 
 		TextureRect creditsBackground = new TextureRect();
 		creditsBackground.Texture = creditsTexture;

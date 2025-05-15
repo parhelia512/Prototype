@@ -31,16 +31,16 @@ public partial class ScienceAdvisor : TextureRect {
 	private void CreateUI() {
 		// science_industrial_new is used as the industrial tech tree is
 		// different from vanilla civ3.
-		AncientBackground = Util.LoadTextureFromPCX("Art/Advisors/science_ancient.pcx");
-		MiddleBackground = Util.LoadTextureFromPCX("Art/Advisors/science_middle.pcx");
-		IndustrialBackground = Util.LoadTextureFromPCX("Art/Advisors/science_industrial_new.pcx");
-		ModernBackground = Util.LoadTextureFromPCX("Art/Advisors/science_modern.pcx");
+		AncientBackground = TextureLoader.Load("advisors.science.background.ancient");
+		MiddleBackground = TextureLoader.Load("advisors.science.background.middle");
+		IndustrialBackground = TextureLoader.Load("advisors.science.background.industrial");
+		ModernBackground = TextureLoader.Load("advisors.science.background.modern");
 
 		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(851, 0));
 		AddChild(advisorHead);
 
-		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
+		ImageTexture DialogBoxTexture = TextureLoader.Load("advisors.dialog_box");
 		TextureButton DialogBox = new TextureButton();
 		DialogBox.TextureNormal = DialogBoxTexture;
 		DialogBox.SetPosition(new Vector2(806, 110));
@@ -52,23 +52,25 @@ public partial class ScienceAdvisor : TextureRect {
 		DialogBoxAdvise.SetPosition(new Vector2(815, 119));
 		AddChild(DialogBoxAdvise);
 
-		ImageTexture GoBackTexture = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
+		ImageTexture GoBackTexture = TextureLoader.Load("ui.exit.normal");
 		TextureButton GoBackButton = new TextureButton();
 		GoBackButton.TextureNormal = GoBackTexture;
 		GoBackButton.SetPosition(new Vector2(952, 720));
 		AddChild(GoBackButton);
 		GoBackButton.Pressed += ReturnToMenu;
 
-		previousEra = new();
-		previousEra.TextureNormal = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 1, 129, 33);
-		previousEra.TextureHover = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 35, 129, 33);
-		previousEra.TexturePressed = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 69, 129, 33);
+		previousEra = new() {
+			TextureNormal = TextureLoader.Load("advisors.science.navigation.previous.normal"),
+			TextureHover = TextureLoader.Load("advisors.science.navigation.previous.hover"),
+			TexturePressed = TextureLoader.Load("advisors.science.navigation.previous.pressed")
+		};
 		previousEra.SetPosition(new Vector2(512 - 128 - 100, 720));
 		AddChild(previousEra);
 		previousEra.Pressed += () => { ChangeEraAndDrawTree(-1); };
 
-		TextureRect leftArrow = new();
-		leftArrow.Texture = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 103, 44, 9);
+		TextureRect leftArrow = new() {
+			Texture = TextureLoader.Load("advisors.science.navigation.previous.arrow")
+		};
 		previousEra.AddChild(leftArrow);
 		leftArrow.SetPosition(new Vector2(-44, 13));
 
@@ -77,18 +79,20 @@ public partial class ScienceAdvisor : TextureRect {
 		previousEraLabel.SetTextAndCenterLabel("Previous Era");
 		previousEraLabel.Position += new Vector2(0, 7);
 
-		nextEra = new();
-		nextEra.TextureNormal = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 1, 129, 33);
-		nextEra.TextureHover = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 35, 129, 33);
-		nextEra.TexturePressed = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 0, 69, 129, 33);
+		nextEra = new() {
+			TextureNormal = TextureLoader.Load("advisors.science.navigation.next.normal"),
+			TextureHover = TextureLoader.Load("advisors.science.navigation.next.hover"),
+			TexturePressed = TextureLoader.Load("advisors.science.navigation.next.pressed")
+		};
 		nextEra.SetPosition(new Vector2(512 + 100, 720));
 		AddChild(nextEra);
 		nextEra.Pressed += () => { ChangeEraAndDrawTree(1); };
 
-		TextureRect rightArrow = new();
-		rightArrow.Texture = Util.LoadTextureFromPCX("Art/Tech Chooser/scienceNAV.pcx", 46, 103, 44, 9);
+		TextureRect rightArrow = new() {
+			Texture = TextureLoader.Load("advisors.science.navigation.next.arrow")
+		};
 		nextEra.AddChild(rightArrow);
-		rightArrow.SetPosition(new Vector2(129, 13));
+		rightArrow.SetPosition(new Vector2(-44, 13));
 
 		Label nextEraLabel = new();
 		nextEra.AddChild(nextEraLabel);

@@ -11,7 +11,7 @@ namespace C7.Map {
 		private ImageTexture resourceTexture;
 
 		public ResourceLayer() {
-			resourceTexture = Util.LoadTextureFromPCX("Art/resources.pcx");
+			resourceTexture = TextureLoader.Load("resources");
 		}
 
 		public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {

@@ -7,11 +7,11 @@ public partial class PalaceScreen : Control {
 	[Export] TextureButton close;
 
 	public override void _Ready() {
-		background.Texture = Util.LoadTextureFromPCX("Art/PalaceView/bkgr.pcx");
+		background.Texture = TextureLoader.Load("palace.background");
 
-		close.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 38, 48);
-		close.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 38, 48);
-		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 38, 48);
+		close.TextureNormal = TextureLoader.Load("city_screen.buttons.close.normal");
+		close.TextureHover = TextureLoader.Load("city_screen.buttons.close.hover");
+		close.TexturePressed = TextureLoader.Load("city_screen.buttons.close.pressed");
 
 		close.Pressed += Hide;
 	}

@@ -1,0 +1,421 @@
+-- Base paths
+local BUTTONS = "Art/buttonsFINAL.pcx"
+local ADVISORS = "Art/Advisors/"
+local CITY_BUTTONS = "Art/city screen/cityMgmtButtons.pcx"
+local CITY_PRODUCTION = "Art/city screen/ProdButton.pcx"
+local CITY_ICONS = "Art/city screen/CityIcons.pcx"
+local EXIT_BOX = "Art/exitBox-backgroundStates.pcx"
+local CITIES = "Art/Cities/"
+local TERRAIN = "Art/Terrain/"
+local INTERFACE = "Art/interface/"
+local RESOURCES = "Art/resources.pcx"
+local CREDITS = "Art/Credits/"
+local X_O = "Art/X-o_ALLstates-sprite.pcx"
+local SCIENCE_NAV = "Art/Tech Chooser/scienceNAV.pcx"
+local PALACE = "Art/PalaceView/"
+
+-- Texture definitions
+local textures = {}
+
+textures.advisors = {
+  dialog_box = ADVISORS .. "dialogbox.pcx",
+  science = {
+    background = {
+      ancient = ADVISORS .. "science_ancient.pcx",
+      middle = ADVISORS .. "science_middle.pcx",
+      industrial = ADVISORS .. "science_industrial_new.pcx",
+      modern = ADVISORS .. "science_modern.pcx",
+    },
+    navigation = {
+      previous = {
+        normal = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 1, 129, 33 },
+        },
+        hover = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 35, 129, 33 },
+        },
+        pressed = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 69, 129, 33 },
+        },
+        arrow = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 103, 44, 9 },
+        },
+      },
+      next = {
+        normal = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 1, 129, 33 },
+        },
+        hover = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 35, 129, 33 },
+        },
+        pressed = {
+          path = SCIENCE_NAV,
+          crop_region = { 0, 69, 129, 33 },
+        },
+        arrow = {
+          path = SCIENCE_NAV,
+          crop_region = { 46, 103, 44, 9 },
+        },
+      },
+    },
+  },
+  military = {
+    background = ADVISORS .. "military.pcx",
+  },
+  domestic = {
+    background = ADVISORS .. "domestic.pcx",
+    button = {
+      normal = {
+        path = ADVISORS .. "domesticBUTTON.pcx",
+        crop_region = { 1, 1, 145, 24 },
+      },
+      hover = {
+        path = ADVISORS .. "domesticBUTTON.pcx",
+        crop_region = { 1, 26, 145, 24 },
+      },
+      pressed = {
+        path = ADVISORS .. "domesticBUTTON.pcx",
+        crop_region = { 1, 52, 145, 24 },
+      },
+    },
+  },
+}
+
+textures.tech_box = {
+  known = {
+    path = ADVISORS .. "techboxes.pcx",
+    crop_region = { 1, 1, 180, 80 },
+  },
+  in_progress = {
+    path = ADVISORS .. "techboxes.pcx",
+    crop_region = { 192, 1, 180, 80 },
+  },
+  possible = {
+    path = ADVISORS .. "techboxes.pcx",
+    crop_region = { 381, 1, 180, 80 },
+  },
+  blocked = {
+    path = ADVISORS .. "techboxes.pcx",
+    crop_region = { 568, 1, 180, 80 },
+  },
+  non_required = ADVISORS .. "non_required.pcx",
+}
+
+textures.ui = {
+  button = {
+    inactive = {
+      path = BUTTONS,
+      crop_region = { 1, 1, 20, 20 },
+      shadows = false,
+    },
+    hover = {
+      path = BUTTONS,
+      crop_region = { 22, 1, 20, 20 },
+      shadows = false,
+    },
+  },
+  confirm = {
+    normal = {
+      path = X_O,
+      crop_region = { 1, 1, 19, 19 },
+    },
+    hover = {
+      path = X_O,
+      crop_region = { 37, 1, 19, 19 },
+    },
+    pressed = {
+      path = X_O,
+      crop_region = { 73, 1, 19, 19 },
+    },
+  },
+  cancel = {
+    normal = {
+      path = X_O,
+      crop_region = { 21, 1, 15, 19 },
+    },
+    hover = {
+      path = X_O,
+      crop_region = { 57, 1, 15, 19 },
+    },
+    pressed = {
+      path = X_O,
+      crop_region = { 93, 1, 15, 19 },
+    },
+  },
+  console = {
+    normal = {
+      path = INTERFACE .. "consoleButtons.pcx",
+      crop_region = { 1, 1, 16, 16 },
+    },
+    hover = {
+      path = INTERFACE .. "consoleButtons.pcx",
+      crop_region = { 17, 1, 16, 16 },
+    },
+    pressed = {
+      path = INTERFACE .. "consoleButtons.pcx",
+      crop_region = { 33, 1, 16, 16 },
+    },
+  },
+  exit = {
+    normal = {
+      path = EXIT_BOX,
+      crop_region = { 0, 0, 72, 48 },
+    },
+    hover = {
+      path = EXIT_BOX,
+      crop_region = { 72, 0, 72, 48 },
+    },
+    pressed = {
+      path = EXIT_BOX,
+      crop_region = { 144, 0, 72, 48 },
+    },
+  },
+}
+
+textures.terrain = {
+  mountain = {
+    base = TERRAIN .. "Mountains.pcx",
+    jungle = TERRAIN .. "mountain jungles.pcx",
+    snow = TERRAIN .. "Mountains-snow.pcx",
+    forest = TERRAIN .. "mountain forests.pcx",
+  },
+  hill = {
+    base = TERRAIN .. "xhills.pcx",
+    forest = TERRAIN .. "hill forests.pcx",
+    jungle = TERRAIN .. "hill jungle.pcx",
+  },
+  volcano = {
+    base = TERRAIN .. "Volcanos.pcx",
+    forest = TERRAIN .. "Volcanos forests.pcx",
+    jungle = TERRAIN .. "Volcanos jungles.pcx",
+  },
+  irrigation = {
+    grass = TERRAIN .. "irrigation.pcx",
+    desert = TERRAIN .. "irrigation DESETT.pcx",
+    plains = TERRAIN .. "irrigation PLAINS.pcx",
+    tundra = TERRAIN .. "irrigation TUNDRA.pcx",
+  },
+  mine = {
+    path = TERRAIN .. "TerrainBuildings.pcx",
+    crop_region = { 256, 64, 128, 64 },
+  },
+  marsh = {
+    large = {
+      path = TERRAIN .. "marsh.pcx",
+      crop_region = { 0, 0, 512, 176 },
+    },
+    small = {
+      path = TERRAIN .. "marsh.pcx",
+      crop_region = { 0, 176, 640, 176 },
+    },
+  },
+  river = TERRAIN .. "mtnRivers.pcx",
+  tnt = TERRAIN .. "tnt.pcx",
+  railroad = TERRAIN .. "railroads.pcx",
+  road = TERRAIN .. "roads.pcx",
+  jungle = {
+    large = {
+      path = TERRAIN .. "grassland forests.pcx",
+      crop_region = { 0, 0, 512, 176 },
+    },
+    small = {
+      path = TERRAIN .. "grassland forests.pcx",
+      crop_region = { 0, 176, 768, 176 },
+    },
+  },
+  forest = {
+    large = {
+      path = TERRAIN .. "grassland forests.pcx",
+      crop_region = { 0, 352, 512, 176 },
+    },
+    small = {
+      path = TERRAIN .. "grassland forests.pcx",
+      crop_region = { 0, 528, 640, 176 },
+    },
+    plains = {
+      large = {
+        path = TERRAIN .. "plains forests.pcx",
+        crop_region = { 0, 352, 512, 176 },
+      },
+      small = {
+        path = TERRAIN .. "plains forests.pcx",
+        crop_region = { 0, 528, 640, 176 },
+      },
+    },
+    tundra = {
+      large = {
+        path = TERRAIN .. "tundra forests.pcx",
+        crop_region = { 0, 352, 512, 176 },
+      },
+      small = {
+        path = TERRAIN .. "tundra forests.pcx",
+        crop_region = { 0, 528, 640, 176 },
+      },
+    },
+  },
+  pine = {
+    forest = {
+      path = TERRAIN .. "grassland forests.pcx",
+      crop_region = { 0, 704, 768, 176 },
+    },
+    plains = {
+      path = TERRAIN .. "plains forests.pcx",
+      crop_region = { 0, 704, 768, 176 },
+    },
+    tundra = {
+      path = TERRAIN .. "tundra forests.pcx",
+      crop_region = { 0, 704, 768, 176 },
+    },
+  },
+}
+
+textures.resources = RESOURCES
+
+textures.credits = {
+  background = CREDITS .. "credits_background.pcx",
+}
+
+textures.icons = {
+  science = {
+    path = CITY_ICONS,
+    crop_region = { 34, 2, 30, 30 },
+  },
+  luxury = {
+    path = CITY_ICONS,
+    crop_region = { 376, 2, 30, 30 },
+  },
+  food = {
+    path = CITY_ICONS,
+    crop_region = { 195, 1, 21, 30 },
+  },
+  shield = {
+    path = CITY_ICONS,
+    crop_region = { 133, 1, 16, 30 },
+  },
+  commerce = {
+    path = CITY_ICONS,
+    crop_region = { 67, 1, 21, 30 },
+  },
+  plus = {
+    path = ADVISORS .. "domestic_icons_aux.pcx",
+    crop_region = { 75, 1, 22, 22 },
+  },
+  minus = {
+    path = ADVISORS .. "domestic_icons_aux.pcx",
+    crop_region = { 51, 1, 22, 22 },
+  },
+  eaten_food = {
+    path = CITY_ICONS,
+    crop_region = { 218, 2, 29, 29 },
+  },
+  full_food = {
+    path = CITY_ICONS,
+    crop_region = { 188, 2, 29, 29 },
+  },
+  wasted_shield = {
+    path = CITY_ICONS,
+    crop_region = { 157, 2, 29, 29 },
+  },
+  good_shield = {
+    path = CITY_ICONS,
+    crop_region = { 125, 2, 29, 29 },
+  },
+  wasted_gold = {
+    path = CITY_ICONS,
+    crop_region = { 95, 2, 29, 29 },
+  },
+  good_gold = {
+    path = CITY_ICONS,
+    crop_region = { 64, 2, 29, 29 },
+  },
+  happy_face = {
+    path = CITY_ICONS,
+    crop_region = { 373, 2, 29, 29 },
+  },
+  content_face = {
+    path = CITY_ICONS,
+    crop_region = { 591, 2, 29, 29 },
+  },
+  beaker = {
+    path = CITY_ICONS,
+    crop_region = { 34, 2, 29, 29 },
+  },
+  treasury = {
+    path = CITY_ICONS,
+    crop_region = { 746, 2, 29, 29 },
+  },
+}
+
+textures.city_screen = {
+  background = "Art/city screen/background.pcx",
+  buttons = {
+    close = {
+      normal = {
+        path = CITY_BUTTONS,
+        crop_region = { 155, 1, 38, 48 },
+      },
+      hover = {
+        path = CITY_BUTTONS,
+        crop_region = { 155, 50, 38, 48 },
+      },
+      pressed = {
+        path = CITY_BUTTONS,
+        crop_region = { 155, 99, 38, 48 },
+      },
+    },
+    previous = {
+      normal = {
+        path = CITY_BUTTONS,
+        crop_region = { 1, 1, 48, 48 },
+      },
+      hover = {
+        path = CITY_BUTTONS,
+        crop_region = { 1, 50, 48, 48 },
+      },
+      pressed = {
+        path = CITY_BUTTONS,
+        crop_region = { 1, 99, 48, 48 },
+      },
+    },
+    next = {
+      normal = {
+        path = CITY_BUTTONS,
+        crop_region = { 42, 1, 48, 48 },
+      },
+      hover = {
+        path = CITY_BUTTONS,
+        crop_region = { 42, 50, 48, 48 },
+      },
+      pressed = {
+        path = CITY_BUTTONS,
+        crop_region = { 42, 99, 48, 48 },
+      },
+    },
+    production = {
+      normal = {
+        path = CITY_PRODUCTION,
+        crop_region = { 1, 0, 114, 95 },
+      },
+      hover = {
+        path = CITY_PRODUCTION,
+        crop_region = { 116, 0, 115, 95 },
+      },
+      pressed = {
+        path = CITY_PRODUCTION,
+        crop_region = { 231, 0, 115, 95 },
+      },
+    },
+  },
+}
+
+textures.palace = {
+  background = PALACE .. "bkgr.pcx",
+}
+
+return textures

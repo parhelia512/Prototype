@@ -459,7 +459,7 @@ public partial class Util {
 	}
 
 	public static Rect2 GetResourceRect(C7GameData.Resource resource) {
-		ImageTexture resourceTexture = LoadTextureFromPCX("Art/resources.pcx");
+		ImageTexture resourceTexture = TextureLoader.Load("resources");
 		Vector2 resourceSize = new(50, 50);
 
 		int maxRow = (resourceTexture.GetHeight() / 50) - 1;

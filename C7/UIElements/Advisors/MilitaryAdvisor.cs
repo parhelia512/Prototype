@@ -13,9 +13,9 @@ public partial class MilitaryAdvisor : TextureRect {
 	}
 
 	private void CreateUI() {
-		this.Texture = Util.LoadTextureFromPCX("Art/Advisors/military.pcx");
+		this.Texture = TextureLoader.Load("advisors.military.background");
 
-		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
+		ImageTexture DialogBoxTexture = TextureLoader.Load("advisors.dialog_box");
 		TextureButton DialogBox = new TextureButton();
 		DialogBox.TextureNormal = DialogBoxTexture;
 		DialogBox.SetPosition(new Vector2(806, 110));
@@ -27,7 +27,7 @@ public partial class MilitaryAdvisor : TextureRect {
 		DialogBoxAdvise.SetPosition(new Vector2(815, 119));
 		AddChild(DialogBoxAdvise);
 
-		ImageTexture GoBackTexture = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
+		ImageTexture GoBackTexture = TextureLoader.Load("ui.exit.normal");
 		TextureButton GoBackButton = new TextureButton();
 		GoBackButton.TextureNormal = GoBackTexture;
 		GoBackButton.SetPosition(new Vector2(952, 720));

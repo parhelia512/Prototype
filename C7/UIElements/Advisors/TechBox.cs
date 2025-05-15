@@ -31,14 +31,10 @@ public partial class TechBox : TextureButton {
 		// NOTE: this pcx has 16 rows, 4 per era, with different sizes.
 		//
 		// NOTE: the X coordinates of each column were found via guess+check.
-		ImageTexture knownTechBox = Util.LoadTextureFromPCX("Art/Advisors/techboxes.pcx",
-			1, 1, 180, 80);
-		ImageTexture inProgressTechBox = Util.LoadTextureFromPCX("Art/Advisors/techboxes.pcx",
-			192, 1, 180, 80);
-		ImageTexture possibleTechBox = Util.LoadTextureFromPCX("Art/Advisors/techboxes.pcx",
-			381, 1, 180, 80);
-		ImageTexture blockedTechBox = Util.LoadTextureFromPCX("Art/Advisors/techboxes.pcx",
-			568, 1, 180, 80);
+		ImageTexture knownTechBox = TextureLoader.Load("tech_box.known");
+		ImageTexture inProgressTechBox = TextureLoader.Load("tech_box.in_progress");
+		ImageTexture possibleTechBox = TextureLoader.Load("tech_box.possible");
+		ImageTexture blockedTechBox = TextureLoader.Load("tech_box.blocked");
 
 		TextureNormal = techState switch {
 			TechState.kKnown => knownTechBox,
@@ -65,7 +61,7 @@ public partial class TechBox : TextureButton {
 
 		if (!tech.RequiredForEraAdvancement) {
 			TextureRect notRequired = new() {
-				Texture = Util.LoadTextureFromPCX("Art/Advisors/non_required.pcx"),
+				Texture = TextureLoader.Load("tech_box.non_required"),
 			};
 			notRequired.SetPosition(new Vector2(85, 0));
 			AddChild(notRequired);

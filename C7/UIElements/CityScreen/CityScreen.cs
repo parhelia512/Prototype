@@ -45,23 +45,22 @@ public partial class CityScreen : Control {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background.Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx");
+		background.Texture = TextureLoader.Load("city_screen.background");
 
 		// The close button.
-		close.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 48, 48);
-		close.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 48, 48);
-		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 48, 48);
-
+		close.TextureNormal = TextureLoader.Load("city_screen.buttons.close.normal");
+		close.TextureHover = TextureLoader.Load("city_screen.buttons.close.hover");
+		close.TexturePressed = TextureLoader.Load("city_screen.buttons.close.pressed");
 		close.Pressed += Hide;
 
-		previousCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 1, 48, 48);
-		previousCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 50, 48, 48);
-		previousCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 99, 48, 48);
+		previousCity.TextureNormal = TextureLoader.Load("city_screen.buttons.previous.normal");
+		previousCity.TextureHover = TextureLoader.Load("city_screen.buttons.previous.hover");
+		previousCity.TexturePressed = TextureLoader.Load("city_screen.buttons.previous.pressed");
 		previousCity.Pressed += SwitchToPreviousCity;
 
-		nextCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 1, 48, 48);
-		nextCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 50, 48, 48);
-		nextCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 99, 48, 48);
+		nextCity.TextureNormal = TextureLoader.Load("city_screen.buttons.next.normal");
+		nextCity.TextureHover = TextureLoader.Load("city_screen.buttons.next.hover");
+		nextCity.TexturePressed = TextureLoader.Load("city_screen.buttons.next.pressed");
 		nextCity.Pressed += SwitchToNextCity;
 
 		// Load the font we'll use for the details.
@@ -110,9 +109,9 @@ public partial class CityScreen : Control {
 		};
 		background.AddChild(commerceHappinessDetails);
 
-		productionButton.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 1, 0, 114, 95);
-		productionButton.TextureHover = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 116, 0, 115, 95);
-		productionButton.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 231, 0, 115, 95);
+		productionButton.TextureNormal = TextureLoader.Load("city_screen.buttons.production.normal");
+		productionButton.TextureHover = TextureLoader.Load("city_screen.buttons.production.hover");
+		productionButton.TexturePressed = TextureLoader.Load("city_screen.buttons.production.pressed");
 
 		productionButton.Pressed += () => { this.productionMenu.Visible = !this.productionMenu.Visible; };
 
