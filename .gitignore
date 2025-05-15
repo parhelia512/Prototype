@@ -48,6 +48,9 @@ C7.ini
 log.txt
 *.csproj.old
 
+# The file we use to allow generating new maps
+C7/Text/c7-autosave-turn-0.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
