@@ -56,9 +56,11 @@ namespace QueryCiv3 {
 			string steam = SteamCommonDir();
 			if (!string.IsNullOrEmpty(steam)) {
 				DirectoryInfo root = new(steam);
-				foreach (DirectoryInfo di in root.GetDirectories()) {
-					if (FolderIsCiv3(di)) {
-						return di.FullName;
+				if (root.Exists) {
+					foreach (DirectoryInfo di in root.GetDirectories()) {
+						if (FolderIsCiv3(di)) {
+							return di.FullName;
+						}
 					}
 				}
 			}

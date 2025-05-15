@@ -5,6 +5,7 @@ using C7GameData;
 using C7GameData.Save;
 using Serilog;
 
+[Tool]
 public partial class MainMenu : Node2D {
 	private ILogger log;
 
@@ -33,19 +34,19 @@ public partial class MainMenu : Node2D {
 
 		DisplayServer.WindowSetTitle("C7 - Godot 4");
 
-		// To pass data between scenes, putting path string in a global singleton and reading it later in createGame
-		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
-		Global.ResetLoadGamePath();
-
-		LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
-		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
-
 		DisplayTitleScreen();
 	}
 
 	private void DisplayTitleScreen() {
 		try {
 			SetMainMenuBackground();
+
+			// To pass data between scenes, putting path string in a global singleton and reading it later in createGame
+			Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
+			Global.ResetLoadGamePath();
+
+			LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
+			LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
 
 			InactiveButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 1, 1, 20, 20, false);
 			HoverButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 22, 1, 20, 20, false);
