@@ -1,4 +1,5 @@
 using C7GameData;
+using C7Engine;
 using Xunit;
 using System;
 using System.Collections.Generic;

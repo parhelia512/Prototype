@@ -1,10 +1,11 @@
-namespace C7GameData {
+namespace C7Engine {
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
 	using System.Linq;
 	using Serilog;
 	using System.Diagnostics;
+	using C7GameData;
 
 	public class WorldSize {
 		public int width;
@@ -111,7 +112,7 @@ namespace C7GameData {
 
 			// Last step: Assign the terrain file and image ids to each tile so
 			// we know which texture to use when displaying them.
-			AssignTextureDetails(wc, gameMap);
+			TerrainTextureFiles.AssignTextureDetails(new Random(wc.mapSeed + 0xebac), wc.terrainTypes, gameMap);
 
 			return gameMap;
 		}
@@ -508,12 +509,19 @@ namespace C7GameData {
 					// went lower, but we don't want all tundra.
 					tundraLatitudeThreshold = 45;
 
+					// For all the bounds here we're picking arbitrary temperature
+					// bounds. So roughly 23% of the map is eligible for being
+					// tundra here, though the latitude threshold also comes into
+					// play later.
 					tundraLowerBound = hm.FindSeaLevel(70);
 					tundraUpperBound = hm.FindSeaLevel(93);
 
+					// Roughly 15% of the map is eligible for plains, though this
+					// can be boosted for arid maps.
 					plainsLowerBound = hm.FindSeaLevel(15);
 					plainsUpperBound = hm.FindSeaLevel(30 + aridPlainsBoost);
 
+					// Another 15% for deserts.
 					desertLowerBound = hm.FindSeaLevel(45);
 					desertUpperBound = hm.FindSeaLevel(60 + aridDesertBoost);
 					break;
@@ -913,185 +921,6 @@ namespace C7GameData {
 			return result;
 		}
 
-		// The texture file ids. A leading "x" means it is a land file, and the
-		// following three letters are the terrain types (t=tundra, g=grass,
-		// p=plains, c=coast, d= desert). A leading "w" is water, coast/sea/ocean.
-		private enum TextureFile {
-			xtgc = 0,
-			xpgc = 1,
-			xdgc = 2,
-			xdpc = 3,
-			xdgp = 4,
-			xggc = 5,
-			wCSO = 6,
-			wSSS = 7,
-			wOOO = 8,
-		}
-
-		private static void AssignTextureDetails(WorldCharacteristics wc, GameMap m) {
-			Random rand = new Random(wc.mapSeed + 0xebac);
-
-			foreach (Tile t in m.tiles) {
-				t.ExtraInfo = new();
-				t.overlayTerrainTypeKey = t.overlayTerrainType.Key;
-				t.baseTerrainTypeKey = t.baseTerrainType.Key;
-
-				Dictionary<string, int> terrainCounts = new();
-				foreach (TerrainType tt in wc.terrainTypes) {
-					terrainCounts.Add(tt.Key, 0);
-				}
-
-				// Count the terrain types of ourself and our neighbors.
-				string[] neighbors = {
-					GetNeighborTerrain(t, TileDirection.NORTH),
-					GetNeighborTerrain(t, TileDirection.NORTHWEST),
-					GetNeighborTerrain(t, TileDirection.NORTHEAST),
-					t.baseTerrainType.Key,
-				};
-				foreach (string s in neighbors) {
-					terrainCounts[s] += 1;
-				}
-
-				// Count the land and water neighbors.
-				int waterNeighbors = terrainCounts["ocean"] + terrainCounts["sea"] + terrainCounts["coast"];
-				int uniqueNeighbors = 0;
-				foreach (var (key, value) in terrainCounts) {
-					if (value > 0) {
-						++uniqueNeighbors;
-					}
-				}
-
-				if (waterNeighbors == 4) {
-					if (terrainCounts["ocean"] == 4) {
-						// All ocean, so use the ocean file with a random texture.
-						t.ExtraInfo.BaseTerrainFileID = (int)TextureFile.wOOO;
-						t.ExtraInfo.BaseTerrainImageID = rand.Next(81);
-					} else if (terrainCounts["sea"] == 4) {
-						// All sea, so use the ocean file with a random texture.
-						t.ExtraInfo.BaseTerrainFileID = (int)TextureFile.wSSS;
-						t.ExtraInfo.BaseTerrainImageID = rand.Next(81);
-					} else {
-						SetExtraInfo(t, neighbors, TextureFile.wCSO);
-					}
-				} else if (terrainCounts["tundra"] > 0) {
-					// Fun fact - tundra can only border grassland and coast, so
-					// this is sufficient for all tundra cases.
-					SetExtraInfo(t, neighbors, TextureFile.xtgc);
-				} else if (uniqueNeighbors >= 3) {
-					// 3 distinct types (must be combinations of D, P, G, C)
-					bool hasCoast = terrainCounts["coast"] > 0;
-					bool hasDesert = terrainCounts["desert"] > 0;
-					bool hasPlains = terrainCounts["plains"] > 0;
-					bool hasGrass = terrainCounts["grassland"] > 0;
-
-					if (!hasCoast) { // D/G/P only
-						SetExtraInfo(t, neighbors, TextureFile.xdgp);
-					} else if (!hasGrass) { // D/P/C
-						SetExtraInfo(t, neighbors, TextureFile.xdpc);
-					} else if (!hasDesert) { // P/G/C
-						SetExtraInfo(t, neighbors, TextureFile.xpgc);
-					} else { // D/G/C (Plains must be absent)
-						SetExtraInfo(t, neighbors, TextureFile.xdgc);
-					}
-				} else if (uniqueNeighbors == 2) {
-					// 2 distinct types (D/P, D/G, P/G, D/C, P/C, G/C)
-					bool hasDesert = terrainCounts["desert"] > 0;
-					bool hasPlains = terrainCounts["plains"] > 0;
-					bool hasGrass = terrainCounts["grassland"] > 0;
-					bool hasCoast = terrainCounts["coast"] > 0;
-
-					if (hasGrass && hasCoast) SetExtraInfo(t, neighbors, TextureFile.xpgc);
-					else if (hasPlains && hasCoast) SetExtraInfo(t, neighbors, TextureFile.xpgc);
-					else if (hasDesert && hasCoast) SetExtraInfo(t, neighbors, TextureFile.xdpc);
-					else if (hasGrass && hasPlains) SetExtraInfo(t, neighbors, TextureFile.xpgc);
-					else if (hasGrass && hasDesert) SetExtraInfo(t, neighbors, TextureFile.xdgc);
-					else if (hasPlains && hasDesert) SetExtraInfo(t, neighbors, TextureFile.xdpc);
-					else {
-						throw new Exception($"Unexpected possibility: {hasDesert} {hasPlains} {hasGrass} {hasCoast} {string.Join(",", terrainCounts)}");
-					}
-				} else if (uniqueNeighbors == 1) {
-					if (terrainCounts["grassland"] > 0) SetExtraInfo(t, neighbors, TextureFile.xdgc);
-					else if (terrainCounts["plains"] > 0) SetExtraInfo(t, neighbors, TextureFile.xpgc);
-					else if (terrainCounts["desert"] > 0) SetExtraInfo(t, neighbors, TextureFile.xdgp);
-					else {
-						throw new Exception($"Unexpected possibility: {string.Join(",", terrainCounts)}");
-					}
-				} else {
-					throw new Exception($"Weird number of unique neighbors: {uniqueNeighbors}");
-				}
-			}
-		}
-
-		private static void SetExtraInfo(Tile t, string[] neighbors, TextureFile textureFile) {
-			t.ExtraInfo.BaseTerrainFileID = (int)textureFile;
-			t.ExtraInfo.BaseTerrainImageID = GetTextureFileIndex(neighbors, textureFile);
-		}
-
-		private static int GetTextureFileIndex(string[] neighbors, TextureFile textureFile) {
-			// Cumulative weights based on position index {0, 1, 2, 3} -> {N, NW, NE, Center}
-			int[] cumulativeStartWeights = { 0, 0, 0, 0};
-			int[] cumulativeMiddleWeights = { 1, 3, 9, 27 };  // Set A: Adds {1, 2, 6, 18} per step
-			int[] cumulativeEndWeights = { 2, 6, 18, 54 }; // Set B: Adds {2, 4, 12, 36} per step
-
-			int location = 0;
-			for (int i = 0; i < 4; i++) // Loop through positions N, NW, NE, Center
-			{
-				string currentType = neighbors[i];
-				bool useMiddleWeights = false;
-				bool useStartWeights = false;
-
-				// For a given file with terrain types XYZ, X and Z use weight
-				// set B, Y uses set A.
-				switch (textureFile) {
-					case TextureFile.xtgc: // File 0 (T/G/C)
-						useMiddleWeights = (currentType == "grassland");
-						useStartWeights = (currentType == "tundra");
-						break;
-					case TextureFile.xpgc: // File 1 (P/G/C)
-						useMiddleWeights = (currentType == "grassland");
-						useStartWeights = (currentType == "plains");
-						break;
-					case TextureFile.xdgc: // File 2 (D/G/C)
-						useMiddleWeights = (currentType == "grassland");
-						useStartWeights = (currentType == "desert");
-						break;
-					case TextureFile.xdpc: // File 3 (D/P/C)
-						useMiddleWeights = (currentType == "plains");
-						useStartWeights = (currentType == "desert");
-						break;
-					case TextureFile.xdgp: // File 4 (D/G/P)
-						useMiddleWeights = (currentType == "grassland");
-						useStartWeights = (currentType == "desert");
-						break;
-					case TextureFile.wCSO:
-						useMiddleWeights = (currentType == "sea");
-						useStartWeights = (currentType == "coast");
-						break;
-					default:
-						throw new Exception($"Unexpected textureFile type: {textureFile}");
-						break;
-				}
-
-				// Add the cumulative weight for the current position based on the chosen set
-				if (useStartWeights) {
-					location += cumulativeStartWeights[i];
-				} else if (useMiddleWeights) {
-					location += cumulativeMiddleWeights[i];
-				} else {
-					location += cumulativeEndWeights[i];
-				}
-			}
-			return location;
-		}
-
-		private static string GetNeighborTerrain(Tile t, TileDirection dir) {
-			Tile neighbor = t.neighbors[dir];
-			if (neighbor == Tile.NONE) {
-				return "coast";
-			}
-			return neighbor.baseTerrainType.Key;
-		}
-
 		private static void FixContinentalShelf(WorldCharacteristics wc, GameMap m) {
 			TerrainType coast = wc.terrainTypes.Find(x => x.Key == "coast");
 			TerrainType sea = wc.terrainTypes.Find(x => x.Key == "sea");
@@ -1168,14 +997,20 @@ namespace C7GameData {
 			PlaceBonusResources(rand, wc, m, resourcesToPlace.Where(x => x.Category == ResourceCategory.BONUS).ToList(), tileIndicies);
 		}
 
+		// Determine the rate of appearance for a given resource. The rate of
+		// appearance seems to have a default of 100 for civ3, but if it isn't
+		// specified (like for luxuries) it is some random value less than 100
+		// but always larger than 50.
 		private static int GetAppearance(WorldCharacteristics wc, Random rand, Resource r, int minCount) {
 			// The the appearance ratio, with a random number between 50 and
-			// 100 if it isn't specified.
+			// 100 if it isn't specified. Use multiple random calls to roughly
+			// simulate a normal distribution using uniform random samples.
 			int baseCount = r.AppearanceRatio;
 			if (baseCount == 0) {
 				baseCount = 50 + rand.Next(11) + rand.Next(11) + rand.Next(11) + rand.Next(11) + rand.Next(11);
 			}
 
+			// Scale the appearance based on the number of civs in the game.
 			int targetCount = (wc.worldSize.numberOfCivs * baseCount) / 100;
 			targetCount = Math.Max(minCount, targetCount);
 			return targetCount;
