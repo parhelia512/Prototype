@@ -92,7 +92,7 @@ public partial class ScienceAdvisor : TextureRect {
 			Texture = TextureLoader.Load("advisors.science.navigation.next.arrow")
 		};
 		nextEra.AddChild(rightArrow);
-		rightArrow.SetPosition(new Vector2(-44, 13));
+		rightArrow.SetPosition(new Vector2(129, 13));
 
 		Label nextEraLabel = new();
 		nextEra.AddChild(nextEraLabel);
