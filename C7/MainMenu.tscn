@@ -1,9 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://gnt0y3og7nk6"]
+[gd_scene load_steps=9 format=3 uid="uid://gnt0y3og7nk6"]
 
 [ext_resource type="Script" path="res://MainMenu.cs" id="1"]
 [ext_resource type="Script" path="res://MainMenuMusicPlayer.cs" id="3"]
 [ext_resource type="Theme" uid="uid://b0jisy3avwkxf" path="res://MainMenuTheme.tres" id="4"]
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="4_x23yr"]
+[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmerc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbij8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e20w6"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("LoadDialog", "SetCiv3Home", "SetCiv3HomeDialog", "LoadScenarioDialog")]
 z_index = 1
@@ -64,6 +71,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4")
 stretch_mode = 1
+script = ExtResource("5")
 
 [node name="SetCiv3Home" type="Button" parent="CanvasLayer"]
 anchors_preset = 8
@@ -71,17 +79,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -84.5
-offset_top = -93.7225
-offset_right = 84.5
-offset_bottom = -73.7225
+offset_left = -155.0
+offset_top = -101.0
+offset_right = 159.0
+offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/h_separation = 50
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_gmerc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vbij8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e20w6")
 text = "Select Civ3 Home Folder"
 
 [node name="SetCiv3HomeDialog" type="FileDialog" parent="CanvasLayer"]
 mode = 3
 title = "Open a Directory"
+initial_position = 1
+size = Vector2i(357, 450)
 ok_button_text = "Select Current Folder"
 file_mode = 2
 access = 2

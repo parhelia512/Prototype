@@ -9,6 +9,7 @@ namespace C7GameData.Save {
 		public int techRate;
 		public int optimalNumberOfCities;
 		public List<SaveTile> tiles = new List<SaveTile>();
+		public List<SaveTile> startingLocations = new();
 		public SaveMap() { }
 
 		public SaveMap(GameMap map) {
@@ -19,6 +20,7 @@ namespace C7GameData.Save {
 			techRate = map.techRate;
 			optimalNumberOfCities = map.optimalNumberOfCities;
 			tiles = map.tiles.ConvertAll(tile => new SaveTile(tile));
+			startingLocations = map.startingLocations.ConvertAll(x => new SaveTile(x));
 		}
 		public GameMap ToGameMap(GameData gd) {
 			GameMap gameMap = new GameMap{
@@ -30,6 +32,9 @@ namespace C7GameData.Save {
 				optimalNumberOfCities = optimalNumberOfCities,
 				tiles = tiles.ConvertAll(tile => tile.ToTile(gd.terrainTypes, gd.Resources)),
 			};
+			foreach (SaveTile st in startingLocations) {
+				gameMap.startingLocations.Add(gameMap.tiles.Find(t => t.XCoordinate == st.X && t.YCoordinate == st.Y));
+			}
 			gameMap.computeNeighbors();
 			gameMap.barbarianCamps = gameMap.tiles.Where(tile => tile.hasBarbarianCamp).ToList();
 			return gameMap;

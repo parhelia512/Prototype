@@ -23,6 +23,7 @@ namespace C7GameData {
 		public HashSet<UnitAction> allowedWorkerActions = [];
 		public StrengthBonus defenseBonus;
 		public HashSet<string> allowedResources = new();
+		public int height = -1;
 
 		//some stuff about graphics would probably make sense, too
 
@@ -68,6 +69,18 @@ namespace C7GameData {
 				irrigationBonus = civ3Terrain.IrrigationBonus,
 				allowedWorkerActions = LoadWorkerActions(civ3Terrain).ToHashSet(),
 			};
+
+			if (c7Terrain.Key == "mountains" || c7Terrain.Key == "volcano") {
+				c7Terrain.height = 4;
+			} else if (c7Terrain.Key == "hills") {
+				c7Terrain.height = 2;
+			} else if (c7Terrain.Key == "ocean" || c7Terrain.Key == "sea" || c7Terrain.Key == "coast" || c7Terrain.Key == "marsh") {
+				c7Terrain.height = -2;
+			} else if (c7Terrain.Key == "forest" || c7Terrain.Key == "jungle") {
+				c7Terrain.height = 1;
+			} else {
+				c7Terrain.height = 0;
+			}
 
 			return c7Terrain;
 		}

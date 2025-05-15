@@ -8,7 +8,7 @@ using Godot;
 using QueryCiv3;
 
 public partial class Util {
-	static public string Civ3Root = Civ3Location.GetCiv3Path();
+	static public string Civ3Root = GetCiv3Path();
 	static public bool CheckForModernFiles = true;
 
 	static public string GetCiv3Path() {

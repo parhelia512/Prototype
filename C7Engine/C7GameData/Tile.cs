@@ -61,6 +61,10 @@ namespace C7GameData {
 		// two land tiles just to discover they have no land connection.
 		public int continent;
 
+		// An arbitrary number indicating which part of the continent this tile
+		// is part of, for the purposes of biome assignment.
+		public int biomeRegion = -1;
+
 		public City owningCity; // The city whose border contains this tile
 		public string baseTerrainTypeKey { get; set; }
 		public TerrainType baseTerrainType = TerrainType.NONE;
@@ -155,7 +159,7 @@ namespace C7GameData {
 		}
 
 		public override string ToString() {
-			return "[" + XCoordinate + ", " + YCoordinate + "] (" + overlayTerrainType.DisplayName + " on " + baseTerrainType.DisplayName + ")";
+			return "[" + XCoordinate + ", " + YCoordinate + "] (" + overlayTerrainType.Key + " on " + baseTerrainType.Key + ")";
 		}
 
 		public List<Tile> GetLandNeighbors() {

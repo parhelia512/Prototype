@@ -1,8 +1,11 @@
 using Godot;
 using System;
 using C7Engine;
+using C7GameData;
+using C7GameData.Save;
 using Serilog;
 
+[Tool]
 public partial class MainMenu : Node2D {
 	private ILogger log;
 
@@ -31,13 +34,6 @@ public partial class MainMenu : Node2D {
 
 		DisplayServer.WindowSetTitle("C7 - Godot 4");
 
-		// To pass data between scenes, putting path string in a global singleton and reading it later in createGame
-		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
-		Global.ResetLoadGamePath();
-
-		LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
-		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
-
 		DisplayTitleScreen();
 	}
 
@@ -45,11 +41,18 @@ public partial class MainMenu : Node2D {
 		try {
 			SetMainMenuBackground();
 
+			// To pass data between scenes, putting path string in a global singleton and reading it later in createGame
+			Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
+			Global.ResetLoadGamePath();
+
+			LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
+			LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
+
 			InactiveButton = TextureLoader.Load("ui.button.inactive");
 			HoverButton = TextureLoader.Load("ui.button.hover");
 
-			AddButton("New Game", 0, StartGame);
-			AddButton("Quick Start", 35, StartGame);
+			AddButton("New Game", 0, GoToWorldSetup);
+			AddButton("Quick Start", 35, GoToWorldSetup);
 			AddButton("Tutorial", 70, StartGame);
 			AddButton("Load Game", 105, LoadGame);
 			AddButton("Load Scenario", 140, LoadScenario);
@@ -92,6 +95,11 @@ public partial class MainMenu : Node2D {
 		newButtonLabel.SetPosition(new Vector2(MENU_OFFSET_FROM_LEFT + 25, MENU_OFFSET_FROM_TOP + verticalPosition + BUTTON_LABEL_OFFSET));
 		MainMenuBackground.AddChild(newButtonLabel);
 		newButtonLabel.Pressed += action;
+	}
+
+	public void GoToWorldSetup() {
+		PlayButtonPressedSound();
+		GetTree().ChangeSceneToFile("res://UIElements/NewGame/world_setup.tscn");
 	}
 
 	public void StartGame() {
