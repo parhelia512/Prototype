@@ -9,7 +9,6 @@ using QueryCiv3;
 
 public partial class Util {
 	static public string Civ3Root = GetCiv3Path();
-	static public bool CheckForModernFiles = true;
 
 	static public string GetCiv3Path() {
 		string path = C7Settings.GetSettingValue("locations", "civ3InstallDir");

@@ -3,17 +3,43 @@ using NLua;
 using Godot;
 using ConvertCiv3Media;
 using System.Collections.Generic;
+using System.IO;
 
 public static class TextureLoader {
+	private struct ConfigEntry {
+		public string Path;
+		public PCXToGodot.CropRegion? CropRegion = null;
+
+		// PCX-specific settings
+		public string AlphaPath = null;
+		public int AlphaRowOffset = 0;
+		public PCXToGodot.ColorOptions ColorOptions = true;
+
+		public ConfigEntry() {
+		}
+
+		public readonly bool UseAlpha => AlphaPath != null;
+	}
+
 	private static Lua lua;
+	private static LuaTable civ3TextureConfig;
+	private static LuaTable c7TextureConfig;
+
 	private static LuaTable textureConfig;
+	private static bool modernGraphics;
 
 	private static Dictionary<string, ImageTexture> textureCache = [];
 	private static Dictionary<string, Pcx> PcxCache = [];
 
 	static TextureLoader() {
 		lua = new Lua();
-		textureConfig = (LuaTable)lua.DoFile("./Text/texture_config.lua")[0];
+		lua.DoString($"package.path = './Text/TextureConfigs/?.lua'");
+
+		civ3TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/civ3.lua")[0];
+		c7TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/c7.lua")[0];
+
+		textureConfig = c7TextureConfig;
+		modernGraphics = true;
 	}
 
 	public static ImageTexture Load(string keyPath) {
@@ -34,33 +60,44 @@ public static class TextureLoader {
 	}
 
 	private static ImageTexture LoadFromLuaObject(object entry) {
-		// Handle string paths directly
+		return LoadFromConfigEntry(ParseConfigEntry(entry));
+	}
+
+	private static ConfigEntry ParseConfigEntry(object entry) {
 		if (entry is string simplePath) {
-			return LoadFromPCX(simplePath);
+			return new() {
+				Path = simplePath,
+			};
 		}
 
-		// Handle configurations via table
 		if (entry is LuaTable table) {
 			if (table["path"] == null) {
 				throw new ArgumentException("Texture configuration missing required 'path' property");
 			}
 
-			string path = table["path"].ToString();
-
-			// Process textures with alpha blending
-			string? alpha = table["alpha"]?.ToString();
-			if (alpha != null) {
-				return LoadWithAlphaBlend(path, alpha, table);
-			}
-
-			// Process standard texture with optional cropping
-			PCXToGodot.CropRegion? cropRegion = ExtractCropRegion(table);
-			bool shadows = Convert.ToBoolean(table["shadows"] ?? true);
-
-			return LoadFromPCX(path, cropRegion, shadows);
+			return new() {
+				Path = table["path"].ToString(),
+				AlphaPath = table["alpha"]?.ToString(),
+				CropRegion = ExtractCropRegion(table),
+				ColorOptions = Convert.ToBoolean(table["shadows"] ?? true),
+				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0)
+			};
 		}
 
 		throw new ArgumentException($"Invalid texture config format: {entry?.GetType().Name ?? "null"}");
+	}
+
+	private static ImageTexture LoadFromConfigEntry(ConfigEntry config) {
+		if (config.UseAlpha) {
+			return LoadWithAlphaBlend(config.Path, config.AlphaPath!, config.CropRegion, config.AlphaRowOffset);
+		}
+
+		string ext = Path.GetExtension(config.Path).ToLowerInvariant();
+		return ext switch {
+			".png" => LoadFromPNG(config.Path, config.CropRegion),
+			".pcx" => LoadFromPCX(config.Path, config.CropRegion, config.ColorOptions),
+			_ => throw new FormatException($"Unknown texture format: {config.Path}"),
+		};
 	}
 
 	// Helper method to extract crop region from a table
@@ -83,12 +120,9 @@ public static class TextureLoader {
 	}
 
 	// Helper method to handle alpha blend loading
-	private static ImageTexture LoadWithAlphaBlend(string path, string alphaPath, LuaTable table) {
+	private static ImageTexture LoadWithAlphaBlend(string path, string alphaPath, PCXToGodot.CropRegion? cropRegion, int alphaRowOffset) {
 		Pcx pcx = LoadPCX(path);
 		Pcx alphaPcx = LoadPCX(alphaPath);
-		int alphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0);
-
-		PCXToGodot.CropRegion? cropRegion = ExtractCropRegion(table);
 
 		return cropRegion.HasValue
 			? PCXToGodot.getImageFromPCXWithAlphaBlend(pcx, alphaPcx, cropRegion.Value, alphaRowOffset)
@@ -122,19 +156,41 @@ public static class TextureLoader {
 	}
 
 	private static ImageTexture LoadFromPCX(string relPath, PCXToGodot.CropRegion? cropRegion, PCXToGodot.ColorOptions colorOptions) {
-		string key = cropRegion is null
-			? relPath
-			: $"{relPath}-{cropRegion.Value.LeftStart}-{cropRegion.Value.TopStart}-{cropRegion.Value.CroppedWidth}-{cropRegion.Value.CroppedHeight}";
+		return GetOrAddTexture(relPath, cropRegion, () => {
+			Pcx pcx = LoadPCX(relPath);
+			return cropRegion is null
+				? PCXToGodot.getImageTextureFromPCX(pcx)
+				: PCXToGodot.getImageTextureFromPCX(pcx, cropRegion.Value, colorOptions);
+		});
+	}
 
-		if (textureCache.TryGetValue(key, out ImageTexture cached)) {
+	private static ImageTexture LoadFromPNG(string relPath, PCXToGodot.CropRegion? cropRegion) {
+		return GetOrAddTexture(relPath, cropRegion, () => {
+			Image image = Image.LoadFromFile(Util.Civ3MediaPath(relPath));
+			if (cropRegion != null) {
+				var region = cropRegion.Value;
+				return ImageTexture.CreateFromImage(
+					image.GetRegion(new Rect2I(region.LeftStart, region.TopStart, region.CroppedWidth, region.CroppedHeight))
+				);
+			}
+			return ImageTexture.CreateFromImage(image);
+		});
+	}
+
+	private static string MakeCacheKey(string relPath, PCXToGodot.CropRegion? cropRegion) {
+		if (cropRegion is null) return relPath;
+
+		var region = cropRegion.Value;
+		return $"{relPath}-{region.LeftStart}-{region.TopStart}-{region.CroppedWidth}-{region.CroppedHeight}";
+	}
+
+	private static ImageTexture GetOrAddTexture(string relPath, PCXToGodot.CropRegion? cropRegion, Func<ImageTexture> loader) {
+		string key = MakeCacheKey(relPath, cropRegion);
+
+		if (textureCache.TryGetValue(key, out var cached))
 			return cached;
-		}
 
-		Pcx pcx = LoadPCX(relPath);
-		ImageTexture texture = cropRegion is null
-			? PCXToGodot.getImageTextureFromPCX(pcx)
-			: PCXToGodot.getImageTextureFromPCX(pcx, cropRegion.Value, colorOptions);
-
+		var texture = loader();
 		textureCache[key] = texture;
 		return texture;
 	}
@@ -154,5 +210,15 @@ public static class TextureLoader {
 	public static void ClearCache() {
 		PcxCache.Clear();
 		textureCache.Clear();
+	}
+
+	public static void ToggleModernGraphics() {
+		if (modernGraphics) {
+			modernGraphics = false;
+			textureConfig = civ3TextureConfig;
+		} else {
+			modernGraphics = true;
+			textureConfig = c7TextureConfig;
+		}
 	}
 }
