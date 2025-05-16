@@ -68,16 +68,12 @@ public partial class DomesticAdvisor : Control {
 		DialogBoxAdvise.SetPosition(new Vector2(815, 119));
 		background.AddChild(DialogBoxAdvise);
 
-		close.TextureNormal = TextureLoader.Load("ui.exit.normal");
-		close.TextureHover = TextureLoader.Load("ui.exit.hover");
-		close.TexturePressed = TextureLoader.Load("ui.exit.pressed");
+		TextureLoader.SetButtonTextures(close, "ui.exit");
 		close.Pressed += () => {
 			GetParent<Advisors>().Hide();
 		};
 
-		changeGovernment.TextureNormal = TextureLoader.Load("advisors.domestic.button.normal");
-		changeGovernment.TextureHover = TextureLoader.Load("advisors.domestic.button.hover");
-		changeGovernment.TexturePressed = TextureLoader.Load("advisors.domestic.button.pressed");
+		TextureLoader.SetButtonTextures(changeGovernment, "advisors.domestic.button");
 		changeGovernment.Pressed += ChangeGovernments;
 
 		ImageTexture scienceSliderTexture = TextureLoader.Load("icons.science");

@@ -31,7 +31,7 @@ textures.advisors = {
       modern = ADVISORS .. "science_modern.pcx",
     },
     navigation = {
-      previous = {
+      button = {
         normal = {
           path = SCIENCE_NAV,
           crop_region = { 0, 1, 129, 33 },
@@ -43,29 +43,15 @@ textures.advisors = {
         pressed = {
           path = SCIENCE_NAV,
           crop_region = { 0, 69, 129, 33 },
-        },
-        arrow = {
-          path = SCIENCE_NAV,
-          crop_region = { 0, 103, 44, 9 },
         },
       },
-      next = {
-        normal = {
-          path = SCIENCE_NAV,
-          crop_region = { 0, 1, 129, 33 },
-        },
-        hover = {
-          path = SCIENCE_NAV,
-          crop_region = { 0, 35, 129, 33 },
-        },
-        pressed = {
-          path = SCIENCE_NAV,
-          crop_region = { 0, 69, 129, 33 },
-        },
-        arrow = {
-          path = SCIENCE_NAV,
-          crop_region = { 46, 103, 44, 9 },
-        },
+      arrow_previous = {
+        path = SCIENCE_NAV,
+        crop_region = { 0, 103, 44, 9 },
+      },
+      arrow_next = {
+        path = SCIENCE_NAV,
+        crop_region = { 46, 103, 44, 9 },
       },
     },
   },

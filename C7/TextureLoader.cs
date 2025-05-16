@@ -17,6 +17,18 @@ public static class TextureLoader {
 		if (entry == null)
 			throw new Exception($"Texture config not found for key: {keyPath}");
 
+		return LoadFromLuaObject(entry);
+	}
+
+	public static void SetButtonTextures(TextureButton button, string keyPath) {
+		var entry = (LuaTable)GetEntryByPath(keyPath);
+
+		button.TextureNormal = LoadFromLuaObject(entry["normal"]);
+		button.TexturePressed = LoadFromLuaObject(entry["pressed"]);
+		button.TextureHover = LoadFromLuaObject(entry["hover"]);
+	}
+
+	private static ImageTexture LoadFromLuaObject(object entry) {
 		string path;
 
 		int x, y, w, h;
@@ -36,7 +48,7 @@ public static class TextureLoader {
 			w = Convert.ToInt32(cropRegion[3]);
 			h = Convert.ToInt32(cropRegion[4]);
 		} else {
-			throw new Exception($"Invalid texture config format for key: {keyPath}");
+			throw new Exception($"Invalid texture config format");
 		}
 
 		return Util.LoadTextureFromPCX(path, x, y, w, h, shadows);

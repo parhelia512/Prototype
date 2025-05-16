@@ -59,17 +59,14 @@ public partial class ScienceAdvisor : TextureRect {
 		AddChild(GoBackButton);
 		GoBackButton.Pressed += ReturnToMenu;
 
-		previousEra = new() {
-			TextureNormal = TextureLoader.Load("advisors.science.navigation.previous.normal"),
-			TextureHover = TextureLoader.Load("advisors.science.navigation.previous.hover"),
-			TexturePressed = TextureLoader.Load("advisors.science.navigation.previous.pressed")
-		};
+		previousEra = new();
+		TextureLoader.SetButtonTextures(previousEra, "advisors.science.navigation.button");
 		previousEra.SetPosition(new Vector2(512 - 128 - 100, 720));
 		AddChild(previousEra);
 		previousEra.Pressed += () => { ChangeEraAndDrawTree(-1); };
 
 		TextureRect leftArrow = new() {
-			Texture = TextureLoader.Load("advisors.science.navigation.previous.arrow")
+			Texture = TextureLoader.Load("advisors.science.navigation.arrow_previous")
 		};
 		previousEra.AddChild(leftArrow);
 		leftArrow.SetPosition(new Vector2(-44, 13));
@@ -79,17 +76,14 @@ public partial class ScienceAdvisor : TextureRect {
 		previousEraLabel.SetTextAndCenterLabel("Previous Era");
 		previousEraLabel.Position += new Vector2(0, 7);
 
-		nextEra = new() {
-			TextureNormal = TextureLoader.Load("advisors.science.navigation.next.normal"),
-			TextureHover = TextureLoader.Load("advisors.science.navigation.next.hover"),
-			TexturePressed = TextureLoader.Load("advisors.science.navigation.next.pressed")
-		};
+		nextEra = new();
+		TextureLoader.SetButtonTextures(nextEra, "advisors.science.navigation.button");
 		nextEra.SetPosition(new Vector2(512 + 100, 720));
 		AddChild(nextEra);
 		nextEra.Pressed += () => { ChangeEraAndDrawTree(1); };
 
 		TextureRect rightArrow = new() {
-			Texture = TextureLoader.Load("advisors.science.navigation.next.arrow")
+			Texture = TextureLoader.Load("advisors.science.navigation.arrow_next")
 		};
 		nextEra.AddChild(rightArrow);
 		rightArrow.SetPosition(new Vector2(129, 13));

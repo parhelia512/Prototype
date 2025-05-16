@@ -48,19 +48,13 @@ public partial class CityScreen : Control {
 		background.Texture = TextureLoader.Load("city_screen.background");
 
 		// The close button.
-		close.TextureNormal = TextureLoader.Load("city_screen.buttons.close.normal");
-		close.TextureHover = TextureLoader.Load("city_screen.buttons.close.hover");
-		close.TexturePressed = TextureLoader.Load("city_screen.buttons.close.pressed");
+		TextureLoader.SetButtonTextures(close, "city_screen.buttons.close");
 		close.Pressed += Hide;
 
-		previousCity.TextureNormal = TextureLoader.Load("city_screen.buttons.previous.normal");
-		previousCity.TextureHover = TextureLoader.Load("city_screen.buttons.previous.hover");
-		previousCity.TexturePressed = TextureLoader.Load("city_screen.buttons.previous.pressed");
+		TextureLoader.SetButtonTextures(previousCity, "city_screen.buttons.previous");
 		previousCity.Pressed += SwitchToPreviousCity;
 
-		nextCity.TextureNormal = TextureLoader.Load("city_screen.buttons.next.normal");
-		nextCity.TextureHover = TextureLoader.Load("city_screen.buttons.next.hover");
-		nextCity.TexturePressed = TextureLoader.Load("city_screen.buttons.next.pressed");
+		TextureLoader.SetButtonTextures(nextCity, "city_screen.buttons.next");
 		nextCity.Pressed += SwitchToNextCity;
 
 		// Load the font we'll use for the details.
@@ -109,10 +103,7 @@ public partial class CityScreen : Control {
 		};
 		background.AddChild(commerceHappinessDetails);
 
-		productionButton.TextureNormal = TextureLoader.Load("city_screen.buttons.production.normal");
-		productionButton.TextureHover = TextureLoader.Load("city_screen.buttons.production.hover");
-		productionButton.TexturePressed = TextureLoader.Load("city_screen.buttons.production.pressed");
-
+		TextureLoader.SetButtonTextures(productionButton, "city_screen.buttons.production");
 		productionButton.Pressed += () => { this.productionMenu.Visible = !this.productionMenu.Visible; };
 
 		Hidden += OnExit;
