@@ -808,4 +808,28 @@ textures.upper_left_navigation = {
   },
 }
 
+textures.lower_right_infobox = {
+  box = {
+    path = INTERFACE .. "box right color.pcx",
+    alpha = INTERFACE .. "box right alpha.pcx",
+  },
+  next_turn = {
+    off = {
+      path = INTERFACE .. "nextturn states color.pcx",
+      alpha = INTERFACE .. "nextturn states alpha.pcx",
+      crop_region = { 0, 0, 47, 28 },
+    },
+    on = {
+      path = INTERFACE .. "nextturn states color.pcx",
+      alpha = INTERFACE .. "nextturn states alpha.pcx",
+      crop_region = { 47, 0, 47, 28 },
+    },
+    blink = {
+      path = INTERFACE .. "nextturn states color.pcx",
+      alpha = INTERFACE .. "nextturn states alpha.pcx",
+      crop_region = { 94, 0, 47, 28 },
+    },
+  },
+}
+
 return textures
