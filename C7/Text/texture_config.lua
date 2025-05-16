@@ -1,17 +1,21 @@
 -- Base paths
-local BUTTONS = "Art/buttonsFINAL.pcx"
 local ADVISORS = "Art/Advisors/"
-local CITY_BUTTONS = "Art/city screen/cityMgmtButtons.pcx"
-local CITY_PRODUCTION = "Art/city screen/ProdButton.pcx"
-local CITY_ICONS = "Art/city screen/CityIcons.pcx"
+
+local BUTTONS = "Art/buttonsFINAL.pcx"
 local EXIT_BOX = "Art/exitBox-backgroundStates.pcx"
-local CITIES = "Art/Cities/"
-local TERRAIN = "Art/Terrain/"
 local INTERFACE = "Art/interface/"
-local RESOURCES = "Art/resources.pcx"
-local CREDITS = "Art/Credits/"
 local X_O = "Art/X-o_ALLstates-sprite.pcx"
 local SCIENCE_NAV = "Art/Tech Chooser/scienceNAV.pcx"
+
+local CITY_BUTTONS = "Art/city screen/cityMgmtButtons.pcx"
+local CITY_PRODUCTION = "Art/city screen/ProdButton.pcx"
+local CITY_SCREEN_ICONS = "Art/city screen/CityIcons.pcx"
+local CITY_ICONS = "Art/Cities/city icons.pcx"
+
+local TERRAIN = "Art/Terrain/"
+local RESOURCES = "Art/resources.pcx"
+
+local CREDITS = "Art/Credits/"
 local PALACE = "Art/PalaceView/"
 
 -- Texture definitions
@@ -283,23 +287,23 @@ textures.credits = {
 
 textures.icons = {
   science = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 34, 2, 30, 30 },
   },
   luxury = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 376, 2, 30, 30 },
   },
   food = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 195, 1, 21, 30 },
   },
   shield = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 133, 1, 16, 30 },
   },
   commerce = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 67, 1, 21, 30 },
   },
   plus = {
@@ -311,44 +315,48 @@ textures.icons = {
     crop_region = { 51, 1, 22, 22 },
   },
   eaten_food = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 218, 2, 29, 29 },
   },
   full_food = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 188, 2, 29, 29 },
   },
   wasted_shield = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 157, 2, 29, 29 },
   },
   good_shield = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 125, 2, 29, 29 },
   },
   wasted_gold = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 95, 2, 29, 29 },
   },
   good_gold = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 64, 2, 29, 29 },
   },
   happy_face = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 373, 2, 29, 29 },
   },
   content_face = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 591, 2, 29, 29 },
   },
   beaker = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 34, 2, 29, 29 },
   },
   treasury = {
-    path = CITY_ICONS,
+    path = CITY_SCREEN_ICONS,
     crop_region = { 746, 2, 29, 29 },
+  },
+  capital_star = {
+    path = CITY_ICONS,
+    crop_region = { 20, 1, 18, 18 },
   },
 }
 
