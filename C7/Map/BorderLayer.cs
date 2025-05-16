@@ -11,7 +11,7 @@ namespace C7.Map {
 		private readonly Dictionary<(int, Color), ImageTexture> textureCache = new();
 
 		public BorderLayer() {
-			Pcx texturePcx = Util.LoadPCX(texturePath);
+			Pcx texturePcx = TextureLoader.LoadPCX(texturePath);
 
 			int textureWidth = 128;
 			int textureHeight = 72;

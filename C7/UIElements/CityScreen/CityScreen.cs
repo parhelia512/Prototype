@@ -367,7 +367,7 @@ public partial class CityScreen : Control {
 			const int iconWidth = 50, iconHeight = 40;
 
 			Sprite2D icon = new();
-			icon.Texture = Util.LoadTextureFromPCX("Art/city screen/buildings-large.pcx", 33, y, iconWidth, iconHeight);
+			icon.Texture = TextureLoader.LoadFromPCX("Art/city screen/buildings-large.pcx", new(33, y, iconWidth, iconHeight));
 			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
 			productionButton.AddChild(icon);
 		}

@@ -80,7 +80,7 @@ public partial class TerrainLayer : LooseLayer {
 			"Art/Terrain/wSSS.pcx",
 			"Art/Terrain/wOOO.pcx",
 		};
-		return fileNames.ConvertAll(name => Util.LoadTextureFromPCX(name));
+		return fileNames.ConvertAll(name => TextureLoader.LoadFromPCX(name));
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {

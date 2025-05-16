@@ -122,7 +122,7 @@ public partial class Popup : TextureRect {
 
 		Image image = Image.Create(width, height, false, Image.Format.Rgba8);
 
-		Pcx popupborders = Util.LoadPCX("Art/popupborders.pcx");
+		Pcx popupborders = TextureLoader.LoadPCX("Art/popupborders.pcx");
 
 		//The pop-up part is the tricky part
 		Stopwatch imageTimer = new Stopwatch();

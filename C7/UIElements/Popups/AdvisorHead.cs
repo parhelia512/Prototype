@@ -19,7 +19,7 @@ public class AdvisorHead {
 	};
 
 	public static ImageTexture GetPopupImage(Advisor advisor, Mood mood, int eraIndex) {
-		return Util.LoadTextureFromPCX(GetFilename(advisor), 1 + (int)mood * 150, 150 * (eraIndex + 1) - 110, 149, 110, false);
+		return TextureLoader.LoadFromPCX(GetFilename(advisor), new(1 + (int)mood * 150, 150 * (eraIndex + 1) - 110, 149, 110), false);
 	}
 
 	private static string GetFilename(Advisor advisor) {

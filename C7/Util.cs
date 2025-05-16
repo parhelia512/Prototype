@@ -157,31 +157,6 @@ public partial class Util {
 		return FileExistsIgnoringCase(Civ3Root, fullPath);
 	}
 
-	//Send this function a path (e.g. Art/title.pcx) and it will load it up and convert it to a texture for you.
-	static public ImageTexture LoadTextureFromPCX(string relPath) {
-		if (textureCache.ContainsKey(relPath)) {
-			return textureCache[relPath];
-		}
-
-		// As a hack, whenever we try to load a legacy pcx file, first check if
-		// there is a .png file with the same name, and if it exists, prefer
-		// that instead. This is a little inefficient, but the loading is all
-		// cached and it makes it easy to incrementally add our own graphics.
-		if (CheckForModernFiles) {
-			try {
-				Image image = Image.LoadFromFile(Civ3MediaPath(relPath.Replace(".pcx", ".png")));
-				ImageTexture t = ImageTexture.CreateFromImage(image);
-				textureCache[relPath] = t;
-				return t;
-			} catch (Exception e) { }
-		}
-
-		Pcx NewPCX = LoadPCX(relPath);
-		ImageTexture texture = PCXToGodot.getImageTextureFromPCX(NewPCX);
-		textureCache[relPath] = texture;
-		return texture;
-	}
-
 	static public (ImageTexture, ImageTexture) LoadTextureFromFlicData(byte[] image, byte[,] pallete, int width, int height) {
 		var (baseImage, tintImage) = PCXToGodot.ByteArrayWithTintToImage(image, pallete, width, height, shadows: true);
 		return (ImageTexture.CreateFromImage(baseImage), ImageTexture.CreateFromImage(tintImage));
@@ -213,48 +188,6 @@ public partial class Util {
 		return ImageTexture.CreateFromImage(img);
 	}
 
-	private static Dictionary<string, ImageTexture> textureCache = new Dictionary<string, ImageTexture>();
-	//Send this function a path (e.g. Art/exitBox-backgroundStates.pcx), and the coordinates of the extracted image you need from that PCX
-	//file, and it'll load it up and return you what you need.
-	static public ImageTexture LoadTextureFromPCX(string relPath, int leftStart, int topStart, int width, int height, bool shadows = true) {
-		string key = relPath + "-" + leftStart + "-" + topStart + "-" + width + "-" + height;
-		if (textureCache.ContainsKey(key)) {
-			return textureCache[key];
-		}
-
-		// As a hack, whenever we try to load a legacy pcx file, first check if
-		// there is a .png file with the same name, and if it exists, prefer
-		// that instead. This is a little inefficient, but the loading is all
-		// cached and it makes it easy to incrementally add our own graphics.
-		if (CheckForModernFiles) {
-			try {
-				Image image = Image.LoadFromFile(Civ3MediaPath(relPath.Replace(".pcx", ".png")));
-				ImageTexture t = ImageTexture.CreateFromImage(image.GetRegion(new Rect2I(leftStart, topStart, width, height)));
-				textureCache[key] = t;
-				return t;
-			} catch (Exception e) { }
-		}
-
-		Pcx NewPCX = LoadPCX(relPath);
-		ImageTexture texture = PCXToGodot.getImageTextureFromPCX(NewPCX, new(leftStart, topStart, width, height), shadows);
-		textureCache[key] = texture;
-		return texture;
-	}
-
-	private static Dictionary<string, Pcx> PcxCache = new Dictionary<string, Pcx>();
-
-	/**
-	 * Utility method for loading PCX files that will cache them, so we don't have to load them from disk so often.
-	 **/
-	static public Pcx LoadPCX(string relPath) {
-		if (PcxCache.ContainsKey(relPath)) {
-			return PcxCache[relPath];
-		}
-		Pcx thePcx = new Pcx(Civ3MediaPath(relPath));
-		PcxCache[relPath] = thePcx;
-		return thePcx;
-	}
-
 	private static Dictionary<int, Color> ColorCache = new();
 	private const string CivPalettePath = "Art/Units/Palettes/";
 
@@ -267,7 +200,7 @@ public partial class Util {
 		string fileName = $"ntp{colorIndex:D2}.pcx";
 		string filePath = System.IO.Path.Combine(CivPalettePath, fileName);
 
-		Pcx pcx = LoadPCX(filePath);
+		Pcx pcx = TextureLoader.LoadPCX(filePath);
 		Color color = PCXToGodot.GetColorFromPCX(pcx);
 
 		ColorCache[colorIndex] = color;
@@ -309,7 +242,7 @@ public partial class Util {
 	// Creates textures from a PCX file without de-palettizing it. Returns two ImageTextures, the first is 16x16 with RGB8 format containing the
 	// color palette and the second is the size of the image itself and contains the indices in R8 format.
 	public static (ImageTexture palette, ImageTexture indices) loadPalettizedPCX(string filePath) {
-		var pcx = LoadPCX(filePath);
+		var pcx = TextureLoader.LoadPCX(filePath);
 
 		var imgIndices = Image.CreateFromData(pcx.Width, pcx.Height, false, Image.Format.R8, pcx.ColorIndices);
 		ImageTexture texIndices = ImageTexture.CreateFromImage(imgIndices);
@@ -452,10 +385,9 @@ public partial class Util {
 	// Allow clearing the caches, so that scenarios with different files that
 	// have the same name can be loaded independently.
 	public static void ClearCaches() {
-		PcxCache.Clear();
 		ColorCache.Clear();
-		textureCache.Clear();
 		flicCache.Clear();
+		TextureLoader.ClearCache();
 	}
 
 	public static Rect2 GetResourceRect(C7GameData.Resource resource) {
@@ -483,6 +415,6 @@ public partial class Util {
 		int width = (int)rect.Size.X;
 		int height = (int)rect.Size.Y;
 
-		return LoadTextureFromPCX("Art/resources.pcx", x, y, width, height);
+		return TextureLoader.LoadFromPCX("Art/resources.pcx", new(x, y, width, height));
 	}
 }

@@ -7,9 +7,11 @@ local INTERFACE = "Art/interface/"
 local X_O = "Art/X-o_ALLstates-sprite.pcx"
 local SCIENCE_NAV = "Art/Tech Chooser/scienceNAV.pcx"
 
+local CITY_SCREEN = "Art/city screen/"
 local CITY_BUTTONS = "Art/city screen/cityMgmtButtons.pcx"
 local CITY_PRODUCTION = "Art/city screen/ProdButton.pcx"
 local CITY_SCREEN_ICONS = "Art/city screen/CityIcons.pcx"
+
 local CITY_ICONS = "Art/Cities/city icons.pcx"
 
 local TERRAIN = "Art/Terrain/"
@@ -167,6 +169,11 @@ textures.ui = {
       path = EXIT_BOX,
       crop_region = { 144, 0, 72, 48 },
     },
+  },
+  rename = {
+    path = INTERFACE .. "NormButtons.PCX",
+    alpha = INTERFACE .. "ButtonAlpha.pcx",
+    crop_region = { 64, 224, 32, 32 },
   },
 }
 
@@ -408,6 +415,7 @@ textures.city_screen = {
       },
     },
   },
+  production_queue = CITY_SCREEN .. "ProductionQueueBox.pcx",
 }
 
 textures.palace = {
@@ -760,6 +768,43 @@ textures.world_setup_large = {
   billion5 = {
     path = WORLD_SETUP .. "age.pcx",
     crop_region = { 603, 1, 300, 200 },
+  },
+}
+
+textures.diplomacy = {
+  deal = "Art/Diplomacy/counter.pcx",
+  offer = "Art/Diplomacy/talk_offer.pcx",
+}
+
+textures.upper_left_navigation = {
+  menu = {
+    path = INTERFACE .. "menuButtons.pcx",
+    alpha = INTERFACE .. "menuButtonsAlpha.pcx",
+    crop_region = { 0, 1, 35, 29 },
+  },
+  civilopedia = {
+    path = INTERFACE .. "menuButtons.pcx",
+    alpha = INTERFACE .. "menuButtonsAlpha.pcx",
+    crop_region = { 36, 1, 35, 29 },
+  },
+  advisor = {
+    normal = {
+      path = INTERFACE .. "menuButtons.pcx",
+      alpha = INTERFACE .. "menuButtonsAlpha.pcx",
+      crop_region = { 73, 1, 35, 29 },
+    },
+    hover = {
+      path = INTERFACE .. "menuButtons.pcx",
+      alpha = INTERFACE .. "menuButtonsAlpha.pcx",
+      alpha_row_offset = 60,
+      crop_region = { 73, 61, 35, 29 },
+    },
+    pressed = {
+      path = INTERFACE .. "menuButtons.pcx",
+      alpha = INTERFACE .. "menuButtonsAlpha.pcx",
+      alpha_row_offset = 120,
+      crop_region = { 73, 121, 35, 29 },
+    },
   },
 }
 

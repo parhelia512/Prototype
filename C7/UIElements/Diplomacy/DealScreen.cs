@@ -66,7 +66,7 @@ public partial class DealScreen : TextureRect {
 		blueFontTheme.DefaultFont = font;
 		blueFontTheme.SetColor("font_color", "Label", Colors.Blue);
 
-		this.Texture = Util.LoadTextureFromPCX("Art/Diplomacy/counter.pcx");
+		this.Texture = TextureLoader.Load("diplomacy.deal");
 
 		using UIGameDataAccess gameDataAccess = new();
 		GameData gD = gameDataAccess.gameData;

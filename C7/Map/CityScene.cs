@@ -17,10 +17,10 @@ namespace C7.Map {
 			cityLabelScene = new CityLabelScene(city, tileCenter);
 
 			//TODO: Generalize, support multiple city types, etc.
-			Pcx pcx = Util.LoadPCX("Art/Cities/rMIDEAST.PCX");
+			Pcx pcx = TextureLoader.LoadPCX("Art/Cities/rMIDEAST.PCX");
 			int height = pcx.Height/4;
 			int width = pcx.Width/3;
-			cityTexture = Util.LoadTextureFromPCX("Art/Cities/rMIDEAST.PCX", 0, 0, width, height, false);
+			cityTexture = TextureLoader.LoadFromPCX("Art/Cities/rMIDEAST.PCX", new(0, 0, width, height), false);
 			citySpriteSize = new Vector2(width, height);
 
 			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * citySpriteSize.X;
