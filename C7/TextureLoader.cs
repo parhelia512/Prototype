@@ -5,7 +5,6 @@ using ConvertCiv3Media;
 using System.Collections.Generic;
 using System.IO;
 
-
 public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
 
 public static class TextureLoader {
@@ -16,7 +15,7 @@ public static class TextureLoader {
 		// PCX-specific settings
 		public string AlphaPath = null;
 		public int AlphaRowOffset = 0;
-		public PCXToGodot.ColorOptions ColorOptions = true;
+		public PCXToGodot.ColorOptions ColorOptions = PCXToGodot.ColorOptions.Default;
 
 		public ConfigEntry() {
 		}
@@ -33,6 +32,7 @@ public static class TextureLoader {
 
 	private static Dictionary<string, ImageTexture> textureCache = [];
 	private static Dictionary<string, Pcx> PcxCache = [];
+	private static Dictionary<string, Image> PngCache = [];
 
 	static TextureLoader() {
 		lua = new Lua();
@@ -45,20 +45,20 @@ public static class TextureLoader {
 		modernGraphics = true;
 	}
 
-	public static ImageTexture Load(string keyPath) {
-		object entry = GetEntryByPath(keyPath);
+	public static ImageTexture Load(string configKey) {
+		object entry = GetEntryByPath(configKey);
 
 		if (entry == null)
-			throw new Exception($"Texture config not found for key: {keyPath}");
+			throw new Exception($"Texture config not found for key: {configKey}");
 
 		return LoadFromLuaObject(entry);
 	}
 
-	public static ImageTexture Load(string keyPath, object obj) {
-		object entry = GetEntryByPath(keyPath);
+	public static ImageTexture Load(string configKey, object obj) {
+		object entry = GetEntryByPath(configKey);
 
 		if (entry is not LuaTable table)
-			throw new Exception($"Table expected for key: {keyPath}");
+			throw new Exception($"Table expected for key: {configKey}");
 
 		var func = table["map_object_to_sprite"] as LuaFunction
 			?? throw new Exception("Custom mapping function expected");
@@ -66,12 +66,15 @@ public static class TextureLoader {
 		return LoadFromLuaObject(func.Call(table, obj)[0]);
 	}
 
-	public static void SetButtonTextures(TextureButton button, string keyPath) {
-		var entry = (LuaTable)GetEntryByPath(keyPath);
+	public static void SetButtonTextures(TextureButton button, string configKey) {
+		object entry = GetEntryByPath(configKey);
 
-		button.TextureNormal = LoadFromLuaObject(entry["normal"]);
-		button.TexturePressed = LoadFromLuaObject(entry["pressed"]);
-		button.TextureHover = LoadFromLuaObject(entry["hover"]);
+		if (entry is not LuaTable table)
+			throw new Exception($"Table expected for key: {configKey}");
+
+		button.TextureNormal = LoadFromLuaObject(table["normal"]);
+		button.TexturePressed = LoadFromLuaObject(table["pressed"]);
+		button.TextureHover = LoadFromLuaObject(table["hover"]);
 	}
 
 	private static ImageTexture LoadFromLuaObject(object entry) {
@@ -144,8 +147,8 @@ public static class TextureLoader {
 			: PCXToGodot.getImageFromPCXWithAlphaBlend(pcx, alphaPcx);
 	}
 
-	private static object GetEntryByPath(string keyPath) {
-		string[] parts = keyPath.Split('.');
+	private static object GetEntryByPath(string configKey) {
+		string[] parts = configKey.Split('.');
 		object current = textureConfig;
 
 		foreach (string part in parts) {
@@ -159,29 +162,18 @@ public static class TextureLoader {
 		return current;
 	}
 
-	//Send this function a path (e.g. Art/title.pcx) and it will load it up and convert it to a texture for you.
-	public static ImageTexture LoadFromPCX(string relPath) {
-		return LoadFromPCX(relPath, null, true);
-	}
-
-	//Send this function a path (e.g. Art/exitBox-backgroundStates.pcx), and the coordinates of the extracted image you need from that PCX
-	//file, and it'll load it up and return you what you need.
-	public static ImageTexture LoadFromPCX(string relPath, CropRegion cropRegion, bool shadows = true) {
-		return LoadFromPCX(relPath, cropRegion, new PCXToGodot.ColorOptions(shadows));
-	}
-
-	private static ImageTexture LoadFromPCX(string relPath, CropRegion? cropRegion, PCXToGodot.ColorOptions colorOptions) {
+	public static ImageTexture LoadFromPCX(string relPath, CropRegion? cropRegion = null, PCXToGodot.ColorOptions? colorOptions = null) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
 			Pcx pcx = LoadPCX(relPath);
 			return cropRegion is null
 				? PCXToGodot.getImageTextureFromPCX(pcx)
-				: PCXToGodot.getImageTextureFromPCX(pcx, cropRegion.Value, colorOptions);
+				: PCXToGodot.getImageTextureFromPCX(pcx, cropRegion.Value, colorOptions ?? PCXToGodot.ColorOptions.Default);
 		});
 	}
 
 	private static ImageTexture LoadFromPNG(string relPath, CropRegion? cropRegion) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
-			Image image = Image.LoadFromFile(Util.Civ3MediaPath(relPath));
+			Image image = LoadPNG(relPath);
 			if (cropRegion != null) {
 				var region = cropRegion.Value;
 				return ImageTexture.CreateFromImage(
@@ -222,8 +214,18 @@ public static class TextureLoader {
 		return thePcx;
 	}
 
+	private static Image LoadPNG(string relPath) {
+		if (PngCache.TryGetValue(relPath, out Image value)) {
+			return value;
+		}
+		Image png = Image.LoadFromFile(Util.Civ3MediaPath(relPath));
+		PngCache[relPath] = png;
+		return png;
+	}
+
 	public static void ClearCache() {
 		PcxCache.Clear();
+		PngCache.Clear();
 		textureCache.Clear();
 	}
 
