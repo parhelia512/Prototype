@@ -304,7 +304,17 @@ public partial class CityScreen : Control {
 	}
 
 	private void RenderFoodDetails(City city) {
-		foodDetails.Text = $"{city.CurrentFoodYield()} food/turn, {city.FoodGrowthPerTurn()} surplus. {city.foodStored} stored. Growth in {city.TurnsUntilGrowth()} turns.";
+		string growthStr;
+		int turnsUntilGrowth = city.TurnsUntilGrowth();
+		if (turnsUntilGrowth == int.MaxValue) {
+			growthStr = "Not growing.";
+		} else if (turnsUntilGrowth == int.MinValue) {
+			growthStr = "Starving!";
+		} else {
+			growthStr = $"Growth in {turnsUntilGrowth} turns.";
+		}
+
+		foodDetails.Text = $"{city.CurrentFoodYield()} food/turn, {city.FoodGrowthPerTurn()} surplus. {city.foodStored} stored. {growthStr}";
 	}
 
 	private void RenderCommerceDetails(City city) {

@@ -50,7 +50,6 @@ namespace C7GameData {
 		public int shieldsStored = 0;
 
 		public int foodStored = 0;
-		public int foodNeededToGrow = 20;
 
 		public bool capital = false;
 		public Player owner { get; set; }
@@ -113,13 +112,29 @@ namespace C7GameData {
 						.ToHashSet();
 		}
 
-		public int TurnsUntilGrowth() {
-			if (FoodGrowthPerTurn() == 0) {
-				return int.MaxValue;
+		public int FoodNeededToGrow() {
+			Rules rules = owner.rules;
+			if (residents.Count <= rules.MaximumLevel1CitySize) {
+				return rules.FoodNeededToGrowForLevel1Cities;
+			} else if (residents.Count <= rules.MaximumLevel2CitySize) {
+				return rules.FoodNeededToGrowForLevel2Cities;
+			} else {
+				return rules.FoodNeededToGrowForLevel3Cities;
 			}
+		}
+
+		public int TurnsUntilGrowth() {
+			int foodGrowthPerTurn = FoodGrowthPerTurn();
+			int foodNeededToGrow = FoodNeededToGrow();
+			if (foodGrowthPerTurn == 0 || foodStored > foodNeededToGrow) {
+				return int.MaxValue;
+			} else if (foodGrowthPerTurn < 0) {
+				return int.MinValue;
+			}
+
 			int additionalFoodNeeded = foodNeededToGrow - foodStored;
-			int turnsRoundedDown = additionalFoodNeeded / FoodGrowthPerTurn();
-			if (additionalFoodNeeded % FoodGrowthPerTurn() != 0) {
+			int turnsRoundedDown = additionalFoodNeeded / foodGrowthPerTurn;
+			if (additionalFoodNeeded % foodGrowthPerTurn != 0) {
 				return turnsRoundedDown + 1;
 			}
 			return turnsRoundedDown;
@@ -222,8 +237,27 @@ namespace C7GameData {
 		}
 
 		public void HandleCityGrowth(GameData gameData) {
+			// Ensure borders expand before we assign the new citizen, so that
+			// the new citizen can go on one of our new tiles.
+			if (UpdateCultureAndCheckForExpansion()) {
+				gameData.UpdateTileOwners();
+			}
+
 			foodStored += FoodGrowthPerTurn();
-			if (foodStored >= foodNeededToGrow) {
+
+			// Handle the city starving.
+			if (foodStored < 0) {
+				RemoveCitizen();
+				foodStored = 0;
+				return;
+			}
+
+			// No growth necessary.
+			if (foodStored < FoodNeededToGrow()) {
+				return;
+			}
+
+			if (CanGrowPopulationByOne(gameData)) {
 				CityResident newResident = new CityResident();
 				newResident.nationality = owner.civilization;
 				newResident.city = this;
@@ -232,10 +266,47 @@ namespace C7GameData {
 				C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
 
 				foodStored = 0;
-			} else if (foodStored < 0) {
-				RemoveCitizen();
-				foodStored = 0;
 			}
+		}
+
+		private bool CanGrowPopulationByOne(GameData gD) {
+			// We can always grow up to size 6.
+			if (residents.Count + 1 <= gD.rules.MaximumLevel1CitySize) {
+				return true;
+			}
+
+			// If the city doesn't have fresh water and doesn't have an aqueduct
+			// then it can't grow into a city.
+			//
+			// TODO: lakes are bodies of water under 20 tiles (https://civilization.fandom.com/wiki/Fresh_Water_Lake_(Civ3))
+			bool hasFreshwaterAccess = location.BordersRiver();
+			bool canGrowIntoCity = hasFreshwaterAccess;
+			if (!hasFreshwaterAccess) {
+				foreach (CityBuilding cb in buildings) {
+					if (cb.building.allowsCitySize2 || cb.building.allowsCitySize3) {
+						canGrowIntoCity = true;
+						break;
+					}
+				}
+			}
+
+			if (!canGrowIntoCity) {
+				return false;
+			}
+
+			// With fresh water or an aqueduct we can grow to size 2.
+			if (residents.Count + 1 <= gD.rules.MaximumLevel2CitySize) {
+				return true;
+			}
+
+			// If we're a city trying to grow into a metropolis, we need a
+			// hospital.
+			foreach (CityBuilding cb in buildings) {
+				if (cb.building.allowsCitySize3) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/**

@@ -79,6 +79,8 @@ namespace C7GameData {
 		public bool increasesLuxuryTrade;
 		public bool reducesCorruption;
 		public bool isForbiddenPalace;
+		public bool allowsCitySize2;
+		public bool allowsCitySize3;
 
 		public int culturePerTurn = 0;
 
@@ -115,6 +117,8 @@ namespace C7GameData {
 			increasesLuxuryTrade = building.flags.Contains(SaveBuilding.Flag.IncreasesLuxuryTrade);
 			reducesCorruption = building.flags.Contains(SaveBuilding.Flag.ReducesCorruption);
 			isForbiddenPalace = building.flags.Contains(SaveBuilding.Flag.ForbiddenPalace);
+			allowsCitySize2 = building.flags.Contains(SaveBuilding.Flag.AllowsCitySize2);
+			allowsCitySize3 = building.flags.Contains(SaveBuilding.Flag.AllowsCitySize3);
 			dataSource = building;
 
 			foreach (var kvp in BuildingRules.productionRules) {

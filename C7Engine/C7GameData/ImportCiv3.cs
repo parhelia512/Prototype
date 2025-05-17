@@ -571,7 +571,6 @@ namespace C7GameData {
 					shieldsStored = city.ShieldsCollected,
 					foodStored = city.TotalFood,
 					buildings = ImportCityBuildingsFromSav(i),
-					foodNeededToGrow = 20, // HACK: don't know where to find this
 					turnsOfUnhappinessDueToPopRushing = city.TurnsOfUnhappinessDueToPopRushing,
 				};
 
@@ -682,7 +681,6 @@ namespace C7GameData {
 					buildings = ImportCityBuildingsFromBiq(cityIndex, player.id),
 					shieldsStored = 0,
 					foodStored = 0,
-					foodNeededToGrow = 20, // HACK: don't know where to find this
 				};
 				saveCity.perPlayerCulture.Add(player.id.ToString(), city.Culture);
 
@@ -938,7 +936,9 @@ namespace C7GameData {
 				(bldg.ForbiddenPalace, SaveBuilding.Flag.ForbiddenPalace),
 				(bldg.IncreasesShieldsInWater, SaveBuilding.Flag.IncreasesShieldsInWater),
 				(bldg.IncreasesFoodInWater, SaveBuilding.Flag.IncreasesFoodInWater),
-				(bldg.IncreasesTradeInWater, SaveBuilding.Flag.IncreasesTradeInWater)
+				(bldg.IncreasesTradeInWater, SaveBuilding.Flag.IncreasesTradeInWater),
+				(bldg.AllowsCitySize2, SaveBuilding.Flag.AllowsCitySize2),
+				(bldg.AllowsCitySize3, SaveBuilding.Flag.AllowsCitySize3),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);
@@ -1235,6 +1235,8 @@ namespace C7GameData {
 
 			save.Rules.MaximumResearchTime = rule.MaximumResearchTime;
 			save.Rules.MinimumResearchTime = rule.MinimumResearchTime;
+			save.Rules.MaximumLevel1CitySize = rule.MaximumLevel1CitySize;
+			save.Rules.MaximumLevel2CitySize = rule.MaximumLevel2CitySize;
 			save.Rules.ShieldValueInGold = rule.ShieldValueInGold;
 			save.Rules.CitizenValueInShields = rule.CitizenValueInShields;
 			save.Rules.TurnPenaltyForEachHurrySacrifice = rule.TurnPenaltyForEachHurrySacrifice;
