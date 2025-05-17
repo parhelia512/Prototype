@@ -15,7 +15,6 @@ public partial class PCXToGodot : GodotObject {
 	private const byte ALPHA_BITSHIFT = 24;
 	private const byte MAX_COLOR = 255;
 
-	public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
 
 	public struct ColorOptions {
 		public static readonly ColorOptions Default = new();

@@ -5,10 +5,13 @@ using ConvertCiv3Media;
 using System.Collections.Generic;
 using System.IO;
 
+
+public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
+
 public static class TextureLoader {
 	private struct ConfigEntry {
 		public string Path;
-		public PCXToGodot.CropRegion? CropRegion = null;
+		public CropRegion? CropRegion = null;
 
 		// PCX-specific settings
 		public string AlphaPath = null;
@@ -101,7 +104,7 @@ public static class TextureLoader {
 	}
 
 	// Helper method to extract crop region from a table
-	private static PCXToGodot.CropRegion? ExtractCropRegion(LuaTable table) {
+	private static CropRegion? ExtractCropRegion(LuaTable table) {
 		object cropRegionObj = table["crop_region"];
 		if (cropRegionObj is LuaTable cropRegion) {
 			try {
@@ -110,7 +113,7 @@ public static class TextureLoader {
 				int w = Convert.ToInt32(cropRegion[3]);
 				int h = Convert.ToInt32(cropRegion[4]);
 
-				return new PCXToGodot.CropRegion(x, y, w, h);
+				return new CropRegion(x, y, w, h);
 			} catch (Exception ex) {
 				throw new FormatException($"Invalid crop_region format: {ex.Message}", ex);
 			}
@@ -120,7 +123,7 @@ public static class TextureLoader {
 	}
 
 	// Helper method to handle alpha blend loading
-	private static ImageTexture LoadWithAlphaBlend(string path, string alphaPath, PCXToGodot.CropRegion? cropRegion, int alphaRowOffset) {
+	private static ImageTexture LoadWithAlphaBlend(string path, string alphaPath, CropRegion? cropRegion, int alphaRowOffset) {
 		Pcx pcx = LoadPCX(path);
 		Pcx alphaPcx = LoadPCX(alphaPath);
 
@@ -151,11 +154,11 @@ public static class TextureLoader {
 
 	//Send this function a path (e.g. Art/exitBox-backgroundStates.pcx), and the coordinates of the extracted image you need from that PCX
 	//file, and it'll load it up and return you what you need.
-	public static ImageTexture LoadFromPCX(string relPath, PCXToGodot.CropRegion cropRegion, bool shadows = true) {
+	public static ImageTexture LoadFromPCX(string relPath, CropRegion cropRegion, bool shadows = true) {
 		return LoadFromPCX(relPath, cropRegion, new PCXToGodot.ColorOptions(shadows));
 	}
 
-	private static ImageTexture LoadFromPCX(string relPath, PCXToGodot.CropRegion? cropRegion, PCXToGodot.ColorOptions colorOptions) {
+	private static ImageTexture LoadFromPCX(string relPath, CropRegion? cropRegion, PCXToGodot.ColorOptions colorOptions) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
 			Pcx pcx = LoadPCX(relPath);
 			return cropRegion is null
@@ -164,7 +167,7 @@ public static class TextureLoader {
 		});
 	}
 
-	private static ImageTexture LoadFromPNG(string relPath, PCXToGodot.CropRegion? cropRegion) {
+	private static ImageTexture LoadFromPNG(string relPath, CropRegion? cropRegion) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
 			Image image = Image.LoadFromFile(Util.Civ3MediaPath(relPath));
 			if (cropRegion != null) {
@@ -177,20 +180,20 @@ public static class TextureLoader {
 		});
 	}
 
-	private static string MakeCacheKey(string relPath, PCXToGodot.CropRegion? cropRegion) {
+	private static string MakeCacheKey(string relPath, CropRegion? cropRegion) {
 		if (cropRegion is null) return relPath;
 
 		var region = cropRegion.Value;
 		return $"{relPath}-{region.LeftStart}-{region.TopStart}-{region.CroppedWidth}-{region.CroppedHeight}";
 	}
 
-	private static ImageTexture GetOrAddTexture(string relPath, PCXToGodot.CropRegion? cropRegion, Func<ImageTexture> loader) {
+	private static ImageTexture GetOrAddTexture(string relPath, CropRegion? cropRegion, Func<ImageTexture> loader) {
 		string key = MakeCacheKey(relPath, cropRegion);
 
-		if (textureCache.TryGetValue(key, out var cached))
+		if (textureCache.TryGetValue(key, out ImageTexture cached))
 			return cached;
 
-		var texture = loader();
+		ImageTexture texture = loader();
 		textureCache[key] = texture;
 		return texture;
 	}
