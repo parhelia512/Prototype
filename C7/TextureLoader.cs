@@ -36,7 +36,7 @@ public static class TextureLoader {
 
 	static TextureLoader() {
 		lua = new Lua();
-		lua.DoString($"package.path = './Text/TextureConfigs/?.lua'");
+		lua.DoString($"package.path = './Text/TextureConfigs/?.lua;./Text/TextureConfigs/*/?.lua'");
 
 		civ3TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/civ3.lua")[0];
 		c7TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/c7.lua")[0];
@@ -52,6 +52,18 @@ public static class TextureLoader {
 			throw new Exception($"Texture config not found for key: {keyPath}");
 
 		return LoadFromLuaObject(entry);
+	}
+
+	public static ImageTexture Load(string keyPath, object obj) {
+		object entry = GetEntryByPath(keyPath);
+
+		if (entry is not LuaTable table)
+			throw new Exception($"Table expected for key: {keyPath}");
+
+		var func = table["map_object_to_sprite"] as LuaFunction
+			?? throw new Exception("Custom mapping function expected");
+
+		return LoadFromLuaObject(func.Call(table, obj)[0]);
 	}
 
 	public static void SetButtonTextures(TextureButton button, string keyPath) {

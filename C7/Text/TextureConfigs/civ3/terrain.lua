@@ -1,0 +1,156 @@
+local terrain = {}
+
+local TERRAIN = "Art/Terrain/"
+
+terrain.base = {
+  extra_data = {
+    -- A triple sheet is a sprite sheet containing sprites for three different terrain types including transitions between.
+    triple_sheets = {
+      TERRAIN .. "xtgc.pcx",
+      TERRAIN .. "xpgc.pcx",
+      TERRAIN .. "xdgc.pcx",
+      TERRAIN .. "xdpc.pcx",
+      TERRAIN .. "xdgp.pcx",
+      TERRAIN .. "xggc.pcx",
+      TERRAIN .. "wCSO.pcx",
+      TERRAIN .. "wSSS.pcx",
+      TERRAIN .. "wOOO.pcx",
+    },
+  },
+}
+
+function terrain.base:map_object_to_sprite(tile)
+  if tile:GetType().Name ~= "Tile" then
+    error "Expected a Tile object"
+  end
+
+  local terrain_image_id = tile.ExtraInfo.BaseTerrainImageID
+  local terrain_file_id = tile.ExtraInfo.BaseTerrainFileID
+
+  local sprite_width = 128
+  local sprite_height = 64
+
+  local x_sheet = terrain_image_id % 9
+  local y_sheet = math.floor(terrain_image_id / 9)
+
+  return {
+    path = self.extra_data.triple_sheets[terrain_file_id + 1]
+      or error("Unknown BaseTerrainFileID: " .. terrain_file_id),
+    crop_region = {
+      x_sheet * sprite_width,
+      y_sheet * sprite_height,
+      sprite_width,
+      sprite_height,
+    },
+    shadows = false,
+  }
+end
+
+terrain.mountain = {
+  base = TERRAIN .. "Mountains.pcx",
+  jungle = TERRAIN .. "mountain jungles.pcx",
+  snow = TERRAIN .. "Mountains-snow.pcx",
+  forest = TERRAIN .. "mountain forests.pcx",
+}
+
+terrain.hill = {
+  base = TERRAIN .. "xhills.pcx",
+  forest = TERRAIN .. "hill forests.pcx",
+  jungle = TERRAIN .. "hill jungle.pcx",
+}
+
+terrain.volcano = {
+  base = TERRAIN .. "Volcanos.pcx",
+  forest = TERRAIN .. "Volcanos forests.pcx",
+  jungle = TERRAIN .. "Volcanos jungles.pcx",
+}
+
+terrain.irrigation = {
+  grass = TERRAIN .. "irrigation.pcx",
+  desert = TERRAIN .. "irrigation DESETT.pcx",
+  plains = TERRAIN .. "irrigation PLAINS.pcx",
+  tundra = TERRAIN .. "irrigation TUNDRA.pcx",
+}
+
+terrain.mine = {
+  path = TERRAIN .. "TerrainBuildings.pcx",
+  crop_region = { 256, 64, 128, 64 },
+}
+
+terrain.marsh = {
+  large = {
+    path = TERRAIN .. "marsh.pcx",
+    crop_region = { 0, 0, 512, 176 },
+  },
+  small = {
+    path = TERRAIN .. "marsh.pcx",
+    crop_region = { 0, 176, 640, 176 },
+  },
+}
+
+terrain.river = TERRAIN .. "mtnRivers.pcx"
+
+terrain.tnt = TERRAIN .. "tnt.pcx"
+
+terrain.railroad = TERRAIN .. "railroads.pcx"
+
+terrain.road = TERRAIN .. "roads.pcx"
+
+terrain.jungle = {
+  large = {
+    path = TERRAIN .. "grassland forests.pcx",
+    crop_region = { 0, 0, 512, 176 },
+  },
+  small = {
+    path = TERRAIN .. "grassland forests.pcx",
+    crop_region = { 0, 176, 768, 176 },
+  },
+}
+
+terrain.forest = {
+  large = {
+    path = TERRAIN .. "grassland forests.pcx",
+    crop_region = { 0, 352, 512, 176 },
+  },
+  small = {
+    path = TERRAIN .. "grassland forests.pcx",
+    crop_region = { 0, 528, 640, 176 },
+  },
+  plains = {
+    large = {
+      path = TERRAIN .. "plains forests.pcx",
+      crop_region = { 0, 352, 512, 176 },
+    },
+    small = {
+      path = TERRAIN .. "plains forests.pcx",
+      crop_region = { 0, 528, 640, 176 },
+    },
+  },
+  tundra = {
+    large = {
+      path = TERRAIN .. "tundra forests.pcx",
+      crop_region = { 0, 352, 512, 176 },
+    },
+    small = {
+      path = TERRAIN .. "tundra forests.pcx",
+      crop_region = { 0, 528, 640, 176 },
+    },
+  },
+}
+
+terrain.pine = {
+  forest = {
+    path = TERRAIN .. "grassland forests.pcx",
+    crop_region = { 0, 704, 768, 176 },
+  },
+  plains = {
+    path = TERRAIN .. "plains forests.pcx",
+    crop_region = { 0, 704, 768, 176 },
+  },
+  tundra = {
+    path = TERRAIN .. "tundra forests.pcx",
+    crop_region = { 0, 704, 768, 176 },
+  },
+}
+
+return terrain

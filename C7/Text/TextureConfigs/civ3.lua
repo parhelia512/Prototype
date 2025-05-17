@@ -14,7 +14,6 @@ local CITY_SCREEN_ICONS = "Art/city screen/CityIcons.pcx"
 
 local CITY_ICONS = "Art/Cities/city icons.pcx"
 
-local TERRAIN = "Art/Terrain/"
 local RESOURCES = "Art/resources.pcx"
 
 local CREDITS = "Art/Credits/"
@@ -177,102 +176,7 @@ textures.ui = {
   },
 }
 
-textures.terrain = {
-  mountain = {
-    base = TERRAIN .. "Mountains.pcx",
-    jungle = TERRAIN .. "mountain jungles.pcx",
-    snow = TERRAIN .. "Mountains-snow.pcx",
-    forest = TERRAIN .. "mountain forests.pcx",
-  },
-  hill = {
-    base = TERRAIN .. "xhills.pcx",
-    forest = TERRAIN .. "hill forests.pcx",
-    jungle = TERRAIN .. "hill jungle.pcx",
-  },
-  volcano = {
-    base = TERRAIN .. "Volcanos.pcx",
-    forest = TERRAIN .. "Volcanos forests.pcx",
-    jungle = TERRAIN .. "Volcanos jungles.pcx",
-  },
-  irrigation = {
-    grass = TERRAIN .. "irrigation.pcx",
-    desert = TERRAIN .. "irrigation DESETT.pcx",
-    plains = TERRAIN .. "irrigation PLAINS.pcx",
-    tundra = TERRAIN .. "irrigation TUNDRA.pcx",
-  },
-  mine = {
-    path = TERRAIN .. "TerrainBuildings.pcx",
-    crop_region = { 256, 64, 128, 64 },
-  },
-  marsh = {
-    large = {
-      path = TERRAIN .. "marsh.pcx",
-      crop_region = { 0, 0, 512, 176 },
-    },
-    small = {
-      path = TERRAIN .. "marsh.pcx",
-      crop_region = { 0, 176, 640, 176 },
-    },
-  },
-  river = TERRAIN .. "mtnRivers.pcx",
-  tnt = TERRAIN .. "tnt.pcx",
-  railroad = TERRAIN .. "railroads.pcx",
-  road = TERRAIN .. "roads.pcx",
-  jungle = {
-    large = {
-      path = TERRAIN .. "grassland forests.pcx",
-      crop_region = { 0, 0, 512, 176 },
-    },
-    small = {
-      path = TERRAIN .. "grassland forests.pcx",
-      crop_region = { 0, 176, 768, 176 },
-    },
-  },
-  forest = {
-    large = {
-      path = TERRAIN .. "grassland forests.pcx",
-      crop_region = { 0, 352, 512, 176 },
-    },
-    small = {
-      path = TERRAIN .. "grassland forests.pcx",
-      crop_region = { 0, 528, 640, 176 },
-    },
-    plains = {
-      large = {
-        path = TERRAIN .. "plains forests.pcx",
-        crop_region = { 0, 352, 512, 176 },
-      },
-      small = {
-        path = TERRAIN .. "plains forests.pcx",
-        crop_region = { 0, 528, 640, 176 },
-      },
-    },
-    tundra = {
-      large = {
-        path = TERRAIN .. "tundra forests.pcx",
-        crop_region = { 0, 352, 512, 176 },
-      },
-      small = {
-        path = TERRAIN .. "tundra forests.pcx",
-        crop_region = { 0, 528, 640, 176 },
-      },
-    },
-  },
-  pine = {
-    forest = {
-      path = TERRAIN .. "grassland forests.pcx",
-      crop_region = { 0, 704, 768, 176 },
-    },
-    plains = {
-      path = TERRAIN .. "plains forests.pcx",
-      crop_region = { 0, 704, 768, 176 },
-    },
-    tundra = {
-      path = TERRAIN .. "tundra forests.pcx",
-      crop_region = { 0, 704, 768, 176 },
-    },
-  },
-}
+textures.terrain = require "civ3.terrain"
 
 textures.resources = RESOURCES
 

@@ -36,9 +36,6 @@ public partial class TerrainLayer : LooseLayer {
 
 	public static readonly Vector2 terrainSpriteSize = new Vector2(128, 64);
 
-	// A triple sheet is a sprite sheet containing sprites for three different terrain types including transitions between.
-	private List<ImageTexture> tripleSheets;
-
 	// TileToDraw stores the arguments passed to drawObject so the draws can be sorted by texture before being submitted. This significantly
 	// reduces the number of draw calls Godot must generate (1483 to 312 when fully zoomed out on our test map) and modestly improves framerate
 	// (by about 14% on my system).
@@ -64,25 +61,6 @@ public partial class TerrainLayer : LooseLayer {
 
 	private List<TileToDraw> tilesToDraw = new List<TileToDraw>();
 
-	public TerrainLayer() {
-		tripleSheets = loadTerrainTripleSheets();
-	}
-
-	public List<ImageTexture> loadTerrainTripleSheets() {
-		List<string> fileNames = new List<string> {
-			"Art/Terrain/xtgc.pcx",
-			"Art/Terrain/xpgc.pcx",
-			"Art/Terrain/xdgc.pcx",
-			"Art/Terrain/xdpc.pcx",
-			"Art/Terrain/xdgp.pcx",
-			"Art/Terrain/xggc.pcx",
-			"Art/Terrain/wCSO.pcx",
-			"Art/Terrain/wSSS.pcx",
-			"Art/Terrain/wOOO.pcx",
-		};
-		return fileNames.ConvertAll(name => TextureLoader.LoadFromPCX(name));
-	}
-
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
 		tilesToDraw.Add(new TileToDraw(tile, tileCenter));
 		tilesToDraw.Add(new TileToDraw(tile.neighbors[TileDirection.SOUTH], tileCenter + new Vector2(0, 64)));
@@ -94,13 +72,18 @@ public partial class TerrainLayer : LooseLayer {
 		tilesToDraw.Sort();
 		foreach (TileToDraw tTD in tilesToDraw) {
 			if (tTD.tile != Tile.NONE) {
-				int xSheet = tTD.tile.ExtraInfo.BaseTerrainImageID % 9, ySheet = tTD.tile.ExtraInfo.BaseTerrainImageID / 9;
-				Rect2 texRect = new Rect2(new Vector2(xSheet, ySheet) * terrainSpriteSize, terrainSpriteSize);
 				Vector2 terrainOffset = new Vector2(0, -1 * MapView.cellSize.Y);
+
+				Vector2 position = tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset;
+
+				ImageTexture texture = TextureLoader.Load("terrain.base", tTD.tile);
+
 				// Multiply size by 100.1% so avoid "seams" in the map.  See issue #106.
 				// Jim's option of a whole-map texture is less hacky, but this is quicker and seems to be working well.
-				Rect2 screenRect = new Rect2(tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset, terrainSpriteSize * 1.001f);
-				looseView.DrawTextureRectRegion(tripleSheets[tTD.tile.ExtraInfo.BaseTerrainFileID], screenRect, texRect);
+				Vector2 size = texture.GetSize() * 1.001f;
+				texture.SetSizeOverride((Vector2I)size);
+
+				looseView.DrawTexture(texture, position);
 			}
 		}
 		tilesToDraw.Clear();
