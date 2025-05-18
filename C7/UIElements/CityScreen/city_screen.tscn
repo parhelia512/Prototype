@@ -26,7 +26,7 @@ font = ExtResource("5_hld1k")
 font_size = 28
 font_color = Color(0, 0, 0, 1)
 
-[node name="CityScreen" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "cityName", "productionButton", "close", "previousCity", "nextCity", "productionMenu", "strategicResources", "luxuriesContainer") instance=ExtResource("1_hl43g")]
+[node name="CityScreen" node_paths=PackedStringArray("background", "existingBuildings", "culturePerTurn", "totalCulture", "cityName", "productionButton", "close", "previousCity", "nextCity", "productionMenu", "strategicResources", "luxuriesContainer", "productionLabel", "completeInLabel", "growthInLabel", "foodLabel", "granaryLabel", "shieldsInBoxContainer", "foodInBoxContainer", "foodInGranaryContainer", "shieldRowContainer", "foodRowContainer") instance=ExtResource("1_hl43g")]
 script = ExtResource("1_e5kig")
 background = NodePath("HBoxContainer/Background")
 existingBuildings = NodePath("HBoxContainer/Background/ScrollContainerBuildings/ExistingBuildings")
@@ -40,6 +40,16 @@ nextCity = NodePath("HBoxContainer/Background/NextCity")
 productionMenu = NodePath("HBoxContainer/Background/ProductionMenu")
 strategicResources = NodePath("HBoxContainer/Background/ScrollContainerStrategicResources/StrategicResourceContainer")
 luxuriesContainer = NodePath("HBoxContainer/Background/ScrollContainerLuxuries/LuxuriesContainer")
+productionLabel = NodePath("HBoxContainer/Background/ProductionLabel")
+completeInLabel = NodePath("HBoxContainer/Background/CompleteInLabel")
+growthInLabel = NodePath("HBoxContainer/Background/GrowthInLabel")
+foodLabel = NodePath("HBoxContainer/Background/FoodLabel")
+granaryLabel = NodePath("HBoxContainer/Background/CenterContainer2/VBoxContainer/Label")
+shieldsInBoxContainer = NodePath("HBoxContainer/Background/CenterContainer/ShieldsInBoxContainer")
+foodInBoxContainer = NodePath("HBoxContainer/Background/CenterContainer2/VBoxContainer/HBoxContainer/FoodInBoxContainer")
+foodInGranaryContainer = NodePath("HBoxContainer/Background/CenterContainer2/VBoxContainer/HBoxContainer2/FoodInGranaryContainer")
+shieldRowContainer = NodePath("HBoxContainer/Background/ShieldRowContainer")
+foodRowContainer = NodePath("HBoxContainer/Background/FoodRowContainer")
 
 [node name="Background" type="TextureRect" parent="HBoxContainer" index="1"]
 layout_mode = 2
@@ -179,3 +189,104 @@ offset_bottom = 89.0
 [node name="StrategicResourceContainer" type="HBoxContainer" parent="HBoxContainer/Background/ScrollContainerStrategicResources" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 0
+
+[node name="ProductionLabel" type="Label" parent="HBoxContainer/Background" index="15"]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 511.0
+offset_right = 505.0
+offset_bottom = 531.0
+theme_override_font_sizes/font_size = 12
+text = "PRODUCTION: 10 per turn"
+
+[node name="CompleteInLabel" type="Label" parent="HBoxContainer/Background" index="16"]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 608.0
+offset_right = 1021.0
+offset_bottom = 626.0
+theme_override_font_sizes/font_size = 10
+text = "Complete in 100 turns"
+horizontal_alignment = 1
+
+[node name="GrowthInLabel" type="Label" parent="HBoxContainer/Background" index="17"]
+layout_mode = 0
+offset_left = 776.0
+offset_top = 563.0
+offset_right = 893.0
+offset_bottom = 581.0
+theme_override_font_sizes/font_size = 10
+text = "Growth in 8 turns"
+horizontal_alignment = 1
+
+[node name="FoodLabel" type="Label" parent="HBoxContainer/Background" index="18"]
+layout_mode = 0
+offset_left = 285.0
+offset_top = 559.0
+offset_right = 506.0
+offset_bottom = 579.0
+theme_override_font_sizes/font_size = 12
+text = "FOOD: 3 per turn"
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/Background" index="19"]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 626.0
+offset_right = 1020.0
+offset_bottom = 764.0
+
+[node name="ShieldsInBoxContainer" type="GridContainer" parent="HBoxContainer/Background/CenterContainer" index="0"]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 6
+
+[node name="CenterContainer2" type="CenterContainer" parent="HBoxContainer/Background" index="20"]
+layout_mode = 0
+offset_left = 774.0
+offset_top = 584.0
+offset_right = 896.0
+offset_bottom = 761.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Background/CenterContainer2" index="0"]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Background/CenterContainer2/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="FoodInBoxContainer" type="GridContainer" parent="HBoxContainer/Background/CenterContainer2/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Background/CenterContainer2/VBoxContainer" index="1"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "GRANARY"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/Background/CenterContainer2/VBoxContainer" index="2"]
+layout_mode = 2
+
+[node name="FoodInGranaryContainer" type="GridContainer" parent="HBoxContainer/Background/CenterContainer2/VBoxContainer/HBoxContainer2" index="0"]
+visible = false
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+
+[node name="ShieldRowContainer" type="Control" parent="HBoxContainer/Background" index="21"]
+anchors_preset = 0
+offset_left = 288.0
+offset_top = 527.0
+offset_right = 835.0
+offset_bottom = 554.0
+
+[node name="FoodRowContainer" type="Control" parent="HBoxContainer/Background" index="22"]
+anchors_preset = 0
+offset_left = 287.0
+offset_top = 577.0
+offset_right = 767.0
+offset_bottom = 604.0
