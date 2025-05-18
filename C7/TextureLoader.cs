@@ -7,6 +7,23 @@ using System.IO;
 
 public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
 
+/// This class provides methods for loading PCX and PNG textures based on the metadata set up in the Lua configuration file.
+///
+/// Each Lua configuration file returns a table representing a tree.
+/// Any leaf node in this structure can be one of the following:
+/// 1) A string representing a path to the texture
+///
+/// 2) A table with following keys:
+///    - Required: "path" (string) - Path to the texture file
+///    - Optional: "crop_region" (table) - Sequential table matching the CropRegion record
+///
+///    For PCX files:
+///    - Optional: "shadows" (boolean) - Whether the shadow effect should be simulated (defaults to true)
+///    - Optional: "alpha" (string) - Path to an alpha channel texture file
+///    - Optional: "alpha_row_offset" (number) - Row offset for alpha blending
+///
+/// 3) A table containing key "map_object_to_sprite" holding a function that accepts a table it belongs to and a C# object.
+/// This function should return a table similar to the one described in the point 2.
 public static class TextureLoader {
 	private struct ConfigEntry {
 		public string Path;
@@ -27,7 +44,9 @@ public static class TextureLoader {
 	private static LuaTable civ3TextureConfig;
 	private static LuaTable c7TextureConfig;
 
+	// currently used config
 	private static LuaTable textureConfig;
+	// whether the currently used config represent the CIV3 or the custom C7 graphics
 	private static bool modernGraphics;
 
 	private static Dictionary<string, ImageTexture> textureCache = [];
@@ -45,6 +64,9 @@ public static class TextureLoader {
 		modernGraphics = true;
 	}
 
+	/// Returns a texture based on the config key.
+	/// The config key should be a string separated by dots, representing the path through the
+	/// configuration hierarchy (e.g., "icons.plus").
 	public static ImageTexture Load(string configKey) {
 		object entry = GetEntryByPath(configKey);
 
@@ -54,18 +76,25 @@ public static class TextureLoader {
 		return LoadFromLuaObject(entry);
 	}
 
+	/// Returns a texture based on the config key and a C# object, using a custom mapping function.
+	/// This overload uses the "map_object_to_sprite" function in the config entry to dynamically
+	/// determine which texture to load based on the provided object's properties.
 	public static ImageTexture Load(string configKey, object obj) {
 		object entry = GetEntryByPath(configKey);
 
 		if (entry is not LuaTable table)
 			throw new Exception($"Table expected for key: {configKey}");
 
-		var func = table["map_object_to_sprite"] as LuaFunction
-			?? throw new Exception("Custom mapping function expected");
+		if (table["map_object_to_sprite"] is not LuaFunction func)
+			throw new Exception("Custom mapping function expected");
 
 		return LoadFromLuaObject(func.Call(table, obj)[0]);
 	}
 
+	/// An utility method for setting textures of a button node.
+	/// Accepts a button and a config key. The config key should lead
+	/// to a table containing config entries with "normal", "pressed"
+	/// and "hover" keys.
 	public static void SetButtonTextures(TextureButton button, string configKey) {
 		object entry = GetEntryByPath(configKey);
 

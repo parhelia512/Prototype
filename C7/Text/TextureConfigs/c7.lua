@@ -1,3 +1,8 @@
+--[[
+	This configuration file holds a table with texture definitions for "modern" graphics.
+	It produces this table by copying the config of the civ3 assets and replaces the paths to the original Civilization 3 PCX textures with modern PNG versions.
+	To add new replacement texture to the config modify the "c7_texture_list" table.
+--]]
 local civ3_textures = require "civ3"
 
 local c7_texture_list = {
