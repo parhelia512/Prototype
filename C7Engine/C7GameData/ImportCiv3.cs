@@ -939,6 +939,7 @@ namespace C7GameData {
 				(bldg.IncreasesTradeInWater, SaveBuilding.Flag.IncreasesTradeInWater),
 				(bldg.AllowsCitySize2, SaveBuilding.Flag.AllowsCitySize2),
 				(bldg.AllowsCitySize3, SaveBuilding.Flag.AllowsCitySize3),
+				(bldg.DoublesCityGrowthRate, SaveBuilding.Flag.DoublesCityGrowthRate),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);
