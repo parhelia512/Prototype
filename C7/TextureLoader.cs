@@ -53,6 +53,9 @@ public static class TextureLoader {
 	private static Dictionary<string, Pcx> PcxCache = [];
 	private static Dictionary<string, Image> PngCache = [];
 
+	private static Dictionary<string, ImageTexture> configKeyCache = [];
+	private static Dictionary<(string configKey, object obj), ImageTexture> objectMappingCache = [];
+
 	static TextureLoader() {
 		lua = new Lua();
 		lua.DoString($"package.path = './Text/TextureConfigs/?.lua;./Text/TextureConfigs/*/?.lua'");
@@ -68,18 +71,29 @@ public static class TextureLoader {
 	/// The config key should be a string separated by dots, representing the path through the
 	/// configuration hierarchy (e.g., "icons.plus").
 	public static ImageTexture Load(string configKey) {
-		object entry = GetEntryByPath(configKey);
+		if (configKeyCache.TryGetValue(configKey, out ImageTexture cachedTexture))
+			return cachedTexture;
 
+		object entry = GetEntryByPath(configKey);
 		if (entry == null)
 			throw new Exception($"Texture config not found for key: {configKey}");
 
-		return LoadFromLuaObject(entry);
+		ImageTexture texture = LoadFromLuaObject(entry);
+
+		configKeyCache[configKey] = texture;
+
+		return texture;
 	}
 
 	/// Returns a texture based on the config key and a C# object, using a custom mapping function.
 	/// This overload uses the "map_object_to_sprite" function in the config entry to dynamically
 	/// determine which texture to load based on the provided object's properties.
 	public static ImageTexture Load(string configKey, object obj) {
+		var cacheKey = (configKey, obj);
+
+		if (objectMappingCache.TryGetValue(cacheKey, out ImageTexture cachedTexture))
+			return cachedTexture;
+
 		object entry = GetEntryByPath(configKey);
 
 		if (entry is not LuaTable table)
@@ -88,7 +102,11 @@ public static class TextureLoader {
 		if (table["map_object_to_sprite"] is not LuaFunction func)
 			throw new Exception("Custom mapping function expected");
 
-		return LoadFromLuaObject(func.Call(table, obj)[0]);
+		ImageTexture texture = LoadFromLuaObject(func.Call(table, obj)[0]);
+
+		objectMappingCache[cacheKey] = texture;
+
+		return texture;
 	}
 
 	/// An utility method for setting textures of a button node.
@@ -256,6 +274,8 @@ public static class TextureLoader {
 		PcxCache.Clear();
 		PngCache.Clear();
 		textureCache.Clear();
+		configKeyCache.Clear();
+		objectMappingCache.Clear();
 	}
 
 	public static void ToggleModernGraphics() {
@@ -266,5 +286,8 @@ public static class TextureLoader {
 			modernGraphics = true;
 			textureConfig = c7TextureConfig;
 		}
+
+		configKeyCache.Clear();
+		objectMappingCache.Clear();
 	}
 }

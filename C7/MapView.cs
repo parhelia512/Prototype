@@ -69,32 +69,23 @@ public partial class TerrainLayer : LooseLayer {
 	}
 
 	public override void onEndDraw(LooseView looseView, GameData gameData) {
-		Dictionary<(int fileID, int imageID), ImageTexture> textureCache = [];
 
 		tilesToDraw.Sort();
 
 		foreach (TileToDraw tTD in tilesToDraw) {
-			if (tTD.tile != Tile.NONE) {
-				Vector2 terrainOffset = new Vector2(0, -1 * MapView.cellSize.Y);
+			if (tTD.tile == Tile.NONE) { continue; }
 
-				Vector2 position = tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset;
+			ImageTexture texture = TextureLoader.Load("terrain.base", tTD.tile);
 
-				int fileID = tTD.tile.ExtraInfo.BaseTerrainFileID;
-				int imageID = tTD.tile.ExtraInfo.BaseTerrainImageID;
-				var textureKey = (fileID, imageID);
+			Vector2 terrainOffset = new Vector2(0, -1 * MapView.cellSize.Y);
+			Vector2 position = tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset;
 
-				if (!textureCache.TryGetValue(textureKey, out ImageTexture texture)) {
-					texture = TextureLoader.Load("terrain.base", tTD.tile);
-					textureCache[textureKey] = texture;
-				}
+			// Multiply size by 100.1% so avoid "seams" in the map.  See issue #106.
+			// Jim's option of a whole-map texture is less hacky, but this is quicker and seems to be working well.
+			Rect2 screenRect = new Rect2(position, terrainSpriteSize * 1.001f);
 
-				// Multiply size by 100.1% so avoid "seams" in the map.  See issue #106.
-				// Jim's option of a whole-map texture is less hacky, but this is quicker and seems to be working well.
-				Vector2 size = texture.GetSize() * 1.001f;
-				texture.SetSizeOverride((Vector2I)size);
+			looseView.DrawTextureRect(texture, screenRect, true);
 
-				looseView.DrawTexture(texture, position);
-			}
 		}
 
 		tilesToDraw.Clear();
