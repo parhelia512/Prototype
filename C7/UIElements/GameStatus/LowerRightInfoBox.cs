@@ -32,19 +32,15 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	}
 
 	private void CreateUI() {
-		Pcx boxRightColor = new Pcx(Util.Civ3MediaPath("Art/interface/box right color.pcx"));
-		Pcx boxRightAlpha = new Pcx(Util.Civ3MediaPath("Art/interface/box right alpha.pcx"));
-		ImageTexture boxRight = PCXToGodot.getImageFromPCXWithAlphaBlend(boxRightColor, boxRightAlpha);
+		ImageTexture boxRight = TextureLoader.Load("lower_right_infobox.box");
 		TextureRect boxRightRectangle = new TextureRect();
 		boxRightRectangle.Texture = boxRight;
 		boxRightRectangle.SetPosition(new Vector2(0, 0));
 		AddChild(boxRightRectangle);
 
-		Pcx nextTurnColor = new Pcx(Util.Civ3MediaPath("Art/interface/nextturn states color.pcx"));
-		Pcx nextTurnAlpha = new Pcx(Util.Civ3MediaPath("Art/interface/nextturn states alpha.pcx"));
-		nextTurnOffTexture = PCXToGodot.getImageFromPCXWithAlphaBlend(nextTurnColor, nextTurnAlpha, 0, 0, 47, 28);
-		nextTurnOnTexture = PCXToGodot.getImageFromPCXWithAlphaBlend(nextTurnColor, nextTurnAlpha, 47, 0, 47, 28);
-		nextTurnBlinkTexture = PCXToGodot.getImageFromPCXWithAlphaBlend(nextTurnColor, nextTurnAlpha, 94, 0, 47, 28);
+		nextTurnOffTexture = TextureLoader.Load("lower_right_infobox.next_turn.off");
+		nextTurnOnTexture = TextureLoader.Load("lower_right_infobox.next_turn.on");
+		nextTurnBlinkTexture = TextureLoader.Load("lower_right_infobox.next_turn.blink");
 
 		nextTurnButton.TextureNormal = nextTurnOffTexture;
 		nextTurnButton.TextureHover = nextTurnOnTexture;

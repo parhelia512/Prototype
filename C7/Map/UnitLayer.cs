@@ -6,8 +6,6 @@ using ConvertCiv3Media;
 using Godot;
 
 public partial class UnitLayer : LooseLayer {
-	private ImageTexture unitIcons;
-	private int unitIconsWidth;
 	private ImageTexture unitMovementIndicators;
 
 	// The unit animations, effect animations, and cursor are all drawn as children attached to the looseView but aren't created and attached in
@@ -17,10 +15,6 @@ public partial class UnitLayer : LooseLayer {
 	public const int cursorZIndex = -1;
 
 	public UnitLayer() {
-		var iconPCX = new Pcx(Util.Civ3MediaPath("Art/Units/units_32.pcx"));
-		unitIcons = PCXToGodot.getImageTextureFromPCX(iconPCX);
-		unitIconsWidth = (unitIcons.GetWidth() - 1) / 33;
-
 		var moveIndPCX = new Pcx(Util.Civ3MediaPath("Art/interface/MovementLED.pcx"));
 		unitMovementIndicators = PCXToGodot.getImageTextureFromPCX(moveIndPCX);
 	}

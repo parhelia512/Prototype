@@ -21,8 +21,8 @@ public class PopHeads {
 		int numRowsOfLaborers = NUM_ERAS * MOODS_PER_ERA;
 		int Y = HEAD_SIZE_WITH_BORDER * numRowsOfLaborers
 				 + HEAD_SIZE_WITH_BORDER * (cr.citizenType.SpecialistIndex - 1);
-		return Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
-										X + 1, Y + 1, HEAD_SIZE, HEAD_SIZE);
+		return TextureLoader.LoadFromPCX("Art/SmallHeads/popHeads.pcx",
+										new(X + 1, Y + 1, HEAD_SIZE, HEAD_SIZE));
 	}
 
 	private static ImageTexture GetLaborerPopHead(CityResident cr, int eraNum) {
@@ -33,10 +33,10 @@ public class PopHeads {
 		};
 		int headWithBorderSize = HEAD_SIZE + 2;
 
-		return Util.LoadTextureFromPCX("Art/SmallHeads/popHeads.pcx",
-										0 + 1,
+		return TextureLoader.LoadFromPCX("Art/SmallHeads/popHeads.pcx",
+										new(0 + 1,
 										MOODS_PER_ERA * HEAD_SIZE_WITH_BORDER * eraNum
 											+ HEAD_SIZE_WITH_BORDER * column + 1,
-										HEAD_SIZE, HEAD_SIZE);
+										HEAD_SIZE, HEAD_SIZE));
 	}
 }

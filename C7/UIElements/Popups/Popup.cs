@@ -37,8 +37,8 @@ public partial class Popup : TextureRect {
 	const int VTILE_SIZE = 44;
 	private readonly static int BUTTON_LABEL_OFFSET = 0;    //Necessary in Godot 3, appears unnecessary in 4
 
-	private static ImageTexture InactiveButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 1, 1, 20, 20, false);
-	private static ImageTexture HoverButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 22, 1, 20, 20, false);
+	private static ImageTexture InactiveButton = TextureLoader.Load("ui.button.inactive");
+	private static ImageTexture HoverButton = TextureLoader.Load("ui.button.hover");
 	private static Dictionary<(int, int), ImageTexture> backgroundCache = new Dictionary<(int, int), ImageTexture>();
 
 	protected void AddButton(string label, int verticalPosition, Action action) {
@@ -122,7 +122,7 @@ public partial class Popup : TextureRect {
 
 		Image image = Image.Create(width, height, false, Image.Format.Rgba8);
 
-		Pcx popupborders = Util.LoadPCX("Art/popupborders.pcx");
+		Pcx popupborders = TextureLoader.LoadPCX("Art/popupborders.pcx");
 
 		//The pop-up part is the tricky part
 		Stopwatch imageTimer = new Stopwatch();
@@ -164,9 +164,9 @@ public partial class Popup : TextureRect {
 	}
 
 	protected void AddConfirmButton(Vector2 position, Action action) {
-		ImageTexture circleTexture= Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 1, 1, 19, 19);
-		ImageTexture circleHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 37, 1, 19, 19);
-		ImageTexture circlePressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 73, 1, 19, 19);
+		ImageTexture circleTexture= TextureLoader.Load("ui.confirm.normal");
+		ImageTexture circleHover = TextureLoader.Load("ui.confirm.hover");
+		ImageTexture circlePressed = TextureLoader.Load("ui.confirm.pressed");
 		TextureButton confirmButton = new TextureButton();
 		confirmButton.TextureNormal = circleTexture;
 		confirmButton.TextureHover = circleHover;
@@ -177,9 +177,9 @@ public partial class Popup : TextureRect {
 	}
 
 	protected void AddCancelButton(Vector2 position) {
-		ImageTexture xTexture = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 21, 1, 15, 19);
-		ImageTexture xHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 57, 1, 15, 19);
-		ImageTexture xPressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 93, 1, 15, 19);
+		ImageTexture xTexture = TextureLoader.Load("ui.cancel.normal");
+		ImageTexture xHover = TextureLoader.Load("ui.cancel.hover");
+		ImageTexture xPressed = TextureLoader.Load("ui.cancel.pressed");
 		TextureButton cancelButton = new TextureButton();
 		cancelButton.TextureNormal = xTexture;
 		cancelButton.TextureHover = xHover;

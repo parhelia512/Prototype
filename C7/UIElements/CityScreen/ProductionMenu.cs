@@ -13,7 +13,7 @@ public partial class ProductionMenu : Civ3TextureRect {
 	Theme fontTheme = new();
 
 	public ProductionMenu() {
-		this.Texture = Util.LoadTextureFromPCX("Art/city screen/ProductionQueueBox.pcx");
+		this.Texture = TextureLoader.Load("city_screen.production_queue");
 
 		// Load the font we'll use.
 		FontFile font = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf", null, ResourceLoader.CacheMode.Ignore);

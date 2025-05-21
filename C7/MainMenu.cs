@@ -48,8 +48,8 @@ public partial class MainMenu : Node2D {
 			LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
 			LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
 
-			InactiveButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 1, 1, 20, 20, false);
-			HoverButton = Util.LoadTextureFromPCX("Art/buttonsFINAL.pcx", 22, 1, 20, 20, false);
+			InactiveButton = TextureLoader.Load("ui.button.inactive");
+			HoverButton = TextureLoader.Load("ui.button.hover");
 
 			AddButton("New Game", 0, GoToWorldSetup);
 			AddButton("Quick Start", 35, GoToWorldSetup);

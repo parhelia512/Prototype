@@ -731,8 +731,7 @@ public partial class Game : Node2D {
 	}
 
 	private void ToggleC7Graphics() {
-		Util.CheckForModernFiles = !Util.CheckForModernFiles;
-		Util.ClearCaches();
+		TextureLoader.ToggleModernGraphics();
 		InitializeMapView();
 	}
 

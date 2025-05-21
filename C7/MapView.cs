@@ -36,9 +36,6 @@ public partial class TerrainLayer : LooseLayer {
 
 	public static readonly Vector2 terrainSpriteSize = new Vector2(128, 64);
 
-	// A triple sheet is a sprite sheet containing sprites for three different terrain types including transitions between.
-	private List<ImageTexture> tripleSheets;
-
 	// TileToDraw stores the arguments passed to drawObject so the draws can be sorted by texture before being submitted. This significantly
 	// reduces the number of draw calls Godot must generate (1483 to 312 when fully zoomed out on our test map) and modestly improves framerate
 	// (by about 14% on my system).
@@ -64,25 +61,6 @@ public partial class TerrainLayer : LooseLayer {
 
 	private List<TileToDraw> tilesToDraw = new List<TileToDraw>();
 
-	public TerrainLayer() {
-		tripleSheets = loadTerrainTripleSheets();
-	}
-
-	public List<ImageTexture> loadTerrainTripleSheets() {
-		List<string> fileNames = new List<string> {
-			"Art/Terrain/xtgc.pcx",
-			"Art/Terrain/xpgc.pcx",
-			"Art/Terrain/xdgc.pcx",
-			"Art/Terrain/xdpc.pcx",
-			"Art/Terrain/xdgp.pcx",
-			"Art/Terrain/xggc.pcx",
-			"Art/Terrain/wCSO.pcx",
-			"Art/Terrain/wSSS.pcx",
-			"Art/Terrain/wOOO.pcx",
-		};
-		return fileNames.ConvertAll(name => Util.LoadTextureFromPCX(name));
-	}
-
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
 		tilesToDraw.Add(new TileToDraw(tile, tileCenter));
 		tilesToDraw.Add(new TileToDraw(tile.neighbors[TileDirection.SOUTH], tileCenter + new Vector2(0, 64)));
@@ -91,18 +69,25 @@ public partial class TerrainLayer : LooseLayer {
 	}
 
 	public override void onEndDraw(LooseView looseView, GameData gameData) {
+
 		tilesToDraw.Sort();
+
 		foreach (TileToDraw tTD in tilesToDraw) {
-			if (tTD.tile != Tile.NONE) {
-				int xSheet = tTD.tile.ExtraInfo.BaseTerrainImageID % 9, ySheet = tTD.tile.ExtraInfo.BaseTerrainImageID / 9;
-				Rect2 texRect = new Rect2(new Vector2(xSheet, ySheet) * terrainSpriteSize, terrainSpriteSize);
-				Vector2 terrainOffset = new Vector2(0, -1 * MapView.cellSize.Y);
-				// Multiply size by 100.1% so avoid "seams" in the map.  See issue #106.
-				// Jim's option of a whole-map texture is less hacky, but this is quicker and seems to be working well.
-				Rect2 screenRect = new Rect2(tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset, terrainSpriteSize * 1.001f);
-				looseView.DrawTextureRectRegion(tripleSheets[tTD.tile.ExtraInfo.BaseTerrainFileID], screenRect, texRect);
-			}
+			if (tTD.tile == Tile.NONE) { continue; }
+
+			ImageTexture texture = TextureLoader.Load("terrain.base", tTD.tile);
+
+			Vector2 terrainOffset = new Vector2(0, -1 * MapView.cellSize.Y);
+			Vector2 position = tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset;
+
+			// Multiply size by 100.1% so avoid "seams" in the map.  See issue #106.
+			// Jim's option of a whole-map texture is less hacky, but this is quicker and seems to be working well.
+			Rect2 screenRect = new Rect2(position, terrainSpriteSize * 1.001f);
+
+			looseView.DrawTextureRect(texture, screenRect, tile: false);
+
 		}
+
 		tilesToDraw.Clear();
 	}
 }
@@ -123,16 +108,15 @@ public partial class HillsLayer : LooseLayer {
 	private ImageTexture jungleVolcanoTexture;
 
 	public HillsLayer() {
-		mountainTexture = Util.LoadTextureFromPCX("Art/Terrain/Mountains.pcx");
-		snowMountainTexture = Util.LoadTextureFromPCX("Art/Terrain/Mountains-snow.pcx");
-		forestMountainTexture = Util.LoadTextureFromPCX("Art/Terrain/mountain forests.pcx");
-		jungleMountainTexture = Util.LoadTextureFromPCX("Art/Terrain/mountain jungles.pcx");
-		hillsTexture = Util.LoadTextureFromPCX("Art/Terrain/xhills.pcx");
-		forestHillsTexture = Util.LoadTextureFromPCX("Art/Terrain/hill forests.pcx");
-		jungleHillsTexture = Util.LoadTextureFromPCX("Art/Terrain/hill jungle.pcx");
-		volcanosTexture = Util.LoadTextureFromPCX("Art/Terrain/Volcanos.pcx");
-		forestVolcanoTexture = Util.LoadTextureFromPCX("Art/Terrain/Volcanos forests.pcx");
-		jungleVolcanoTexture = Util.LoadTextureFromPCX("Art/Terrain/Volcanos jungles.pcx");
+		mountainTexture = TextureLoader.Load("terrain.mountain.base");
+		snowMountainTexture = TextureLoader.Load("terrain.mountain.snow");
+		forestMountainTexture = TextureLoader.Load("terrain.mountain.forest");
+		jungleMountainTexture = TextureLoader.Load("terrain.mountain.jungle");
+		hillsTexture = TextureLoader.Load("terrain.hill.base");
+		forestHillsTexture = TextureLoader.Load("terrain.hill.forest");
+		jungleHillsTexture = TextureLoader.Load("terrain.hill.jungle");
+		volcanosTexture = TextureLoader.Load("terrain.volcano.base");
+		forestVolcanoTexture = TextureLoader.Load("terrain.volcano.forest");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
@@ -268,17 +252,17 @@ public partial class ForestLayer : LooseLayer {
 	private ImageTexture pineTundraTexture;
 
 	public ForestLayer() {
-		largeJungleTexture = Util.LoadTextureFromPCX("Art/Terrain/grassland forests.pcx", 0, 0, 512, 176);
-		smallJungleTexture = Util.LoadTextureFromPCX("Art/Terrain/grassland forests.pcx", 0, 176, 768, 176);
-		largeForestTexture = Util.LoadTextureFromPCX("Art/Terrain/grassland forests.pcx", 0, 352, 512, 176);
-		largePlainsForestTexture = Util.LoadTextureFromPCX("Art/Terrain/plains forests.pcx", 0, 352, 512, 176);
-		largeTundraForestTexture = Util.LoadTextureFromPCX("Art/Terrain/tundra forests.pcx", 0, 352, 512, 176);
-		smallForestTexture = Util.LoadTextureFromPCX("Art/Terrain/grassland forests.pcx", 0, 528, 640, 176);
-		smallPlainsForestTexture = Util.LoadTextureFromPCX("Art/Terrain/plains forests.pcx", 0, 528, 640, 176);
-		smallTundraForestTexture = Util.LoadTextureFromPCX("Art/Terrain/tundra forests.pcx", 0, 528, 640, 176);
-		pineForestTexture = Util.LoadTextureFromPCX("Art/Terrain/grassland forests.pcx", 0, 704, 768, 176);
-		pinePlainsTexture = Util.LoadTextureFromPCX("Art/Terrain/plains forests.pcx", 0, 704, 768, 176);
-		pineTundraTexture = Util.LoadTextureFromPCX("Art/Terrain/tundra forests.pcx", 0, 704, 768, 176);
+		largeJungleTexture = TextureLoader.Load("terrain.jungle.large");
+		smallJungleTexture = TextureLoader.Load("terrain.jungle.small");
+		largeForestTexture = TextureLoader.Load("terrain.forest.large");
+		largePlainsForestTexture = TextureLoader.Load("terrain.forest.plains.large");
+		largeTundraForestTexture = TextureLoader.Load("terrain.forest.tundra.large");
+		smallForestTexture = TextureLoader.Load("terrain.forest.small");
+		smallPlainsForestTexture = TextureLoader.Load("terrain.forest.plains.small");
+		smallTundraForestTexture = TextureLoader.Load("terrain.forest.tundra.small");
+		pineForestTexture = TextureLoader.Load("terrain.pine.forest");
+		pinePlainsTexture = TextureLoader.Load("terrain.pine.plains");
+		pineTundraTexture = TextureLoader.Load("terrain.pine.tundra");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
@@ -352,8 +336,8 @@ public partial class MarshLayer : LooseLayer {
 	private ImageTexture smallMarshTexture;
 
 	public MarshLayer() {
-		largeMarshTexture = Util.LoadTextureFromPCX("Art/Terrain/marsh.pcx", 0, 0, 512, 176);
-		smallMarshTexture = Util.LoadTextureFromPCX("Art/Terrain/marsh.pcx", 0, 176, 640, 176);
+		largeMarshTexture = TextureLoader.Load("terrain.marsh.large");
+		smallMarshTexture = TextureLoader.Load("terrain.marsh.small");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
@@ -381,7 +365,7 @@ public partial class RiverLayer : LooseLayer {
 	private ImageTexture riverTexture;
 
 	public RiverLayer() {
-		riverTexture = Util.LoadTextureFromPCX("Art/Terrain/mtnRivers.pcx");
+		riverTexture = TextureLoader.Load("terrain.river");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {

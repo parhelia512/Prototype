@@ -50,14 +50,14 @@ public partial class DomesticAdvisor : Control {
 	}
 
 	private void CreateUI() {
-		ImageTexture DomesticBackground = Util.LoadTextureFromPCX("Art/Advisors/domestic.pcx");
+		ImageTexture DomesticBackground = TextureLoader.Load("advisors.domestic.background");
 		background.Texture = DomesticBackground;
 
 		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(851, 0));
 		background.AddChild(advisorHead);
 
-		ImageTexture DialogBoxTexture = Util.LoadTextureFromPCX("Art/Advisors/dialogbox.pcx");
+		ImageTexture DialogBoxTexture = TextureLoader.Load("advisors.dialog_box");
 		TextureButton DialogBox = new TextureButton();
 		DialogBox.TextureNormal = DialogBoxTexture;
 		DialogBox.SetPosition(new Vector2(806, 110));
@@ -68,20 +68,16 @@ public partial class DomesticAdvisor : Control {
 		DialogBoxAdvise.SetPosition(new Vector2(815, 119));
 		background.AddChild(DialogBoxAdvise);
 
-		close.TextureNormal = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 0, 0, 72, 48);
-		close.TextureHover = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 72, 0, 72, 48);
-		close.TexturePressed = Util.LoadTextureFromPCX("Art/exitBox-backgroundStates.pcx", 144, 0, 72, 48);
+		TextureLoader.SetButtonTextures(close, "ui.exit");
 		close.Pressed += () => {
 			GetParent<Advisors>().Hide();
 		};
 
-		changeGovernment.TextureNormal = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 1, 145, 24);
-		changeGovernment.TextureHover = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 26, 145, 24);
-		changeGovernment.TexturePressed = Util.LoadTextureFromPCX("Art/Advisors/domesticBUTTON.pcx", 1, 52, 145, 24);
+		TextureLoader.SetButtonTextures(changeGovernment, "advisors.domestic.button");
 		changeGovernment.Pressed += ChangeGovernments;
 
-		ImageTexture scienceSliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 34, 2, 30, 30);
-		ImageTexture luxurySliderTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 376, 2, 30, 30);
+		ImageTexture scienceSliderTexture = TextureLoader.Load("icons.science");
+		ImageTexture luxurySliderTexture = TextureLoader.Load("icons.luxury");
 
 		// Placeholder values
 		int scienceRate = 5;
@@ -103,8 +99,8 @@ public partial class DomesticAdvisor : Control {
 		luxurySliderLabel.SetPosition(new Vector2(760, luxurySliderY + 4));
 		background.AddChild(luxurySliderLabel);
 
-		ImageTexture plusTexture = Util.LoadTextureFromPCX("Art/Advisors/domestic_icons_aux.pcx", 75, 1, 22, 22);
-		ImageTexture minusTexture = Util.LoadTextureFromPCX("Art/Advisors/domestic_icons_aux.pcx", 51, 1, 22, 22);
+		ImageTexture plusTexture = TextureLoader.Load("icons.plus");
+		ImageTexture minusTexture = TextureLoader.Load("icons.minus");
 
 		TextureButton moreScience = new();
 		moreScience.TextureNormal = plusTexture;
@@ -131,16 +127,16 @@ public partial class DomesticAdvisor : Control {
 		background.AddChild(lessLuxury);
 
 		// Column header icons.
-		eatenFood.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 218, 2, 29, 29);
-		fullFood.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 188, 2, 29, 29);
-		wastedShield.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 157, 2, 29, 29);
-		goodShield.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 125, 2, 29, 29);
-		wastedGold.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 95, 2, 29, 29);
-		goodGold.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 64, 2, 29, 29);
-		happyFace.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 373, 2, 29, 29);
-		contentFace.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 591, 2, 29, 29);
-		beaker.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 34, 2, 29, 29);
-		treasuryIcon.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 746, 2, 29, 29);
+		eatenFood.TextureNormal = TextureLoader.Load("icons.eaten_food");
+		fullFood.TextureNormal = TextureLoader.Load("icons.full_food");
+		wastedShield.TextureNormal = TextureLoader.Load("icons.wasted_shield");
+		goodShield.TextureNormal = TextureLoader.Load("icons.good_shield");
+		wastedGold.TextureNormal = TextureLoader.Load("icons.wasted_gold");
+		goodGold.TextureNormal = TextureLoader.Load("icons.good_gold");
+		happyFace.TextureNormal = TextureLoader.Load("icons.happy_face");
+		contentFace.TextureNormal = TextureLoader.Load("icons.content_face");
+		beaker.TextureNormal = TextureLoader.Load("icons.beaker");
+		treasuryIcon.TextureNormal = TextureLoader.Load("icons.treasury");
 	}
 
 	public void ShowAdvisor() {

@@ -80,11 +80,9 @@ public partial class WorldSetup : Control {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/background.pcx");
+		background.Texture = TextureLoader.Load("world_setup.background");
 
-		pangaea80.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 1 + 1, 1, 75, 50);
-		pangaea80.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 1 + 1, 1, 75, 50);
-		pangaea80.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 1 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(pangaea80, "world_setup.pangaea80");
 		pangaea80.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Pangaea;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_80;
@@ -93,9 +91,7 @@ public partial class WorldSetup : Control {
 			pangaeaLabel.Text = "Pangaea (80% water)";
 		};
 
-		pangaea70.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 3 + 1, 1, 75, 50);
-		pangaea70.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 3 + 1, 1, 75, 50);
-		pangaea70.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 3 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(pangaea70, "world_setup.pangaea70");
 		pangaea70.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Pangaea;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_70;
@@ -104,9 +100,7 @@ public partial class WorldSetup : Control {
 			pangaeaLabel.Text = "Pangaea (70% water)";
 		};
 
-		pangaea60.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 6 + 1, 1, 75, 50);
-		pangaea60.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 6 + 1, 1, 75, 50);
-		pangaea60.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 6 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(pangaea60, "world_setup.pangaea60");
 		pangaea60.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Pangaea;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_60;
@@ -115,9 +109,7 @@ public partial class WorldSetup : Control {
 			pangaeaLabel.Text = "Pangaea (60% water)";
 		};
 
-		continents80.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 1 + 1, 1, 75, 50);
-		continents80.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 1 + 1, 1, 75, 50);
-		continents80.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 1 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(continents80, "world_setup.continents80");
 		continents80.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Continents;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_80;
@@ -126,9 +118,7 @@ public partial class WorldSetup : Control {
 			continentsLabel.Text = "Continents (80% water)";
 		};
 
-		continents70.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 4 + 1, 1, 75, 50);
-		continents70.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 4 + 1, 1, 75, 50);
-		continents70.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 4 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(continents70, "world_setup.continents70");
 		continents70.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Continents;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_70;
@@ -137,9 +127,7 @@ public partial class WorldSetup : Control {
 			continentsLabel.Text = "Continents (70% water)";
 		};
 
-		continents60.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 7 + 1, 1, 75, 50);
-		continents60.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 7 + 1, 1, 75, 50);
-		continents60.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 7 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(continents60, "world_setup.continents60");
 		continents60.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Continents;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_60;
@@ -148,9 +136,7 @@ public partial class WorldSetup : Control {
 			continentsLabel.Text = "Continents (60% water)";
 		};
 
-		archipelago80.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 2 + 1, 1, 75, 50);
-		archipelago80.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 2 + 1, 1, 75, 50);
-		archipelago80.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 2 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(archipelago80, "world_setup.archipelago80");
 		archipelago80.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Archipelago;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_80;
@@ -159,9 +145,7 @@ public partial class WorldSetup : Control {
 			archipelagoLabel.Text = "Archipelago (80% water)";
 		};
 
-		archipelago70.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 5 + 1, 1, 75, 50);
-		archipelago70.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 5 + 1, 1, 75, 50);
-		archipelago70.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 5 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(archipelago70, "world_setup.archipelago70");
 		archipelago70.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Archipelago;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_70;
@@ -170,9 +154,7 @@ public partial class WorldSetup : Control {
 			archipelagoLabel.Text = "Archipelago (70% water)";
 		};
 
-		archipelago60.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALL.pcx", 76 * 8 + 1, 1, 75, 50);
-		archipelago60.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLrollovers.pcx", 76 * 8 + 1, 1, 75, 50);
-		archipelago60.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterSMALLdepress.pcx", 76 * 8 + 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(archipelago60, "world_setup.archipelago60");
 		archipelago60.Pressed += () => {
 			landform = WorldCharacteristics.Landform.Archipelago;
 			ocean = WorldCharacteristics.OceanCoverage.Percent_60;
@@ -181,116 +163,94 @@ public partial class WorldSetup : Control {
 			archipelagoLabel.Text = "Archipelago (60% water)";
 		};
 
-		arid.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/climate.pcx", 1, 339, 75, 50);
-		arid.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 1, 1, 75, 50);
-		arid.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGERollovers.pcx", 1, 1, 75, 50);
+		TextureLoader.SetButtonTextures(arid, "world_setup.arid");
 		arid.Pressed += () => {
 			clim = WorldCharacteristics.Climate.Arid;
 			ResetClimateGraphics();
 			aridLarge.Visible = true;
 		};
 
-		normal.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/climate.pcx", 77, 339, 75, 50);
-		normal.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 77, 1, 75, 50);
-		normal.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 77, 1, 75, 50);
+		TextureLoader.SetButtonTextures(normal, "world_setup.normal");
 		normal.Pressed += () => {
 			clim = WorldCharacteristics.Climate.Normal;
 			ResetClimateGraphics();
 			normalLarge.Visible = true;
 		};
 
-		wet.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/climate.pcx", 153, 339, 75, 50);
-		wet.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 153, 1, 75, 50);
-		wet.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 153, 1, 75, 50);
+		TextureLoader.SetButtonTextures(wet, "world_setup.wet");
 		wet.Pressed += () => {
 			clim = WorldCharacteristics.Climate.Wet;
 			ResetClimateGraphics();
 			wetLarge.Visible = true;
 		};
 
-		warm.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/temperature.pcx", 1, 339, 75, 50);
-		warm.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 1, 124, 75, 50);
-		warm.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGERollovers.pcx", 1, 124, 75, 50);
+		TextureLoader.SetButtonTextures(warm, "world_setup.warm");
 		warm.Pressed += () => {
 			temp = WorldCharacteristics.Temperature.Warm;
 			ResetTemperatureGraphics();
 			warmLarge.Visible = true;
 		};
 
-		temperate.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/temperature.pcx", 77, 339, 75, 50);
-		temperate.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 77, 124, 75, 50);
-		temperate.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 77, 124, 75, 50);
+		TextureLoader.SetButtonTextures(temperate, "world_setup.temperate");
 		temperate.Pressed += () => {
 			temp = WorldCharacteristics.Temperature.Temperate;
 			ResetTemperatureGraphics();
 			temperateLarge.Visible = true;
 		};
 
-		cool.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/temperature.pcx", 153, 339, 75, 50);
-		cool.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 153, 124, 75, 50);
-		cool.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 153, 124, 75, 50);
+		TextureLoader.SetButtonTextures(cool, "world_setup.cool");
 		cool.Pressed += () => {
 			temp = WorldCharacteristics.Temperature.Cool;
 			ResetTemperatureGraphics();
 			coolLarge.Visible = true;
 		};
 
-		billion3.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/age.pcx", 1, 339, 75, 50);
-		billion3.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 1, 281, 75, 50);
-		billion3.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGERollovers.pcx", 1, 281, 75, 50);
+		TextureLoader.SetButtonTextures(billion3, "world_setup.billion3");
 		billion3.Pressed += () => {
 			age = WorldCharacteristics.Age.Billion_3;
 			ResetAgeGraphics();
 			billion3Large.Visible = true;
 		};
 
-		billion4.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/age.pcx", 77, 339, 75, 50);
-		billion4.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 77, 281, 75, 50);
-		billion4.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 77, 281, 75, 50);
+		TextureLoader.SetButtonTextures(billion4, "world_setup.billion4");
 		billion4.Pressed += () => {
 			age = WorldCharacteristics.Age.Billion_4;
 			ResetAgeGraphics();
 			billion4Large.Visible = true;
 		};
 
-		billion5.TextureNormal = Util.LoadTextureFromPCX("Art/WorldSetup/age.pcx", 153, 339, 75, 50);
-		billion5.TexturePressed = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 153, 281, 75, 50);
-		billion5.TextureHover = Util.LoadTextureFromPCX("Art/WorldSetup/CLIMTEMPAGEDepress.pcx", 153, 281, 75, 50);
+		TextureLoader.SetButtonTextures(billion5, "world_setup.billion5");
 		billion5.Pressed += () => {
 			age = WorldCharacteristics.Age.Billion_5;
 			ResetAgeGraphics();
 			billion5Large.Visible = true;
 		};
 
-		confirm.TextureNormal = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 1, 1, 19, 19);
-		confirm.TextureHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 37, 1, 19, 19);
-		confirm.TexturePressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 73, 1, 19, 19);
+		TextureLoader.SetButtonTextures(confirm, "ui.confirm");
 		confirm.Pressed += CreateGame;
 
-		cancel.TextureNormal = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 21, 1, 15, 19);
-		cancel.TextureHover = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 57, 1, 15, 19);
-		cancel.TexturePressed = Util.LoadTextureFromPCX("Art/X-o_ALLstates-sprite.pcx", 93, 1, 15, 19);
+		TextureLoader.SetButtonTextures(cancel, "ui.cancel");
 		cancel.Pressed += BackToMainMenu;
 
-		pangaea60Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 1, 551, 300, 200);
-		pangaea70Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 1, 276, 300, 200);
-		pangaea80Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 1, 1, 300, 200);
-		continents60Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 301 + 1, 551, 300, 200);
-		continents70Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 301 + 1, 276, 300, 200);
-		continents80Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 301 + 1, 1, 300, 200);
-		archipelago60Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 301 * 2 + 1, 551, 300, 200);
-		archipelago70Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 301 * 2 + 1, 276, 300, 200);
-		archipelago80Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/landmassWaterlarge.pcx", 301 * 2 + 1, 1, 300, 200);
+		pangaea60Large.Texture = TextureLoader.Load("world_setup_large.pangaea60");
+		pangaea70Large.Texture = TextureLoader.Load("world_setup_large.pangaea70");
+		pangaea80Large.Texture = TextureLoader.Load("world_setup_large.pangaea80");
+		continents60Large.Texture = TextureLoader.Load("world_setup_large.continents60");
+		continents70Large.Texture = TextureLoader.Load("world_setup_large.continents70");
+		continents80Large.Texture = TextureLoader.Load("world_setup_large.continents80");
+		archipelago60Large.Texture = TextureLoader.Load("world_setup_large.archipelago60");
+		archipelago70Large.Texture = TextureLoader.Load("world_setup_large.archipelago70");
+		archipelago80Large.Texture = TextureLoader.Load("world_setup_large.archipelago80");
 
-		aridLarge.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/climate.pcx", 1, 1, 300, 200);
-		normalLarge.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/climate.pcx", 302, 1, 300, 200);
-		wetLarge.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/climate.pcx", 603, 1, 300, 200);
-		coolLarge.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/temperature.pcx", 603, 1, 300, 200);
-		temperateLarge.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/temperature.pcx", 302, 1, 300, 200);
-		warmLarge.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/temperature.pcx", 1, 1, 300, 200);
-		billion3Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/age.pcx", 1, 1, 300, 200);
-		billion4Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/age.pcx", 302, 1, 300, 200);
-		billion5Large.Texture = Util.LoadTextureFromPCX("Art/WorldSetup/age.pcx", 603, 1, 300, 200);
+		aridLarge.Texture = TextureLoader.Load("world_setup_large.arid");
+		normalLarge.Texture = TextureLoader.Load("world_setup_large.normal");
+		wetLarge.Texture = TextureLoader.Load("world_setup_large.wet");
+		coolLarge.Texture = TextureLoader.Load("world_setup_large.cool");
+		temperateLarge.Texture = TextureLoader.Load("world_setup_large.temperate");
+		warmLarge.Texture = TextureLoader.Load("world_setup_large.warm");
+		billion3Large.Texture = TextureLoader.Load("world_setup_large.billion3");
+		billion4Large.Texture = TextureLoader.Load("world_setup_large.billion4");
+		billion5Large.Texture = TextureLoader.Load("world_setup_large.billion5");
 
 		ResetLandformGraphics();
 		pangaea70Large.Visible = true;
@@ -357,8 +317,8 @@ public partial class WorldSetup : Control {
 		loadingLabel.Visible = true;
 		GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 
-		// World generation can take a bit of time if multiple attempts are 
-		// needed, so we don't want to tie up the UI thread. 
+		// World generation can take a bit of time if multiple attempts are
+		// needed, so we don't want to tie up the UI thread.
 		Thread thread = new(() => { DoWorldGenerationAndstartGame(Global); });
 		thread.Start();
 	}
@@ -388,7 +348,7 @@ public partial class WorldSetup : Control {
 		}));
 
 		// Hack: reposition the initial units to the starting locations from the
-		// generated map. Longer term we'll need to split out our own 
+		// generated map. Longer term we'll need to split out our own
 		// "conquests.bic" type file and load that - until then we'll use this
 		// hack of grabbing it from the static save.
 		//

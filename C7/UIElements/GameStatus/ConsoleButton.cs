@@ -23,9 +23,9 @@ public partial class ConsoleButton : Control {
 
 	public override void _Ready() {
 		button = new() {
-			TextureNormal = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 1, 1, 16, 16),
-			TextureHover = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 17, 1, 16, 16),
-			TexturePressed = Util.LoadTextureFromPCX("Art/interface/consoleButtons.pcx", 33, 1, 16, 16),
+			TextureNormal = TextureLoader.Load("ui.console.normal"),
+			TextureHover = TextureLoader.Load("ui.console.hover"),
+			TexturePressed = TextureLoader.Load("ui.console.pressed"),
 			TooltipText = tooltipText
 		};
 		button.Pressed += () => { EmitSignal(SignalName.Pressed); };

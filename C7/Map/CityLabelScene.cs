@@ -14,8 +14,7 @@ namespace C7.Map {
 		const int LEFT_RIGHT_BOXES_HEIGHT = CITY_LABEL_HEIGHT - 2;
 		const int CENTRAL_PANEL_SEPARATOR_WIDTH = 4;
 
-		static Pcx cityIcons = Util.LoadPCX("Art/Cities/city icons.pcx");
-		static Image nonEmbassyStar;
+		static ImageTexture nonEmbassyStar;
 		static Theme smallFontTheme = new();
 		static Theme popThemeRed = new();
 		static Theme popSizeTheme = new();
@@ -64,7 +63,7 @@ namespace C7.Map {
 			//Must set the FixedSize so Godot can calculate the width of the font for city labels
 			smallFont.FixedSize = 11;
 
-			nonEmbassyStar = PCXToGodot.getImageFromPCX(cityIcons, new(20, 1, 18, 18));
+			nonEmbassyStar = TextureLoader.Load("icons.capital_star");
 		}
 
 		public CityLabelScene(City city, Vector2I tileCenter) {
@@ -134,7 +133,7 @@ namespace C7.Map {
 			capitalPanel.CustomMinimumSize = new Vector2(LEFT_RIGHT_BOXES_WIDTH, LEFT_RIGHT_BOXES_HEIGHT);
 
 			TextureRect starTextureRect = new() {
-				Texture = ImageTexture.CreateFromImage(nonEmbassyStar),
+				Texture = nonEmbassyStar,
 				StretchMode = TextureRect.StretchModeEnum.KeepCentered
 			};
 

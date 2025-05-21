@@ -30,7 +30,7 @@ public partial class TalkScreen : TextureRect {
 		font.FixedSize = 14;
 		fontTheme.DefaultFont = font;
 
-		this.Texture = Util.LoadTextureFromPCX("Art/Diplomacy/talk_offer.pcx");
+		this.Texture = TextureLoader.Load("diplomacy.offer");
 
 		string civNameText;
 		string leaderName;

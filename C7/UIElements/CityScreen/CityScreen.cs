@@ -45,23 +45,16 @@ public partial class CityScreen : Control {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background.Texture = Util.LoadTextureFromPCX("Art/city screen/background.pcx");
+		background.Texture = TextureLoader.Load("city_screen.background");
 
 		// The close button.
-		close.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 1, 48, 48);
-		close.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 50, 48, 48);
-		close.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 155, 99, 48, 48);
-
+		TextureLoader.SetButtonTextures(close, "city_screen.buttons.close");
 		close.Pressed += Hide;
 
-		previousCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 1, 48, 48);
-		previousCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 50, 48, 48);
-		previousCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 1, 99, 48, 48);
+		TextureLoader.SetButtonTextures(previousCity, "city_screen.buttons.previous");
 		previousCity.Pressed += SwitchToPreviousCity;
 
-		nextCity.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 1, 48, 48);
-		nextCity.TextureHover = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 50, 48, 48);
-		nextCity.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/cityMgmtButtons.pcx", 42, 99, 48, 48);
+		TextureLoader.SetButtonTextures(nextCity, "city_screen.buttons.next");
 		nextCity.Pressed += SwitchToNextCity;
 
 		// Load the font we'll use for the details.
@@ -110,10 +103,7 @@ public partial class CityScreen : Control {
 		};
 		background.AddChild(commerceHappinessDetails);
 
-		productionButton.TextureNormal = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 1, 0, 114, 95);
-		productionButton.TextureHover = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 116, 0, 115, 95);
-		productionButton.TexturePressed = Util.LoadTextureFromPCX("Art/city screen/ProdButton.pcx", 231, 0, 115, 95);
-
+		TextureLoader.SetButtonTextures(productionButton, "city_screen.buttons.production");
 		productionButton.Pressed += () => { this.productionMenu.Visible = !this.productionMenu.Visible; };
 
 		Hidden += OnExit;
@@ -377,7 +367,7 @@ public partial class CityScreen : Control {
 			const int iconWidth = 50, iconHeight = 40;
 
 			Sprite2D icon = new();
-			icon.Texture = Util.LoadTextureFromPCX("Art/city screen/buildings-large.pcx", 33, y, iconWidth, iconHeight);
+			icon.Texture = TextureLoader.LoadFromPCX("Art/city screen/buildings-large.pcx", new(33, y, iconWidth, iconHeight));
 			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
 			productionButton.AddChild(icon);
 		}

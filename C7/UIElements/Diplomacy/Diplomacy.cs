@@ -75,7 +75,7 @@ public partial class Diplomacy : CenterContainer {
 			// TODO: track mood in the player relationship data structure.
 			int yOffset = 115;  // 0 is annoyed, 115*2 is mad.
 
-			Pcx headPcx = Util.LoadPCX(player.civilization.leaderArtFile);
+			Pcx headPcx = TextureLoader.LoadPCX(player.civilization.leaderArtFile);
 			leaderHead.Texture = PCXToGodot.getImageTextureFromPCX(
 						headPcx,
 						new(xOffset, yOffset, 115, 115),

@@ -284,10 +284,10 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 			const int iconsPerRow = 14;
 			int x = 1 + 33 * (proto.iconIndex % iconsPerRow),
 				y = 1 + 33 * (proto.iconIndex / iconsPerRow);
-			return Util.LoadTextureFromPCX("Art/Units/units_32.pcx", x, y, iconWidth, iconHeight);
+			return TextureLoader.LoadFromPCX("Art/Units/units_32.pcx", new(x, y, iconWidth, iconHeight));
 		} else if (producible is Building b) {
 			int y = 1 + 33 * (1 + b.iconRowIndex);
-			return Util.LoadTextureFromPCX("Art/city screen/buildings-small.pcx", 33, y, iconWidth, iconHeight);
+			return TextureLoader.LoadFromPCX("Art/city screen/buildings-small.pcx", new(33, y, iconWidth, iconHeight));
 		} else {
 			return null;
 		}

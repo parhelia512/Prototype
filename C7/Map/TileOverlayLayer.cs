@@ -16,8 +16,8 @@ namespace C7.Map {
 		private readonly Vector2 tileSize;
 
 		public TileOverlayLayer() {
-			roadTexture = Util.LoadTextureFromPCX("Art/Terrain/roads.pcx");
-			railroadTexture = Util.LoadTextureFromPCX("Art/Terrain/railroads.pcx");
+			roadTexture = TextureLoader.Load("terrain.road");
+			railroadTexture = TextureLoader.Load("terrain.railroad");
 			tileSize = roadTexture.GetSize() / 16;
 			// grid 16x16 tiles
 			// assume that roads and railroads textures have the same size
@@ -30,14 +30,14 @@ namespace C7.Map {
 			//  Fortress (medieval)    | Colony (me)   | Mine
 			//  Fortress (industrial)  | Colony (in)   | Empty
 			//  Fortress (modern)      | Colony (mo)   | Empty
-			mineTexture = Util.LoadTextureFromPCX("Art/Terrain/TerrainBuildings.pcx", 128 * 2, 64, 128, 64);
+			mineTexture = TextureLoader.Load("terrain.mine");
 
 			// Each irrigation.pcx has a 4x4 grid of irrigation tiles, with
 			// each tile being 128x64 pixels.
-			grassIrrigationTexture = Util.LoadTextureFromPCX("Art/Terrain/irrigation.pcx");
-			desertIrrigationTexture = Util.LoadTextureFromPCX("Art/Terrain/irrigation DESETT.pcx");
-			plainsIrrigationTexture = Util.LoadTextureFromPCX("Art/Terrain/irrigation PLAINS.pcx");
-			tundraIrrigationTexture = Util.LoadTextureFromPCX("Art/Terrain/irrigation TUNDRA.pcx");
+			grassIrrigationTexture = TextureLoader.Load("terrain.irrigation.grass");
+			desertIrrigationTexture = TextureLoader.Load("terrain.irrigation.desert");
+			plainsIrrigationTexture = TextureLoader.Load("terrain.irrigation.plains");
+			tundraIrrigationTexture = TextureLoader.Load("terrain.irrigation.tundra");
 		}
 
 		public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {

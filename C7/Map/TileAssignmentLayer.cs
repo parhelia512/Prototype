@@ -5,9 +5,9 @@ using Godot;
 
 namespace C7.Map {
 	public partial class TileAssignmentLayer : LooseLayer {
-		ImageTexture foodTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 195, 1, 21, 30);
-		ImageTexture shieldTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 133, 1, 16, 30);
-		ImageTexture goldTexture = Util.LoadTextureFromPCX("Art/city screen/CityIcons.pcx", 67, 1, 21, 30);
+		ImageTexture foodTexture = TextureLoader.Load("icons.food");
+		ImageTexture shieldTexture = TextureLoader.Load("icons.shield");
+		ImageTexture goldTexture = TextureLoader.Load("icons.commerce");
 
 		private const int tileWidth = 128;
 		private const int tileHeight = 64;
