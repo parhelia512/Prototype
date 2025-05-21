@@ -47,8 +47,6 @@ local c7_texture_list = {
 -- Helper: Strip file extension from path
 local function strip_extension(path) return path:match "^(.-)%.[^%.]+$" or path end
 
-local output = {}
-
 -- Build lookup table from c7_texture_list without extensions
 local lookup = {}
 for _, path in ipairs(c7_texture_list) do

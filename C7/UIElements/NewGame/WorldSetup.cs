@@ -232,25 +232,25 @@ public partial class WorldSetup : Control {
 		TextureLoader.SetButtonTextures(cancel, "ui.cancel");
 		cancel.Pressed += BackToMainMenu;
 
-		pangaea60Large.Texture = TextureLoader.Load("world_setup_large.pangaea60");
-		pangaea70Large.Texture = TextureLoader.Load("world_setup_large.pangaea70");
-		pangaea80Large.Texture = TextureLoader.Load("world_setup_large.pangaea80");
-		continents60Large.Texture = TextureLoader.Load("world_setup_large.continents60");
-		continents70Large.Texture = TextureLoader.Load("world_setup_large.continents70");
-		continents80Large.Texture = TextureLoader.Load("world_setup_large.continents80");
-		archipelago60Large.Texture = TextureLoader.Load("world_setup_large.archipelago60");
-		archipelago70Large.Texture = TextureLoader.Load("world_setup_large.archipelago70");
-		archipelago80Large.Texture = TextureLoader.Load("world_setup_large.archipelago80");
+		pangaea60Large.Texture = TextureLoader.Load("world_setup.large.pangaea60");
+		pangaea70Large.Texture = TextureLoader.Load("world_setup.large.pangaea70");
+		pangaea80Large.Texture = TextureLoader.Load("world_setup.large.pangaea80");
+		continents60Large.Texture = TextureLoader.Load("world_setup.large.continents60");
+		continents70Large.Texture = TextureLoader.Load("world_setup.large.continents70");
+		continents80Large.Texture = TextureLoader.Load("world_setup.large.continents80");
+		archipelago60Large.Texture = TextureLoader.Load("world_setup.large.archipelago60");
+		archipelago70Large.Texture = TextureLoader.Load("world_setup.large.archipelago70");
+		archipelago80Large.Texture = TextureLoader.Load("world_setup.large.archipelago80");
 
-		aridLarge.Texture = TextureLoader.Load("world_setup_large.arid");
-		normalLarge.Texture = TextureLoader.Load("world_setup_large.normal");
-		wetLarge.Texture = TextureLoader.Load("world_setup_large.wet");
-		coolLarge.Texture = TextureLoader.Load("world_setup_large.cool");
-		temperateLarge.Texture = TextureLoader.Load("world_setup_large.temperate");
-		warmLarge.Texture = TextureLoader.Load("world_setup_large.warm");
-		billion3Large.Texture = TextureLoader.Load("world_setup_large.billion3");
-		billion4Large.Texture = TextureLoader.Load("world_setup_large.billion4");
-		billion5Large.Texture = TextureLoader.Load("world_setup_large.billion5");
+		aridLarge.Texture = TextureLoader.Load("world_setup.large.arid");
+		normalLarge.Texture = TextureLoader.Load("world_setup.large.normal");
+		wetLarge.Texture = TextureLoader.Load("world_setup.large.wet");
+		coolLarge.Texture = TextureLoader.Load("world_setup.large.cool");
+		temperateLarge.Texture = TextureLoader.Load("world_setup.large.temperate");
+		warmLarge.Texture = TextureLoader.Load("world_setup.large.warm");
+		billion3Large.Texture = TextureLoader.Load("world_setup.large.billion3");
+		billion4Large.Texture = TextureLoader.Load("world_setup.large.billion4");
+		billion5Large.Texture = TextureLoader.Load("world_setup.large.billion5");
 
 		ResetLandformGraphics();
 		pangaea70Large.Visible = true;
