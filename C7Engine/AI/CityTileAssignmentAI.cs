@@ -48,9 +48,9 @@ namespace C7Engine.AI {
 
 			// Check to see if this citizen working a tile would cause the city
 			// to be unhappy. If so, make them an entertainer.
-			city.RecalculateCitizenMoods(EngineStorage.gameData);
+			City.Mood cityMood = city.RecalculateCitizenMoods(EngineStorage.gameData);
 
-			if (city.isCityUnhappy() && manageMoods) {
+			if (cityMood == City.Mood.Unhappy && manageMoods) {
 				newResident.citizenType = city.owner.GetKnownSpecialists().MaxBy(x => x.Luxuries);
 				if (newResident.tileWorked != Tile.NONE) {
 					newResident.tileWorked = Tile.NONE;

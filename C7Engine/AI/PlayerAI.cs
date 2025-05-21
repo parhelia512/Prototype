@@ -431,8 +431,8 @@ namespace C7Engine {
 		private static bool MostCitiesUnhappy(Player player) {
 			int unhappyCities = 0;
 			foreach (City city in player.cities) {
-				city.RecalculateCitizenMoods(EngineStorage.gameData);
-				if (city.isCityUnhappy()) {
+				City.Mood cityMood = city.RecalculateCitizenMoods(EngineStorage.gameData);
+				if (cityMood == City.Mood.Unhappy) {
 					++unhappyCities;
 				}
 			}

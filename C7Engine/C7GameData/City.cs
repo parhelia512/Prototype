@@ -617,6 +617,11 @@ namespace C7GameData {
 			ApplyMoodChange(contentToHappyMoves, unhappy, content);
 		}
 
+		public enum Mood {
+			Unhappy,
+			Happy
+		};
+
 		// This function does the heavy lifting of happiness calculations,
 		// combining the various bonuses and penalties that affect citizen moods.
 		//
@@ -624,7 +629,7 @@ namespace C7GameData {
 		//  - https://forums.civfanatics.com/threads/how-is-happiness-calculated.74966/
 		//  - https://codehappy.net/apolyton/threads/83368-1.htm
 		//
-		public void RecalculateCitizenMoods(GameData gameData, bool goIntoDisorderIfUnhappy = false) {
+		public Mood RecalculateCitizenMoods(GameData gameData) {
 			CityResident.Mood happy = CityResident.Mood.Happy;
 			CityResident.Mood content = CityResident.Mood.Content;
 			CityResident.Mood unhappy = CityResident.Mood.Unhappy;
@@ -722,23 +727,17 @@ namespace C7GameData {
 				}
 			}
 
-			if (goIntoDisorderIfUnhappy) {
-				isInCivilDisorder = isCityUnhappy();
-				if (isInCivilDisorder) {
-					log.Information($"City {this} for player {owner} is in civil disorder.");
-				}
-			}
-		}
-
-		// Required: RecalculateCitizenMoods must be called first.
-		public bool isCityUnhappy() {
 			int happyCount = 0;
 			int unhappyCount = 0;
 			foreach (CityResident cr in residents) {
 				if (cr.mood == CityResident.Mood.Happy) { ++happyCount; }
 				if (cr.mood == CityResident.Mood.Unhappy) { ++unhappyCount; }
 			}
-			return unhappyCount > 0 && unhappyCount > happyCount;
+			if (unhappyCount > 0 && unhappyCount > happyCount) {
+				return Mood.Unhappy;
+			} else {
+				return Mood.Happy;
+			}
 		}
 
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {

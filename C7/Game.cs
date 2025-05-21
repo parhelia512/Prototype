@@ -452,15 +452,8 @@ public partial class Game : Node2D {
 			foreach (City city in controller.cities) {
 				if (!controller.isHuman) { continue; }
 
-				city.RecalculateCitizenMoods(gDA.gameData);
-				int happy = 0;
-				int unhappy = 0;
-				foreach (CityResident cr in city.residents) {
-					if (cr.mood == CityResident.Mood.Happy) { ++happy; }
-					if (cr.mood == CityResident.Mood.Unhappy) { ++unhappy; }
-				}
-
-				if (unhappy > happy) {
+				City.Mood cityMood = city.RecalculateCitizenMoods(gDA.gameData);
+				if (cityMood == City.Mood.Unhappy) {
 					popupOverlay.ShowPopup(
 						new ConfirmationPopup(
 							$"{city.name} will riot! Are you sure?",
