@@ -84,7 +84,7 @@ public partial class TerrainLayer : LooseLayer {
 			// Jim's option of a whole-map texture is less hacky, but this is quicker and seems to be working well.
 			Rect2 screenRect = new Rect2(position, terrainSpriteSize * 1.001f);
 
-			looseView.DrawTextureRect(texture, screenRect, true);
+			looseView.DrawTextureRect(texture, screenRect, tile: false);
 
 		}
 
