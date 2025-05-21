@@ -6,6 +6,10 @@ namespace C7GameData.Save {
 	// This is intended for use in save games, so it does not have recursive
 	// references for prereqs.
 	public class SaveTech {
+		public enum Flag {
+			BonusTechToFirstCivThatResearches,
+		}
+
 		public ID id;
 		public string Name { get; set; }
 		public string CivilopediaEntry { get; set; }
@@ -26,6 +30,10 @@ namespace C7GameData.Save {
 
 		public List<ID> Prerequisites = new();
 
+		// Assorted boolean flags for the tech. They're stored in this set
+		// rather than as booleans to avoid bloating the json file.
+		public HashSet<Flag> flags = new();
+
 		public C7GameData.Tech ToTechWithoutPrereqs() {
 			C7GameData.Tech result = new() {
 				id = this.id,
@@ -33,10 +41,12 @@ namespace C7GameData.Save {
 				CivilopediaEntry = this.CivilopediaEntry,
 				Cost = this.Cost,
 				RequiredForEraAdvancement = this.RequiredForEraAdvancement,
+				BonusTechToFirstCivThatResearches = this.flags.Contains(SaveTech.Flag.BonusTechToFirstCivThatResearches),
 				EraCivilopediaName = this.EraCivilopediaName,
 				SmallIconPath = this.SmallIconPath,
 				X = this.X,
-				Y = this.Y
+				Y = this.Y,
+				DataSource = this,
 			};
 			return result;
 		}

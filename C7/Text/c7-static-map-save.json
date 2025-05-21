@@ -70565,6 +70565,9 @@
       "y": 216,
       "prerequisites": [
         "tech-9"
+      ],
+      "flags": [
+        "bonusTechToFirstCivThatResearches"
       ]
     },
     {

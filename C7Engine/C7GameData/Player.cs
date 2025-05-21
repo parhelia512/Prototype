@@ -4,6 +4,7 @@ using System.Linq;
 using C7Engine.AI.StrategicAI;
 using C7GameData.Save;
 using C7Engine.Pathing;
+using C7Engine;
 using Serilog;
 
 namespace C7GameData {
@@ -91,6 +92,11 @@ namespace C7GameData {
 
 		public List<City> citiesWithCorruptionWonders = new();
 
+		// The number of free techs this player has remaining. Free techs can
+		// be awarded after researching a tech (like Philosophy) or after
+		// completing a wonder (like Theory of Evolution).
+		public int freeTechsRemaining = 0;
+
 		public int EraIndex() {
 			return EraIndex(eraCivilopediaName);
 		}
@@ -125,6 +131,18 @@ namespace C7GameData {
 		}
 
 		public void SetCurrentlyResearchedTech(ID id) {
+			// Award a free tech if the player has one.
+			if (id != null && freeTechsRemaining > 0) {
+				--freeTechsRemaining;
+				beakers = 0;
+				turnsResearched = 0;
+
+				Tech tech = EngineStorage.gameData.techs.Find(x => x.id == id);
+				log.Information($"Awarding {tech.Name} to player {this}");
+				CompleteResearchingTech(EngineStorage.gameData, tech);
+				return;
+			}
+
 			currentlyResearchedTech = id;
 
 			// Clear out previous progress.
@@ -533,7 +551,25 @@ namespace C7GameData {
 				return;
 			}
 
-			knownTechs.Add(currentlyResearchedTech);
+			CompleteResearchingTech(gameData, tech);
+		}
+
+		private void CompleteResearchingTech(GameData gameData, Tech tech) {
+			// If this tech awards the first civ to research it a free tech and
+			// no other civs know about the tech, this player gets the bonus. 
+			if (tech.BonusTechToFirstCivThatResearches) {
+				bool awardBonus = true;
+				foreach (Player p in gameData.players) {
+					if (p.knownTechs.Contains(tech.id)) {
+						awardBonus = false;
+					}
+				}
+				if (awardBonus) {
+					++freeTechsRemaining;
+				}
+			}
+
+			knownTechs.Add(tech.id);
 			SetCurrentlyResearchedTech(null);
 
 			if (CanAdvanceToNextEra(gameData)) {

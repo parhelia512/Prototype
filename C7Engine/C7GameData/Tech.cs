@@ -9,6 +9,7 @@ namespace C7GameData {
 		public string CivilopediaEntry { get; set; }
 		public int Cost;
 		public bool RequiredForEraAdvancement;
+		public bool BonusTechToFirstCivThatResearches;
 
 		// The civilopedia name of the era this tech is part of
 		// (like ERA_Ancient_Times). This is what art lookups are based on.
@@ -24,24 +25,12 @@ namespace C7GameData {
 
 		public List<Tech> Prerequisites = new();
 
+		// The backing save tech, for serialization purposes. This should not be
+		// made public - add accessors or fields for what you need.
+		public SaveTech DataSource { private get; set; }
+
 		public C7GameData.Save.SaveTech ToSaveTech() {
-			C7GameData.Save.SaveTech result = new() {
-				id = this.id,
-				Name = this.Name,
-				CivilopediaEntry = this.CivilopediaEntry,
-				Cost = this.Cost,
-				RequiredForEraAdvancement = this.RequiredForEraAdvancement,
-				EraCivilopediaName = this.EraCivilopediaName,
-				SmallIconPath = this.SmallIconPath,
-				X = this.X,
-				Y = this.Y
-			};
-
-			foreach (Tech t in Prerequisites) {
-				result.Prerequisites.Add(t.id);
-			}
-
-			return result;
+			return DataSource;
 		}
 
 		public void FillInPrereqs(List<SaveTech> saveTechs, List<Tech> techs) {
