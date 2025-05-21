@@ -56,6 +56,7 @@ namespace C7GameData.Save {
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
 				Buildings = data.Buildings.ConvertAll(building => building.ToSaveBuilding()),
+				GreatWondersBuilt = data.GreatWondersBuilt,
 				BarbarianInfo = data.barbarianInfo,
 				Units = data.mapUnits.ConvertAll(unit => new SaveUnit(unit, data.map)),
 				UnitPrototypes = data.unitPrototypes.ConvertAll(proto => new SaveUnitPrototype(proto)),
@@ -150,6 +151,7 @@ namespace C7GameData.Save {
 				ids = new ID.Factory(this),
 				experienceLevels = ExperienceLevels,
 				rules = Rules,
+				GreatWondersBuilt = GreatWondersBuilt,
 			};
 		}
 
@@ -196,6 +198,9 @@ namespace C7GameData.Save {
 
 				if (saveBuilding.requiredTech != null) {
 					building.requiredTech = techDict[saveBuilding.requiredTech];
+				}
+				if (saveBuilding.renderedObsoleteBy != null) {
+					building.renderedObsoleteBy = techDict[saveBuilding.renderedObsoleteBy];
 				}
 
 				building.requiredResources = saveBuilding.requiredResources.Select(a => resDict[a]).ToHashSet();
@@ -321,6 +326,7 @@ namespace C7GameData.Save {
 		public List<SaveUnit> Units = new List<SaveUnit>();
 		public List<SaveUnitPrototype> UnitPrototypes = [];
 		public List<SaveBuilding> Buildings = [];
+		public HashSet<string> GreatWondersBuilt = new();
 		public List<SavePlayer> Players = new List<SavePlayer>();
 		public List<SaveCity> Cities = new List<SaveCity>();
 		public BarbarianInfo BarbarianInfo = new BarbarianInfo();

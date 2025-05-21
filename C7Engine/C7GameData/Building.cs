@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using C7GameData.Save;
+using C7Engine;
 
 namespace C7GameData {
 	public static class BuildingRules {
@@ -66,7 +67,11 @@ namespace C7GameData {
 		public string name { get; set; }
 		public int shieldCost { get; set; }
 		public int populationCost { get; set; } // Will always be equal to 0 in the Civ3 rule set
+
+		// Filled in in SaveGame::ConvertBuildings
 		public Tech requiredTech { get; set; }
+		public Tech? renderedObsoleteBy;
+
 		public Building requiredBuilding;
 
 		List<Func<City, bool>> productionPrerequisites = [];
@@ -147,12 +152,31 @@ namespace C7GameData {
 				return false;
 			}
 
+			if (renderedObsoleteBy != null && city.owner.knownTechs.Contains(renderedObsoleteBy.id)) {
+				return false;
+			}
+
 			if (city.buildings.Exists(cityBuilding => cityBuilding.building == this)) {
 				return false;
 			}
 
+			if (isGreatWonder) {
+				// We can't build a great wonder if it was already built.
+				if (EngineStorage.gameData.GreatWondersBuilt.Contains(name)) {
+					return false;
+				}
+
+				// We can't build a great wonder if another one of our cities is
+				// building it.
+				foreach (City c in city.owner.cities) {
+					if (c.itemBeingProduced != null && c.itemBeingProduced.name == name) {
+						return false;
+					}
+				}
+			}
+
 			// TODO: Add logic for wonders and the palace
-			if (isGreatWonder || isSmallWonder || isCenterOfEmpire) {
+			if (isSmallWonder || isCenterOfEmpire) {
 				return false;
 			}
 

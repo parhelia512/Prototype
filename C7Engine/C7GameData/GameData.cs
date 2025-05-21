@@ -18,6 +18,10 @@ namespace C7GameData {
 		public List<MapUnit> mapUnits { get; set; } = new List<MapUnit>();
 		public List<UnitPrototype> unitPrototypes = new();
 		public List<Building> Buildings = new();
+
+		// The names of all great wonders that have been built.
+		public HashSet<string> GreatWondersBuilt = new();
+
 		public List<City> cities = new List<City>();
 
 		internal List<Civilization> civilizations = new List<Civilization>();

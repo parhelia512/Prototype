@@ -46,8 +46,8 @@ namespace C7Engine {
 					// Note that we do growth after calculating citizen moods,
 					// to ensure that the player has a chance to deal with the
 					// unhappiness of a new citizen during their turn.
+					log.Information($"\n*** City growth/production for turn {gameData.turn}, player {player} ***");
 					player.HandleCityUpdates(gameData);
-					HandleCityResults(gameData, player);
 
 					player.DoPerTurnFinanceUpdates(gameData);
 					player.DoPerTurnScienceUpdates(gameData);
@@ -137,24 +137,6 @@ namespace C7Engine {
 					gameData.mapUnits.Add(newUnit);
 					barbPlayer.units.Add(newUnit);
 					log.Debug("New barbarian galley added at " + tile);
-				}
-			}
-		}
-
-		private static void HandleCityResults(GameData gameData, Player player) {
-			log.Information($"\n*** City production for turn {gameData.turn}, player {player} ***");
-
-			foreach (City city in player.cities) {
-				IProducible producedItem = city.ComputeTurnProduction();
-				if (producedItem != null) {
-					log.Debug($"Produced {producedItem} in {city}");
-					if (producedItem is UnitPrototype prototype) {
-						city.AddUnit(prototype, gameData);
-					} else if (producedItem is Building building) {
-						city.AddBuilding(building);
-					}
-
-					city.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(city, producedItem));
 				}
 			}
 		}

@@ -531,6 +531,7 @@ namespace C7GameData {
 				}
 
 				c.HandleCityGrowth(gameData);
+				c.HandleCityProduction(gameData);
 			}
 		}
 

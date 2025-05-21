@@ -607,7 +607,7 @@ namespace C7GameData {
 			List<SaveCityBuilding> res = [];
 
 			var city = savData.City[cityIndex];
-			var cityBuildings = savData.CityBuilding[cityIndex];
+			QueryCiv3.Sav.CITY_Building[] cityBuildings = savData.CityBuilding[cityIndex];
 
 			BiqData theBiq = biq.Bldg is null ? defaultBiq : biq;
 
@@ -621,6 +621,10 @@ namespace C7GameData {
 						year = building.Year,
 						totalCulture = building.Culture,
 					});
+
+					if (theBiq.Bldg[buildingIndex].Wonder) {
+						save.GreatWondersBuilt.Add(theBiq.Bldg[buildingIndex].Name);
+					}
 				}
 			}
 
@@ -641,6 +645,10 @@ namespace C7GameData {
 					year = 0,
 					totalCulture = 0,
 				});
+
+				if (building.Wonder) {
+					save.GreatWondersBuilt.Add(building.Name);
+				}
 			}
 
 			return res;
@@ -916,6 +924,10 @@ namespace C7GameData {
 
 				if (bldg.RequiredResource2 != -1) {
 					building.requiredResources.Add(save.Resources[bldg.RequiredResource2].Key);
+				}
+
+				if (bldg.RenderedObsoleteBy != -1) {
+					building.renderedObsoleteBy = save.Techs[bldg.RequiredAdvance].id;
 				}
 
 				building.flags = LoadBuildingFlags(bldg).ToHashSet();

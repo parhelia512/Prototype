@@ -67759,7 +67759,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 3,
-      "iconRowIndex": 31
+      "iconRowIndex": 31,
+      "renderedObsoleteBy": "tech-20"
     },
     {
       "name": "The Colossus",
@@ -67771,6 +67772,7 @@
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
       "iconRowIndex": 32,
+      "renderedObsoleteBy": "tech-1",
       "flags": [
         "mustBeCoastal"
       ]
@@ -67785,6 +67787,7 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 33,
+      "renderedObsoleteBy": "tech-15",
       "flags": [
         "mustBeCoastal"
       ]
@@ -67798,7 +67801,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
-      "iconRowIndex": 34
+      "iconRowIndex": 34,
+      "renderedObsoleteBy": "tech-14"
     },
     {
       "name": "The Oracle",
@@ -67809,7 +67813,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 35
+      "iconRowIndex": 35,
+      "renderedObsoleteBy": "tech-10"
     },
     {
       "name": "The Great Wall",
@@ -67820,7 +67825,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "iconRowIndex": 36
+      "iconRowIndex": 36,
+      "renderedObsoleteBy": "tech-21"
     },
     {
       "name": "Sun Tzu\u0027s Art of War",
@@ -68339,7 +68345,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 78
+      "iconRowIndex": 78,
+      "renderedObsoleteBy": "tech-17"
     },
     {
       "name": "The Statue of Zeus",
@@ -68351,6 +68358,7 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
       "iconRowIndex": 79,
+      "renderedObsoleteBy": "tech-11",
       "requiredResources": [
         "Ivory"
       ]
@@ -68375,7 +68383,8 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "iconRowIndex": 81
+      "iconRowIndex": 81,
+      "renderedObsoleteBy": "tech-26"
     },
     {
       "name": "Secret Police HQ",
