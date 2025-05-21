@@ -442,13 +442,40 @@ public partial class Game : Node2D {
 	}
 
 	private void OnPlayerEndTurn() {
-		if (CurrentState == GameState.PlayerTurn) {
-			log.Information("Ending player turn");
-			EmitSignal(SignalName.TurnEnded);
-			log.Information("Starting computer turn");
-			CurrentState = GameState.ComputerTurn;
-			new MsgEndTurn().send(); // Triggers actual backend processing
+		if (CurrentState != GameState.PlayerTurn) {
+			return;
 		}
+
+		// Prompt the user if they would have a city riot when the turn ended.
+		{
+			using UIGameDataAccess gDA = new();
+			foreach (City city in controller.cities) {
+				if (!controller.isHuman) { continue; }
+
+				City.Mood cityMood = city.RecalculateCitizenMoods(gDA.gameData);
+				if (cityMood == City.Mood.Unhappy) {
+					popupOverlay.ShowPopup(
+						new ConfirmationPopup(
+							$"{city.name} will riot! Are you sure?",
+							"Yes, let them riot!",
+							"No. Maybe you are right, advisor.",
+							() => {
+								DoActualEndTurn();
+							}),
+						PopupOverlay.PopupCategory.Advisor);
+					return;
+				}
+			}
+		}
+		DoActualEndTurn();
+	}
+
+	private void DoActualEndTurn() {
+		log.Information("Ending player turn");
+		EmitSignal(SignalName.TurnEnded);
+		log.Information("Starting computer turn");
+		CurrentState = GameState.ComputerTurn;
+		new MsgEndTurn().send(); // Triggers actual backend processing
 	}
 
 	public void _on_QuitButton_pressed() {

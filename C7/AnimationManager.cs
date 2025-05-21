@@ -122,10 +122,11 @@ public partial class AnimationManager {
 		}
 	}
 
-	public static void loadCursorAnimation(string path, ref SpriteFrames frames) {
+	// Used for loading animations that don't have a "tint", where the tint is
+	// the civ-specific coloring of a unit.
+	public static void loadNonTintedAnimation(string path, string name, ref SpriteFrames frames) {
 		Flic flic = Util.LoadFlic(path);
 		int row = 0;
-		string name = "cursor";
 		frames.AddAnimation(name);
 
 		for (int col = 0; col < flic.Images.GetLength(1); col++) {

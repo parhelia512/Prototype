@@ -40,7 +40,7 @@ namespace C7Engine {
 
 				gameData.turn++;
 				foreach (Player player in gameData.players) {
-					player.RecalculateCitizenMoods(gameData);
+					player.RecalculateCitizenMoods(gameData, goIntoDisorderIfUnhappy: true);
 					player.DoCorruptionCalculations(gameData);
 
 					// Note that we do growth after calculating citizen moods,
