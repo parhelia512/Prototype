@@ -14,8 +14,6 @@ local CITY_SCREEN_ICONS = "Art/city screen/CityIcons.pcx"
 
 local CITY_ICONS = "Art/Cities/city icons.pcx"
 
-local RESOURCES = "Art/resources.pcx"
-
 local CREDITS = "Art/Credits/"
 local PALACE = "Art/PalaceView/"
 
@@ -176,7 +174,7 @@ textures.ui = {
 
 textures.terrain = require "civ3.terrain"
 
-textures.resources = RESOURCES
+textures.resources = require "civ3.resources"
 
 textures.credits = {
   background = CREDITS .. "credits_background.pcx",

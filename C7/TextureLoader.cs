@@ -85,13 +85,19 @@ public static class TextureLoader {
 		return texture;
 	}
 
-	/// Returns a texture based on the config key and a C# object, using a custom mapping function.
-	/// This overload uses the "map_object_to_sprite" function in the config entry to dynamically
-	/// determine which texture to load based on the provided object's properties.
-	public static ImageTexture Load(string configKey, object obj) {
+	/// Returns a texture based on the config key and a C# object.
+	/// This overload uses the "map_object_to_sprite" function in the
+	/// config entry to dynamically determine which texture to load
+	/// based on the provided object's properties.
+	///
+	/// This method optionally allows to cache the resulting texture,
+	/// using (configKey, obj) as key.  Note, that caching shouldn't
+	/// be used for objects whose texture-affecting properties can
+	/// change.
+	public static ImageTexture Load(string configKey, object obj, bool useCache = false) {
 		var cacheKey = (configKey, obj);
 
-		if (objectMappingCache.TryGetValue(cacheKey, out ImageTexture cachedTexture))
+		if (useCache && objectMappingCache.TryGetValue(cacheKey, out ImageTexture cachedTexture))
 			return cachedTexture;
 
 		object entry = GetEntryByPath(configKey);
@@ -104,7 +110,8 @@ public static class TextureLoader {
 
 		ImageTexture texture = LoadFromLuaObject(func.Call(table, obj)[0]);
 
-		objectMappingCache[cacheKey] = texture;
+		if (useCache)
+			objectMappingCache[cacheKey] = texture;
 
 		return texture;
 	}

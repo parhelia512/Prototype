@@ -252,7 +252,7 @@ public partial class CityScreen : Control {
 			VBoxContainer resourceContainer = new();
 			resourceContainer.AddThemeConstantOverride("separation", 0);
 
-			var texture = Util.GetResourceTexture(resource);
+			var texture = (ImageTexture)TextureLoader.Load("resources", resource).Duplicate();
 			texture.SetSizeOverride(new(45, 45));
 
 			TextureRect resourceRect = new() {
