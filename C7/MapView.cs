@@ -75,7 +75,7 @@ public partial class TerrainLayer : LooseLayer {
 		foreach (TileToDraw tTD in tilesToDraw) {
 			if (tTD.tile == Tile.NONE) { continue; }
 
-			ImageTexture texture = TextureLoader.Load("terrain.base", tTD.tile);
+			ImageTexture texture = TextureLoader.Load("terrain.base", tTD.tile, useCache: true);
 
 			Vector2 terrainOffset = new Vector2(0, -1 * MapView.cellSize.Y);
 			Vector2 position = tTD.tileCenter - (float)0.5 * terrainSpriteSize + terrainOffset;
