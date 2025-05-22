@@ -18,7 +18,7 @@ public partial class Credits : Node2D {
 	}
 
 	private void ShowCredits() {
-		ImageTexture creditsTexture = TextureLoader.Load("credit.background");
+		ImageTexture creditsTexture = TextureLoader.Load("credits.background");
 		ImageTexture goBackTexture = TextureLoader.Load("ui.exit.normal");
 
 		TextureRect creditsBackground = new TextureRect();

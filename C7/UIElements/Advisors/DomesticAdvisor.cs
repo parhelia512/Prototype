@@ -377,20 +377,20 @@ public partial class DomesticAdvisor : Control {
 		List<CityResident> specialists = city.residents.FindAll(x => !x.citizenType.IsDefaultCitizen);
 
 		// Leave a 1 head gap if we have specialists.
-		int width = city.residents.Count * PopHeads.HEAD_SIZE;
+		int width = city.residents.Count * PopHead.HEAD_SIZE;
 		if (specialists.Count > 0) {
-			width += PopHeads.HEAD_SIZE;
+			width += PopHead.HEAD_SIZE;
 		}
 
 		// Leave a 1 head gap between each section of moods.
 		int numMoodsPresent = (happyResidents.Count > 0 ? 1 : 0)
 			+ (contentResidents.Count > 0 ? 1: 0)
 			+ (unhappyResidents.Count > 0 ? 1: 0);
-		width += (numMoodsPresent - 1) * PopHeads.HEAD_SIZE;
+		width += (numMoodsPresent - 1) * PopHead.HEAD_SIZE;
 
 		// Figure out the actual spacing we'll use, to ensure we fit withing the
 		// bounds of our container.
-		int spacer = PopHeads.HEAD_SIZE;
+		int spacer = PopHead.HEAD_SIZE;
 		if (width > maxWidth) {
 			spacer = (int)((float)maxWidth / width * spacer);
 		}
@@ -427,7 +427,7 @@ public partial class DomesticAdvisor : Control {
 
 	private int AddCitizen(Node node, CityResident cr, int xPos, int spacer, int eraNum) {
 		TextureRect tr = new();
-		tr.Texture = PopHeads.GetPopHead(cr, eraNum);
+		tr.Texture = PopHead.GetTexture(cr, eraNum);
 		tr.SetPosition(new Vector2(xPos, 0));
 		node.AddChild(tr);
 		return xPos + spacer;

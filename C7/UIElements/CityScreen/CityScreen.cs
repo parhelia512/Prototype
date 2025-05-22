@@ -246,7 +246,7 @@ public partial class CityScreen : Control {
 			VBoxContainer resourceContainer = new();
 			resourceContainer.AddThemeConstantOverride("separation", 0);
 
-			var texture = Util.GetResourceTexture(resource);
+			var texture = (ImageTexture)TextureLoader.Load("resources", resource, useCache: true).Duplicate();
 			texture.SetSizeOverride(new(45, 45));
 
 			TextureRect resourceRect = new() {
@@ -420,16 +420,16 @@ public partial class CityScreen : Control {
 		List<CityResident> specialists = city.residents.FindAll(x => !x.citizenType.IsDefaultCitizen);
 
 		// Leave a 1 head gap if we have specialists.
-		int width = city.residents.Count * PopHeads.HEAD_SIZE;
+		int width = city.residents.Count * PopHead.HEAD_SIZE;
 		if (specialists.Count > 0) {
-			width += PopHeads.HEAD_SIZE;
+			width += PopHead.HEAD_SIZE;
 		}
 
 		// Leave a 1 head gap between each section of moods.
 		int numMoodsPresent = (happyResidents.Count > 0 ? 1 : 0)
 			+ (contentResidents.Count > 0 ? 1: 0)
 			+ (unhappyResidents.Count > 0 ? 1: 0);
-		width += (numMoodsPresent - 1) * PopHeads.HEAD_SIZE;
+		width += (numMoodsPresent - 1) * PopHead.HEAD_SIZE;
 
 		// Track the x position of each head so that we're centered in the screen
 		int xPos = background.Texture.GetWidth() / 2 + -width / 2;
@@ -441,20 +441,20 @@ public partial class CityScreen : Control {
 			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 		if (happyResidents.Count > 0 && (contentResidents.Count > 0 || unhappyResidents.Count > 0)) {
-			xPos += PopHeads.HEAD_SIZE;
+			xPos += PopHead.HEAD_SIZE;
 		}
 		foreach (CityResident cr in contentResidents) {
 			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 		if (contentResidents.Count > 0 && unhappyResidents.Count > 0) {
-			xPos += PopHeads.HEAD_SIZE;
+			xPos += PopHead.HEAD_SIZE;
 		}
 		foreach (CityResident cr in unhappyResidents) {
 			xPos = AddDefaultCitizen(cr, xPos, eraNum);
 		}
 
 		// Add space before specialists.
-		xPos += PopHeads.HEAD_SIZE;
+		xPos += PopHead.HEAD_SIZE;
 
 		// Add each of the specialists.
 		//
@@ -462,7 +462,7 @@ public partial class CityScreen : Control {
 		// in the corner of the head.
 		foreach (CityResident cr in specialists) {
 			TextureButton tb = new();
-			tb.TextureNormal = PopHeads.GetPopHead(cr, eraNum);
+			tb.TextureNormal = PopHead.GetTexture(cr, eraNum);
 			tb.SetPosition(new Vector2(xPos, 440));
 
 			List<CitizenType> specialistTypes = city.owner.GetKnownSpecialists();
@@ -478,7 +478,7 @@ public partial class CityScreen : Control {
 
 			background.AddChild(tb);
 			popHeads.Add(tb);
-			xPos += PopHeads.HEAD_SIZE;
+			xPos += PopHead.HEAD_SIZE;
 		}
 	}
 
@@ -502,10 +502,10 @@ public partial class CityScreen : Control {
 
 	private int AddDefaultCitizen(CityResident cr, int xPos, int eraNum) {
 		TextureButton tb = new();
-		tb.TextureNormal = PopHeads.GetPopHead(cr, eraNum);
+		tb.TextureNormal = PopHead.GetTexture(cr, eraNum);
 		tb.SetPosition(new Vector2(xPos, 440));
 		background.AddChild(tb);
 		popHeads.Add(tb);
-		return xPos + PopHeads.HEAD_SIZE;
+		return xPos + PopHead.HEAD_SIZE;
 	}
 }

@@ -8,11 +8,6 @@ namespace C7.Map {
 		private ILogger log = LogManager.ForContext<ResourceLayer>();
 
 		private static readonly Vector2 resourceSize = new Vector2(50, 50);
-		private ImageTexture resourceTexture;
-
-		public ResourceLayer() {
-			resourceTexture = TextureLoader.Load("resources");
-		}
 
 		public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
 			Resource resource = tile.Resource;
@@ -24,10 +19,9 @@ namespace C7.Map {
 				return;
 			}
 
-			Rect2 resourceRectangle = Util.GetResourceRect(resource);
+			var texture = TextureLoader.Load("resources", resource, useCache: true);
 
-			Rect2 screenTarget = new Rect2(tileCenter - 0.5f * resourceSize, resourceSize);
-			looseView.DrawTextureRectRegion(resourceTexture, screenTarget, resourceRectangle);
+			looseView.DrawTexture(texture, tileCenter - 0.5f * texture.GetSize());
 		}
 
 		private bool ResourceVisible(GameData gameData, Tile t) {
