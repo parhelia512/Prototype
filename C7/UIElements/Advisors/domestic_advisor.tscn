@@ -291,33 +291,33 @@ text_overrun_behavior = 3
 [node name="EatenFood" type="TextureButton" parent="Background"]
 layout_mode = 0
 offset_left = 241.0
-offset_top = 239.0
+offset_top = 247.0
 offset_right = 270.0
-offset_bottom = 268.0
+offset_bottom = 276.0
 script = ExtResource("3")
 
 [node name="FullFood" type="TextureButton" parent="Background"]
 layout_mode = 0
 offset_left = 251.0
-offset_top = 248.0
+offset_top = 256.0
 offset_right = 280.0
-offset_bottom = 277.0
+offset_bottom = 285.0
 script = ExtResource("3")
 
 [node name="WastedShield" type="TextureButton" parent="Background"]
 layout_mode = 0
 offset_left = 294.0
-offset_top = 241.0
+offset_top = 245.0
 offset_right = 323.0
-offset_bottom = 270.0
+offset_bottom = 274.0
 script = ExtResource("3")
 
 [node name="GoodShield" type="TextureButton" parent="Background"]
 layout_mode = 0
 offset_left = 298.0
-offset_top = 248.0
+offset_top = 253.0
 offset_right = 327.0
-offset_bottom = 277.0
+offset_bottom = 282.0
 script = ExtResource("3")
 
 [node name="WastedGold" type="TextureButton" parent="Background"]

@@ -211,19 +211,31 @@ textures.icons = {
   },
   eaten_food = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 218, 2, 29, 29 },
+    crop_region = { 223, 7, 20, 20 },
   },
   full_food = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 188, 2, 29, 29 },
+    crop_region = { 191, 7, 20, 20 },
+  },
+  no_food = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 315, 7, 20, 20 },
+  },
+  empty_food = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 284, 7, 20, 20 },
   },
   wasted_shield = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 157, 2, 29, 29 },
+    crop_region = { 160, 5, 22, 22 },
   },
   good_shield = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 125, 2, 29, 29 },
+    crop_region = { 129, 5, 22, 22 },
+  },
+  empty_shield = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 253, 5, 22, 22 },
   },
   wasted_gold = {
     path = CITY_SCREEN_ICONS,

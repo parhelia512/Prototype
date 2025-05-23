@@ -303,6 +303,17 @@ namespace C7GameData {
 			return false;
 		}
 
+		public bool HasGranary() {
+			foreach (CityBuilding cb in buildings) {
+				// TODO: Import the flag for granaries and actually implement
+				// them. This is just a stopgap for the city screen.
+				if (cb.building.name == "Granary") {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		/**
 		 * Computes turn production.  If the production queue finishes,
 		 * returns the item that is built.  Otherwise, returns null.

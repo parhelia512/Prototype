@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using Serilog;
 using System.Collections.Generic;
 using C7GameData;
@@ -34,6 +35,18 @@ public partial class CityScreen : Control {
 	[Export] private HBoxContainer strategicResources;
 	[Export] private VBoxContainer luxuriesContainer;
 
+	[Export] Label productionLabel;
+	[Export] Label completeInLabel;
+	[Export] Label growthInLabel;
+	[Export] Label foodLabel;
+	[Export] Label granaryLabel;
+	[Export] GridContainer shieldsInBoxContainer;
+	[Export] GridContainer foodInBoxContainer;
+	[Export] GridContainer foodInGranaryContainer;
+
+	[Export] Control shieldRowContainer;
+	[Export] Control foodRowContainer;
+
 	Theme yieldDetailsFontTheme = new();
 	FontFile yieldDetailsFont = new();
 
@@ -42,6 +55,14 @@ public partial class CityScreen : Control {
 	private Label commerceTaxesDetails;
 	private Label commerceScienceDetails;
 	private Label commerceHappinessDetails;
+
+	private ImageTexture shieldTexture;
+	private ImageTexture emptyShieldTexture;
+	private ImageTexture corruptShieldTexture;
+	private ImageTexture foodTexture;
+	private ImageTexture emptyFoodTexture;
+	private ImageTexture noFoodTexture;
+	private ImageTexture eatenFoodTexture;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -105,6 +126,19 @@ public partial class CityScreen : Control {
 
 		TextureLoader.SetButtonTextures(productionButton, "city_screen.buttons.production");
 		productionButton.Pressed += () => { this.productionMenu.Visible = !this.productionMenu.Visible; };
+
+		shieldTexture = TextureLoader.Load("icons.good_shield");
+		emptyShieldTexture = TextureLoader.Load("icons.empty_shield");
+		corruptShieldTexture = TextureLoader.Load("icons.wasted_shield");
+		foodTexture = TextureLoader.Load("icons.full_food");
+		emptyFoodTexture = TextureLoader.Load("icons.empty_food");
+		noFoodTexture = TextureLoader.Load("icons.no_food");
+		eatenFoodTexture = TextureLoader.Load("icons.eaten_food");
+
+		RenderShieldBox(shieldCost: 30, shieldsInBox: 15);
+		RenderShieldRow(goodShields: 10, corruptShields: 3);
+		RenderFoodBox(foodNeededToGrow: 20, foodStored: 10, foodLostPerTurn: 2, hasGranary: true);
+		RenderFoodRow(foodEatenPerTurn: 3, foodSurplus: 1);
 
 		Hidden += OnExit;
 	}
@@ -305,16 +339,195 @@ public partial class CityScreen : Control {
 
 	private void RenderFoodDetails(City city) {
 		string growthStr;
+		int foodLostPerTurn = 0;
+		int foodSurplus = 0;
 		int turnsUntilGrowth = city.TurnsUntilGrowth();
 		if (turnsUntilGrowth == int.MaxValue) {
 			growthStr = "Not growing.";
 		} else if (turnsUntilGrowth == int.MinValue) {
 			growthStr = "Starving!";
+			foodLostPerTurn = Math.Abs(city.FoodGrowthPerTurn());
 		} else {
 			growthStr = $"Growth in {turnsUntilGrowth} turns.";
+			foodSurplus = city.FoodGrowthPerTurn();
+		}
+		growthInLabel.Text = growthStr;
+		foodLabel.Text = $"{city.CurrentFoodYield()} per turn";
+
+		RenderFoodBox(city.FoodNeededToGrow(), city.foodStored, foodLostPerTurn, hasGranary: city.HasGranary());
+		RenderFoodRow(city.FoodConsumedPerTurn(), foodSurplus);
+	}
+
+	private void RenderFoodRow(int foodEatenPerTurn, int foodSurplus) {
+		foreach (Node child in foodRowContainer.GetChildren()) {
+			foodRowContainer.RemoveChild(child);
+			child.QueueFree();
 		}
 
-		foodDetails.Text = $"{city.CurrentFoodYield()} food/turn, {city.FoodGrowthPerTurn()} surplus. {city.foodStored} stored. {growthStr}";
+		int width = (int)foodRowContainer.Size.X;
+		int iconWidth = eatenFoodTexture.GetWidth();
+		int spacerWidth = foodSurplus > 0 ? 100 : 0;
+		int spacePerIcon = (width - spacerWidth) / (foodEatenPerTurn + foodSurplus);
+
+		int xOffset = 0;
+		for (int i = 0; i < foodEatenPerTurn; ++i) {
+			TextureRect icon = new() { Texture = eatenFoodTexture };
+			foodRowContainer.AddChild(icon);
+			icon.SetPosition(new Vector2(xOffset, 0));
+			xOffset += Math.Min(spacePerIcon, iconWidth + 10);
+		}
+
+		xOffset = width - iconWidth;
+		for (int i = 0; i < foodSurplus; ++i) {
+			TextureRect icon = new() { Texture = foodTexture };
+			foodRowContainer.AddChild(icon);
+			icon.SetPosition(new Vector2(xOffset, 0));
+			xOffset -= Math.Min(spacePerIcon, iconWidth + 10);
+		}
+	}
+
+	private void RenderFoodBox(int foodNeededToGrow, int foodStored, int foodLostPerTurn, bool hasGranary) {
+		if (hasGranary && foodStored >= foodNeededToGrow / 2) {
+			RenderFoodBoxWithGranary(foodNeededToGrow, foodStored, foodLostPerTurn);
+		} else {
+			RenderFoodBoxNoGranary(foodNeededToGrow, foodStored, foodLostPerTurn);
+		}
+	}
+
+	private void RenderFoodBoxNoGranary(int foodNeededToGrow, int foodStored, int foodLostPerTurn) {
+		foreach (Node child in foodInBoxContainer.GetChildren()) {
+			foodInBoxContainer.RemoveChild(child);
+			child.QueueFree();
+		}
+		foreach (Node child in foodInGranaryContainer.GetChildren()) {
+			foodInGranaryContainer.RemoveChild(child);
+			child.QueueFree();
+		}
+		granaryLabel.Visible = false;
+		foodInGranaryContainer.Visible = false;
+
+		int width = 120;
+		int height = 180;
+
+		// Hardcode the common 20/40/60 sizes, but support custom rules as well.
+		if (foodNeededToGrow == 20) {
+			foodInBoxContainer.Columns = 2;
+		} else if (foodNeededToGrow == 40) {
+			foodInBoxContainer.Columns = 4;
+		} else if (foodNeededToGrow == 60) {
+			foodInBoxContainer.Columns = 6;
+		} else {
+			foodInBoxContainer.Columns = (int)Math.Ceiling(Math.Sqrt(foodNeededToGrow));
+		}
+
+		int itemsPerColumn = (int)Math.Ceiling((float)foodNeededToGrow / foodInBoxContainer.Columns);
+		int iconSize = Math.Min(height / itemsPerColumn, width / foodInBoxContainer.Columns);
+
+		for (int i = 0; i < Math.Min(foodNeededToGrow, foodStored) - foodLostPerTurn; ++i) {
+			foodInBoxContainer.AddChild(new TextureRect() {
+				Texture = foodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+		for (int i = 0; i < foodLostPerTurn; ++i) {
+			foodInBoxContainer.AddChild(new TextureRect() {
+				Texture = noFoodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+		for (int i = 0; i < foodNeededToGrow - foodStored - foodLostPerTurn; ++i) {
+			foodInBoxContainer.AddChild(new TextureRect() {
+				Texture = emptyFoodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize)
+			});
+		}
+	}
+
+	private void RenderFoodBoxWithGranary(int foodNeededToGrow, int foodStored, int foodLostPerTurn) {
+		foreach (Node child in foodInBoxContainer.GetChildren()) {
+			foodInBoxContainer.RemoveChild(child);
+			child.QueueFree();
+		}
+		foreach (Node child in foodInGranaryContainer.GetChildren()) {
+			foodInGranaryContainer.RemoveChild(child);
+			child.QueueFree();
+		}
+		granaryLabel.Visible = true;
+		foodInGranaryContainer.Visible = true;
+
+		int width = 120;
+		int height = 80;
+
+		// Hardcode the common 20/40/60 sizes, but support custom rules as well.
+		if (foodNeededToGrow == 20) {
+			foodInBoxContainer.Columns = 2;
+		} else if (foodNeededToGrow == 40) {
+			foodInBoxContainer.Columns = 4;
+		} else if (foodNeededToGrow == 60) {
+			foodInBoxContainer.Columns = 6;
+		} else {
+			foodInBoxContainer.Columns = (int)Math.Ceiling(Math.Sqrt(foodNeededToGrow));
+		}
+		foodInGranaryContainer.Columns = foodInBoxContainer.Columns;
+
+		int itemsPerColumn = (int)Math.Ceiling((float)foodNeededToGrow / foodInBoxContainer.Columns) / 2;
+		int iconSize = Math.Min(height / itemsPerColumn, width / foodInBoxContainer.Columns);
+
+		// Start by filling the granary.
+		int foodInGranary = foodNeededToGrow / 2;
+		if (foodInGranary > foodStored) { throw new Exception($"not enough food {foodInGranary} {foodStored}"); }
+
+		for (int i = 0; i < foodInGranary - foodLostPerTurn; ++i) {
+			foodInGranaryContainer.AddChild(new TextureRect() {
+				Texture = foodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+		for (int i = 0; i < foodLostPerTurn; ++i) {
+			foodInGranaryContainer.AddChild(new TextureRect() {
+				Texture = noFoodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+
+		// Now fill the rest of the box.
+		foodStored -= foodInGranary;
+
+		for (int i = 0; i < foodStored - foodLostPerTurn; ++i) {
+			foodInBoxContainer.AddChild(new TextureRect() {
+				Texture = foodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+		for (int i = 0; i < foodLostPerTurn; ++i) {
+			foodInBoxContainer.AddChild(new TextureRect() {
+				Texture = noFoodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+
+		for (int i = 0; i < foodNeededToGrow / 2 - foodStored - foodLostPerTurn; ++i) {
+			foodInBoxContainer.AddChild(new TextureRect() {
+				Texture = emptyFoodTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize)
+			});
+		}
 	}
 
 	private void RenderCommerceDetails(City city) {
@@ -326,8 +539,10 @@ public partial class CityScreen : Control {
 
 	private void RenderProductionDetails(City city) {
 		CorruptableValue shields = city.CurrentProductionYield();
-		string turnsLeft = city.TurnsUntilProductionFinished() == int.MaxValue ? "--" : $"{city.TurnsUntilProductionFinished()} turns left";
-		productionDetails.Text = $"{shields.useful + shields.corrupt} shields/turn ({shields.useful} usable, {shields.corrupt} corrupt). {city.shieldsStored} of {city.itemBeingProduced.shieldCost} stored. {turnsLeft}";
+		RenderShieldBox(city.itemBeingProduced.shieldCost, city.shieldsStored);
+		RenderShieldRow(shields.useful, shields.corrupt);
+		productionLabel.Text = $"PRODUCTION: {shields.useful + shields.corrupt} per turn";
+		completeInLabel.Text = city.TurnsUntilProductionFinished() == int.MaxValue ? "--" : $"Complete in {city.TurnsUntilProductionFinished()} turns";
 
 		foreach (Node child in productionButton.GetChildren()) {
 			child.QueueFree();
@@ -386,6 +601,65 @@ public partial class CityScreen : Control {
 			city.SetItemBeingProduced(p);
 			RenderProductionDetails(city);
 		});
+	}
+
+	private void RenderShieldRow(int goodShields, int corruptShields) {
+		foreach (Node child in shieldRowContainer.GetChildren()) {
+			shieldRowContainer.RemoveChild(child);
+			child.QueueFree();
+		}
+
+		int width = (int)shieldRowContainer.Size.X;
+		int iconWidth = shieldTexture.GetWidth();
+		int spacerWidth = corruptShields > 0 ? 100 : 0;
+		int spacePerIcon = (width - spacerWidth) / (goodShields + corruptShields);
+
+		int xOffset = 0;
+		for (int i = 0; i < corruptShields; ++i) {
+			TextureRect icon = new() { Texture = corruptShieldTexture };
+			shieldRowContainer.AddChild(icon);
+			icon.SetPosition(new Vector2(xOffset, 0));
+			xOffset += Math.Min(spacePerIcon, iconWidth);
+		}
+
+		xOffset = width - iconWidth;
+		for (int i = 0; i < goodShields; ++i) {
+			TextureRect icon = new() { Texture = shieldTexture };
+			shieldRowContainer.AddChild(icon);
+			icon.SetPosition(new Vector2(xOffset, 0));
+			xOffset -= Math.Min(spacePerIcon, iconWidth);
+		}
+	}
+
+	private void RenderShieldBox(int shieldCost, int shieldsInBox) {
+		foreach (Node child in shieldsInBoxContainer.GetChildren()) {
+			shieldsInBoxContainer.RemoveChild(child);
+			child.QueueFree();
+		}
+
+		int width = (int)shieldsInBoxContainer.GetParent<CenterContainer>().Size.X;
+		int height = (int)shieldsInBoxContainer.GetParent<CenterContainer>().Size.Y;
+
+		shieldsInBoxContainer.Columns = (int)Math.Ceiling(Math.Sqrt(shieldCost));
+		int itemsPerColumn = (int)Math.Ceiling((float)shieldCost / shieldsInBoxContainer.Columns);
+		int iconSize = Math.Min(height / itemsPerColumn, width / shieldsInBoxContainer.Columns);
+
+		for (int i = 0; i < Math.Min(shieldCost, shieldsInBox); ++i) {
+			shieldsInBoxContainer.AddChild(new TextureRect() {
+				Texture = shieldTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize),
+			});
+		}
+		for (int i = 0; i < shieldCost - shieldsInBox; ++i) {
+			shieldsInBoxContainer.AddChild(new TextureRect() {
+				Texture = emptyShieldTexture,
+				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+				CustomMinimumSize = new Vector2(iconSize, iconSize)
+			});
+		}
 	}
 
 	private void RenderCulture(City city) {
