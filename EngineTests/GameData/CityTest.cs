@@ -31,6 +31,7 @@ public class CityTest {
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf19_of_20FoodDone() {
 		Player player = new();
 		player.government = new Government();
+		player.rules = new() { MaximumLevel1CitySize = 6 };
 		TerrainType oneShield = new TerrainType();
 		oneShield.baseShieldProduction = 1;
 		Tile tile = new Tile(ID.None("tile"));

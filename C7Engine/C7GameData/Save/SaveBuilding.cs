@@ -15,6 +15,8 @@ namespace C7GameData.Save {
 			IncreasesShieldsInWater,
 			IncreasesFoodInWater,
 			IncreasesTradeInWater,
+			AllowsCitySize2,
+			AllowsCitySize3,
 		}
 		public string name;
 		public int shieldCost;

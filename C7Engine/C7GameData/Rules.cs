@@ -5,5 +5,10 @@ namespace C7GameData {
 		public int ShieldValueInGold;
 		public int CitizenValueInShields;
 		public int TurnPenaltyForEachHurrySacrifice;
+		public int MaximumLevel1CitySize;
+		public int MaximumLevel2CitySize;
+		public int FoodNeededToGrowForLevel1Cities = 20;
+		public int FoodNeededToGrowForLevel2Cities = 40;
+		public int FoodNeededToGrowForLevel3Cities = 60;
 	}
 }

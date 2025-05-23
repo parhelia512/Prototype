@@ -46,7 +46,7 @@ namespace C7Engine {
 					// Note that we do growth after calculating citizen moods,
 					// to ensure that the player has a chance to deal with the
 					// unhappiness of a new citizen during their turn.
-					player.HandleCityGrowth(gameData);
+					player.HandleCityUpdates(gameData);
 					HandleCityResults(gameData, player);
 
 					player.DoPerTurnFinanceUpdates(gameData);
@@ -145,10 +145,6 @@ namespace C7Engine {
 			log.Information($"\n*** City production for turn {gameData.turn}, player {player} ***");
 
 			foreach (City city in player.cities) {
-				if (city.UpdateCultureAndCheckForExpansion()) {
-					gameData.UpdateTileOwners();
-				}
-
 				IProducible producedItem = city.ComputeTurnProduction();
 				if (producedItem != null) {
 					log.Debug($"Produced {producedItem} in {city}");

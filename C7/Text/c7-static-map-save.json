@@ -67462,7 +67462,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 8
+      "iconRowIndex": 8,
+      "flags": [
+        "allowsCitySize2"
+      ]
     },
     {
       "name": "Bank",
@@ -67602,7 +67605,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 19
+      "iconRowIndex": 19,
+      "flags": [
+        "allowsCitySize3"
+      ]
     },
     {
       "name": "Research Lab",
@@ -67869,7 +67875,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 8,
       "contentFacesInCity": 8,
-      "iconRowIndex": 41
+      "iconRowIndex": 41,
+      "flags": [
+        "allowsCitySize3"
+      ]
     },
     {
       "name": "Leonardo\u0027s Workshop",
@@ -70399,7 +70408,12 @@
     "minimumResearchTime": 4,
     "shieldValueInGold": 4,
     "citizenValueInShields": 20,
-    "turnPenaltyForEachHurrySacrifice": 20
+    "turnPenaltyForEachHurrySacrifice": 20,
+    "maximumLevel1CitySize": 6,
+    "maximumLevel2CitySize": 12,
+    "foodNeededToGrowForLevel1Cities": 20,
+    "foodNeededToGrowForLevel2Cities": 40,
+    "foodNeededToGrowForLevel3Cities": 60
   },
   "techs": [
     {

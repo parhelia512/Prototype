@@ -49,7 +49,6 @@ namespace C7GameData.Save {
 		public Dictionary<string, int> perPlayerCulture = new();
 		public int shieldsStored;
 		public int foodStored;
-		public int foodNeededToGrow;
 		public int turnsOfUnhappinessDueToPopRushing;
 		public List<SaveCityResident> residents = new List<SaveCityResident>();
 		public List<SaveCityBuilding> buildings = [];
@@ -69,7 +68,6 @@ namespace C7GameData.Save {
 			};
 			shieldsStored = city.shieldsStored;
 			foodStored = city.foodStored;
-			foodNeededToGrow = city.foodNeededToGrow;
 			turnsOfUnhappinessDueToPopRushing = city.turnsOfUnhappinessDueToPopRushing;
 			residents = city.residents.ConvertAll(resident => {
 				return new SaveCityResident {
@@ -103,7 +101,6 @@ namespace C7GameData.Save {
 				},
 				shieldsStored = shieldsStored,
 				foodStored = foodStored,
-				foodNeededToGrow = foodNeededToGrow,
 				turnsOfUnhappinessDueToPopRushing = turnsOfUnhappinessDueToPopRushing,
 				capital = capital,
 				buildings = this.buildings.ConvertAll(building => building.ToCityBuilding(buildings, players)),
