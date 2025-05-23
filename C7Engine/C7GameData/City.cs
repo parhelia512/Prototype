@@ -237,12 +237,6 @@ namespace C7GameData {
 		}
 
 		public void HandleCityGrowth(GameData gameData) {
-			// Ensure borders expand before we assign the new citizen, so that
-			// the new citizen can go on one of our new tiles.
-			if (UpdateCultureAndCheckForExpansion()) {
-				gameData.UpdateTileOwners();
-			}
-
 			foodStored += FoodGrowthPerTurn();
 
 			// Handle the city starving.

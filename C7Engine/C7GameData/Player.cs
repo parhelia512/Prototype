@@ -504,8 +504,14 @@ namespace C7GameData {
 			gold += CalculateGoldPerTurn();
 		}
 
-		public void HandleCityGrowth(GameData gameData) {
+		public void HandleCityUpdates(GameData gameData) {
 			foreach (City c in cities) {
+				// Ensure borders expand before we assign the new citizen, so that
+				// the new citizen can go on one of our new tiles.
+				if (c.UpdateCultureAndCheckForExpansion()) {
+					gameData.UpdateTileOwners();
+				}
+
 				c.HandleCityGrowth(gameData);
 			}
 		}
