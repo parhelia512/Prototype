@@ -280,7 +280,7 @@ public partial class CityScreen : Control {
 			VBoxContainer resourceContainer = new();
 			resourceContainer.AddThemeConstantOverride("separation", 0);
 
-			var texture = (ImageTexture)TextureLoader.Load("resources", resource, useCache: true).Duplicate();
+			var texture = (ImageTexture)TextureLoader.Load("resources.large", resource, useCache: true).Duplicate();
 			texture.SetSizeOverride(new(45, 45));
 
 			TextureRect resourceRect = new() {
@@ -313,12 +313,14 @@ public partial class CityScreen : Control {
 				Text = "(" + count.ToString() + ")"
 			};
 
-			Label resourceName = new() {
-				Text = resource.Name
+			var texture = TextureLoader.Load("resources.small", resource, useCache: true);
+
+			TextureRect resourceRect = new() {
+				Texture = texture,
 			};
 
 			resourceContainer.AddChild(resourceCount);
-			resourceContainer.AddChild(resourceName);
+			resourceContainer.AddChild(resourceRect);
 
 			luxuriesContainer.AddChild(resourceContainer);
 		}

@@ -19,7 +19,7 @@ namespace C7.Map {
 				return;
 			}
 
-			var texture = TextureLoader.Load("resources", resource, useCache: true);
+			var texture = TextureLoader.Load("resources.large", resource, useCache: true);
 
 			looseView.DrawTexture(texture, tileCenter - 0.5f * texture.GetSize());
 		}
