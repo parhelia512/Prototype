@@ -24,6 +24,8 @@ public partial class MainMenu : Node2D {
 	Civ3FileDialog LoadScenarioDialog;
 	GlobalSingleton Global;
 
+	Button toggleGraphicsButton;
+
 	readonly int MENU_OFFSET_FROM_TOP = 180;
 	readonly int MENU_OFFSET_FROM_LEFT = 180;
 
@@ -57,10 +59,18 @@ public partial class MainMenu : Node2D {
 			AddButton("Load Game", 105, LoadGame);
 			AddButton("Load Scenario", 140, LoadScenario);
 			AddButton("Hall of Fame", 175, HallOfFame);
-			AddButton("Preferences", 210, Preferences);
-			AddButton("Audio Preferences", 245, Preferences);
-			AddButton("Credits", 280, showCredits);
-			AddButton("Exit", 315, _on_Exit_pressed);
+			(_, toggleGraphicsButton) = AddButton("Turn on C7 Graphics", 210, () => {
+				if (toggleGraphicsButton.Text == "Turn on C7 Graphics") {
+					toggleGraphicsButton.Text = "Turn on Civ3 Graphics";
+				} else {
+					toggleGraphicsButton.Text = "Turn on C7 Graphics";
+				}
+				TextureLoader.ToggleModernGraphics();
+			});
+			AddButton("Preferences", 245, Preferences);
+			AddButton("Audio Preferences", 280, Preferences);
+			AddButton("Credits", 315, showCredits);
+			AddButton("Exit", 350, _on_Exit_pressed);
 
 			// Hide select home folder if valid path is present as proven by reaching this point in code
 			SetCiv3Home.Visible = false;
@@ -78,7 +88,7 @@ public partial class MainMenu : Node2D {
 		MainMenuBackground.Texture = TitleScreenTexture;
 	}
 
-	private void AddButton(string label, int verticalPosition, Action action) {
+	private (TextureButton, Button) AddButton(string label, int verticalPosition, Action action) {
 		TextureButton newButton = new TextureButton();
 		newButton.TextureNormal = InactiveButton;
 		newButton.TextureHover = HoverButton;
@@ -95,6 +105,7 @@ public partial class MainMenu : Node2D {
 		newButtonLabel.SetPosition(new Vector2(MENU_OFFSET_FROM_LEFT + 25, MENU_OFFSET_FROM_TOP + verticalPosition + BUTTON_LABEL_OFFSET));
 		MainMenuBackground.AddChild(newButtonLabel);
 		newButtonLabel.Pressed += action;
+		return (newButton, newButtonLabel);
 	}
 
 	public void GoToWorldSetup() {

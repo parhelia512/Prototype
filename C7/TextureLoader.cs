@@ -63,8 +63,8 @@ public static class TextureLoader {
 		civ3TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/civ3.lua")[0];
 		c7TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/c7.lua")[0];
 
-		textureConfig = c7TextureConfig;
-		modernGraphics = true;
+		textureConfig = civ3TextureConfig;
+		modernGraphics = false;
 	}
 
 	/// Returns a texture based on the config key.
