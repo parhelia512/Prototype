@@ -241,13 +241,7 @@ namespace C7GameData {
 			int foodGrowth = FoodGrowthPerTurn();
 			bool hasGranary = HasGranary();
 
-			// Granaries cause cities to lose twice as much food when the city
-			// is starving.
-			if (foodGrowth < 0 && hasGranary) {
-				foodStored += foodGrowth * 2;
-			} else {
-				foodStored += foodGrowth;
-			}
+			foodStored += foodGrowth;
 			foodStored = Math.Clamp(foodStored, 0, foodNeededToGrow);
 
 			// Handle the city starving.
