@@ -237,7 +237,12 @@ namespace C7GameData {
 		}
 
 		public void HandleCityGrowth(GameData gameData) {
-			foodStored += FoodGrowthPerTurn();
+			int foodNeededToGrow = FoodNeededToGrow();
+			int foodGrowth = FoodGrowthPerTurn();
+			bool hasGranary = HasGranary();
+
+			foodStored += foodGrowth;
+			foodStored = Math.Min(foodStored, foodNeededToGrow);
 
 			// Handle the city starving.
 			if (foodStored < 0) {
@@ -247,7 +252,7 @@ namespace C7GameData {
 			}
 
 			// No growth necessary.
-			if (foodStored < FoodNeededToGrow()) {
+			if (foodStored < foodNeededToGrow) {
 				return;
 			}
 
@@ -259,7 +264,11 @@ namespace C7GameData {
 				AddCitizen(newResident);
 				C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
 
-				foodStored = 0;
+				if (hasGranary) {
+					foodStored /= 2;
+				} else {
+					foodStored = 0;
+				}
 			}
 		}
 
@@ -305,9 +314,7 @@ namespace C7GameData {
 
 		public bool HasGranary() {
 			foreach (CityBuilding cb in buildings) {
-				// TODO: Import the flag for granaries and actually implement
-				// them. This is just a stopgap for the city screen.
-				if (cb.building.name == "Granary") {
+				if (cb.building.doublesCityGrowthRate) {
 					return true;
 				}
 			}

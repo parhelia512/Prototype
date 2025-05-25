@@ -81,6 +81,7 @@ namespace C7GameData {
 		public bool isForbiddenPalace;
 		public bool allowsCitySize2;
 		public bool allowsCitySize3;
+		public bool doublesCityGrowthRate;
 
 		public int culturePerTurn = 0;
 
@@ -119,6 +120,7 @@ namespace C7GameData {
 			isForbiddenPalace = building.flags.Contains(SaveBuilding.Flag.ForbiddenPalace);
 			allowsCitySize2 = building.flags.Contains(SaveBuilding.Flag.AllowsCitySize2);
 			allowsCitySize3 = building.flags.Contains(SaveBuilding.Flag.AllowsCitySize3);
+			doublesCityGrowthRate = building.flags.Contains(SaveBuilding.Flag.DoublesCityGrowthRate);
 			dataSource = building;
 
 			foreach (var kvp in BuildingRules.productionRules) {

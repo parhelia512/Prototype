@@ -67390,7 +67390,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 2
+      "iconRowIndex": 2,
+      "flags": [
+        "doublesCityGrowthRate"
+      ]
     },
     {
       "name": "Temple",

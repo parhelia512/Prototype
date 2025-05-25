@@ -425,6 +425,7 @@ public partial class CityScreen : Control {
 		int itemsPerColumn = (int)Math.Ceiling((float)foodNeededToGrow / foodInBoxContainer.Columns);
 		int iconSize = Math.Min(height / itemsPerColumn, width / foodInBoxContainer.Columns);
 
+		int nonEmptySquares = 0;
 		for (int i = 0; i < Math.Min(foodNeededToGrow, foodStored) - foodLostPerTurn; ++i) {
 			foodInBoxContainer.AddChild(new TextureRect() {
 				Texture = foodTexture,
@@ -432,6 +433,7 @@ public partial class CityScreen : Control {
 				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
 				CustomMinimumSize = new Vector2(iconSize, iconSize),
 			});
+			++nonEmptySquares;
 		}
 		for (int i = 0; i < foodLostPerTurn; ++i) {
 			foodInBoxContainer.AddChild(new TextureRect() {
@@ -440,8 +442,9 @@ public partial class CityScreen : Control {
 				StretchMode = TextureRect.StretchModeEnum.KeepAspect,
 				CustomMinimumSize = new Vector2(iconSize, iconSize),
 			});
+			++nonEmptySquares;
 		}
-		for (int i = 0; i < foodNeededToGrow - foodStored - foodLostPerTurn; ++i) {
+		for (int i = 0; i < foodNeededToGrow - nonEmptySquares; ++i) {
 			foodInBoxContainer.AddChild(new TextureRect() {
 				Texture = emptyFoodTexture,
 				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
@@ -485,7 +488,9 @@ public partial class CityScreen : Control {
 		int foodInGranary = foodNeededToGrow / 2;
 		if (foodInGranary > foodStored) { throw new Exception($"not enough food {foodInGranary} {foodStored}"); }
 
-		for (int i = 0; i < foodInGranary - foodLostPerTurn; ++i) {
+		int foodLostInGranaryPerTurn = Math.Max(0, foodLostPerTurn - (foodStored - foodInGranary));
+
+		for (int i = 0; i < foodInGranary - foodLostInGranaryPerTurn; ++i) {
 			foodInGranaryContainer.AddChild(new TextureRect() {
 				Texture = foodTexture,
 				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
@@ -493,7 +498,7 @@ public partial class CityScreen : Control {
 				CustomMinimumSize = new Vector2(iconSize, iconSize),
 			});
 		}
-		for (int i = 0; i < foodLostPerTurn; ++i) {
+		for (int i = 0; i < foodLostInGranaryPerTurn; ++i) {
 			foodInGranaryContainer.AddChild(new TextureRect() {
 				Texture = noFoodTexture,
 				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
@@ -504,6 +509,7 @@ public partial class CityScreen : Control {
 
 		// Now fill the rest of the box.
 		foodStored -= foodInGranary;
+		foodLostPerTurn -= foodLostInGranaryPerTurn;
 
 		for (int i = 0; i < foodStored - foodLostPerTurn; ++i) {
 			foodInBoxContainer.AddChild(new TextureRect() {
@@ -522,7 +528,7 @@ public partial class CityScreen : Control {
 			});
 		}
 
-		for (int i = 0; i < foodNeededToGrow / 2 - foodStored - foodLostPerTurn; ++i) {
+		for (int i = 0; i < foodNeededToGrow / 2 - foodStored; ++i) {
 			foodInBoxContainer.AddChild(new TextureRect() {
 				Texture = emptyFoodTexture,
 				ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
