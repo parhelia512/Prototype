@@ -53,4 +53,30 @@ public class CityTest {
 		int turnsUntilGrowth = city.TurnsUntilGrowth();
 		Assert.Equal(1, turnsUntilGrowth);
 	}
+
+	[Fact]
+	public void CityShouldShrinkWhenItRunsOutOfFood() {
+		GameData gameData = new();
+		Player player = new();
+		player.government = new Government();
+		player.rules = new() { MaximumLevel1CitySize = 6 };
+		TerrainType oneShield = new TerrainType();
+		oneShield.baseShieldProduction = 1;
+		Tile tile = new Tile(ID.None("tile"));
+
+		City city = new City(tile, player, "Gotham", ID.None("city"));
+		city.foodStored = 0;
+		tile.cityAtTile = city;
+
+		CityResident resident1 = new();
+		city.residents.Add(resident1);
+
+		CityResident resident2 = new();
+		city.residents.Add(resident2);
+
+		// Confirm we lose population without enough food.
+		Assert.Equal(2, city.residents.Count);
+		city.HandleCityGrowth(gameData);
+		Assert.Equal(1, city.residents.Count);
+	}
 }

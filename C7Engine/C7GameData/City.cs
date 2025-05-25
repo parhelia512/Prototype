@@ -242,7 +242,7 @@ namespace C7GameData {
 			bool hasGranary = HasGranary();
 
 			foodStored += foodGrowth;
-			foodStored = Math.Clamp(foodStored, 0, foodNeededToGrow);
+			foodStored = Math.Min(foodStored, foodNeededToGrow);
 
 			// Handle the city starving.
 			if (foodStored < 0) {
