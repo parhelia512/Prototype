@@ -42,6 +42,16 @@ local c7_texture_list = {
   "Art/city screen/background.png",
   "Art/city screen/cityMgmtButtons.png",
   "Art/resources.png",
+  "Art/WorldSetup/CLIMTEMPAGEDepress.png",
+  "Art/WorldSetup/CLIMTEMPAGERollovers.png",
+  "Art/WorldSetup/age.png",
+  "Art/WorldSetup/background.png",
+  "Art/WorldSetup/climate.png",
+  "Art/WorldSetup/landmassWaterSMALL.png",
+  "Art/WorldSetup/landmassWaterSMALLdepress.png",
+  "Art/WorldSetup/landmassWaterSMALLrollovers.png",
+  "Art/WorldSetup/landmassWaterlarge.png",
+  "Art/WorldSetup/temperature.png",
 }
 
 -- Helper: Strip file extension from path
