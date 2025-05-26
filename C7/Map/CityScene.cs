@@ -8,7 +8,8 @@ namespace C7.Map {
 	public record struct CityGraphicsDetails(
 		// A size rank of 0 is a town, 1 a city, etc.
 		int sizeRank,
-		int eraIndex
+		int eraIndex,
+		bool hasWalls
 	);
 
 	public partial class CityScene : Node2D {
@@ -62,9 +63,15 @@ namespace C7.Map {
 		}
 
 		private CityGraphicsDetails GetCityGraphicsDetails(City c) {
-			CityGraphicsDetails result = new() { sizeRank = 0 };
+			CityGraphicsDetails result = new() {
+				sizeRank = 0,
+				hasWalls = c.HasWalls(),
+			};
 			if (c.residents.Count > rules.MaximumLevel1CitySize) {
 				++result.sizeRank;
+
+				// Walls are only displayed for towns, not cities or metropolises
+				result.hasWalls = false;
 			}
 			if (c.residents.Count > rules.MaximumLevel2CitySize) {
 				++result.sizeRank;
