@@ -398,5 +398,6 @@ textures.lower_right_infobox = {
 }
 
 textures.popheads = require "civ3.popheads"
+textures.cities = require "civ3.cities"
 
 return textures

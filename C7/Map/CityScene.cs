@@ -8,29 +8,25 @@ namespace C7.Map {
 	public partial class CityScene : Node2D {
 		private ILogger log = LogManager.ForContext<CityScene>();
 
-		private readonly Vector2 citySpriteSize;
-
 		private ImageTexture cityTexture;
 		private TextureRect cityGraphics = new TextureRect();
 		private CityLabelScene cityLabelScene;
 		private AnimatedSprite2D disorderSprite;
 		private City city;
+		private Rules rules;
+		private int cachedCitySize = -1;
+		private int cachedEraIndex = -1;
+		private Vector2I tileCenter;
 
 		public CityScene(City city, Vector2I tileCenter) {
 			cityLabelScene = new CityLabelScene(city, tileCenter);
 			this.city = city;
+			this.rules = city.owner.rules;
+			this.tileCenter = tileCenter;
 
-			//TODO: Generalize, support multiple city types, etc.
-			Pcx pcx = TextureLoader.LoadPCX("Art/Cities/rMIDEAST.PCX");
-			int height = pcx.Height/4;
-			int width = pcx.Width/3;
-			cityTexture = TextureLoader.LoadFromPCX("Art/Cities/rMIDEAST.PCX", new(0, 0, width, height), false);
-			citySpriteSize = new Vector2(width, height);
-
-			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * citySpriteSize.X;
-			cityGraphics.OffsetTop = tileCenter.Y - (float)0.5 * citySpriteSize.Y;
-			cityGraphics.MouseFilter = Control.MouseFilterEnum.Ignore;
-			cityGraphics.Texture = cityTexture;
+			cachedCitySize = city.residents.Count;
+			cachedEraIndex = city.owner.EraIndex();
+			ConfigureCityGraphics(cachedCitySize, cachedEraIndex);
 
 			AddChild(cityGraphics);
 			AddChild(cityLabelScene);
@@ -49,11 +45,35 @@ namespace C7.Map {
 			base._Draw();
 			cityLabelScene._Draw();
 
+			if (city.residents.Count != cachedCitySize || city.owner.EraIndex() != cachedEraIndex) {
+				cachedCitySize = city.residents.Count;
+				cachedEraIndex = city.owner.EraIndex();
+				ConfigureCityGraphics(cachedCitySize, cachedEraIndex);
+			}
+
 			if (city.isInCivilDisorder) {
 				disorderSprite.Show();
 			} else {
 				disorderSprite.Hide();
 			}
+		}
+
+		//TODO: Support multiple city flavors and walls.
+		private void ConfigureCityGraphics(int citySize, int era) {
+			int size = 0;
+			if (citySize > rules.MaximumLevel1CitySize) {
+				++size;
+			}
+			if (citySize > rules.MaximumLevel2CitySize) {
+				++size;
+			}
+
+			cityTexture = TextureLoader.Load("cities", new { size, era });
+
+			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * cityTexture.GetWidth();
+			cityGraphics.OffsetTop = tileCenter.Y - (float)0.5 * cityTexture.GetHeight();
+			cityGraphics.MouseFilter = Control.MouseFilterEnum.Ignore;
+			cityGraphics.Texture = cityTexture;
 		}
 	}
 }
