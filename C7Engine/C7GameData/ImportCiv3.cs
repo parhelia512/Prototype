@@ -925,6 +925,8 @@ namespace C7GameData {
 					culturePerTurn=bldg.Culture,
 					contentFacesInCity=bldg.ContentFaces - bldg.UnhappyFaces,
 					iconRowIndex=pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
+					bombardDefenseBonus=bldg.BombardDefense,
+					combatDefenseBonus=bldg.DefenseBonus,
 				};
 
 				if (bldg.RequiredAdvance != -1) {

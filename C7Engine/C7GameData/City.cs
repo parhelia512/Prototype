@@ -381,6 +381,40 @@ namespace C7GameData {
 			return false;
 		}
 
+		public IEnumerable<StrengthBonus> GetDefenseBonuses() {
+			GameData gD = EngineStorage.gameData;
+
+			// Cities give defense bonuses based on their size.
+			if (residents.Count > gD.rules.MaximumLevel2CitySize) {
+				yield return gD.cityLevel3DefenseBonus;
+			} else if (residents.Count > gD.rules.MaximumLevel1CitySize) {
+				yield return gD.cityLevel2DefenseBonus;
+			} else {
+				yield return gD.cityLevel1DefenseBonus;
+			}
+
+			// Buildings, such as walls, can also give bonuses.
+			foreach (CityBuilding cb in buildings) {
+				if (cb.building.combatDefenseBonus == 0) {
+					continue;
+				}
+
+				// Combat defense bonus with no bombard defense bonus means that
+				// this isn't walls, so we can give the bonus regardless of the
+				// size of the city.
+				if (cb.building.bombardDefenseBonus == 0) {
+					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
+				}
+
+				// A non-zero bombard defense bonus means this building is
+				// considered to be walls, so the bonus is only active when the
+				// city size is level 1.
+				if (residents.Count <= gD.rules.MaximumLevel1CitySize) {
+					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
+				}
+			}
+		}
+
 		/**
 		 * Computes turn production.  If the production queue finishes,
 		 * returns the item that is built.  Otherwise, returns null.

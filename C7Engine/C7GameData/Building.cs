@@ -9,7 +9,7 @@ namespace C7GameData {
 		public static Dictionary<SaveBuilding.Flag, Func<City, bool>> productionRules = new()
 		{
 			{ SaveBuilding.Flag.MustBeCoastal, MustBeCoastal },
-			{ SaveBuilding.Flag.MustBeNearRiver, MustBeNearRiver }
+			{ SaveBuilding.Flag.MustBeNearRiver, MustBeNearRiver },
 		};
 
 		public static Dictionary<SaveBuilding.Flag, Action<MapUnit>> unitProductionEffects = new()
@@ -87,6 +87,8 @@ namespace C7GameData {
 		public bool allowsCitySize2;
 		public bool allowsCitySize3;
 		public bool doublesCityGrowthRate;
+		public int bombardDefenseBonus;
+		public int combatDefenseBonus;
 
 		public int culturePerTurn = 0;
 
@@ -119,6 +121,8 @@ namespace C7GameData {
 			} else {
 				contentFacesInCity = building.contentFacesInCity;
 			}
+			bombardDefenseBonus = building.bombardDefenseBonus;
+			combatDefenseBonus = building.combatDefenseBonus;
 			isCenterOfEmpire = building.flags.Contains(SaveBuilding.Flag.IsCenterOfEmpire);
 			increasesLuxuryTrade = building.flags.Contains(SaveBuilding.Flag.IncreasesLuxuryTrade);
 			reducesCorruption = building.flags.Contains(SaveBuilding.Flag.ReducesCorruption);
@@ -190,6 +194,12 @@ namespace C7GameData {
 			}
 
 			if (!productionPrerequisites.All(func => func(city))) {
+				return false;
+			}
+
+			// Walls (buildings with non-zero bombard defense) can only be built
+			// in towns, not cities or larger.
+			if (dataSource.bombardDefenseBonus > 0 && city.residents.Count > city.owner.rules.MaximumLevel1CitySize) {
 				return false;
 			}
 
