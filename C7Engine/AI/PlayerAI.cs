@@ -68,11 +68,12 @@ namespace C7Engine {
 		}
 
 		private static void MaybePickTechToResearch(Player player, List<Tech> techs) {
-			if (player.currentlyResearchedTech == null) {
+			while (player.currentlyResearchedTech == null) {
 				Tech toResearch = PickTechToResearch(player, techs);
 				if (toResearch == null) {
 					log.Information($"Player {player.civilization.name} has no techs available to research.");
 					player.SetCurrentlyResearchedTech(null);
+					break;
 				} else {
 					log.Information($"Player {player.civilization.name} is researching {toResearch.Name}.");
 					player.SetCurrentlyResearchedTech(toResearch.id);

@@ -1042,7 +1042,8 @@ namespace C7GameData {
 					EraCivilopediaName = t.Era == -1 ? "Hidden" : theBiq.Eras[t.Era].CivilopediaEntry,
 					SmallIconPath = t.Era == -1 ? "" : pediaIcons.GetTechIconPath(t.CivilopediaEntry),
 					X = t.X,
-					Y = t.Y
+					Y = t.Y,
+					flags = LoadTechFlags(t).ToHashSet(),
 				};
 				save.Techs.Add(st);
 			}
@@ -1098,6 +1099,14 @@ namespace C7GameData {
 					return false;
 				});
 			}
+		}
+
+		private static IEnumerable<SaveTech.Flag> LoadTechFlags(TECH t) {
+			return new[] {
+				(t.BonusTechToFirstCivThatResearches, SaveTech.Flag.BonusTechToFirstCivThatResearches),
+			}
+			.Where(t => t.Item1)
+			.Select(t => t.Item2);
 		}
 
 		private void ImportCitizenTypes() {
