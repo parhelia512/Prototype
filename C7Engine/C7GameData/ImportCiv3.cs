@@ -927,7 +927,7 @@ namespace C7GameData {
 				}
 
 				if (bldg.RenderedObsoleteBy != -1) {
-					building.renderedObsoleteBy = save.Techs[bldg.RequiredAdvance].id;
+					building.renderedObsoleteBy = save.Techs[bldg.RenderedObsoleteBy].id;
 				}
 
 				building.flags = LoadBuildingFlags(bldg).ToHashSet();

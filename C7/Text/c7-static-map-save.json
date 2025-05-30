@@ -67760,7 +67760,7 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 3,
       "iconRowIndex": 31,
-      "renderedObsoleteBy": "tech-20"
+      "renderedObsoleteBy": "tech-45"
     },
     {
       "name": "The Colossus",
@@ -67772,7 +67772,7 @@
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
       "iconRowIndex": 32,
-      "renderedObsoleteBy": "tech-1",
+      "renderedObsoleteBy": "tech-59",
       "flags": [
         "mustBeCoastal"
       ]
@@ -67787,7 +67787,7 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 33,
-      "renderedObsoleteBy": "tech-15",
+      "renderedObsoleteBy": "tech-42",
       "flags": [
         "mustBeCoastal"
       ]
@@ -67802,7 +67802,7 @@
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
       "iconRowIndex": 34,
-      "renderedObsoleteBy": "tech-14"
+      "renderedObsoleteBy": "tech-30"
     },
     {
       "name": "The Oracle",
@@ -67814,7 +67814,7 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
       "iconRowIndex": 35,
-      "renderedObsoleteBy": "tech-10"
+      "renderedObsoleteBy": "tech-25"
     },
     {
       "name": "The Great Wall",
@@ -67826,7 +67826,7 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 36,
-      "renderedObsoleteBy": "tech-21"
+      "renderedObsoleteBy": "tech-39"
     },
     {
       "name": "Sun Tzu\u0027s Art of War",
@@ -68346,7 +68346,7 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
       "iconRowIndex": 78,
-      "renderedObsoleteBy": "tech-17"
+      "renderedObsoleteBy": "tech-30"
     },
     {
       "name": "The Statue of Zeus",
@@ -68358,7 +68358,7 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
       "iconRowIndex": 79,
-      "renderedObsoleteBy": "tech-11",
+      "renderedObsoleteBy": "tech-39",
       "requiredResources": [
         "Ivory"
       ]
@@ -68384,7 +68384,7 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 81,
-      "renderedObsoleteBy": "tech-26"
+      "renderedObsoleteBy": "tech-45"
     },
     {
       "name": "Secret Police HQ",
