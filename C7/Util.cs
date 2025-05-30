@@ -179,14 +179,6 @@ public partial class Util {
 		return OS.IsDebugBuild() ? "res://" : OS.GetExecutablePath().GetBaseDir();
 	}
 
-	// Send this function a path (e.g. Title_Screen.jpg) and it will
-	// load it up and convert it in both debug and release modes.
-	// Note: We probably will need variants of this for other file types, too.
-	static public ImageTexture LoadTextureFromC7JPG(string relPath) {
-		Image img = Image.LoadFromFile(Util.getProjectDirectoryPath().PathJoin(relPath));
-		return ImageTexture.CreateFromImage(img);
-	}
-
 	private static Dictionary<int, Color> ColorCache = new();
 	private const string CivPalettePath = "Art/Units/Palettes/";
 

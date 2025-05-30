@@ -483,7 +483,7 @@ public partial class Game : Node2D {
 		// GetTree().Quit();
 
 		// ChangeSceneToFile deletes the current scene and frees its memory, so this is quitting to main menu
-		GetTree().ChangeSceneToFile("res://MainMenu.tscn");
+		GetTree().ChangeSceneToFile("res://UIElements/MainMenu/main_menu.tscn");
 	}
 
 	public void _on_Zoom_value_changed(float value) {
