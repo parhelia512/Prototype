@@ -236,6 +236,56 @@ namespace C7GameData {
 			}
 		}
 
+		public void HandleCityProduction(GameData gameData) {
+			IProducible producedItem = ComputeTurnProduction();
+			if (producedItem == null) {
+				return;
+			}
+
+			log.Debug($"Produced {producedItem} in {this}");
+			if (producedItem is UnitPrototype prototype) {
+				AddUnit(prototype, gameData);
+			} else if (producedItem is Building building) {
+				AddBuilding(building);
+
+				// If we completed a great wonder, mark it as completed so no
+				// other civ can build it. If any other cities are building the
+				// wonder then change production to the most expensive option, 
+				// to avoid wasting the shields.
+				//
+				// TODO: This should interrupt the player's turn to let them
+				// make the choice. And does the game allow wonder shuffling in
+				// this situation?
+				if (building.isGreatWonder) {
+					gameData.GreatWondersBuilt.Add(building.name);
+
+					foreach (Player p in gameData.players) {
+						if (p == this.owner) {
+							continue;
+						}
+
+						foreach (City c in p.cities) {
+							if (c.itemBeingProduced.name == building.name) {
+								c.SetItemBeingProduced(c.GetMostExpensiveItemToProduce());
+							}
+						}
+					}
+				}
+			}
+
+			SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(this, producedItem));
+		}
+
+		private IProducible GetMostExpensiveItemToProduce() {
+			IProducible best = null;
+			foreach (IProducible ip in ListProductionOptions()) {
+				if (best == null || ip.shieldCost > best.shieldCost) {
+					best = ip;
+				}
+			}
+			return best;
+		}
+
 		public void HandleCityGrowth(GameData gameData) {
 			int foodNeededToGrow = FoodNeededToGrow();
 			int foodGrowth = FoodGrowthPerTurn();
