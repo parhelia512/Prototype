@@ -410,7 +410,7 @@ namespace C7GameData {
 			// TODO: Handle the SPHQ.
 			int numCorruptionReducingSmallWondersInEmpire = 0;
 			foreach (City c in cities) {
-				foreach (CityBuilding cb in c.buildings) {
+				foreach (CityBuilding cb in c.GetBuildings(includeWonderProvidedBuildings: false)) {
 					if (cb.building.isForbiddenPalace) {
 						++numCorruptionReducingSmallWondersInEmpire;
 					}
@@ -666,7 +666,7 @@ namespace C7GameData {
 					citiesWithCorruptionWonders.Add(c);
 					foundCapital = true;
 				}
-				if (c.buildings.Any(x => x.building.isForbiddenPalace)) {
+				if (c.GetBuildings(includeWonderProvidedBuildings: false).Any(x => x.building.isForbiddenPalace)) {
 					citiesWithCorruptionWonders.Add(c);
 				}
 			}

@@ -34,7 +34,7 @@ namespace C7GameData {
 			}
 
 			private Yield ApplyCityModifiers(City city) {
-				city.buildings.ForEach(b => b.building.tileModifier?.Invoke(this));
+				city.GetBuildings(includeWonderProvidedBuildings: true).ForEach(b => b.building.tileModifier?.Invoke(this));
 				return this;
 			}
 

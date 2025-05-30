@@ -69,6 +69,13 @@ namespace C7GameData {
 	}
 
 	public class Building : IProducible {
+		public class GreatWonderProperties {
+			// The building this building gives to every city in the empire on 
+			// on the continent (like the pyramids or the internet), if any.
+			public Building buildingGainedInEveryCity;
+			public Building buildingGainedInEveryCityOnContinent;
+		}
+
 		public string name { get; set; }
 		public int shieldCost { get; set; }
 		public int populationCost { get; set; } // Will always be equal to 0 in the Civ3 rule set
@@ -83,7 +90,9 @@ namespace C7GameData {
 		public Action<MapUnit> onFinishedUnitProduction;
 		public Action<Tile.Yield> tileModifier;
 
-		public bool isGreatWonder;
+		// Filled in in SaveGame::ConvertBuildings. Non-null for great wonders.
+		public GreatWonderProperties? greatWonderProperties;
+
 		public bool isSmallWonder;
 		public bool isCenterOfEmpire;
 		public bool increasesLuxuryTrade;
@@ -118,7 +127,6 @@ namespace C7GameData {
 			name = building.name;
 			shieldCost = building.shieldCost;
 			populationCost = building.populationCost;
-			isGreatWonder = building.isGreatWonder;
 			isSmallWonder = building.isSmallWonder;
 			culturePerTurn = building.culturePerTurn;
 			iconRowIndex = building.iconRowIndex;
@@ -138,6 +146,10 @@ namespace C7GameData {
 			providesWalls = building.flags.Contains(SaveBuilding.Flag.ProvidesWalls);
 			onlyUsefulInTowns = building.flags.Contains(SaveBuilding.Flag.CanOnlyBeBuiltInTowns);
 			dataSource = building;
+
+			if (building.greatWonderProperties != null) {
+				greatWonderProperties = new();
+			}
 
 			foreach (var kvp in BuildingRules.productionRules) {
 				if (building.flags.Contains(kvp.Key)) {
@@ -167,11 +179,11 @@ namespace C7GameData {
 				return false;
 			}
 
-			if (city.buildings.Exists(cityBuilding => cityBuilding.building == this)) {
+			if (city.GetBuildings(includeWonderProvidedBuildings: true).Exists(cityBuilding => cityBuilding.building == this)) {
 				return false;
 			}
 
-			if (isGreatWonder) {
+			if (greatWonderProperties != null) {
 				// We can't build a great wonder if it was already built.
 				if (EngineStorage.gameData.GreatWondersBuilt.Contains(name)) {
 					return false;
@@ -192,7 +204,7 @@ namespace C7GameData {
 			}
 
 			if (requiredBuilding != null &&
-				!city.buildings.Exists(cityBuilding => cityBuilding.building == this)) {
+				!city.GetBuildings(includeWonderProvidedBuildings: true).Exists(cityBuilding => cityBuilding.building == this)) {
 				return false;
 			}
 
@@ -214,6 +226,16 @@ namespace C7GameData {
 				}
 			}
 			return shieldCost;
+		}
+
+		public bool isGreatWonderObsolete(Player owner) {
+			if (greatWonderProperties == null) {
+				return false;
+			}
+			if (renderedObsoleteBy == null) {
+				return false;
+			}
+			return owner.knownTechs.Contains(renderedObsoleteBy.id);
 		}
 
 		public SaveBuilding ToSaveBuilding() {

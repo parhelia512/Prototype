@@ -921,7 +921,7 @@ namespace C7GameData {
 					shieldCost=bldg.Cost * 10, // In Civ3 files, building costs are stored at 1/10th of their actual value
 					populationCost=0, // In Civ3, a building cannot have a population cost
 					isSmallWonder=bldg.SmallWonder,
-					isGreatWonder=bldg.Wonder,
+					greatWonderProperties=bldg.Wonder ? new SaveBuilding.GreatWonderProperties() : null,
 					culturePerTurn=bldg.Culture,
 					contentFacesInCity=bldg.ContentFaces - bldg.UnhappyFaces,
 					iconRowIndex=pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
@@ -946,6 +946,13 @@ namespace C7GameData {
 
 				if (bldg.RenderedObsoleteBy != -1) {
 					building.renderedObsoleteBy = save.Techs[bldg.RenderedObsoleteBy].id;
+				}
+
+				if (bldg.GainInEveryCity >= 0) {
+					building.greatWonderProperties.buildingGainedInEveryCity = Bldg[bldg.GainInEveryCity].Name;
+				}
+				if (bldg.GainInEveryCityOnContinent >= 0) {
+					building.greatWonderProperties.buildingGainedInEveryCityOnContinent = Bldg[bldg.GainInEveryCityOnContinent].Name;
 				}
 
 				building.flags = LoadBuildingFlags(bldg).ToHashSet();

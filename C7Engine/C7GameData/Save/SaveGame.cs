@@ -202,6 +202,12 @@ namespace C7GameData.Save {
 				if (saveBuilding.renderedObsoleteBy != null) {
 					building.renderedObsoleteBy = techDict[saveBuilding.renderedObsoleteBy];
 				}
+				if (saveBuilding.greatWonderProperties?.buildingGainedInEveryCity?.Length > 0) {
+					building.greatWonderProperties.buildingGainedInEveryCity = buildingDict[saveBuilding.greatWonderProperties.buildingGainedInEveryCity];
+				}
+				if (saveBuilding.greatWonderProperties?.buildingGainedInEveryCityOnContinent?.Length > 0) {
+					building.greatWonderProperties.buildingGainedInEveryCityOnContinent = buildingDict[saveBuilding.greatWonderProperties.buildingGainedInEveryCityOnContinent];
+				}
 
 				building.requiredResources = saveBuilding.requiredResources.Select(a => resDict[a]).ToHashSet();
 			}

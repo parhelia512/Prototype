@@ -54,7 +54,10 @@ namespace C7GameData {
 		public bool capital = false;
 		public Player owner { get; set; }
 		public List<CityResident> residents = new List<CityResident>();
-		public List<CityBuilding> buildings = [];
+
+		// The list of buildings built in this city. You probably want to use
+		// GetBuildings, which can also include buildings granted by wonders.
+		public List<CityBuilding> buildings_built_in_this_city { private get; set; }
 
 		// The order of this city within all the cities of a player for the
 		// purposes of rank corruption calculations.
@@ -83,9 +86,12 @@ namespace C7GameData {
 			if (owner != null) {
 				this.perPlayerCulture.Add(owner, 0);
 			}
+			buildings_built_in_this_city = new();
 		}
 
-		internal City() { }
+		internal City() {
+			buildings_built_in_this_city = new();
+		}
 
 		public void SetItemBeingProduced(IProducible producible) {
 			this.itemBeingProduced = producible;
@@ -93,6 +99,54 @@ namespace C7GameData {
 
 		public bool IsCapital() {
 			return capital;
+		}
+
+		public List<CityBuilding> GetBuildings(bool includeWonderProvidedBuildings) {
+			// Always include the buildings we built, and if no wonders are
+			// included, that's all we need to do.
+			HashSet<Building> buildingsSeen = new();
+			List<CityBuilding> result = new();
+			foreach (CityBuilding cb in buildings_built_in_this_city) {
+				result.Add(cb);
+				buildingsSeen.Add(cb.building);
+			}
+
+			if (!includeWonderProvidedBuildings) {
+				return result;
+			}
+
+			// Loop through all the wonders we control, and if they aren't
+			// obsolete and provide a building, add it to the result.
+			foreach (City c in owner.cities) {
+				foreach (CityBuilding cb in c.GetBuildings(includeWonderProvidedBuildings: false)) {
+					if (cb.building.greatWonderProperties == null || cb.building.isGreatWonderObsolete(owner)) {
+						continue;
+					}
+					Building b = cb.building;
+
+					if (b.greatWonderProperties.buildingGainedInEveryCity != null
+						&& !buildingsSeen.Contains(b.greatWonderProperties.buildingGainedInEveryCity)) {
+						result.Add(new CityBuilding() {
+							building = b.greatWonderProperties.buildingGainedInEveryCity,
+							builtByPlayer = cb.builtByPlayer,
+							year = cb.year,
+							totalCulture = 0, // TODO: calculate this
+						});
+					}
+					if (b.greatWonderProperties.buildingGainedInEveryCityOnContinent != null
+						&& c.location.continent == location.continent
+						&& !buildingsSeen.Contains(b.greatWonderProperties.buildingGainedInEveryCityOnContinent)) {
+						result.Add(new CityBuilding() {
+							building = b.greatWonderProperties.buildingGainedInEveryCityOnContinent,
+							builtByPlayer = cb.builtByPlayer,
+							year = cb.year,
+							totalCulture = 0, // TODO: calculate this
+						});
+					}
+				}
+			}
+
+			return result;
 		}
 
 		public IEnumerable<IProducible> ListProductionOptions() {
@@ -256,7 +310,7 @@ namespace C7GameData {
 				// TODO: This should interrupt the player's turn to let them
 				// make the choice. And does the game allow wonder shuffling in
 				// this situation?
-				if (building.isGreatWonder) {
+				if (building.greatWonderProperties != null) {
 					gameData.GreatWondersBuilt.Add(building.name);
 
 					foreach (Player p in gameData.players) {
@@ -335,7 +389,7 @@ namespace C7GameData {
 			bool hasFreshwaterAccess = location.BordersRiver();
 			bool canGrowIntoCity = hasFreshwaterAccess;
 			if (!hasFreshwaterAccess) {
-				foreach (CityBuilding cb in buildings) {
+				foreach (CityBuilding cb in GetBuildings(includeWonderProvidedBuildings: true)) {
 					if (cb.building.allowsCitySize2 || cb.building.allowsCitySize3) {
 						canGrowIntoCity = true;
 						break;
@@ -354,7 +408,7 @@ namespace C7GameData {
 
 			// If we're a city trying to grow into a metropolis, we need a
 			// hospital.
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings(includeWonderProvidedBuildings: true)) {
 				if (cb.building.allowsCitySize3) {
 					return true;
 				}
@@ -363,7 +417,7 @@ namespace C7GameData {
 		}
 
 		public bool HasGranary() {
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings(includeWonderProvidedBuildings: true)) {
 				if (cb.building.doublesCityGrowthRate) {
 					return true;
 				}
@@ -539,7 +593,7 @@ namespace C7GameData {
 
 		public int GetCulturePerTurn() {
 			int result = 0;
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings(includeWonderProvidedBuildings: true)) {
 				result += cb.building.culturePerTurn;
 			}
 			return result;
@@ -558,7 +612,7 @@ namespace C7GameData {
 		}
 
 		public void AddBuilding(Building building) {
-			buildings.Add(new CityBuilding {
+			buildings_built_in_this_city.Add(new CityBuilding {
 				building = building,
 				builtByPlayer = owner,
 				year = 1, // TODO: Implement in-game year tracking
@@ -578,7 +632,7 @@ namespace C7GameData {
 			gameData.mapUnits.Add(newUnit);
 			owner.AddUnit(newUnit);
 
-			buildings.ForEach(b => b.building.onFinishedUnitProduction?.Invoke(newUnit));
+			GetBuildings(includeWonderProvidedBuildings: true).ForEach(b => b.building.onFinishedUnitProduction?.Invoke(newUnit));
 		}
 
 		// The list of tiles that could be worked by this city.
@@ -695,6 +749,7 @@ namespace C7GameData {
 		}
 
 		public void CalculateCorruption(GameData gameData) {
+			List<CityBuilding> buildings = GetBuildings(includeWonderProvidedBuildings: true);
 			int numAntiCorruptionBuildings = buildings.Count(x => x.building.reducesCorruption);
 
 			// TODO: Handle the SPHQ.
@@ -717,7 +772,7 @@ namespace C7GameData {
 		// the borders need to be updated.
 		public bool UpdateCultureAndCheckForExpansion() {
 			int start = GetBorderExpansionLevel();
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings(includeWonderProvidedBuildings: true)) {
 				cb.totalCulture += cb.building.culturePerTurn;
 				perPlayerCulture[owner] += cb.building.culturePerTurn;
 			}
@@ -829,7 +884,7 @@ namespace C7GameData {
 			// content transition, nothing with happy faces.
 			//
 			// TODO: account for wonders and buildings with global/continental effects.
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings(includeWonderProvidedBuildings: true)) {
 				unhappyToContentMoves -= cb.building.unhappyFacesInCity;
 				unhappyToContentMoves += cb.building.contentFacesInCity;
 			}
@@ -839,7 +894,7 @@ namespace C7GameData {
 
 			// As do luxury resources, which can be boosted by marketplaces.
 			int effectiveLux = GetLuxuries().Keys.Count;
-			if (buildings.Any(x => x.building.increasesLuxuryTrade)) {
+			if (GetBuildings(includeWonderProvidedBuildings: true).Any(x => x.building.increasesLuxuryTrade)) {
 				effectiveLux = (int)(Math.Floor(effectiveLux / 2f) * Math.Ceiling(effectiveLux / 2f) + Math.Ceiling(effectiveLux / 2f));
 			}
 			contentToHappyMoves += effectiveLux;

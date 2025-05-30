@@ -21,12 +21,20 @@ namespace C7GameData.Save {
 			ProvidesWalls,
 			CanOnlyBeBuiltInTowns,
 		}
+
+		public class GreatWonderProperties {
+			// The name of the building this building gives to every city in the
+			// empire on on the continent (like the pyramids or the internet).
+			public string buildingGainedInEveryCity;
+			public string buildingGainedInEveryCityOnContinent;
+		}
+
 		public string name;
 		public int shieldCost;
 		public int populationCost;
 		public ID requiredTech;
 		public string requiredBuilding;
-		public bool isGreatWonder;
+		public GreatWonderProperties? greatWonderProperties;
 		public bool isSmallWonder;
 		public int culturePerTurn;
 		public int contentFacesInCity;
