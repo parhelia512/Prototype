@@ -60,6 +60,6 @@ public partial class Credits : Node2D {
 	}
 	public void ReturnToMenu() {
 		log.Information("Returning to main menu");
-		GetTree().ChangeSceneToFile("res://MainMenu.tscn");
+		GetTree().ChangeSceneToFile("res://UIElements/MainMenu/main_menu.tscn");
 	}
 }

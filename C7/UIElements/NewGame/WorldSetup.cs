@@ -379,6 +379,6 @@ public partial class WorldSetup : Control {
 	}
 
 	private void BackToMainMenu() {
-		GetTree().ChangeSceneToFile("res://MainMenu.tscn");
+		GetTree().ChangeSceneToFile("res://UIElements/MainMenu/main_menu.tscn");
 	}
 }

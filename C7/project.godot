@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="C7"
-run/main_scene="res://MainMenu.tscn"
+run/main_scene="res://UIElements/MainMenu/main_menu.tscn"
 config/features=PackedStringArray("4.2", "C#")
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
