@@ -663,7 +663,7 @@ public partial class Game : Node2D {
 	}
 
 	private void LogCityDetails(City city) {
-		log.Debug($"  {city.name}, production {city.shieldsStored} of {city.itemBeingProduced.shieldCost}");
+		log.Debug($"  {city.name}, production {city.shieldsStored} of {city.itemBeingProduced.ShieldCost(city.owner.civilization)}");
 		foreach (CityResident resident in city.residents) {
 			log.Debug($"  Resident working at {resident.tileWorked}");
 		}

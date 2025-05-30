@@ -196,6 +196,19 @@ namespace C7GameData {
 			return true;
 		}
 
+		public int ShieldCost(Civilization? civ) {
+			if (civ == null) {
+				return shieldCost;
+			}
+
+			foreach (Civilization.Trait trait in dataSource.traits) {
+				if (civ.traits.Contains(trait)) {
+					return shieldCost / 2;
+				}
+			}
+			return shieldCost;
+		}
+
 		public SaveBuilding ToSaveBuilding() {
 			return dataSource;
 		}

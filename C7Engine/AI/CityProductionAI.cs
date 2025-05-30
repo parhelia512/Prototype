@@ -94,7 +94,7 @@ namespace C7Engine {
 					//N.B. Eventually this should be influenced by the military strategy
 					baseScore = baseScore + baseScore / 2 * (unit.movement - 1);
 				}
-				baseScore = baseScore - unit.shieldCost;
+				baseScore = baseScore - unit.ShieldCost(null);
 				baseScore = baseScore - 10 * unit.populationCost;
 				baseScore = baseScore + 5 * unit.bombard;
 				return baseScore;

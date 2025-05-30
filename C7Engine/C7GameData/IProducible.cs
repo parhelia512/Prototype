@@ -7,10 +7,11 @@ namespace C7GameData {
 	 */
 	public interface IProducible {
 		string name { get; set; }
-		int shieldCost { get; set; }
 		int populationCost { get; set; }
 		Tech requiredTech { get; set; }
 		HashSet<Resource> requiredResources { get; set; }
+
+		int ShieldCost(Civilization? civilization);
 
 		bool CanProduce(City city, HashSet<Resource> accessibleResources);
 	}
