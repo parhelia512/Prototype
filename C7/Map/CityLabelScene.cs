@@ -52,7 +52,7 @@ namespace C7.Map {
 			popSizeTheme.SetColor("font_color", "Label", Color.Color8(255, 255, 255, 255));
 			popSizeTheme.SetFontSize("font_size", "Label", 18);
 			popThemeRed.DefaultFont = midSizedFont;
-			popThemeRed.SetColor("font_color", "Label", Color.Color8(255, 255, 255, 255));
+			popThemeRed.SetColor("font_color", "Label", Color.Color8(255, 0, 0, 255));
 			popThemeRed.SetFontSize("font_size", "Label", 18);
 
 			//Mid-Size font skips the cache as it sets a custom size
