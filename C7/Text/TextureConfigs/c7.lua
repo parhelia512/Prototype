@@ -38,6 +38,7 @@ local c7_texture_list = {
   "Art/Terrain/xpgc.png",
   "Art/Terrain/xtgc.png",
   "Art/Cities/rMIDEAST.png",
+  "Art/Cities/MIDEASTWALL.png",
   "Art/city screen/CityIcons.png",
   "Art/city screen/ProdButton.png",
   "Art/city screen/background.png",

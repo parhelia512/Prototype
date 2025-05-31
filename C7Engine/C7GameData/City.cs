@@ -371,6 +371,16 @@ namespace C7GameData {
 			return false;
 		}
 
+		public bool HasWalls() {
+			foreach (CityBuilding cb in buildings) {
+				// TODO: figure out how to determine this properly
+				if (cb.building.name == "Walls") {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		/**
 		 * Computes turn production.  If the production queue finishes,
 		 * returns the item that is built.  Otherwise, returns null.
