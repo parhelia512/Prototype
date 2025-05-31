@@ -5,6 +5,22 @@ using Serilog;
 using System;
 
 namespace C7.Map {
+	struct CityGraphicsDetails {
+		// A size rank of 0 is a town, 1 is a city, etc.
+		public int sizeRank;
+		public int eraIndex;
+
+		public bool Equals(CityGraphicsDetails c) {
+			return c.sizeRank == sizeRank && c.eraIndex == eraIndex;
+		}
+
+		public static bool operator ==(CityGraphicsDetails lhs, CityGraphicsDetails rhs) {
+			return lhs.Equals(rhs);
+		}
+
+		public static bool operator !=(CityGraphicsDetails lhs, CityGraphicsDetails rhs) => !(lhs == rhs);
+	}
+
 	public partial class CityScene : Node2D {
 		private ILogger log = LogManager.ForContext<CityScene>();
 
@@ -14,8 +30,7 @@ namespace C7.Map {
 		private AnimatedSprite2D disorderSprite;
 		private City city;
 		private Rules rules;
-		private int cachedCitySize = -1;
-		private int cachedEraIndex = -1;
+		private CityGraphicsDetails cachedDetails;
 		private Vector2I tileCenter;
 
 		public CityScene(City city, Vector2I tileCenter) {
@@ -24,9 +39,8 @@ namespace C7.Map {
 			this.rules = city.owner.rules;
 			this.tileCenter = tileCenter;
 
-			cachedCitySize = city.residents.Count;
-			cachedEraIndex = city.owner.EraIndex();
-			ConfigureCityGraphics(cachedCitySize, cachedEraIndex);
+			cachedDetails = GetCityGraphicsDetails(city);
+			ConfigureCityGraphics(cachedDetails);
 
 			AddChild(cityGraphics);
 			AddChild(cityLabelScene);
@@ -45,10 +59,9 @@ namespace C7.Map {
 			base._Draw();
 			cityLabelScene._Draw();
 
-			if (city.residents.Count != cachedCitySize || city.owner.EraIndex() != cachedEraIndex) {
-				cachedCitySize = city.residents.Count;
-				cachedEraIndex = city.owner.EraIndex();
-				ConfigureCityGraphics(cachedCitySize, cachedEraIndex);
+			if (cachedDetails != GetCityGraphicsDetails(city)) {
+				cachedDetails = GetCityGraphicsDetails(city);
+				ConfigureCityGraphics(cachedDetails);
 			}
 
 			if (city.isInCivilDisorder) {
@@ -58,17 +71,21 @@ namespace C7.Map {
 			}
 		}
 
-		//TODO: Support multiple city flavors and walls.
-		private void ConfigureCityGraphics(int citySize, int era) {
-			int size = 0;
-			if (citySize > rules.MaximumLevel1CitySize) {
-				++size;
+		private CityGraphicsDetails GetCityGraphicsDetails(City c) {
+			CityGraphicsDetails result = new() { sizeRank = 0 };
+			if (c.residents.Count > rules.MaximumLevel1CitySize) {
+				++result.sizeRank;
 			}
-			if (citySize > rules.MaximumLevel2CitySize) {
-				++size;
+			if (c.residents.Count > rules.MaximumLevel2CitySize) {
+				++result.sizeRank;
 			}
+			result.eraIndex = city.owner.EraIndex();
+			return result;
+		}
 
-			cityTexture = TextureLoader.Load("cities", new { size, era });
+		//TODO: Support multiple city flavors and walls.
+		private void ConfigureCityGraphics(CityGraphicsDetails details) {
+			cityTexture = TextureLoader.Load("cities", details);
 
 			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * cityTexture.GetWidth();
 			cityGraphics.OffsetTop = tileCenter.Y - (float)0.5 * cityTexture.GetHeight();

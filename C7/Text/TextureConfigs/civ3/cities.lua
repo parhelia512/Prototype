@@ -7,26 +7,14 @@ local cities = {
   },
 }
 
-local function validate_input(pair)
-  local size = pair.size
-  local era = pair.era
-
-  if type(size) ~= "number" then
-    error "Expected a number for the size"
+function cities:map_object_to_sprite(city_graphics_details)
+  if (city_graphics_details:GetType().Name ~= "CityGraphicsDetails") then
+    error "Expected a CityGraphicsDetails object"
   end
-  if type(era) ~= "number" then
-    error "Expected a number for the era"
-  end
-
-  return size, era
-end
-
-function cities:map_object_to_sprite(pair)
-  local size, era = validate_input(pair)
 
   return {
     path = self.extra_data.path,
-    crop_region = { size * CITY_WIDTH, era * CITY_HEIGHT, CITY_WIDTH, CITY_HEIGHT },
+    crop_region = { city_graphics_details.sizeRank * CITY_WIDTH, city_graphics_details.eraIndex * CITY_HEIGHT, CITY_WIDTH, CITY_HEIGHT },
     shadows = false,
   }
 end
