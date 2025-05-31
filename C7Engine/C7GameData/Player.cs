@@ -725,6 +725,10 @@ namespace C7GameData {
 				   knownTechs.Contains(producible.requiredTech.id);
 		}
 
+		public int ShieldCost(IProducible producible) {
+			return producible.ShieldCost(civilization.traits);
+		}
+
 		// TODO: Take wars into account. Trade networks cannot pass through civilizations the player's at war with
 		public bool HasTradeAccess(Tile from, Tile to) {
 			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
