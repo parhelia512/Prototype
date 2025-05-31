@@ -5,32 +5,32 @@ using Serilog;
 using System;
 
 namespace C7.Map {
+	public record struct CityGraphicsDetails(
+		// A size rank of 0 is a town, 1 a city, etc.
+		int sizeRank,
+		int eraIndex
+	);
+
 	public partial class CityScene : Node2D {
 		private ILogger log = LogManager.ForContext<CityScene>();
-
-		private readonly Vector2 citySpriteSize;
 
 		private ImageTexture cityTexture;
 		private TextureRect cityGraphics = new TextureRect();
 		private CityLabelScene cityLabelScene;
 		private AnimatedSprite2D disorderSprite;
 		private City city;
+		private Rules rules;
+		private CityGraphicsDetails cachedDetails;
+		private Vector2I tileCenter;
 
 		public CityScene(City city, Vector2I tileCenter) {
 			cityLabelScene = new CityLabelScene(city, tileCenter);
 			this.city = city;
+			this.rules = city.owner.rules;
+			this.tileCenter = tileCenter;
 
-			//TODO: Generalize, support multiple city types, etc.
-			Pcx pcx = TextureLoader.LoadPCX("Art/Cities/rMIDEAST.PCX");
-			int height = pcx.Height/4;
-			int width = pcx.Width/3;
-			cityTexture = TextureLoader.LoadFromPCX("Art/Cities/rMIDEAST.PCX", new(0, 0, width, height), false);
-			citySpriteSize = new Vector2(width, height);
-
-			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * citySpriteSize.X;
-			cityGraphics.OffsetTop = tileCenter.Y - (float)0.5 * citySpriteSize.Y;
-			cityGraphics.MouseFilter = Control.MouseFilterEnum.Ignore;
-			cityGraphics.Texture = cityTexture;
+			cachedDetails = GetCityGraphicsDetails(city);
+			ConfigureCityGraphics(cachedDetails);
 
 			AddChild(cityGraphics);
 			AddChild(cityLabelScene);
@@ -49,11 +49,38 @@ namespace C7.Map {
 			base._Draw();
 			cityLabelScene._Draw();
 
+			if (cachedDetails != GetCityGraphicsDetails(city)) {
+				cachedDetails = GetCityGraphicsDetails(city);
+				ConfigureCityGraphics(cachedDetails);
+			}
+
 			if (city.isInCivilDisorder) {
 				disorderSprite.Show();
 			} else {
 				disorderSprite.Hide();
 			}
+		}
+
+		private CityGraphicsDetails GetCityGraphicsDetails(City c) {
+			CityGraphicsDetails result = new() { sizeRank = 0 };
+			if (c.residents.Count > rules.MaximumLevel1CitySize) {
+				++result.sizeRank;
+			}
+			if (c.residents.Count > rules.MaximumLevel2CitySize) {
+				++result.sizeRank;
+			}
+			result.eraIndex = city.owner.EraIndex();
+			return result;
+		}
+
+		//TODO: Support multiple city flavors and walls.
+		private void ConfigureCityGraphics(CityGraphicsDetails details) {
+			cityTexture = TextureLoader.Load("cities", details);
+
+			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * cityTexture.GetWidth();
+			cityGraphics.OffsetTop = tileCenter.Y - (float)0.5 * cityTexture.GetHeight();
+			cityGraphics.MouseFilter = Control.MouseFilterEnum.Ignore;
+			cityGraphics.Texture = cityTexture;
 		}
 	}
 }
