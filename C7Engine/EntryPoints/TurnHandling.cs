@@ -1,5 +1,8 @@
 using System.Diagnostics;
 using C7Engine.AI;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Linq;
 using Serilog;
 
 namespace C7Engine {
@@ -103,41 +106,37 @@ namespace C7Engine {
 		}
 
 		private static void SpawnBarbarians(GameData gameData) {
-			//Generate new barbarian units.
 			Player barbPlayer = gameData.players.Find(player => player.isBarbarians);
-			foreach (Tile tile in gameData.map.barbarianCamps) {
-				//7% chance of a new barbarian.  Probably should scale based on barbarian activity.
-				int result = GameData.rng.Next(100);
-				log.Verbose("Random barb result = " + result);
-				if (result < 4) {
-					MapUnit newUnit = new MapUnit(gameData.ids.CreateID("barbarian"));
-					newUnit.location = tile;
-					newUnit.owner = gameData.players[0];
-					newUnit.unitType = gameData.barbarianInfo.basicBarbarian;
-					newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
-					newUnit.experienceLevel = gameData.defaultExperienceLevel;
-					newUnit.hitPointsRemaining = 3;
-					newUnit.isFortified = true; //todo: hack for unit selection
 
-					tile.unitsOnTile.Add(newUnit);
-					gameData.mapUnits.Add(newUnit);
-					barbPlayer.units.Add(newUnit);
-					log.Debug("New barbarian added at " + tile);
-				} else if (tile.NeighborsWater() && result < 6) {
-					MapUnit newUnit = new MapUnit(gameData.ids.CreateID(gameData.barbarianInfo.barbarianSeaUnit.name));
-					newUnit.location = tile;
-					newUnit.owner = gameData.players[0]; //todo: make this reliably point to the barbs
+			// A random 5% of camps will spawn a unit each turn. Shuffle the
+			// camps to make this random.
+			int barbariansToSpawn = (int)Math.Ceiling(GameData.rng.Next(gameData.map.barbarianCamps.Count) / 20.0);
+			List<int> tileIndicies = Enumerable.Range(0, gameData.map.barbarianCamps.Count).ToList();
+			GameData.rng.Shuffle<int>(CollectionsMarshal.AsSpan(tileIndicies));
+
+			for (int i = 0; i < barbariansToSpawn; ++i) {
+				Tile tile = gameData.map.barbarianCamps[tileIndicies[i]];
+				MapUnit newUnit = new(gameData.ids.CreateID("barbarian"));
+				newUnit.location = tile;
+				newUnit.owner = barbPlayer;
+				// TODO: make this a conscript.
+				newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
+				newUnit.experienceLevel = gameData.defaultExperienceLevel;
+				newUnit.hitPointsRemaining = 3;
+				tile.unitsOnTile.Add(newUnit);
+				gameData.mapUnits.Add(newUnit);
+				barbPlayer.units.Add(newUnit);
+
+				// Give costal camps a chance to spawn a boat.
+				if (tile.NeighborsWater() && GameData.rng.Next(100) < 20) {
 					newUnit.unitType = gameData.barbarianInfo.barbarianSeaUnit;
-					newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
-					newUnit.experienceLevel = gameData.defaultExperienceLevel;
-					newUnit.hitPointsRemaining = 3;
-					newUnit.isFortified = true; //todo: hack for unit selection
-
-					tile.unitsOnTile.Add(newUnit);
-					gameData.mapUnits.Add(newUnit);
-					barbPlayer.units.Add(newUnit);
 					log.Debug("New barbarian galley added at " + tile);
+					continue;
 				}
+
+				// Otherwise its a 3:1 ratio of advanced to basic barbarians.
+				newUnit.unitType = GameData.rng.Next(100) < 25 ? gameData.barbarianInfo.advancedBarbarian : gameData.barbarianInfo.basicBarbarian;
+				log.Debug("New barbarian added at " + tile);
 			}
 		}
 

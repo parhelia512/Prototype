@@ -230,6 +230,11 @@ namespace C7GameData {
 
 
 		public void RollToPromote(MapUnit opponent, bool waitForAnimation) {
+			// Barbarians can't promote.
+			if (owner.isBarbarians) {
+				return;
+			}
+
 			double promotionChance = experienceLevel.promotionChance;
 			if (opponent.owner.isBarbarians)
 				promotionChance /= 2.0;
@@ -421,15 +426,32 @@ namespace C7GameData {
 			owner.tileKnowledge.AddTilesToKnown(tile);
 
 			// Disperse barb camp
-			if (tile.hasBarbarianCamp && (!owner.isBarbarians)) {
-				tile.DisbandNonDefendingUnits();
+			if (tile.hasBarbarianCamp && !owner.isBarbarians) {
 				EngineStorage.gameData.map.barbarianCamps.Remove(tile);
 				tile.hasBarbarianCamp = false;
+				animate(MapUnit.AnimatedAction.VICTORY, false);
+
+				// TODO: make this configurable
+				owner.gold += 25;
+				if (owner.isHuman) {
+					new MsgShowMilitaryAdvisorPopup($"We cleared a barbarian encampment and earned 25 gold!", happy: true).send();
+				}
 			}
 
-			// Destroy enemy city on tile
+			// Destroy the enemy city on the tile unless we're the barbarians,
+			// in which case we'll just take some gold.
 			if (tile.HasCity && !owner.IsAtPeaceWith(tile.cityAtTile.owner)) {
-				CityInteractions.DestroyCity(tile.XCoordinate, tile.YCoordinate);
+				if (owner.isBarbarians) {
+					// TODO: Add rules for how much gold is taken.
+					int goldTaken = tile.cityAtTile.owner.gold / 4;
+					tile.cityAtTile.owner.gold -= goldTaken;
+					disband();
+					if (tile.cityAtTile.owner.isHuman) {
+						new MsgShowMilitaryAdvisorPopup($"Barbarians have stolen {goldTaken} gold from our cities!\nWe need a stronger military.", happy: false).send();
+					}
+				} else {
+					CityInteractions.DestroyCity(tile.XCoordinate, tile.YCoordinate);
+				}
 			}
 
 			// Check to see if we've discovered a new civ.

@@ -95,4 +95,13 @@ namespace C7Engine {
 			this.city = city;
 		}
 	}
+
+	public class MsgShowMilitaryAdvisorPopup : MessageToUI {
+		public string message;
+		public bool happy;
+		public MsgShowMilitaryAdvisorPopup(string message, bool happy) {
+			this.message = message;
+			this.happy = happy;
+		}
+	}
 }

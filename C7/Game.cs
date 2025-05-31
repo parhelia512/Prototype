@@ -244,6 +244,13 @@ public partial class Game : Node2D {
 					// Break out of fast forward mode after interesting events.
 					turnsLeftToFastForward = 0;
 					break;
+				case MsgShowMilitaryAdvisorPopup mSMAP:
+					if (!popupOverlay.Visible) {
+						popupOverlay.ShowPopup(
+							new InformationalPopup(mSMAP.message, AdvisorHead.Advisor.Military, mSMAP.happy ? AdvisorHead.Mood.Happy : AdvisorHead.Mood.Angry),
+							PopupOverlay.PopupCategory.Advisor);
+					}
+					break;
 				case MsgUpdateUiAfterMove mUUAM:
 					// The unit finished moving and still has moves left, so we need to
 					// mark it as the selected unit again.

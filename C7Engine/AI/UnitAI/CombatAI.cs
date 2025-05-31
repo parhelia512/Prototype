@@ -88,6 +88,18 @@ namespace C7Engine.AI.UnitAI {
 
 		private static HashSet<ID> GetPlayersAtWarWith(Player player) {
 			HashSet<ID> enemyIds = new();
+
+			// Special case: barbarians are at war with all other players but
+			// don't have player relationships with them.
+			if (player.isBarbarians) {
+				foreach (Player p in EngineStorage.gameData.players) {
+					if (!p.isBarbarians) {
+						enemyIds.Add(p.id);
+					}
+				}
+				return enemyIds;
+			}
+
 			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
 				if (p.Value.atWar) {
 					enemyIds.Add(p.Key);
@@ -103,7 +115,18 @@ namespace C7Engine.AI.UnitAI {
 			// enemy units. As of 2025-03-09, we don't track known and visible
 			// tiles separately, so this should be updated in the future.
 			foreach (Tile t in player.tileKnowledge.knownTiles) {
-				scoredTiles.Add(t, ScoreTile(t, unit, player, enemyIds));
+				// Barbarians don't have unified knowledge across their "empire",
+				// only local knowledge.
+				if (player.isBarbarians && t.distanceTo(unit.location) > 4) {
+					continue;
+				}
+
+				float score = ScoreTile(t, unit, player, enemyIds);
+				if (score == int.MinValue) {
+					continue;
+				}
+
+				scoredTiles.Add(t, score);
 			}
 
 			if (scoredTiles.Count == 0) {

@@ -106,6 +106,10 @@ namespace C7Engine {
 			// for resources.
 			AddBonusGrasslands(wc, gameMap);
 
+			// Step 10: Add barb camps. We do this towards the end to make sure
+			// that we don't have barb camps on top of resources.
+			AddBarbarianCamps(wc, gameMap);
+
 			// TODO: Goody huts, barbarian camps.
 
 			DetermineStartingLocations(wc, gameMap);
@@ -1309,6 +1313,60 @@ namespace C7Engine {
 			return result;
 		}
 
+		private static void AddBarbarianCamps(WorldCharacteristics wc, GameMap m) {
+			Random rand = new(wc.mapSeed + 0xba7b5);
+			List<int> tileIndicies = Enumerable.Range(0, m.tiles.Count).ToList();
+			rand.Shuffle<int>(CollectionsMarshal.AsSpan(tileIndicies));
+
+			int landTiles = 0;
+			foreach (Tile t in m.tiles) {
+				if (t.IsLand()) {
+					++landTiles;
+				}
+			}
+			int totalPossibleBarbCamps = landTiles / 100;
+			// TODO: Update this based on barbarian activity.
+
+			int numCamps = 0;
+			for (int i = 0; i < tileIndicies.Count && numCamps < totalPossibleBarbCamps; ++i) {
+				Tile t = m.tiles[tileIndicies[i]];
+				if (IsValidForBarbarianCamp(m, t)) {
+					m.barbarianCamps.Add(t);
+					t.hasBarbarianCamp = true;
+					++numCamps;
+				}
+			}
+		}
+
+		private static bool IsValidForBarbarianCamp(GameMap m, Tile t) {
+			// No barbarian camps on water, volcanos, or mountains.
+			if (!t.IsLand() || t == Tile.NONE || t.overlayTerrainType.Key == "volcano" || t.overlayTerrainType.Key == "mountains") {
+				return false;
+			}
+
+			// No barbarian camps on luxury or strategic resources (we're ok
+			// with barb camps on things like cows or gold).
+			if (t.Resource != null && t.Resource != Resource.NONE &&
+				(t.Resource.Category == ResourceCategory.STRATEGIC || t.Resource.Category == ResourceCategory.LUXURY)) {
+				return false;
+			}
+
+			// No barbarian camps on super tiny islands.
+			HashSet<Tile> continent = m.continents.First(x => x.Contains(t));
+			if (continent.Count < 15) {
+				return false;
+			}
+
+			// No barbarian camps within the big fat cross of another camp.
+			foreach (Tile n in GetTilesWithinRankDistance(t, 2)) {
+				if (n.hasBarbarianCamp) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		private static void DetermineStartingLocations(WorldCharacteristics wc, GameMap m) {
 			Random rand = new(wc.mapSeed + 0x1337);
 			List<HashSet<Tile>> landContinents = m.continents.Where(x => x.First().IsLand()).ToList();
@@ -1436,6 +1494,7 @@ namespace C7Engine {
 			const int RiverPoints = 35;
 			const int CoastPoints = 30;
 			const int LandTilePoints = 1;
+			const int BarbarianCampPoints = -50;
 
 			Player player = new();
 			player.government = wc.defaultGovernment;
@@ -1446,6 +1505,9 @@ namespace C7Engine {
 				score += CommercePoints * n.commerceYield(player).yield;
 				score += ShieldPoints * n.productionYield(player).yield;
 				score += FoodPoints * n.foodYield(player).yield;
+				if (n.hasBarbarianCamp) {
+					score += BarbarianCampPoints;
+				}
 
 				if (!n.IsLand()) {
 					score += CoastPoints;
@@ -1458,6 +1520,9 @@ namespace C7Engine {
 				score += CommercePoints * n.commerceYield(player).yield;
 				score += ShieldPoints * n.productionYield(player).yield;
 				score += FoodPoints * n.foodYield(player).yield;
+				if (n.hasBarbarianCamp) {
+					score += BarbarianCampPoints;
+				}
 			}
 
 			// Give an extra bonus for rivers.
