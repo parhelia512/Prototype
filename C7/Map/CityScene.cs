@@ -5,21 +5,11 @@ using Serilog;
 using System;
 
 namespace C7.Map {
-	struct CityGraphicsDetails {
-		// A size rank of 0 is a town, 1 is a city, etc.
-		public int sizeRank;
-		public int eraIndex;
-
-		public bool Equals(CityGraphicsDetails c) {
-			return c.sizeRank == sizeRank && c.eraIndex == eraIndex;
-		}
-
-		public static bool operator ==(CityGraphicsDetails lhs, CityGraphicsDetails rhs) {
-			return lhs.Equals(rhs);
-		}
-
-		public static bool operator !=(CityGraphicsDetails lhs, CityGraphicsDetails rhs) => !(lhs == rhs);
-	}
+	public record struct CityGraphicsDetails(
+		// A size rank of 0 is a town, 1 a city, etc.
+		int sizeRank,
+		int eraIndex
+	);
 
 	public partial class CityScene : Node2D {
 		private ILogger log = LogManager.ForContext<CityScene>();
