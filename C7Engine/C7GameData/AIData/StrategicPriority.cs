@@ -66,7 +66,7 @@ namespace C7Engine.AI.StrategicAI {
 		/// </summary>
 		/// <param name="producible"></param>
 		/// <returns></returns>
-		public virtual float GetProductionItemFlatAdjuster(IProducible producible) {
+		public virtual float GetProductionItemFlatAdjuster(Player player, IProducible producible) {
 			return 0.0f;
 		}
 

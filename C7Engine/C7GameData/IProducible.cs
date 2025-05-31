@@ -11,7 +11,7 @@ namespace C7GameData {
 		Tech requiredTech { get; set; }
 		HashSet<Resource> requiredResources { get; set; }
 
-		int ShieldCost(Civilization? civilization);
+		int ShieldCost(HashSet<Civilization.Trait> civTraits);
 
 		bool CanProduce(City city, HashSet<Resource> accessibleResources);
 	}

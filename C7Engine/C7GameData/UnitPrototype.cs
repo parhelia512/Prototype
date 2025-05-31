@@ -104,7 +104,7 @@ namespace C7GameData {
 			return MeetsProductionRequirements(city, accessibleResources) && !IsUnitObsolete(city, accessibleResources);
 		}
 
-		public int ShieldCost(Civilization? civ) {
+		public int ShieldCost(HashSet<Civilization.Trait> civTraits) {
 			return shieldCost;
 		}
 

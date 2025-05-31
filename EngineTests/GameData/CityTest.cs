@@ -5,6 +5,7 @@ public class CityTest {
 	[Fact]
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf9_of_10ProductionDone() {
 		Player player = new();
+		player.civilization = new Civilization();
 		player.government = new Government();
 		UnitPrototype warrior = new UnitPrototype();
 		warrior.shieldCost = 10;

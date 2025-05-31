@@ -547,7 +547,7 @@ public partial class CityScreen : Control {
 
 	private void RenderProductionDetails(City city) {
 		CorruptableValue shields = city.CurrentProductionYield();
-		RenderShieldBox(city.itemBeingProduced.ShieldCost(city.owner.civilization), city.shieldsStored);
+		RenderShieldBox(city.itemBeingProduced.ShieldCost(city.owner.civilization.traits), city.shieldsStored);
 		RenderShieldRow(shields.useful, shields.corrupt);
 		productionLabel.Text = $"PRODUCTION: {shields.useful + shields.corrupt} per turn";
 		completeInLabel.Text = city.TurnsUntilProductionFinished() == int.MaxValue ? "--" : $"Complete in {city.TurnsUntilProductionFinished()} turns";

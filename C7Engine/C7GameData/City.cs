@@ -141,7 +141,7 @@ namespace C7GameData {
 		}
 
 		public int TurnsToProduce(IProducible item) {
-			int additionalProductionNeeded = item.ShieldCost(owner.civilization) - shieldsStored;
+			int additionalProductionNeeded = item.ShieldCost(owner.civilization.traits) - shieldsStored;
 			int usefulShields = CurrentProductionYield().useful;
 			if (usefulShields == 0) {
 				return int.MaxValue;
@@ -161,9 +161,9 @@ namespace C7GameData {
 		private int ShieldCostForHurrying() {
 			// If there are no shields in the box, hurrying costs double.
 			if (shieldsStored == 0) {
-				return itemBeingProduced.ShieldCost(owner.civilization) * 2;
+				return itemBeingProduced.ShieldCost(owner.civilization.traits) * 2;
 			}
-			return itemBeingProduced.ShieldCost(owner.civilization) - shieldsStored;
+			return itemBeingProduced.ShieldCost(owner.civilization.traits) - shieldsStored;
 		}
 
 		// Returns the feasibility of hurrying production
@@ -223,7 +223,7 @@ namespace C7GameData {
 					}
 					RemoveCitizens(details.popCost);
 					turnsOfUnhappinessDueToPopRushing += rules.TurnPenaltyForEachHurrySacrifice * details.popCost;
-					shieldsStored = itemBeingProduced.ShieldCost(owner.civilization);
+					shieldsStored = itemBeingProduced.ShieldCost(owner.civilization.traits);
 					break;
 
 				case Government.HurryProductionType.PaidLabor:
@@ -231,7 +231,7 @@ namespace C7GameData {
 						throw new Exception(details.errorMessage);
 					}
 					owner.gold -= details.goldCost;
-					shieldsStored = itemBeingProduced.ShieldCost(owner.civilization);
+					shieldsStored = itemBeingProduced.ShieldCost(owner.civilization.traits);
 					break;
 			}
 		}
@@ -279,7 +279,7 @@ namespace C7GameData {
 		private IProducible GetMostExpensiveItemToProduce() {
 			IProducible best = null;
 			foreach (IProducible ip in ListProductionOptions()) {
-				if (best == null || ip.ShieldCost(owner.civilization) > best.ShieldCost(owner.civilization)) {
+				if (best == null || ip.ShieldCost(owner.civilization.traits) > best.ShieldCost(owner.civilization.traits)) {
 					best = ip;
 				}
 			}
@@ -387,13 +387,13 @@ namespace C7GameData {
 		 */
 		public IProducible ComputeTurnProduction() {
 			shieldsStored += CurrentProductionYield().useful;
-			if (shieldsStored >= itemBeingProduced.ShieldCost(owner.civilization) && residents.Count > itemBeingProduced.populationCost) {
+			if (shieldsStored >= itemBeingProduced.ShieldCost(owner.civilization.traits) && residents.Count > itemBeingProduced.populationCost) {
 				shieldsStored = 0;
 				RemoveCitizens(itemBeingProduced.populationCost);
 				return itemBeingProduced;
 			}
 
-			shieldsStored = Math.Min(shieldsStored, itemBeingProduced.ShieldCost(owner.civilization));
+			shieldsStored = Math.Min(shieldsStored, itemBeingProduced.ShieldCost(owner.civilization.traits));
 			return null;
 		}
 

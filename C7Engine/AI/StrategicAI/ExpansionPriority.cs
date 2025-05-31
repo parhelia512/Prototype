@@ -28,11 +28,11 @@ namespace C7GameData.AIData {
 			}
 		}
 
-		public override float GetProductionItemFlatAdjuster(IProducible producible) {
+		public override float GetProductionItemFlatAdjuster(Player player, IProducible producible) {
 			if (producible is UnitPrototype prototype) {
 				if (prototype.actions.Contains(UnitAction.BuildCity)) {
 					//Offset the shield cost and pop cost maluses, and add a flat 30 value to be equivalent to an early-game unit
-					int adjustment = prototype.ShieldCost(null) + 10 * prototype.populationCost + SETTLER_FLAT_APPEAL;
+					int adjustment = prototype.ShieldCost(player.civilization.traits) + 10 * prototype.populationCost + SETTLER_FLAT_APPEAL;
 					log.Debug($"ExpansionPriority adjusting {producible} by {adjustment}");
 					return adjustment;
 				}

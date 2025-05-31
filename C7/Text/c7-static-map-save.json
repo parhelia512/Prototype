@@ -70748,7 +70748,8 @@
     "maximumLevel2CitySize": 12,
     "foodNeededToGrowForLevel1Cities": 20,
     "foodNeededToGrowForLevel2Cities": 40,
-    "foodNeededToGrowForLevel3Cities": 60
+    "foodNeededToGrowForLevel3Cities": 60,
+    "buildingDiscountForCivTraits": 0.5
   },
   "techs": [
     {
