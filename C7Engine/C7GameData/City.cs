@@ -399,16 +399,14 @@ namespace C7GameData {
 					continue;
 				}
 
-				// Combat defense bonus with no bombard defense bonus means that
-				// this isn't walls, so we can give the bonus regardless of the
-				// size of the city.
-				if (cb.building.bombardDefenseBonus == 0) {
+				// If this building doesn't have the "only useful in towns" flag
+				// we can always provide the bonus regardless of the city size.
+				if (!cb.building.onlyUsefulInTowns) {
 					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
 				}
 
-				// A non-zero bombard defense bonus means this building is
-				// considered to be walls, so the bonus is only active when the
-				// city size is level 1.
+				// But if the building is only useful in towns we need to check
+				// the city size before providing the bonus.
 				if (residents.Count <= gD.rules.MaximumLevel1CitySize) {
 					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
 				}

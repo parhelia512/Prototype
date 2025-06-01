@@ -67363,7 +67363,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 0,
       "flags": [
@@ -67378,7 +67377,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 1,
       "flags": [
@@ -67397,7 +67395,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 2,
       "flags": [
@@ -67413,7 +67410,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 1,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 3,
       "traits": [
@@ -67429,7 +67425,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 4,
       "flags": [
@@ -67448,7 +67443,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 5,
       "traits": [
@@ -67464,7 +67458,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 6,
       "flags": [
@@ -67480,9 +67473,12 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 8,
       "combatDefenseBonus": 50,
       "iconRowIndex": 7,
+      "flags": [
+        "providesWalls",
+        "canOnlyBeBuiltInTowns"
+      ],
       "traits": [
         "militaristic"
       ]
@@ -67496,7 +67492,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 8,
       "flags": [
@@ -67516,7 +67511,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 9,
       "traits": [
@@ -67533,7 +67527,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 3,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 10,
       "traits": [
@@ -67550,7 +67543,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 11,
       "traits": [
@@ -67566,7 +67558,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 2,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 12
     },
@@ -67579,7 +67570,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 13,
       "requiredResources": [
@@ -67596,7 +67586,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 14
     },
@@ -67609,7 +67598,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 15,
       "traits": [
@@ -67626,7 +67614,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 16,
       "requiredResources": [
@@ -67643,7 +67630,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 17,
       "flags": [
@@ -67660,7 +67646,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 18,
       "requiredResources": [
@@ -67676,7 +67661,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 19,
       "flags": [
@@ -67693,7 +67677,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 20,
       "traits": [
@@ -67709,7 +67692,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 21,
       "requiredResources": [
@@ -67725,7 +67707,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 22,
       "traits": [
@@ -67744,7 +67725,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 23,
       "flags": [
@@ -67769,7 +67749,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 24,
       "traits": [
@@ -67785,7 +67764,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 25,
       "flags": [
@@ -67808,7 +67786,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 26,
       "flags": [
@@ -67828,7 +67805,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 27,
       "traits": [
@@ -67845,7 +67821,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 28,
       "flags": [
@@ -67861,7 +67836,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 30,
       "traits": [
@@ -67879,7 +67853,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 3,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 31,
       "renderedObsoleteBy": "tech-45",
@@ -67897,7 +67870,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 32,
       "renderedObsoleteBy": "tech-59",
@@ -67919,7 +67891,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 33,
       "renderedObsoleteBy": "tech-42",
@@ -67941,7 +67912,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 34,
       "renderedObsoleteBy": "tech-30",
@@ -67958,7 +67928,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 35,
       "renderedObsoleteBy": "tech-25",
@@ -67975,7 +67944,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 36,
       "renderedObsoleteBy": "tech-39",
@@ -67993,7 +67961,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 37,
       "traits": [
@@ -68009,7 +67976,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 38,
       "traits": [
@@ -68025,7 +67991,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 39,
       "flags": [
@@ -68046,7 +68011,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 40,
       "traits": [
@@ -68062,7 +68026,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 8,
       "contentFacesInCity": 8,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 41,
       "flags": [
@@ -68078,7 +68041,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 42,
       "traits": [
@@ -68094,7 +68056,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 2,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 43,
       "traits": [
@@ -68110,7 +68071,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 44,
       "traits": [
@@ -68126,7 +68086,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 45,
       "traits": [
@@ -68143,7 +68102,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 46,
       "traits": [
@@ -68159,7 +68117,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 47,
       "flags": [
@@ -68179,7 +68136,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 48,
       "traits": [
@@ -68195,7 +68151,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 49,
       "traits": [
@@ -68211,7 +68166,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 50,
       "traits": [
@@ -68231,7 +68185,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 1,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 51,
       "traits": [
@@ -68248,7 +68201,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 52,
       "traits": [
@@ -68264,7 +68216,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 53,
       "traits": [
@@ -68279,7 +68230,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 54,
       "traits": [
@@ -68295,7 +68245,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 55,
       "requiredResources": [
@@ -68311,7 +68260,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 56,
       "flags": [
@@ -68330,7 +68278,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 57,
       "traits": [
@@ -68345,7 +68292,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 58,
       "traits": [
@@ -68361,7 +68307,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 59
     },
@@ -68374,7 +68319,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 60,
       "traits": [
@@ -68394,7 +68338,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 61,
       "traits": [
@@ -68410,7 +68353,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 62,
       "traits": [
@@ -68427,7 +68369,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 63,
       "traits": [
@@ -68443,7 +68384,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 64,
       "requiredResources": [
@@ -68459,7 +68399,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 65,
       "requiredResources": [
@@ -68475,7 +68414,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 66,
       "requiredResources": [
@@ -68491,7 +68429,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 67,
       "requiredResources": [
@@ -68507,7 +68444,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 68,
       "requiredResources": [
@@ -68523,7 +68459,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 69,
       "requiredResources": [
@@ -68539,7 +68474,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 70,
       "requiredResources": [
@@ -68556,7 +68490,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 71,
       "requiredResources": [
@@ -68572,7 +68505,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 72,
       "requiredResources": [
@@ -68588,7 +68520,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 73,
       "requiredResources": [
@@ -68605,7 +68536,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 74,
       "traits": [
@@ -68629,7 +68559,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 50,
       "iconRowIndex": 75,
       "traits": [
@@ -68646,7 +68575,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 76,
       "traits": [
@@ -68663,7 +68591,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 77,
       "flags": [
@@ -68683,7 +68610,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 78,
       "renderedObsoleteBy": "tech-30",
@@ -68700,7 +68626,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 79,
       "renderedObsoleteBy": "tech-39",
@@ -68721,7 +68646,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 3,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 80,
       "traits": [
@@ -68738,7 +68662,6 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 81,
       "renderedObsoleteBy": "tech-45",
@@ -68756,7 +68679,6 @@
       "isSmallWonder": true,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "bombardDefenseBonus": 0,
       "combatDefenseBonus": 0,
       "iconRowIndex": 56,
       "flags": [

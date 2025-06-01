@@ -10,6 +10,7 @@ namespace C7GameData {
 		{
 			{ SaveBuilding.Flag.MustBeCoastal, MustBeCoastal },
 			{ SaveBuilding.Flag.MustBeNearRiver, MustBeNearRiver },
+			{ SaveBuilding.Flag.CanOnlyBeBuiltInTowns, CanOnlyBeBuiltInTowns },
 		};
 
 		public static Dictionary<SaveBuilding.Flag, Action<MapUnit>> unitProductionEffects = new()
@@ -61,6 +62,10 @@ namespace C7GameData {
 		private static bool MustBeNearRiver(City city) {
 			return city.location.BordersRiver();
 		}
+
+		private static bool CanOnlyBeBuiltInTowns(City city) {
+			return city.residents.Count <= city.owner.rules.MaximumLevel1CitySize;
+		}
 	}
 
 	public class Building : IProducible {
@@ -87,7 +92,8 @@ namespace C7GameData {
 		public bool allowsCitySize2;
 		public bool allowsCitySize3;
 		public bool doublesCityGrowthRate;
-		public int bombardDefenseBonus;
+		public bool providesWalls;
+		public bool onlyUsefulInTowns;
 		public int combatDefenseBonus;
 
 		public int culturePerTurn = 0;
@@ -121,7 +127,6 @@ namespace C7GameData {
 			} else {
 				contentFacesInCity = building.contentFacesInCity;
 			}
-			bombardDefenseBonus = building.bombardDefenseBonus;
 			combatDefenseBonus = building.combatDefenseBonus;
 			isCenterOfEmpire = building.flags.Contains(SaveBuilding.Flag.IsCenterOfEmpire);
 			increasesLuxuryTrade = building.flags.Contains(SaveBuilding.Flag.IncreasesLuxuryTrade);
@@ -130,6 +135,8 @@ namespace C7GameData {
 			allowsCitySize2 = building.flags.Contains(SaveBuilding.Flag.AllowsCitySize2);
 			allowsCitySize3 = building.flags.Contains(SaveBuilding.Flag.AllowsCitySize3);
 			doublesCityGrowthRate = building.flags.Contains(SaveBuilding.Flag.DoublesCityGrowthRate);
+			providesWalls = building.flags.Contains(SaveBuilding.Flag.ProvidesWalls);
+			onlyUsefulInTowns = building.flags.Contains(SaveBuilding.Flag.CanOnlyBeBuiltInTowns);
 			dataSource = building;
 
 			foreach (var kvp in BuildingRules.productionRules) {
@@ -194,12 +201,6 @@ namespace C7GameData {
 			}
 
 			if (!productionPrerequisites.All(func => func(city))) {
-				return false;
-			}
-
-			// Walls (buildings with non-zero bombard defense) can only be built
-			// in towns, not cities or larger.
-			if (dataSource.bombardDefenseBonus > 0 && city.residents.Count > city.owner.rules.MaximumLevel1CitySize) {
 				return false;
 			}
 
