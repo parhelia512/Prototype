@@ -373,8 +373,7 @@ namespace C7GameData {
 
 		public bool HasWalls() {
 			foreach (CityBuilding cb in buildings) {
-				// TODO: figure out how to determine this properly
-				if (cb.building.name == "Walls") {
+				if (cb.building.providesWalls) {
 					return true;
 				}
 			}
@@ -401,13 +400,12 @@ namespace C7GameData {
 
 				// If this building doesn't have the "only useful in towns" flag
 				// we can always provide the bonus regardless of the city size.
-				if (!cb.building.onlyUsefulInTowns) {
-					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
-				}
-
+				// 
 				// But if the building is only useful in towns we need to check
 				// the city size before providing the bonus.
-				if (residents.Count <= gD.rules.MaximumLevel1CitySize) {
+				if (!cb.building.onlyUsefulInTowns) {
+					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
+				} else if (residents.Count <= gD.rules.MaximumLevel1CitySize) {
 					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
 				}
 			}
