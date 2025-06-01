@@ -259,7 +259,7 @@ public partial class CityScreen : Control {
 		RenderFoodDetails(city.Value);
 		RenderCommerceDetails(city.Value);
 		RenderProductionDetails(city.Value);
-		RenderExistingBuildings(city.Value.GetBuildings(includeWonderProvidedBuildings: true));
+		RenderExistingBuildings(city.Value.GetBuildings());
 		RenderStrategicResources(city.Value);
 		RenderLuxuries(city.Value);
 	}

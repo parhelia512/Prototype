@@ -77,7 +77,7 @@ namespace C7GameData.Save {
 					citizenType = resident.citizenType.Id,
 				};
 			});
-			buildings = city.GetBuildings(includeWonderProvidedBuildings: false).ConvertAll(building => new SaveCityBuilding(building));
+			buildings = city.constructed_buildings.ConvertAll(building => new SaveCityBuilding(building));
 
 			foreach (KeyValuePair<Player, int> keyValuePair in city.perPlayerCulture) {
 				perPlayerCulture.Add(keyValuePair.Key.id.ToString(), keyValuePair.Value);
@@ -103,7 +103,7 @@ namespace C7GameData.Save {
 				foodStored = foodStored,
 				turnsOfUnhappinessDueToPopRushing = turnsOfUnhappinessDueToPopRushing,
 				capital = capital,
-				buildings_built_in_this_city = this.buildings.ConvertAll(building => building.ToCityBuilding(buildings, players)),
+				constructed_buildings = this.buildings.ConvertAll(building => building.ToCityBuilding(buildings, players)),
 			};
 
 			foreach (KeyValuePair<string, int> keyValuePair in perPlayerCulture) {

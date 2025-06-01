@@ -179,7 +179,7 @@ namespace C7GameData {
 				return false;
 			}
 
-			if (city.GetBuildings(includeWonderProvidedBuildings: true).Exists(cityBuilding => cityBuilding.building == this)) {
+			if (city.GetBuildings().Exists(cityBuilding => cityBuilding.building == this)) {
 				return false;
 			}
 
@@ -204,7 +204,7 @@ namespace C7GameData {
 			}
 
 			if (requiredBuilding != null &&
-				!city.GetBuildings(includeWonderProvidedBuildings: true).Exists(cityBuilding => cityBuilding.building == this)) {
+				!city.GetBuildings().Exists(cityBuilding => cityBuilding.building == this)) {
 				return false;
 			}
 
