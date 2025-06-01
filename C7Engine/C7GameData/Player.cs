@@ -410,7 +410,10 @@ namespace C7GameData {
 			// TODO: Handle the SPHQ.
 			int numCorruptionReducingSmallWondersInEmpire = 0;
 			foreach (City c in cities) {
-				foreach (CityBuilding cb in c.buildings) {
+				// We use constructed_buildings here because great wonders can't
+				// supply small wonders like forbidden palaces, so we can avoid
+				// doing extra work for each city.
+				foreach (CityBuilding cb in c.constructed_buildings) {
 					if (cb.building.isForbiddenPalace) {
 						++numCorruptionReducingSmallWondersInEmpire;
 					}
@@ -666,7 +669,10 @@ namespace C7GameData {
 					citiesWithCorruptionWonders.Add(c);
 					foundCapital = true;
 				}
-				if (c.buildings.Any(x => x.building.isForbiddenPalace)) {
+				// We use constructed_buildings here because great wonders can't
+				// supply small wonders like forbidden palaces, so we can avoid
+				// doing extra work for each city.
+				if (c.constructed_buildings.Any(x => x.building.isForbiddenPalace)) {
 					citiesWithCorruptionWonders.Add(c);
 				}
 			}
@@ -711,6 +717,21 @@ namespace C7GameData {
 			return C7Engine.EngineStorage.gameData.citizenTypes.FindAll(x => {
 				return !x.IsDefaultCitizen && (x.PrerequisiteTech == null || knownTechs.Contains(x.PrerequisiteTech));
 			});
+		}
+
+		// Returns the list of all wonders owned by this player, excluding those
+		// that have become obsolete.
+		public List<Tuple<City, CityBuilding>> GetActiveWonders() {
+			List<Tuple<City, CityBuilding>> result = new();
+			foreach (City c in cities) {
+				foreach (CityBuilding cb in c.constructed_buildings) {
+					if (cb.building.greatWonderProperties == null || cb.building.isGreatWonderObsolete(this)) {
+						continue;
+					}
+					result.Add(new Tuple<City, CityBuilding>(c, cb));
+				}
+			}
+			return result;
 		}
 
 		public void UpdateResourcesInBorders(IEnumerable<Tile> ownedTiles) {
