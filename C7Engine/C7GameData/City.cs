@@ -311,7 +311,7 @@ namespace C7GameData {
 				}
 			}
 
-			SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(this, producedItem));
+			SetItemBeingProduced(ChooseProducible.Choose(this, owner));
 		}
 
 		private IProducible GetMostExpensiveItemToProduce() {
@@ -668,7 +668,7 @@ namespace C7GameData {
 			return GetTilesOfRank(GetBorderExpansionLevel());
 		}
 
-		private HashSet<Tile> GetTilesOfRank(int rank) {
+		public HashSet<Tile> GetTilesOfRank(int rank) {
 			HashSet<Tile> result = new();
 			HashSet<Tile> knownTiles = new();
 

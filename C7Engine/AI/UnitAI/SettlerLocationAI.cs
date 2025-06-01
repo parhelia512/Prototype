@@ -61,6 +61,9 @@ namespace C7Engine {
 				if (distance > 4) {
 					score -= distance * 2;
 				}
+				if (distance > 8) {
+					score -= distance * 4;
+				}
 				//Distance can never lower score beyond 1; the AI will always try to settle those worthless tundras.
 				//(This could actually be modified in the future, but for now is also a safety rail)
 				if (preDistanceScore > 0 && score <= 0) {

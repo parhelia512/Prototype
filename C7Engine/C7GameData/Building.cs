@@ -104,6 +104,7 @@ namespace C7GameData {
 		public bool providesWalls;
 		public bool onlyUsefulInTowns;
 		public StrengthBonus? combatDefenseBonus;
+		public bool providesVeteranGroundUnits;
 
 		public int culturePerTurn = 0;
 		public int maintenanceCost = 0;
@@ -152,6 +153,7 @@ namespace C7GameData {
 			doublesCityGrowthRate = building.flags.Contains(SaveBuilding.Flag.DoublesCityGrowthRate);
 			providesWalls = building.flags.Contains(SaveBuilding.Flag.ProvidesWalls);
 			onlyUsefulInTowns = building.flags.Contains(SaveBuilding.Flag.CanOnlyBeBuiltInTowns);
+			providesVeteranGroundUnits = building.flags.Contains(SaveBuilding.Flag.VeteranGroundUnits);
 			dataSource = building;
 
 			if (building.greatWonderProperties != null) {
@@ -247,6 +249,10 @@ namespace C7GameData {
 
 		public SaveBuilding ToSaveBuilding() {
 			return dataSource;
+		}
+
+		public override string ToString() {
+			return name;
 		}
 	}
 }

@@ -71,6 +71,7 @@ namespace C7Engine {
 			if (wc.mapSeed == -1) {
 				wc.mapSeed = new Random().Next(int.MaxValue);
 			}
+			log.Information("Seed: " + wc.mapSeed);
 
 			// Step 1: generate the general shape of the terrain.
 			GameMap gameMap = GenerateTerrainShape(wc);

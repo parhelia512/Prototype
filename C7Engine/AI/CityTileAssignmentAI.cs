@@ -37,7 +37,7 @@ namespace C7Engine.AI {
 			}
 
 			string yield = city.location.YieldString(city.owner);
-			log.Information($"Assigning new citizen of {city.name} to tile {preferredTile} with yield {yield}");
+			log.Debug($"Assigning new citizen of {city.name} to tile {preferredTile} with yield {yield}");
 
 			if (preferredTile == Tile.NONE) {
 				newResident.citizenType = city.owner.GetKnownSpecialists()[0];
