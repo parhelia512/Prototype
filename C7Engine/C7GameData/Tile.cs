@@ -61,6 +61,9 @@ namespace C7GameData {
 		// two land tiles just to discover they have no land connection.
 		public int continent;
 
+		// For water tiles, is this tile part of an inland sea with fresh water?
+		public bool isFreshWater = false;
+
 		// An arbitrary number indicating which part of the continent this tile
 		// is part of, for the purposes of biome assignment.
 		public int biomeRegion = -1;
@@ -142,6 +145,15 @@ namespace C7GameData {
 		public bool NeighborsWater() {
 			foreach (Tile neighbor in neighbors.Values) {
 				if (neighbor.baseTerrainType.isWater()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public bool NeighborsFreshWater() {
+			foreach (Tile neighbor in neighbors.Values) {
+				if (neighbor.baseTerrainType.isWater() && neighbor.isFreshWater) {
 					return true;
 				}
 			}
@@ -401,9 +413,8 @@ namespace C7GameData {
 			return overlayTerrainType.miningBonus > 0 && overlays.CanAdd(TerrainImprovement.mine);
 		}
 
-		// TODO: This method doesn't handle two important irrigation cases:
-		//  - inland lakes/seas: we need to figure out what is fresh/salt water
-		//  - Electricity tech, to allow irrigating w/o fresh water access
+		// TODO: This method doesn't handle the electicity tech which allows
+		// irrigating without fresh water access.
 		public bool CanBeIrrigated(Player player) {
 			// Irrigation can't be done if there is no irrigation bonus for the
 			// tile or if there's already an improvement or city on the tile.
@@ -413,8 +424,8 @@ namespace C7GameData {
 				return false;
 			}
 
-			// If a tile borders a river, it has fresh water access.
-			if (BordersRiver()) {
+			// If a tile borders a river or fresh water, it has fresh water access.
+			if (BordersRiver() || NeighborsFreshWater()) {
 				return true;
 			}
 
@@ -427,7 +438,7 @@ namespace C7GameData {
 				// Special case, if we are neighboring a city, check
 				// if the city can act as part of an irrigation chain.
 				if (dirToTile.Value.cityAtTile != null) {
-					if (dirToTile.Value.BordersRiver()) {
+					if (dirToTile.Value.BordersRiver() || dirToTile.Value.NeighborsFreshWater()) {
 						return true;
 					}
 

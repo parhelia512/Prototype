@@ -375,6 +375,13 @@ namespace C7GameData {
 			//
 			// TODO: lakes are bodies of water under 20 tiles (https://civilization.fandom.com/wiki/Fresh_Water_Lake_(Civ3))
 			bool hasFreshwaterAccess = location.BordersRiver();
+			foreach (Tile t in location.neighbors.Values) {
+				if (!t.IsLand() && t.isFreshWater) {
+					hasFreshwaterAccess = true;
+					break;
+				}
+			}
+
 			bool canGrowIntoCity = hasFreshwaterAccess;
 			if (!hasFreshwaterAccess) {
 				foreach (CityBuilding cb in GetBuildings()) {
