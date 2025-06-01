@@ -414,7 +414,7 @@ namespace C7GameData {
 		}
 
 		public bool HasWalls() {
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings()) {
 				if (cb.building.providesWalls) {
 					return true;
 				}
@@ -435,7 +435,7 @@ namespace C7GameData {
 			}
 
 			// Buildings, such as walls, can also give bonuses.
-			foreach (CityBuilding cb in buildings) {
+			foreach (CityBuilding cb in GetBuildings()) {
 				if (cb.building.combatDefenseBonus == 0) {
 					continue;
 				}
