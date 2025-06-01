@@ -18,6 +18,8 @@ namespace C7GameData.Save {
 			AllowsCitySize2,
 			AllowsCitySize3,
 			DoublesCityGrowthRate,
+			ProvidesWalls,
+			CanOnlyBeBuiltInTowns,
 		}
 		public string name;
 		public int shieldCost;
@@ -28,6 +30,7 @@ namespace C7GameData.Save {
 		public bool isSmallWonder;
 		public int culturePerTurn;
 		public int contentFacesInCity;
+		public int combatDefenseBonus;
 		public int iconRowIndex;
 		public ID? renderedObsoleteBy;
 

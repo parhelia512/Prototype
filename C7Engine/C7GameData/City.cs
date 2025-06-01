@@ -373,12 +373,42 @@ namespace C7GameData {
 
 		public bool HasWalls() {
 			foreach (CityBuilding cb in buildings) {
-				// TODO: figure out how to determine this properly
-				if (cb.building.name == "Walls") {
+				if (cb.building.providesWalls) {
 					return true;
 				}
 			}
 			return false;
+		}
+
+		public IEnumerable<StrengthBonus> GetDefenseBonuses() {
+			GameData gD = EngineStorage.gameData;
+
+			// Cities give defense bonuses based on their size.
+			if (residents.Count > gD.rules.MaximumLevel2CitySize) {
+				yield return gD.cityLevel3DefenseBonus;
+			} else if (residents.Count > gD.rules.MaximumLevel1CitySize) {
+				yield return gD.cityLevel2DefenseBonus;
+			} else {
+				yield return gD.cityLevel1DefenseBonus;
+			}
+
+			// Buildings, such as walls, can also give bonuses.
+			foreach (CityBuilding cb in buildings) {
+				if (cb.building.combatDefenseBonus == 0) {
+					continue;
+				}
+
+				// If this building doesn't have the "only useful in towns" flag
+				// we can always provide the bonus regardless of the city size.
+				// 
+				// But if the building is only useful in towns we need to check
+				// the city size before providing the bonus.
+				if (!cb.building.onlyUsefulInTowns) {
+					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
+				} else if (residents.Count <= gD.rules.MaximumLevel1CitySize) {
+					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
+				}
+			}
 		}
 
 		/**

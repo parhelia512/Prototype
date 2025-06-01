@@ -181,9 +181,11 @@ namespace C7GameData {
 				if ((!role.Bombarding()) && (attackDirection is TileDirection dir) && location.HasRiverCrossing(dir.reversed()))
 					yield return gD.riverCrossingBonus;
 
-				// TODO: Bonus should vary depending on city level. First we must load the thresholds for level 2/3 into the scenario data.
-				if (location.cityAtTile != null)
-					yield return gD.cityLevel2DefenseBonus;
+				if (location.cityAtTile != null) {
+					foreach (StrengthBonus sb in location.cityAtTile.GetDefenseBonuses()) {
+						yield return sb;
+					}
+				}
 			}
 		}
 
@@ -365,7 +367,8 @@ namespace C7GameData {
 			var unitOriginalOrientation = facingDirection;
 			facingDirection = location.directionTo(tile);
 
-			double bombardStrength  = StrengthVersus(target, CombatRole.Bombard       , facingDirection);
+			// TODO: Figure out the bombard defense that walls grant.
+			double bombardStrength  = StrengthVersus(target, CombatRole.Bombard, facingDirection);
 			double defenderStrength = target.StrengthVersus(this, CombatRole.BombardDefense, facingDirection);
 			double attackerOdds = bombardStrength / (bombardStrength + defenderStrength);
 			if (Double.IsNaN(attackerOdds))

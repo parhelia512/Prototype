@@ -925,6 +925,7 @@ namespace C7GameData {
 					culturePerTurn=bldg.Culture,
 					contentFacesInCity=bldg.ContentFaces - bldg.UnhappyFaces,
 					iconRowIndex=pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
+					combatDefenseBonus=bldg.DefenseBonus,
 				};
 
 				if (bldg.RequiredAdvance != -1) {
@@ -949,6 +950,12 @@ namespace C7GameData {
 
 				building.flags = LoadBuildingFlags(bldg).ToHashSet();
 				building.traits = LoadBuildingTraits(bldg).ToHashSet();
+
+				// Buildings with bombard defense are treated as walls in civ3.
+				if (bldg.BombardDefense > 0) {
+					building.flags.Add(SaveBuilding.Flag.ProvidesWalls);
+					building.flags.Add(SaveBuilding.Flag.CanOnlyBeBuiltInTowns);
+				}
 
 				save.Buildings.Add(building);
 			}
