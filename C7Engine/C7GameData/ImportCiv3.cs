@@ -348,6 +348,8 @@ namespace C7GameData {
 				foreach (RACE_City city in theBiq.RaceCityName[i]) {
 					civ.cityNames.Add(city.Name);
 				}
+				civ.traits = LoadCivTraits(race).ToHashSet();
+
 				// Look up the image for non-barbarian civs.
 				string artName = pediaIcons.GetLeaderArtName(race.CivilopediaEntry);
 				if (artName != null) {
@@ -356,6 +358,21 @@ namespace C7GameData {
 				save.Civilizations.Add(civ);
 				i++;
 			}
+		}
+
+		private static IEnumerable<Civilization.Trait> LoadCivTraits(RACE race) {
+			return new[] {
+				(race.Militaristic, Civilization.Trait.Militaristic),
+				(race.Commercial, Civilization.Trait.Commercial),
+				(race.Expansionist, Civilization.Trait.Expansionist),
+				(race.Scientific, Civilization.Trait.Scientific),
+				(race.Religious, Civilization.Trait.Religious),
+				(race.Industrious, Civilization.Trait.Industrious),
+				(race.Agricultural, Civilization.Trait.Agricultural),
+				(race.Seafaring, Civilization.Trait.Seafaring),
+			}
+			.Where(t => t.Item1)
+			.Select(t => t.Item2);
 		}
 
 		private void ImportBicLeaders() {
@@ -931,6 +948,7 @@ namespace C7GameData {
 				}
 
 				building.flags = LoadBuildingFlags(bldg).ToHashSet();
+				building.traits = LoadBuildingTraits(bldg).ToHashSet();
 
 				save.Buildings.Add(building);
 			}
@@ -952,6 +970,21 @@ namespace C7GameData {
 				(bldg.AllowsCitySize2, SaveBuilding.Flag.AllowsCitySize2),
 				(bldg.AllowsCitySize3, SaveBuilding.Flag.AllowsCitySize3),
 				(bldg.DoublesCityGrowthRate, SaveBuilding.Flag.DoublesCityGrowthRate),
+			}
+			.Where(t => t.Item1)
+			.Select(t => t.Item2);
+		}
+
+		private static IEnumerable<Civilization.Trait> LoadBuildingTraits(BLDG bldg) {
+			return new[] {
+				(bldg.Militaristic, Civilization.Trait.Militaristic),
+				(bldg.Commercial, Civilization.Trait.Commercial),
+				(bldg.Expansionist, Civilization.Trait.Expansionist),
+				(bldg.Scientific, Civilization.Trait.Scientific),
+				(bldg.Religious, Civilization.Trait.Religious),
+				(bldg.Industrious, Civilization.Trait.Industrious),
+				(bldg.Agricultural, Civilization.Trait.Agricultural),
+				(bldg.Seafaring, Civilization.Trait.Seafaring),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);

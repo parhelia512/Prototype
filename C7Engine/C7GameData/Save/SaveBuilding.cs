@@ -35,6 +35,10 @@ namespace C7GameData.Save {
 		// rather than as booleans to avoid bloating the json file.
 		public HashSet<Flag> flags = new();
 
+		// The set of traits this building has. Civilizations with a matching
+		// trait get discounted production costs.
+		public HashSet<Civilization.Trait> traits = new();
+
 		public HashSet<string> requiredResources = [];
 
 		public SaveBuilding() { }

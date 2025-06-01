@@ -67379,6 +67379,9 @@
       "iconRowIndex": 1,
       "flags": [
         "veteranGroundUnits"
+      ],
+      "traits": [
+        "militaristic"
       ]
     },
     {
@@ -67404,7 +67407,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 1,
-      "iconRowIndex": 3
+      "iconRowIndex": 3,
+      "traits": [
+        "religious"
+      ]
     },
     {
       "name": "Marketplace",
@@ -67418,6 +67424,9 @@
       "iconRowIndex": 4,
       "flags": [
         "increasesLuxuryTrade"
+      ],
+      "traits": [
+        "commercial"
       ]
     },
     {
@@ -67429,7 +67438,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "iconRowIndex": 5
+      "iconRowIndex": 5,
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "Courthouse",
@@ -67454,7 +67466,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 7
+      "iconRowIndex": 7,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "Aqueduct",
@@ -67468,6 +67483,9 @@
       "iconRowIndex": 8,
       "flags": [
         "allowsCitySize2"
+      ],
+      "traits": [
+        "agricultural"
       ]
     },
     {
@@ -67480,7 +67498,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 9
+      "iconRowIndex": 9,
+      "traits": [
+        "commercial"
+      ]
     },
     {
       "name": "Cathedral",
@@ -67492,7 +67513,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 3,
-      "iconRowIndex": 10
+      "iconRowIndex": 10,
+      "traits": [
+        "religious"
+      ]
     },
     {
       "name": "University",
@@ -67504,7 +67528,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 11
+      "iconRowIndex": 11,
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "Colosseum",
@@ -67552,7 +67579,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 15
+      "iconRowIndex": 15,
+      "traits": [
+        "agricultural"
+      ]
     },
     {
       "name": "Coal Plant",
@@ -67623,7 +67653,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "iconRowIndex": 20
+      "iconRowIndex": 20,
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "Mass Transit System",
@@ -67649,6 +67682,9 @@
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
       "iconRowIndex": 22,
+      "traits": [
+        "militaristic"
+      ],
       "requiredResources": [
         "Aluminum"
       ]
@@ -67666,6 +67702,10 @@
       "flags": [
         "mustBeCoastal"
       ],
+      "traits": [
+        "militaristic",
+        "seafaring"
+      ],
       "requiredResources": [
         "Iron",
         "Saltpeter"
@@ -67681,7 +67721,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 24
+      "iconRowIndex": 24,
+      "traits": [
+        "agricultural"
+      ]
     },
     {
       "name": "Harbor",
@@ -67697,6 +67740,11 @@
         "mustBeCoastal",
         "veteranSeaUnits",
         "increasesFoodInWater"
+      ],
+      "traits": [
+        "militaristic",
+        "commercial",
+        "seafaring"
       ]
     },
     {
@@ -67712,6 +67760,9 @@
       "flags": [
         "mustBeCoastal",
         "increasesShieldsInWater"
+      ],
+      "traits": [
+        "seafaring"
       ]
     },
     {
@@ -67723,7 +67774,11 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 27
+      "iconRowIndex": 27,
+      "traits": [
+        "militaristic",
+        "commercial"
+      ]
     },
     {
       "name": "Police Station",
@@ -67748,7 +67803,12 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 30
+      "iconRowIndex": 30,
+      "traits": [
+        "religious",
+        "industrious",
+        "agricultural"
+      ]
     },
     {
       "name": "The Hanging Gardens",
@@ -67760,7 +67820,11 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 3,
       "iconRowIndex": 31,
-      "renderedObsoleteBy": "tech-45"
+      "renderedObsoleteBy": "tech-45",
+      "traits": [
+        "industrious",
+        "agricultural"
+      ]
     },
     {
       "name": "The Colossus",
@@ -67775,6 +67839,11 @@
       "renderedObsoleteBy": "tech-59",
       "flags": [
         "mustBeCoastal"
+      ],
+      "traits": [
+        "commercial",
+        "expansionist",
+        "seafaring"
       ]
     },
     {
@@ -67790,6 +67859,11 @@
       "renderedObsoleteBy": "tech-42",
       "flags": [
         "mustBeCoastal"
+      ],
+      "traits": [
+        "commercial",
+        "expansionist",
+        "seafaring"
       ]
     },
     {
@@ -67802,7 +67876,10 @@
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
       "iconRowIndex": 34,
-      "renderedObsoleteBy": "tech-30"
+      "renderedObsoleteBy": "tech-30",
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "The Oracle",
@@ -67814,7 +67891,10 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
       "iconRowIndex": 35,
-      "renderedObsoleteBy": "tech-25"
+      "renderedObsoleteBy": "tech-25",
+      "traits": [
+        "religious"
+      ]
     },
     {
       "name": "The Great Wall",
@@ -67826,7 +67906,11 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 36,
-      "renderedObsoleteBy": "tech-39"
+      "renderedObsoleteBy": "tech-39",
+      "traits": [
+        "militaristic",
+        "industrious"
+      ]
     },
     {
       "name": "Sun Tzu\u0027s Art of War",
@@ -67837,7 +67921,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "iconRowIndex": 37
+      "iconRowIndex": 37,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "Sistine Chapel",
@@ -67848,7 +67935,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
-      "iconRowIndex": 38
+      "iconRowIndex": 38,
+      "traits": [
+        "religious"
+      ]
     },
     {
       "name": "Magellan\u0027s Voyage",
@@ -67862,6 +67952,11 @@
       "iconRowIndex": 39,
       "flags": [
         "mustBeCoastal"
+      ],
+      "traits": [
+        "commercial",
+        "expansionist",
+        "seafaring"
       ]
     },
     {
@@ -67873,7 +67968,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 40
+      "iconRowIndex": 40,
+      "traits": [
+        "expansionist"
+      ]
     },
     {
       "name": "Shakespeare\u0027s Theater",
@@ -67898,7 +67996,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
-      "iconRowIndex": 42
+      "iconRowIndex": 42,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "JS Bach\u0027s Cathedral",
@@ -67909,7 +68010,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 2,
-      "iconRowIndex": 43
+      "iconRowIndex": 43,
+      "traits": [
+        "religious"
+      ]
     },
     {
       "name": "Newton\u0027s University",
@@ -67920,7 +68024,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 6,
       "contentFacesInCity": 0,
-      "iconRowIndex": 44
+      "iconRowIndex": 44,
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "Smith\u0027s Trading Company",
@@ -67931,7 +68038,11 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "iconRowIndex": 45
+      "iconRowIndex": 45,
+      "traits": [
+        "commercial",
+        "seafaring"
+      ]
     },
     {
       "name": "Universal Suffrage",
@@ -67942,7 +68053,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 46
+      "iconRowIndex": 46,
+      "traits": [
+        "agricultural"
+      ]
     },
     {
       "name": "Hoover Dam",
@@ -67956,6 +68070,10 @@
       "iconRowIndex": 47,
       "flags": [
         "mustBeNearRiver"
+      ],
+      "traits": [
+        "industrious",
+        "agricultural"
       ]
     },
     {
@@ -67967,7 +68085,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "iconRowIndex": 48
+      "iconRowIndex": 48,
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "The United Nations",
@@ -67978,7 +68099,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 49
+      "iconRowIndex": 49,
+      "traits": [
+        "commercial"
+      ]
     },
     {
       "name": "The Manhattan Project",
@@ -67990,6 +68114,10 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 50,
+      "traits": [
+        "militaristic",
+        "industrious"
+      ],
       "requiredResources": [
         "Uranium"
       ]
@@ -68003,7 +68131,11 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 1,
-      "iconRowIndex": 51
+      "iconRowIndex": 51,
+      "traits": [
+        "scientific",
+        "agricultural"
+      ]
     },
     {
       "name": "Longevity",
@@ -68014,7 +68146,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "iconRowIndex": 52
+      "iconRowIndex": 52,
+      "traits": [
+        "scientific"
+      ]
     },
     {
       "name": "SETI program",
@@ -68025,7 +68160,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 3,
       "contentFacesInCity": 0,
-      "iconRowIndex": 53
+      "iconRowIndex": 53,
+      "traits": [
+        "expansionist"
+      ]
     },
     {
       "name": "Heroic Epic",
@@ -68035,7 +68173,11 @@
       "isSmallWonder": true,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 54
+      "iconRowIndex": 54,
+      "traits": [
+        "religious",
+        "seafaring"
+      ]
     },
     {
       "name": "Iron Works",
@@ -68062,6 +68204,9 @@
       "iconRowIndex": 56,
       "flags": [
         "forbiddenPalace"
+      ],
+      "traits": [
+        "religious"
       ]
     },
     {
@@ -68073,7 +68218,10 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "iconRowIndex": 57
+      "iconRowIndex": 57,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "The Pentagon",
@@ -68083,7 +68231,10 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "iconRowIndex": 58
+      "iconRowIndex": 58,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "Wall Street",
@@ -68106,6 +68257,9 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 60,
+      "traits": [
+        "scientific"
+      ],
       "requiredResources": [
         "Aluminum"
       ]
@@ -68120,7 +68274,10 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "iconRowIndex": 61
+      "iconRowIndex": 61,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "Intelligence Agency",
@@ -68131,7 +68288,11 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "iconRowIndex": 62
+      "iconRowIndex": 62,
+      "traits": [
+        "militaristic",
+        "scientific"
+      ]
     },
     {
       "name": "Battlefield Medicine",
@@ -68142,7 +68303,10 @@
       "isSmallWonder": true,
       "culturePerTurn": 1,
       "contentFacesInCity": 0,
-      "iconRowIndex": 63
+      "iconRowIndex": 63,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "SS Thrusters",
@@ -68295,7 +68459,17 @@
       "isSmallWonder": false,
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
-      "iconRowIndex": 74
+      "iconRowIndex": 74,
+      "traits": [
+        "militaristic",
+        "commercial",
+        "expansionist",
+        "scientific",
+        "religious",
+        "industrious",
+        "agricultural",
+        "seafaring"
+      ]
     },
     {
       "name": "Civil Defense",
@@ -68307,7 +68481,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 75
+      "iconRowIndex": 75,
+      "traits": [
+        "militaristic"
+      ]
     },
     {
       "name": "Stock Exchange",
@@ -68319,7 +68496,10 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "iconRowIndex": 76
+      "iconRowIndex": 76,
+      "traits": [
+        "commercial"
+      ]
     },
     {
       "name": "Commercial Dock",
@@ -68334,6 +68514,10 @@
       "iconRowIndex": 77,
       "flags": [
         "increasesTradeInWater"
+      ],
+      "traits": [
+        "commercial",
+        "seafaring"
       ]
     },
     {
@@ -68346,7 +68530,10 @@
       "culturePerTurn": 4,
       "contentFacesInCity": 0,
       "iconRowIndex": 78,
-      "renderedObsoleteBy": "tech-30"
+      "renderedObsoleteBy": "tech-30",
+      "traits": [
+        "religious"
+      ]
     },
     {
       "name": "The Statue of Zeus",
@@ -68359,6 +68546,10 @@
       "contentFacesInCity": 0,
       "iconRowIndex": 79,
       "renderedObsoleteBy": "tech-39",
+      "traits": [
+        "militaristic",
+        "religious"
+      ],
       "requiredResources": [
         "Ivory"
       ]
@@ -68372,7 +68563,11 @@
       "isSmallWonder": false,
       "culturePerTurn": 2,
       "contentFacesInCity": 3,
-      "iconRowIndex": 80
+      "iconRowIndex": 80,
+      "traits": [
+        "scientific",
+        "seafaring"
+      ]
     },
     {
       "name": "Knights Templar",
@@ -68384,7 +68579,11 @@
       "culturePerTurn": 2,
       "contentFacesInCity": 0,
       "iconRowIndex": 81,
-      "renderedObsoleteBy": "tech-45"
+      "renderedObsoleteBy": "tech-45",
+      "traits": [
+        "militaristic",
+        "religious"
+      ]
     },
     {
       "name": "Secret Police HQ",
@@ -69143,6 +69342,10 @@
       "startingTechs": [
         "tech-6",
         "tech-3"
+      ],
+      "traits": [
+        "militaristic",
+        "commercial"
       ]
     },
     {
@@ -69186,6 +69389,10 @@
       "startingTechs": [
         "tech-7",
         "tech-2"
+      ],
+      "traits": [
+        "religious",
+        "industrious"
       ]
     },
     {
@@ -69229,6 +69436,10 @@
       "startingTechs": [
         "tech-3",
         "tech-1"
+      ],
+      "traits": [
+        "commercial",
+        "scientific"
       ]
     },
     {
@@ -69270,6 +69481,10 @@
       "startingTechs": [
         "tech-1",
         "tech-7"
+      ],
+      "traits": [
+        "scientific",
+        "religious"
       ]
     },
     {
@@ -69300,6 +69515,10 @@
       "startingTechs": [
         "tech-6",
         "tech-1"
+      ],
+      "traits": [
+        "militaristic",
+        "scientific"
       ]
     },
     {
@@ -69353,6 +69572,10 @@
       "startingTechs": [
         "tech-4",
         "tech-1"
+      ],
+      "traits": [
+        "expansionist",
+        "scientific"
       ]
     },
     {
@@ -69385,6 +69608,10 @@
       "startingTechs": [
         "tech-6",
         "tech-2"
+      ],
+      "traits": [
+        "militaristic",
+        "industrious"
       ]
     },
     {
@@ -69439,6 +69666,10 @@
       "startingTechs": [
         "tech-4",
         "tech-2"
+      ],
+      "traits": [
+        "expansionist",
+        "industrious"
       ]
     },
     {
@@ -69479,6 +69710,10 @@
       "startingTechs": [
         "tech-5",
         "tech-7"
+      ],
+      "traits": [
+        "militaristic",
+        "religious"
       ]
     },
     {
@@ -69514,6 +69749,10 @@
       "startingTechs": [
         "tech-3",
         "tech-2"
+      ],
+      "traits": [
+        "commercial",
+        "industrious"
       ]
     },
     {
@@ -69545,6 +69784,10 @@
       "startingTechs": [
         "tech-3",
         "tech-7"
+      ],
+      "traits": [
+        "commercial",
+        "religious"
       ]
     },
     {
@@ -69588,6 +69831,10 @@
       "startingTechs": [
         "tech-1",
         "tech-2"
+      ],
+      "traits": [
+        "scientific",
+        "industrious"
       ]
     },
     {
@@ -69638,6 +69885,10 @@
       "startingTechs": [
         "tech-6",
         "tech-4"
+      ],
+      "traits": [
+        "militaristic",
+        "agricultural"
       ]
     },
     {
@@ -69668,6 +69919,10 @@
       "startingTechs": [
         "tech-6",
         "tech-4"
+      ],
+      "traits": [
+        "militaristic",
+        "expansionist"
       ]
     },
     {
@@ -69711,6 +69966,10 @@
       "startingTechs": [
         "tech-4",
         "tech-3"
+      ],
+      "traits": [
+        "commercial",
+        "agricultural"
       ]
     },
     {
@@ -69754,6 +70013,10 @@
       "startingTechs": [
         "tech-3",
         "tech-4"
+      ],
+      "traits": [
+        "commercial",
+        "seafaring"
       ]
     },
     {
@@ -69797,6 +70060,10 @@
       "startingTechs": [
         "tech-6",
         "tech-4"
+      ],
+      "traits": [
+        "militaristic",
+        "expansionist"
       ]
     },
     {
@@ -69841,6 +70108,10 @@
       "startingTechs": [
         "tech-3",
         "tech-7"
+      ],
+      "traits": [
+        "religious",
+        "seafaring"
       ]
     },
     {
@@ -69887,6 +70158,10 @@
       "startingTechs": [
         "tech-6",
         "tech-3"
+      ],
+      "traits": [
+        "militaristic",
+        "seafaring"
       ]
     },
     {
@@ -69929,6 +70204,10 @@
       "startingTechs": [
         "tech-1",
         "tech-2"
+      ],
+      "traits": [
+        "scientific",
+        "industrious"
       ]
     },
     {
@@ -69972,6 +70251,10 @@
       "startingTechs": [
         "tech-4",
         "tech-7"
+      ],
+      "traits": [
+        "religious",
+        "agricultural"
       ]
     },
     {
@@ -70013,6 +70296,10 @@
       "startingTechs": [
         "tech-4",
         "tech-7"
+      ],
+      "traits": [
+        "expansionist",
+        "religious"
       ]
     },
     {
@@ -70056,6 +70343,10 @@
       "startingTechs": [
         "tech-3",
         "tech-2"
+      ],
+      "traits": [
+        "industrious",
+        "seafaring"
       ]
     },
     {
@@ -70099,6 +70390,10 @@
       "startingTechs": [
         "tech-1",
         "tech-3"
+      ],
+      "traits": [
+        "commercial",
+        "scientific"
       ]
     },
     {
@@ -70138,6 +70433,10 @@
       "startingTechs": [
         "tech-4",
         "tech-1"
+      ],
+      "traits": [
+        "scientific",
+        "agricultural"
       ]
     },
     {
@@ -70177,6 +70476,10 @@
       "startingTechs": [
         "tech-4",
         "tech-3"
+      ],
+      "traits": [
+        "commercial",
+        "expansionist"
       ]
     },
     {
@@ -70216,6 +70519,10 @@
       "startingTechs": [
         "tech-4",
         "tech-3"
+      ],
+      "traits": [
+        "agricultural",
+        "seafaring"
       ]
     },
     {
@@ -70266,6 +70573,10 @@
       "startingTechs": [
         "tech-3",
         "tech-4"
+      ],
+      "traits": [
+        "expansionist",
+        "seafaring"
       ]
     },
     {
@@ -70305,6 +70616,10 @@
       "startingTechs": [
         "tech-1",
         "tech-3"
+      ],
+      "traits": [
+        "scientific",
+        "seafaring"
       ]
     },
     {
@@ -70344,6 +70659,10 @@
       "startingTechs": [
         "tech-4",
         "tech-2"
+      ],
+      "traits": [
+        "expansionist",
+        "agricultural"
       ]
     },
     {
@@ -70384,6 +70703,10 @@
       "startingTechs": [
         "tech-2",
         "tech-4"
+      ],
+      "traits": [
+        "industrious",
+        "agricultural"
       ]
     }
   ],
@@ -70425,7 +70748,8 @@
     "maximumLevel2CitySize": 12,
     "foodNeededToGrowForLevel1Cities": 20,
     "foodNeededToGrowForLevel2Cities": 40,
-    "foodNeededToGrowForLevel3Cities": 60
+    "foodNeededToGrowForLevel3Cities": 60,
+    "buildingDiscountForCivTraits": 0.5
   },
   "techs": [
     {

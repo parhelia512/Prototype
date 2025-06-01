@@ -40,10 +40,10 @@ namespace C7Engine {
 			//N.B. This implicitly casts to UnitPrototype.  For now this is fine but once we add buildings, this (or the source of the list)
 			//will have to get smarter.
 			foreach (UnitPrototype unitPrototype in producibles.Where(p => p is UnitPrototype)) {
-				float baseScore = GetItemScore(unitPrototype);
+				float baseScore = GetItemScore(city.owner, unitPrototype);
 				log.Debug($" Base score for {unitPrototype} is {baseScore}");
 				// There may eventually be some additive adjusters (or that may play into the previous)
-				float flatAdjuster = GetPriorityFlatAdjusters(priorities, unitPrototype, baseScore);
+				float flatAdjuster = GetPriorityFlatAdjusters(city.owner, priorities, unitPrototype, baseScore);
 				float flatAdjustedScore = baseScore + flatAdjuster;
 				log.Debug($"  Flat-adjusted score for {unitPrototype} is {flatAdjustedScore}");
 
@@ -84,7 +84,7 @@ namespace C7Engine {
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static float GetItemScore(IProducible item) {
+		private static float GetItemScore(Player player, IProducible item) {
 			float baseScore = 0.0f;
 			if (item is UnitPrototype unit) {
 				baseScore = baseScore + 10 * unit.attack;
@@ -94,7 +94,7 @@ namespace C7Engine {
 					//N.B. Eventually this should be influenced by the military strategy
 					baseScore = baseScore + baseScore / 2 * (unit.movement - 1);
 				}
-				baseScore = baseScore - unit.shieldCost;
+				baseScore = baseScore - player.ShieldCost(unit);
 				baseScore = baseScore - 10 * unit.populationCost;
 				baseScore = baseScore + 5 * unit.bombard;
 				return baseScore;
@@ -216,12 +216,12 @@ namespace C7Engine {
 			return baseScore;
 		}
 
-		public static float GetPriorityFlatAdjusters(List<StrategicPriority> priorities, UnitPrototype prototype, float baseScore) {
+		public static float GetPriorityFlatAdjusters(Player player, List<StrategicPriority> priorities, UnitPrototype prototype, float baseScore) {
 			// How much emphasis the top priority adds.
 			float totalAdjusters = 0.0f;
 			float priorityMultiplier = 1.0f;
 			foreach (StrategicPriority priority in priorities) {
-				float adjuster = priority.GetProductionItemFlatAdjuster(prototype);
+				float adjuster = priority.GetProductionItemFlatAdjuster(player, prototype);
 				// Low-level log, we don't have proper logs yet so it's commented out
 				log.Verbose($"  Got adjuster of {adjuster} from {priority}; adjusting by ${adjuster * priorityMultiplier}");
 				totalAdjusters += (adjuster * priorityMultiplier);

@@ -12,6 +12,17 @@ namespace C7GameData {
 	}
 
 	public class Civilization {
+		public enum Trait {
+			Militaristic,
+			Commercial,
+			Expansionist,
+			Scientific,
+			Religious,
+			Industrious,
+			Agricultural,
+			Seafaring,
+		}
+
 		public Civilization() { }
 
 		public Civilization(string name) {
@@ -32,6 +43,9 @@ namespace C7GameData {
 
 		// The IDs of all the techs that this civ starts with.
 		public HashSet<ID> startingTechs = new();
+
+		// The traits that this civilization has.
+		public HashSet<Trait> traits = new();
 
 		[JsonIgnore]
 		public UnitPrototype uniqueUnit;
