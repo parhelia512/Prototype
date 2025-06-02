@@ -1,5 +1,6 @@
 namespace C7GameData {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 	using C7GameData.Save;
 
@@ -192,6 +193,23 @@ namespace C7GameData {
 
 			// Sort by size, descending.
 			continents.Sort((x, y) => y.Count.CompareTo(x.Count));
+
+			// For water tiles, determine if they are ocean or inland seas.
+			foreach (HashSet<Tile> continent in continents) {
+				if (continent.First().IsLand()) {
+					continue;
+				}
+
+				// Bodies of water under 20 tiles are fresh water
+				// (https://civilization.fandom.com/wiki/Fresh_Water_Lake_(Civ3)).
+				//
+				// TODO: consider making this part of the rules.
+				if (continent.Count <= 20) {
+					foreach (Tile t in continent) {
+						t.isFreshWater = true;
+					}
+				}
+			}
 		}
 	}
 }
