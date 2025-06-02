@@ -853,6 +853,12 @@ namespace C7GameData {
 		//  - https://codehappy.net/apolyton/threads/83368-1.htm
 		//
 		public Mood RecalculateCitizenMoods(GameData gameData) {
+			// Always act like we're not in disorder during these calculations
+			// so that the luxury slider has an effect - otherwise the commerce
+			// is always marked as corrupt.
+			bool cachedIsInDisorder = isInCivilDisorder;
+			isInCivilDisorder = false;
+
 			CityResident.Mood happy = CityResident.Mood.Happy;
 			CityResident.Mood content = CityResident.Mood.Content;
 			CityResident.Mood unhappy = CityResident.Mood.Unhappy;
@@ -883,6 +889,10 @@ namespace C7GameData {
 				unhappyToContentMoves -= cb.building.unhappyFacesInCity;
 				unhappyToContentMoves += cb.building.contentFacesInCity;
 			}
+
+			// Depending on the government type, land defensive units can serve
+			// as military police.
+			unhappyToContentMoves += Math.Min(owner.government.militaryPoliceLimit, location.unitsOnTile.Count(x => x.CanDefendOnLand()));
 
 			// Luxury spending moves content faces to happy faces.
 			contentToHappyMoves += CurrentCommerceYield().happiness;
@@ -949,6 +959,9 @@ namespace C7GameData {
 					ApplyMoodChange(sadPoints, content, unhappy);
 				}
 			}
+
+			// Restore whether we are in disorder.
+			isInCivilDisorder = cachedIsInDisorder;
 
 			int happyCount = 0;
 			int unhappyCount = 0;
