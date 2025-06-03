@@ -98,7 +98,7 @@ public class SaveTests {
 					case MsgStartUnitAnimation mSUA:
 						// Ensure we don't get stuck waiting for animations to finish.
 						if (mSUA.completionEvent != null) {
-							mSUA.completionEvent.Set();
+							mSUA.completionEvent();
 						}
 						continue;
 					default:

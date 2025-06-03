@@ -150,11 +150,9 @@ namespace C7GameData {
 
 		public void animate(MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
 			if (EngineStorage.animationsEnabled) {
-				new MsgStartUnitAnimation(this, action, wait ? EngineStorage.uiEvent : null, ending).send();
+				new MsgStartUnitAnimation(this, action, wait ? EngineStorage.FinishUiEvent : null, ending).send();
 				if (wait) {
-					EngineStorage.gameDataMutex.ReleaseMutex();
-					EngineStorage.uiEvent.WaitOne();
-					EngineStorage.gameDataMutex.WaitOne();
+					EngineStorage.WaitForUiEvent();
 				}
 			}
 		}

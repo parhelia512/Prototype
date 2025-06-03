@@ -14,47 +14,60 @@ namespace C7Engine {
 	 * so we don't forget the state of the game after we create it.
 	 **/
 	public static class EngineStorage {
-		public static Mutex gameDataMutex = new Mutex();
+		private static readonly object gameDataLock = new object();
 		internal static GameData gameData { get; set; }
+
 		public static ID uiControllerID;
 		internal static bool animationsEnabled = true;
 
-		private static Thread engineThread = null;
-		internal static AutoResetEvent uiEvent = new AutoResetEvent(false); // Used to block engineThread while waiting for the UI, f.e. while
-																			// an animation plays.
-
-		internal static ConcurrentQueue<MessageToEngine> pendingMessages = new ConcurrentQueue<MessageToEngine>();
-		internal static AutoResetEvent actionAddedToQueue = new AutoResetEvent(false);
+		public static bool isWaitingForUi = false;
 
 		public static ConcurrentQueue<MessageToUI> messagesToUI = new ConcurrentQueue<MessageToUI>();
 
+		private static Thread engineThread = null;
+
+		internal static BlockingCollection<MessageToEngine> pendingMessages = new BlockingCollection<MessageToEngine>(new ConcurrentQueue<MessageToEngine>());
+
 		private static void processActions() {
-			bool stopProcessing = false;
-			while (!stopProcessing) {
-				actionAddedToQueue.WaitOne();
-				MessageToEngine msg;
-				gameDataMutex.WaitOne();
-				while (pendingMessages.TryDequeue(out msg)) {
+			foreach (MessageToEngine msg in pendingMessages.GetConsumingEnumerable()) {
+				lock (gameDataLock) {
 					msg.process();
-					if (msg is MsgShutdownEngine) {
-						stopProcessing = true;
-						break;
-					}
 				}
-				gameDataMutex.ReleaseMutex();
+
+				if (msg is MsgShutdownEngine) {
+					break;
+				}
 			}
 		}
 
 		internal static void createThread() {
-			// TODO: What if engineThread is not null, i.e. if the thread has already been created? Should we join() it? Does it matter?
-			engineThread = new Thread(processActions);
-			engineThread.Start();
+			if (engineThread == null) {
+				// TODO: What if engineThread is not null, i.e. if the thread has already been created? Should we join() it? Does it matter?
+				engineThread = new Thread(processActions);
+				engineThread.Start();
+			}
 		}
 
 		public static void ReadGameData(Action<GameData> accessor) {
-			EngineStorage.gameDataMutex.WaitOne();
-			accessor(gameData);
-			EngineStorage.gameDataMutex.ReleaseMutex();
+			lock (gameDataLock) {
+				accessor(gameData);
+			}
+		}
+
+		internal static void WaitForUiEvent() {
+			lock (gameDataLock) {
+				isWaitingForUi = true;
+				while (isWaitingForUi) {
+					Monitor.Wait(gameDataLock);
+				}
+			}
+		}
+
+		public static void FinishUiEvent() {
+			lock (gameDataLock) {
+				isWaitingForUi = false;
+				Monitor.Pulse(gameDataLock);
+			}
 		}
 	}
 }
