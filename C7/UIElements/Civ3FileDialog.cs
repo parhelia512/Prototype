@@ -1,3 +1,5 @@
+using C7Engine;
+using C7GameData;
 using Godot;
 using Serilog;
 
@@ -39,9 +41,9 @@ public partial class Civ3FileDialog : FileDialog {
 			}
 
 			log.Information($"Saving game to {path}");
-			using (C7Engine.UIGameDataAccess gameDataAccess = new()) {
-				C7GameData.Save.SaveGame.FromGameData(gameDataAccess.gameData).Save(path);
-			}
+			EngineStorage.ReadGameData((GameData gameData) => {
+				C7GameData.Save.SaveGame.FromGameData(gameData).Save(path);
+			});
 		}
 	}
 }

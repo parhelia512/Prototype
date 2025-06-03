@@ -32,15 +32,14 @@ public partial class TalkScreen : TextureRect {
 
 		this.Texture = TextureLoader.Load("diplomacy.offer");
 
-		string civNameText;
-		string leaderName;
-		using (UIGameDataAccess gameDataAccess = new()) {
-			GameData gD = gameDataAccess.gameData;
+		string civNameText = "";
+		string leaderName = "";
+		EngineStorage.ReadGameData((GameData gD) => {
 			Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
 			GetParent<Diplomacy>().AddLeaderHeadAndLabel(this, opponentPlayer, fontTheme);
 			civNameText = $"{opponentPlayer.civilization.name} (Cautious)";
 			leaderName = opponentPlayer.civilization.leader;
-		}
+		});
 
 		Button proposeDeal = new();
 		proposeDeal.Text = "We would like to propose a deal...";
@@ -67,14 +66,14 @@ public partial class TalkScreen : TextureRect {
 	}
 
 	private void DeclareWar() {
-		using UIGameDataAccess gameDataAccess = new();
-		GameData gD = gameDataAccess.gameData;
-		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
-		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
-		GetParent<Diplomacy>().popupOverlay.ShowPopup(new WarConfirmation(opponentPlayer,
+		EngineStorage.ReadGameData((GameData gD) => {
+			Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
+			Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
+			GetParent<Diplomacy>().popupOverlay.ShowPopup(new WarConfirmation(opponentPlayer,
 				() => {
 					humanPlayer.DeclareWarOn(opponentPlayer, gD.turn);
 					GetParent<Diplomacy>().Hide();
 				}), PopupOverlay.PopupCategory.Advisor);
+		});
 	}
 }

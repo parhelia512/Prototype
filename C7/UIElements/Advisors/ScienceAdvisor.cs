@@ -21,11 +21,12 @@ public partial class ScienceAdvisor : TextureRect {
 	public override void _Ready() {
 		this.CreateUI();
 
-		using UIGameDataAccess gameDataAccess = new();
-		List<Tech> techs = gameDataAccess.gameData.techs;
-		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
-		eraName = player.eraCivilopediaName;
-		this.DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameDataAccess.gameData));
+		EngineStorage.ReadGameData((GameData gameData) => {
+			List<Tech> techs = gameData.techs;
+			Player player = gameData.GetHumanPlayers()[0];
+			eraName = player.eraCivilopediaName;
+			this.DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
+		});
 	}
 
 	private void CreateUI() {
@@ -146,11 +147,12 @@ public partial class ScienceAdvisor : TextureRect {
 		}
 		techBoxes.Clear();
 
-		using UIGameDataAccess gameDataAccess = new();
-		List<Tech> techs = gameDataAccess.gameData.techs;
-		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
-		eraName = Player.EraIndexToEra(Player.EraIndex(eraName) + delta);
-		DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameDataAccess.gameData));
+		EngineStorage.ReadGameData((GameData gameData) => {
+			List<Tech> techs = gameData.techs;
+			Player player = gameData.GetHumanPlayers()[0];
+			eraName = Player.EraIndexToEra(Player.EraIndex(eraName) + delta);
+			DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
+		});
 	}
 
 	private void ReturnToMenu() {

@@ -34,8 +34,8 @@ public partial class MilitaryAdvisor : TextureRect {
 		AddChild(GoBackButton);
 		GoBackButton.Pressed += ReturnToMenu;
 
-		using (UIGameDataAccess gameDataAccess = new()) {
-			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+		EngineStorage.ReadGameData((GameData gameData) => {
+			Player player = gameData.GetHumanPlayers()[0];
 			var (totalUnits, allowedUnits, unitSupportCost) = player.TotalUnitsAllowedUnitsAndSupportCost();
 
 			AddChild(totalUnitsLabel);
@@ -55,11 +55,11 @@ public partial class MilitaryAdvisor : TextureRect {
 
 			TextureRect advisorHead = new();
 			//TODO: Randomize or set logically
-			advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Military, AdvisorHead.Mood.Happy, player.EraIndex());
+			advisorHead.Texture =
+				AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Military, AdvisorHead.Mood.Happy, player.EraIndex());
 			advisorHead.SetPosition(new Vector2(851, 0));
 			AddChild(advisorHead);
-		}
-
+		});
 	}
 
 	private void ReturnToMenu() {

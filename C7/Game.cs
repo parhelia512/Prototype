@@ -153,49 +153,55 @@ public partial class Game : Node2D {
 	}
 
 	private void InitializeMapView() {
-		using UIGameDataAccess gameDataAccess = new();
-		GameMap map = gameDataAccess.gameData.map;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			GameMap map = gameData.map;
 
-		Vector2? cameraLocation = null;
-		if (mapView != null) {
-			cameraLocation = mapView.cameraLocation;
-			RemoveChild(mapView);
-		}
-
-		mapView = new MapView(this, map.numTilesWide, map.numTilesTall, map.wrapHorizontally, map.wrapVertically);
-		AddChild(mapView);
-
-		mapView.cameraZoom = (float)1.0;
-		mapView.gridLayer.visible = false;
-
-		if (!cameraLocation.HasValue) {
-			// Set initial camera location. If the UI controller has any cities, focus on their capital. Otherwise, focus on their
-			// starting settler.
-			if (controller.cities.Count > 0) {
-				City capital = controller.cities.Find(c => c.IsCapital());
-				if (capital != null)
-					mapView.centerCameraOnTile(capital.location);
-			} else {
-				MapUnit startingSettler = controller.units.Find(u => u.unitType.actions.Contains(UnitAction.BuildCity));
-				if (startingSettler != null)
-					mapView.centerCameraOnTile(startingSettler.location);
+			Vector2? cameraLocation = null;
+			if (mapView != null) {
+				cameraLocation = mapView.cameraLocation;
+				RemoveChild(mapView);
 			}
-		} else {
-			mapView.cameraLocation = cameraLocation.Value;
-		}
 
-		// Allow the city screen to control whether tile assignments
-		// are visible and map UI locations back to map locations.
-		cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
-		cityScreen.mapView = mapView;
-		cityScreen.citizenTypes = gameDataAccess.gameData.citizenTypes;
+			mapView = new MapView(this, map.numTilesWide, map.numTilesTall, map.wrapHorizontally, map.wrapVertically);
+			AddChild(mapView);
 
-		// Allow the domestic advisor to trigger popups.
-		advisor.domesticAdvisor.SetPopupOverlay(popupOverlay);
+			mapView.cameraZoom = (float)1.0;
+			mapView.gridLayer.visible = false;
+
+			if (!cameraLocation.HasValue) {
+				// Set initial camera location. If the UI controller has any cities, focus on their capital. Otherwise, focus on their
+				// starting settler.
+				if (controller.cities.Count > 0) {
+					City capital = controller.cities.Find(c => c.IsCapital());
+					if (capital != null)
+						mapView.centerCameraOnTile(capital.location);
+				} else {
+					MapUnit startingSettler =
+						controller.units.Find(u => u.unitType.actions.Contains(UnitAction.BuildCity));
+					if (startingSettler != null)
+						mapView.centerCameraOnTile(startingSettler.location);
+				}
+			} else {
+				mapView.cameraLocation = cameraLocation.Value;
+			}
+
+			// Allow the city screen to control whether tile assignments
+			// are visible and map UI locations back to map locations.
+			cityScreen.tileAssignmentLayer = mapView.tileAssignmentLayer;
+			cityScreen.mapView = mapView;
+			cityScreen.citizenTypes = gameData.citizenTypes;
+
+			// Allow the domestic advisor to trigger popups.
+			advisor.domesticAdvisor.SetPopupOverlay(popupOverlay);
+		});
+	}
+
+	public void processEngineMessages() {
+		EngineStorage.ReadGameData((GameData gameData) => { processEngineMessagesLocked(gameData); });
 	}
 
 	// Must only be called while holding the game data mutex
-	public void processEngineMessages(GameData gameData) {
+	public void processEngineMessagesLocked(GameData gameData) {
 		MessageToUI msg;
 		while (EngineStorage.messagesToUI.TryDequeue(out msg)) {
 			switch (msg) {
@@ -311,34 +317,30 @@ public partial class Game : Node2D {
 	// waiting messages b/c some of them might pertain to animations. TODO: Consider processing only the animation messages here.
 	// Must only be called while holding the game data mutex
 	public void updateAnimations(GameData gameData) {
-		processEngineMessages(gameData);
+		processEngineMessagesLocked(gameData);
 		animTracker.update();
 	}
 
 	public override void _Process(double delta) {
 		ProcessActions();
+		processEngineMessages();
 
-		// TODO: Is it necessary to keep the game data mutex locked for this entire method?
-		using (var gameDataAccess = new UIGameDataAccess()) {
-			GameData gameData = gameDataAccess.gameData;
+		if (!errorOnLoad) {
+			if (CurrentState == GameState.PlayerTurn) {
+				// If the selected unit is unfortified, prepare to autoselect the next one if it becomes fortified
+				if ((CurrentlySelectedUnit != MapUnit.NONE) && (!CurrentlySelectedUnit.isFortified))
+					KeepCSUWhenFortified = false;
 
-			processEngineMessages(gameData);
-
-			if (!errorOnLoad) {
-				if (CurrentState == GameState.PlayerTurn) {
-					// If the selected unit is unfortified, prepare to autoselect the next one if it becomes fortified
-					if ((CurrentlySelectedUnit != MapUnit.NONE) && (!CurrentlySelectedUnit.isFortified))
-						KeepCSUWhenFortified = false;
-
-					// Advance off the currently selected unit to the next one if it's out of moves or HP and not playing an
-					// animation we want to watch, or if it's fortified and we aren't set to keep fortified units selected.
-					if ((CurrentlySelectedUnit != MapUnit.NONE) &&
-						(((!CurrentlySelectedUnit.movementPoints.canMove || CurrentlySelectedUnit.hitPointsRemaining <= 0) &&
-						  !animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
-						 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified) ||
-						 CurrentlySelectedUnit.isAutomated))
+				// Advance off the currently selected unit to the next one if it's out of moves or HP and not playing an
+				// animation we want to watch, or if it's fortified and we aren't set to keep fortified units selected.
+				if ((CurrentlySelectedUnit != MapUnit.NONE) &&
+					(((!CurrentlySelectedUnit.movementPoints.canMove || CurrentlySelectedUnit.hitPointsRemaining <= 0) &&
+					  !animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
+					 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified) ||
+					 CurrentlySelectedUnit.isAutomated))
+					EngineStorage.ReadGameData((GameData gameData) => {
 						GetNextAutoselectedUnit(gameData);
-				}
+					});
 			}
 		}
 	}
@@ -414,38 +416,39 @@ public partial class Game : Node2D {
 	}
 
 	private void OnPlayerStartTurn() {
-		using UIGameDataAccess gameDataAccess = new();
-		log.Information("Starting player turn");
+		EngineStorage.ReadGameData((GameData gameData) => {
+			log.Information("Starting player turn");
 
-		// If the player can now pick a new government, force them to do so.
-		// When the popup is closed we call OnPlayerStartTurn again. This isn't
-		// ideal, but we don't yet have a general purpose "show a popup and
-		// wait for the player to acknowledge it" system.
-		if (controller.government.transitionType && TurnHandling.GetTurnNumber() >= controller.inAnarchyUntilTurn) {
-			popupOverlay.ShowPopup(
-				new GovernmentSelection(controller, controller.GetAvailableGovernments(gameDataAccess.gameData)),
-				PopupOverlay.PopupCategory.Info);
-		}
-
-		// If the player can pick a new tech to research, prompt them to do so
-		// once they have a city.
-		if (controller.cities.Count > 0
-				&& controller.currentlyResearchedTech == null
-				&& controller.GetAvailableTechsToResearch(gameDataAccess.gameData).Count > 0) {
-			popupOverlay.ShowPopup(
-					new ScienceSelection(controller),
+			// If the player can now pick a new government, force them to do so.
+			// When the popup is closed we call OnPlayerStartTurn again. This isn't
+			// ideal, but we don't yet have a general purpose "show a popup and
+			// wait for the player to acknowledge it" system.
+			if (controller.government.transitionType && TurnHandling.GetTurnNumber() >= controller.inAnarchyUntilTurn) {
+				popupOverlay.ShowPopup(
+					new GovernmentSelection(controller, controller.GetAvailableGovernments(gameData)),
 					PopupOverlay.PopupCategory.Info);
-		}
+			}
 
-		// Allow fast forwarding in observer mode.
-		if (gameDataAccess.gameData.observerMode && turnsLeftToFastForward > 0) {
-			--turnsLeftToFastForward;
-			new MsgEndTurn().send();
-			return;
-		}
+			// If the player can pick a new tech to research, prompt them to do so
+			// once they have a city.
+			if (controller.cities.Count > 0
+					&& controller.currentlyResearchedTech == null
+					&& controller.GetAvailableTechsToResearch(gameData).Count > 0) {
+				popupOverlay.ShowPopup(
+						new ScienceSelection(controller),
+						PopupOverlay.PopupCategory.Info);
+			}
 
-		CurrentState = GameState.PlayerTurn;
-		GetNextAutoselectedUnit(gameDataAccess.gameData);
+			// Allow fast forwarding in observer mode.
+			if (gameData.observerMode && turnsLeftToFastForward > 0) {
+				--turnsLeftToFastForward;
+				new MsgEndTurn().send();
+				return;
+			}
+
+			CurrentState = GameState.PlayerTurn;
+			GetNextAutoselectedUnit(gameData);
+		});
 	}
 
 	private void OnPlayerEndTurn() {
@@ -454,12 +457,13 @@ public partial class Game : Node2D {
 		}
 
 		// Prompt the user if they would have a city riot when the turn ended.
-		{
-			using UIGameDataAccess gDA = new();
+		EngineStorage.ReadGameData((GameData gameData) => {
 			foreach (City city in controller.cities) {
-				if (!controller.isHuman) { continue; }
+				if (!controller.isHuman) {
+					continue;
+				}
 
-				City.Mood cityMood = city.RecalculateCitizenMoods(gDA.gameData);
+				City.Mood cityMood = city.RecalculateCitizenMoods(gameData);
 				if (cityMood == City.Mood.Unhappy) {
 					popupOverlay.ShowPopup(
 						new ConfirmationPopup(
@@ -473,7 +477,7 @@ public partial class Game : Node2D {
 					return;
 				}
 			}
-		}
+		});
 		DoActualEndTurn();
 	}
 
@@ -579,8 +583,10 @@ public partial class Game : Node2D {
 	}
 
 	private Tile PositionToTile(Vector2 position) {
-		using var gameDataAccess = new UIGameDataAccess();
-		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, position);
+		Tile tile = null;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			tile = mapView.tileOnScreenAt(gameData.map, position);
+		});
 		return tile;
 	}
 
@@ -603,8 +609,9 @@ public partial class Game : Node2D {
 	private void OnDoubleLeftMouseButtonClick(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile?.cityAtTile?.owner == controller) {
-			using UIGameDataAccess gDA = new();
-			ShowCityScreenForCity(gDA.gameData, tile.cityAtTile);
+			EngineStorage.ReadGameData((GameData gameData) => {
+				ShowCityScreenForCity(gameData, tile.cityAtTile);
+			});
 		}
 	}
 
@@ -729,17 +736,18 @@ public partial class Game : Node2D {
 	}
 
 	private void ToggleObserverMode() {
-		using UIGameDataAccess gameDataAccess = new UIGameDataAccess();
-		gameDataAccess.gameData.observerMode = !gameDataAccess.gameData.observerMode;
-		if (gameDataAccess.gameData.observerMode) {
-			SetObserverModeOn(gameDataAccess);
-		} else {
-			SetObserverModeOff(gameDataAccess);
-		}
+		EngineStorage.ReadGameData((GameData gameData) => {
+			gameData.observerMode = !gameData.observerMode;
+			if (gameData.observerMode) {
+				SetObserverModeOn(gameData);
+			} else {
+				SetObserverModeOff(gameData);
+			}
+		});
 	}
 
-	private void SetObserverModeOn(UIGameDataAccess gameDataAccess) {
-		foreach (Player player in gameDataAccess.gameData.players) {
+	private void SetObserverModeOn(GameData gameData) {
+		foreach (Player player in gameData.players) {
 			player.isHuman = false;
 		}
 		SetAnimationsEnabled(false);
@@ -751,8 +759,8 @@ public partial class Game : Node2D {
 				PopupOverlay.PopupCategory.Advisor);
 	}
 
-	private void SetObserverModeOff(UIGameDataAccess gameDataAccess) {
-		foreach (Player player in gameDataAccess.gameData.players) {
+	private void SetObserverModeOff(GameData gameData) {
+		foreach (Player player in gameData.players) {
 			if (player.id == EngineStorage.uiControllerID) {
 				player.isHuman = true;
 			}
@@ -760,8 +768,9 @@ public partial class Game : Node2D {
 	}
 
 	private void ToggleGridCoordinates() {
-		using UIGameDataAccess gameDataAccess = new UIGameDataAccess();
-		gameDataAccess.gameData.showGridCoordinates = !gameDataAccess.gameData.showGridCoordinates;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			gameData.showGridCoordinates = !gameData.showGridCoordinates;
+		});
 	}
 
 	private void ToggleC7Graphics() {
@@ -866,9 +875,10 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitWait) {
-			using var gameDataAccess = new UIGameDataAccess();
-			UnitInteractions.waitUnit(gameDataAccess.gameData, CurrentlySelectedUnit.id);
-			GetNextAutoselectedUnit(gameDataAccess.gameData);
+			EngineStorage.ReadGameData((GameData gameData) => {
+				UnitInteractions.waitUnit(gameData, CurrentlySelectedUnit.id);
+				GetNextAutoselectedUnit(gameData);
+			});
 		}
 
 		if (currentAction == C7Action.UnitFortify) {
@@ -911,12 +921,14 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitBuildCity && CurrentlySelectedUnit != MapUnit.NONE && (CurrentlySelectedUnit?.canBuildCity() ?? false)) {
-			using var gameDataAccess = new UIGameDataAccess();
-			MapUnit currentUnit = gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
-			log.Debug(currentUnit.Describe());
-			if (currentUnit.canBuildCity()) {
-				popupOverlay.ShowPopup(new BuildCityDialog(controller.GetNextCityName()), PopupOverlay.PopupCategory.Advisor);
-			}
+			EngineStorage.ReadGameData((GameData gameData) => {
+				MapUnit currentUnit = gameData.GetUnit(CurrentlySelectedUnit.id);
+				log.Debug(currentUnit.Describe());
+				if (currentUnit.canBuildCity()) {
+					popupOverlay.ShowPopup(new BuildCityDialog(controller.GetNextCityName()),
+						PopupOverlay.PopupCategory.Advisor);
+				}
+			});
 		}
 
 		Terraform terraform = C7Action.ToTerraform(currentAction);
@@ -944,24 +956,26 @@ public partial class Game : Node2D {
 		if (info == null || info.moveCost == -1) {
 			return;
 		}
-		using UIGameDataAccess gameDataAccess = new();
-		int currentTurn = gameDataAccess.gameData.turn;
 
-		// If this move would require declaring war, display a popup that checks
-		// if the player really wants to declare war. If they do, declare the
-		// war for them, clear out the player, and call this method again.
-		if (info.requiresWarDeclarationOnPlayer != null) {
-			GotoInfo stashed = info;
-			popupOverlay.ShowPopup(new WarConfirmation(stashed.requiresWarDeclarationOnPlayer,
-				() => {
-					controller.DeclareWarOn(info.requiresWarDeclarationOnPlayer, currentTurn);
-					stashed.requiresWarDeclarationOnPlayer = null;
-					HandleGotoClick(stashed);
-				}), PopupOverlay.PopupCategory.Advisor);
-			return;
-		}
+		EngineStorage.ReadGameData((GameData gameData) => {
+			int currentTurn = gameData.turn;
 
-		new MsgSetUnitPath(CurrentlySelectedUnit.id, info.path).send();
+			// If this move would require declaring war, display a popup that checks
+			// if the player really wants to declare war. If they do, declare the
+			// war for them, clear out the player, and call this method again.
+			if (info.requiresWarDeclarationOnPlayer != null) {
+				GotoInfo stashed = info;
+				popupOverlay.ShowPopup(new WarConfirmation(stashed.requiresWarDeclarationOnPlayer,
+					() => {
+						controller.DeclareWarOn(info.requiresWarDeclarationOnPlayer, currentTurn);
+						stashed.requiresWarDeclarationOnPlayer = null;
+						HandleGotoClick(stashed);
+					}), PopupOverlay.PopupCategory.Advisor);
+				return;
+			}
+
+			new MsgSetUnitPath(CurrentlySelectedUnit.id, info.path).send();
+		});
 	}
 
 	private GotoInfo GetGotoInfo(Vector2 mousePos) {
@@ -970,46 +984,49 @@ public partial class Game : Node2D {
 		// We're in "goto" mode and moved the mouse over a tile.
 		//
 		// Figure out which tile it was.
-		using UIGameDataAccess gameDataAccess = new();
-		Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, mousePos);
-		result.destinationTile = tile;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			Tile tile = mapView.tileOnScreenAt(gameData.map, mousePos);
+			result.destinationTile = tile;
 
-		// Figure out what unit is in goto mode. If the tile we're hovering over is
-		// different than the tile the unit is on, calculate the path to move there.
-		MapUnit unit = tile == null ? null : gameDataAccess.gameData.GetUnit(CurrentlySelectedUnit.id);
-		if (unit != null && unit.location != tile) {
-			result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
-			result.moveCost = result.path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
-			result.pathCoords = result.path.GetPathCoords();
+			// Figure out what unit is in goto mode. If the tile we're hovering over is
+			// different than the tile the unit is on, calculate the path to move there.
+			MapUnit unit = tile == null ? null : gameData.GetUnit(CurrentlySelectedUnit.id);
+			if (unit != null && unit.location != tile) {
+				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
+				result.moveCost =
+					result.path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
+				result.pathCoords = result.path.GetPathCoords();
 
-			// If we couldn't path onto the tile, but the tile is next to us and
-			// we could enter the tile if combat is allowed (or if we could
-			// declare war with the move) mark the path.
-			if (result.moveCost == -1
+				// If we couldn't path onto the tile, but the tile is next to us and
+				// we could enter the tile if combat is allowed (or if we could
+				// declare war with the move) mark the path.
+				if (result.moveCost == -1
 					&& unit.location.distanceTo(tile) == 1
 					&& unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: true)) {
-				Queue<Tile> pathQueue = new();
-				pathQueue.Enqueue(tile);
+					Queue<Tile> pathQueue = new();
+					pathQueue.Enqueue(tile);
 
-				result.path = new TilePath(tile, pathQueue);
-				result.moveCost = result.path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
-				result.pathCoords = result.path.GetPathCoords();
-				result.attackingMove = true;
+					result.path = new TilePath(tile, pathQueue);
+					result.moveCost = result.path.PathCost(unit.location, unit.unitType.movement,
+						unit.movementPoints.remaining);
+					result.pathCoords = result.path.GetPathCoords();
+					result.attackingMove = true;
 
-				// If we couldn't enter this tile without a war declaration,
-				// record which civ we need to declare war on.
-				if (!unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: false)) {
-					if (tile.cityAtTile != null) {
-						result.requiresWarDeclarationOnPlayer = tile.cityAtTile.owner;
-					} else {
-						result.requiresWarDeclarationOnPlayer = tile.unitsOnTile[0].owner;
+					// If we couldn't enter this tile without a war declaration,
+					// record which civ we need to declare war on.
+					if (!unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: false)) {
+						if (tile.cityAtTile != null) {
+							result.requiresWarDeclarationOnPlayer = tile.cityAtTile.owner;
+						} else {
+							result.requiresWarDeclarationOnPlayer = tile.unitsOnTile[0].owner;
+						}
 					}
 				}
+			} else {
+				// Hide the goto cursor, we don't have a valid move.
+				result.moveCost = -1;
 			}
-		} else {
-			// Hide the goto cursor, we don't have a valid move.
-			result.moveCost = -1;
-		}
+		});
 
 		return result;
 	}

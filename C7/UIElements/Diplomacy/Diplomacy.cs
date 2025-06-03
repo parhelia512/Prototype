@@ -43,18 +43,17 @@ public partial class Diplomacy : CenterContainer {
 	public void ShowTalkScreenForPlayer(ID humanPlayer, ID opponentPlayer) {
 		RemoveOtherScreens();
 
-		using (UIGameDataAccess gameDataAccess = new()) {
-			GameData gd = gameDataAccess.gameData;
+		EngineStorage.ReadGameData((GameData gd) => {
 			Player opponent = gd.players.Find(x => x.id == opponentPlayer);
 			Player human = gd.players.Find(x => x.id == humanPlayer);
 			if (!opponent.WillAcceptCommunicationFrom(human, gd.turn)) {
 				popupOverlay.ShowPopup(
 					new InformationalPopup(
 						$"The {opponent.civilization.noun} refused to acknowledge our envoy!"),
-						PopupOverlay.PopupCategory.Advisor);
+					PopupOverlay.PopupCategory.Advisor);
 				return;
 			}
-		}
+		});
 
 		talkScreen = new TalkScreen(humanPlayer, opponentPlayer);
 		AddChild(talkScreen);

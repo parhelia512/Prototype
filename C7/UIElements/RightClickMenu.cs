@@ -135,10 +135,10 @@ public partial class RightClickTileMenu : RightClickMenu {
 	public void ResetItems(Tile tile, Dictionary<ID, bool> uiUpdatedUnitStates = null) {
 		RemoveAll();
 
-		bool observerMode;
-		using (UIGameDataAccess gameDataAccess = new()) {
-			observerMode = gameDataAccess.gameData.observerMode;
-		}
+		bool observerMode = false;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			observerMode = gameData.observerMode;
+		});
 
 		int fortifiedCount = 0;
 		List<MapUnit> playerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id == game.controller.id || observerMode);
@@ -166,14 +166,16 @@ public partial class RightClickTileMenu : RightClickMenu {
 			});
 			AddItem("Hurry Production", () => {
 				this.CloseAndDelete();
-				using UIGameDataAccess gDA = new();
-				City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
-				new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
+				EngineStorage.ReadGameData((GameData gameData) => {
+					City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
+					new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
+				});
 			});
 			AddItem("Zoom to city", () => {
 				this.CloseAndDelete();
-				using UIGameDataAccess gDA = new();
-				game.ShowCityScreenForCity(gDA.gameData, tile.cityAtTile);
+				EngineStorage.ReadGameData((GameData gameData) => {
+					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
+				});
 			});
 		}
 
@@ -203,26 +205,27 @@ public partial class RightClickTileMenu : RightClickMenu {
 	}
 
 	public void SelectUnit(ID id) {
-		using (var gameDataAccess = new UIGameDataAccess()) {
-			MapUnit toSelect = gameDataAccess.gameData.mapUnits.Find(u => u.id == id);
+		EngineStorage.ReadGameData((GameData gameData) => {
+			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
 			if (toSelect != null && toSelect.owner == game.controller) {
 				bool canMove = game.setSelectedUnit(toSelect);
 				if (!canMove) {
 					ShowCannotMovePopup();
 				}
+
 				new MsgSetFortification(toSelect.id, false).send();
 				ResetItems(toSelect.location, new Dictionary<ID, bool>() { { toSelect.id, false } });
 			}
-		}
+		});
 		if (!Input.IsKeyPressed(Godot.Key.Shift)) {
 			CloseAndDelete();
 		}
 	}
 
 	public void ForAll(int tileX, int tileY, bool isFortify) {
-		using (var gameDataAccess = new UIGameDataAccess()) {
+		EngineStorage.ReadGameData((GameData gameData) => {
 			bool hasSelectedUnit = false;
-			Tile tile = gameDataAccess.gameData.map.tileAt(tileX, tileY);
+			Tile tile = gameData.map.tileAt(tileX, tileY);
 			Dictionary<ID, bool> modified = new Dictionary<ID, bool>();
 			foreach (MapUnit unit in tile.unitsOnTile) {
 				if (unit.isFortified != isFortify) {
@@ -237,8 +240,9 @@ public partial class RightClickTileMenu : RightClickMenu {
 					}
 				}
 			}
+
 			ResetItems(tile, modified);
-		}
+		});
 		if (!Input.IsKeyPressed(Godot.Key.Shift)) {
 			CloseAndDelete();
 		}
@@ -262,14 +266,16 @@ public partial class RightClickCityMenu : RightClickMenu {
 			});
 			AddItem("Hurry Production", () => {
 				this.CloseAndDelete();
-				using UIGameDataAccess gDA = new();
-				City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
-				new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
+				EngineStorage.ReadGameData((GameData gameData) => {
+					City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
+					new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
+				});
 			});
 			AddItem("Zoom to city", () => {
 				this.CloseAndDelete();
-				using UIGameDataAccess gDA = new();
-				game.ShowCityScreenForCity(gDA.gameData, tile.cityAtTile);
+				EngineStorage.ReadGameData((GameData gameData) => {
+					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
+				});
 			});
 		}
 	}

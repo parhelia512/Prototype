@@ -148,10 +148,8 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 		// Update our information each time we're drawn, just like the tile and
 		// city scenes.
-		using (UIGameDataAccess gameDataAccess = new()) {
-			GameData gD = gameDataAccess.gameData;
-			// There may be no human players in observer mode.
-			Player player = gD.GetHumanPlayers().Count > 0 ? gD.GetHumanPlayers()[0] : gD.players[1];
+		EngineStorage.ReadGameData((GameData gD) => {
+			Player player = gD.GetHumanPlayers()[0];
 
 			// Gold per turn and turn indicator.
 			{
@@ -171,7 +169,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 			// Civ and government.
 			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - {player.government.name} (5.5.0)");
-		}
+		});
 
 		base._Process(delta);
 	}
