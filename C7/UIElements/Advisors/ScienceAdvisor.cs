@@ -23,7 +23,7 @@ public partial class ScienceAdvisor : TextureRect {
 
 		EngineStorage.ReadGameData((GameData gameData) => {
 			List<Tech> techs = gameData.techs;
-			Player player = gameData.GetHumanPlayers()[0];
+			Player player = gameData.GetFirstHumanPlayer();
 			eraName = player.eraCivilopediaName;
 			this.DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
 		});
@@ -149,7 +149,7 @@ public partial class ScienceAdvisor : TextureRect {
 
 		EngineStorage.ReadGameData((GameData gameData) => {
 			List<Tech> techs = gameData.techs;
-			Player player = gameData.GetHumanPlayers()[0];
+			Player player = gameData.GetFirstHumanPlayer();
 			eraName = Player.EraIndexToEra(Player.EraIndex(eraName) + delta);
 			DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
 		});

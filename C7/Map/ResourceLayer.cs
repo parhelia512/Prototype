@@ -28,7 +28,7 @@ namespace C7.Map {
 			if (gameData.observerMode) {
 				return true;
 			}
-			return gameData.GetHumanPlayers()[0].KnowsAboutResource(t.Resource);
+			return gameData.GetFirstHumanPlayer().KnowsAboutResource(t.Resource);
 		}
 	}
 }

@@ -22,7 +22,7 @@ public partial class StatusMenu : Control {
 				return;
 			}
 
-			Player player = gD.GetHumanPlayers()[0];
+			Player player = gD.GetFirstHumanPlayer();
 
 			// Only show the diplomacy button if we have civs to talk to.
 			if (player.playerRelationships.Count > 0) {
@@ -36,7 +36,7 @@ public partial class StatusMenu : Control {
 
 	private void OpenDiplomacyPopup() {
 		EngineStorage.ReadGameData((GameData gD) => {
-			Player player = gD.GetHumanPlayers()[0];
+			Player player = gD.GetFirstHumanPlayer();
 
 			popupOverlay.ShowPopup(new DiplomacySelection(player, gD.players), PopupOverlay.PopupCategory.Info);
 		});

@@ -286,6 +286,6 @@ public partial class UnitLayer : LooseLayer {
 
 		// Only draw units on active tiles - otherwise if the tile is only known
 		// but not actively seen, we can't see units.
-		return gameData.GetHumanPlayers()[0].tileKnowledge.isActiveTile(t);
+		return gameData.GetFirstHumanPlayer().tileKnowledge.isActiveTile(t);
 	}
 }
