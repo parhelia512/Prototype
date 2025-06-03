@@ -509,7 +509,7 @@ namespace C7GameData {
 			return result;
 		}
 
-		public CommerceBreakdown CurrentCommerceYield() {
+		public CommerceBreakdown CurrentCommerceYield(bool respectCivilDisorder = true) {
 			int uncorruptedCommerce = location.commerceYield(this).yield;
 			foreach (CityResident r in residents) {
 				uncorruptedCommerce += r.tileWorked.commerceYield(this).yield;
@@ -521,9 +521,12 @@ namespace C7GameData {
 			// corruption to 100% because CorruptableValue would give us one
 			// useful commerce in that situation.
 			//
-			// The same is true in civil disorder.
+			// The same is true in civil disorder, but we allow ignoring civil
+			// disorder for the purpose of calculating whether a city would be
+			// happy at a certain luxury slider value even while the city is in
+			// civil disorder.
 			CorruptableValue commerce = new CorruptableValue(uncorruptedCommerce, corruption);
-			if (owner.government.transitionType || isInCivilDisorder) {
+			if (owner.government.transitionType || (isInCivilDisorder && respectCivilDisorder)) {
 				commerce.useful = 0;
 				commerce.corrupt = uncorruptedCommerce;
 			}
@@ -884,8 +887,17 @@ namespace C7GameData {
 				unhappyToContentMoves += cb.building.contentFacesInCity;
 			}
 
+			// Depending on the government type, land defensive units can serve
+			// as military police.
+			unhappyToContentMoves += Math.Min(owner.government.militaryPoliceLimit, location.unitsOnTile.Count(x => x.CanDefendOnLand()));
+
 			// Luxury spending moves content faces to happy faces.
-			contentToHappyMoves += CurrentCommerceYield().happiness;
+			//
+			// Don't respect civil disorder during this calculation, because if
+			// we are currently in civil disorder our commerce is all corrupt,
+			// but we still need to be able to calculate whether a certain
+			// luxury slider value would get us out of civil disorder.
+			contentToHappyMoves += CurrentCommerceYield(respectCivilDisorder: false).happiness;
 
 			// As do luxury resources, which can be boosted by marketplaces.
 			int effectiveLux = GetLuxuries().Keys.Count;

@@ -706,9 +706,7 @@ namespace C7GameData {
 		public void RecalculateCitizenMoods(GameData gameData, bool goIntoDisorderIfUnhappy = false) {
 			foreach (City c in cities) {
 				City.Mood cityMood = c.RecalculateCitizenMoods(gameData);
-				if (cityMood == City.Mood.Unhappy && goIntoDisorderIfUnhappy) {
-					c.isInCivilDisorder = true;
-				}
+				c.isInCivilDisorder = cityMood == City.Mood.Unhappy && goIntoDisorderIfUnhappy;
 			}
 		}
 
