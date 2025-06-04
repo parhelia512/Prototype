@@ -35,17 +35,5 @@ namespace C7Engine.Pathing {
 				}
 			);
 		}
-
-		public static PathingAlgorithm GetTradeNetworkAlgorithm() {
-			return new AStarAlgorithm(
-				new TradeNetworkWalker(),
-				(Tile from, Tile to) => {
-					return from.distanceTo(to);
-				},
-				(Tile neighbor, Tile destination) => {
-					return true;
-				}
-			);
-		}
 	}
 }

@@ -97,6 +97,10 @@ namespace C7GameData {
 		// completing a wonder (like Theory of Evolution).
 		public int freeTechsRemaining = 0;
 
+		// The cached trade network for this player. This is invalidated whenever
+		// a road is built or a city is created/destroyed.
+		private TradeNetwork tradeNetwork;
+
 		public int EraIndex() {
 			return EraIndex(eraCivilopediaName);
 		}
@@ -758,10 +762,15 @@ namespace C7GameData {
 		}
 
 		// TODO: Take wars into account. Trade networks cannot pass through civilizations the player's at war with
-		public bool HasTradeAccess(Tile from, Tile to) {
-			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
+		public TradeNetwork GetTradeNetwork() {
+			if (tradeNetwork == null) {
+				tradeNetwork = new(this);
+			}
+			return tradeNetwork;
+		}
 
-			return from == to || pathing.PathFrom(from, to).path.Count > 0;
+		public void InvalidateCachedTradeNetwork() {
+			tradeNetwork = null;
 		}
 	}
 

@@ -112,7 +112,7 @@ namespace C7Engine {
 
 			foreach (Terraform terraform in accessibleTerraforms) {
 				Tile tAfterImprovement = t.Copy();
-				terraform.OnComplete(tAfterImprovement);
+				terraform.OnComplete(unit.owner, tAfterImprovement);
 
 				int newCommerce = tAfterImprovement.commerceYield(player).yield;
 				int newShields = tAfterImprovement.productionYield(player).yield;

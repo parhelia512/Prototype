@@ -6,14 +6,20 @@ using C7GameData.Save;
 namespace C7GameData;
 
 public static class TerraformRules {
-	public static readonly Dictionary<UnitAction, Action<Tile>> ActionEffects = new() {
-		{UnitAction.BuildMine, tile => tile.overlays.Add(TerrainImprovement.mine)},
-		{UnitAction.Irrigate, tile => tile.overlays.Add(TerrainImprovement.irrigation)},
-		{UnitAction.BuildRoad, tile => tile.overlays.Add(TerrainImprovement.road)},
-		{UnitAction.BuildRailroad, tile => tile.overlays.Add(TerrainImprovement.railroad)},
-		{UnitAction.ClearWetlands, tile => tile.ClearTerrainOverlay()},
+	public static readonly Dictionary<UnitAction, Action<Player, Tile>> ActionEffects = new() {
+		{UnitAction.BuildMine, (_, tile) => tile.overlays.Add(TerrainImprovement.mine)},
+		{UnitAction.Irrigate, (_, tile) => tile.overlays.Add(TerrainImprovement.irrigation)},
+		{UnitAction.BuildRoad, (player, tile) => {
+				tile.overlays.Add(TerrainImprovement.road);
+
+				// The trade network needs to be recomputed whenever roads are added.
+				player.InvalidateCachedTradeNetwork();
+			}
+		},
+		{UnitAction.BuildRailroad, (_, tile) => tile.overlays.Add(TerrainImprovement.railroad)},
+		{UnitAction.ClearWetlands, (_, tile) => tile.ClearTerrainOverlay()},
 		// TODO: add bonus shields to the nearest city - should only happen the first time a forest is cleared
-		{UnitAction.ClearForest, tile => tile.ClearTerrainOverlay()},
+		{UnitAction.ClearForest, (_, tile) => tile.ClearTerrainOverlay()},
 	};
 
 	public static readonly Dictionary<UnitAction, Func<Player, Tile, bool>> ActionValidators = new() {
@@ -36,7 +42,7 @@ public class Terraform {
 
 	public List<Resource> RequiredResources = [];
 
-	public Action<Tile> OnComplete;
+	public Action<Player, Tile> OnComplete;
 	private Func<Player, Tile, bool> ActionValidator;
 
 	private SaveTerraform dataSource;
@@ -58,7 +64,7 @@ public class Terraform {
 		if (TerraformRules.ActionEffects.TryGetValue(Action, out var onComplete)) {
 			OnComplete = onComplete;
 		} else {
-			OnComplete = (_) => { };
+			OnComplete = (_, _) => { };
 		}
 
 		if (TerraformRules.ActionValidators.TryGetValue(Action, out var prerequisite)) {
@@ -72,10 +78,7 @@ public class Terraform {
 		bool hasTech = RequiredTech == null || player.knownTechs.Contains(RequiredTech);
 
 		bool hasResources = RequiredResources.All(
-			res =>
-				player.KnowsAboutResource(res) &&
-				player.resourcesInBorders.ContainsKey(res) &&
-				player.resourcesInBorders[res].Any(resTile => player.HasTradeAccess(tile, resTile))
+			res => player.GetTradeNetwork().HasTradeAccess(tile, res)
 		);
 
 		return hasTech && hasResources && ActionValidator(player, tile);

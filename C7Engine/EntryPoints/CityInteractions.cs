@@ -26,6 +26,14 @@ namespace C7Engine {
 			// accurate. We do this after adding the resident though, because
 			// cities with zero residents are considered destroyed.
 			gameData.UpdateTileOwners();
+
+			// Now that the city exists and its borders have been established,
+			// invalidate the trade network so it can be recomputed with this
+			// new information.
+			owner.InvalidateCachedTradeNetwork();
+
+			// Assigning citizens to tiles requires knowing luxuries, so this
+			// has to happen after invalidating the trade network.
 			CityTileAssignmentAI.AssignNewCitizenToTile(firstResident);
 
 			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
@@ -51,6 +59,11 @@ namespace C7Engine {
 				new MsgCivilizationDestroyed(tile.cityAtTile.owner.civilization).send();
 			}
 			tile.cityAtTile = null;
+
+			// Now that the city has been destroyed and tile owners updated,
+			// invalidate the trade network in case removing this city cut off
+			// resource access.
+			owner.InvalidateCachedTradeNetwork();
 
 			// Redo corruption calculations after a city is destroyed, since it
 			// may change rank corruption values.

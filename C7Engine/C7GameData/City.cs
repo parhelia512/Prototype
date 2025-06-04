@@ -147,11 +147,7 @@ namespace C7GameData {
 		}
 
 		private HashSet<Resource> GetAccessibleResources() {
-			return owner.resourcesInBorders
-						.Where(kv => owner.KnowsAboutResource(kv.Key))
-						.Where(kv => kv.Value.Any(t => owner.HasTradeAccess(location, t)))
-						.Select(kv => kv.Key)
-						.ToHashSet();
+			return owner.GetTradeNetwork().segments[this].resourceCounts.Keys.ToHashSet();
 		}
 
 		public int FoodNeededToGrow() {
@@ -984,11 +980,13 @@ namespace C7GameData {
 		}
 
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {
-			return owner.resourcesInBorders
-				.Where(kv => kv.Key.Category == category && owner.KnowsAboutResource(kv.Key))
-				.Select(kv => (kv.Key, kv.Value.Where(t => owner.HasTradeAccess(location, t)).Count()))
-				.Where(rc => rc.Item2 > 0)
-				.ToDictionary();
+			Dictionary<Resource, int> result = new();
+			foreach ((Resource r, int count) in owner.GetTradeNetwork().segments[this].resourceCounts) {
+				if (r.Category == category) {
+					result[r] = count;
+				}
+			}
+			return result;
 		}
 
 		public Dictionary<Resource, int> GetStrategicResources() {

@@ -545,13 +545,15 @@ namespace C7GameData {
 		/// <param name="currentWorkerJob">the worker job currently finished, must not be null</param>
 		public void FinishWorkerJob(Terraform currentWorkerJob) {
 			// Reset All Workers working on the finished Job
+			Player player = null;
 			foreach (MapUnit unit in unitsOnTile) {
+				player = unit.owner;
 				if (currentWorkerJob == unit.WorkerJob) {
 					unit.resetWorkerJob();
 				}
 			}
 
-			currentWorkerJob.OnComplete(this);
+			currentWorkerJob.OnComplete(player, this);
 		}
 
 		public void Animate(AnimatedEffect effect, bool wait) {
