@@ -1101,7 +1101,7 @@ namespace C7Engine {
 			minLuxurySpacing = Math.Max(2, minLuxurySpacing);
 			minLuxurySpacing = Math.Min(minLuxurySpacing, 10);
 
-			foreach (Tile x in GetTilesWithinRankDistance(t, minLuxurySpacing)) {
+			foreach (Tile x in t.GetTilesWithinRankDistance(minLuxurySpacing)) {
 				if (x.Resource != null
 					&& x.Resource != Resource.NONE
 					&& x.Resource.Category == ResourceCategory.LUXURY
@@ -1122,42 +1122,13 @@ namespace C7Engine {
 		private static bool HasSufficientLandNeighborsForResource(Tile t) {
 			int landTiles = 0;
 
-			foreach (Tile x in GetTilesWithinRankDistance(t, 2)) {
+			foreach (Tile x in t.GetTilesWithinRankDistance(2)) {
 				if (x.IsLand()) {
 					++landTiles;
 				}
 			}
 
 			return landTiles >= 1;
-		}
-
-		private static HashSet<Tile> GetTilesWithinRankDistance(Tile location, int rank) {
-			HashSet<Tile> result = new();
-			HashSet<Tile> knownTiles = new();
-
-			Stack<Tile> toCheck = new();
-			toCheck.Push(location);
-			knownTiles.Add(location);
-
-			while (toCheck.Count > 0) {
-				Tile t = toCheck.Pop();
-
-				// Skip tiles that are too far away.
-				if (location.rankDistanceTo(t) > rank) {
-					continue;
-				}
-
-				// Otherwise this tile is close enough. Check its neighbors next.
-				result.Add(t);
-				foreach (Tile neighbor in t.neighbors.Values) {
-					if (!knownTiles.Contains(neighbor)) {
-						toCheck.Push(neighbor);
-						knownTiles.Add(t);
-					}
-				}
-			}
-
-			return result;
 		}
 
 		private static void PlaceStrategicResourceType(Random rand, WorldCharacteristics wc, GameMap m, Resource r, List<int> tileIndicies) {
@@ -1207,7 +1178,7 @@ namespace C7Engine {
 			minSpacing = Math.Min(minSpacing, 10);
 
 			// Ensure strategic resources of the same kind don't clump up.
-			foreach (Tile x in GetTilesWithinRankDistance(t, minSpacing)) {
+			foreach (Tile x in t.GetTilesWithinRankDistance(minSpacing)) {
 				if (x.Resource != null
 					&& x.Resource != Resource.NONE
 					&& x.Resource.Category == ResourceCategory.STRATEGIC
@@ -1359,7 +1330,7 @@ namespace C7Engine {
 			}
 
 			// No barbarian camps within the big fat cross of another camp.
-			foreach (Tile n in GetTilesWithinRankDistance(t, 2)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(2)) {
 				if (n.hasBarbarianCamp) {
 					return false;
 				}
@@ -1502,7 +1473,7 @@ namespace C7Engine {
 
 			// Calculate the score for tiles in the immediate area.
 			int score = 0;
-			foreach (Tile n in GetTilesWithinRankDistance(t, 1)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(1)) {
 				score += CommercePoints * n.commerceYield(player).yield;
 				score += ShieldPoints * n.productionYield(player).yield;
 				score += FoodPoints * n.foodYield(player).yield;
@@ -1517,7 +1488,7 @@ namespace C7Engine {
 
 			// Then do it again for the full big fat cross, effectively weighting
 			// the immediate neighbors at a 2x rate.
-			foreach (Tile n in GetTilesWithinRankDistance(t, 2)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(2)) {
 				score += CommercePoints * n.commerceYield(player).yield;
 				score += ShieldPoints * n.productionYield(player).yield;
 				score += FoodPoints * n.foodYield(player).yield;
@@ -1535,7 +1506,7 @@ namespace C7Engine {
 			// Try to get a rough sense of the number of surrounding land tiles
 			// on the same continent, to avoid players getting stuck on a
 			// peninsula.
-			foreach (Tile n in GetTilesWithinRankDistance(t, 4)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(4)) {
 				if (n.continent == t.continent) {
 					score += LandTilePoints;
 				}

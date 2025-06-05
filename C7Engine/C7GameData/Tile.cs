@@ -512,6 +512,89 @@ namespace C7GameData {
 			}
 			return location;
 		}
+
+		// Returns the tile at a "neighbor index", where 0 is this tile, 1 is
+		// due north, 2 is NE, 3 is E, and so on in a clockwise spiral.
+		// Index 9 is N+N, 10 is N+NE, etc.
+		//
+		// This is slightly different than the civ3 spiral, which starts with 
+		// the NE and goes clockwise. Ring 2 of the civ3 spiral is the BFC tiles,
+		// but rings beyond that get stranger. We don't need to match the civ3
+		// spiral exactly, and this is much simpler to understand. 
+		public Tile GetTileAtNeighborIndex(int neighborIndex) {
+			// Special case: Index 0 is this tile.
+			if (neighborIndex <= 0) {
+				return this;
+			}
+
+			int xDelta = 0;
+			int yDelta = 0;
+
+			// Figure out which ring we're in.
+			int ringNumber = 0;
+			do {
+				ringNumber++;
+			} while (Math.Pow(2 * ringNumber + 1, 2) <= neighborIndex);
+
+			// Figure out how many tiles are in the previous ring.
+			// For ring 2, we get (2*2 - 1)^2, which is 9.
+			int cellsInInnerRings = (ringNumber * 2 - 1) * (ringNumber * 2 - 1);
+
+			// Figure out the index of this neighbor within our ring.
+			int indexInRing1Based = neighborIndex - cellsInInnerRings;
+
+			// Our ring is a square with 4 sides, and each side has
+			// (ringNumber*2 + 1) tiles in it. But then we have the overlap of
+			// each corner, so excluding the overlap we have ringNumber*2 tiles
+			// per side.
+			//
+			// For ring 1, the 4 sections of size 2 are
+			//    (N, NE), (E, SE), (S, SW), (W, NW)
+			int cellsPerSquareEdge = ringNumber * 2;
+
+			// Define segment boundaries based on 1-based index within the ring
+			int segment1End = cellsPerSquareEdge;
+			int segment2End = 2 * cellsPerSquareEdge;
+			int segment3End = 3 * cellsPerSquareEdge;
+			int segment4End = 4 * cellsPerSquareEdge;
+
+			if (indexInRing1Based <= segment1End) {
+				// This is the side that goes from N to 1 short of E.
+				// N and NE for ring 1.
+				xDelta = indexInRing1Based;
+				yDelta = indexInRing1Based - cellsPerSquareEdge;
+			} else if (indexInRing1Based <= segment2End) {
+				// This is the side that goes from E to 1 short of S.
+				// E and SE for ring 1.
+				xDelta = segment2End - indexInRing1Based;
+				yDelta = indexInRing1Based - cellsPerSquareEdge;
+			} else if (indexInRing1Based <= segment3End) {
+				// This is the side that goes from S to 1 short of W.
+				// S and SW for ring 1.
+				xDelta = segment2End - indexInRing1Based;
+				yDelta = segment3End - indexInRing1Based;
+			} else {
+				// This is the side that goes from W to 1 short of N.
+				// W and NW for ring 1.
+				xDelta = indexInRing1Based - segment4End;
+				yDelta = segment3End - indexInRing1Based;
+			}
+
+			return map.tileAt(XCoordinate + xDelta, YCoordinate + yDelta);
+		}
+
+		public List<Tile> GetTilesWithinRankDistance(int rank) {
+			List<Tile> result = new();
+			for (int i = 0; i < (rank * 2 + 1) * (rank * 2 + 1); ++i) {
+				Tile t = GetTileAtNeighborIndex(i);
+				if (rankDistanceTo(t) <= rank) {
+					result.Add(t);
+				}
+			}
+
+			return result;
+		}
+
 		public MapUnit FindTopDefender(MapUnit opponent) {
 			if (unitsOnTile.Count > 0) {
 				IEnumerable<MapUnit> potentialDefenders = unitsOnTile.Where(u => u.CanDefendAgainst(opponent));
