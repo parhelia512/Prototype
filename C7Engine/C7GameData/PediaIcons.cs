@@ -86,7 +86,7 @@ namespace C7GameData {
 		}
 
 		public string GetLeaderArtName(string civilopediaEntry) {
-			string key = "#" + civilopediaEntry;
+			string key = "#" + civilopediaEntry.ToUpper();
 			if (!raceToArtMapping.ContainsKey(key)) {
 				return null;
 			}

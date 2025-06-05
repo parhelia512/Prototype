@@ -125,7 +125,9 @@ public partial class Civ3MenuButton : BaseButton {
 		if (textPosition == TextPosition.TextAboveIcon || textPosition == TextPosition.TextBelowIcon) {
 			boxContainer = new VBoxContainer();
 		} else {
-			boxContainer = new HBoxContainer();
+			boxContainer = new HBoxContainer() {
+				Alignment = (textPosition == TextPosition.TextLeftOfIcon) ? BoxContainer.AlignmentMode.End : BoxContainer.AlignmentMode.Begin,
+			};
 		}
 		boxContainer.SetAnchorsPreset(LayoutPreset.FullRect);
 		boxContainer.MouseFilter = MouseFilterEnum.Pass;

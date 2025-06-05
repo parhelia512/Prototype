@@ -1,5 +1,6 @@
 using Godot;
 using QueryCiv3;
+using C7Engine;
 
 /****
 	Need to pass values from one scene to another, particularly when loading
@@ -25,4 +26,9 @@ public partial class GlobalSingleton : Node {
 	public void ResetLoadGamePath() {
 		LoadGamePath = DefaultGamePath;
 	}
+
+	// The characteristics of the world to generate. This exists in the singleton
+	// to allow the world setup screen to pass the information to the player
+	// setup screen, which is what actually kicks off the world generation.
+	public WorldCharacteristics WorldCharacteristics;
 }
