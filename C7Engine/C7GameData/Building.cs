@@ -106,6 +106,7 @@ namespace C7GameData {
 		public int combatDefenseBonus;
 
 		public int culturePerTurn = 0;
+		public int maintenanceCost = 0;
 
 		// The number of unhappy faces that become content in the city with this
 		// building.
@@ -129,6 +130,7 @@ namespace C7GameData {
 			populationCost = building.populationCost;
 			isSmallWonder = building.isSmallWonder;
 			culturePerTurn = building.culturePerTurn;
+			maintenanceCost = building.maintenanceCost;
 			iconRowIndex = building.iconRowIndex;
 			if (building.contentFacesInCity < 0) {
 				unhappyFacesInCity = -building.contentFacesInCity;

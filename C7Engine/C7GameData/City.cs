@@ -546,6 +546,14 @@ namespace C7GameData {
 			return result;
 		}
 
+		public int MaintenanceCosts() {
+			int result = 0;
+			foreach (CityBuilding cb in constructed_buildings) {
+				result += cb.building.maintenanceCost;
+			}
+			return result;
+		}
+
 		public int FoodGrowthPerTurn() {
 			return CurrentFoodYield() - FoodConsumedPerTurn();
 		}
