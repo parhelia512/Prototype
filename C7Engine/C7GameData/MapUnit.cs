@@ -540,7 +540,7 @@ namespace C7GameData {
 						// If the enemy was defeated, check if there is another enemy on the tile. If so we can't complete the move
 						// but still pay one movement point for the combat.
 						else if (combatResult == CombatResult.DefenderKilled || combatResult == CombatResult.DefenderRetreated) {
-							if (!CanEnterTile(newLoc, false)) {
+							if (newLoc.FindTopDefender(this) != MapUnit.NONE) {
 								movementPoints.onUnitMove(1);
 								return true;
 							}
