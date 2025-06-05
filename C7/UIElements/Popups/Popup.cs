@@ -35,30 +35,19 @@ public partial class Popup : TextureRect {
 
 	const int HTILE_SIZE = 61;
 	const int VTILE_SIZE = 44;
-	private readonly static int BUTTON_LABEL_OFFSET = 0;    //Necessary in Godot 3, appears unnecessary in 4
 
-	private static ImageTexture InactiveButton = TextureLoader.Load("ui.button.inactive");
-	private static ImageTexture HoverButton = TextureLoader.Load("ui.button.hover");
 	private static Dictionary<(int, int), ImageTexture> backgroundCache = new Dictionary<(int, int), ImageTexture>();
 
 	protected void AddButton(string label, int verticalPosition, Action action) {
 		const int HORIZONTAL_POSITION = 30;
-		TextureButton newButton = new TextureButton();
-		newButton.TextureNormal = InactiveButton;
-		newButton.TextureHover = HoverButton;
-		newButton.SetPosition(new Vector2(HORIZONTAL_POSITION, verticalPosition));
-		AddChild(newButton);
-		newButton.Pressed += action;
 
-		Theme theme = new Theme();
-		theme.SetFontSize("font_size", "Button", 14);
-		Button newButtonLabel = new Button();
-		newButtonLabel.Theme = theme;
-		newButtonLabel.Text = label;
-
-		newButtonLabel.SetPosition(new Vector2(HORIZONTAL_POSITION + 25, verticalPosition + BUTTON_LABEL_OFFSET));
-		AddChild(newButtonLabel);
-		newButtonLabel.Pressed += action;
+		Civ3MenuButton button = new() {
+			Text = label,
+			FontSize = 14,
+		};
+		button.SetPosition(new Vector2(HORIZONTAL_POSITION, verticalPosition));
+		AddChild(button);
+		button.Pressed += action;
 	}
 
 	protected void AddHeader(string text, int vOffset) {
