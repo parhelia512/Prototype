@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://gnt0y3og7nk6"]
 
 [ext_resource type="Script" path="res://UIElements/MainMenu/MainMenu.cs" id="1_akneh"]
-[ext_resource type="Texture2D" uid="uid://bu113i1ououof" path="res://Art/title-screen.png" id="2_1lqrk"]
+[ext_resource type="Texture2D" uid="uid://s55xvcaini8h" path="res://title-screen.png" id="2_erxyj"]
 [ext_resource type="Script" path="res://UIElements/MainMenu/MenuButtonContainer.cs" id="3_t1nuq"]
 [ext_resource type="Script" path="res://UIElements/MainMenu/MainMenuMusicPlayer.cs" id="4_tqr50"]
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="5_rw2g7"]
@@ -42,7 +42,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("2_1lqrk")
+texture = ExtResource("2_erxyj")
 expand_mode = 3
 stretch_mode = 4
 
