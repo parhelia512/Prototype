@@ -464,9 +464,7 @@ public partial class LooseView : Node2D {
 	public override void _Draw() {
 		base._Draw();
 
-		using (var gameDataAccess = new UIGameDataAccess()) {
-			GameData gD = gameDataAccess.gameData;
-
+		EngineStorage.ReadGameData((GameData gD) => {
 			// Iterating over visible tiles is unfortunately pretty expensive. Assemble a list of Tile references and centers first so we don't
 			// have to reiterate for each layer. Doing this improves framerate significantly.
 			MapView.VisibleRegion visRegion = mapView.getVisibleRegion();
@@ -475,8 +473,11 @@ public partial class LooseView : Node2D {
 				if (gD.map.isRowAt(Y)) {
 					for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {
 						Tile tile = gD.map.tileAt(X, Y);
-						if (IsTileKnown(tile, gameDataAccess)) {
-							visibleTiles.Add(new VisibleTile { tile = tile, tileCenter = MapView.cellSize * new Vector2(X + 1, Y + 1) });
+						if (IsTileKnown(tile, gD)) {
+							visibleTiles.Add(new VisibleTile {
+								tile = tile,
+								tileCenter = MapView.cellSize * new Vector2(X + 1, Y + 1)
+							});
 						}
 					}
 				}
@@ -489,8 +490,10 @@ public partial class LooseView : Node2D {
 				foreach (VisibleTile vT in visibleTiles) {
 					layer.drawObject(this, gD, vT.tile, vT.tileCenter);
 				}
+
 				layer.onEndDraw(this, gD);
 			}
+
 			if (stopwatch.ElapsedMilliseconds > 100) {
 				log.Information($"-> End draw: {stopwatch.ElapsedMilliseconds} milliseconds");
 			}
@@ -502,19 +505,22 @@ public partial class LooseView : Node2D {
 							for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {
 								Tile tile = gD.map.tileAt(X, Y);
 								if (tile != Tile.NONE) {
-									VisibleTile invisibleTile = new VisibleTile { tile = tile, tileCenter = MapView.cellSize * new Vector2(X + 1, Y + 1) };
+									VisibleTile invisibleTile = new VisibleTile {
+										tile = tile,
+										tileCenter = MapView.cellSize * new Vector2(X + 1, Y + 1)
+									};
 									layer.drawObject(this, gD, tile, invisibleTile.tileCenter);
 								}
 							}
 				}
 			}
-		}
+		});
 	}
-	private static bool IsTileKnown(Tile tile, UIGameDataAccess gameDataAccess) {
-		if (gameDataAccess.gameData.observerMode) {
+	private static bool IsTileKnown(Tile tile, GameData gameData) {
+		if (gameData.observerMode) {
 			return true;
 		}
-		TileKnowledge knowledge = gameDataAccess.gameData.GetHumanPlayers()[0].tileKnowledge;
+		TileKnowledge knowledge = gameData.GetHumanPlayers()[0].tileKnowledge;
 		return tile != Tile.NONE && knowledge.isTileKnown(tile);
 	}
 }

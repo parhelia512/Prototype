@@ -15,7 +15,6 @@ namespace C7Engine {
 		public static Player createGame(string loadFilePath, string defaultBicPath,
 										Func<string, string> getPediaIconsPath) {
 			EngineStorage.createThread();
-			EngineStorage.gameDataMutex.WaitOne();
 
 			SaveGame save = SaveManager.LoadSave(loadFilePath, defaultBicPath, getPediaIconsPath);
 			GameData gameData = save.ToGameData();
@@ -38,7 +37,6 @@ namespace C7Engine {
 			TurnHandling.OnBeginTurn(); // Call for the first turn
 			TurnHandling.AdvanceTurn();
 
-			EngineStorage.gameDataMutex.ReleaseMutex();
 			return humanPlayer;
 		}
 	}

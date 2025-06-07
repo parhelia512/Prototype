@@ -9,7 +9,7 @@ namespace C7GameData {
 		public Building building;
 		public Player builtByPlayer;
 		public int year;
-		public int totalCulture; // This represents the total culture produced by the building. 
+		public int totalCulture; // This represents the total culture produced by the building.
 								 // In Civ3, this value is displayed in the cultural advisor tab
 	}
 
@@ -292,7 +292,7 @@ namespace C7GameData {
 
 				// If we completed a great wonder, mark it as completed so no
 				// other civ can build it. If any other cities are building the
-				// wonder then change production to the most expensive option, 
+				// wonder then change production to the most expensive option,
 				// to avoid wasting the shields.
 				//
 				// TODO: This should interrupt the player's turn to let them
@@ -449,7 +449,7 @@ namespace C7GameData {
 
 				// If this building doesn't have the "only useful in towns" flag
 				// we can always provide the bonus regardless of the city size.
-				// 
+				//
 				// But if the building is only useful in towns we need to check
 				// the city size before providing the bonus.
 				if (!cb.building.onlyUsefulInTowns) {
@@ -493,7 +493,7 @@ namespace C7GameData {
 
 			// Using our value of corruption, figure out how much useful
 			// production we have to work with. Special case anarchy, where no
-			// useful production is available. We do this here rather than 
+			// useful production is available. We do this here rather than
 			// setting corruption to 100% because CorruptableValue would give us
 			// one useful commerce in that situation.
 			//
@@ -839,7 +839,7 @@ namespace C7GameData {
 			contentToHappyMoves -= 2 * ApplyMoodChange(contentToHappyMoves / 2, unhappy, happy);
 
 			// Account for the remainder of the integer division
-			// (ApplyMoodChange ignores a negative input). 
+			// (ApplyMoodChange ignores a negative input).
 			ApplyMoodChange(contentToHappyMoves, unhappy, content);
 		}
 
@@ -869,7 +869,7 @@ namespace C7GameData {
 			int unhappyToContentMoves = 0;
 
 			// Each citizen lost to pop rushing has a 20 turn penalty, so
-			// multiple citizens lost causes multiple unhappy faces. 
+			// multiple citizens lost causes multiple unhappy faces.
 			if (turnsOfUnhappinessDueToPopRushing > 0) {
 				contentToHappyMoves -= (turnsOfUnhappinessDueToPopRushing - 1) / gameData.rules.TurnPenaltyForEachHurrySacrifice + 1;
 			}

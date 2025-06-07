@@ -121,33 +121,34 @@ public class SaveTests {
 	}
 
 	private void CheckAiInvariants() {
-		using UIGameDataAccess gda = new();
-		GameData game = gda.gameData;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			GameData game = gameData;
 
-		foreach (Player p in game.players) {
-			foreach (MapUnit u in p.units) {
-				if (u.unitType.name != "Settler") {
-					continue;
-				}
+			foreach (Player p in game.players) {
+				foreach (MapUnit u in p.units) {
+					if (u.unitType.name != "Settler") {
+						continue;
+					}
 
-				// We don't require an escort if the settler is in a city.
-				if (u.location.cityAtTile != null) {
-					continue;
-				}
+					// We don't require an escort if the settler is in a city.
+					if (u.location.cityAtTile != null) {
+						continue;
+					}
 
-				// This is a settler not in a city - make sure it has an escort.
-				if (u.currentAI is SettlerAI settlerAi) {
-					if (settlerAi.data.escort != null) {
-						Assert.Equal(settlerAi.data.escort.location, u.location);
-					} else {
-						// This assertion is tempting, but will sometimes fire
-						// if the escort is disbanded due to unit support costs.
-						//
-						// Assert.True(u.location.unitsOnTile.Count > 1, $"{u} {u.location}");
+					// This is a settler not in a city - make sure it has an escort.
+					if (u.currentAI is SettlerAI settlerAi) {
+						if (settlerAi.data.escort != null) {
+							Assert.Equal(settlerAi.data.escort.location, u.location);
+						} else {
+							// This assertion is tempting, but will sometimes fire
+							// if the escort is disbanded due to unit support costs.
+							//
+							// Assert.True(u.location.unitsOnTile.Count > 1, $"{u} {u.location}");
+						}
 					}
 				}
 			}
-		}
+		});
 	}
 
 	[Fact]
@@ -168,10 +169,10 @@ public class SaveTests {
 
 		// Make the player a human again so we can save and load the game.
 		human.isHuman = true;
-		GameData game;
-		using (UIGameDataAccess gda = new()) {
-			game = gda.gameData;
-		}
+		GameData game = null;
+		EngineStorage.ReadGameData((GameData gameData) => {
+			game = gameData;
+		});
 		Assert.Equal(50, game.turn);
 
 		// Save the game.
@@ -200,8 +201,8 @@ public class SaveTests {
 		Player human = CreateHeadlessGame(developerSave);
 		WaitForStartTurnMessage();
 
-		using UIGameDataAccess gda = new();
-		GameData gd = gda.gameData;
+		GameData gd = null;
+		EngineStorage.ReadGameData((GameData gameData) => { gd = gameData; });
 
 		Tile t0 = gd.map.tileAt(97, 33);
 		Tile t1 = gd.map.tileAt(99, 33);

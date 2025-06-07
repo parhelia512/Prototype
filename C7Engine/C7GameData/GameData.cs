@@ -165,7 +165,7 @@ namespace C7GameData {
 			unit.location.unitsOnTile.Remove(unit);
 			mapUnits.Remove(unit);
 
-			// TODO: why not just do Player p = unit.owner; p.units.Remove(unit);?	
+			// TODO: why not just do Player p = unit.owner; p.units.Remove(unit);?
 			foreach (Player player in players) {
 				if (player.units.Contains(unit)) {
 					player.units.Remove(unit);

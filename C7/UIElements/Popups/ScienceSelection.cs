@@ -75,18 +75,19 @@ public partial class ScienceSelection : Popup {
 		PopupMenu popup = optionButton.GetPopup();
 		popup.AddThemeStyleboxOverride("panel", styleBox);
 
-		using UIGameDataAccess gameDataAccess = new();
-		foreach (Tech tech in player.GetAvailableTechsToResearch(gameDataAccess.gameData)) {
-			int turns = player.EstimateTurnsToResearch(gameDataAccess.gameData, tech);
-			string turnsStr = turns == int.MaxValue ? "--" : $"{turns}";
-			optionButton.AddItem($"{tech.Name} ({turnsStr} turns)");
-			options.Add(tech);
-		}
+		EngineStorage.ReadGameData((GameData gameData) => {
+			foreach (Tech tech in player.GetAvailableTechsToResearch(gameData)) {
+				int turns = player.EstimateTurnsToResearch(gameData, tech);
+				string turnsStr = turns == int.MaxValue ? "--" : $"{turns}";
+				optionButton.AddItem($"{tech.Name} ({turnsStr} turns)");
+				options.Add(tech);
+			}
 
-		for (int i = 0; i < popup.ItemCount; ++i) {
-			popup.SetItemAsRadioCheckable(i, false);
-			popup.SetItemAsCheckable(i, false);
-		}
+			for (int i = 0; i < popup.ItemCount; ++i) {
+				popup.SetItemAsRadioCheckable(i, false);
+				popup.SetItemAsCheckable(i, false);
+			}
+		});
 
 		return optionButton;
 	}

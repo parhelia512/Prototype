@@ -50,21 +50,11 @@ namespace C7Engine {
 			engineThread = new Thread(processActions);
 			engineThread.Start();
 		}
-	}
 
-	public class UIGameDataAccess : IDisposable {
-		public UIGameDataAccess() {
+		public static void ReadGameData(Action<GameData> accessor) {
 			EngineStorage.gameDataMutex.WaitOne();
-		}
-
-		public void Dispose() {
+			accessor(gameData);
 			EngineStorage.gameDataMutex.ReleaseMutex();
-		}
-
-		public GameData gameData {
-			get {
-				return EngineStorage.gameData;
-			}
 		}
 	}
 }

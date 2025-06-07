@@ -142,58 +142,59 @@ public partial class DomesticAdvisor : Control {
 	public void ShowAdvisor() {
 		Show();
 
-		using UIGameDataAccess gameDataAccess = new();
-		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+		EngineStorage.ReadGameData((GameData gameData) => {
+			Player player = gameData.GetHumanPlayers()[0];
 
-		int scienceRate = player.scienceRate;
-		int luxuryRate = player.luxuryRate;
+			int scienceRate = player.scienceRate;
+			int luxuryRate = player.luxuryRate;
 
-		scienceSliderIcon.SetPosition(new Vector2(CalculateSliderXPos(scienceRate), scienceSliderY));
-		luxurySliderIcon.SetPosition(new Vector2(CalculateSliderXPos(luxuryRate), luxurySliderY));
-		scienceSliderLabel.Text = $"{scienceRate * 10}%";
-		luxurySliderLabel.Text = $"{luxuryRate * 10}%";
+			scienceSliderIcon.SetPosition(new Vector2(CalculateSliderXPos(scienceRate), scienceSliderY));
+			luxurySliderIcon.SetPosition(new Vector2(CalculateSliderXPos(luxuryRate), luxurySliderY));
+			scienceSliderLabel.Text = $"{scienceRate * 10}%";
+			luxurySliderLabel.Text = $"{luxuryRate * 10}%";
 
-		governmentLabel.Text = $"{player.government.name}";
-		scienceStatus.Text = player.SummarizeScience(gameDataAccess.gameData);
-		treasury.Text = $"Treasury: {player.gold}";
+			governmentLabel.Text = $"{player.government.name}";
+			scienceStatus.Text = player.SummarizeScience(gameData);
+			treasury.Text = $"Treasury: {player.gold}";
 
-		// TODO: fill these in.
-		incomeDetails.Text = "From cities: +??\nFrom taxmen: +??\nFrom other civs: +??\nFrom interest: +??";
-		expenseDetails.Text = "-??: Science\n-??: Entertainment\n-??: Corruption\n-??: Maintenance\n-??: Unit costs\n-??: To other civs";
-		incomeSummary.Text = "??";
-		expenseSummary.Text = "??";
+			// TODO: fill these in.
+			incomeDetails.Text = "From cities: +??\nFrom taxmen: +??\nFrom other civs: +??\nFrom interest: +??";
+			expenseDetails.Text = "-??: Science\n-??: Entertainment\n-??: Corruption\n-??: Maintenance\n-??: Unit costs\n-??: To other civs";
+			incomeSummary.Text = "??";
+			expenseSummary.Text = "??";
 
-		int goldPerTurn = player.CalculateGoldPerTurn();
-		if (goldPerTurn > 0) {
-			sumSummary.Text = $"Net gain: {goldPerTurn}";
-			growth.Text = "Growing!";
-		} else if (goldPerTurn < 0) {
-			sumSummary.Text = $"Net loss: {goldPerTurn}";
-			growth.Text = "Shrinking!";
-		} else {
-			sumSummary.Text = $"Neutral: {goldPerTurn}";
-			growth.Text = "Balanced";
-		}
+			int goldPerTurn = player.CalculateGoldPerTurn();
+			if (goldPerTurn > 0) {
+				sumSummary.Text = $"Net gain: {goldPerTurn}";
+				growth.Text = "Growing!";
+			} else if (goldPerTurn < 0) {
+				sumSummary.Text = $"Net loss: {goldPerTurn}";
+				growth.Text = "Shrinking!";
+			} else {
+				sumSummary.Text = $"Neutral: {goldPerTurn}";
+				growth.Text = "Balanced";
+			}
 
-		//TODO: Randomize or set logically
-		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, player.EraIndex());
+			//TODO: Randomize or set logically
+			advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Domestic, AdvisorHead.Mood.Happy, player.EraIndex());
 
-		// Disable the change government button unless we have a government to
-		// switch to.
-		changeGovernment.Disabled = player.GetAvailableGovernments(gameDataAccess.gameData).Count == 1;
+			// Disable the change government button unless we have a government to
+			// switch to.
+			changeGovernment.Disabled = player.GetAvailableGovernments(gameData).Count == 1;
 
-		if (player.government.transitionType && player.inAnarchyUntilTurn > gameDataAccess.gameData.turn) {
-			DialogBoxAdvise.Text = $"{player.inAnarchyUntilTurn - gameDataAccess.gameData.turn} turns of anarchy left";
-		}
+			if (player.government.transitionType && player.inAnarchyUntilTurn > gameData.turn) {
+				DialogBoxAdvise.Text = $"{player.inAnarchyUntilTurn - gameData.turn} turns of anarchy left";
+			}
 
-		foreach (var node in cityListContainer.GetChildren()) {
-			cityListContainer.RemoveChild(node);
-			node.QueueFree();
-		}
+			foreach (var node in cityListContainer.GetChildren()) {
+				cityListContainer.RemoveChild(node);
+				node.QueueFree();
+			}
 
-		foreach (City city in player.cities) {
-			cityListContainer.AddChild(MakeCityRow(city));
-		}
+			foreach (City city in player.cities) {
+				cityListContainer.AddChild(MakeCityRow(city));
+			}
+		});
 	}
 
 	private int CalculateSliderXPos(int sliderRate) {
@@ -208,25 +209,24 @@ public partial class DomesticAdvisor : Control {
 	}
 
 	private void ChangeGovernments() {
-		using UIGameDataAccess gameDataAccess = new();
-		Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
+		EngineStorage.ReadGameData((GameData gameData) => {
+			Player player = gameData.GetHumanPlayers()[0];
 
-		if (player.government.transitionType) {
+			if (player.government.transitionType) {
+				popupOverlay.ShowPopup(
+					new InformationalPopup("You already started a revolution. Remember?"),
+					PopupOverlay.PopupCategory.Advisor);
+				return;
+			}
+
 			popupOverlay.ShowPopup(
-				new InformationalPopup("You already started a revolution. Remember?"),
-				PopupOverlay.PopupCategory.Advisor);
-			return;
-		}
-
-		popupOverlay.ShowPopup(
 				new ConfirmationPopup(
 					"You say you want a revolution?",
 					"Yes, you know it's gonna be alright.",
 					"No. You can count me out.",
-					() => {
-						new StartGovernmentTransitionMsg(player).send();
-					}),
+					() => { new StartGovernmentTransitionMsg(player).send(); }),
 				PopupOverlay.PopupCategory.Advisor);
+		});
 	}
 
 	private HBoxContainer MakeCityRow(City city) {

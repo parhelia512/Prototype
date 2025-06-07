@@ -154,22 +154,24 @@ public partial class CityScreen : Control {
 			if (eventMouseButton.ButtonIndex == MouseButton.Left) {
 				GetViewport().SetInputAsHandled();
 				if (eventMouseButton.IsPressed()) {
-					using UIGameDataAccess gameDataAccess = new();
-					if (productionMenu != null) {
-						productionMenu.Visible = false;
-					}
-					Tile tile = mapView.tileOnScreenAt(gameDataAccess.gameData.map, eventMouseButton.Position);
-					if (tile != null) {
-						HandleReassignment(tile);
+					EngineStorage.ReadGameData((GameData gameData) => {
+						if (productionMenu != null) {
+							productionMenu.Visible = false;
+						}
 
-						// Recalculate moods after changing tile assignments.
-						tileAssignmentLayer.city.RecalculateCitizenMoods(gameDataAccess.gameData);
+						Tile tile = mapView.tileOnScreenAt(gameData.map, eventMouseButton.Position);
+						if (tile != null) {
+							HandleReassignment(tile);
 
-						RenderPopHeads(tileAssignmentLayer.city);
-						RenderFoodDetails(tileAssignmentLayer.city);
-						RenderCommerceDetails(tileAssignmentLayer.city);
-						RenderProductionDetails(tileAssignmentLayer.city);
-					}
+							// Recalculate moods after changing tile assignments.
+							tileAssignmentLayer.city.RecalculateCitizenMoods(gameData);
+
+							RenderPopHeads(tileAssignmentLayer.city);
+							RenderFoodDetails(tileAssignmentLayer.city);
+							RenderCommerceDetails(tileAssignmentLayer.city);
+							RenderProductionDetails(tileAssignmentLayer.city);
+						}
+					});
 				}
 			}
 		}
@@ -605,9 +607,10 @@ public partial class CityScreen : Control {
 		productionButtonLabel.SetTextAndCenterLabel($"{city.itemBeingProduced.name}");
 
 		productionMenu.AddItems(city, (IProducible p) => {
-			using UIGameDataAccess gameDataAccess = new();
-			city.SetItemBeingProduced(p);
-			RenderProductionDetails(city);
+			EngineStorage.ReadGameData((GameData gameData) => {
+				city.SetItemBeingProduced(p);
+				RenderProductionDetails(city);
+			});
 		});
 	}
 
@@ -764,8 +767,7 @@ public partial class CityScreen : Control {
 				++index;
 				RenderPopHeads(city);
 
-				using UIGameDataAccess gDa = new();
-				RenderCommerceDetails(city);
+				EngineStorage.ReadGameData((GameData gameData) => { RenderCommerceDetails(city); });
 			};
 
 			background.AddChild(tb);
@@ -775,21 +777,23 @@ public partial class CityScreen : Control {
 	}
 
 	private void SwitchToNextCity() {
-		using UIGameDataAccess gameDataAccess = new();
-		City currentCity = tileAssignmentLayer.city;
-		List<City> cities = currentCity.owner.cities;
-		City nextCity = cities[(cities.IndexOf(currentCity) + 1) % cities.Count];
-		nextCity.RecalculateCitizenMoods(gameDataAccess.gameData);
-		OnShowCityScreen(new ParameterWrapper<City>(nextCity));
+		EngineStorage.ReadGameData((GameData gameData) => {
+			City currentCity = tileAssignmentLayer.city;
+			List<City> cities = currentCity.owner.cities;
+			City nextCity = cities[(cities.IndexOf(currentCity) + 1) % cities.Count];
+			nextCity.RecalculateCitizenMoods(gameData);
+			OnShowCityScreen(new ParameterWrapper<City>(nextCity));
+		});
 	}
 
 	private void SwitchToPreviousCity() {
-		using UIGameDataAccess gameDataAccess = new();
-		City currentCity = tileAssignmentLayer.city;
-		List<City> cities = currentCity.owner.cities;
-		City previousCity = cities[(cities.IndexOf(currentCity) + cities.Count - 1) % cities.Count];
-		previousCity.RecalculateCitizenMoods(gameDataAccess.gameData);
-		OnShowCityScreen(new ParameterWrapper<City>(previousCity));
+		EngineStorage.ReadGameData((GameData gameData) => {
+			City currentCity = tileAssignmentLayer.city;
+			List<City> cities = currentCity.owner.cities;
+			City previousCity = cities[(cities.IndexOf(currentCity) + cities.Count - 1) % cities.Count];
+			previousCity.RecalculateCitizenMoods(gameData);
+			OnShowCityScreen(new ParameterWrapper<City>(previousCity));
+		});
 	}
 
 	private int AddDefaultCitizen(CityResident cr, int xPos, int eraNum) {

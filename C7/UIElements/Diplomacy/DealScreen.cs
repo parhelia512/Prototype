@@ -14,7 +14,7 @@ using ConvertCiv3Media;
 //
 // The basic idea is to have all the possible items present in both components,
 // and then use the shared TradeOffer object to determine what is visible. So
-// when a technology is clicked in the trading tree, it is added to the 
+// when a technology is clicked in the trading tree, it is added to the
 // TradeOffer object, and then we refresh the UIs of the trading tree and the
 // trade offer ui to swap the visibility.
 //
@@ -68,127 +68,129 @@ public partial class DealScreen : TextureRect {
 
 		this.Texture = TextureLoader.Load("diplomacy.deal");
 
-		using UIGameDataAccess gameDataAccess = new();
-		GameData gD = gameDataAccess.gameData;
-		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
-		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
-		bool playersAtWar = humanPlayer.playerRelationships[opponentPlayer.id].atWar;
-		GetParent<Diplomacy>().AddLeaderHeadAndLabel(this, opponentPlayer, fontTheme);
+		EngineStorage.ReadGameData((GameData gD) => {
+			Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
+			Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
+			bool playersAtWar = humanPlayer.playerRelationships[opponentPlayer.id].atWar;
+			GetParent<Diplomacy>().AddLeaderHeadAndLabel(this, opponentPlayer, fontTheme);
 
-		// Figure out which technologies can be traded by each player, if any.
-		List<Tech> techsOpponentCanTrade = gD.techs.FindAll(x => {
-			return opponentPlayer.knownTechs.Contains(x.id) && !humanPlayer.knownTechs.Contains(x.id);
+			// Figure out which technologies can be traded by each player, if any.
+			List<Tech> techsOpponentCanTrade = gD.techs.FindAll(x => {
+				return opponentPlayer.knownTechs.Contains(x.id) && !humanPlayer.knownTechs.Contains(x.id);
+			});
+			List<Tech> techsHumanCanTrade = gD.techs.FindAll(x => {
+				return humanPlayer.knownTechs.Contains(x.id) && !opponentPlayer.knownTechs.Contains(x.id);
+			});
+
+			// Left hand side UI components.
+			opponentTree = new TradingTree(fontTheme, opponentPlayer.gold, techsOpponentCanTrade, opponentOffer,
+				playersAtWar);
+			AddChild(opponentTree);
+			opponentTree.Position = new Vector2(45, 220);
+
+			Label weWant = new();
+			weWant.Text = "We Want";
+			weWant.SetPosition(new Vector2(320, 440));
+			weWant.Theme = blueFontTheme;
+			AddChild(weWant);
+
+			opponentOfferUi = new(fontTheme, techsOpponentCanTrade, opponentPlayer.gold, opponentOffer, playersAtWar,
+				HorizontalAlignment.Left);
+			AddChild(opponentOfferUi);
+			opponentOfferUi.Position = new Vector2(314, 453);
+
+			// Right hand side UI components.
+			humanTree = new TradingTree(fontTheme, humanPlayer.gold, techsHumanCanTrade, humanOffer, playersAtWar);
+			AddChild(humanTree);
+			humanTree.Position = new Vector2(789, 220);
+
+			Label weOffer = new();
+			weOffer.Text = "We Offer";
+			weOffer.SetPosition(new Vector2(660, 440));
+			weOffer.Theme = blueFontTheme;
+			AddChild(weOffer);
+
+			humanOfferUi = new(fontTheme, techsHumanCanTrade, humanPlayer.gold, humanOffer, playersAtWar,
+				HorizontalAlignment.Right);
+			AddChild(humanOfferUi);
+			humanOfferUi.Position = new Vector2(527, 453);
+
+			var syncUis = () => {
+				opponentTree.RefreshUiForOffer();
+				humanTree.RefreshUiForOffer();
+				opponentOfferUi.RefreshUiForOffer();
+				humanOfferUi.RefreshUiForOffer();
+			};
+
+			// Link up the tree components appropriately.
+			opponentTree.HandleClicks(humanTree, () => {
+				syncUis();
+				UpdateText();
+			});
+			humanTree.HandleClicks(opponentTree, () => {
+				syncUis();
+				UpdateText();
+			});
+
+			humanOfferUi.HandleClicks(opponentOfferUi, () => {
+				syncUis();
+				UpdateText();
+			});
+			opponentOfferUi.HandleClicks(humanOfferUi, () => {
+				syncUis();
+				UpdateText();
+			});
+
+			// Add the buttons at the bottom.
+			acceptDeal = new();
+			acceptDeal.Text = "\"Will you accept this deal?\"";
+			acceptDeal.SetPosition(new Vector2(512 - 205, 650));
+			acceptDeal.Theme = fontTheme;
+			acceptDeal.Pressed += AttemptDeal;
+			AddChild(acceptDeal);
+
+			Button goodbye = new();
+			goodbye.Text = "\"Never mind...\"";
+			goodbye.SetPosition(new Vector2(512 - 205, 670));
+			goodbye.Theme = fontTheme;
+			goodbye.Pressed += () => { GetParent<Diplomacy>().Hide(); };
+			AddChild(goodbye);
+
+			// And the text from the opponent, if they reject a deal.
+			opponentResponse = new();
+			opponentResponse.Text = "\"Let's get down to business...\"";
+			opponentResponse.SetPosition(new Vector2(512 - 205, 345));
+			opponentResponse.Theme = fontTheme;
+			AddChild(opponentResponse);
 		});
-		List<Tech> techsHumanCanTrade = gD.techs.FindAll(x => {
-			return humanPlayer.knownTechs.Contains(x.id) && !opponentPlayer.knownTechs.Contains(x.id);
-		});
-
-		// Left hand side UI components.
-		opponentTree = new TradingTree(fontTheme, opponentPlayer.gold, techsOpponentCanTrade, opponentOffer, playersAtWar);
-		AddChild(opponentTree);
-		opponentTree.Position = new Vector2(45, 220);
-
-		Label weWant = new();
-		weWant.Text = "We Want";
-		weWant.SetPosition(new Vector2(320, 440));
-		weWant.Theme = blueFontTheme;
-		AddChild(weWant);
-
-		opponentOfferUi = new(fontTheme, techsOpponentCanTrade, opponentPlayer.gold, opponentOffer, playersAtWar, HorizontalAlignment.Left);
-		AddChild(opponentOfferUi);
-		opponentOfferUi.Position = new Vector2(314, 453);
-
-		// Right hand side UI components.
-		humanTree = new TradingTree(fontTheme, humanPlayer.gold, techsHumanCanTrade, humanOffer, playersAtWar);
-		AddChild(humanTree);
-		humanTree.Position = new Vector2(789, 220);
-
-		Label weOffer = new();
-		weOffer.Text = "We Offer";
-		weOffer.SetPosition(new Vector2(660, 440));
-		weOffer.Theme = blueFontTheme;
-		AddChild(weOffer);
-
-		humanOfferUi = new(fontTheme, techsHumanCanTrade, humanPlayer.gold, humanOffer, playersAtWar, HorizontalAlignment.Right);
-		AddChild(humanOfferUi);
-		humanOfferUi.Position = new Vector2(527, 453);
-
-		var syncUis = () => {
-			opponentTree.RefreshUiForOffer();
-			humanTree.RefreshUiForOffer();
-			opponentOfferUi.RefreshUiForOffer();
-			humanOfferUi.RefreshUiForOffer();
-		};
-
-		// Link up the tree components appropriately.
-		opponentTree.HandleClicks(humanTree, () => {
-			syncUis();
-			UpdateText();
-		});
-		humanTree.HandleClicks(opponentTree, () => {
-			syncUis();
-			UpdateText();
-		});
-
-		humanOfferUi.HandleClicks(opponentOfferUi, () => {
-			syncUis();
-			UpdateText();
-		});
-		opponentOfferUi.HandleClicks(humanOfferUi, () => {
-			syncUis();
-			UpdateText();
-		});
-
-		// Add the buttons at the bottom.
-		acceptDeal = new();
-		acceptDeal.Text = "\"Will you accept this deal?\"";
-		acceptDeal.SetPosition(new Vector2(512 - 205, 650));
-		acceptDeal.Theme = fontTheme;
-		acceptDeal.Pressed += AttemptDeal;
-		AddChild(acceptDeal);
-
-		Button goodbye = new();
-		goodbye.Text = "\"Never mind...\"";
-		goodbye.SetPosition(new Vector2(512 - 205, 670));
-		goodbye.Theme = fontTheme;
-		goodbye.Pressed += () => { GetParent<Diplomacy>().Hide(); };
-		AddChild(goodbye);
-
-		// And the text from the opponent, if they reject a deal.
-		opponentResponse = new();
-		opponentResponse.Text = "\"Let's get down to business...\"";
-		opponentResponse.SetPosition(new Vector2(512 - 205, 345));
-		opponentResponse.Theme = fontTheme;
-		AddChild(opponentResponse);
 	}
 
 	private void AttemptDeal() {
 		// TODO: This seems to be only usage of UIGameDataAccess that mutates
 		// state - can this be a message instead?
-		using UIGameDataAccess gameDataAccess = new();
-		GameData gD = gameDataAccess.gameData;
+		EngineStorage.ReadGameData((GameData gD) => {
+			Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
+			Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
 
-		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
-		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
+			// If the deal is acceptable, execute it and go back to the previous
+			// screen.
+			if (opponentPlayer.WouldAcceptDealFrom(gD, humanPlayer, humanOffer, opponentOffer)) {
+				opponentPlayer.ExecuteDeal(gD, humanPlayer, humanOffer, opponentOffer);
 
-		// If the deal is acceptable, execute it and go back to the previous
-		// screen.
-		if (opponentPlayer.WouldAcceptDealFrom(gD, humanPlayer, humanOffer, opponentOffer)) {
-			opponentPlayer.ExecuteDeal(gD, humanPlayer, humanOffer, opponentOffer);
-
-			GetParent<Diplomacy>().ShowTalkScreenForPlayer(humanPlayerId, opponentPlayerId);
-			return;
-		}
+				GetParent<Diplomacy>().ShowTalkScreenForPlayer(humanPlayerId, opponentPlayerId);
+			}
+		});
 	}
 
 	private void UpdateText() {
-		using UIGameDataAccess gameDataAccess = new();
-		GameData gD = gameDataAccess.gameData;
-		Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
-		Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
+		EngineStorage.ReadGameData((GameData gD) => {
+			Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
+			Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
 
-		int theirGoldValue = opponentOffer.GoldEquivalentFor(gD, opponentPlayer);
-		int ourGoldValue = humanOffer.GoldEquivalentFor(gD, opponentPlayer);
-		opponentResponse.Text = $"\"I value my offer at {theirGoldValue} gold and I value your offer at {ourGoldValue} gold\"";
+			int theirGoldValue = opponentOffer.GoldEquivalentFor(gD, opponentPlayer);
+			int ourGoldValue = humanOffer.GoldEquivalentFor(gD, opponentPlayer);
+			opponentResponse.Text =
+				$"\"I value my offer at {theirGoldValue} gold and I value your offer at {ourGoldValue} gold\"";
+		});
 	}
 }
