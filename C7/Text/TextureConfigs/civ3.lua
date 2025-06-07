@@ -108,6 +108,11 @@ textures.ui = {
       crop_region = { 22, 1, 20, 20 },
       shadows = false,
     },
+    pressed = {
+      path = BUTTONS,
+      crop_region = { 43, 1, 20, 20 },
+      shadows = false,
+    },
   },
   confirm = {
     normal = {
