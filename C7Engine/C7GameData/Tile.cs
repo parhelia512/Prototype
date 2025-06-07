@@ -636,6 +636,17 @@ namespace C7GameData {
 				throw new InvalidOperationException($"Cannot add {improvement.key} to the tile");
 
 			terrainImprovementByLayer[improvement.layer] = improvement;
+
+			// Hack: don't do this if gamedata is null, which can be true in some
+			// unit tests.
+			if (improvement == TerrainImprovement.road && EngineStorage.gameData != null) {
+				// Recompute all the trade networks whenever roads are added,
+				// because a new road may connect two new civs, which in turn
+				// could indirectly connect multiple other civs.
+				foreach (Player p in EngineStorage.gameData.players) {
+					p.InvalidateCachedTradeNetwork();
+				}
+			}
 		}
 
 		public bool HasImprovement(TerrainImprovement improvement) {

@@ -147,7 +147,16 @@ namespace C7GameData {
 		}
 
 		private HashSet<Resource> GetAccessibleResources() {
-			return owner.GetTradeNetwork().segments[this].resourceCounts.Keys.ToHashSet();
+			// We filter by whether the player knows about the resources here
+			// rather than in the trade network itself so that we don't have to
+			// invalidate the trade network when new techs are learned.
+			HashSet<Resource> result = new();
+			foreach (Resource r in owner.GetTradeNetwork().segments[this].resourceCounts.Keys) {
+				if (owner.KnowsAboutResource(r)) {
+					result.Add(r);
+				}
+			}
+			return result;
 		}
 
 		public int FoodNeededToGrow() {
@@ -982,7 +991,7 @@ namespace C7GameData {
 		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {
 			Dictionary<Resource, int> result = new();
 			foreach ((Resource r, int count) in owner.GetTradeNetwork().segments[this].resourceCounts) {
-				if (r.Category == category) {
+				if (r.Category == category && owner.KnowsAboutResource(r)) {
 					result[r] = count;
 				}
 			}

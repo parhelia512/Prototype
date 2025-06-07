@@ -9,13 +9,7 @@ public static class TerraformRules {
 	public static readonly Dictionary<UnitAction, Action<Player, Tile>> ActionEffects = new() {
 		{UnitAction.BuildMine, (_, tile) => tile.overlays.Add(TerrainImprovement.mine)},
 		{UnitAction.Irrigate, (_, tile) => tile.overlays.Add(TerrainImprovement.irrigation)},
-		{UnitAction.BuildRoad, (player, tile) => {
-				tile.overlays.Add(TerrainImprovement.road);
-
-				// The trade network needs to be recomputed whenever roads are added.
-				player.InvalidateCachedTradeNetwork();
-			}
-		},
+		{UnitAction.BuildRoad, (player, tile) => tile.overlays.Add(TerrainImprovement.road)},
 		{UnitAction.BuildRailroad, (_, tile) => tile.overlays.Add(TerrainImprovement.railroad)},
 		{UnitAction.ClearWetlands, (_, tile) => tile.ClearTerrainOverlay()},
 		// TODO: add bonus shields to the nearest city - should only happen the first time a forest is cleared
@@ -78,7 +72,7 @@ public class Terraform {
 		bool hasTech = RequiredTech == null || player.knownTechs.Contains(RequiredTech);
 
 		bool hasResources = RequiredResources.All(
-			res => player.GetTradeNetwork().HasTradeAccess(tile, res)
+			res => player.KnowsAboutResource(res) && player.GetTradeNetwork().HasTradeAccess(tile, res)
 		);
 
 		return hasTech && hasResources && ActionValidator(player, tile);

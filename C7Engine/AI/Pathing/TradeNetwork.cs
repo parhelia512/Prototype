@@ -10,7 +10,7 @@ namespace C7Engine.Pathing {
 
 		public void AddTile(Tile t, Player p) {
 			tiles.Add(t);
-			if (t.Resource != Resource.NONE && t.OwningPlayer() == p && p.KnowsAboutResource(t.Resource)) {
+			if (t.Resource != Resource.NONE && t.OwningPlayer() == p) {
 				if (resourceCounts.TryGetValue(t.Resource, out int currentCount)) {
 					resourceCounts[t.Resource] = currentCount + 1;
 				} else {
@@ -29,6 +29,7 @@ namespace C7Engine.Pathing {
 	//
 	// TODO: Handle harbors and airports
 	// TODO: Account for passing through the borders of civs we're at war with
+	// TODO: Invalidate the trade network when war status changes.
 	public class TradeNetwork {
 		public Dictionary<City, TradeNetworkSegment> segments = new();
 
