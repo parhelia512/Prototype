@@ -204,7 +204,7 @@ namespace C7Engine {
 
 			// A town that is at war might consider building walls, otherwise it
 			// probably shouldn't.
-			if (building.providesWalls && building.onlyUsefulInTowns && city.residents.Count < player.rules.MaximumLevel1CitySize) {
+			if (building.providesWalls) {
 				score += atWar ? 20 : 8;
 			}
 
