@@ -147,6 +147,8 @@ public partial class DomesticAdvisor : Control {
 
 			int scienceRate = player.scienceRate;
 			int luxuryRate = player.luxuryRate;
+			int maintenanceCosts = player.MaintenanceCosts();
+			(_, _, int unitSupportCost) = player.TotalUnitsAllowedUnitsAndSupportCost();
 
 			scienceSliderIcon.SetPosition(new Vector2(CalculateSliderXPos(scienceRate), scienceSliderY));
 			luxurySliderIcon.SetPosition(new Vector2(CalculateSliderXPos(luxuryRate), luxurySliderY));
@@ -159,7 +161,7 @@ public partial class DomesticAdvisor : Control {
 
 			// TODO: fill these in.
 			incomeDetails.Text = "From cities: +??\nFrom taxmen: +??\nFrom other civs: +??\nFrom interest: +??";
-			expenseDetails.Text = "-??: Science\n-??: Entertainment\n-??: Corruption\n-??: Maintenance\n-??: Unit costs\n-??: To other civs";
+			expenseDetails.Text = $"-??: Science\n-??: Entertainment\n-??: Corruption\n-{maintenanceCosts}: Maintenance\n-{unitSupportCost}: Unit costs\n-??: To other civs";
 			incomeSummary.Text = "??";
 			expenseSummary.Text = "??";
 

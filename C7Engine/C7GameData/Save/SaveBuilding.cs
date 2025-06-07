@@ -39,6 +39,7 @@ namespace C7GameData.Save {
 		public int culturePerTurn;
 		public int contentFacesInCity;
 		public int combatDefenseBonus;
+		public int maintenanceCost;
 		public int iconRowIndex;
 		public ID? renderedObsoleteBy;
 

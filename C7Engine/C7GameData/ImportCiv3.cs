@@ -926,6 +926,7 @@ namespace C7GameData {
 					contentFacesInCity=bldg.ContentFaces - bldg.UnhappyFaces,
 					iconRowIndex=pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
 					combatDefenseBonus=bldg.DefenseBonus,
+					maintenanceCost=bldg.MaintenanceCost,
 				};
 
 				if (bldg.RequiredAdvance != -1) {

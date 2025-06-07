@@ -270,10 +270,19 @@ namespace C7GameData {
 			return "";
 		}
 
+		public int MaintenanceCosts() {
+			int result = 0;
+			foreach (City c in cities) {
+				result += c.MaintenanceCosts();
+			}
+			return result;
+		}
+
 		public int CalculateGoldPerTurn() {
 			int result = 0;
 			foreach (City city in cities) {
 				result += city.CurrentCommerceYield().taxes;
+				result -= city.MaintenanceCosts();
 			}
 
 			// Subtract unit support costs, if any.
