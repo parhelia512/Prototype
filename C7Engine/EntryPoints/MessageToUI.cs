@@ -1,6 +1,7 @@
 namespace C7Engine {
 	using System.Threading;
 	using C7GameData;
+	using System;
 
 	public class MessageToUI {
 		public void send() {
@@ -11,10 +12,10 @@ namespace C7Engine {
 	public class MsgStartUnitAnimation : MessageToUI {
 		public ID unitID;
 		public MapUnit.AnimatedAction action;
-		public AutoResetEvent completionEvent;
+		public Action completionEvent;
 		public AnimationEnding ending;
 
-		public MsgStartUnitAnimation(MapUnit unit, MapUnit.AnimatedAction action, AutoResetEvent completionEvent, AnimationEnding ending) {
+		public MsgStartUnitAnimation(MapUnit unit, MapUnit.AnimatedAction action, Action completionEvent, AnimationEnding ending) {
 			this.unitID = unit.id;
 			this.action = action;
 			this.completionEvent = completionEvent;
@@ -25,10 +26,10 @@ namespace C7Engine {
 	public class MsgStartEffectAnimation : MessageToUI {
 		public int tileIndex;
 		public AnimatedEffect effect;
-		public AutoResetEvent completionEvent;
+		public Action completionEvent;
 		public AnimationEnding ending;
 
-		public MsgStartEffectAnimation(Tile tile, AnimatedEffect effect, AutoResetEvent completionEvent, AnimationEnding ending) {
+		public MsgStartEffectAnimation(Tile tile, AnimatedEffect effect, Action completionEvent, AnimationEnding ending) {
 			this.tileIndex = EngineStorage.gameData.map.tileCoordsToIndex(tile.XCoordinate, tile.YCoordinate);
 			this.effect = effect;
 			this.completionEvent = completionEvent;

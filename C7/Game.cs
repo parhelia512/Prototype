@@ -217,7 +217,7 @@ public partial class Game : Node2D {
 						animTracker.startAnimation(unit, mSUA.action, mSUA.completionEvent, mSUA.ending);
 					} else {
 						if (mSUA.completionEvent != null) {
-							mSUA.completionEvent.Set();
+							mSUA.completionEvent();
 						}
 					}
 					break;
@@ -229,7 +229,7 @@ public partial class Game : Node2D {
 						animTracker.startAnimation(tile, mSEA.effect, mSEA.completionEvent, mSEA.ending);
 					else {
 						if (mSEA.completionEvent != null)
-							mSEA.completionEvent.Set();
+							mSEA.completionEvent();
 					}
 					break;
 				case MsgStartTurn mST:

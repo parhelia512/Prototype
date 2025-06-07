@@ -1,5 +1,6 @@
 namespace C7GameData {
 	using System;
+	using System.Threading;
 	using System.Text.Json.Serialization;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -555,11 +556,9 @@ namespace C7GameData {
 
 		public void Animate(AnimatedEffect effect, bool wait) {
 			if (EngineStorage.animationsEnabled) {
-				new MsgStartEffectAnimation(this, effect, wait ? EngineStorage.uiEvent : null, AnimationEnding.Stop).send();
+				new MsgStartEffectAnimation(this, effect, wait ? EngineStorage.FinishUiEvent : null, AnimationEnding.Stop).send();
 				if (wait) {
-					EngineStorage.gameDataMutex.ReleaseMutex();
-					EngineStorage.uiEvent.WaitOne();
-					EngineStorage.gameDataMutex.WaitOne();
+					EngineStorage.WaitForUiEvent();
 				}
 			}
 		}

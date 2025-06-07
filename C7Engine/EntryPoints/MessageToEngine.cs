@@ -8,8 +8,7 @@ namespace C7Engine {
 		public abstract void process();
 
 		public void send() {
-			EngineStorage.pendingMessages.Enqueue(this);
-			EngineStorage.actionAddedToQueue.Set();
+			EngineStorage.pendingMessages.Add(this);
 		}
 	}
 

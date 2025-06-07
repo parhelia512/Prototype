@@ -16,7 +16,7 @@ public partial class AnimationTracker {
 
 	public struct ActiveAnimation {
 		public long startTimeMS, endTimeMS;
-		public AutoResetEvent completionEvent;
+		public Action completionEvent;
 		public AnimationEnding ending;
 		public C7Animation anim;
 	}
@@ -27,7 +27,7 @@ public partial class AnimationTracker {
 		return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 	}
 
-	private void startAnimation(ID id, C7Animation anim, AutoResetEvent completionEvent, AnimationEnding ending) {
+	private void startAnimation(ID id, C7Animation anim, Action completionEvent, AnimationEnding ending) {
 		long currentTimeMS = getCurrentTimeMS();
 		long animDurationMS = (long)(1000.0 * anim.getDuration());
 
@@ -36,7 +36,7 @@ public partial class AnimationTracker {
 			// If there's already an animation playing for this unit, end it first before replacing it
 			// TODO: Consider instead queueing up the new animation until after the first one is completed
 			if (aa.completionEvent != null)
-				aa.completionEvent.Set();
+				aa.completionEvent();
 		}
 		aa = new ActiveAnimation {
 			startTimeMS = currentTimeMS,
@@ -51,11 +51,11 @@ public partial class AnimationTracker {
 		activeAnims[id] = aa;
 	}
 
-	public void startAnimation(MapUnit unit, MapUnit.AnimatedAction action, AutoResetEvent completionEvent, AnimationEnding ending) {
+	public void startAnimation(MapUnit unit, MapUnit.AnimatedAction action, Action completionEvent, AnimationEnding ending) {
 		startAnimation(unit.id, civ3AnimData.forUnit(unit.unitType, action), completionEvent, ending);
 	}
 
-	public void startAnimation(Tile tile, AnimatedEffect effect, AutoResetEvent completionEvent, AnimationEnding ending) {
+	public void startAnimation(Tile tile, AnimatedEffect effect, Action completionEvent, AnimationEnding ending) {
 		startAnimation(tile.Id, civ3AnimData.forEffect(effect), completionEvent, ending);
 	}
 
@@ -63,7 +63,7 @@ public partial class AnimationTracker {
 		ActiveAnimation aa;
 		if (activeAnims.TryGetValue(unit.id, out aa)) {
 			if (aa.completionEvent != null)
-				aa.completionEvent.Set();
+				aa.completionEvent();
 			activeAnims.Remove(unit.id);
 		}
 	}
@@ -102,7 +102,7 @@ public partial class AnimationTracker {
 		foreach (var guidAAPair in activeAnims.Where(guidAAPair => guidAAPair.Value.endTimeMS <= currentTimeMS)) {
 			var (id, aa) = (guidAAPair.Key, guidAAPair.Value);
 			if (aa.completionEvent != null) {
-				aa.completionEvent.Set();
+				aa.completionEvent();
 				aa.completionEvent = null; // So event is only triggered once
 			}
 			if (aa.ending == AnimationEnding.Stop)
