@@ -65,8 +65,25 @@ namespace C7GameData {
 			rng = new Random(seed);
 		}
 
-		public List<Player> GetHumanPlayers() {
-			return players.FindAll(p => p.isHuman);
+		// Returns the first human player in the set of players, or the first
+		// non-barbarian player if we're in observer mode (where the human player
+		// is no longer marked as human).
+		public Player GetFirstHumanPlayer() {
+			foreach (Player p in players) {
+				if (p.isHuman) {
+					return p;
+				}
+			}
+
+			if (observerMode) {
+				foreach (Player p in players) {
+					if (!p.isBarbarians) {
+						return p;
+					}
+				}
+			}
+
+			return null;
 		}
 
 		public MapUnit GetUnit(ID id) {

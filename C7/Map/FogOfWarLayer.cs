@@ -26,7 +26,7 @@ namespace C7.Map {
 			Tile east = tile.neighbors[TileDirection.NORTHEAST];
 			Tile west = tile.neighbors[TileDirection.NORTHWEST];
 
-			TileKnowledge tileKnowledge = gameData.GetHumanPlayers()[0].tileKnowledge;
+			TileKnowledge tileKnowledge = gameData.GetFirstHumanPlayer().tileKnowledge;
 			int column = 0;
 			int row = 0;
 

@@ -35,7 +35,7 @@ public partial class MilitaryAdvisor : TextureRect {
 		GoBackButton.Pressed += ReturnToMenu;
 
 		EngineStorage.ReadGameData((GameData gameData) => {
-			Player player = gameData.GetHumanPlayers()[0];
+			Player player = gameData.GetFirstHumanPlayer();
 			var (totalUnits, allowedUnits, unitSupportCost) = player.TotalUnitsAllowedUnitsAndSupportCost();
 
 			AddChild(totalUnitsLabel);

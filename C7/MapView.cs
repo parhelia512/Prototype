@@ -520,7 +520,7 @@ public partial class LooseView : Node2D {
 		if (gameData.observerMode) {
 			return true;
 		}
-		TileKnowledge knowledge = gameData.GetHumanPlayers()[0].tileKnowledge;
+		TileKnowledge knowledge = gameData.GetFirstHumanPlayer().tileKnowledge;
 		return tile != Tile.NONE && knowledge.isTileKnown(tile);
 	}
 }

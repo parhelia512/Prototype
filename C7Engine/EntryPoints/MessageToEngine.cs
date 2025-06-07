@@ -183,7 +183,7 @@ namespace C7Engine {
 		}
 
 		public override void process() {
-			Player player = EngineStorage.gameData.GetHumanPlayers()[0];
+			Player player = EngineStorage.gameData.GetFirstHumanPlayer();
 			if (player.currentlyResearchedTech == techId) {
 				return;
 			}
@@ -220,7 +220,7 @@ namespace C7Engine {
 		}
 
 		public override void process() {
-			Player player = EngineStorage.gameData.GetHumanPlayers()[0];
+			Player player = EngineStorage.gameData.GetFirstHumanPlayer();
 
 			if (moreScience && player.scienceRate == 10 || lessScience && player.scienceRate == 0) {
 				return;

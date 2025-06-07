@@ -143,7 +143,7 @@ public partial class DomesticAdvisor : Control {
 		Show();
 
 		EngineStorage.ReadGameData((GameData gameData) => {
-			Player player = gameData.GetHumanPlayers()[0];
+			Player player = gameData.GetFirstHumanPlayer();
 
 			int scienceRate = player.scienceRate;
 			int luxuryRate = player.luxuryRate;
@@ -210,7 +210,7 @@ public partial class DomesticAdvisor : Control {
 
 	private void ChangeGovernments() {
 		EngineStorage.ReadGameData((GameData gameData) => {
-			Player player = gameData.GetHumanPlayers()[0];
+			Player player = gameData.GetFirstHumanPlayer();
 
 			if (player.government.transitionType) {
 				popupOverlay.ShowPopup(
