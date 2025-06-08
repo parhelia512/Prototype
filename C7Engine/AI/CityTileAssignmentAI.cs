@@ -16,7 +16,7 @@ namespace C7Engine.AI {
 		private static ILogger log = Log.ForContext<CityTileAssignmentAI>();
 
 		// Assigns a citizen, which is alredy part of a city, to a tile, if possible.
-		public static void AssignNewCitizenToTile(CityResident newResident, bool manageMoods = false) {
+		public static void AssignNewCitizenToTile(GameData gameData, CityResident newResident, bool manageMoods = false) {
 			City city = newResident.city;
 			int foodYield = city.CurrentFoodYield();
 
@@ -48,7 +48,7 @@ namespace C7Engine.AI {
 
 			// Check to see if this citizen working a tile would cause the city
 			// to be unhappy. If so, make them an entertainer.
-			City.Mood cityMood = city.RecalculateCitizenMoods(EngineStorage.gameData);
+			City.Mood cityMood = city.RecalculateCitizenMoods(gameData);
 
 			if (cityMood == City.Mood.Unhappy && manageMoods) {
 				newResident.citizenType = city.owner.GetKnownSpecialists().MaxBy(x => x.Luxuries);

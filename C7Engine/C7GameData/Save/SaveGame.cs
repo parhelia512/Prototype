@@ -109,13 +109,15 @@ namespace C7GameData.Save {
 			data.defaultExperienceLevel = data.experienceLevels.Find(el => el.key == DefaultExperienceLevel);
 
 			data.UpdateTileOwners();
+			data.InvalidateCachedTradeNetwork();
+
 			foreach (Player p in data.players) {
 				// Backfill citizen assignments for scenarios that don't specify
 				// them.
 				foreach (City c in p.cities) {
 					foreach (CityResident cr in c.residents) {
 						if (cr.citizenType.IsDefaultCitizen && cr.tileWorked == Tile.NONE) {
-							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(cr);
+							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(data, cr);
 						}
 					}
 				}

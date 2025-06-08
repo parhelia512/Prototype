@@ -301,10 +301,12 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 
 	public RightClickChooseProductionMenu(Game game, City city) : base(game) {
 		cityID = city.id;
-		foreach (IProducible option in city.ListProductionOptions()) {
-			int buildTime = city.TurnsToProduce(option);
-			AddItem($"{option.name} ({buildTime} turns)", () => ChooseProduction(option.name), GetProducibleIcon(option));
-		}
+		EngineStorage.ReadGameData((GameData gameData) => {
+			foreach (IProducible option in city.ListProductionOptions(gameData)) {
+				int buildTime = city.TurnsToProduce(option);
+				AddItem($"{option.name} ({buildTime} turns)", () => ChooseProduction(option.name), GetProducibleIcon(option));
+			}
+		});
 	}
 
 	public void ChooseProduction(string producibleName) {

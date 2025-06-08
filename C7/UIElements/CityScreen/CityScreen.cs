@@ -161,7 +161,7 @@ public partial class CityScreen : Control {
 
 						Tile tile = mapView.tileOnScreenAt(gameData.map, eventMouseButton.Position);
 						if (tile != null) {
-							HandleReassignment(tile);
+							HandleReassignment(gameData, tile);
 
 							// Recalculate moods after changing tile assignments.
 							tileAssignmentLayer.city.RecalculateCitizenMoods(gameData);
@@ -169,7 +169,7 @@ public partial class CityScreen : Control {
 							RenderPopHeads(tileAssignmentLayer.city);
 							RenderFoodDetails(tileAssignmentLayer.city);
 							RenderCommerceDetails(tileAssignmentLayer.city);
-							RenderProductionDetails(tileAssignmentLayer.city);
+							RenderProductionDetails(gameData, tileAssignmentLayer.city);
 						}
 					});
 				}
@@ -177,7 +177,7 @@ public partial class CityScreen : Control {
 		}
 	}
 
-	private void HandleReassignment(Tile tile) {
+	private void HandleReassignment(GameData gameData, Tile tile) {
 		City city = tileAssignmentLayer.city;
 
 		// We only support clicking on workable tiles or the city center.
@@ -246,12 +246,18 @@ public partial class CityScreen : Control {
 					city = city
 				};
 				city.AddCitizen(newResident);
-				CityTileAssignmentAI.AssignNewCitizenToTile(newResident, manageMoods: true);
+				CityTileAssignmentAI.AssignNewCitizenToTile(gameData, newResident, manageMoods: true);
 			}
 		}
 	}
 
 	private void OnShowCityScreen(ParameterWrapper<City> city) {
+		EngineStorage.ReadGameData((GameData gameData) => {
+			OnShowCityScreenLocked(gameData, city);
+		});
+	}
+
+	private void OnShowCityScreenLocked(GameData gameData, ParameterWrapper<City> city) {
 		this.Show();
 		mapView.centerCameraOnTile(city.Value.location.neighbors[TileDirection.SOUTH]);
 		tileAssignmentLayer.city = city.Value;
@@ -260,10 +266,10 @@ public partial class CityScreen : Control {
 		RenderCulture(city.Value);
 		RenderFoodDetails(city.Value);
 		RenderCommerceDetails(city.Value);
-		RenderProductionDetails(city.Value);
+		RenderProductionDetails(gameData, city.Value);
 		RenderExistingBuildings(city.Value.GetBuildings());
-		RenderStrategicResources(city.Value);
-		RenderLuxuries(city.Value);
+		RenderStrategicResources(gameData, city.Value);
+		RenderLuxuries(gameData, city.Value);
 	}
 
 	private void OnExit() {
@@ -271,8 +277,8 @@ public partial class CityScreen : Control {
 		tileAssignmentLayer.city = null;
 	}
 
-	private void RenderStrategicResources(City city) {
-		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetStrategicResources();
+	private void RenderStrategicResources(GameData gameData, City city) {
+		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetStrategicResources(gameData);
 
 		foreach (var child in strategicResources.GetChildren()) {
 			strategicResources.RemoveChild(child);
@@ -301,8 +307,8 @@ public partial class CityScreen : Control {
 		}
 	}
 
-	private void RenderLuxuries(City city) {
-		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetLuxuries();
+	private void RenderLuxuries(GameData gameData, City city) {
+		Dictionary<C7GameData.Resource, int> resourceCounter = city.GetLuxuries(gameData);
 
 		foreach (var child in luxuriesContainer.GetChildren()) {
 			luxuriesContainer.RemoveChild(child);
@@ -547,7 +553,7 @@ public partial class CityScreen : Control {
 		commerceHappinessDetails.Text = $"{breakdown.happiness} gold/turn to happiness";
 	}
 
-	private void RenderProductionDetails(City city) {
+	private void RenderProductionDetails(GameData gameData, City city) {
 		CorruptableValue shields = city.CurrentProductionYield();
 		RenderShieldBox(city.owner.ShieldCost(city.itemBeingProduced), city.shieldsStored);
 		RenderShieldRow(shields.useful, shields.corrupt);
@@ -606,10 +612,10 @@ public partial class CityScreen : Control {
 		productionButtonLabel.SetPosition(new Vector2(0, 65));
 		productionButtonLabel.SetTextAndCenterLabel($"{city.itemBeingProduced.name}");
 
-		productionMenu.AddItems(city, (IProducible p) => {
+		productionMenu.AddItems(gameData, city, (IProducible p) => {
 			EngineStorage.ReadGameData((GameData gameData) => {
 				city.SetItemBeingProduced(p);
-				RenderProductionDetails(city);
+				RenderProductionDetails(gameData, city);
 			});
 		});
 	}
@@ -782,7 +788,7 @@ public partial class CityScreen : Control {
 			List<City> cities = currentCity.owner.cities;
 			City nextCity = cities[(cities.IndexOf(currentCity) + 1) % cities.Count];
 			nextCity.RecalculateCitizenMoods(gameData);
-			OnShowCityScreen(new ParameterWrapper<City>(nextCity));
+			OnShowCityScreenLocked(gameData, new ParameterWrapper<City>(nextCity));
 		});
 	}
 
@@ -792,7 +798,7 @@ public partial class CityScreen : Control {
 			List<City> cities = currentCity.owner.cities;
 			City previousCity = cities[(cities.IndexOf(currentCity) + cities.Count - 1) % cities.Count];
 			previousCity.RecalculateCitizenMoods(gameData);
-			OnShowCityScreen(new ParameterWrapper<City>(previousCity));
+			OnShowCityScreenLocked(gameData, new ParameterWrapper<City>(previousCity));
 		});
 	}
 

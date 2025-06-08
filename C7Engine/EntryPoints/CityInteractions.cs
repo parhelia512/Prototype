@@ -30,17 +30,17 @@ namespace C7Engine {
 			// Now that the city exists and its borders have been established,
 			// invalidate the trade network so it can be recomputed with this
 			// new information.
-			owner.InvalidateCachedTradeNetwork();
+			gameData.InvalidateCachedTradeNetwork();
 
 			// Assigning citizens to tiles requires knowing luxuries, so this
 			// has to happen after invalidating the trade network.
-			CityTileAssignmentAI.AssignNewCitizenToTile(firstResident);
+			CityTileAssignmentAI.AssignNewCitizenToTile(gameData, firstResident);
 
 			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
 
 			// Redo corruption calculations after a city is created, since it
 			// may change rank corruption values.
-			owner.DoCorruptionCalculations(EngineStorage.gameData);
+			owner.DoCorruptionCalculations(gameData);
 
 			return newCity;
 		}
@@ -63,7 +63,7 @@ namespace C7Engine {
 			// Now that the city has been destroyed and tile owners updated,
 			// invalidate the trade network in case removing this city cut off
 			// resource access.
-			owner.InvalidateCachedTradeNetwork();
+			EngineStorage.gameData.InvalidateCachedTradeNetwork();
 
 			// Redo corruption calculations after a city is destroyed, since it
 			// may change rank corruption values.

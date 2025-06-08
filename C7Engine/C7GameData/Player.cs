@@ -97,10 +97,6 @@ namespace C7GameData {
 		// completing a wonder (like Theory of Evolution).
 		public int freeTechsRemaining = 0;
 
-		// The cached trade network for this player. This is invalidated whenever
-		// a road is built or a city is created/destroyed.
-		private TradeNetwork tradeNetwork;
-
 		public int EraIndex() {
 			return EraIndex(eraCivilopediaName);
 		}
@@ -547,7 +543,7 @@ namespace C7GameData {
 
 					// Update the trade network if borders expanded, as a new
 					// resource may be part of the network.
-					InvalidateCachedTradeNetwork();
+					EngineStorage.gameData.InvalidateCachedTradeNetwork();
 				}
 
 				c.HandleCityGrowth(gameData);
@@ -763,18 +759,6 @@ namespace C7GameData {
 
 		public int ShieldCost(IProducible producible) {
 			return producible.ShieldCost(civilization.traits);
-		}
-
-		// TODO: Take wars into account. Trade networks cannot pass through civilizations the player's at war with
-		public TradeNetwork GetTradeNetwork() {
-			if (tradeNetwork == null) {
-				tradeNetwork = new(this);
-			}
-			return tradeNetwork;
-		}
-
-		public void InvalidateCachedTradeNetwork() {
-			tradeNetwork = null;
 		}
 	}
 

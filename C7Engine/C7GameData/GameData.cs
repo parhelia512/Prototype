@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Serilog;
+using C7Engine.Pathing;
 
 namespace C7GameData {
 	public class GameData {
@@ -54,6 +55,10 @@ namespace C7GameData {
 		public bool showGridCoordinates = false;
 
 		public string scenarioSearchPath;   //legacy from Civ3, we'll probably have a more modern format someday but this keeps legacy compatibility
+
+		// The cached trade network for all players. This is invalidated whenever
+		// a road is built or a city is created/destroyed.
+		private TradeNetwork tradeNetwork;
 
 		public GameData() {
 			map = new GameMap();
@@ -225,6 +230,17 @@ namespace C7GameData {
 			}
 
 			return (int)Math.Max(Math.Floor(researchCost), 0);
+		}
+
+		public TradeNetwork GetTradeNetwork() {
+			if (tradeNetwork == null) {
+				tradeNetwork = new(this);
+			}
+			return tradeNetwork;
+		}
+
+		public void InvalidateCachedTradeNetwork() {
+			tradeNetwork = null;
 		}
 
 		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/

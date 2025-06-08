@@ -163,7 +163,7 @@ namespace C7Engine {
 		public override void process() {
 			City city = EngineStorage.gameData.cities.Find(c => c.id == cityID);
 			if (city != null) {
-				foreach (IProducible producible in city.ListProductionOptions()) {
+				foreach (IProducible producible in city.ListProductionOptions(EngineStorage.gameData)) {
 					if (producible.name == producibleName) {
 						city.SetItemBeingProduced(producible);
 						break;

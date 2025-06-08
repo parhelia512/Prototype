@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using C7GameData.Save;
+using C7Engine;
 
 namespace C7GameData;
 
@@ -72,7 +73,7 @@ public class Terraform {
 		bool hasTech = RequiredTech == null || player.knownTechs.Contains(RequiredTech);
 
 		bool hasResources = RequiredResources.All(
-			res => player.KnowsAboutResource(res) && player.GetTradeNetwork().HasTradeAccess(tile, res)
+			res => EngineStorage.gameData.GetTradeNetwork().HasTradeAccess(tile, player, res)
 		);
 
 		return hasTech && hasResources && ActionValidator(player, tile);

@@ -20,7 +20,7 @@ namespace C7Engine.Pathing {
 		}
 	}
 
-	// A class for calculating the trade networks of a particular player.
+	// A class for calculating the trade networks.
 	//
 	// The main idea is that calculating the entire empire's trade network once
 	// is faster than doing it repeatedly for each city. By doing it once we can
@@ -31,13 +31,20 @@ namespace C7Engine.Pathing {
 	// TODO: Account for passing through the borders of civs we're at war with
 	// TODO: Invalidate the trade network when war status changes.
 	public class TradeNetwork {
-		public Dictionary<City, TradeNetworkSegment> segments = new();
+		private Dictionary<Player, Dictionary<City, TradeNetworkSegment>> segments = new();
 
-		public TradeNetwork(Player player) {
+		public TradeNetwork(GameData gameData) {
+			foreach (Player p in gameData.players) {
+				ComputeTradeNetwork(p);
+			}
+		}
+
+		private void ComputeTradeNetwork(Player player) {
 			HashSet<Tile> seen = new();
 
+			segments[player] = new();
 			foreach (City c in player.cities) {
-				if (segments.ContainsKey(c)) {
+				if (segments[player].ContainsKey(c)) {
 					continue;
 				}
 
@@ -45,7 +52,7 @@ namespace C7Engine.Pathing {
 				// segment and do a flood fill for all roads coming from the
 				// city.
 				TradeNetworkSegment segment = new();
-				segments[c] = segment;
+				segments[player][c] = segment;
 
 				Queue<Tile> toCheck = new();
 				toCheck.Enqueue(c.location);
@@ -56,7 +63,7 @@ namespace C7Engine.Pathing {
 					segment.AddTile(x, player);
 
 					if (x.cityAtTile != null) {
-						segments[x.cityAtTile] = segment;
+						segments[player][x.cityAtTile] = segment;
 					}
 
 					foreach (Tile n in x.neighbors.Values) {
@@ -69,8 +76,25 @@ namespace C7Engine.Pathing {
 			}
 		}
 
-		public bool HasTradeAccess(Tile t, Resource r) {
-			foreach (TradeNetworkSegment segment in segments.Values) {
+		// Returns the resources and their counts that are available to the given
+		// city.
+		public Dictionary<Resource, int> GetResourcesAvailableToCity(Player player, City city) {
+			TradeNetworkSegment segment = segments[player][city];
+			Dictionary<Resource, int> result = new();
+			foreach ((Resource r, int count) in segment.resourceCounts) {
+				if (player.KnowsAboutResource(r)) {
+					result[r] = count;
+				}
+			}
+			return result;
+		}
+
+		public bool HasTradeAccess(Tile t, Player p, Resource r) {
+			if (!p.KnowsAboutResource(r)) {
+				return false;
+			}
+
+			foreach (TradeNetworkSegment segment in segments[p].Values) {
 				if (segment.tiles.Contains(t) && segment.resourceCounts.TryGetValue(r, out int count) && count > 0) {
 					return true;
 				}
