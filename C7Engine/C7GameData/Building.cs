@@ -103,7 +103,7 @@ namespace C7GameData {
 		public bool doublesCityGrowthRate;
 		public bool providesWalls;
 		public bool onlyUsefulInTowns;
-		public int combatDefenseBonus;
+		public StrengthBonus? combatDefenseBonus;
 
 		public int culturePerTurn = 0;
 		public int maintenanceCost = 0;
@@ -132,12 +132,17 @@ namespace C7GameData {
 			culturePerTurn = building.culturePerTurn;
 			maintenanceCost = building.maintenanceCost;
 			iconRowIndex = building.iconRowIndex;
+
 			if (building.contentFacesInCity < 0) {
 				unhappyFacesInCity = -building.contentFacesInCity;
 			} else {
 				contentFacesInCity = building.contentFacesInCity;
 			}
-			combatDefenseBonus = building.combatDefenseBonus;
+
+			if (building.combatDefenseBonus > 0) {
+				combatDefenseBonus = new(name, building.combatDefenseBonus);
+			}
+
 			isCenterOfEmpire = building.flags.Contains(SaveBuilding.Flag.IsCenterOfEmpire);
 			increasesLuxuryTrade = building.flags.Contains(SaveBuilding.Flag.IncreasesLuxuryTrade);
 			reducesCorruption = building.flags.Contains(SaveBuilding.Flag.ReducesCorruption);
