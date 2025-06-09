@@ -72472,7 +72472,7 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "combatDefenseBonus": 50,
+      "combatDefenseBonus": 0.5,
       "maintenanceCost": 0,
       "iconRowIndex": 7,
       "flags": [
@@ -73593,7 +73593,7 @@
       "isSmallWonder": false,
       "culturePerTurn": 0,
       "contentFacesInCity": 0,
-      "combatDefenseBonus": 50,
+      "combatDefenseBonus": 0.5,
       "maintenanceCost": 1,
       "iconRowIndex": 75,
       "traits": [

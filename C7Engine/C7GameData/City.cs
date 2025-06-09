@@ -441,9 +441,11 @@ namespace C7GameData {
 				yield return gD.cityLevel1DefenseBonus;
 			}
 
+			bool isTown = residents.Count <= gD.rules.MaximumLevel1CitySize;
+
 			// Buildings, such as walls, can also give bonuses.
 			foreach (CityBuilding cb in GetBuildings()) {
-				if (cb.building.combatDefenseBonus == 0) {
+				if (cb.building.combatDefenseBonus is not StrengthBonus defenseBonus) {
 					continue;
 				}
 
@@ -452,10 +454,8 @@ namespace C7GameData {
 				//
 				// But if the building is only useful in towns we need to check
 				// the city size before providing the bonus.
-				if (!cb.building.onlyUsefulInTowns) {
-					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
-				} else if (residents.Count <= gD.rules.MaximumLevel1CitySize) {
-					yield return new StrengthBonus(cb.building.name, cb.building.combatDefenseBonus);
+				if (!cb.building.onlyUsefulInTowns || isTown) {
+					yield return defenseBonus;
 				}
 			}
 		}
