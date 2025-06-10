@@ -164,7 +164,7 @@ namespace C7Engine {
 			}
 
 			// Special case: we're at war.
-			if (PlayerIsAtWarWithOtherPlayer(player)) {
+			if (PlayerIsAtWarWithSomeone(player)) {
 				// Priority 1: ensure we don't have any unguarded cities.
 				//
 				// If this is an offensive unit only go defend if there are
@@ -224,7 +224,7 @@ namespace C7Engine {
 			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, minDefenders: int.MaxValue));
 		}
 
-		private static bool PlayerIsAtWarWithOtherPlayer(Player player) {
+		public static bool PlayerIsAtWarWithSomeone(Player player) {
 			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
 				if (p.Value.atWar) {
 					Player other = EngineStorage.gameData.players.Find(x => x.id == p.Key);

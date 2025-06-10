@@ -46,14 +46,17 @@ namespace C7Engine {
 					player.RecalculateCitizenMoods(gameData, goIntoDisorderIfUnhappy: true);
 					player.DoCorruptionCalculations(gameData);
 
+					// Do the financial updates before updating the cities, so
+					// that a newly produced unit won't put a player over the
+					// unit support cap and cause them to lose gold unexpectedly.
+					player.DoPerTurnFinanceUpdates(gameData);
+					player.DoPerTurnScienceUpdates(gameData);
+
 					// Note that we do growth after calculating citizen moods,
 					// to ensure that the player has a chance to deal with the
 					// unhappiness of a new citizen during their turn.
 					log.Information($"\n*** City growth/production for turn {gameData.turn}, player {player} ***");
 					player.HandleCityUpdates(gameData);
-
-					player.DoPerTurnFinanceUpdates(gameData);
-					player.DoPerTurnScienceUpdates(gameData);
 				}
 
 				// Now that the turn is ending, do all the bookkeeping for the

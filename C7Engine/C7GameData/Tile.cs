@@ -161,6 +161,15 @@ namespace C7GameData {
 			return false;
 		}
 
+		public bool NeighborsOcean() {
+			foreach (Tile neighbor in neighbors.Values) {
+				if (neighbor.baseTerrainType.isWater() && !neighbor.isFreshWater) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		/// <summary>
 		/// Returns neighbors along edges only.
 		/// This is used by some graphics algorithms.
@@ -680,6 +689,10 @@ namespace C7GameData {
 			}
 
 			return -1;
+		}
+
+		public bool HasBeenImproved() {
+			return terrainImprovementByLayer.Count > 0;
 		}
 
 		public void Clear() {

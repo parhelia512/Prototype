@@ -36,7 +36,7 @@ namespace C7Engine {
 			// has to happen after invalidating the trade network.
 			CityTileAssignmentAI.AssignNewCitizenToTile(gameData, firstResident);
 
-			newCity.SetItemBeingProduced(CityProductionAI.GetNextItemToBeProduced(newCity, null));
+			newCity.SetItemBeingProduced(ChooseProducible.Choose(newCity, owner));
 
 			// Redo corruption calculations after a city is created, since it
 			// may change rank corruption values.
