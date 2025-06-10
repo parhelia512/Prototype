@@ -18,7 +18,7 @@ namespace C7Engine {
 		);
 
 		public static IProducible Choose(City city, Player player) {
-			List<IProducible> options = city.ListProductionOptions().ToList();
+			List<IProducible> options = city.ListProductionOptions(EngineStorage.gameData).ToList();
 			ProducibleStats stats = CalculateStats(city, options);
 
 			IProducible best = null;
@@ -170,7 +170,7 @@ namespace C7Engine {
 
 				// If we have a few cities but don't have trade access to the
 				// capital, boost the odds of a worker.
-				if (player.GetTradeNetwork().segments[city] != player.GetTradeNetwork().segments[player.cities[0]] && player.cities.Count > 4) {
+				if (!EngineStorage.gameData.GetTradeNetwork().ConnectedToCapital(player, city) && player.cities.Count > 4) {
 					score += noTradeAccessBoost;
 				}
 			}
@@ -187,7 +187,8 @@ namespace C7Engine {
 			// that have a decent number of luxuries. Otherwise they don't do
 			// much.
 			if (building.increasesLuxuryTrade) {
-				score += Math.Max(city.residents.Count - city.GetLuxuries().Keys.Count, 0) * (city.GetLuxuries().Keys.Count / 2);
+				GameData gd = EngineStorage.gameData;
+				score += Math.Max(city.residents.Count - city.GetLuxuries(gd).Keys.Count, 0) * (city.GetLuxuries(gd).Keys.Count / 2);
 			}
 
 			// Only build an aqueduct if we need one.

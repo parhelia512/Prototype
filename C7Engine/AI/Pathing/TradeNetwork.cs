@@ -101,5 +101,9 @@ namespace C7Engine.Pathing {
 			}
 			return false;
 		}
+
+		public bool ConnectedToCapital(Player p, City c) {
+			return segments[p][c] == segments[p][p.cities[0]];
+		}
 	}
 }
