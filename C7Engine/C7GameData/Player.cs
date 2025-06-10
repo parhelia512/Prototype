@@ -540,6 +540,10 @@ namespace C7GameData {
 				// the new citizen can go on one of our new tiles.
 				if (c.UpdateCultureAndCheckForExpansion()) {
 					gameData.UpdateTileOwners();
+
+					// Update the trade network if borders expanded, as a new
+					// resource may be part of the network.
+					EngineStorage.gameData.InvalidateCachedTradeNetwork();
 				}
 
 				c.HandleCityGrowth(gameData);
@@ -755,13 +759,6 @@ namespace C7GameData {
 
 		public int ShieldCost(IProducible producible) {
 			return producible.ShieldCost(civilization.traits);
-		}
-
-		// TODO: Take wars into account. Trade networks cannot pass through civilizations the player's at war with
-		public bool HasTradeAccess(Tile from, Tile to) {
-			PathingAlgorithm pathing = PathingAlgorithmChooser.GetTradeNetworkAlgorithm();
-
-			return from == to || pathing.PathFrom(from, to).path.Count > 0;
 		}
 	}
 

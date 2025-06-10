@@ -21,7 +21,7 @@ public partial class ProductionMenu : Civ3TextureRect {
 		fontTheme.DefaultFont = font;
 	}
 
-	public void AddItems(City city, Action<IProducible> chooseProduction) {
+	public void AddItems(GameData gameData, City city, Action<IProducible> chooseProduction) {
 		if (tree != null) {
 			itemMapping.Clear();
 			RemoveChild(tree);
@@ -38,7 +38,7 @@ public partial class ProductionMenu : Civ3TextureRect {
 
 		TreeItem root = TradingTree.CreateTreeRoot(tree);
 
-		foreach (IProducible option in city.ListProductionOptions()) {
+		foreach (IProducible option in city.ListProductionOptions(gameData)) {
 			int buildTime = city.TurnsToProduce(option);
 
 			TreeItem child = tree.CreateItem(root);

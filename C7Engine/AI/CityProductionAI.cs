@@ -30,7 +30,7 @@ namespace C7Engine {
 		 */
 		public static IProducible GetNextItemToBeProduced(City city, IProducible lastProduced) {
 			List<StrategicPriority> priorities = city.owner.strategicPriorityData;
-			IEnumerable<IProducible> producibles = city.ListProductionOptions();
+			IEnumerable<IProducible> producibles = city.ListProductionOptions(EngineStorage.gameData);
 
 			log.Debug($"Choosing what to produce next in {city.name}");
 

@@ -455,7 +455,7 @@ namespace C7Engine {
 						city = city
 					};
 					city.AddCitizen(newResident);
-					CityTileAssignmentAI.AssignNewCitizenToTile(newResident, manageMoods: true);
+					CityTileAssignmentAI.AssignNewCitizenToTile(EngineStorage.gameData, newResident, manageMoods: true);
 				}
 			}
 		}

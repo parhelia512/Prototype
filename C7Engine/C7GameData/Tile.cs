@@ -545,13 +545,15 @@ namespace C7GameData {
 		/// <param name="currentWorkerJob">the worker job currently finished, must not be null</param>
 		public void FinishWorkerJob(Terraform currentWorkerJob) {
 			// Reset All Workers working on the finished Job
+			Player player = null;
 			foreach (MapUnit unit in unitsOnTile) {
+				player = unit.owner;
 				if (currentWorkerJob == unit.WorkerJob) {
 					unit.resetWorkerJob();
 				}
 			}
 
-			currentWorkerJob.OnComplete(this);
+			currentWorkerJob.OnComplete(player, this);
 		}
 
 		public void Animate(AnimatedEffect effect, bool wait) {
@@ -634,6 +636,12 @@ namespace C7GameData {
 				throw new InvalidOperationException($"Cannot add {improvement.key} to the tile");
 
 			terrainImprovementByLayer[improvement.layer] = improvement;
+
+			// Hack: don't do this if gamedata is null, which can be true in some
+			// unit tests.
+			if (improvement == TerrainImprovement.road && EngineStorage.gameData != null) {
+				EngineStorage.gameData.InvalidateCachedTradeNetwork();
+			}
 		}
 
 		public bool HasImprovement(TerrainImprovement improvement) {

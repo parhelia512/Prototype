@@ -137,21 +137,17 @@ namespace C7GameData {
 			return result;
 		}
 
-		public IEnumerable<IProducible> ListProductionOptions() {
-			HashSet<Resource> accessibleResources = GetAccessibleResources();
+		public IEnumerable<IProducible> ListProductionOptions(GameData gameData) {
+			HashSet<Resource> accessibleResources = GetAccessibleResources(gameData);
 
-			IEnumerable<IProducible> producibles = EngineStorage.gameData.unitPrototypes.Cast<IProducible>()
-													.Concat(EngineStorage.gameData.Buildings.Cast<IProducible>());
+			IEnumerable<IProducible> producibles = gameData.unitPrototypes.Cast<IProducible>()
+													.Concat(gameData.Buildings.Cast<IProducible>());
 
 			return producibles.Where(p => p.CanProduce(this, accessibleResources));
 		}
 
-		private HashSet<Resource> GetAccessibleResources() {
-			return owner.resourcesInBorders
-						.Where(kv => owner.KnowsAboutResource(kv.Key))
-						.Where(kv => kv.Value.Any(t => owner.HasTradeAccess(location, t)))
-						.Select(kv => kv.Key)
-						.ToHashSet();
+		private HashSet<Resource> GetAccessibleResources(GameData gameData) {
+			return gameData.GetTradeNetwork().GetResourcesAvailableToCity(owner, this).Keys.ToHashSet();
 		}
 
 		public int FoodNeededToGrow() {
@@ -320,7 +316,7 @@ namespace C7GameData {
 
 		private IProducible GetMostExpensiveItemToProduce() {
 			IProducible best = null;
-			foreach (IProducible ip in ListProductionOptions()) {
+			foreach (IProducible ip in ListProductionOptions(EngineStorage.gameData)) {
 				if (best == null || owner.ShieldCost(ip) > owner.ShieldCost(best)) {
 					best = ip;
 				}
@@ -354,7 +350,7 @@ namespace C7GameData {
 				newResident.city = this;
 				newResident.citizenType = gameData.citizenTypes.Find(x => x.IsDefaultCitizen);
 				AddCitizen(newResident);
-				C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(newResident);
+				C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(gameData, newResident);
 
 				if (hasGranary) {
 					foodStored /= 2;
@@ -908,7 +904,7 @@ namespace C7GameData {
 			contentToHappyMoves += CurrentCommerceYield(respectCivilDisorder: false).happiness;
 
 			// As do luxury resources, which can be boosted by marketplaces.
-			int effectiveLux = GetLuxuries().Keys.Count;
+			int effectiveLux = GetLuxuries(gameData).Keys.Count;
 			if (GetBuildings().Any(x => x.building.increasesLuxuryTrade)) {
 				effectiveLux = (int)(Math.Floor(effectiveLux / 2f) * Math.Ceiling(effectiveLux / 2f) + Math.Ceiling(effectiveLux / 2f));
 			}
@@ -983,20 +979,23 @@ namespace C7GameData {
 			}
 		}
 
-		private Dictionary<Resource, int> ListResourceAccess(ResourceCategory category) {
-			return owner.resourcesInBorders
-				.Where(kv => kv.Key.Category == category && owner.KnowsAboutResource(kv.Key))
-				.Select(kv => (kv.Key, kv.Value.Where(t => owner.HasTradeAccess(location, t)).Count()))
-				.Where(rc => rc.Item2 > 0)
-				.ToDictionary();
+		private Dictionary<Resource, int> ListResourceAccess(GameData gameData, ResourceCategory category) {
+			Dictionary<Resource, int> availableResources = gameData.GetTradeNetwork().GetResourcesAvailableToCity(owner, this);
+			Dictionary<Resource, int> result = new();
+			foreach ((Resource r, int count) in availableResources) {
+				if (r.Category == category) {
+					result[r] = count;
+				}
+			}
+			return result;
 		}
 
-		public Dictionary<Resource, int> GetStrategicResources() {
-			return ListResourceAccess(ResourceCategory.STRATEGIC);
+		public Dictionary<Resource, int> GetStrategicResources(GameData gameData) {
+			return ListResourceAccess(gameData, ResourceCategory.STRATEGIC);
 		}
 
-		public Dictionary<Resource, int> GetLuxuries() {
-			return ListResourceAccess(ResourceCategory.LUXURY);
+		public Dictionary<Resource, int> GetLuxuries(GameData gameData) {
+			return ListResourceAccess(gameData, ResourceCategory.LUXURY);
 		}
 	}
 }
