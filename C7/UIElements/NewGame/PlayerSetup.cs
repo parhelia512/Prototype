@@ -202,22 +202,22 @@ public partial class PlayerSetup : Control {
 		} catch (Exception e) {
 			// Hardcoded fallback for the godot editor, which doesn't handle the
 			// global.
-			return SaveManager.LoadSave(@"./Text/c7-autosave-turn-0.json", "", (string unused) => { return unused; });
+			return SaveManager.LoadSave(@"./Text/c7-static-map-save.json", "", (string unused) => { return unused; });
 		}
 	}
 
 	private void CreateGame() {
 		loadingLabel.Visible = true;
 		GlobalSingleton global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
+		SaveGame save = GetSave();
 
 		// World generation can take a bit of time if multiple attempts are
 		// needed, so we don't want to tie up the UI thread.
-		Thread thread = new(() => { DoWorldGenerationAndstartGame(global); });
+		Thread thread = new(() => { DoWorldGenerationAndstartGame(save, global); });
 		thread.Start();
 	}
 
-	private void DoWorldGenerationAndstartGame(GlobalSingleton Global) {
-		SaveGame save = GetSave();
+	private void DoWorldGenerationAndstartGame(SaveGame save, GlobalSingleton Global) {
 		log.Information("Starting map generation");
 		save.Map = new SaveMap(MapGenerator.GenerateMap(Global.WorldCharacteristics));
 		log.Information("Done with map generation");
