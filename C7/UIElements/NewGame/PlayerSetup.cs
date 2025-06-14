@@ -161,23 +161,31 @@ public partial class PlayerSetup : Control {
 				popup.SetItemAsRadioCheckable(k, false);
 				popup.SetItemAsCheckable(k, false);
 			}
+
+			optionButton.ItemSelected += (long i) => { UpdateOpponentSelectors(); };
 		}
 
 		UpdateOpponentSelectors();
 	}
 
 	private void UpdateOpponentSelectors() {
-		foreach (OptionButton ob in opponentSelectors) {
-			int index = civilizations.FindIndex(x => x == this.civilization);
+		HashSet<string> civsTaken = new();
+		civsTaken.Add(civilization.name);
 
-			for (int i = 0; i < ob.GetPopup().ItemCount; ++i) {
-				ob.SetItemDisabled(i, this.civilization.name == ob.GetItemText(i));
-			}
+		foreach (OptionButton ob in opponentSelectors) {
+			string selection = ob.GetItemText(ob.Selected);
 
 			// If the player decides to play as civ X and one of the opponent
-			// selectors has X selected, change it to random.
-			if (ob.Selected == index) {
+			// selectors has X selected, change it to random. Similarly if one
+			// of the previous option buttons has selected this civ.
+			if (civsTaken.Contains(selection)) {
 				ob.Select(ob.GetPopup().ItemCount - 1);
+			} else if (selection != "Random") {
+				civsTaken.Add(selection);
+			}
+
+			for (int i = 0; i < ob.GetPopup().ItemCount; ++i) {
+				ob.SetItemDisabled(i, civsTaken.Contains(ob.GetItemText(i)));
 			}
 		}
 	}
@@ -196,10 +204,10 @@ public partial class PlayerSetup : Control {
 	}
 
 	private SaveGame GetSave() {
-		try {
+		if (!Engine.IsEditorHint()) {
 			GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 			return SaveManager.LoadSave(Global.DefaultGamePath, Global.DefaultBicPath, (string unused) => { return unused; });
-		} catch (Exception e) {
+		} else {
 			// Hardcoded fallback for the godot editor, which doesn't handle the
 			// global.
 			return SaveManager.LoadSave(@"./Text/c7-static-map-save.json", "", (string unused) => { return unused; });
