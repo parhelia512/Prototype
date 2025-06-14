@@ -248,7 +248,7 @@ namespace C7Engine {
 			if (building.culturePerTurn > 0) {
 				int unclaimedTilesInOuterRing = 0;
 				int enemyTilesInOuterRing = 0;
-				foreach (Tile t in city.GetTilesOfRank(2)) {
+				foreach (Tile t in city.location.GetTilesWithinRankDistance(2)) {
 					if (t.OwningPlayer() == null) {
 						++unclaimedTilesInOuterRing;
 					} else if (t.OwningPlayer() != city.owner) {

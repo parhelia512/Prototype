@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using C7GameData;
 using Godot;
@@ -21,7 +22,7 @@ namespace C7.Map {
 			if (city == null) {
 				return;
 			}
-			workableTiles = city.GetWorkableTiles();
+			workableTiles = city.GetWorkableTiles().ToHashSet();
 
 			// Include the city center in the "workable" tiles to avoid having
 			// a border drawn there.
