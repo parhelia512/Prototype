@@ -104,8 +104,8 @@ namespace C7GameData {
 			return MeetsProductionRequirements(city, accessibleResources) && !IsUnitObsolete(city, accessibleResources);
 		}
 
-		public int ShieldCost(HashSet<Civilization.Trait> civTraits) {
-			return shieldCost;
+		public int ShieldCost(HashSet<Civilization.Trait> civTraits, float costFactor) {
+			return (int)(shieldCost * costFactor);
 		}
 
 		// TODO: Consider golden ages when determining whether a unit is obsolete.

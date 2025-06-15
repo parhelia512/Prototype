@@ -1312,9 +1312,15 @@ namespace C7GameData {
 			save.Rules.CitizenValueInShields = rule.CitizenValueInShields;
 			save.Rules.TurnPenaltyForEachHurrySacrifice = rule.TurnPenaltyForEachHurrySacrifice;
 			save.GameDifficulty = save.Difficulties[rule.DefaultDifficultyLevel];
-			save.Rules.StartUnitType1 = theBiq.Prto[rule.StartUnitType1].Name;
-			save.Rules.StartUnitType2 = theBiq.Prto[rule.StartUnitType2].Name;
-			save.Rules.ScoutUnitType = theBiq.Prto[rule.Scout].Name;
+			if (rule.StartUnitType1 >= 0) {
+				save.Rules.StartUnitType1 = theBiq.Prto[rule.StartUnitType1].Name;
+			}
+			if (rule.StartUnitType2 >= 0) {
+				save.Rules.StartUnitType2 = theBiq.Prto[rule.StartUnitType2].Name;
+			}
+			if (rule.Scout >= 0) {
+				save.Rules.ScoutUnitType = theBiq.Prto[rule.Scout].Name;
+			}
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

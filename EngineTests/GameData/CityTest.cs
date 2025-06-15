@@ -4,7 +4,12 @@ using Xunit;
 public class CityTest {
 	[Fact]
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf9_of_10ProductionDone() {
-		Player player = new();
+		C7Engine.EngineStorage.InitializeGameDataForTests(new GameData() {
+			gameDifficulty = new Difficulty(),
+		});
+		Player player = new() {
+			isHuman = true,
+		};
 		player.civilization = new Civilization();
 		player.government = new Government();
 		UnitPrototype warrior = new UnitPrototype();

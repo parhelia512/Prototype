@@ -220,7 +220,7 @@ namespace C7GameData {
 		}
 
 		public bool IsAllowCities() {
-			return overlayTerrainType.allowCities;
+			return overlayTerrainType.allowCities && !hasBarbarianCamp;
 		}
 
 		public bool IsVolcano() {
