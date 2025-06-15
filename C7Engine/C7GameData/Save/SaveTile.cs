@@ -16,8 +16,8 @@ namespace C7GameData.Save {
 			Y = tile.YCoordinate;
 			continent = tile.continent;
 			isFreshWater = tile.isFreshWater;
-			baseTerrain = tile.baseTerrainTypeKey;
-			overlayTerrain = tile.overlayTerrainTypeKey;
+			baseTerrain = tile.baseTerrainType.Key;
+			overlayTerrain = tile.overlayTerrainType.Key;
 			if (tile.Resource != Resource.NONE) {
 				resource = tile.ResourceKey;
 			}
@@ -50,9 +50,7 @@ namespace C7GameData.Save {
 				YCoordinate = Y,
 				continent = continent,
 				isFreshWater = isFreshWater,
-				baseTerrainTypeKey = baseTerrain,
 				baseTerrainType = terrainTypes.Find(tt => tt.Key == baseTerrain),
-				overlayTerrainTypeKey = overlayTerrain,
 				overlayTerrainType = terrainTypes.Find(tt => tt.Key == overlayTerrain),
 				hasBarbarianCamp = features.Contains("barbarianCamp"),
 				// TODO: load working tile

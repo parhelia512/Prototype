@@ -70,9 +70,7 @@ namespace C7GameData {
 		public int biomeRegion = -1;
 
 		public City owningCity; // The city whose border contains this tile
-		public string baseTerrainTypeKey { get; set; }
 		public TerrainType baseTerrainType = TerrainType.NONE;
-		public string overlayTerrainTypeKey { get; set; }
 		public TerrainType overlayTerrainType = TerrainType.NONE;
 
 		private City _cityAtTile;
@@ -659,7 +657,6 @@ namespace C7GameData {
 
 		public void ClearTerrainOverlay() {
 			overlayTerrainType = baseTerrainType;
-			overlayTerrainTypeKey = baseTerrainTypeKey;
 		}
 
 		public Tile Copy() {

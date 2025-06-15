@@ -28,8 +28,6 @@ namespace C7Engine {
 		public static void AssignTextureDetails(Random rand, List<TerrainType> terrainTypes, GameMap m) {
 			foreach (Tile t in m.tiles) {
 				t.ExtraInfo = new();
-				t.overlayTerrainTypeKey = t.overlayTerrainType.Key;
-				t.baseTerrainTypeKey = t.baseTerrainType.Key;
 
 				Dictionary<string, int> terrainCounts = new();
 				foreach (TerrainType tt in terrainTypes) {
