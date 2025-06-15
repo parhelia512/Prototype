@@ -15,7 +15,7 @@ namespace C7GameData.Save {
 		public string action; // "fortified"
 		public TileDirection facingDirection;
 		public string experience;
-		public int WorkerProgressTowardsJob;
+		public float WorkerProgressTowardsJob;
 		public ID WorkerJob;
 
 		// True for multiple types of automation, including worker automation

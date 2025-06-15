@@ -46,7 +46,7 @@ namespace C7GameData {
 
 		public TileDirection facingDirection;
 
-		public int WorkerProgressTowardsJob { get; set; }
+		public float WorkerProgressTowardsJob { get; set; }
 		public Terraform WorkerJob { get; set; }
 
 
@@ -144,8 +144,14 @@ namespace C7GameData {
 		private const int JOB_PROGRESS_WORKER = 2;
 		private const int JOB_PROGRESS_SLAVE = 1;
 
-		private static int GetWorkerJobCost(Terraform workerJob) {
-			return workerJob.TurnsToComplete;
+		private static int GetWorkerJobCost(Tile tile, Terraform workerJob) {
+			// For the movement cost multiplier, see note 7
+			// (https://apolyton.net/forum/civilization-series/civilization-iii/59815-civilization-iii-bic-file-format-2nd-thread?p=1362768#post1362768)
+			// For example, clearing a forest has a cost of 4, but with a nomral
+			// worker that would take 2 turns. In order for the job to take the
+			// expected 4 turns we need to multiply by the movement cost of the
+			// terrain. This also makes roading hills/mountains more expensive.
+			return workerJob.TurnsToComplete * tile.overlayTerrainType.movementCost;
 		}
 
 		public void animate(MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
@@ -571,8 +577,8 @@ namespace C7GameData {
 			return true;
 		}
 
-		private int SumWorkerProgress(Tile tile, Terraform workerJob) {
-			int result = 0;
+		private float SumWorkerProgress(Tile tile, Terraform workerJob) {
+			float result = 0;
 			foreach (MapUnit unit in tile.unitsOnTile) {
 				if (WorkerJob == workerJob) {
 					result += WorkerProgressTowardsJob;
@@ -598,7 +604,7 @@ namespace C7GameData {
 				updateWorkerJob();
 
 				// See if this worker finished the job.
-				if (SumWorkerProgress(location, WorkerJob) >= GetWorkerJobCost(WorkerJob)) {
+				if ((int)SumWorkerProgress(location, WorkerJob) >= GetWorkerJobCost(location, WorkerJob)) {
 					location.FinishWorkerJob(WorkerJob);
 				}
 			}
@@ -677,7 +683,12 @@ namespace C7GameData {
 		}
 
 		public void updateWorkerJob() {
-			WorkerProgressTowardsJob += JOB_PROGRESS_WORKER;
+			float progressPerTurn = JOB_PROGRESS_WORKER;
+			if (owner.civilization.traits.Contains(Civilization.Trait.Industrious)) {
+				progressPerTurn *= 1.5f;
+			}
+
+			WorkerProgressTowardsJob += progressPerTurn;
 			movementPoints.onConsumeAll();
 		}
 
