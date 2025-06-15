@@ -204,14 +204,7 @@ public partial class PlayerSetup : Control {
 	}
 
 	private SaveGame GetSave() {
-		if (!Engine.IsEditorHint()) {
-			GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
-			return SaveManager.LoadSave(Global.DefaultGamePath, Global.DefaultBicPath, (string unused) => { return unused; });
-		} else {
-			// Hardcoded fallback for the godot editor, which doesn't handle the
-			// global.
-			return SaveManager.LoadSave(@"./Text/c7-static-map-save.json", "", (string unused) => { return unused; });
-		}
+		return SaveManager.LoadSave(GlobalSingleton.DefaultGamePath, GlobalSingleton.DefaultBicPath, (string unused) => { return unused; });
 	}
 
 	private void CreateGame() {
@@ -276,8 +269,8 @@ public partial class PlayerSetup : Control {
 		save.GameDifficulty = difficulty;
 
 		log.Information("saving generated map");
-		save.Save(Global.DefaultGeneratedGamePath);
-		Global.LoadGamePath = Global.DefaultGeneratedGamePath;
+		save.Save(GlobalSingleton.DefaultGeneratedGamePath);
+		Global.LoadGamePath = GlobalSingleton.DefaultGeneratedGamePath;
 
 		log.Information("opening map");
 		CallDeferred("StartGame");

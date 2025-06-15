@@ -314,7 +314,7 @@ public partial class WorldSetup : Control {
 	private void CreateGame() {
 		GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 		Global.ResetLoadGamePath();
-		SaveGame save = SaveManager.LoadSave(Global.DefaultGamePath, Global.DefaultBicPath, (string unused) => { return unused; });
+		SaveGame save = SaveManager.LoadSave(GlobalSingleton.DefaultGamePath, GlobalSingleton.DefaultBicPath, (string unused) => { return unused; });
 
 		Global.WorldCharacteristics = new WorldCharacteristics() {
 			landform = landform,

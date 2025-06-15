@@ -106,7 +106,7 @@ public partial class Game : Node2D {
 			civ3AnimData = new AnimationManager(animSoundPlayer);
 			animTracker = new AnimationTracker(civ3AnimData);
 
-			controller = CreateGame.createGame(Global.LoadGamePath, Global.DefaultBicPath, (scenarioSearchPath) => {
+			controller = CreateGame.createGame(Global.LoadGamePath, GlobalSingleton.DefaultBicPath, (scenarioSearchPath) => {
 				// WHen the game loading logic tries to load the PediaIcons file, set the
 				// scenario search path and then use our Civ3MediaPath searching logic to
 				// find the correct version of the file.

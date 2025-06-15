@@ -13,15 +13,15 @@ public partial class GlobalSingleton : Node {
 	// and back to game
 	public string LoadGamePath;
 	// For now this needs to get passed to QueryCiv3 when importing.
-	public string DefaultBicPath { get => Util.GetCiv3Path() + @"/Conquests/conquests.biq"; }
+	public static string DefaultBicPath { get => Util.GetCiv3Path() + @"/Conquests/conquests.biq"; }
 
 	// This is the 'static map' used in lieu of terrain generation
-	public string DefaultGamePath { get => @"./Text/c7-static-map-save.json"; }
+	public static string DefaultGamePath { get => ProjectSettings.GlobalizePath(@"res://Text/c7-static-map-save.json"); }
 
 	// The file where a generated map is saved, until we get more advanced ways
 	// to generate new games.
 	// TODO: improve this.
-	public string DefaultGeneratedGamePath { get => @"./Text/c7-autosave-turn-0.json"; }
+	public static string DefaultGeneratedGamePath { get => ProjectSettings.GlobalizePath(@"user://generated-game.json"); }
 
 	public void ResetLoadGamePath() {
 		LoadGamePath = DefaultGamePath;
