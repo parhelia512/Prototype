@@ -11,5 +11,8 @@ namespace C7GameData {
 		public int FoodNeededToGrowForLevel2Cities = 40;
 		public int FoodNeededToGrowForLevel3Cities = 60;
 		public float BuildingDiscountForCivTraits = .5f;
+		public string StartUnitType1;
+		public string StartUnitType2;
+		public string ScoutUnitType;
 	}
 }

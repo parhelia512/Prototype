@@ -8,7 +8,7 @@ using Serilog;
 
 [Tool]
 public partial class WorldSetup : Control {
-	private static ILogger log = LogManager.ForContext<MainMenu>();
+	private static ILogger log = LogManager.ForContext<WorldSetup>();
 
 	[Export] TextureRect background;
 
@@ -69,8 +69,6 @@ public partial class WorldSetup : Control {
 	[Export] TextureButton cancel;
 
 	[Export] LineEdit seedInput;
-
-	[Export] Label loadingLabel;
 
 	WorldCharacteristics.Landform landform = WorldCharacteristics.Landform.Pangaea;
 	WorldCharacteristics.OceanCoverage ocean = WorldCharacteristics.OceanCoverage.Percent_70;
@@ -314,20 +312,11 @@ public partial class WorldSetup : Control {
 	}
 
 	private void CreateGame() {
-		loadingLabel.Visible = true;
 		GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
-
-		// World generation can take a bit of time if multiple attempts are
-		// needed, so we don't want to tie up the UI thread.
-		Thread thread = new(() => { DoWorldGenerationAndstartGame(Global); });
-		thread.Start();
-	}
-
-	private void DoWorldGenerationAndstartGame(GlobalSingleton Global) {
 		Global.ResetLoadGamePath();
-
 		SaveGame save = SaveManager.LoadSave(Global.DefaultGamePath, Global.DefaultBicPath, (string unused) => { return unused; });
-		save.Map = new SaveMap(MapGenerator.GenerateMap(new WorldCharacteristics() {
+
+		Global.WorldCharacteristics = new WorldCharacteristics() {
 			landform = landform,
 			oceanCoverage = ocean,
 			age = age,
@@ -345,37 +334,9 @@ public partial class WorldSetup : Control {
 			resources = save.Resources,
 			defaultGovernment = save.Governments.Find(x => x.defaultType),
 			mapSeed = Int32.Parse(seedInput.Text),
-		}));
+		};
 
-		// Hack: reposition the initial units to the starting locations from the
-		// generated map. Longer term we'll need to split out our own
-		// "conquests.bic" type file and load that - until then we'll use this
-		// hack of grabbing it from the static save.
-		//
-		// Start at index 1 to skip the barbarians.
-		for (int i = 1; i < save.Players.Count; ++i) {
-			SaveTile startingTile = save.Map.startingLocations[i - 1];
-			TileLocation startingLocation = new TileLocation(startingTile.X, startingTile.Y);
-			SavePlayer player = save.Players[i];
-
-			foreach (SaveUnit unit in save.Units) {
-				if (unit.owner == player.id) {
-					unit.currentLocation = startingLocation;
-				}
-			}
-			player.tileKnowledge.Clear();
-		}
-
-		log.Information("saving generated map");
-		save.Save(Global.DefaultGeneratedGamePath);
-		Global.LoadGamePath = Global.DefaultGeneratedGamePath;
-
-		log.Information("opening map");
-		CallDeferred("StartGame");
-	}
-
-	private void StartGame() {
-		GetTree().ChangeSceneToFile("res://C7Game.tscn");
+		GetTree().ChangeSceneToFile("res://UIElements/NewGame/player_setup.tscn");
 	}
 
 	private void BackToMainMenu() {

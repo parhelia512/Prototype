@@ -40,9 +40,7 @@ keycode = 4194305
 [sub_resource type="Shortcut" id="Shortcut_7oyjg"]
 events = [SubResource("InputEventKey_klcu1")]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ld2d8"]
-
-[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "tinySize", "smallSize", "standardSize", "largeSize", "hugeSize", "randomSize", "confirm", "cancel", "seedInput", "loadingLabel")]
+[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "tinySize", "smallSize", "standardSize", "largeSize", "hugeSize", "randomSize", "confirm", "cancel", "seedInput")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -98,7 +96,6 @@ randomSize = NodePath("Background/RandomSize")
 confirm = NodePath("Background/Confirm")
 cancel = NodePath("Background/Cancel")
 seedInput = NodePath("Background/SeedInput")
-loadingLabel = NodePath("Background/LoadingLabel")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2
@@ -759,16 +756,3 @@ offset_right = 1007.0
 offset_bottom = 748.0
 shortcut = SubResource("Shortcut_7oyjg")
 script = ExtResource("3")
-
-[node name="LoadingLabel" type="Label" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 310.0
-offset_top = 325.0
-offset_right = 717.0
-offset_bottom = 434.0
-theme_override_font_sizes/font_size = 38
-theme_override_styles/normal = SubResource("StyleBoxFlat_ld2d8")
-text = "Loading..."
-horizontal_alignment = 1
-vertical_alignment = 1

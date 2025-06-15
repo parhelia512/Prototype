@@ -355,6 +355,7 @@ namespace C7GameData {
 				if (artName != null) {
 					civ.leaderArtFile = artName;
 				}
+
 				save.Civilizations.Add(civ);
 				i++;
 			}
@@ -1311,6 +1312,9 @@ namespace C7GameData {
 			save.Rules.CitizenValueInShields = rule.CitizenValueInShields;
 			save.Rules.TurnPenaltyForEachHurrySacrifice = rule.TurnPenaltyForEachHurrySacrifice;
 			save.GameDifficulty = save.Difficulties[rule.DefaultDifficultyLevel];
+			save.Rules.StartUnitType1 = theBiq.Prto[rule.StartUnitType1].Name;
+			save.Rules.StartUnitType2 = theBiq.Prto[rule.StartUnitType2].Name;
+			save.Rules.ScoutUnitType = theBiq.Prto[rule.Scout].Name;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

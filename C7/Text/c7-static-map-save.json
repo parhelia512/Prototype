@@ -75152,6 +75152,7 @@
       "leader": "Temujin",
       "colorIndex": 3,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_temujin advisor.pcx",
       "cityNames": [
         "Karakorum",
         "Ta-Tu",
@@ -75199,6 +75200,7 @@
       "leader": "Isabella",
       "colorIndex": 5,
       "leaderGender": "female",
+      "leaderArtFile": "art\\advisors\\x_isabell advisor.pcx",
       "cityNames": [
         "Madrid",
         "Barcelona",
@@ -75247,6 +75249,7 @@
       "leader": "Ragnar Lodbrok",
       "colorIndex": 8,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_ragnar advisor.pcx",
       "cityNames": [
         "Trondheim",
         "Bergen",
@@ -75297,6 +75300,7 @@
       "leader": "Osman",
       "colorIndex": 2,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_osman advisor.pcx",
       "cityNames": [
         "Istanbul",
         "Edrine",
@@ -75343,6 +75347,7 @@
       "leader": "Brennus",
       "colorIndex": 4,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_brennus advisor.pcx",
       "cityNames": [
         "Entremont",
         "Alesia",
@@ -75390,6 +75395,7 @@
       "leader": "Abu Bakr",
       "colorIndex": 7,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_abu bakr advisor.pcx",
       "cityNames": [
         "Mecca",
         "Medina",
@@ -75435,6 +75441,7 @@
       "leader": "Hannibal",
       "colorIndex": 9,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_Hannibal advisor.pcx",
       "cityNames": [
         "Carthage",
         "Utica",
@@ -75482,6 +75489,7 @@
       "leader": "Wang Kon",
       "colorIndex": 6,
       "leaderGender": "male",
+      "leaderArtFile": "art\\advisors\\x_Wang Kon advisor.pcx",
       "cityNames": [
         "Seoul",
         "P\u0027yongyang",
@@ -75876,7 +75884,10 @@
     "foodNeededToGrowForLevel1Cities": 20,
     "foodNeededToGrowForLevel2Cities": 40,
     "foodNeededToGrowForLevel3Cities": 60,
-    "buildingDiscountForCivTraits": 0.5
+    "buildingDiscountForCivTraits": 0.5,
+    "startUnitType1": "Settler",
+    "startUnitType2": "Worker",
+    "scoutUnitType": "Scout"
   },
   "techs": [
     {

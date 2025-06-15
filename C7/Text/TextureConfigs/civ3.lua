@@ -340,6 +340,7 @@ textures.palace = {
 }
 
 textures.world_setup = require "civ3.world_setup"
+textures.player_setup = require "civ3.player_setup"
 
 textures.diplomacy = {
   deal = "Art/Diplomacy/counter.pcx",
