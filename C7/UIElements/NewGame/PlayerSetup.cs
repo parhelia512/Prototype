@@ -228,6 +228,7 @@ public partial class PlayerSetup : Control {
 	private void DoWorldGenerationAndstartGame(SaveGame save, GlobalSingleton Global) {
 		log.Information("Starting map generation");
 		save.Map = new SaveMap(MapGenerator.GenerateMap(Global.WorldCharacteristics));
+		save.Seed = Global.WorldCharacteristics.mapSeed;
 		log.Information("Done with map generation");
 		Random rand = new(Global.WorldCharacteristics.mapSeed + 0x531);
 		ids = new(save);
