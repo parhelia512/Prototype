@@ -32,6 +32,10 @@ public partial class Game : Node2D {
 
 	GameState CurrentState = GameState.PreGame;
 
+	// True if the deal screen is open because an AI player is offering something
+	// to the human player.
+	private bool waitingForDealScreen = false;
+
 	// CurrentlySelectedUnit is a reference directly into the game state so be careful of race conditions. TODO: Consider storing a GUID instead.
 	public MapUnit CurrentlySelectedUnit = MapUnit.NONE; //The selected unit.  May be changed by clicking on a unit or the next unit being auto-selected after orders are given for the current one.
 	private bool HasCurrentlySelectedUnit() => CurrentlySelectedUnit != MapUnit.NONE;
@@ -283,6 +287,13 @@ public partial class Game : Node2D {
 					}
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 					break;
+				case MsgShowTradeOffer mSTO:
+					diplomacy.ShowDealScreenForPlayer(
+						mSTO.humanPlayer.id, mSTO.aiPlayer.id,
+						humanGives: mSTO.aiWant,
+						humanWants: mSTO.aiGive);
+					waitingForDealScreen = true;
+					break;
 				case MsgDisplayHurryProductionPopup mDHPP:
 					if (mDHPP.details.errorMessage != null) {
 						popupOverlay.ShowPopup(
@@ -328,6 +339,11 @@ public partial class Game : Node2D {
 	}
 
 	public override void _Process(double delta) {
+		if (CurrentState == GameState.ComputerTurn && waitingForDealScreen && !diplomacy.Visible) {
+			waitingForDealScreen = false;
+			EngineStorage.FinishUiEvent();
+		}
+
 		ProcessActions();
 		processEngineMessages();
 
@@ -880,7 +896,6 @@ public partial class Game : Node2D {
 		if (CurrentState != GameState.PlayerTurn) {
 			return;
 		}
-
 
 		if (currentAction == C7Action.UnitHold) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.skipTurn()).send();

@@ -316,11 +316,6 @@ namespace C7Engine {
 					continue;
 				}
 
-				// TODO: Implement AI -> Human tech trading
-				if (them.isHuman) {
-					continue;
-				}
-
 				// Figure out what techs are available for trading.
 				List<Tech> techsTheyCanTrade = gD.techs.FindAll(x => {
 					return them.knownTechs.Contains(x.id) && !us.knownTechs.Contains(x.id);
@@ -338,18 +333,25 @@ namespace C7Engine {
 					continue;
 				}
 
-				// Figure out the value of what we have available to trade.
 				TradeOffer weGive = new();
+				Func<int> CalculateWeGiveValue = () => {
+					return Math.Max(weGive.GoldEquivalentFor(gD, them), weGive.GoldEquivalentFor(gD, us));
+				};
+				TradeOffer weWant = new();
+				Func<int> CalculateWeWantValue = () => {
+					return Math.Min(weWant.GoldEquivalentFor(gD, them), weWant.GoldEquivalentFor(gD, us));
+				};
+
+				// Figure out the value of what we have available to trade.
 				weGive.gold = us.gold;
 				foreach (Tech t in techsWeCanTrade) {
 					weGive.techs.Add(t);
 				}
-				int ourMaxPossibleOffer = weGive.GoldEquivalentFor(gD, them);
+				int ourMaxPossibleOffer = CalculateWeGiveValue();
 
 				// Going from the most to the least valuable valuable techs, see
 				// if we can afford them. This greedy algorithm should be good
 				// enough - we don't need perfect binpacking.
-				TradeOffer weWant = new();
 				foreach (Tech t in techsTheyCanTrade) {
 					int cost = gD.TechCostFor(t, us);
 					if (cost < ourMaxPossibleOffer) {
@@ -365,9 +367,9 @@ namespace C7Engine {
 				// from the opponent. However, we might be overpaying, possibly
 				// by a significant amount. Keep removing techs from our offer
 				// as long as it doesn't make our offer worse than theirs.
-				int theirOfferValue = weWant.GoldEquivalentFor(gD, us);
+				int theirOfferValue = CalculateWeWantValue();
 				for (int i = 0; i < weGive.techs.Count;) {
-					if (weGive.GoldEquivalentFor(gD, them) - gD.TechCostFor(weGive.techs[i], them) >= theirOfferValue) {
+					if (CalculateWeGiveValue() - gD.TechCostFor(weGive.techs[i], them) >= theirOfferValue) {
 						weGive.techs.RemoveAt(0);
 					} else {
 						++i;
@@ -375,7 +377,7 @@ namespace C7Engine {
 				}
 
 				// Now use any gold to even things out, if possible.
-				int remainingDelta = Math.Max(0, weGive.GoldEquivalentFor(gD, them) - theirOfferValue);
+				int remainingDelta = Math.Max(0, CalculateWeGiveValue() - theirOfferValue);
 				weGive.gold -= Math.Min(remainingDelta, weGive.gold.Value);
 
 				// And ensure we minimize the total gold traded, to keep the
@@ -383,15 +385,30 @@ namespace C7Engine {
 				int redundantGold = Math.Min(weGive.gold.Value, weWant.gold.Value);
 				weGive.gold -= redundantGold;
 				weWant.gold -= redundantGold;
+				if (weGive.gold == 0) {
+					weGive.gold = null;
+				}
+				if (weWant.gold == 0) {
+					weWant.gold = null;
+				}
 
 				// Finally if the deal is too mismatched or only contains a swap
 				// of gold, abandon it. Otherwise we can execute the deal.
-				if (weGive.GoldEquivalentFor(gD, them) > 1.1 * weWant.GoldEquivalentFor(gD, us)) {
+				// TODO: Figure out how the real trade factor in the difficulty
+				// works.
+				float tradeFactor = them.isHuman ? 1.0f : 1.1f;
+				if (CalculateWeGiveValue() > tradeFactor * CalculateWeWantValue()) {
 					continue;
 				}
 				if (weGive.techs.Count == 0 && weWant.techs.Count == 0) {
 					continue;
 				}
+
+				if (them.isHuman) {
+					new MsgShowTradeOffer(us, them, weWant, weGive).send();
+					EngineStorage.WaitForUiEvent();
+				}
+
 				us.ExecuteDeal(gD, them, weWant, weGive);
 			}
 		}

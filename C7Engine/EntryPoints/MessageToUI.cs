@@ -115,4 +115,18 @@ namespace C7Engine {
 			this.location = location;
 		}
 	}
+
+	public class MsgShowTradeOffer : MessageToUI {
+		public Player aiPlayer;
+		public Player humanPlayer;
+		public TradeOffer aiWant;
+		public TradeOffer aiGive;
+
+		public MsgShowTradeOffer(Player aiPlayer, Player humanPlayer, TradeOffer aiWant, TradeOffer aiGive) {
+			this.aiPlayer = aiPlayer;
+			this.humanPlayer = humanPlayer;
+			this.aiWant = aiWant;
+			this.aiGive = aiGive;
+		}
+	}
 }
