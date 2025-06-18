@@ -58,10 +58,11 @@ public static class TextureLoader {
 
 	static TextureLoader() {
 		lua = new Lua();
-		lua.DoString($"package.path = './Text/TextureConfigs/?.lua;./Text/TextureConfigs/*/?.lua'");
+		string textureConfigFolder = ProjectSettings.GlobalizePath(@"res://Text/TextureConfigs");
+		lua.DoString($"package.path = '{textureConfigFolder}/?.lua;{textureConfigFolder}/*/?.lua'");
 
-		civ3TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/civ3.lua")[0];
-		c7TextureConfig = (LuaTable)lua.DoFile("./Text/TextureConfigs/c7.lua")[0];
+		civ3TextureConfig = (LuaTable)lua.DoFile($"{textureConfigFolder}/civ3.lua")[0];
+		c7TextureConfig = (LuaTable)lua.DoFile($"{textureConfigFolder}/c7.lua")[0];
 
 		textureConfig = civ3TextureConfig;
 		modernGraphics = false;

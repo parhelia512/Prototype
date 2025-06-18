@@ -10,7 +10,7 @@ public partial class Credits : Node2D {
 	public override void _Ready() {
 		log.Information("Now rolling the credits!");
 		try {
-			creditsText = System.IO.File.ReadAllText("./Text/credits.txt");
+			creditsText = System.IO.File.ReadAllText(ProjectSettings.GlobalizePath(@"res://Text/credits.txt"));
 		} catch (System.Exception ex) {
 			log.Error(ex, "Failed to read from credits.txt!");
 		}
