@@ -492,13 +492,8 @@ namespace C7GameData {
 				return;
 			}
 
-			for (int i = 1; i < 25; ++i) {
-				// We don't award shields beyond rank 2.
-				Tile other = GetTileAtNeighborIndex(i);
-				if (other.rankDistanceTo(this) > 2) {
-					continue;
-				}
-
+			// Check all the tiles within rank 2 of the forest.
+			foreach (Tile other in GetTilesWithinRankDistance(2)) {
 				if (other.cityAtTile == null) {
 					continue;
 				}
@@ -623,6 +618,8 @@ namespace C7GameData {
 			return map.tileAt(XCoordinate + xDelta, YCoordinate + yDelta);
 		}
 
+		// Returns the tiles in the spiral ordering defined by 
+		// GetTileAtNeighborIndex(i).
 		public List<Tile> GetTilesWithinRankDistance(int rank) {
 			List<Tile> result = new();
 			for (int i = 0; i < (rank * 2 + 1) * (rank * 2 + 1); ++i) {
