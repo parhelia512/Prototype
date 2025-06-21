@@ -459,7 +459,9 @@ namespace C7GameData {
 		//    civilizations, the formula is: 1 (2 for Conquests) + random number
 		//    between 1-4 + number between 0-3 depending on size of your empire.
 		public int GetTurnsOfAnarchyForTransition(GameData gameData) {
-			// TODO: if religious, return 2.
+			if (civilization.traits.Contains(Civilization.Trait.Religious)) {
+				return 2;
+			}
 
 			// We add Next(3)+Next(3) to roughly approximate a normal 
 			// distribution. With the base of 2, this gets us a random value 
@@ -617,12 +619,19 @@ namespace C7GameData {
 		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
 			int freeUnits = 0;
 
+			Difficulty difficulty = EngineStorage.gameData.gameDifficulty;
+			if (!isHuman) {
+				freeUnits += difficulty.AdditionalFreeUnitSupport;
+			}
+
 			foreach (City city in cities) {
-				// TODO: Import these sizes from Rule.cs in the biq. Maybe have
-				// them live in the city class?
-				if (city.residents.Count <= 6) {
+				if (!isHuman) {
+					freeUnits += difficulty.UnitSupportBonusForEachSettlement;
+				}
+
+				if (city.residents.Count <= rules.MaximumLevel1CitySize) {
 					freeUnits += government.freeUnitsPerTown;
-				} else if (city.residents.Count <= 12) {
+				} else if (city.residents.Count <= rules.MaximumLevel2CitySize) {
 					freeUnits += government.freeUnitsPerCity;
 				} else {
 					freeUnits += government.freeUnitsPerMetropolis;
@@ -745,6 +754,43 @@ namespace C7GameData {
 			return result;
 		}
 
+		public void MaybeSpawnBonusUnits(GameData gD) {
+			// Bonus units only spawn on the first turn, if we have a city and
+			// are a non-barbarian AI player.
+			if (gD.turn != 1 || cities.Count != 1 || isHuman || isBarbarians) {
+				return;
+			}
+
+			for (int i = 0; i < gD.gameDifficulty.ExtraStartUnit1; ++i) {
+				cities[0].AddUnit(gD.unitPrototypes.Find(x => x.name == gD.rules.StartUnitType1), gD);
+			}
+			for (int i = 0; i < gD.gameDifficulty.ExtraStartUnit2; ++i) {
+				cities[0].AddUnit(gD.unitPrototypes.Find(x => x.name == gD.rules.StartUnitType2), gD);
+			}
+			for (int i = 0; i < gD.gameDifficulty.NumberOfAIDefensiveStartingUnits; ++i) {
+				UnitPrototype unit = (UnitPrototype)cities[0].ListProductionOptions(gD).MaxBy(
+					x => {
+						if (x is UnitPrototype u) {
+							return u.defense;
+						}
+						return -1;
+					}
+				);
+				cities[0].AddUnit(unit, gD);
+			}
+			for (int i = 0; i < gD.gameDifficulty.NumberOfAIOffensiveStartingUnits; ++i) {
+				UnitPrototype unit = (UnitPrototype)cities[0].ListProductionOptions(gD).MaxBy(
+					x => {
+						if (x is UnitPrototype u) {
+							return u.attack;
+						}
+						return -1;
+					}
+				);
+				cities[0].AddUnit(unit, gD);
+			}
+		}
+
 		public void UpdateResourcesInBorders(IEnumerable<Tile> ownedTiles) {
 			resourcesInBorders = ownedTiles
 								.Where(t => t.Resource != Resource.NONE)
@@ -758,7 +804,11 @@ namespace C7GameData {
 		}
 
 		public int ShieldCost(IProducible producible) {
-			return producible.ShieldCost(civilization.traits);
+			// At higher difficulties, AI players get a cost discount.
+			Difficulty difficulty = EngineStorage.gameData.gameDifficulty;
+			float costFactor = isHuman ? 1.0f : difficulty.AiCostFactor / (float)(difficulty.HumanCostFactor);
+
+			return producible.ShieldCost(civilization.traits, costFactor);
 		}
 	}
 

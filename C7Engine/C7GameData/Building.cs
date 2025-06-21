@@ -228,13 +228,13 @@ namespace C7GameData {
 			return true;
 		}
 
-		public int ShieldCost(HashSet<Civilization.Trait> civTraits) {
+		public int ShieldCost(HashSet<Civilization.Trait> civTraits, float costFactor) {
 			foreach (Civilization.Trait trait in dataSource.traits) {
 				if (civTraits.Contains(trait)) {
-					return (int)(shieldCost * EngineStorage.gameData.rules.BuildingDiscountForCivTraits);
+					return (int)(shieldCost * EngineStorage.gameData.rules.BuildingDiscountForCivTraits * costFactor);
 				}
 			}
-			return shieldCost;
+			return (int)(shieldCost * costFactor);
 		}
 
 		public bool isGreatWonderObsolete(Player owner) {

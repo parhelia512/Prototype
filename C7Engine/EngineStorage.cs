@@ -69,5 +69,9 @@ namespace C7Engine {
 				Monitor.Pulse(gameDataLock);
 			}
 		}
+
+		public static void InitializeGameDataForTests(GameData gD) {
+			gameData = gD;
+		}
 	}
 }

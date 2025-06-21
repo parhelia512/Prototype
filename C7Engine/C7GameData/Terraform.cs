@@ -55,6 +55,10 @@ public class Terraform {
 		SetRules();
 	}
 
+	public string ToString() {
+		return Name;
+	}
+
 	private void SetRules() {
 		if (TerraformRules.ActionEffects.TryGetValue(Action, out var onComplete)) {
 			OnComplete = onComplete;

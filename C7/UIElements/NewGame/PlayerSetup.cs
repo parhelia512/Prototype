@@ -272,6 +272,8 @@ public partial class PlayerSetup : Control {
 					  isHuman: false);
 		}
 
+		save.GameDifficulty = difficulty;
+
 		log.Information("saving generated map");
 		save.Save(Global.DefaultGeneratedGamePath);
 		Global.LoadGamePath = Global.DefaultGeneratedGamePath;

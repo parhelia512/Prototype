@@ -156,7 +156,6 @@ namespace C7Engine {
 			} else if (unit.location.cityAtTile != null && unit.CanDefendOnLand() && unit.location.unitsOnTile.Count(u => u.CanDefendOnLand() && u != unit) == 0) {
 				return new DefenderAI(DefenderAI.MakeAiDataForDefendInPlace(unit, player));
 			} else if (GetCombatAIIfUnitCanAttackNearbyBarbCamp(unit, player) is UnitAI unitAI && unitAI != null) {
-				log.Information("Set unit " + unit + " to take out barb camp");
 				return unitAI;
 			} else if (unit.unitType.name == "Catapult") {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
@@ -262,6 +261,7 @@ namespace C7Engine {
 
 				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
 				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp);
+				log.Information($"Set unit {unit} to take out barb camp at {closestBarbCamp}");
 				return new CombatAI(caid);
 			}
 			return null;
