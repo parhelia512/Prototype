@@ -12,7 +12,9 @@ public partial class ProductionMenu : Civ3TextureRect {
 	Tree tree;
 	Theme fontTheme = new();
 
-	public ProductionMenu() {
+	public ProductionMenu() { }
+
+	public override void _Ready() {
 		this.Texture = TextureLoader.Load("city_screen.production_queue");
 
 		// Load the font we'll use.
