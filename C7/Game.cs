@@ -308,6 +308,12 @@ public partial class Game : Node2D {
 					// interesting happens.
 					turnsLeftToFastForward = 0;
 					break;
+				case MsgShowTemporaryPopup mSTP:
+					TemporaryPopup popup = new(mSTP.message, 1);
+					popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
+					AddChild(popup);
+					popup.ShowPopup();
+					break;
 			}
 		}
 	}

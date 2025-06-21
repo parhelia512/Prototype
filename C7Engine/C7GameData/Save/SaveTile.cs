@@ -38,6 +38,9 @@ namespace C7GameData.Save {
 			if (tile.hasBarbarianCamp) {
 				features.Add("barbarianCamp");
 			}
+			if (tile.hasHadForestCleared) {
+				features.Add("hasHadForestCleared");
+			}
 
 			overlays.AddRange(tile.overlays.GetImprovements().Select(i => i.key));
 		}
@@ -53,6 +56,7 @@ namespace C7GameData.Save {
 				baseTerrainType = terrainTypes.Find(tt => tt.Key == baseTerrain),
 				overlayTerrainType = terrainTypes.Find(tt => tt.Key == overlayTerrain),
 				hasBarbarianCamp = features.Contains("barbarianCamp"),
+				hasHadForestCleared = features.Contains("hasHadForestCleared"),
 				// TODO: load working tile
 				ResourceKey = resource is null ? Resource.NONE.Key : resource,
 				riverNorth = features.Contains("riverNorth"),

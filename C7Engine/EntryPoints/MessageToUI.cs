@@ -105,4 +105,14 @@ namespace C7Engine {
 			this.happy = happy;
 		}
 	}
+
+	public class MsgShowTemporaryPopup : MessageToUI {
+		public string message;
+		public Tile location;
+
+		public MsgShowTemporaryPopup(string message, Tile location) {
+			this.message = message;
+			this.location = location;
+		}
+	}
 }

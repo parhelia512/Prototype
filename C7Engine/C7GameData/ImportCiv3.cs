@@ -1309,6 +1309,7 @@ namespace C7GameData {
 			save.Rules.MaximumLevel1CitySize = rule.MaximumLevel1CitySize;
 			save.Rules.MaximumLevel2CitySize = rule.MaximumLevel2CitySize;
 			save.Rules.ShieldValueInGold = rule.ShieldValueInGold;
+			save.Rules.ForestValueInShields = rule.ForestValueInShields;
 			save.Rules.CitizenValueInShields = rule.CitizenValueInShields;
 			save.Rules.TurnPenaltyForEachHurrySacrifice = rule.TurnPenaltyForEachHurrySacrifice;
 			save.GameDifficulty = save.Difficulties[rule.DefaultDifficultyLevel];

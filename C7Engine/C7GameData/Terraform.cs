@@ -14,7 +14,10 @@ public static class TerraformRules {
 		{UnitAction.BuildRailroad, (_, tile) => tile.overlays.Add(TerrainImprovement.railroad)},
 		{UnitAction.ClearWetlands, (_, tile) => tile.ClearTerrainOverlay()},
 		// TODO: add bonus shields to the nearest city - should only happen the first time a forest is cleared
-		{UnitAction.ClearForest, (_, tile) => tile.ClearTerrainOverlay()},
+		{UnitAction.ClearForest, (_, tile) => {
+			tile.MaybeAwardForestClearingShields();
+			tile.ClearTerrainOverlay();
+		}},
 	};
 
 	public static readonly Dictionary<UnitAction, Func<Player, Tile, bool>> ActionValidators = new() {

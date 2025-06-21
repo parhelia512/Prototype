@@ -115,6 +115,10 @@ namespace C7GameData {
 		public bool riverWest;
 		public bool riverNorthwest;
 
+		// The first time a forest is cleared on a tile it can award shields to
+		// a nearby city.
+		public bool hasHadForestCleared = false;
+
 		public TileOverlays overlays;
 
 		public Tile(ID id) {
@@ -476,6 +480,39 @@ namespace C7GameData {
 			return null;
 		}
 
+		public void MaybeAwardForestClearingShields() {
+			if (hasHadForestCleared) {
+				return;
+			}
+			hasHadForestCleared = true;
+
+			// Shields can only be awarded if the forest is within some city's
+			// borders.
+			if (OwningPlayer() == null) {
+				return;
+			}
+
+			// Check all the tiles within rank 2 of the forest.
+			foreach (Tile other in GetTilesWithinRankDistance(2)) {
+				if (other.cityAtTile == null) {
+					continue;
+				}
+
+				// Shields aren't awarded to wonders.
+				if (other.cityAtTile.itemBeingProduced is Building b
+					&& (b.greatWonderProperties != null || b.isSmallWonder)) {
+					continue;
+				}
+
+				City c = other.cityAtTile;
+				int shieldsAwarded = EngineStorage.gameData.rules.ForestValueInShields;
+				c.shieldsStored += shieldsAwarded;
+				c.shieldsStored = Math.Min(c.shieldsStored, c.owner.ShieldCost(c.itemBeingProduced));
+				new MsgShowTemporaryPopup($"{shieldsAwarded} shields awarded for clearing forests", other).send();
+				return;
+			}
+		}
+
 		// Returns the X and Y coordinates of the neighbor in the specified direction.
 		public static TileLocation NeighborCoordinate(TileLocation location, TileDirection direction) {
 			switch (direction) {
@@ -581,6 +618,8 @@ namespace C7GameData {
 			return map.tileAt(XCoordinate + xDelta, YCoordinate + yDelta);
 		}
 
+		// Returns the tiles in the spiral ordering defined by 
+		// GetTileAtNeighborIndex(i).
 		public List<Tile> GetTilesWithinRankDistance(int rank) {
 			List<Tile> result = new();
 			for (int i = 0; i < (rank * 2 + 1) * (rank * 2 + 1); ++i) {

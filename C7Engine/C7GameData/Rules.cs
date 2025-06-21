@@ -3,6 +3,7 @@ namespace C7GameData {
 		public int MaximumResearchTime;
 		public int MinimumResearchTime;
 		public int ShieldValueInGold;
+		public int ForestValueInShields;
 		public int CitizenValueInShields;
 		public int TurnPenaltyForEachHurrySacrifice;
 		public int MaximumLevel1CitySize;
