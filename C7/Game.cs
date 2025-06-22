@@ -875,7 +875,13 @@ public partial class Game : Node2D {
 			SetAnimationsEnabled(true);
 		}
 
-		// actions with unit buttons
+		// actions with unit buttons, which are only relevant during the player
+		// turn.
+		if (CurrentState != GameState.PlayerTurn) {
+			return;
+		}
+
+
 		if (currentAction == C7Action.UnitHold) {
 			new ActionToEngineMsg(() => CurrentlySelectedUnit?.skipTurn()).send();
 		}
