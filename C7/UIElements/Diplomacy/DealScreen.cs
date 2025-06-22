@@ -44,9 +44,11 @@ public partial class DealScreen : TextureRect {
 	TradeOffer opponentOffer = new();
 	TradeOffer humanOffer = new();
 
-	public DealScreen(ID humanPlayer, ID opponentPlayer) {
+	public DealScreen(ID humanPlayer, ID opponentPlayer, TradeOffer humanGives, TradeOffer humanWants) {
 		this.humanPlayerId = humanPlayer;
 		this.opponentPlayerId = opponentPlayer;
+		this.humanOffer = humanGives;
+		this.opponentOffer = humanWants;
 	}
 
 	public override void _Ready() {
