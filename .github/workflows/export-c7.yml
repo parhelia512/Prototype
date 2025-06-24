@@ -56,7 +56,9 @@ jobs:
         dotnet format C7/C7.sln whitespace --verify-no-changes
     - name: Copy Static Files
       run: |
-        if cp -r ${EXPORT_NAME}/Text build/${FOLDER_NAME}/Text && cp -r ${EXPORT_NAME}/Art build/${FOLDER_NAME}/Art
+        if cp -r ${EXPORT_NAME}/Text build/${FOLDER_NAME}/Text && \\
+           cp -r ${EXPORT_NAME}/Art build/${FOLDER_NAME}/Art && \\
+           cp -r ${EXPORT_NAME}/Lua build/${FOLDER_NAME}/Lua
         then
           echo "successfully copied static files to build"
         else
@@ -92,7 +94,9 @@ jobs:
         dotnet format C7/C7.sln whitespace --verify-no-changes
     - name: Copy Static Files
       run: |
-        if cp -r ${EXPORT_NAME}/Text build/${FOLDER_NAME}/Text && cp -r ${EXPORT_NAME}/Art build/${FOLDER_NAME}/Art
+        if cp -r ${EXPORT_NAME}/Text build/${FOLDER_NAME}/Text && \\
+           cp -r ${EXPORT_NAME}/Art build/${FOLDER_NAME}/Art && \\
+           cp -r ${EXPORT_NAME}/Lua build/${FOLDER_NAME}/Lua
         then
           echo "successfully copied static files to build"
         else
@@ -132,7 +136,7 @@ jobs:
     - name: Copy Static Files
       run: |
         cd ${EXPORT_NAME}
-        if zip -r ../build/${FOLDER_NAME}.zip Art Text
+        if zip -r ../build/${FOLDER_NAME}.zip Art Text Lua
         then
           echo "successfully copied static files to build"
         else
