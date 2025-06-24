@@ -5,72 +5,9 @@ using C7GameData.Save;
 using C7Engine;
 
 namespace C7GameData {
-	public static class BuildingRules {
-		public static Dictionary<SaveBuilding.Flag, Func<City, bool>> productionRules = new()
-		{
-			{ SaveBuilding.Flag.MustBeCoastal, MustBeCoastal },
-			{ SaveBuilding.Flag.MustBeNearRiver, MustBeNearRiver },
-			{ SaveBuilding.Flag.CanOnlyBeBuiltInTowns, CanOnlyBeBuiltInTowns },
-		};
-
-		public static Dictionary<SaveBuilding.Flag, Action<MapUnit>> unitProductionEffects = new()
-		{
-			{ SaveBuilding.Flag.VeteranGroundUnits, VeteranGroundUnits },
-			{ SaveBuilding.Flag.VeteranSeaUnits, VeteranSeaUnits }
-		};
-
-		public static Dictionary<SaveBuilding.Flag, Action<Tile.Yield>> tileModifiers = new(){
-			{ SaveBuilding.Flag.IncreasesFoodInWater, IncreaseFoodInWater },
-			{ SaveBuilding.Flag.IncreasesShieldsInWater, IncreaseShieldInWater},
-			{ SaveBuilding.Flag.IncreasesTradeInWater, IncreaseTradeInWater}
-		};
-
-		private static void IncreaseTradeInWater(Tile.Yield yield) {
-			if (yield.type == Tile.YieldType.Commerce && yield.tile.IsWater() && yield.baseYield > 0) {
-				yield.bonus += 1;
-			}
-		}
-
-		private static void IncreaseShieldInWater(Tile.Yield yield) {
-			if (yield.type == Tile.YieldType.Production && yield.tile.IsWater()) {
-				yield.bonus += 1;
-			}
-		}
-
-		private static void IncreaseFoodInWater(Tile.Yield yield) {
-			if (yield.type == Tile.YieldType.Food && yield.tile.IsWater()) {
-				yield.bonus += 1;
-			}
-		}
-
-		private static void VeteranGroundUnits(MapUnit unit) {
-			if (unit.unitType.categories.Contains("Land")) {
-				unit.Promote();
-			}
-		}
-
-		private static void VeteranSeaUnits(MapUnit unit) {
-			if (unit.unitType.categories.Contains("Sea")) {
-				unit.Promote();
-			}
-		}
-
-		private static bool MustBeCoastal(City city) {
-			return city.location.NeighborsWater();
-		}
-
-		private static bool MustBeNearRiver(City city) {
-			return city.location.BordersRiver();
-		}
-
-		private static bool CanOnlyBeBuiltInTowns(City city) {
-			return city.residents.Count <= city.owner.rules.MaximumLevel1CitySize;
-		}
-	}
-
 	public class Building : IProducible {
 		public class GreatWonderProperties {
-			// The building this building gives to every city in the empire on 
+			// The building this building gives to every city in the empire on
 			// on the continent (like the pyramids or the internet), if any.
 			public Building buildingGainedInEveryCity;
 			public Building buildingGainedInEveryCityOnContinent;
@@ -125,7 +62,9 @@ namespace C7GameData {
 
 		SaveBuilding dataSource;
 
-		public Building(SaveBuilding building) {
+		public Building(SaveBuilding building, GameData gameData) {
+			dataSource = building;
+
 			name = building.name;
 			shieldCost = building.shieldCost;
 			populationCost = building.populationCost;
@@ -154,29 +93,12 @@ namespace C7GameData {
 			providesWalls = building.flags.Contains(SaveBuilding.Flag.ProvidesWalls);
 			onlyUsefulInTowns = building.flags.Contains(SaveBuilding.Flag.CanOnlyBeBuiltInTowns);
 			providesVeteranGroundUnits = building.flags.Contains(SaveBuilding.Flag.VeteranGroundUnits);
-			dataSource = building;
 
 			if (building.greatWonderProperties != null) {
 				greatWonderProperties = new();
 			}
 
-			foreach (var kvp in BuildingRules.productionRules) {
-				if (building.flags.Contains(kvp.Key)) {
-					productionPrerequisites.Add(kvp.Value);
-				}
-			}
-
-			foreach (var kvp in BuildingRules.unitProductionEffects) {
-				if (building.flags.Contains(kvp.Key)) {
-					onFinishedUnitProduction += kvp.Value;
-				}
-			}
-
-			foreach (var kvp in BuildingRules.tileModifiers) {
-				if (building.flags.Contains(kvp.Key)) {
-					tileModifier += kvp.Value;
-				}
-			}
+			LoadLuaFunctions(gameData);
 		}
 
 		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
@@ -253,6 +175,25 @@ namespace C7GameData {
 
 		public override string ToString() {
 			return name;
+		}
+
+		private void LoadLuaFunctions(GameData gameData) {
+			LuaRulesEngine luaEngine = gameData.luaRulesEngine;
+
+			foreach (var path in dataSource.productionPrerequisites) {
+				var rule = luaEngine.ImportFunc<Func<City, bool>>(path);
+				productionPrerequisites.Add(rule);
+			}
+
+			foreach (var path in dataSource.onFinishedUnitProduction) {
+				var handler = luaEngine.ImportFunc<Action<MapUnit>>(path);
+				onFinishedUnitProduction += handler;
+			}
+
+			foreach (var path in dataSource.tileModifiers) {
+				var modifier = luaEngine.ImportFunc<Action<Tile.Yield>>(path);
+				tileModifier += modifier;
+			}
 		}
 	}
 }

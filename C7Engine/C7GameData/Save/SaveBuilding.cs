@@ -53,6 +53,11 @@ namespace C7GameData.Save {
 
 		public HashSet<string> requiredResources = [];
 
+		// Paths to Lua functions 
+		public SortedSet<string> onFinishedUnitProduction = [];
+		public SortedSet<string> productionPrerequisites = [];
+		public SortedSet<string> tileModifiers = [];
+
 		public SaveBuilding() { }
 	}
 }

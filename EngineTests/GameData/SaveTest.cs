@@ -40,6 +40,8 @@ public class SaveTests {
 		}
 	}
 
+	private static string luaRulesDir => getBasePath("../C7/Lua/rules");
+
 	private static string GetMd5FileHash(string path) {
 		if (!File.Exists(path)) {
 			return "";
@@ -113,11 +115,11 @@ public class SaveTests {
 			getPediaIconsPath = (string unused) => { return unused; };
 		}
 
-		return CreateGame.createGame(path, biqPath, getPediaIconsPath);
+		return CreateGame.createGame(path, luaRulesDir, biqPath, getPediaIconsPath);
 	}
 
 	private GameData ToGameData(SaveGame game) {
-		return game.ToGameData();
+		return game.ToGameData(luaRulesDir);
 	}
 
 	private void CheckAiInvariants() {
