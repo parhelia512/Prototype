@@ -6,6 +6,8 @@
 local civ3_textures = require "civ3"
 
 local c7_texture_list = {
+  "Art/buttonsFINAL.png",
+  "Art/X-o_ALLstates-sprite.png",
   "Art/SmallHeads/popHeads.png",
   "Art/Terrain/Mountains-snow.png",
   "Art/Terrain/Mountains.png",
