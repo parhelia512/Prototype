@@ -14,7 +14,7 @@ public partial class UnitButtons : VBoxContainer {
 
 	private ILogger log = LogManager.ForContext<UnitButtons>();
 
-	private Dictionary<string, UnitControlButton> buttonMap = new Dictionary<string, UnitControlButton>();
+	private Dictionary<string, TextureButton> buttonMap = new();
 
 	[Export]
 	HBoxContainer primaryControls;
@@ -31,54 +31,54 @@ public partial class UnitButtons : VBoxContainer {
 		// Remember to re-calc the margin after hiding/unhiding buttons, as that may affect the width.
 		// this.GetNode<FortifyButton>("PrimaryUnitControls/FortifyButton").Hide();
 
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitHold, 0, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitWait, 1, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitFortify, 2, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitDisband, 3, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitGoto, 4, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitExplore, 5, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitSentry, 6, 0, onButtonPressed));
-		AddNewButton(primaryControls, new UnitControlButton(C7Action.UnitSentryEnemyOnly, 2, 5, onButtonPressed));
+		AddNewButton(primaryControls, C7Action.UnitHold);
+		AddNewButton(primaryControls, C7Action.UnitWait);
+		AddNewButton(primaryControls, C7Action.UnitFortify);
+		AddNewButton(primaryControls, C7Action.UnitDisband);
+		AddNewButton(primaryControls, C7Action.UnitGoto);
+		AddNewButton(primaryControls, C7Action.UnitExplore);
+		// AddNewButton(primaryControls, C7Action.UnitSentry);
+		// AddNewButton(primaryControls, C7Action.UnitSentryEnemyOnly);
 
 		//   ******* SPECIALIZED CONTROLS *************
-		AddNewButton(specializedControls, new UnitControlButton("load", 7, 0, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("unload", 0, 1, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("pillage", 2, 1, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("bombard", 3, 1, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("autobombard", 3, 5, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("paradrop", 4, 1, onButtonPressed));
+		// AddNewButton(specializedControls, "load");
+		// AddNewButton(specializedControls, "unload");
+		// AddNewButton(specializedControls, "pillage");
+		// AddNewButton(specializedControls, "bombard");
+		// AddNewButton(specializedControls, "autobombard");
+		// AddNewButton(specializedControls, "paradrop");
 		//superfortify?
-		AddNewButton(specializedControls, new UnitControlButton("hurryBuilding", 6, 1, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("upgrade", 7, 1, onButtonPressed));
+		// AddNewButton(specializedControls, "hurryBuilding");
+		// AddNewButton(specializedControls, "upgrade");
 
 		//TODO: The first two buttons in row index 2, and validate science age/colony are correct
-		AddNewButton(specializedControls, new UnitControlButton("sacrifice", 3, 2, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("scienceAge", 3, 2, onButtonPressed));  //validate
-		AddNewButton(specializedControls, new UnitControlButton("buildColony", 4, 2, onButtonPressed)); //validate
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildCity, 5, 2, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildRoad, 6, 2, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildRailroad, 7, 2, onButtonPressed));
+		// AddNewButton(specializedControls, "sacrifice");
+		// AddNewButton(specializedControls, "scienceAge");  //validate
+		// AddNewButton(specializedControls, "buildColony"); //validate
+		AddNewButton(specializedControls, C7Action.UnitBuildCity);
+		AddNewButton(specializedControls, C7Action.UnitBuildRoad);
+		AddNewButton(specializedControls, C7Action.UnitBuildRailroad);
 
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildFortress, 0, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildBarricade, 4, 4, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitBuildMine, 1, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitIrrigate, 2, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitClearForest, 3, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitClearWetlands, 4, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("plantForest", 5, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton("clearDamage", 6, 3, onButtonPressed));
-		AddNewButton(specializedControls, new UnitControlButton(C7Action.UnitAutomate, 7, 3, onButtonPressed));
+		// AddNewButton(specializedControls, C7Action.UnitBuildFortress);
+		// AddNewButton(specializedControls, C7Action.UnitBuildBarricade);
+		AddNewButton(specializedControls, C7Action.UnitBuildMine);
+		AddNewButton(specializedControls, C7Action.UnitIrrigate);
+		AddNewButton(specializedControls, C7Action.UnitClearForest);
+		AddNewButton(specializedControls, C7Action.UnitClearWetlands);
+		// AddNewButton(specializedControls, "plantForest");
+		// AddNewButton(specializedControls, "clearDamage");
+		AddNewButton(specializedControls, C7Action.UnitAutomate);
 
 		// Row index 4 and later not yet added
 	}
 
-	private void AddNewButton(HBoxContainer row, UnitControlButton button) {
-		row.AddChild(button);
-		buttonMap[button.action] = button;
-	}
+	private void AddNewButton(HBoxContainer row, string action) {
+		TextureButton button = new();
+		TextureLoader.SetButtonTextures(button, "ui.unit_control." + action);
+		button.Pressed += () => { EmitSignal(SignalName.ActionRequested, action); };
 
-	private void onButtonPressed(string action) {
-		EmitSignal(SignalName.ActionRequested, action);
+		row.AddChild(button);
+		buttonMap[action] = button;
 	}
 
 	private void OnNoMoreAutoselectableUnits() {
@@ -87,7 +87,7 @@ public partial class UnitButtons : VBoxContainer {
 
 	private void OnNewUnitSelected(ParameterWrapper<MapUnit> wrappedMapUnit) {
 		MapUnit unit = wrappedMapUnit.Value;
-		foreach (UnitControlButton button in buttonMap.Values) {
+		foreach (TextureButton button in buttonMap.Values) {
 			button.Visible = false;
 		}
 
