@@ -46,6 +46,7 @@ project.lock.json
 C7.ini
 log.txt
 *.csproj.old
+*.csproj.old.*
 C7/.idea/.*
 
 # The file we use to allow generating new maps
