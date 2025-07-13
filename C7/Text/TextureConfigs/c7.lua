@@ -56,6 +56,9 @@ local c7_texture_list = {
   "Art/WorldSetup/landmassWaterSMALLrollovers.png",
   "Art/WorldSetup/landmassWaterlarge.png",
   "Art/WorldSetup/temperature.png",
+  "Art/interface/NormButtons.png",
+  "Art/interface/rolloverbuttons.png",
+  "Art/interface/highlightedbuttons.png",
 }
 
 -- Helper: Strip file extension from path
