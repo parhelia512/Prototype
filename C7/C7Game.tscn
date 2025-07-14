@@ -1,21 +1,21 @@
 [gd_scene load_steps=22 format=3 uid="uid://cldl5nk4n61m2"]
 
-[ext_resource type="Script" path="res://Game.cs" id="1"]
-[ext_resource type="Script" path="res://DoubleClickHandler.cs" id="2_t735q"]
-[ext_resource type="Script" path="res://UIElements/Advisors/Advisors.cs" id="3"]
-[ext_resource type="Script" path="res://UIElements/UpperLeftNav/MenuButton.cs" id="4"]
-[ext_resource type="Script" path="res://UIElements/UpperLeftNav/CivilopediaButton.cs" id="5"]
-[ext_resource type="Script" path="res://UIElements/UpperLeftNav/AdvisorButton.cs" id="6"]
-[ext_resource type="Script" path="res://UIElements/GameStatus/LowerRightInfoBox.cs" id="6_24l34"]
-[ext_resource type="Script" path="res://UIElements/GameStatus/StatusMenu.cs" id="7_yn4xe"]
-[ext_resource type="Script" path="res://UIElements/UnitButtons/RenameButton.cs" id="8"]
-[ext_resource type="Script" path="res://UIElements/GameStatus/ConsoleButton.cs" id="8_7a2mf"]
-[ext_resource type="Script" path="res://UIElements/Popups/PopupOverlay.cs" id="9"]
+[ext_resource type="Script" uid="uid://yxhiwx46tety" path="res://Game.cs" id="1"]
+[ext_resource type="Script" uid="uid://cfenrvu7tnp40" path="res://DoubleClickHandler.cs" id="2_t735q"]
+[ext_resource type="Script" uid="uid://ifoasmoofo6r" path="res://UIElements/Advisors/Advisors.cs" id="3"]
+[ext_resource type="Script" uid="uid://3wtlmr00bmfb" path="res://UIElements/UpperLeftNav/MenuButton.cs" id="4"]
+[ext_resource type="Script" uid="uid://cproyms6andlc" path="res://UIElements/UpperLeftNav/CivilopediaButton.cs" id="5"]
+[ext_resource type="Script" uid="uid://dg82qjp5l1007" path="res://UIElements/UpperLeftNav/AdvisorButton.cs" id="6"]
+[ext_resource type="Script" uid="uid://dmla0pkq64hbb" path="res://UIElements/GameStatus/LowerRightInfoBox.cs" id="6_24l34"]
+[ext_resource type="Script" uid="uid://c36gu2a2r5biy" path="res://UIElements/GameStatus/StatusMenu.cs" id="7_yn4xe"]
+[ext_resource type="Script" uid="uid://bmuhvi4e7jl1h" path="res://UIElements/UnitButtons/RenameButton.cs" id="8"]
+[ext_resource type="Script" uid="uid://dpeyoror0slxa" path="res://UIElements/GameStatus/ConsoleButton.cs" id="8_7a2mf"]
+[ext_resource type="Script" uid="uid://bf02vtfo70hue" path="res://UIElements/Popups/PopupOverlay.cs" id="9"]
 [ext_resource type="Theme" uid="uid://c1jpmssnhvodi" path="res://C7Theme.tres" id="10"]
 [ext_resource type="PackedScene" uid="uid://bo4yg85jcbgdx" path="res://UIElements/CityScreen/city_screen.tscn" id="11_12lt4"]
-[ext_resource type="Script" path="res://UIElements/UnitButtons/UnitButtons.cs" id="12"]
+[ext_resource type="Script" uid="uid://cqbrjccf0k1xx" path="res://UIElements/UnitButtons/UnitButtons.cs" id="12"]
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="12_yjlfl"]
-[ext_resource type="Script" path="res://UIElements/Diplomacy/Diplomacy.cs" id="14"]
+[ext_resource type="Script" uid="uid://bmfpx37ovqnsx" path="res://UIElements/Diplomacy/Diplomacy.cs" id="14"]
 [ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
 [ext_resource type="PackedScene" uid="uid://da7hbbufyfllg" path="res://UIElements/Advisors/domestic_advisor.tscn" id="15"]
 
@@ -62,8 +62,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bowxq"]
 _data = {
-"RESET": SubResource("2"),
-"SlideOutAnimation": SubResource("1")
+&"RESET": SubResource("2"),
+&"SlideOutAnimation": SubResource("1")
 }
 
 [node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer", "doubleClickHandler", "palaceScreen")]
@@ -232,7 +232,7 @@ text = "Quit"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Control/SlideOutBar"]
 libraries = {
-"": SubResource("AnimationLibrary_bowxq")
+&"": SubResource("AnimationLibrary_bowxq")
 }
 
 [node name="GameStatus" type="Control" parent="CanvasLayer/Control"]
