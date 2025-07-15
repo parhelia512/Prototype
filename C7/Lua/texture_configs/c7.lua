@@ -62,6 +62,12 @@ local c7_texture_list = {
   "Art/interface/box right color.png",
   "Art/interface/nextturn states color.png",
   "Art/interface/consoleButtons.png",
+  "Art/SmallHeads/popupDOMESTIC.png",
+  "Art/SmallHeads/popupTRADE.png",
+  "Art/SmallHeads/popupMILITARY.png",
+  "Art/SmallHeads/popupFOREIGN.png",
+  "Art/SmallHeads/popupCULTURE.png",
+  "Art/SmallHeads/popupSCIENCE.png",
 }
 
 -- Helper: Strip file extension from path
