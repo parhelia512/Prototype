@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://dg82qjp5l1007" path="res://UIElements/UpperLeftNav/AdvisorButton.cs" id="6"]
 [ext_resource type="Script" uid="uid://dmla0pkq64hbb" path="res://UIElements/GameStatus/LowerRightInfoBox.cs" id="6_24l34"]
 [ext_resource type="Script" uid="uid://c36gu2a2r5biy" path="res://UIElements/GameStatus/StatusMenu.cs" id="7_yn4xe"]
-[ext_resource type="Script" uid="uid://bmuhvi4e7jl1h" path="res://UIElements/UnitButtons/RenameButton.cs" id="8"]
 [ext_resource type="Script" uid="uid://dpeyoror0slxa" path="res://UIElements/GameStatus/ConsoleButton.cs" id="8_7a2mf"]
 [ext_resource type="Script" uid="uid://bf02vtfo70hue" path="res://UIElements/Popups/PopupOverlay.cs" id="9"]
 [ext_resource type="Theme" uid="uid://c1jpmssnhvodi" path="res://C7Theme.tres" id="10"]
@@ -115,10 +114,6 @@ advancedControls = NodePath("AdvancedUnitControls")
 layout_mode = 2
 size_flags_vertical = 0
 alignment = 1
-
-[node name="RenameButton" type="TextureButton" parent="CanvasLayer/Control/UnitButtons/AdvancedUnitControls"]
-layout_mode = 2
-script = ExtResource("8")
 
 [node name="SpecializedUnitControls" type="HBoxContainer" parent="CanvasLayer/Control/UnitButtons"]
 layout_mode = 2

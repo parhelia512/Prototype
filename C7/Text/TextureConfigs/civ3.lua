@@ -170,11 +170,6 @@ textures.ui = {
       crop_region = { 144, 0, 72, 48 },
     },
   },
-  rename = {
-    path = INTERFACE .. "NormButtons.PCX",
-    alpha = INTERFACE .. "ButtonAlpha.pcx",
-    crop_region = { 64, 224, 32, 32 },
-  },
 }
 
 textures.terrain = require "civ3.terrain"
@@ -405,5 +400,6 @@ textures.lower_right_infobox = {
 
 textures.popheads = require "civ3.popheads"
 textures.cities = require "civ3.cities"
+textures.ui.unit_control = require "civ3.unit_control"
 
 return textures
