@@ -93,8 +93,14 @@ namespace C7GameData.Save {
 			}
 		}
 
-		public GameData ToGameData() {
+		public GameData ToGameData(string luaRulesDir) {
 			GameData data = InitializeGameData();
+
+			// TODO: In the future the path to the Lua script should be loaded from a save
+			// to allow a modded game to rely on a specific Lua ruleset.
+			string rulesScript = "civ3.lua";
+			data.luaRulesEngine.Initialize(luaRulesDir, rulesScript);
+
 			ConvertTerraforms(data);
 			ConvertMapAndPlayers(data);
 			ConvertTechnologies(data);
@@ -185,7 +191,7 @@ namespace C7GameData.Save {
 		}
 
 		private void ConvertBuildings(GameData data) {
-			data.Buildings = Buildings.ConvertAll(building => new Building(building));
+			data.Buildings = Buildings.ConvertAll(building => new Building(building, data));
 
 			var buildingDict = data.Buildings.ToDictionary(b => b.name);
 			var techDict = data.techs.ToDictionary(t => t.id);

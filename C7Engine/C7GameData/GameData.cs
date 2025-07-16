@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Serilog;
+using C7Engine;
 using C7Engine.Pathing;
 
 namespace C7GameData {
@@ -55,6 +56,8 @@ namespace C7GameData {
 		public bool showGridCoordinates = false;
 
 		public string scenarioSearchPath;   //legacy from Civ3, we'll probably have a more modern format someday but this keeps legacy compatibility
+
+		internal LuaRulesEngine luaRulesEngine = new();
 
 		// The cached trade network for all players. This is invalidated whenever
 		// a road is built or a city is created/destroyed.

@@ -18,6 +18,8 @@ public partial class GlobalSingleton : Node {
 	// This is the 'static map' used in lieu of terrain generation
 	public string DefaultGamePath { get => @"./Text/c7-static-map-save.json"; }
 
+	public string LuaRulesDir { get => "./Lua/rules/"; }
+
 	// The file where a generated map is saved, until we get more advanced ways
 	// to generate new games.
 	// TODO: improve this.

@@ -12,12 +12,14 @@ namespace C7Engine {
 		 * quickly.  By keeping all the client-callable APIs in the EntryPoints folder,
 		 * hopefully it won't be too much of a goose hunt to refactor it later if we decide to do so.
 		 **/
-		public static Player createGame(string loadFilePath, string defaultBicPath,
+		public static Player createGame(string loadFilePath,
+										string luaRulesDir,
+										string defaultBicPath,
 										Func<string, string> getPediaIconsPath) {
 			EngineStorage.createThread();
 
 			SaveGame save = SaveManager.LoadSave(loadFilePath, defaultBicPath, getPediaIconsPath);
-			GameData gameData = save.ToGameData();
+			GameData gameData = save.ToGameData(luaRulesDir);
 
 			EngineStorage.gameData = gameData;
 

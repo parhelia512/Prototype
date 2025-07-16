@@ -72384,6 +72384,9 @@
       ],
       "traits": [
         "militaristic"
+      ],
+      "onFinishedUnitProduction": [
+        "buildings.unit_production_effects.veteran_ground_units"
       ]
     },
     {
@@ -72481,6 +72484,9 @@
       ],
       "traits": [
         "militaristic"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.can_only_be_built_in_towns"
       ]
     },
     {
@@ -72499,6 +72505,9 @@
       ],
       "traits": [
         "agricultural"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.allows_city_size_2"
       ]
     },
     {
@@ -72634,6 +72643,9 @@
       "iconRowIndex": 17,
       "flags": [
         "mustBeNearRiver"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_near_river"
       ]
     },
     {
@@ -72665,6 +72677,9 @@
       "iconRowIndex": 19,
       "flags": [
         "allowsCitySize3"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.allows_city_size_3"
       ]
     },
     {
@@ -72737,6 +72752,9 @@
       "requiredResources": [
         "Iron",
         "Saltpeter"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_coastal"
       ]
     },
     {
@@ -72775,6 +72793,15 @@
         "militaristic",
         "commercial",
         "seafaring"
+      ],
+      "onFinishedUnitProduction": [
+        "buildings.unit_production_effects.veteran_sea_units"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_coastal"
+      ],
+      "tileModifiers": [
+        "buildings.tile_modifiers.increases_food_in_water"
       ]
     },
     {
@@ -72794,6 +72821,12 @@
       ],
       "traits": [
         "seafaring"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_coastal"
+      ],
+      "tileModifiers": [
+        "buildings.tile_modifiers.increases_shields_in_water"
       ]
     },
     {
@@ -72885,6 +72918,9 @@
         "commercial",
         "expansionist",
         "seafaring"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_coastal"
       ]
     },
     {
@@ -72907,6 +72943,9 @@
         "commercial",
         "expansionist",
         "seafaring"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_coastal"
       ]
     },
     {
@@ -73016,6 +73055,9 @@
         "commercial",
         "expansionist",
         "seafaring"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_coastal"
       ]
     },
     {
@@ -73048,6 +73090,9 @@
       "iconRowIndex": 41,
       "flags": [
         "allowsCitySize3"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.allows_city_size_3"
       ]
     },
     {
@@ -73151,6 +73196,9 @@
       "traits": [
         "industrious",
         "agricultural"
+      ],
+      "productionPrerequisites": [
+        "buildings.production_rules.must_be_near_river"
       ]
     },
     {
@@ -73634,6 +73682,9 @@
       "traits": [
         "commercial",
         "seafaring"
+      ],
+      "tileModifiers": [
+        "buildings.tile_modifiers.increases_trade_in_water"
       ]
     },
     {

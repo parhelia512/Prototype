@@ -108,6 +108,14 @@ namespace C7GameData {
 			return (int)(shieldCost * costFactor);
 		}
 
+		public bool IsLandUnit() {
+			return categories.Contains("Land");
+		}
+
+		public bool IsSeaUnit() {
+			return categories.Contains("Sea");
+		}
+
 		// TODO: Consider golden ages when determining whether a unit is obsolete.
 		// If a golden age has not yet been triggered and a unit can trigger one,
 		// it shouldn't be marked as obsolete, even if its upgrade is available.

@@ -966,6 +966,8 @@ namespace C7GameData {
 					building.flags.Add(SaveBuilding.Flag.CanOnlyBeBuiltInTowns);
 				}
 
+				MapFlagsToLuaFunctions(building);
+
 				save.Buildings.Add(building);
 			}
 		}
@@ -1004,6 +1006,44 @@ namespace C7GameData {
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);
+		}
+
+		private static void MapFlagsToLuaFunctions(SaveBuilding building) {
+			var flagToProductionRule = new Dictionary<SaveBuilding.Flag, string>
+			{
+				{ SaveBuilding.Flag.MustBeCoastal, "must_be_coastal" },
+				{ SaveBuilding.Flag.MustBeNearRiver, "must_be_near_river" },
+				{ SaveBuilding.Flag.AllowsCitySize2, "allows_city_size_2" },
+				{ SaveBuilding.Flag.AllowsCitySize3, "allows_city_size_3" },
+				{ SaveBuilding.Flag.CanOnlyBeBuiltInTowns, "can_only_be_built_in_towns"}
+			};
+
+			var flagToUnitProductionEffect = new Dictionary<SaveBuilding.Flag, string>
+			{
+				{ SaveBuilding.Flag.VeteranGroundUnits, "veteran_ground_units" },
+				{ SaveBuilding.Flag.VeteranSeaUnits, "veteran_sea_units" },
+			};
+
+			var flagToTileModifier = new Dictionary<SaveBuilding.Flag, string>
+			{
+				{ SaveBuilding.Flag.IncreasesFoodInWater, "increases_food_in_water" },
+				{ SaveBuilding.Flag.IncreasesShieldsInWater, "increases_shields_in_water" },
+				{ SaveBuilding.Flag.IncreasesTradeInWater, "increases_trade_in_water" },
+			};
+
+			foreach (var flag in building.flags) {
+				if (flagToProductionRule.TryGetValue(flag, out var productionRule)) {
+					building.productionPrerequisites.Add($"buildings.production_rules.{productionRule}");
+				}
+
+				if (flagToUnitProductionEffect.TryGetValue(flag, out var unitEffect)) {
+					building.onFinishedUnitProduction.Add($"buildings.unit_production_effects.{unitEffect}");
+				}
+
+				if (flagToTileModifier.TryGetValue(flag, out var tileModifier)) {
+					building.tileModifiers.Add($"buildings.tile_modifiers.{tileModifier}");
+				}
+			}
 		}
 
 		private void ImportCiv3TerrainTypes() {
