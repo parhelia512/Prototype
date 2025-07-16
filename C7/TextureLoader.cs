@@ -160,11 +160,11 @@ public static class TextureLoader {
 	}
 
 	private static ImageTexture LoadFromConfigEntry(ConfigEntry config) {
-		if (config.UseAlpha) {
+		string ext = Path.GetExtension(config.Path).ToLowerInvariant();
+		if (config.UseAlpha && ext == ".pcx") {
 			return LoadWithAlphaBlend(config.Path, config.AlphaPath!, config.CropRegion, config.AlphaRowOffset);
 		}
 
-		string ext = Path.GetExtension(config.Path).ToLowerInvariant();
 		return ext switch {
 			".png" => LoadFromPNG(config.Path, config.CropRegion),
 			".pcx" => LoadFromPCX(config.Path, config.CropRegion, config.ColorOptions),

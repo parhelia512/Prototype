@@ -1,8 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://4e71j27bd536"]
+[gd_scene load_steps=9 format=3 uid="uid://4e71j27bd536"]
 
-[ext_resource type="Script" path="res://UIElements/NewGame/PlayerSetup.cs" id="1"]
-[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2"]
-[ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3"]
+[ext_resource type="Script" uid="uid://conqgejgvnn6d" path="res://UIElements/NewGame/PlayerSetup.cs" id="1"]
+[ext_resource type="Script" uid="uid://doqipc4rnaotx" path="res://UIElements/Civ3TextureRect.cs" id="2"]
+[ext_resource type="Script" uid="uid://dcrdcjop64t6t" path="res://UIElements/Civ3TextureButton.cs" id="3"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_8ublj"]
 device = -1
@@ -20,7 +20,7 @@ events = [SubResource("InputEventKey_klcu1")]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ld2d8"]
 
-[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "playerListContainer", "opponentListContainer", "difficultyContainer", "civLabel", "confirm", "cancel", "loadingLabel")]
+[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "playerListContainer", "civLabel", "opponentListContainer", "difficultyContainer", "confirm", "cancel", "loadingLabel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -29,9 +29,9 @@ grow_vertical = 2
 script = ExtResource("1")
 background = NodePath("Background")
 playerListContainer = NodePath("Background/CenterContainer/PlayerListContainer")
+civLabel = NodePath("Background/CivLabel")
 opponentListContainer = NodePath("Background/OpponentListContainer")
 difficultyContainer = NodePath("Background/DifficultyContainer")
-civLabel = NodePath("Background/CivLabel")
 confirm = NodePath("Background/Confirm")
 cancel = NodePath("Background/Cancel")
 loadingLabel = NodePath("Background/LoadingLabel")
@@ -116,8 +116,8 @@ offset_left = 421.0
 offset_top = 289.0
 offset_right = 608.0
 offset_bottom = 368.0
-text = "Foo of the Bars
-(Expansionist, Agricultural, Industrial)"
+text = "Hannibal of the Carthaginians
+(Industrious, Seafaring)"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
