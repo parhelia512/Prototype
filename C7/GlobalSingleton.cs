@@ -12,25 +12,21 @@ public partial class GlobalSingleton : Node {
 	// which then should blank it again to prevent reloading same if going back to main menu
 	// and back to game
 	public string LoadGamePath;
-	// For now this needs to get passed to QueryCiv3 when importing.
-	public string DefaultBicPath { get => Util.GetCiv3Path() + @"/Conquests/conquests.biq"; }
 
-	// This is the 'static map' used in lieu of terrain generation
-	public string DefaultGamePath { get => @"./Text/c7-static-map-save.json"; }
-
-	public string LuaRulesDir { get => "./Lua/rules/"; }
-
-	// The file where a generated map is saved, until we get more advanced ways
-	// to generate new games.
-	// TODO: improve this.
-	public string DefaultGeneratedGamePath { get => @"./Text/c7-autosave-turn-0.json"; }
-
-	public void ResetLoadGamePath() {
-		LoadGamePath = DefaultGamePath;
-	}
+	public bool ModernGraphicsActive { get; private set; }
 
 	// The characteristics of the world to generate. This exists in the singleton
 	// to allow the world setup screen to pass the information to the player
 	// setup screen, which is what actually kicks off the world generation.
 	public WorldCharacteristics WorldCharacteristics;
+
+	public void ResetLoadGamePath() {
+		LoadGamePath = GamePaths.DefaultGamePath;
+	}
+
+	public void ToggleModernGraphics() {
+		string newConfig = ModernGraphicsActive ? GamePaths.ClassicGraphicsConfig : GamePaths.ModernGraphicsConfig;
+		TextureLoader.SetConfig(GamePaths.TextureConfigsDir, newConfig);
+		ModernGraphicsActive = !ModernGraphicsActive;
+	}
 }

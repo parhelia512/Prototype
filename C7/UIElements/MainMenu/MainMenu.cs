@@ -54,16 +54,21 @@ public partial class MainMenu : Node {
 		ButtonContainer.Exit.Pressed += _on_Exit_pressed;
 
 		ButtonContainer.ToggleGraphics.Pressed += () => {
-			if (ButtonContainer.ToggleGraphics.Text == "Turn on C7 Graphics") {
-				ButtonContainer.ToggleGraphics.Text = "Turn on Civ3 Graphics";
-			} else {
-				ButtonContainer.ToggleGraphics.Text = "Turn on C7 Graphics";
-			}
-			TextureLoader.ToggleModernGraphics();
+			Global.ToggleModernGraphics();
+			SetToggleGraphicsText();
 		};
+		SetToggleGraphicsText();
 
 		// Hide select home folder if valid path is present as proven by reaching this point in code
 		SetCiv3Home.Visible = false;
+	}
+
+	private void SetToggleGraphicsText() {
+		if (Global.ModernGraphicsActive) {
+			ButtonContainer.ToggleGraphics.Text = "Turn on Civ3 Graphics";
+		} else {
+			ButtonContainer.ToggleGraphics.Text = "Turn on C7 Graphics";
+		}
 	}
 
 	public void GoToWorldSetup() {
