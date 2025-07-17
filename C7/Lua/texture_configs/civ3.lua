@@ -17,6 +17,8 @@ local CITY_ICONS = "Art/Cities/city icons.pcx"
 local CREDITS = "Art/Credits/"
 local PALACE = "Art/PalaceView/"
 
+local POPUP_BORDERS = "Art/popupborders.pcx"
+
 -- Texture definitions
 local textures = {}
 
@@ -395,6 +397,45 @@ textures.lower_right_infobox = {
       alpha = INTERFACE .. "nextturn states alpha.pcx",
       crop_region = { 94, 0, 47, 28 },
     },
+  },
+}
+
+textures.popup_background = {
+  top_left = {
+    path = POPUP_BORDERS,
+    crop_region = { 251, 1, 61, 44, },
+  },
+  top_center = {
+    path = POPUP_BORDERS,
+    crop_region = { 313, 1, 61, 44, },
+  },
+  top_right = {
+    path = POPUP_BORDERS,
+    crop_region = { 375, 1, 61, 44, },
+  },
+  middle_left = {
+    path = POPUP_BORDERS,
+    crop_region = { 251, 46, 61, 44, },
+  },
+  middle_center = {
+    path = POPUP_BORDERS,
+    crop_region = { 313, 46, 61, 44, },
+  },
+  middle_right = {
+    path = POPUP_BORDERS,
+    crop_region = { 375, 46, 61, 44, },
+  },
+  bottom_left = {
+    path = POPUP_BORDERS,
+    crop_region = { 251, 91, 61, 44, },
+  },
+  bottom_center = {
+    path = POPUP_BORDERS,
+    crop_region = { 313, 91, 61, 44, },
+  },
+  bottom_right = {
+    path = POPUP_BORDERS,
+    crop_region = { 375, 91, 61, 44, },
   },
 }
 
