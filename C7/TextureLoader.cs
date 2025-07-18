@@ -57,6 +57,11 @@ public static class TextureLoader {
 		UserData.RegisterType<CityGraphicsDetails>();
 		UserData.RegisterType<PopHead.TextureKey>();
 
+		// Note, we register all of AdvisorHeader rather than just
+		// AdvisorHead.AdvisorGraphicsDetails because we access the nums
+		// in the class as well.
+		UserData.RegisterType<AdvisorHead>();
+
 		// We need to register the "Type" type to be able to inspect
 		// the types of C# objects in the Lua code
 		UserData.RegisterType<Type>();
