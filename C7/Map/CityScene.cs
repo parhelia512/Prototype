@@ -18,17 +18,22 @@ namespace C7.Map {
 		private ImageTexture cityTexture;
 		private TextureRect cityGraphics = new TextureRect();
 		private CityLabelScene cityLabelScene;
-		private AnimatedSprite2D disorderSprite;
 		private City city;
 		private Rules rules;
 		private CityGraphicsDetails cachedDetails;
 		private Vector2I tileCenter;
 
-		public CityScene(City city, Vector2I tileCenter) {
-			cityLabelScene = new CityLabelScene(city, tileCenter);
+		private AnimatedSprite2D disorderSprite;
+		private static SpriteFrames disorderFrames = new();
+
+		static CityScene() {
+			AnimationManager.loadNonTintedAnimation("Art/Animations/Disorder/DisorderDefault.flc", "disorder", ref disorderFrames);
+		}
+
+		public CityScene(City city) {
+			cityLabelScene = new CityLabelScene(city);
 			this.city = city;
 			this.rules = city.owner.rules;
-			this.tileCenter = tileCenter;
 
 			cachedDetails = GetCityGraphicsDetails(city);
 			ConfigureCityGraphics(cachedDetails);
@@ -37,9 +42,7 @@ namespace C7.Map {
 			AddChild(cityLabelScene);
 
 			disorderSprite = new();
-			SpriteFrames frames = new();
-			disorderSprite.SpriteFrames = frames;
-			AnimationManager.loadNonTintedAnimation("Art/Animations/Disorder/DisorderDefault.flc", "disorder", ref frames);
+			disorderSprite.SpriteFrames = disorderFrames;
 			disorderSprite.Animation = "disorder";
 			disorderSprite.Position = tileCenter + new Vector2(0, -32);
 			AddChild(disorderSprite);
@@ -60,6 +63,18 @@ namespace C7.Map {
 			} else {
 				disorderSprite.Hide();
 			}
+		}
+
+		public void SetTileCenter(Vector2I tileCenter) {
+			this.tileCenter = tileCenter;
+
+			disorderSprite.Position = tileCenter + new Vector2(0, -32);
+			cityLabelScene.tileCenter = tileCenter;
+
+			cityGraphics.Position = new(
+				tileCenter.X - (float)0.5 * cityTexture.GetWidth(),
+				tileCenter.Y - (float)0.5 * cityTexture.GetHeight()
+			);
 		}
 
 		private CityGraphicsDetails GetCityGraphicsDetails(City c) {
@@ -84,8 +99,6 @@ namespace C7.Map {
 		private void ConfigureCityGraphics(CityGraphicsDetails details) {
 			cityTexture = TextureLoader.Load("cities", details);
 
-			cityGraphics.OffsetLeft = tileCenter.X - (float)0.5 * cityTexture.GetWidth();
-			cityGraphics.OffsetTop = tileCenter.Y - (float)0.5 * cityTexture.GetHeight();
 			cityGraphics.MouseFilter = Control.MouseFilterEnum.Ignore;
 			cityGraphics.Texture = cityTexture;
 		}

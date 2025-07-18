@@ -23,12 +23,16 @@ namespace C7.Map {
 			}
 
 			City city = tile.cityAtTile;
+			Vector2I tileCenter2I = new((int)tileCenter.X, (int)tileCenter.Y);
+
 			if (!citySceneLookup.ContainsKey(city)) {
-				CityScene cityScene = new CityScene(city, new Vector2I((int)tileCenter.X, (int)tileCenter.Y));
+				CityScene cityScene = new CityScene(city);
+				cityScene.SetTileCenter(tileCenter2I);
 				looseView.AddChild(cityScene);
 				citySceneLookup[city] = cityScene;
 			} else {
 				CityScene scene = citySceneLookup[city];
+				scene.SetTileCenter(tileCenter2I);
 				scene._Draw();
 			}
 		}

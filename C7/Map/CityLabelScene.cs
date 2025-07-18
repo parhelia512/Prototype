@@ -5,7 +5,7 @@ using Godot;
 namespace C7.Map {
 	public partial class CityLabelScene : Node2D {
 		City city;
-		Vector2I tileCenter;
+		public Vector2I tileCenter;
 		Color civColor;
 
 		const byte TRANSPARENCY = 192; // 25%
@@ -66,9 +66,8 @@ namespace C7.Map {
 			nonEmbassyStar = TextureLoader.Load("icons.capital_star");
 		}
 
-		public CityLabelScene(City city, Vector2I tileCenter) {
+		public CityLabelScene(City city) {
 			this.city = city;
-			this.tileCenter = tileCenter;
 
 			civColor = new Color(Util.LoadColor(city.owner.colorIndex), TRANSPARENCY);
 
