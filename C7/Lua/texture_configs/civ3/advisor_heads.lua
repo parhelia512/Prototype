@@ -2,12 +2,14 @@ local IMAGE_SIZE = 150
 local CROP_HEIGHT = 110
 
 local advisor_heads = {
-  domestic = { path = "Art/SmallHeads/popupDOMESTIC.pcx", },
-  trade = { path = "Art/SmallHeads/popupTRADE.pcx", },
-  military = { path = "Art/SmallHeads/popupMILITARY.pcx", },
-  foreign = { path = "Art/SmallHeads/popupFOREIGN.pcx", },
-  culture = { path = "Art/SmallHeads/popupCULTURE.pcx", },
-  science = { path = "Art/SmallHeads/popupSCIENCE.pcx", },
+  extra_data = {
+    domestic_path = "Art/SmallHeads/popupDOMESTIC.pcx",
+    trade_path = "Art/SmallHeads/popupTRADE.pcx",
+    military_path = "Art/SmallHeads/popupMILITARY.pcx",
+    foreign_path = "Art/SmallHeads/popupFOREIGN.pcx",
+    culture_path = "Art/SmallHeads/popupCULTURE.pcx",
+    science_path = "Art/SmallHeads/popupSCIENCE.pcx",
+  },
 }
 
 function advisor_heads:map_object_to_sprite(details)
@@ -19,27 +21,27 @@ function advisor_heads:map_object_to_sprite(details)
   -- conversion to work.
   local path = nil
   if details.advisor == details.advisor.Domestic then
-    path = self.domestic.path
+    path = self.extra_data.domestic_path
   elseif details.advisor == details.advisor.Trade then
-    path = self.trade.path
+    path = self.extra_data.trade_path
   elseif details.advisor == details.advisor.Military then
-    path = self.military.path
+    path = self.extra_data.military_path
   elseif details.advisor == details.advisor.Foreign then
-    path = self.foreign.path
+    path = self.extra_data.foreign_path
   elseif details.advisor == details.advisor.Culture then
-    path = self.culture.path
+    path = self.extra_data.culture_path
   elseif details.advisor == details.advisor.Science then
-    path = self.science.path
+    path = self.extra_data.science_path
   end
 
   local mood_col = nil
   if details.mood == details.mood.Happy then
     mood_col = 0
-  elseif detmood == details.mood.Angry then
+  elseif details.mood == details.mood.Angry then
     mood_col = 1
-  elseif detmood == details.mood.Sad then
+  elseif details.mood == details.mood.Sad then
     mood_col = 2
-  elseif detmood == details.mood.Surprised then
+  elseif details.mood == details.mood.Surprised then
     mood_col = 3
   end
 
