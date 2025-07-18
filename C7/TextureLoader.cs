@@ -1,9 +1,12 @@
 using System;
-using NLua;
 using Godot;
 using ConvertCiv3Media;
 using System.Collections.Generic;
 using System.IO;
+using MoonSharp.Interpreter;
+using Script = MoonSharp.Interpreter.Script;
+using MoonSharp.Interpreter.Loaders;
+using C7.Map;
 
 public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
 
@@ -40,14 +43,8 @@ public static class TextureLoader {
 		public readonly bool UseAlpha => AlphaPath != null;
 	}
 
-	private static Lua lua;
-	private static LuaTable civ3TextureConfig;
-	private static LuaTable c7TextureConfig;
-
-	// currently used config
-	private static LuaTable textureConfig;
-	// whether the currently used config represent the CIV3 or the custom C7 graphics
-	private static bool modernGraphics;
+	private static Script lua;
+	private static Table textureConfig;
 
 	private static Dictionary<string, ImageTexture> textureCache = [];
 	private static Dictionary<string, Pcx> PcxCache = [];
@@ -57,14 +54,30 @@ public static class TextureLoader {
 	private static Dictionary<(string configKey, object obj), ImageTexture> objectMappingCache = [];
 
 	static TextureLoader() {
-		lua = new Lua();
-		lua.DoString($"package.path = './Lua/texture_configs/?.lua;./Lua/texture_configs/*/?.lua'");
+		UserData.RegisterType<CityGraphicsDetails>();
+		UserData.RegisterType<PopHead.TextureKey>();
 
-		civ3TextureConfig = (LuaTable)lua.DoFile("./Lua/texture_configs/civ3.lua")[0];
-		c7TextureConfig = (LuaTable)lua.DoFile("./Lua/texture_configs/c7.lua")[0];
+		// We need to register the "Type" type to be able to inspect
+		// the types of C# objects in the Lua code
+		UserData.RegisterType<Type>();
 
-		textureConfig = civ3TextureConfig;
-		modernGraphics = false;
+		SetConfig(GamePaths.TextureConfigsDir, GamePaths.ClassicGraphicsConfig);
+	}
+
+	public static void SetConfig(string configDir, string configScript) {
+		ClearCache();
+
+		lua = new Script();
+		lua.Options.ScriptLoader = new FileSystemScriptLoader {
+			ModulePaths = [
+				Path.Combine(configDir, "?.lua"),
+				Path.Combine(configDir, "*", "?.lua")
+			]
+		};
+
+		string fullScriptPath = Path.Combine(configDir, configScript);
+		DynValue res = lua.DoFile(fullScriptPath);
+		textureConfig = res.Table;
 	}
 
 	/// Returns a texture based on the config key.
@@ -94,6 +107,9 @@ public static class TextureLoader {
 	/// using (configKey, obj) as key.  Note, that caching shouldn't
 	/// be used for objects whose texture-affecting properties can
 	/// change.
+	///
+	/// Note that the type of the object passed to the method should
+	/// be registered as Moonsharp userdata.
 	public static ImageTexture Load(string configKey, object obj, bool useCache = false) {
 		var cacheKey = (configKey, obj);
 
@@ -101,14 +117,15 @@ public static class TextureLoader {
 			return cachedTexture;
 
 		object entry = GetEntryByPath(configKey);
-
-		if (entry is not LuaTable table)
+		if (entry is not Table table)
 			throw new Exception($"Table expected for key: {configKey}");
 
-		if (table["map_object_to_sprite"] is not LuaFunction func)
+		if (table["map_object_to_sprite"] is not Closure func)
 			throw new Exception("Custom mapping function expected");
 
-		ImageTexture texture = LoadFromLuaObject(func.Call(table, obj)[0]);
+		object result = func.Call(table, DynValue.FromObject(lua, obj)).ToObject();
+
+		ImageTexture texture = LoadFromLuaObject(result);
 
 		if (useCache)
 			objectMappingCache[cacheKey] = texture;
@@ -123,7 +140,7 @@ public static class TextureLoader {
 	public static void SetButtonTextures(TextureButton button, string configKey) {
 		object entry = GetEntryByPath(configKey);
 
-		if (entry is not LuaTable table)
+		if (entry is not Table table)
 			throw new Exception($"Table expected for key: {configKey}");
 
 		button.TextureNormal = LoadFromLuaObject(table["normal"]);
@@ -142,7 +159,7 @@ public static class TextureLoader {
 			};
 		}
 
-		if (entry is LuaTable table) {
+		if (entry is Table table) {
 			if (table["path"] == null) {
 				throw new ArgumentException("Texture configuration missing required 'path' property");
 			}
@@ -161,21 +178,19 @@ public static class TextureLoader {
 
 	private static ImageTexture LoadFromConfigEntry(ConfigEntry config) {
 		string ext = Path.GetExtension(config.Path).ToLowerInvariant();
-		if (config.UseAlpha && ext == ".pcx") {
-			return LoadWithAlphaBlend(config.Path, config.AlphaPath!, config.CropRegion, config.AlphaRowOffset);
-		}
 
 		return ext switch {
 			".png" => LoadFromPNG(config.Path, config.CropRegion),
+			".pcx" when config.UseAlpha => LoadWithAlphaBlend(config.Path, config.AlphaPath!, config.CropRegion, config.AlphaRowOffset),
 			".pcx" => LoadFromPCX(config.Path, config.CropRegion, config.ColorOptions),
 			_ => throw new FormatException($"Unknown texture format: {config.Path}"),
 		};
 	}
 
 	// Helper method to extract crop region from a table
-	private static CropRegion? ExtractCropRegion(LuaTable table) {
+	private static CropRegion? ExtractCropRegion(Table table) {
 		object cropRegionObj = table["crop_region"];
-		if (cropRegionObj is LuaTable cropRegion) {
+		if (cropRegionObj is Table cropRegion) {
 			try {
 				int x = Convert.ToInt32(cropRegion[1]);
 				int y = Convert.ToInt32(cropRegion[2]);
@@ -206,7 +221,7 @@ public static class TextureLoader {
 		object current = textureConfig;
 
 		foreach (string part in parts) {
-			if (current is LuaTable table && table[part] != null) {
+			if (current is Table table && table[part] != null) {
 				current = table[part];
 			} else {
 				return null;
@@ -281,19 +296,6 @@ public static class TextureLoader {
 		PcxCache.Clear();
 		PngCache.Clear();
 		textureCache.Clear();
-		configKeyCache.Clear();
-		objectMappingCache.Clear();
-	}
-
-	public static void ToggleModernGraphics() {
-		if (modernGraphics) {
-			modernGraphics = false;
-			textureConfig = civ3TextureConfig;
-		} else {
-			modernGraphics = true;
-			textureConfig = c7TextureConfig;
-		}
-
 		configKeyCache.Clear();
 		objectMappingCache.Clear();
 	}

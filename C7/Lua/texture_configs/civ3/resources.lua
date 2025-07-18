@@ -15,7 +15,7 @@ function resources.large:map_object_to_sprite(resource)
   end
 
   local icon = resource.Icon
-  local row = icon // 6
+  local row = math.floor(icon / 6)
   local col = icon % 6
 
   return {

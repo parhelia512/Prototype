@@ -96,6 +96,10 @@ public class LuaRulesEngine {
 	Script script = new();
 	Table rules;
 
+	static LuaRulesEngine() {
+		RegisterTypes();
+	}
+
 	/// Initializes the Lua state.
 	///
 	/// Accepts the path to the directory containing Lua scripts,
@@ -104,7 +108,6 @@ public class LuaRulesEngine {
 		if (rules != null)
 			throw new InvalidOperationException("Engine already initialized");
 
-		RegisterTypes();
 		RegisterEnums();
 		RegisterGlobals();
 
@@ -150,7 +153,7 @@ public class LuaRulesEngine {
 		throw new ArgumentException($"Function path '{functionPath}' did not resolve to a function.");
 	}
 
-	void RegisterTypes() {
+	static void RegisterTypes() {
 		var types = Assembly.GetExecutingAssembly()
 							.GetTypes()
 							.Where(t =>

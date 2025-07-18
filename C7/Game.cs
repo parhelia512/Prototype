@@ -112,8 +112,8 @@ public partial class Game : Node2D {
 
 			controller = CreateGame.createGame(
 				Global.LoadGamePath,
-				Global.LuaRulesDir,
-				Global.DefaultBicPath,
+				GamePaths.LuaRulesDir,
+				GamePaths.DefaultBicPath,
 				(scenarioSearchPath) => {
 					// WHen the game loading logic tries to load the PediaIcons file, set the
 					// scenario search path and then use our Civ3MediaPath searching logic to
@@ -801,7 +801,7 @@ public partial class Game : Node2D {
 	}
 
 	private void ToggleC7Graphics() {
-		TextureLoader.ToggleModernGraphics();
+		Global.ToggleModernGraphics();
 		InitializeMapView();
 	}
 
