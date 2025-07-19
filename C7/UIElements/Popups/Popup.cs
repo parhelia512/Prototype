@@ -111,20 +111,18 @@ public partial class Popup : TextureRect {
 
 		Image image = Image.Create(width, height, false, Image.Format.Rgba8);
 
-		Pcx popupborders = TextureLoader.LoadPCX("Art/popupborders.pcx");
-
 		//The pop-up part is the tricky part
 		Stopwatch imageTimer = new Stopwatch();
 		imageTimer.Start();
-		Image topLeftPopup = PCXToGodot.getImageFromPCX(popupborders, new(251, 1, 61, 44));
-		Image topCenterPopup = PCXToGodot.getImageFromPCX(popupborders, new(313, 1, 61, 44));
-		Image topRightPopup = PCXToGodot.getImageFromPCX(popupborders, new(375, 1, 61, 44));
-		Image middleLeftPopup = PCXToGodot.getImageFromPCX(popupborders, new(251, 46, 61, 44));
-		Image middleCenterPopup = PCXToGodot.getImageFromPCX(popupborders, new(313, 46, 61, 44));
-		Image middleRightPopup = PCXToGodot.getImageFromPCX(popupborders, new(375, 46, 61, 44));
-		Image bottomLeftPopup = PCXToGodot.getImageFromPCX(popupborders, new(251, 91, 61, 44));
-		Image bottomCenterPopup = PCXToGodot.getImageFromPCX(popupborders, new(313, 91, 61, 44));
-		Image bottomRightPopup = PCXToGodot.getImageFromPCX(popupborders, new(375, 91, 61, 44));
+		Image topLeftPopup = TextureLoader.Load("popup_background.top_left").GetImage();
+		Image topCenterPopup = TextureLoader.Load("popup_background.top_center").GetImage();
+		Image topRightPopup = TextureLoader.Load("popup_background.top_right").GetImage();
+		Image middleLeftPopup = TextureLoader.Load("popup_background.middle_left").GetImage();
+		Image middleCenterPopup = TextureLoader.Load("popup_background.middle_center").GetImage();
+		Image middleRightPopup = TextureLoader.Load("popup_background.middle_right").GetImage();
+		Image bottomLeftPopup = TextureLoader.Load("popup_background.bottom_left").GetImage();
+		Image bottomCenterPopup = TextureLoader.Load("popup_background.bottom_center").GetImage();
+		Image bottomRightPopup = TextureLoader.Load("popup_background.bottom_right").GetImage();
 		imageTimer.Stop();
 		TimeSpan stopwatchElapsed = imageTimer.Elapsed;
 		log.Debug("Image creation time: " + Convert.ToInt32(stopwatchElapsed.TotalMilliseconds) + " ms");

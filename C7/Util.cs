@@ -230,17 +230,6 @@ public partial class Util {
 		return ImageTexture.CreateFromImage(img);
 	}
 
-	// Creates textures from a PCX file without de-palettizing it. Returns two ImageTextures, the first is 16x16 with RGB8 format containing the
-	// color palette and the second is the size of the image itself and contains the indices in R8 format.
-	public static (ImageTexture palette, ImageTexture indices) loadPalettizedPCX(string filePath) {
-		var pcx = TextureLoader.LoadPCX(filePath);
-
-		var imgIndices = Image.CreateFromData(pcx.Width, pcx.Height, false, Image.Format.R8, pcx.ColorIndices);
-		ImageTexture texIndices = ImageTexture.CreateFromImage(imgIndices);
-
-		return (createPaletteTexture(pcx.Palette), texIndices);
-	}
-
 	// A FlicSheet is a sprite sheet created from a Flic file, with each frame of the animation as its own sprite
 	public struct FlicSheet {
 		public ImageTexture palette, indices;

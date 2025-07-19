@@ -70,10 +70,6 @@ public partial class PCXToGodot : GodotObject {
 		return getImageFromBufferData(croppedWidth, croppedHeight, BufferData);
 	}
 
-	public static Image getImageFromPCX(Pcx pcx, CropRegion cropRegion) {
-		return getImageFromPCX(pcx, cropRegion, ColorOptions.Default);
-	}
-
 	public static ImageTexture getPureAlphaFromPCX(Pcx alphaPcx) {
 		int[] bufferData = new int[alphaPcx.Width * alphaPcx.Height];
 		int[] alphaData = new int[MAX_PALETTE_SIZE];

@@ -68,6 +68,14 @@ local c7_texture_list = {
   "Art/SmallHeads/popupFOREIGN.png",
   "Art/SmallHeads/popupCULTURE.png",
   "Art/SmallHeads/popupSCIENCE.png",
+  "Art/Advisors/domestic_icons_aux.png",
+  "Art/Advisors/domesticBUTTON.png",
+  "Art/Cities/city icons.png",
+  "Art/popupborders.png",
+  "Art/interface/menuButtons.png",
+  "Art/Advisors/dialogbox.png",
+  "Art/Advisors/domestic.png",
+  "Art/Tech Chooser/scienceNAV.png",
 }
 
 -- Helper: Strip file extension from path
