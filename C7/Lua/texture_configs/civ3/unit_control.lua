@@ -33,12 +33,17 @@ local unit_control = {
     unit_build_city = make_entry(5, 2),
     unit_build_road = make_entry(6, 2),
     unit_build_railroad = make_entry(7, 2),
-    
+
     unit_build_mine = make_entry(1, 3),
     unit_irrigate = make_entry(2, 3),
     unit_clear_forest = make_entry(3, 3),
     unit_clear_wetlands = make_entry(4, 3),
     unit_automate = make_entry(7, 3),
+
+    movement_indicators = {
+        path = INTERFACE .. "MovementLED.PCX",
+		crop_region = { 0, 0, 36, 8, },
+	},
 }
 
 return unit_control
