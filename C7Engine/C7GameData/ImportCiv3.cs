@@ -1252,6 +1252,9 @@ namespace C7GameData {
 					TurnsToComplete = t.TurnsToComplete,
 					Action = ConvertCiv3OrderToAction(t.Order)
 				};
+
+				tf.Improvement = GetTerraformTerrainImprovement(tf)?.key;
+
 				if (t.Required > -1) {
 					tf.RequiredTech = save.Techs[t.Required].id;
 				}
@@ -1261,8 +1264,42 @@ namespace C7GameData {
 				if (t.RequiredResource2 > -1) {
 					tf.RequiredResources.Add(save.Resources[t.RequiredResource2].Key);
 				}
+
+				LoadTerraformLuaFunctions(tf);
+
 				save.TerraForms.Add(tf);
 			}
+		}
+
+		private static TerrainImprovement GetTerraformTerrainImprovement(SaveTerraform tf) {
+			return tf.Action switch {
+				UnitAction.BuildMine => TerrainImprovement.mine,
+				UnitAction.Irrigate => TerrainImprovement.irrigation,
+				UnitAction.BuildFortress => TerrainImprovement.fortress,
+				UnitAction.BuildBarricade => TerrainImprovement.barricade,
+				UnitAction.BuildRoad => TerrainImprovement.road,
+				UnitAction.BuildRailroad => TerrainImprovement.railroad,
+				_ => null,
+			};
+		}
+
+		private static void LoadTerraformLuaFunctions(SaveTerraform tf) {
+			string actionPath = tf.Action switch {
+				UnitAction.BuildMine => "build_mine",
+				UnitAction.Irrigate => "irrigate",
+				UnitAction.ClearWetlands => "clear_wetlands",
+				UnitAction.ClearForest => "clear_forest",
+				_ => null,
+			};
+
+			if (actionPath == null) {
+				return;
+			}
+
+			tf.Validators.Add($"terraforms.{actionPath}.validator");
+
+			if (tf.Action == UnitAction.ClearWetlands && tf.Action == UnitAction.ClearForest)
+				tf.Effects.Add($"terraforms.{actionPath}.effect");
 		}
 
 		private static UnitAction ConvertCiv3OrderToAction(string order) {

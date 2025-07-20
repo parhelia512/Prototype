@@ -6,30 +6,6 @@ using C7Engine;
 
 namespace C7GameData;
 
-public static class TerraformRules {
-	public static readonly Dictionary<UnitAction, Action<Player, Tile>> ActionEffects = new() {
-		{UnitAction.BuildMine, (_, tile) => tile.overlays.Add(TerrainImprovement.mine)},
-		{UnitAction.Irrigate, (_, tile) => tile.overlays.Add(TerrainImprovement.irrigation)},
-		{UnitAction.BuildRoad, (player, tile) => tile.overlays.Add(TerrainImprovement.road)},
-		{UnitAction.BuildRailroad, (_, tile) => tile.overlays.Add(TerrainImprovement.railroad)},
-		{UnitAction.ClearWetlands, (_, tile) => tile.ClearTerrainOverlay()},
-		// TODO: add bonus shields to the nearest city - should only happen the first time a forest is cleared
-		{UnitAction.ClearForest, (_, tile) => {
-			tile.MaybeAwardForestClearingShields();
-			tile.ClearTerrainOverlay();
-		}},
-	};
-
-	public static readonly Dictionary<UnitAction, Func<Player, Tile, bool>> ActionValidators = new() {
-		{UnitAction.BuildMine, (_, tile) => tile.CanBeMined()},
-		{UnitAction.Irrigate, (player, tile) => tile.CanBeIrrigated(player)},
-		{UnitAction.BuildRoad, (_, tile) => tile.overlays.CanAdd(TerrainImprovement.road)},
-		{UnitAction.BuildRailroad, (_, tile) => tile.overlays.CanAdd(TerrainImprovement.railroad)},
-		{UnitAction.ClearWetlands, (_, tile) => tile.overlayTerrainType.allowedWorkerActions.Contains(UnitAction.ClearWetlands)},
-		{UnitAction.ClearForest, (_, tile) =>  tile.overlayTerrainType.allowedWorkerActions.Contains(UnitAction.ClearForest)}
-	};
-}
-
 public class Terraform {
 	public ID Id;
 	public string Name;
@@ -40,8 +16,10 @@ public class Terraform {
 
 	public List<Resource> RequiredResources = [];
 
-	public Action<Player, Tile> OnComplete;
-	private Func<Player, Tile, bool> ActionValidator;
+	public TerrainImprovement Improvement;
+
+	private Action<Player, Tile> Effect;
+	private List<Func<Player, Tile, bool>> ActionValidators = [];
 
 	private SaveTerraform dataSource;
 
@@ -55,24 +33,23 @@ public class Terraform {
 		dataSource = saveTerraform;
 		RequiredResources = saveTerraform.RequiredResources.ConvertAll(resKey => gameData.Resources.Find(res => res.Key == resKey));
 
-		SetRules();
+		if (saveTerraform.Improvement != null)
+			Improvement = TerrainImprovement.FromKey(saveTerraform.Improvement);
+
+		SetRules(gameData.luaRulesEngine);
 	}
 
 	public string ToString() {
 		return Name;
 	}
 
-	private void SetRules() {
-		if (TerraformRules.ActionEffects.TryGetValue(Action, out var onComplete)) {
-			OnComplete = onComplete;
-		} else {
-			OnComplete = (_, _) => { };
+	private void SetRules(LuaRulesEngine engine) {
+		foreach (string functionPath in dataSource.Effects) {
+			Effect += engine.ImportFunc<Action<Player, Tile>>(functionPath);
 		}
 
-		if (TerraformRules.ActionValidators.TryGetValue(Action, out var prerequisite)) {
-			ActionValidator = prerequisite;
-		} else {
-			ActionValidator = (_, _) => false;
+		foreach (string functionPath in dataSource.Validators) {
+			ActionValidators.Add(engine.ImportFunc<Func<Player, Tile, bool>>(functionPath));
 		}
 	}
 
@@ -83,7 +60,18 @@ public class Terraform {
 			res => EngineStorage.gameData.GetTradeNetwork().HasTradeAccess(tile, player, res)
 		);
 
-		return hasTech && hasResources && ActionValidator(player, tile);
+		bool canAddImprovement = Improvement == null || tile.overlays.CanAdd(Improvement);
+
+		return hasTech && hasResources
+				&& canAddImprovement && ActionValidators.All(func => func(player, tile));
+	}
+
+	public void OnComplete(Player player, Tile tile) {
+		Effect?.Invoke(player, tile);
+
+		if (Improvement != null) {
+			tile.overlays.Add(Improvement);
+		}
 	}
 
 	public SaveTerraform ToSaveTerraform() {
