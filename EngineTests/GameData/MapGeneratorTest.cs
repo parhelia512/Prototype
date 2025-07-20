@@ -18,30 +18,34 @@ namespace C7GameDataTests;
 public class GameMapTest {
 
     /// <summary>
-    /// Generates a 16x16 texture atlas for isometric road tiles based on an 8-directional
+    /// Generates a 16x16 texture atlas for isometric railroad tiles based on an 8-directional
     /// connectivity bitmask. This produces all 256 possible tile variations.
     /// </summary>
-    public class RoadTextureGenerator
+    public class RailroadTextureGenerator
     {
         // --- Configuration Constants ---
         private const int TileWidth = 128;
         private const int TileHeight = 64;
         private const int GridSize = 16;
-        private const float RoadThickness = 4f;
-        private const float CurveRandomness = 16f; // Slightly reduced for cleaner diagonals
+        private const float CurveRandomness = 4f;
+
+        // --- Railroad-specific Configuration ---
+        private const float RailThickness = 2f;
+        private const float TieThickness = 2f;
+        private const float TrackWidth = 6f; // Distance between the two rails
 
         // --- Color Palette ---
         private static readonly Color BackgroundGreen = Color.Transparent;
         private static readonly Color DiamondMagenta = Color.Transparent;
-        private static readonly Color RoadBrown = Color.SaddleBrown;
+        private static readonly Color TrackColor = Color.DarkSlateGray; // Color for rails and ties
 
         /// <summary>
-        /// Generates and saves the complete road texture atlas.
+        /// Generates and saves the complete railroad texture atlas.
         /// </summary>
         public void GenerateAndSave()
         {
             using var finalImage = new Image<Rgba32>(TileWidth * GridSize, TileHeight * GridSize);
-            Console.WriteLine("Generating 256 road tiles based on 8-directional logic...");
+            Console.WriteLine("Generating 256 railroad tiles based on 8-directional logic...");
 
             // Loop through all 256 possible tile indices (bitmasks).
             for (int index = 0; index < 256; index++)
@@ -57,7 +61,7 @@ public class GameMapTest {
                 }
             }
 
-            string fileName = "Civ3Roads_8-Directional.png";
+            string fileName = "Civ3Railroads_8-Directional.png";
             finalImage.Save(fileName);
             Console.WriteLine($"Successfully generated and saved the texture atlas to: {System.IO.Path.GetFullPath(fileName)}");
         }
@@ -65,17 +69,17 @@ public class GameMapTest {
         /// <summary>
         /// Creates a single 128x64 tile image based on its 8-directional connectivity bitmask.
         /// </summary>
-        /// <param name="roadMask">The tile index (0-255), which serves as the connectivity bitmask.</param>
-        private Image<Rgba32> CreateSingleTile(int roadMask)
+        /// <param name="railroadMask">The tile index (0-255), which serves as the connectivity bitmask.</param>
+        private Image<Rgba32> CreateSingleTile(int railroadMask)
         {
             var tileImage = new Image<Rgba32>(TileWidth, TileHeight);
 
             // The curves should be deterministic for each specific mask.
             // Seeding Random with the mask itself ensures this.
-            var random = new Random(roadMask);
+            var random = new Random(railroadMask);
 
             DrawBackground(tileImage);
-            DrawRoads(tileImage, roadMask, random);
+            DrawRailroads(tileImage, railroadMask, random);
 
             return tileImage;
         }
@@ -97,12 +101,10 @@ public class GameMapTest {
         }
 
         /// <summary>
-        /// Draws the curved road segments based on the 8-directional connectivity bitmask.
+        /// Draws the curved railroad segments based on the 8-directional connectivity bitmask.
         /// </summary>
-        private void DrawRoads(Image<Rgba32> image, int roadMask, Random random)
+        private void DrawRailroads(Image<Rgba32> image, int railroadMask, Random random)
         {
-            var pen = Pens.Solid(RoadBrown, RoadThickness);
-
             // Define all 8 connection points plus the center.
             // Cardinal points are on the edge midpoints.
             // Diagonal points are at the corners.
@@ -118,47 +120,75 @@ public class GameMapTest {
 
             image.Mutate(ctx =>
             {
-                // Check each bit in the mask and draw a road if it's set.
-                if ((roadMask & 1)   != 0) DrawCurvedPath(ctx, pen, center, ne, random); // Bit 1: North-East
-                if ((roadMask & 2)   != 0) DrawCurvedPath(ctx, pen, center, e,  random); // Bit 2: East
-                if ((roadMask & 4)   != 0) DrawCurvedPath(ctx, pen, center, se, random); // Bit 3: South-East
-                if ((roadMask & 8)  != 0) DrawCurvedPath(ctx, pen, center, s,  random); // Bit 4: South
-                if ((roadMask & 16)  != 0) DrawCurvedPath(ctx, pen, center, sw, random); // Bit 5: South-West
-                if ((roadMask & 32)  != 0) DrawCurvedPath(ctx, pen, center, w,  random); // Bit 6: West
-                if ((roadMask & 64) != 0) DrawCurvedPath(ctx, pen, center, nw, random); // Bit 7: North-West
-                if ((roadMask & 128) != 0) DrawCurvedPath(ctx, pen, center, n, random); // Bit 8: N
-
-                // For intersections of 3 or more roads, draw a central node to make the join look cleaner.
-                if (BitOperations.PopCount((uint)roadMask) > 2)
-                {
-                    ctx.Fill(RoadBrown, new EllipsePolygon(center, RoadThickness * 1.5f));
-                }
+                // Check each bit in the mask and draw a railroad if it's set.
+                if ((railroadMask & 1)   != 0) DrawRailroadPath(ctx, center, ne, random); // Bit 1: North-East
+                if ((railroadMask & 2)   != 0) DrawRailroadPath(ctx, center, e,  random); // Bit 2: East
+                if ((railroadMask & 4)   != 0) DrawRailroadPath(ctx, center, se, random); // Bit 3: South-East
+                if ((railroadMask & 8)   != 0) DrawRailroadPath(ctx, center, s,  random); // Bit 4: South
+                if ((railroadMask & 16)  != 0) DrawRailroadPath(ctx, center, sw, random); // Bit 5: South-West
+                if ((railroadMask & 32)  != 0) DrawRailroadPath(ctx, center, w,  random); // Bit 6: West
+                if ((railroadMask & 64)  != 0) DrawRailroadPath(ctx, center, nw, random); // Bit 7: North-West
+                if ((railroadMask & 128) != 0) DrawRailroadPath(ctx, center, n,  random); // Bit 8: North
             });
         }
 
         /// <summary>
-        /// Draws a single curved road segment using a quadratic Bezier curve.
+        /// Helper function to calculate a point on a quadratic Bezier curve.
         /// </summary>
-        private void DrawCurvedPath(IImageProcessingContext context, Pen pen, Vector2 start, Vector2 end, Random random)
+        private Vector2 GetPointOnQuadraticBezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
         {
-            var midPoint = (start + end) / 2.0f;
+            float u = 1 - t;
+            float tt = t * t;
+            float uu = u * u;
+            return (uu * p0) + (2 * u * t * p1) + (tt * p2);
+        }
+
+        /// <summary>
+        /// Draws a single railroad track segment, including two rails and connecting ties.
+        /// </summary>
+        private void DrawRailroadPath(IImageProcessingContext context, Vector2 start, Vector2 end, Random random)
+        {
+            var railPen = Pens.Solid(TrackColor, RailThickness);
+            var tiePen = Pens.Solid(TrackColor, TieThickness);
+
+            // Calculate direction and perpendicular normal for offsetting the rails
             var delta = end - start;
             var normal = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
-            var randomOffset = (float)((random.NextDouble() * 2) - 1) * CurveRandomness;
-            var controlPoint = midPoint + normal * randomOffset;
+            var offset = normal * (TrackWidth / 2f);
 
-            var pathBuilder = new PathBuilder();
-            pathBuilder.MoveTo(start);
-            pathBuilder.QuadraticBezierTo(controlPoint, end);
-            var path = pathBuilder.Build();
+            // Define start and end points for the two parallel rails
+            var start1 = start + offset;
+            var end1 = end + offset;
+            var start2 = start - offset;
+            var end2 = end - offset;
 
-            context.Draw(pen, path);
+            // Use the same random factor for both curves to maintain parallelism
+            var randomOffsetAmount = (float)((random.NextDouble() * 2) - 1) * CurveRandomness;
+            var controlPointOffset = normal * randomOffsetAmount;
+
+            // Calculate control points for each Bezier curve
+            var controlPoint1 = ((start1 + end1) / 2f) + controlPointOffset;
+            var controlPoint2 = ((start2 + end2) / 2f) + controlPointOffset;
+
+            // --- Draw the two rails ---
+            context.Draw(railPen, new PathBuilder().MoveTo(start1).QuadraticBezierTo(controlPoint1, end1).Build());
+            context.Draw(railPen, new PathBuilder().MoveTo(start2).QuadraticBezierTo(controlPoint2, end2).Build());
+
+            // --- Draw the ties ---
+            int tieCount = (int)(delta.Length() / 12); // Adjust number of ties based on track length
+            for (int i = 1; i <= tieCount; i++)
+            {
+                float t = (float)i / (tieCount + 1);
+                var pointOnRail1 = GetPointOnQuadraticBezier(start1, controlPoint1, end1, t);
+                var pointOnRail2 = GetPointOnQuadraticBezier(start2, controlPoint2, end2, t);
+                context.DrawLine(tiePen, pointOnRail1, pointOnRail2);
+            }
         }
     }
 
 	[Fact]
 	public void GameMapGeneration() {
-		var generator = new RoadTextureGenerator();
+		var generator = new RailroadTextureGenerator();
 		generator.GenerateAndSave();
 	}
 }
