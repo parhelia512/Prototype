@@ -11,8 +11,7 @@ namespace C7.Map {
 		private readonly Vector2 tileSize;
 
 		public FogOfWarLayer() {
-			Pcx fogOfWarPcx = new Pcx(Util.Civ3MediaPath("Art/Terrain/FogOfWar.pcx"));
-			fogOfWarTexture = PCXToGodot.getPureAlphaFromPCX(fogOfWarPcx);
+			fogOfWarTexture = TextureLoader.Load("terrain.fog_of_war");
 			tileSize = fogOfWarTexture.GetSize() / 9;
 		}
 

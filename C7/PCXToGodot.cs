@@ -73,6 +73,7 @@ public partial class PCXToGodot : GodotObject {
 	public static ImageTexture getPureAlphaFromPCX(Pcx alphaPcx) {
 		int[] bufferData = new int[alphaPcx.Width * alphaPcx.Height];
 		int[] alphaData = new int[MAX_PALETTE_SIZE];
+
 		for (int i = 0; i < MAX_PALETTE_SIZE; i++) {
 			alphaData[i] = alphaPcx.Palette[i, 0];
 		}
