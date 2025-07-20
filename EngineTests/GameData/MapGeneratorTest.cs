@@ -8,187 +8,219 @@ using System.Linq;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Drawing;
-using SixLabors.ImageSharp.Drawing.Processing;
-using System.Numerics;
 
 
 namespace C7GameDataTests;
 
 public class GameMapTest {
+	public static void SaveMapsAsWaterLandPng(List<List<GameMap>> maps, string filePath) {
+		int mapWidthPx = maps[0][0].numTilesWide * 2 + 1;
+		int mapHeightPx = maps[0][0].numTilesTall + 1;
 
-    /// <summary>
-    /// Generates a 16x16 texture atlas for isometric railroad tiles based on an 8-directional
-    /// connectivity bitmask. This produces all 256 possible tile variations.
-    /// </summary>
-    public class RailroadTextureGenerator
-    {
-        // --- Configuration Constants ---
-        private const int TileWidth = 128;
-        private const int TileHeight = 64;
-        private const int GridSize = 16;
-        private const float CurveRandomness = 4f;
+		Bgra32 grass = new((byte)60,(byte)190,(byte)110);
+		Bgra32 coastBlue = new((byte)62, (byte)164, (byte)240);
+		Bgra32 seaBlue = new((byte)88, (byte)141, (byte)195);
+		Bgra32 oceanBlue = new((byte)0, (byte)105, (byte)148);
+		Bgra32 hillsGreen = new((byte)2, (byte)90, (byte)60);
+		Bgra32 mountainBrown = new((byte)70, (byte)65, (byte)40);
+		Bgra32 tundra = new((byte)241, (byte)245, (byte)241);
+		Bgra32 desert = new((byte)231, (byte)161, (byte)112);
+		Bgra32 plains = new((byte)88, (byte)57, (byte)39);
+		Bgra32 jungle = new((byte)0, (byte)60, (byte)0);
+		Bgra32 forest = new((byte)107,(byte)142,(byte)35);
+		Bgra32 marsh = new((byte)46,(byte)139,(byte)87);
 
-        // --- Railroad-specific Configuration ---
-        private const float RailThickness = 2f;
-        private const float TieThickness = 2f;
-        private const float TrackWidth = 6f; // Distance between the two rails
+		using (Image<Bgra32> image = new(mapWidthPx * maps.Count, mapHeightPx * maps[0].Count)) {
+			for (int i = 0; i < maps.Count; ++i) {
+				for (int k = 0; k < maps[i].Count; ++k) {
+					int xOffset = i * mapWidthPx;
+					int yOffset = k * mapHeightPx;
 
-        // --- Color Palette ---
-        private static readonly Color BackgroundGreen = Color.Transparent;
-        private static readonly Color DiamondMagenta = Color.Transparent;
-        private static readonly Color TrackColor = Color.DarkSlateGray; // Color for rails and ties
+					GameMap m = maps[i][k];
+					foreach (Tile t in m.tiles) {
+						Bgra32 color;
+						if (t.overlayTerrainType.Key == "mountains" || t.overlayTerrainType.Key == "volcano") {
+							color = mountainBrown;
+						} else if (t.overlayTerrainType.Key == "hills") {
+							color = hillsGreen;
+						} else if (t.overlayTerrainType.Key == "tundra") {
+							color = tundra;
+						} else if (t.overlayTerrainType.Key == "desert") {
+							color = desert;
+						} else if (t.overlayTerrainType.Key == "plains") {
+							color = plains;
+						} else if (t.overlayTerrainType.Key == "forest") {
+							color = forest;
+						} else if (t.overlayTerrainType.Key == "jungle") {
+							color = jungle;
+						} else if (t.overlayTerrainType.Key == "marsh") {
+							color = marsh;
+						} else if (t.overlayTerrainType.Key == "ocean") {
+							color = oceanBlue;
+						} else if (t.overlayTerrainType.Key == "sea") {
+							color = seaBlue;
+						} else if (t.overlayTerrainType.Key == "coast") {
+							color = coastBlue;
+						} else {
+							color = grass;
+						}
 
-        /// <summary>
-        /// Generates and saves the complete railroad texture atlas.
-        /// </summary>
-        public void GenerateAndSave()
-        {
-            using var finalImage = new Image<Rgba32>(TileWidth * GridSize, TileHeight * GridSize);
-            Console.WriteLine("Generating 256 railroad tiles based on 8-directional logic...");
+						image[t.XCoordinate * 2 + xOffset, t.YCoordinate + yOffset] = color;
+						image[t.XCoordinate * 2 + 1 + xOffset, t.YCoordinate + yOffset] = color;
 
-            // Loop through all 256 possible tile indices (bitmasks).
-            for (int index = 0; index < 256; index++)
-            {
-                // Each index is a unique connectivity bitmask.
-                using (var tileImage = CreateSingleTile(index))
-                {
-                    // The original Civ3 logic for placing the tile in the atlas.
-                    int row = index >> 4;
-                    int column = index & 0x0F;
-                    var location = new Point(column * TileWidth, row * TileHeight);
-                    finalImage.Mutate(ctx => ctx.DrawImage(tileImage, location, 1f));
-                }
-            }
+						if (t.XCoordinate > 0) {
+							image[t.XCoordinate * 2 - 1 + xOffset, t.YCoordinate + yOffset] = color;
+						}
+						if (t.XCoordinate + 1 < m.numTilesWide) {
+							image[t.XCoordinate * 2 + 2 + xOffset, t.YCoordinate + yOffset] = color;
+						}
 
-            string fileName = "Civ3Railroads_8-Directional.png";
-            finalImage.Save(fileName);
-            Console.WriteLine($"Successfully generated and saved the texture atlas to: {System.IO.Path.GetFullPath(fileName)}");
-        }
+						if (t.YCoordinate > 0) {
+							Bgra32 old = image[t.XCoordinate * 2 + xOffset, t.YCoordinate + yOffset - 1];
 
-        /// <summary>
-        /// Creates a single 128x64 tile image based on its 8-directional connectivity bitmask.
-        /// </summary>
-        /// <param name="railroadMask">The tile index (0-255), which serves as the connectivity bitmask.</param>
-        private Image<Rgba32> CreateSingleTile(int railroadMask)
-        {
-            var tileImage = new Image<Rgba32>(TileWidth, TileHeight);
+							image[t.XCoordinate * 2 + xOffset, t.YCoordinate + yOffset - 1] = Average(old, color);
+							image[t.XCoordinate * 2 + 1 + xOffset, t.YCoordinate + yOffset - 1] = Average(old, color);
+						}
+					}
+				}
+			}
 
-            // The curves should be deterministic for each specific mask.
-            // Seeding Random with the mask itself ensures this.
-            var random = new Random(railroadMask);
+			image.SaveAsPng(filePath);
+		}
 
-            DrawBackground(tileImage);
-            DrawRailroads(tileImage, railroadMask, random);
+		Console.WriteLine($"Noise map saved to: {filePath}");
+	}
 
-            return tileImage;
-        }
+	private static Bgra32 Average(Bgra32 a, Bgra32 c) {
+		int r = (int)Math.Sqrt((Math.Pow(a.R, 2) + Math.Pow(c.R, 2)) / 2);
+		int g = (int)Math.Sqrt((Math.Pow(a.G, 2) + Math.Pow(c.G, 2)) / 2);
+		int b = (int)Math.Sqrt((Math.Pow(a.B, 2) + Math.Pow(c.B, 2)) / 2);
 
-        private void DrawBackground(Image<Rgba32> image)
-        {
-            image.Mutate(ctx =>
-            {
-                ctx.Fill(BackgroundGreen);
-                var diamond = new Polygon(new LinearLineSegment(new PointF[]
-                {
-                    new(TileWidth / 2f, 0),
-                    new(TileWidth, TileHeight / 2f),
-                    new(TileWidth / 2f, TileHeight),
-                    new(0, TileHeight / 2f)
-                }));
-                ctx.Fill(DiamondMagenta, diamond);
-            });
-        }
-
-        /// <summary>
-        /// Draws the curved railroad segments based on the 8-directional connectivity bitmask.
-        /// </summary>
-        private void DrawRailroads(Image<Rgba32> image, int railroadMask, Random random)
-        {
-            // Define all 8 connection points plus the center.
-            // Cardinal points are on the edge midpoints.
-            // Diagonal points are at the corners.
-            var center = new Vector2(TileWidth / 2f, TileHeight / 2f);
-            var n  = new Vector2(TileWidth / 2f, 0);
-            var ne = new Vector2(TileWidth * 3.0f/4.0f, TileHeight * 1.0f/4.0f);
-            var e  = new Vector2(TileWidth, TileHeight / 2f);
-            var se = new Vector2(TileWidth * 3.0f/4.0f, TileHeight * 3.0f/4.0f);
-            var s  = new Vector2(TileWidth / 2f, TileHeight);
-            var sw = new Vector2(TileWidth * 1.0f/4.0f, TileHeight * 3.0f/4.0f);
-            var w  = new Vector2(0, TileHeight / 2f);
-            var nw = new Vector2(TileWidth * 1.0f/4.0f, TileHeight * 1.0f/4.0f);
-
-            image.Mutate(ctx =>
-            {
-                // Check each bit in the mask and draw a railroad if it's set.
-                if ((railroadMask & 1)   != 0) DrawRailroadPath(ctx, center, ne, random); // Bit 1: North-East
-                if ((railroadMask & 2)   != 0) DrawRailroadPath(ctx, center, e,  random); // Bit 2: East
-                if ((railroadMask & 4)   != 0) DrawRailroadPath(ctx, center, se, random); // Bit 3: South-East
-                if ((railroadMask & 8)   != 0) DrawRailroadPath(ctx, center, s,  random); // Bit 4: South
-                if ((railroadMask & 16)  != 0) DrawRailroadPath(ctx, center, sw, random); // Bit 5: South-West
-                if ((railroadMask & 32)  != 0) DrawRailroadPath(ctx, center, w,  random); // Bit 6: West
-                if ((railroadMask & 64)  != 0) DrawRailroadPath(ctx, center, nw, random); // Bit 7: North-West
-                if ((railroadMask & 128) != 0) DrawRailroadPath(ctx, center, n,  random); // Bit 8: North
-            });
-        }
-
-        /// <summary>
-        /// Helper function to calculate a point on a quadratic Bezier curve.
-        /// </summary>
-        private Vector2 GetPointOnQuadraticBezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
-        {
-            float u = 1 - t;
-            float tt = t * t;
-            float uu = u * u;
-            return (uu * p0) + (2 * u * t * p1) + (tt * p2);
-        }
-
-        /// <summary>
-        /// Draws a single railroad track segment, including two rails and connecting ties.
-        /// </summary>
-        private void DrawRailroadPath(IImageProcessingContext context, Vector2 start, Vector2 end, Random random)
-        {
-            var railPen = Pens.Solid(TrackColor, RailThickness);
-            var tiePen = Pens.Solid(TrackColor, TieThickness);
-
-            // Calculate direction and perpendicular normal for offsetting the rails
-            var delta = end - start;
-            var normal = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
-            var offset = normal * (TrackWidth / 2f);
-
-            // Define start and end points for the two parallel rails
-            var start1 = start + offset;
-            var end1 = end + offset;
-            var start2 = start - offset;
-            var end2 = end - offset;
-
-            // Use the same random factor for both curves to maintain parallelism
-            var randomOffsetAmount = (float)((random.NextDouble() * 2) - 1) * CurveRandomness;
-            var controlPointOffset = normal * randomOffsetAmount;
-
-            // Calculate control points for each Bezier curve
-            var controlPoint1 = ((start1 + end1) / 2f) + controlPointOffset;
-            var controlPoint2 = ((start2 + end2) / 2f) + controlPointOffset;
-
-            // --- Draw the two rails ---
-            context.Draw(railPen, new PathBuilder().MoveTo(start1).QuadraticBezierTo(controlPoint1, end1).Build());
-            context.Draw(railPen, new PathBuilder().MoveTo(start2).QuadraticBezierTo(controlPoint2, end2).Build());
-
-            // --- Draw the ties ---
-            int tieCount = (int)(delta.Length() / 12); // Adjust number of ties based on track length
-            for (int i = 1; i <= tieCount; i++)
-            {
-                float t = (float)i / (tieCount + 1);
-                var pointOnRail1 = GetPointOnQuadraticBezier(start1, controlPoint1, end1, t);
-                var pointOnRail2 = GetPointOnQuadraticBezier(start2, controlPoint2, end2, t);
-                context.DrawLine(tiePen, pointOnRail1, pointOnRail2);
-            }
-        }
-    }
+		return new Bgra32((byte)r, (byte)g, (byte)b);
+	}
 
 	[Fact]
 	public void GameMapGeneration() {
-		var generator = new RailroadTextureGenerator();
-		generator.GenerateAndSave();
+		int numMapsPerCategory = 1;
+
+		List<TerrainType> terrainTypes = new();
+		terrainTypes.Add(new TerrainType() { Key = "grassland" });
+		terrainTypes.Add(new TerrainType() { Key = "plains" });
+		terrainTypes.Add(new TerrainType() { Key = "desert" });
+		terrainTypes.Add(new TerrainType() { Key = "tundra" });
+		terrainTypes.Add(new TerrainType() { Key = "coast" });
+		terrainTypes.Add(new TerrainType() { Key = "sea" });
+		terrainTypes.Add(new TerrainType() { Key = "ocean" });
+		terrainTypes.Add(new TerrainType() { Key = "forest" });
+		terrainTypes.Add(new TerrainType() { Key = "jungle" });
+		terrainTypes.Add(new TerrainType() { Key = "marsh" });
+		terrainTypes.Add(new TerrainType() { Key = "hills" });
+		terrainTypes.Add(new TerrainType() { Key = "volcano" });
+		terrainTypes.Add(new TerrainType() { Key = "mountains" });
+
+		List<List<GameMap>> archipelagoMaps = new();
+		archipelagoMaps.Add(new List<GameMap>());
+		archipelagoMaps.Add(new List<GameMap>());
+		archipelagoMaps.Add(new List<GameMap>());
+
+		WorldCharacteristics.OceanCoverage[] oceans = {
+			WorldCharacteristics.OceanCoverage.Percent_60,
+			WorldCharacteristics.OceanCoverage.Percent_70,
+			WorldCharacteristics.OceanCoverage.Percent_80,
+		};
+
+		// Uncommenting the options will display them, but make the test take
+		// longer.
+		WorldCharacteristics.Age[] ages = {
+			// WorldCharacteristics.Age.Billion_3,
+			WorldCharacteristics.Age.Billion_4,
+			// WorldCharacteristics.Age.Billion_5,
+		};
+		WorldCharacteristics.Temperature[] temps = {
+			// WorldCharacteristics.Temperature.Cool,
+			WorldCharacteristics.Temperature.Temperate,
+			// WorldCharacteristics.Temperature.Warm,
+		};
+		WorldCharacteristics.Climate[] climates = {
+			// WorldCharacteristics.Climate.Wet,
+			WorldCharacteristics.Climate.Normal,
+			// WorldCharacteristics.Climate.Arid,
+		};
+
+		for (int i = 0; i < oceans.Length; ++i) {
+			foreach (var age in ages) {
+				foreach (var temp in temps) {
+					foreach (var climate in climates) {
+						for (int k = 0; k < numMapsPerCategory; ++k) {
+							archipelagoMaps[i].Add(MapGenerator.GenerateMap(new WorldCharacteristics() {
+								landform = WorldCharacteristics.Landform.Archipelago,
+								oceanCoverage = oceans[i],
+								age = age,
+								climate = climate,
+								temperature = temp,
+								worldSize = new WorldSize() { width = 100, height = 100 },
+								terrainTypes = terrainTypes,
+							}));
+						}
+					}
+				}
+			}
+		}
+
+		SaveMapsAsWaterLandPng(archipelagoMaps, "debug_archipelago_maps.png");
+
+		List<List<GameMap>> continentMaps = new();
+		continentMaps.Add(new List<GameMap>());
+		continentMaps.Add(new List<GameMap>());
+		continentMaps.Add(new List<GameMap>());
+
+		for (int i = 0; i < oceans.Length; ++i) {
+			foreach (var age in ages) {
+				foreach (var temp in temps) {
+					foreach (var climate in climates) {
+						for (int k = 0; k < numMapsPerCategory; ++k) {
+							continentMaps[i].Add(MapGenerator.GenerateMap(new WorldCharacteristics() {
+								landform = WorldCharacteristics.Landform.Continents,
+								oceanCoverage = oceans[i],
+								age = age,
+								climate = climate,
+								temperature = temp,
+								worldSize = new WorldSize() { width = 100, height = 100 },
+								terrainTypes = terrainTypes,
+							}));
+						}
+					}
+				}
+			}
+		}
+
+		SaveMapsAsWaterLandPng(continentMaps, "debug_continent_maps.png");
+
+		List<List<GameMap>> pangaeaMaps = new();
+		pangaeaMaps.Add(new List<GameMap>());
+		pangaeaMaps.Add(new List<GameMap>());
+		pangaeaMaps.Add(new List<GameMap>());
+
+		for (int i = 0; i < oceans.Length; ++i) {
+			foreach (var age in ages) {
+				foreach (var temp in temps) {
+					foreach (var climate in climates) {
+						for (int k = 0; k < numMapsPerCategory; ++k) {
+							pangaeaMaps[i].Add(MapGenerator.GenerateMap(new WorldCharacteristics() {
+								landform = WorldCharacteristics.Landform.Pangaea,
+								oceanCoverage = oceans[i],
+								age = age,
+								climate = climate,
+								temperature = temp,
+								worldSize = new WorldSize() { width = 100, height = 100 },
+								terrainTypes = terrainTypes,
+							}));
+						}
+					}
+				}
+			}
+		}
+
+		SaveMapsAsWaterLandPng(pangaeaMaps, "debug_pangaea_maps.png");
 	}
 }

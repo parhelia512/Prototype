@@ -28,6 +28,8 @@ local c7_texture_list = {
   "Art/Terrain/mtnRivers.png",
   "Art/Terrain/plains forests.png",
   "Art/Terrain/tnt.png",
+  "Art/Terrain/roads.png",
+  "Art/Terrain/railroads.png",
   "Art/Terrain/tundra forests.png",
   "Art/Terrain/wCSO.png",
   "Art/Terrain/wOOO.png",
