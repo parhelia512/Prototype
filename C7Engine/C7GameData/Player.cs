@@ -449,13 +449,13 @@ namespace C7GameData {
 
 		// Notes:
 		//  - see https://www.civforum.de/showthread.php?3153-Anarchie-Wieviel-Runden-welche-Strategie&p=67682&viewfull=1#post67682 (in German)
-		//    This claims Soren Johnson said the time is 
+		//    This claims Soren Johnson said the time is
 		//    1-5 years, random + 0-3 years, depending on the number of cities.
 		//    I think the 1-5 is actually 2 to 6, since the min is 2.
 		//
 		//  - https://forums.civfanatics.com/threads/frequently-asked-questions-civ3-play-the-world-conquests.170282/
-		//    For Religious civilizations, anarchy only lasts 1 turn in Vanilla 
-		//    and Play the World, and 2 turns in Conquests. For non-Religious 
+		//    For Religious civilizations, anarchy only lasts 1 turn in Vanilla
+		//    and Play the World, and 2 turns in Conquests. For non-Religious
 		//    civilizations, the formula is: 1 (2 for Conquests) + random number
 		//    between 1-4 + number between 0-3 depending on size of your empire.
 		public int GetTurnsOfAnarchyForTransition(GameData gameData) {
@@ -463,8 +463,8 @@ namespace C7GameData {
 				return 2;
 			}
 
-			// We add Next(3)+Next(3) to roughly approximate a normal 
-			// distribution. With the base of 2, this gets us a random value 
+			// We add Next(3)+Next(3) to roughly approximate a normal
+			// distribution. With the base of 2, this gets us a random value
 			// between 2 and 6.
 			int randomPortion = 2 + GameData.rng.Next(3) + GameData.rng.Next(3);
 
@@ -575,7 +575,7 @@ namespace C7GameData {
 
 		private void CompleteResearchingTech(GameData gameData, Tech tech) {
 			// If this tech awards the first civ to research it a free tech and
-			// no other civs know about the tech, this player gets the bonus. 
+			// no other civs know about the tech, this player gets the bonus.
 			if (tech.BonusTechToFirstCivThatResearches) {
 				bool awardBonus = true;
 				foreach (Player p in gameData.players) {
@@ -804,6 +804,9 @@ namespace C7GameData {
 		}
 
 		public int ShieldCost(IProducible producible) {
+			if (producible == null) {
+				return int.MaxValue;
+			}
 			// At higher difficulties, AI players get a cost discount.
 			Difficulty difficulty = EngineStorage.gameData.gameDifficulty;
 			float costFactor = isHuman ? 1.0f : difficulty.AiCostFactor / (float)(difficulty.HumanCostFactor);
