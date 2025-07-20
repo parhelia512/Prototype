@@ -10,10 +10,10 @@ namespace C7GameData {
 
 		private static Dictionary<string, TerrainImprovement> improvementByKey = [];
 
+		public static readonly TerrainImprovement irrigation = new(nameof(irrigation), Layer.ResourceDevelopment);
 		public static readonly TerrainImprovement road = new(nameof(road), Layer.Roads, movementCost: 1.0f / 3);
 		public static readonly TerrainImprovement railroad = new(nameof(railroad), Layer.Roads, road, movementCost: 0);
 		public static readonly TerrainImprovement mine = new(nameof(mine), Layer.ResourceDevelopment);
-		public static readonly TerrainImprovement irrigation = new(nameof(irrigation), Layer.ResourceDevelopment);
 		public static readonly TerrainImprovement fortress = new(nameof(fortress), Layer.Holdings, defenseBonus: new(nameof(fortress), 0.5));
 		public static readonly TerrainImprovement barricade = new(nameof(barricade), Layer.Holdings, fortress, defenseBonus: new(nameof(barricade), 1));
 
@@ -21,6 +21,10 @@ namespace C7GameData {
 
 		public readonly Layer layer;
 		public readonly StrengthBonus? defenseBonus;
+
+		// On the game map, overlapping terrain improvement with a higher zIndex cover those with a smaller one
+		public readonly int zIndex;
+		private static int lastAssingedZIndex = 0;
 
 		// A terrain improvement with negative movement cost shouldn't affect the tile movement cost
 		public readonly float movementCost = -1;
@@ -44,6 +48,7 @@ namespace C7GameData {
 			this.defenseBonus = defenseBonus;
 			this.upgradesFrom = upgradesFrom;
 			this.movementCost = movementCost;
+			this.zIndex = lastAssingedZIndex++;
 
 			improvementByKey[key] = this;
 		}
