@@ -76,7 +76,28 @@ local c7_texture_list = {
   "Art/Advisors/dialogbox.png",
   "Art/Advisors/domestic.png",
   "Art/Tech Chooser/scienceNAV.png",
+  "Art/Credits/credits_background.png",
+  "Art/city screen/ProductionQueueBox.png",
+  "Art/Advisors/non_required.png",
+  "Art/Advisors/techboxes.png",
+  "Art/Advisors/military.png",
+  "Art/interface/MovementLED.png",
+  "Art/Advisors/science_ancient.png",
+  "Art/Advisors/science_middle.png",
+  "Art/Advisors/science_industrial_new.png",
+  "Art/Advisors/science_modern.png",
+  "Art/exitBox-backgroundStates.png",
+  "Art/PlayerSetup/playerSetup.png",
+  "Art/Diplomacy/talk_offer.png",
+  "Art/Diplomacy/counter.png",
+  "Art/PalaceView/bkgr.png",
+  "Art/city screen/luxuryicons_small.png",
 }
+
+-- Lua-ified pcs files that don't have png replacements yet
+-- Art/Terrain/railroads.pcx
+-- Art/Terrain/roads.pcx
+
 
 -- Helper: Strip file extension from path
 local function strip_extension(path) return path:match "^(.-)%.[^%.]+$" or path end

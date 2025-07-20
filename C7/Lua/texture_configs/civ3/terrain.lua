@@ -77,6 +77,11 @@ terrain.mine = {
   crop_region = { 256, 64, 128, 64 },
 }
 
+terrain.barbarian_camp = {
+  path = TERRAIN .. "TerrainBuildings.pcx",
+  crop_region = { 256, 0, 128, 64 },
+}
+
 terrain.marsh = {
   large = {
     path = TERRAIN .. "marsh.pcx",

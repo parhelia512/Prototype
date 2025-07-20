@@ -15,26 +15,7 @@ public partial class UnitLayer : LooseLayer {
 	public const int cursorZIndex = -1;
 
 	public UnitLayer() {
-		var moveIndPCX = new Pcx(Util.Civ3MediaPath("Art/interface/MovementLED.pcx"));
-		unitMovementIndicators = PCXToGodot.getImageTextureFromPCX(moveIndPCX);
-	}
-
-	// Creates a plane mesh facing the positive Z-axis with the given shader attached. The quad is 1.0 units long on both sides,
-	// intended to be scaled to the appropriate size when used.
-	public static (ShaderMaterial, MeshInstance2D) createShadedQuad(Shader shader) {
-		PlaneMesh mesh = new PlaneMesh();
-		mesh.SubdivideDepth = 1;
-		mesh.Orientation = PlaneMesh.OrientationEnum.Z;
-		mesh.Size = new Vector2(1, 1);
-
-		ShaderMaterial shaderMat = new ShaderMaterial();
-		shaderMat.Shader = shader;
-
-		MeshInstance2D meshInst = new MeshInstance2D();
-		meshInst.Material = shaderMat;
-		meshInst.Mesh = mesh;
-
-		return (shaderMat, meshInst);
+		unitMovementIndicators = TextureLoader.Load("ui.unit_control.movement_indicators");
 	}
 
 	public Color getHPColor(float fractionRemaining) {
