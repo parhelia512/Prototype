@@ -32,11 +32,11 @@ public static class TextureLoader {
 	private struct ConfigEntry {
 		public string Path;
 		public CropRegion? CropRegion = null;
-		public bool PureAlpha = false;
 
 		// PCX-specific settings
 		public string AlphaPath = null;
 		public int AlphaRowOffset = 0;
+		public bool PureAlpha = false;
 		public PCXToGodot.ColorOptions ColorOptions = PCXToGodot.ColorOptions.Default;
 
 		public ConfigEntry() {
