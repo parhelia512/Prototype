@@ -11,26 +11,10 @@ namespace C7.Map {
 		private readonly Dictionary<(int, Color), ImageTexture> textureCache = new();
 
 		public BorderLayer() {
-			Pcx texturePcx = TextureLoader.LoadPCX(texturePath);
-
-			int textureWidth = 128;
-			int textureHeight = 72;
-
-			// This loops slices the PCX image into separate border textures.
-			// The PCX image contains 4 rows and 2 columns:
-			// - Each row corresponds to a border direction.
-			// - The first column contains border textures for regular terrain.
-			// - The second column contains border textures for hills and mountains
-			//   (rendering logic for textures of the second column is not yet implemented).
-			for (int j = 0; j < 4; j++) {
-				for (int k = 0; k < 2; k++) {
-					borderGraphics[j * 2 + k] = PCXToGodot.getImageTextureFromPCX(
-						texturePcx,
-						new(k * textureWidth, j * textureHeight, textureWidth, textureHeight),
-						new(true, [1, 254, 255])
-					);
-				}
-			}
+			borderGraphics[0] = TextureLoader.Load("terrain.borders.northwest_flat");
+			borderGraphics[2] = TextureLoader.Load("terrain.borders.northeast_flat");
+			borderGraphics[4] = TextureLoader.Load("terrain.borders.southwest_flat");
+			borderGraphics[6] = TextureLoader.Load("terrain.borders.southeast_flat");
 		}
 
 		// TODO: This method doesn't precisely mirror Civ3 coloring

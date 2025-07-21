@@ -95,6 +95,7 @@ local c7_texture_list = {
   "Art/PalaceView/bkgr.png",
   "Art/city screen/luxuryicons_small.png",
   "Art/Terrain/FogOfWar.png",
+  "Art/Terrain/Territory.png",
 }
 
 -- Helper: Strip file extension from path

@@ -3,6 +3,7 @@ using Godot;
 using ConvertCiv3Media;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MoonSharp.Interpreter;
 using Script = MoonSharp.Interpreter.Script;
 using MoonSharp.Interpreter.Loaders;
@@ -171,12 +172,24 @@ public static class TextureLoader {
 				throw new ArgumentException("Texture configuration missing required 'path' property");
 			}
 
+			HashSet<int> transparentColorIndexes = new();
+			if (table["transparent_color_indexes"] == null) {
+				transparentColorIndexes = new PCXToGodot.ColorOptions().transparentColorIndexes;
+			} else {
+				foreach (DynValue d in ((Table)table["transparent_color_indexes"]).Values) {
+					transparentColorIndexes.Add((int)d.CastToNumber());
+				}
+			}
+
 			return new() {
 				Path = table["path"].ToString(),
 				AlphaPath = table["alpha"]?.ToString(),
 				PureAlpha = Convert.ToBoolean(table["pure_alpha"] ?? false),
 				CropRegion = ExtractCropRegion(table),
-				ColorOptions = Convert.ToBoolean(table["shadows"] ?? true),
+				ColorOptions = new PCXToGodot.ColorOptions() {
+					transparentColorIndexes = transparentColorIndexes,
+					shadows = Convert.ToBoolean(table["shadows"] ?? true),
+				},
 				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0)
 			};
 		}
