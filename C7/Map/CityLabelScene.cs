@@ -69,7 +69,7 @@ namespace C7.Map {
 		public CityLabelScene(City city) {
 			this.city = city;
 
-			civColor = new Color(Util.LoadColor(city.owner.colorIndex), TRANSPARENCY);
+			civColor = new Color(TextureLoader.LoadColor(city.owner.colorIndex), TRANSPARENCY);
 
 			// Set up UI hierarchy
 			AddChild(labelPanel);

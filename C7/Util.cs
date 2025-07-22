@@ -179,25 +179,6 @@ public partial class Util {
 		return OS.IsDebugBuild() ? "res://" : OS.GetExecutablePath().GetBaseDir();
 	}
 
-	private static Dictionary<int, Color> ColorCache = new();
-	private const string CivPalettePath = "Art/Units/Palettes/";
-
-	// Transforms color index loaded from a save file into Godot Color
-	public static Color LoadColor(int colorIndex) {
-		if (ColorCache.TryGetValue(colorIndex, out Color value)) {
-			return value;
-		}
-
-		string fileName = $"ntp{colorIndex:D2}.pcx";
-		string filePath = System.IO.Path.Combine(CivPalettePath, fileName);
-
-		Pcx pcx = TextureLoader.LoadPCX(filePath);
-		Color color = PCXToGodot.GetColorFromPCX(pcx);
-
-		ColorCache[colorIndex] = color;
-		return color;
-	}
-
 	// Replaces image colors based on a given dictionary
 	public static Image TransformColors(Image origin, Dictionary<Color, Color> colorReplacements) {
 		Image result = (Image)origin.Duplicate();
@@ -365,7 +346,6 @@ public partial class Util {
 	// Allow clearing the caches, so that scenarios with different files that
 	// have the same name can be loaded independently.
 	public static void ClearCaches() {
-		ColorCache.Clear();
 		flicCache.Clear();
 		TextureLoader.ClearCache();
 	}

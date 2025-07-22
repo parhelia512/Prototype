@@ -142,6 +142,24 @@ local function traverse(value)
   return value
 end
 
+-- For ease of editing, we define the civ colors as hex codes, not 1x1 px images
+civ3_textures.civ_colors.color_0 = { path = "", hex_color = "F0F8FF" }  -- Alice Blue (whiteish)
+civ3_textures.civ_colors.color_1 = { path = "", hex_color = "E6194B" }  -- Red
+civ3_textures.civ_colors.color_2 = { path = "", hex_color = "F58231" }  -- Orange
+civ3_textures.civ_colors.color_3 = { path = "", hex_color = "FFE119" }  -- Yellow
+civ3_textures.civ_colors.color_4 = { path = "", hex_color = "3CB44B" }  -- Green
+civ3_textures.civ_colors.color_5 = { path = "", hex_color = "4363D8" }  -- Blue
+civ3_textures.civ_colors.color_6 = { path = "", hex_color = "000075" }  -- Navy
+civ3_textures.civ_colors.color_7 = { path = "", hex_color = "FABED4" }  -- Pink
+civ3_textures.civ_colors.color_8 = { path = "", hex_color = "911EB4" }  -- Purple
+civ3_textures.civ_colors.color_9 = { path = "", hex_color = "9A6324" }  -- Brown
+civ3_textures.civ_colors.color_10 = { path = "", hex_color = "AAFFC3" }  -- Mint
+civ3_textures.civ_colors.color_11 = { path = "", hex_color = "42D4F4" }  -- Cyan
+civ3_textures.civ_colors.color_12 = { path = "", hex_color = "F032E6" }  -- Magenta
+civ3_textures.civ_colors.color_13 = { path = "", hex_color = "808000" }  -- Olive
+civ3_textures.civ_colors.color_14 = { path = "", hex_color = "DCBEFF" }  -- Lavender
+civ3_textures.civ_colors.color_15 = { path = "", hex_color = "A9A9A9" }  -- Grey
+
 civ3_textures.animations.cursor = {
     path = "Art/Animations/Cursor.png",
     animation_rows = 2,
@@ -154,5 +172,6 @@ civ3_textures.animations.disorder = {
     animation_cols = 6,
     frame_duration = .6
 }
+
 
 return traverse(civ3_textures)
