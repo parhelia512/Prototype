@@ -17,9 +17,6 @@ namespace C7GameData {
 		public int baseCommerceProduction { get; set; }
 		public int movementCost { get; set; }
 		public bool allowCities { get; set; } = true;
-		public int miningBonus { get; set; }
-		public int irrigationBonus { get; set; }
-		public int roadBonus { get; set; }
 		public HashSet<UnitAction> allowedWorkerActions = [];
 		public StrengthBonus defenseBonus;
 		public HashSet<string> allowedResources = new();
@@ -64,9 +61,6 @@ namespace C7GameData {
 					description = civ3Terrain.Name,
 					amount = civ3Terrain.DefenseBonus / 100.0
 				},
-				miningBonus = civ3Terrain.MiningBonus,
-				roadBonus = civ3Terrain.RoadBonus,
-				irrigationBonus = civ3Terrain.IrrigationBonus,
 				allowedWorkerActions = LoadWorkerActions(civ3Terrain).ToHashSet(),
 			};
 

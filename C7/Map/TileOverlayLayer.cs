@@ -55,7 +55,7 @@ namespace C7.Map {
 			// this tile.
 			int irrigationIndex = 0;
 			foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-				if (dirToTile.Value.overlays.HasImprovement(TerrainImprovement.irrigation)) {
+				if (hasIrrigation(dirToTile.Value)) {
 					irrigationIndex |= getIrrigationFlag(dirToTile.Key);
 				}
 			}
@@ -156,11 +156,15 @@ namespace C7.Map {
 		}
 
 		private static bool hasRoad(Tile tile) {
-			return tile.overlays.HasImprovement(TerrainImprovement.road);
+			return tile.overlays.ImprovementAtLayer(TerrainImprovement.Layer.Roads)?.key == "road";
 		}
 
 		private static bool hasRailRoad(Tile tile) {
-			return tile.overlays.HasImprovement(TerrainImprovement.railroad);
+			return tile.overlays.ImprovementAtLayer(TerrainImprovement.Layer.Roads)?.key == "railroad";
+		}
+
+		private static bool hasIrrigation(Tile tile) {
+			return tile.overlays.ImprovementAtLayer(TerrainImprovement.Layer.ResourceDevelopment)?.key == "irrigation";
 		}
 	}
 }

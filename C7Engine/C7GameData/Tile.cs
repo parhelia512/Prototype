@@ -1,7 +1,5 @@
 namespace C7GameData {
 	using System;
-	using System.Threading;
-	using System.Text.Json.Serialization;
 	using System.Collections.Generic;
 	using System.Linq;
 	using C7GameData.Save;
@@ -16,7 +14,7 @@ namespace C7GameData {
 
 		public class Yield {
 			public static Yield CalculateForCity(Tile tile, int yield, YieldType type, City city) {
-				return new Yield(tile, yield, type).ApplyPlayerModifiers(city.owner).ApplyCityModifiers(city);
+				return CalculateForPlayer(tile, yield, type, city.owner).ApplyCityModifiers(city);
 			}
 
 			public static Yield CalculateForPlayer(Tile tile, int yield, YieldType type, Player player) {
@@ -284,13 +282,6 @@ namespace C7GameData {
 				yield += this.Resource.FoodBonus;
 			}
 
-			if (this.overlays.HasImprovement(TerrainImprovement.irrigation)) {
-				yield += this.overlayTerrainType.irrigationBonus;
-				if (this.overlays.HasImprovement(TerrainImprovement.railroad)) {
-					yield += 1;
-				}
-			}
-
 			if (HasCity) {
 				// All city centers have a food yield of 2, regardless of bonus
 				// food. See https://wiki.civforum.de/wiki/Stadtfeldertrag_(Civ3).
@@ -301,6 +292,8 @@ namespace C7GameData {
 				// despotism penalty, unless the city is located on a fresh
 				// water source or has already reached city size (≥ 7)
 			}
+
+			yield += overlays.GetBaseYieldBonus(YieldType.Food);
 
 			return yield;
 		}
@@ -343,12 +336,7 @@ namespace C7GameData {
 				yield += this.Resource.ShieldsBonus;
 			}
 
-			if (this.overlays.HasImprovement(TerrainImprovement.mine)) {
-				yield += this.overlayTerrainType.miningBonus;
-				if (this.overlays.HasImprovement(TerrainImprovement.railroad)) {
-					yield += 1;
-				}
-			}
+			yield += overlays.GetBaseYieldBonus(YieldType.Production);
 
 			return yield;
 		}
@@ -370,9 +358,6 @@ namespace C7GameData {
 			}
 			if (BordersRiver()) {
 				yield += 1;
-			}
-			if (overlays.HasRoad()) {
-				yield += overlayTerrainType.roadBonus;
 			}
 
 			// See https://wiki.civforum.de/wiki/Stadtfeldertrag_(Civ3)
@@ -400,6 +385,8 @@ namespace C7GameData {
 				yield = Math.Max(regularCityYield, capitalCityYield);
 			}
 
+			yield += overlays.GetBaseYieldBonus(YieldType.Commerce);
+
 			return yield;
 		}
 
@@ -421,17 +408,13 @@ namespace C7GameData {
 			return riverNorth || riverNortheast || riverEast || riverSoutheast || riverSouth || riverSouthwest || riverWest || riverNorthwest;
 		}
 
-		public bool CanBeMined() {
-			return overlayTerrainType.miningBonus > 0 && overlays.CanAdd(TerrainImprovement.mine);
-		}
-
 		// TODO: This method doesn't handle the electicity tech which allows
 		// irrigating without fresh water access.
-		public bool CanBeIrrigated(Player player) {
+		public bool CanBeIrrigated(TerrainImprovement irrigation, Player player) {
 			// Irrigation can't be done if there is no irrigation bonus for the
 			// tile or if there's already an improvement or city on the tile.
-			if (!overlays.CanAdd(TerrainImprovement.irrigation) ||
-				overlayTerrainType.irrigationBonus == 0 ||
+			if (!overlays.CanAdd(irrigation) ||
+				irrigation.GetYieldBonus(overlayTerrainType, YieldType.Food) <= 0 ||
 				cityAtTile != null) {
 				return false;
 			}
@@ -443,7 +426,7 @@ namespace C7GameData {
 
 			foreach (KeyValuePair<TileDirection, Tile> dirToTile in neighbors) {
 				// If a neighboring tile is irrigated, this tile has fresh water access.
-				if (dirToTile.Value.overlays.HasImprovement(TerrainImprovement.irrigation)) {
+				if (dirToTile.Value.overlays.HasImprovement(irrigation)) {
 					return true;
 				}
 
@@ -455,7 +438,7 @@ namespace C7GameData {
 					}
 
 					foreach (var (dir, tile) in dirToTile.Value.neighbors) {
-						if (tile.overlays.HasImprovement(TerrainImprovement.irrigation)) {
+						if (tile.overlays.HasImprovement(irrigation)) {
 							return true;
 						}
 					}
@@ -552,10 +535,10 @@ namespace C7GameData {
 		// due north, 2 is NE, 3 is E, and so on in a clockwise spiral.
 		// Index 9 is N+N, 10 is N+NE, etc.
 		//
-		// This is slightly different than the civ3 spiral, which starts with 
+		// This is slightly different than the civ3 spiral, which starts with
 		// the NE and goes clockwise. Ring 2 of the civ3 spiral is the BFC tiles,
 		// but rings beyond that get stranger. We don't need to match the civ3
-		// spiral exactly, and this is much simpler to understand. 
+		// spiral exactly, and this is much simpler to understand.
 		public Tile GetTileAtNeighborIndex(int neighborIndex) {
 			// Special case: Index 0 is this tile.
 			if (neighborIndex <= 0) {
@@ -618,7 +601,7 @@ namespace C7GameData {
 			return map.tileAt(XCoordinate + xDelta, YCoordinate + yDelta);
 		}
 
-		// Returns the tiles in the spiral ordering defined by 
+		// Returns the tiles in the spiral ordering defined by
 		// GetTileAtNeighborIndex(i).
 		public List<Tile> GetTilesWithinRankDistance(int rank) {
 			List<Tile> result = new();
@@ -763,12 +746,16 @@ namespace C7GameData {
 			if (!CanAdd(improvement))
 				throw new InvalidOperationException($"Cannot add {improvement.key} to the tile");
 
+			terrainImprovementByLayer.TryGetValue(improvement.layer, out TerrainImprovement replacedImprovement);
+
 			terrainImprovementByLayer[improvement.layer] = improvement;
 
-			// Hack: don't do this if gamedata is null, which can be true in some
-			// unit tests.
-			if (improvement == TerrainImprovement.road && EngineStorage.gameData != null) {
-				EngineStorage.gameData.InvalidateCachedTradeNetwork();
+			// If a road is being added to a tile that previously had
+			// no road, invalidate the cached trade network
+			if (improvement.layer == TerrainImprovement.Layer.Roads && replacedImprovement == null) {
+				// Hack: don't do this if gamedata is null, which can
+				// be true in some unit tests.
+				EngineStorage.gameData?.InvalidateCachedTradeNetwork();
 			}
 		}
 
@@ -808,6 +795,10 @@ namespace C7GameData {
 			}
 
 			return -1;
+		}
+
+		public int GetBaseYieldBonus(Tile.YieldType type) {
+			return terrainImprovementByLayer.Values.Sum(ti => ti.GetYieldBonus(tile.overlayTerrainType, type));
 		}
 
 		public bool HasBeenImproved() {

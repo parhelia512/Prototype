@@ -7,6 +7,12 @@ using C7Engine;
 namespace C7GameData;
 
 public class Terraform {
+	public struct ScriptContext(Player player, Tile tile, Terraform terraform) {
+		public Player player = player;
+		public Tile tile = tile;
+		public Terraform terraform = terraform;
+	}
+
 	public ID Id;
 	public string Name;
 	public string CivilopediaEntry;
@@ -18,8 +24,8 @@ public class Terraform {
 
 	public TerrainImprovement Improvement;
 
-	private Action<Player, Tile> Effect;
-	private List<Func<Player, Tile, bool>> ActionValidators = [];
+	private Action<ScriptContext> Effect;
+	private List<Func<ScriptContext, bool>> ActionValidators = [];
 
 	private SaveTerraform dataSource;
 
@@ -34,7 +40,7 @@ public class Terraform {
 		RequiredResources = saveTerraform.RequiredResources.ConvertAll(resKey => gameData.Resources.Find(res => res.Key == resKey));
 
 		if (saveTerraform.Improvement != null)
-			Improvement = TerrainImprovement.FromKey(saveTerraform.Improvement);
+			Improvement = gameData.terrainImprovements.Find(ti => ti.key == saveTerraform.Improvement);
 
 		SetRules(gameData.luaRulesEngine);
 	}
@@ -45,11 +51,11 @@ public class Terraform {
 
 	private void SetRules(LuaRulesEngine engine) {
 		foreach (string functionPath in dataSource.Effects) {
-			Effect += engine.ImportFunc<Action<Player, Tile>>(functionPath);
+			Effect += engine.ImportFunc<Action<ScriptContext>>(functionPath);
 		}
 
 		foreach (string functionPath in dataSource.Validators) {
-			ActionValidators.Add(engine.ImportFunc<Func<Player, Tile, bool>>(functionPath));
+			ActionValidators.Add(engine.ImportFunc<Func<ScriptContext, bool>>(functionPath));
 		}
 	}
 
@@ -63,11 +69,11 @@ public class Terraform {
 		bool canAddImprovement = Improvement == null || tile.overlays.CanAdd(Improvement);
 
 		return hasTech && hasResources
-				&& canAddImprovement && ActionValidators.All(func => func(player, tile));
+				&& canAddImprovement && ActionValidators.All(func => func(new(player, tile, this)));
 	}
 
 	public void OnComplete(Player player, Tile tile) {
-		Effect?.Invoke(player, tile);
+		Effect?.Invoke(new(player, tile, this));
 
 		if (Improvement != null) {
 			tile.overlays.Add(Improvement);

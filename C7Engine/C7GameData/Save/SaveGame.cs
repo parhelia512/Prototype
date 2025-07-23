@@ -71,7 +71,8 @@ namespace C7GameData.Save {
 				Governments = data.governments,
 				Difficulties = data.difficulties,
 				GameDifficulty = data.gameDifficulty,
-				Rules = data.rules
+				Rules = data.rules,
+				TerrainImprovements = data.terrainImprovements.ConvertAll(ti => ti.ToSaveTerrainImprovement())
 			};
 			save.StrengthBonuses.Add(data.fortificationBonus);
 			save.StrengthBonuses.Add(data.riverCrossingBonus);
@@ -101,6 +102,7 @@ namespace C7GameData.Save {
 			string rulesScript = "civ3.lua";
 			data.luaRulesEngine.Initialize(luaRulesDir, rulesScript);
 
+			ConvertTerrainImprovements(data);
 			ConvertTerraforms(data);
 			ConvertMapAndPlayers(data);
 			ConvertTechnologies(data);
@@ -173,6 +175,38 @@ namespace C7GameData.Save {
 
 			// players need game map to populate tile knowledge
 			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.rules));
+		}
+
+		private void ConvertTerrainImprovements(GameData gameData) {
+			var saveByKey = TerrainImprovements.ToDictionary(s => s.key);
+			var created = new Dictionary<string, TerrainImprovement>();
+
+			TerrainType ResolveTerrainType(string key) {
+				return TerrainTypes.Find(tt => tt.Key == key);
+			}
+
+			TerrainImprovement Create(string key) {
+				if (created.TryGetValue(key, out var existing)) {
+					return existing;
+				}
+
+				var save = saveByKey[key];
+				TerrainImprovement upgradesFrom = null;
+
+				if (!string.IsNullOrEmpty(save.upgradesFrom)) {
+					upgradesFrom = Create(save.upgradesFrom);
+				}
+
+				var improvement = new TerrainImprovement(save, ResolveTerrainType, upgradesFrom);
+				created[key] = improvement;
+				return improvement;
+			}
+
+			foreach (var key in saveByKey.Keys) {
+				Create(key);
+			}
+
+			gameData.terrainImprovements = created.Values.ToList();
 		}
 
 		private void ConvertTechnologies(GameData data) {
@@ -336,6 +370,7 @@ namespace C7GameData.Save {
 		public int TurnNumber = 0;
 		public SaveMap Map = new SaveMap();
 		public List<TerrainType> TerrainTypes = new List<TerrainType>();
+		public List<SaveTerrainImprovement> TerrainImprovements = [];
 		public List<Resource> Resources = new List<Resource>();
 		public List<SaveUnit> Units = new List<SaveUnit>();
 		public List<SaveUnitPrototype> UnitPrototypes = [];

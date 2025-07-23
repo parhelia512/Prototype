@@ -1,34 +1,37 @@
 local UnitAction = ENUMS.UnitAction
+local YieldType = ENUMS.Tile_YieldType
 
 local terraforms = {
   build_mine = {
-    validator = function(_, tile)
-      return tile:CanBeMined()
+    validator = function(context)
+      local mine = context.terraform.Improvement
+      return mine:GetYieldBonus(context.tile.overlayTerrainType, YieldType.Production) > 0
     end,
   },
 
   irrigate = {
-    validator = function(player, tile)
-      return tile:CanBeIrrigated(player)
+    validator = function(context)
+      local irrigation = context.terraform.Improvement
+      return context.tile:CanBeIrrigated(irrigation, context.player)
+    end,
+  },
+
+  clear_foliage = {
+    validator = function(context)
+      return context.tile.overlayTerrainType.allowedWorkerActions:Contains(context.terraform.Action)
     end,
   },
 
   clear_wetlands = {
-    validator = function(_, tile)
-      return tile.overlayTerrainType.allowedWorkerActions:Contains(UnitAction.ClearWetlands)
-    end,
-    effect = function(_, tile)
-      tile:ClearTerrainOverlay()
+    effect = function(context)
+      context.tile:ClearTerrainOverlay()
     end,
   },
 
   clear_forest = {
-    validator = function(_, tile)
-      return tile.overlayTerrainType.allowedWorkerActions:Contains(UnitAction.ClearForest)
-    end,
-    effect = function(_, tile)
-      tile:MaybeAwardForestClearingShields()
-      tile:ClearTerrainOverlay()
+    effect = function(context)
+      context.tile:MaybeAwardForestClearingShields()
+      context.tile:ClearTerrainOverlay()
     end,
   },
 }
