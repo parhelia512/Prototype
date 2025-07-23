@@ -158,4 +158,9 @@ terrain.pine = {
   },
 }
 
+terrain.fog_of_war = {
+  path = TERRAIN .. "FogOfWar.pcx",
+  pure_alpha = true,
+}
+
 return terrain

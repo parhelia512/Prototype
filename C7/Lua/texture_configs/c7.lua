@@ -94,12 +94,8 @@ local c7_texture_list = {
   "Art/Diplomacy/counter.png",
   "Art/PalaceView/bkgr.png",
   "Art/city screen/luxuryicons_small.png",
+  "Art/Terrain/FogOfWar.png",
 }
-
--- Lua-ified pcs files that don't have png replacements yet
--- Art/Terrain/railroads.pcx
--- Art/Terrain/roads.pcx
-
 
 -- Helper: Strip file extension from path
 local function strip_extension(path) return path:match "^(.-)%.[^%.]+$" or path end

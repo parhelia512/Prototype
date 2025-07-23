@@ -24,6 +24,7 @@ public readonly record struct CropRegion(int LeftStart, int TopStart, int Croppe
 ///    - Optional: "shadows" (boolean) - Whether the shadow effect should be simulated (defaults to true)
 ///    - Optional: "alpha" (string) - Path to an alpha channel texture file
 ///    - Optional: "alpha_row_offset" (number) - Row offset for alpha blending
+///    - Optional: "pure_alpha" - The pcx file only contains transparency information.
 ///
 /// 3) A table containing key "map_object_to_sprite" holding a function that accepts a table it belongs to and a C# object.
 /// This function should return a table similar to the one described in the point 2.
@@ -35,6 +36,7 @@ public static class TextureLoader {
 		// PCX-specific settings
 		public string AlphaPath = null;
 		public int AlphaRowOffset = 0;
+		public bool PureAlpha = false;
 		public PCXToGodot.ColorOptions ColorOptions = PCXToGodot.ColorOptions.Default;
 
 		public ConfigEntry() {
@@ -172,6 +174,7 @@ public static class TextureLoader {
 			return new() {
 				Path = table["path"].ToString(),
 				AlphaPath = table["alpha"]?.ToString(),
+				PureAlpha = Convert.ToBoolean(table["pure_alpha"] ?? false),
 				CropRegion = ExtractCropRegion(table),
 				ColorOptions = Convert.ToBoolean(table["shadows"] ?? true),
 				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0)
@@ -186,6 +189,7 @@ public static class TextureLoader {
 
 		return ext switch {
 			".png" => LoadFromPNG(config.Path, config.CropRegion),
+			".pcx" when config.PureAlpha => PCXToGodot.getPureAlphaFromPCX(new Pcx(Util.Civ3MediaPath(config.Path))),
 			".pcx" when config.UseAlpha => LoadWithAlphaBlend(config.Path, config.AlphaPath!, config.CropRegion, config.AlphaRowOffset),
 			".pcx" => LoadFromPCX(config.Path, config.CropRegion, config.ColorOptions),
 			_ => throw new FormatException($"Unknown texture format: {config.Path}"),
