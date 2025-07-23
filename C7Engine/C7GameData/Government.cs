@@ -82,7 +82,7 @@ namespace C7GameData {
 		}
 
 		private static void TilePenalty(Tile.Yield yield) {
-			yield.penalty += yield.baseYield > 2 ? 1 : 0;
+			yield.penalty += yield.yield > 2 ? 1 : 0;
 		}
 	}
 }

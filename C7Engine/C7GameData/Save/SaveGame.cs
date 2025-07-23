@@ -179,10 +179,12 @@ namespace C7GameData.Save {
 
 		private void ConvertTerrainImprovements(GameData gameData) {
 			var saveByKey = TerrainImprovements.ToDictionary(s => s.key);
+			var terrainTypeByKey = TerrainTypes.ToDictionary(tt => tt.Key);
+
 			var created = new Dictionary<string, TerrainImprovement>();
 
 			TerrainType ResolveTerrainType(string key) {
-				return TerrainTypes.Find(tt => tt.Key == key);
+				return terrainTypeByKey[key];
 			}
 
 			TerrainImprovement Create(string key) {
@@ -197,7 +199,7 @@ namespace C7GameData.Save {
 					upgradesFrom = Create(save.upgradesFrom);
 				}
 
-				var improvement = new TerrainImprovement(save, ResolveTerrainType, upgradesFrom);
+				var improvement = new TerrainImprovement(save, gameData.luaRulesEngine, ResolveTerrainType, upgradesFrom);
 				created[key] = improvement;
 				return improvement;
 			}

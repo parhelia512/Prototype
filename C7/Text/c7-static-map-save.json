@@ -68499,7 +68499,8 @@
         "marsh": {
           "commerce": 1
         }
-      }
+      },
+      "tileModifier": "terrain_improvements.railroad.tile_modifier"
     },
     {
       "key": "mine",

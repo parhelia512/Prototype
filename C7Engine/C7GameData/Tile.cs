@@ -14,11 +14,16 @@ namespace C7GameData {
 
 		public class Yield {
 			public static Yield CalculateForCity(Tile tile, int yield, YieldType type, City city) {
-				return CalculateForPlayer(tile, yield, type, city.owner).ApplyCityModifiers(city);
+				return new Yield(tile, yield, type)
+						.ApplyTerrainImprovementModifiers(tile)
+						.ApplyCityModifiers(city)
+						.ApplyPlayerModifiers(city.owner);
 			}
 
 			public static Yield CalculateForPlayer(Tile tile, int yield, YieldType type, Player player) {
-				return new Yield(tile, yield, type).ApplyPlayerModifiers(player);
+				return new Yield(tile, yield, type)
+						.ApplyTerrainImprovementModifiers(tile)
+						.ApplyPlayerModifiers(player);
 			}
 
 			public Yield(Tile tile, int baseYield, YieldType type) {
@@ -34,6 +39,11 @@ namespace C7GameData {
 
 			private Yield ApplyCityModifiers(City city) {
 				city.GetBuildings().ForEach(b => b.building.tileModifier?.Invoke(this));
+				return this;
+			}
+
+			private Yield ApplyTerrainImprovementModifiers(Tile tile) {
+				tile.overlays.GetImprovements().ToList().ForEach(ti => ti.tileModifier?.Invoke(this));
 				return this;
 			}
 
@@ -757,6 +767,11 @@ namespace C7GameData {
 				// be true in some unit tests.
 				EngineStorage.gameData?.InvalidateCachedTradeNetwork();
 			}
+		}
+
+		public TerrainImprovement ImprovementAtLayer(TerrainImprovement.Layer layer) {
+			terrainImprovementByLayer.TryGetValue(layer, out TerrainImprovement ti);
+			return ti;
 		}
 
 		public bool HasImprovement(TerrainImprovement improvement) {

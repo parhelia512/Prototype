@@ -29,6 +29,8 @@ namespace C7GameData {
 		// 3) result of pillaging (after pillaging, an upgraded improvement will downgrade)
 		public readonly TerrainImprovement upgradesFrom;
 
+		public readonly Action<Tile.Yield> tileModifier;
+
 		private Dictionary<(TerrainType, Tile.YieldType), int> bonusYields = [];
 		private readonly SaveTerrainImprovement dataSource;
 
@@ -44,6 +46,7 @@ namespace C7GameData {
 
 		public TerrainImprovement(
 			SaveTerrainImprovement save,
+			LuaRulesEngine rulesEngine,
 			Func<string, TerrainType> resolveTerrainType,
 			TerrainImprovement upgradesFrom = null
 		) {
@@ -54,6 +57,10 @@ namespace C7GameData {
 			defenseBonus = save.defenseBonus;
 			dataSource = save;
 			this.upgradesFrom = upgradesFrom;
+
+			if (save.tileModifier != null) {
+				tileModifier = rulesEngine.ImportFunc<Action<Tile.Yield>>(save.tileModifier);
+			}
 
 			bonusYields = [];
 			foreach (var (terrainKey, yieldDict) in save.bonusYields) {
