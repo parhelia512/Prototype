@@ -8,13 +8,15 @@ namespace C7.Map {
 	public class BorderLayer : LooseLayer {
 		private readonly string texturePath = "Art/Terrain/Territory.pcx";
 		private readonly ImageTexture[] borderGraphics = new ImageTexture[8];
-		private readonly Dictionary<(int, Color), ImageTexture> textureCache = new();
+
+		private readonly Dictionary<TileDirection, ImageTexture> directionToTexture = new();
+		private readonly Dictionary<(TileDirection, Color), ImageTexture> textureCache = new();
 
 		public BorderLayer() {
-			borderGraphics[0] = TextureLoader.Load("terrain.borders.northwest_flat");
-			borderGraphics[2] = TextureLoader.Load("terrain.borders.northeast_flat");
-			borderGraphics[4] = TextureLoader.Load("terrain.borders.southwest_flat");
-			borderGraphics[6] = TextureLoader.Load("terrain.borders.southeast_flat");
+			directionToTexture[TileDirection.NORTHWEST] = TextureLoader.Load("terrain.borders.northwest_flat");
+			directionToTexture[TileDirection.NORTHEAST] = TextureLoader.Load("terrain.borders.northeast_flat");
+			directionToTexture[TileDirection.SOUTHWEST] = TextureLoader.Load("terrain.borders.southwest_flat");
+			directionToTexture[TileDirection.SOUTHEAST] = TextureLoader.Load("terrain.borders.southeast_flat");
 		}
 
 		// TODO: This method doesn't precisely mirror Civ3 coloring
@@ -27,12 +29,12 @@ namespace C7.Map {
 		/// - The color of civilization, passed as an argument to this method.
 		/// - The secondary color, which is derived from the civilization color.
 		/// The resulting texture is cached.
-		private ImageTexture GetBorderTexture(int textureIndex, Color borderColor) {
-			if (textureCache.TryGetValue((textureIndex, borderColor), out ImageTexture res)) {
+		private ImageTexture GetBorderTexture(TileDirection dir, Color borderColor) {
+			if (textureCache.TryGetValue((dir, borderColor), out ImageTexture res)) {
 				return res;
 			}
 
-			ImageTexture texture = borderGraphics[textureIndex];
+			ImageTexture texture = directionToTexture[dir];
 
 			Color secondaryColor = CalcSecondaryColor(borderColor);
 
@@ -45,7 +47,7 @@ namespace C7.Map {
 			Image image = Util.TransformColors(texture.GetImage(), colorReplacements);
 
 			var newTexture = ImageTexture.CreateFromImage(image);
-			textureCache[(textureIndex, borderColor)] = newTexture;
+			textureCache[(dir, borderColor)] = newTexture;
 
 			return newTexture;
 		}
@@ -55,19 +57,11 @@ namespace C7.Map {
 				return;
 			}
 
-			var directionToTextureIdx = new Dictionary<TileDirection, int>
-				{
-					{ TileDirection.NORTHWEST, 0 },
-					{ TileDirection.NORTHEAST, 2 },
-					{ TileDirection.SOUTHWEST, 4 },
-					{ TileDirection.SOUTHEAST, 6 }
-				};
-
 			Color borderColor = Util.LoadColor(tile.owningCity.owner.colorIndex);
 
-			foreach (var entry in directionToTextureIdx) {
-				if (tile.neighbors[entry.Key].owningCity?.owner != tile.owningCity?.owner) {
-					ImageTexture texture = GetBorderTexture(entry.Value, borderColor);
+			foreach (TileDirection dir in directionToTexture.Keys) {
+				if (tile.neighbors[dir].owningCity?.owner != tile.owningCity?.owner) {
+					ImageTexture texture = GetBorderTexture(dir, borderColor);
 					Vector2 size = texture.GetSize();
 					Vector2 offset = size/2;
 					// this value were found experimentally to improve alignment with the grid
