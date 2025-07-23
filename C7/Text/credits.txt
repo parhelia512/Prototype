@@ -6,6 +6,8 @@
 by the 4X gaming community
 made with Godot Engine[/b]
 
+[b]Core Team[/b]
+
 
 [b]Developers[/b]
 
@@ -35,6 +37,14 @@ Blue Monkey
 Civinator
 Ozymandias
 Vuldacon
+
+[b]In Memoriam[/b]
+
+Balthasar
+[i]a wise old man[/i]
+
+Ozymandias
+[i]a gentleman and a scholar[/i]
 
 [b]Special Thanks[/b]
 Thunderfall and leif erikson for the development forum at CivFanatics
