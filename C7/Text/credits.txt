@@ -7,7 +7,13 @@ by the 4X gaming community
 made with Godot Engine[/b]
 
 [b]Core Team[/b]
-
+WildWeazel
+Quintillus
+JimOfLeisure
+maxpetul
+pcen
+Tom Werner
+Yegor Budylin
 
 [b]Developers[/b]
 
@@ -19,6 +25,7 @@ Kright
 Lanzelot
 pcen
 Quintillus
+rchoffardet
 steviek
 Tom Werner
 WildWeazel
@@ -27,9 +34,7 @@ Yegor Budylin
 [b]Artists[/b]
 
 Kyriakos
- [i]Persian City Set[/i]
 Plotinus
- [i]Carthaginian Settler[/i]
 
 [b]Co-conspirators[/b]
 
