@@ -3,6 +3,7 @@ using Godot;
 using ConvertCiv3Media;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MoonSharp.Interpreter;
 using Script = MoonSharp.Interpreter.Script;
 using MoonSharp.Interpreter.Loaders;
@@ -24,6 +25,7 @@ public readonly record struct CropRegion(int LeftStart, int TopStart, int Croppe
 ///    - Optional: "shadows" (boolean) - Whether the shadow effect should be simulated (defaults to true)
 ///    - Optional: "alpha" (string) - Path to an alpha channel texture file
 ///    - Optional: "alpha_row_offset" (number) - Row offset for alpha blending
+///    - Optional: "transparent_color_indexes" (table) - List of color indexes to treat as transparent
 ///    - Optional: "pure_alpha" - The pcx file only contains transparency information.
 ///
 /// 3) A table containing key "map_object_to_sprite" holding a function that accepts a table it belongs to and a C# object.
@@ -171,12 +173,29 @@ public static class TextureLoader {
 				throw new ArgumentException("Texture configuration missing required 'path' property");
 			}
 
+			HashSet<int> transparentColorIndexes = new();
+			if (table["transparent_color_indexes"] == null) {
+				transparentColorIndexes = new PCXToGodot.ColorOptions().transparentColorIndexes;
+			} else {
+				if (!(table["transparent_color_indexes"] is Table)) {
+					throw new ArgumentException($"'transparent_color_indexes' must be a table.");
+				}
+
+				foreach (DynValue d in ((Table)table["transparent_color_indexes"]).Values) {
+					// Note: Convert.ToInt32 doesn't work for DynValue.
+					transparentColorIndexes.Add((int)d.CastToNumber());
+				}
+			}
+
 			return new() {
 				Path = table["path"].ToString(),
 				AlphaPath = table["alpha"]?.ToString(),
 				PureAlpha = Convert.ToBoolean(table["pure_alpha"] ?? false),
 				CropRegion = ExtractCropRegion(table),
-				ColorOptions = Convert.ToBoolean(table["shadows"] ?? true),
+				ColorOptions = new PCXToGodot.ColorOptions() {
+					transparentColorIndexes = transparentColorIndexes,
+					shadows = Convert.ToBoolean(table["shadows"] ?? true),
+				},
 				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0)
 			};
 		}
