@@ -1,5 +1,5 @@
 [color=black][center]
-[b]C7 0.2 "Carthage"[/b]
+[b]C7 0.3 "Dutch"[/b]
 [url]c7-game.github.io[/url]
 
 [b]An open source project
@@ -7,6 +7,7 @@ by the 4X gaming community
 made with Godot Engine[/b]
 
 [b]Core Team[/b]
+
 WildWeazel
 Quintillus
 JimOfLeisure
@@ -52,6 +53,7 @@ Ozymandias
 [i]a gentleman and a scholar[/i]
 
 [b]Special Thanks[/b]
+
 Thunderfall and leif erikson for the development forum at CivFanatics
 Sid Meier for creating [i]Civilization[/i]
 Soren Johnson and Firaxis for [i]Civilization III[/i]
