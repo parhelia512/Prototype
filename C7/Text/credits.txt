@@ -24,6 +24,7 @@ Flintlock / maxpetul
 JimOfLeisure
 Kright
 Lanzelot
+lt-brlara
 pcen
 Quintillus
 rchoffardet
@@ -54,6 +55,7 @@ Ozymandias
 
 [b]Special Thanks[/b]
 
+SuedeCivIII for promotional media
 Thunderfall and leif erikson for the development forum at CivFanatics
 Sid Meier for creating [i]Civilization[/i]
 Soren Johnson and Firaxis for [i]Civilization III[/i]
