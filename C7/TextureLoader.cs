@@ -8,6 +8,7 @@ using MoonSharp.Interpreter;
 using Script = MoonSharp.Interpreter.Script;
 using MoonSharp.Interpreter.Loaders;
 using C7.Map;
+using C7GameData;
 
 public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
 
@@ -83,6 +84,8 @@ public static class TextureLoader {
 	static TextureLoader() {
 		UserData.RegisterType<CityGraphicsDetails>();
 		UserData.RegisterType<PopHead.TextureKey>();
+		UserData.RegisterType<UnitPrototype>();
+		UserData.RegisterType<Building>();
 
 		// Note, we register all of AdvisorHeader rather than just
 		// AdvisorHead.AdvisorGraphicsDetails because we access the nums
