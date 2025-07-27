@@ -484,6 +484,7 @@ public partial class Game : Node2D {
 		}
 
 		// Prompt the user if they would have a city riot when the turn ended.
+		bool doEndTurn = true;
 		EngineStorage.ReadGameData((GameData gameData) => {
 			foreach (City city in controller.cities) {
 				if (!controller.isHuman) {
@@ -501,11 +502,14 @@ public partial class Game : Node2D {
 								DoActualEndTurn();
 							}),
 						PopupOverlay.PopupCategory.Advisor);
+					doEndTurn = false;
 					return;
 				}
 			}
 		});
-		DoActualEndTurn();
+		if (doEndTurn) {
+			DoActualEndTurn();
+		}
 	}
 
 	private void DoActualEndTurn() {
