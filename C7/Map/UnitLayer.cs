@@ -149,9 +149,7 @@ public partial class UnitLayer : LooseLayer {
 		// Initialize cursor if necessary
 		if (cursorSprite == null) {
 			cursorSprite = new AnimatedSprite2D();
-			SpriteFrames frames = new SpriteFrames();
-			cursorSprite.SpriteFrames = frames;
-			AnimationManager.loadNonTintedAnimation("Art/Animations/Cursor/Cursor.flc", "cursor", ref frames);
+			cursorSprite.SpriteFrames = TextureLoader.LoadAnimation("animations.cursor", "cursor");
 			cursorSprite.Animation = "cursor";
 			looseView.AddChild(cursorSprite);
 			cursorSprite.Play("cursor");

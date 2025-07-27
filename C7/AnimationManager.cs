@@ -122,20 +122,6 @@ public partial class AnimationManager {
 		}
 	}
 
-	// Used for loading animations that don't have a "tint", where the tint is
-	// the civ-specific coloring of a unit.
-	public static void loadNonTintedAnimation(string path, string name, ref SpriteFrames frames) {
-		Flic flic = Util.LoadFlic(path);
-		int row = 0;
-		frames.AddAnimation(name);
-
-		for (int col = 0; col < flic.Images.GetLength(1); col++) {
-			byte[] frame = flic.Images[row,col];
-			(ImageTexture bl, _) = Util.LoadTextureFromFlicData(frame, flic.Palette, flic.Width, flic.Height);
-			frames.AddFrame(name, bl, 0.5f); // TODO: frame duration is controlled by .ini
-		}
-	}
-
 	public bool LoadAnimation(UnitPrototype unit, MapUnit.AnimatedAction action) {
 		string name = BaseAnimationKey(unit.artName, action);
 		string testName = AnimationKey(name, TileDirection.NORTH);

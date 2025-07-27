@@ -142,4 +142,17 @@ local function traverse(value)
   return value
 end
 
+civ3_textures.animations.cursor = {
+    path = "Art/Animations/Cursor.png",
+    animation_rows = 2,
+    animation_cols = 9,
+    frame_duration = .6
+}
+civ3_textures.animations.disorder = {
+    path = "Art/Animations/DisorderDefault.png",
+    animation_rows = 1,
+    animation_cols = 6,
+    frame_duration = .6
+}
+
 return traverse(civ3_textures)

@@ -38,9 +38,7 @@ public partial class GotoLayer : LooseLayer {
 		// Initialize cursor if necessary
 		if (gotoCursorSprite == null) {
 			gotoCursorSprite = new AnimatedSprite2D();
-			SpriteFrames frames = new SpriteFrames();
-			gotoCursorSprite.SpriteFrames = frames;
-			AnimationManager.loadNonTintedAnimation("Art/Animations/Cursor/Cursor.flc", "cursor", ref frames);
+			gotoCursorSprite.SpriteFrames = TextureLoader.LoadAnimation("animations.cursor", "cursor");
 			gotoCursorSprite.Animation = "cursor";
 
 			gotoLabel = new() {

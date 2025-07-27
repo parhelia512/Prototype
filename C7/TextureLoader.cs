@@ -28,6 +28,16 @@ public readonly record struct CropRegion(int LeftStart, int TopStart, int Croppe
 ///    - Optional: "transparent_color_indexes" (table) - List of color indexes to treat as transparent
 ///    - Optional: "pure_alpha" - The pcx file only contains transparency information.
 ///
+///    For animations:
+///    - Optional: "frame_duration" (float) - duration of each frame
+///    - Optional: "animation_rows" (int) - number of rows in an animation sprite sheet. Must be >0 for png animations.
+///    - Optional: "animation_cols" (int) - number of columns in an animation sprite sheet. Must be >0 for png animations.
+///         - If a png animation is specified, the frame ordering is
+///           (row 0, col 0), (row 0,col 1), ... (row 0, col animation_cols-1),
+///           (row 1, col 0), ...
+///           ...
+///           (row animation_rows-1, col 0), ...
+///
 /// 3) A table containing key "map_object_to_sprite" holding a function that accepts a table it belongs to and a C# object.
 /// This function should return a table similar to the one described in the point 2.
 public static class TextureLoader {
@@ -40,6 +50,11 @@ public static class TextureLoader {
 		public int AlphaRowOffset = 0;
 		public bool PureAlpha = false;
 		public PCXToGodot.ColorOptions ColorOptions = PCXToGodot.ColorOptions.Default;
+
+		// Animation-specific settings
+		public float FrameDuration = 0.5f;
+		public int AnimationRows = 0;
+		public int AnimationCols = 0;
 
 		public ConfigEntry() {
 		}
@@ -56,6 +71,7 @@ public static class TextureLoader {
 
 	private static Dictionary<string, ImageTexture> configKeyCache = [];
 	private static Dictionary<(string configKey, object obj), ImageTexture> objectMappingCache = [];
+	private static Dictionary<(string configKey, string animationName), SpriteFrames> animationCache = [];
 
 	static TextureLoader() {
 		UserData.RegisterType<CityGraphicsDetails>();
@@ -142,6 +158,28 @@ public static class TextureLoader {
 		return texture;
 	}
 
+	/// Returns the list of textures making up an animation.
+	///
+	/// The config key should be a string separated by dots, representing the path through the
+	/// configuration hierarchy (e.g., "animations.cursor").
+	///
+	/// The animation name is what the resulting animation will be stored as in the result.
+	public static SpriteFrames LoadAnimation(string configKey, string animationName) {
+		var cacheKey = (configKey, animationName);
+		if (animationCache.TryGetValue(cacheKey, out SpriteFrames cachedAnimation))
+			return cachedAnimation;
+
+		object entry = GetEntryByPath(configKey);
+		if (entry == null)
+			throw new Exception($"Texture config not found for key: {configKey}");
+
+		SpriteFrames animation = LoadAnimationFromConfigEntry(ParseConfigEntry(entry), animationName);
+
+		animationCache[cacheKey] = animation;
+
+		return animation;
+	}
+
 	/// An utility method for setting textures of a button node.
 	/// Accepts a button and a config key. The config key should lead
 	/// to a table containing config entries with "normal", "pressed"
@@ -196,7 +234,11 @@ public static class TextureLoader {
 					transparentColorIndexes = transparentColorIndexes,
 					shadows = Convert.ToBoolean(table["shadows"] ?? true),
 				},
-				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0)
+				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0),
+
+				FrameDuration = (float)Convert.ToDouble(table["frame_duration"] ?? 0.5),
+				AnimationRows = Convert.ToInt32(table["animation_rows"] ?? 0),
+				AnimationCols = Convert.ToInt32(table["animation_cols"] ?? 0),
 			};
 		}
 
@@ -213,6 +255,49 @@ public static class TextureLoader {
 			".pcx" => LoadFromPCX(config.Path, config.CropRegion, config.ColorOptions),
 			_ => throw new FormatException($"Unknown texture format: {config.Path}"),
 		};
+	}
+
+	private static SpriteFrames LoadAnimationFromConfigEntry(ConfigEntry config, string animationName) {
+		string ext = Path.GetExtension(config.Path).ToLowerInvariant();
+		SpriteFrames result = new();
+		result.AddAnimation(animationName);
+
+		if (ext == ".flc") {
+			Flic flic = Util.LoadFlic(config.Path);
+
+			const int row = 0;
+			for (int col = 0; col < flic.Images.GetLength(1); col++) {
+				byte[] frame = flic.Images[row, col];
+				// The ignored variable is the "tint" image, which would get the civ
+				// specific color applied to it if it was a unit animation.
+				(ImageTexture bl, _) = Util.LoadTextureFromFlicData(frame, flic.Palette, flic.Width, flic.Height);
+				result.AddFrame(animationName, bl, config.FrameDuration);
+			}
+
+			return result;
+		}
+
+		if (ext == ".png") {
+			ImageTexture fullImage = LoadFromPNG(config.Path, config.CropRegion);
+			if (config.AnimationRows == 0 || config.AnimationCols == 0) {
+				throw new ArgumentException($"Expected non-zero anim rows and cols for {config.Path}");
+			}
+
+			int frameWidth = fullImage.GetWidth() / config.AnimationCols;
+			int frameHeight = fullImage.GetHeight() / config.AnimationRows;
+			for (int r = 0; r < config.AnimationRows; r++) {
+				for (int c = 0; c < config.AnimationCols; c++) {
+					Rect2I frameRegion = new(c * frameWidth, r * frameHeight, frameWidth, frameHeight);
+					result.AddFrame(animationName,
+						ImageTexture.CreateFromImage(fullImage.GetImage().GetRegion(frameRegion)),
+						config.FrameDuration);
+				}
+			}
+
+			return result;
+		}
+
+		return null;
 	}
 
 	// Helper method to extract crop region from a table
@@ -326,5 +411,6 @@ public static class TextureLoader {
 		textureCache.Clear();
 		configKeyCache.Clear();
 		objectMappingCache.Clear();
+		animationCache.Clear();
 	}
 }

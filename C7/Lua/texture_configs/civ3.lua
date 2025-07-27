@@ -439,6 +439,15 @@ textures.popup_background = {
   },
 }
 
+textures.animations = {
+  cursor = {
+    path = "Art/Animations/Cursor/Cursor.flc",
+  },
+  disorder = {
+    path = "Art/Animations/Disorder/DisorderDefault.flc",
+  }
+}
+
 textures.popheads = require "civ3.popheads"
 textures.cities = require "civ3.cities"
 textures.advisor_heads = require "civ3.advisor_heads"
