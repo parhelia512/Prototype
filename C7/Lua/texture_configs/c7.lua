@@ -176,5 +176,14 @@ civ3_textures.animations.disorder = {
     frame_duration = .6
 }
 
+function civ3_textures.tech_icons.small:map_object_to_sprite(tech)
+  if (tech:GetType().Name ~= "Tech") then
+    error "Expected a Tech object"
+  end
+
+  return {
+    path = "Art/Tech Chooser/Icons/placeholder.png",
+  }
+end
 
 return traverse(civ3_textures)

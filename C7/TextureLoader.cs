@@ -378,7 +378,7 @@ public static class TextureLoader {
 		return current;
 	}
 
-	public static ImageTexture LoadFromPCX(string relPath, CropRegion? cropRegion = null, PCXToGodot.ColorOptions? colorOptions = null) {
+	private static ImageTexture LoadFromPCX(string relPath, CropRegion? cropRegion = null, PCXToGodot.ColorOptions? colorOptions = null) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
 			Pcx pcx = LoadPCX(relPath);
 			return cropRegion is null
