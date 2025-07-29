@@ -72,19 +72,8 @@ public partial class Diplomacy : CenterContainer {
 		node.AddChild(headBackground);
 
 		TextureRect leaderHead = new();
-		{
-			int xOffset = player.EraIndex() * 115;
-
-			// TODO: track mood in the player relationship data structure.
-			int yOffset = 115;  // 0 is annoyed, 115*2 is mad.
-
-			Pcx headPcx = TextureLoader.LoadPCX(player.civilization.leaderArtFile);
-			leaderHead.Texture = PCXToGodot.getImageTextureFromPCX(
-						headPcx,
-						new(xOffset, yOffset, 115, 115),
-						new(false, [255]));
-			leaderHead.Scale = new Vector2(1.7f, 1.7f);
-		}
+		leaderHead.Texture = TextureLoader.Load("leader_heads", player);
+		leaderHead.Scale = new Vector2(1.7f, 1.7f);
 		leaderHead.SetPosition(new Vector2(512 - (115 * 1.7f) / 2, 59 + 120 - (115 * 1.7f) / 2));
 		node.AddChild(leaderHead);
 

@@ -186,4 +186,10 @@ function civ3_textures.tech_icons.small:map_object_to_sprite(tech)
   }
 end
 
+function civ3_textures.leader_heads:map_object_to_sprite(player_or_civ)
+  return {
+    path = "Art/Advisors/placeholder_leaderhead.png",
+  }
+end
+
 return traverse(civ3_textures)
