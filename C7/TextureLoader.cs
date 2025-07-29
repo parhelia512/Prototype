@@ -82,10 +82,10 @@ public static class TextureLoader {
 	private static Dictionary<(string configKey, string animationName), SpriteFrames> animationCache = [];
 
 	static TextureLoader() {
+		// Note: classes in the C7GameData namespace are already registered in
+		// the LuaRulesEngine static constructor.
 		UserData.RegisterType<CityGraphicsDetails>();
 		UserData.RegisterType<PopHead.TextureKey>();
-		UserData.RegisterType<UnitPrototype>();
-		UserData.RegisterType<Building>();
 
 		// Note, we register all of AdvisorHeader rather than just
 		// AdvisorHead.AdvisorGraphicsDetails because we access the nums
