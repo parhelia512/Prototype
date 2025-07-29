@@ -8,6 +8,7 @@ using MoonSharp.Interpreter;
 using Script = MoonSharp.Interpreter.Script;
 using MoonSharp.Interpreter.Loaders;
 using C7.Map;
+using C7GameData;
 
 public readonly record struct CropRegion(int LeftStart, int TopStart, int CroppedWidth, int CroppedHeight);
 
@@ -81,6 +82,8 @@ public static class TextureLoader {
 	private static Dictionary<(string configKey, string animationName), SpriteFrames> animationCache = [];
 
 	static TextureLoader() {
+		// Note: classes in the C7GameData namespace are already registered in
+		// the LuaRulesEngine static constructor.
 		UserData.RegisterType<CityGraphicsDetails>();
 		UserData.RegisterType<PopHead.TextureKey>();
 
