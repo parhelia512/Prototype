@@ -455,5 +455,6 @@ textures.ui.unit_control = require "civ3.unit_control"
 textures.civ_colors = require "civ3.civ_colors"
 textures.unit_icons = require "civ3.unit_icons"
 textures.building_icons = require "civ3.building_icons"
+textures.tech_icons = require "civ3.tech_icons"
 
 return textures
