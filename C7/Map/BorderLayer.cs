@@ -57,7 +57,7 @@ namespace C7.Map {
 				return;
 			}
 
-			Color borderColor = Util.LoadColor(tile.owningCity.owner.colorIndex);
+			Color borderColor = TextureLoader.LoadColor(tile.owningCity.owner.colorIndex);
 
 			foreach (TileDirection dir in directionToTexture.Keys) {
 				if (tile.neighbors[dir].owningCity?.owner != tile.owningCity?.owner) {

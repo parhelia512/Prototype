@@ -452,5 +452,6 @@ textures.popheads = require "civ3.popheads"
 textures.cities = require "civ3.cities"
 textures.advisor_heads = require "civ3.advisor_heads"
 textures.ui.unit_control = require "civ3.unit_control"
+textures.civ_colors = require "civ3.civ_colors"
 
 return textures

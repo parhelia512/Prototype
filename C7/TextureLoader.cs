@@ -27,6 +27,9 @@ public readonly record struct CropRegion(int LeftStart, int TopStart, int Croppe
 ///    - Optional: "alpha_row_offset" (number) - Row offset for alpha blending
 ///    - Optional: "transparent_color_indexes" (table) - List of color indexes to treat as transparent
 ///    - Optional: "pure_alpha" - The pcx file only contains transparency information.
+/// 
+///    For c7 files:
+///    - Optional: "hex_color" (string) - A 6 character hex string for a civ color
 ///
 ///    For animations:
 ///    - Optional: "frame_duration" (float) - duration of each frame
@@ -51,6 +54,9 @@ public static class TextureLoader {
 		public bool PureAlpha = false;
 		public PCXToGodot.ColorOptions ColorOptions = PCXToGodot.ColorOptions.Default;
 
+		// For civ-colors, a modern replacement for the 1x1 px pcx images.
+		public string HexColor = null;
+
 		// Animation-specific settings
 		public float FrameDuration = 0.5f;
 		public int AnimationRows = 0;
@@ -68,6 +74,7 @@ public static class TextureLoader {
 	private static Dictionary<string, ImageTexture> textureCache = [];
 	private static Dictionary<string, Pcx> PcxCache = [];
 	private static Dictionary<string, Image> PngCache = [];
+	private static Dictionary<string, Color> colorCache = [];
 
 	private static Dictionary<string, ImageTexture> configKeyCache = [];
 	private static Dictionary<(string configKey, object obj), ImageTexture> objectMappingCache = [];
@@ -180,6 +187,29 @@ public static class TextureLoader {
 		return animation;
 	}
 
+	/// Gets a color given a "civ index".
+	/// 
+	/// This exists in the TextureLoader because civ3 implements civ colors
+	/// as 1x1 pixel pcx files.
+	public static Color LoadColor(int civIndex) {
+		string key = $"civ_colors.color_{civIndex}";
+		if (colorCache.TryGetValue(key, out Color cachedColor))
+			return cachedColor;
+
+		// Load the 1x1 pixel file and get the color, or use the modern hex color.
+		ConfigEntry config = ParseConfigEntry(GetEntryByPath(key));
+		Color color;
+		if (config.HexColor != null) {
+			color = new(code: config.HexColor);
+		} else {
+			ImageTexture texture = LoadFromConfigEntry(config);
+			color = texture.GetImage().GetPixel(0, 0);
+		}
+
+		colorCache[key] = color;
+		return color;
+	}
+
 	/// An utility method for setting textures of a button node.
 	/// Accepts a button and a config key. The config key should lead
 	/// to a table containing config entries with "normal", "pressed"
@@ -235,6 +265,7 @@ public static class TextureLoader {
 					shadows = Convert.ToBoolean(table["shadows"] ?? true),
 				},
 				AlphaRowOffset = Convert.ToInt32(table["alpha_row_offset"] ?? 0),
+				HexColor = table["hex_color"]?.ToString(),
 
 				FrameDuration = (float)Convert.ToDouble(table["frame_duration"] ?? 0.5),
 				AnimationRows = Convert.ToInt32(table["animation_rows"] ?? 0),
@@ -412,5 +443,6 @@ public static class TextureLoader {
 		configKeyCache.Clear();
 		objectMappingCache.Clear();
 		animationCache.Clear();
+		colorCache.Clear();
 	}
 }
