@@ -44,7 +44,7 @@ public partial class TechBox : TextureButton {
 			_ => throw new ArgumentOutOfRangeException("Invalid tech state")
 		};
 
-		ImageTexture iconTexture = TextureLoader.LoadFromPCX(tech.SmallIconPath);
+		ImageTexture iconTexture = TextureLoader.Load("tech_icons.small", tech, useCache: true);
 		TextureRect icon = new() {
 			Texture = iconTexture
 		};

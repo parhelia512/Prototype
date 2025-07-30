@@ -17,6 +17,8 @@ local CITY_ICONS = "Art/Cities/city icons.pcx"
 local CREDITS = "Art/Credits/"
 local PALACE = "Art/PalaceView/"
 
+local POPUP_BORDERS = "Art/popupborders.pcx"
+
 -- Texture definitions
 local textures = {}
 
@@ -398,10 +400,63 @@ textures.lower_right_infobox = {
   },
 }
 
+textures.popup_background = {
+  top_left = {
+    path = POPUP_BORDERS,
+    crop_region = { 251, 1, 61, 44 },
+  },
+  top_center = {
+    path = POPUP_BORDERS,
+    crop_region = { 313, 1, 61, 44 },
+  },
+  top_right = {
+    path = POPUP_BORDERS,
+    crop_region = { 375, 1, 61, 44 },
+  },
+  middle_left = {
+    path = POPUP_BORDERS,
+    crop_region = { 251, 46, 61, 44 },
+  },
+  middle_center = {
+    path = POPUP_BORDERS,
+    crop_region = { 313, 46, 61, 44 },
+  },
+  middle_right = {
+    path = POPUP_BORDERS,
+    crop_region = { 375, 46, 61, 44 },
+  },
+  bottom_left = {
+    path = POPUP_BORDERS,
+    crop_region = { 251, 91, 61, 44 },
+  },
+  bottom_center = {
+    path = POPUP_BORDERS,
+    crop_region = { 313, 91, 61, 44 },
+  },
+  bottom_right = {
+    path = POPUP_BORDERS,
+    crop_region = { 375, 91, 61, 44 },
+  },
+}
+
+textures.animations = {
+  cursor = {
+    path = "Art/Animations/Cursor/Cursor.flc",
+  },
+  disorder = {
+    path = "Art/Animations/Disorder/DisorderDefault.flc",
+  },
+}
+
 textures.popheads = require "civ3.popheads"
 textures.cities = require "civ3.cities"
 textures.advisor_heads = require "civ3.advisor_heads"
 textures.ui.unit_control = require "civ3.unit_control"
 textures.terrain_improvements = require "civ3.terrain_improvements"
+textures.civ_colors = require "civ3.civ_colors"
+textures.unit_icons = require "civ3.unit_icons"
+textures.building_icons = require "civ3.building_icons"
+textures.tech_icons = require "civ3.tech_icons"
+textures.leader_heads = require "civ3.leader_heads"
 
 return textures

@@ -191,11 +191,7 @@ public partial class PlayerSetup : Control {
 	}
 
 	private void DisplaySelectedLeader() {
-		Pcx headPcx = TextureLoader.LoadPCX(civilization.leaderArtFile);
-		leaderHead.Texture = PCXToGodot.getImageTextureFromPCX(
-					headPcx,
-					new(0, 115, 115, 115),
-					new(false, [255]));
+		leaderHead.Texture = TextureLoader.Load("leader_heads", civilization);
 		leaderHead.Scale = new Vector2(1.7f, 1.7f);
 		leaderHead.SetPosition(new Vector2(414, 46));
 
@@ -227,7 +223,7 @@ public partial class PlayerSetup : Control {
 		ids = new(save);
 
 		// Hack: reuse the save but clear out the non-barbarian players.
-		// 
+		//
 		// Longer term we'll need to split out our own
 		// "conquests.bic" type file and load that - until then we'll use this
 		// hack of reusing the static save.

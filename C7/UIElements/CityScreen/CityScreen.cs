@@ -573,7 +573,7 @@ public partial class CityScreen : Control {
 			// animation frame below.
 			ShaderMaterial material = new();
 			material.Shader = GD.Load<Shader>("res://UnitTint.gdshader");
-			Color civColor = Util.LoadColor(city.owner.colorIndex);
+			Color civColor = TextureLoader.LoadColor(city.owner.colorIndex);
 			material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
 
 			// See flicRowToAnimationDirection for the mapping, row 2 is facing
@@ -598,11 +598,8 @@ public partial class CityScreen : Control {
 			imageTintSprite.Position = baseImageSprite.Position;
 			productionButton.AddChild(imageTintSprite);
 		} else if (city.itemBeingProduced is Building b) {
-			int y = 32 + 1 + 41 * b.iconRowIndex;
-			const int iconWidth = 50, iconHeight = 40;
-
 			Sprite2D icon = new();
-			icon.Texture = TextureLoader.LoadFromPCX("Art/city screen/buildings-large.pcx", new(33, y, iconWidth, iconHeight));
+			icon.Texture = TextureLoader.Load("building_icons.large", b, useCache: true);
 			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
 			productionButton.AddChild(icon);
 		}

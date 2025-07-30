@@ -15,26 +15,7 @@ public partial class UnitLayer : LooseLayer {
 	public const int cursorZIndex = -1;
 
 	public UnitLayer() {
-		var moveIndPCX = new Pcx(Util.Civ3MediaPath("Art/interface/MovementLED.pcx"));
-		unitMovementIndicators = PCXToGodot.getImageTextureFromPCX(moveIndPCX);
-	}
-
-	// Creates a plane mesh facing the positive Z-axis with the given shader attached. The quad is 1.0 units long on both sides,
-	// intended to be scaled to the appropriate size when used.
-	public static (ShaderMaterial, MeshInstance2D) createShadedQuad(Shader shader) {
-		PlaneMesh mesh = new PlaneMesh();
-		mesh.SubdivideDepth = 1;
-		mesh.Orientation = PlaneMesh.OrientationEnum.Z;
-		mesh.Size = new Vector2(1, 1);
-
-		ShaderMaterial shaderMat = new ShaderMaterial();
-		shaderMat.Shader = shader;
-
-		MeshInstance2D meshInst = new MeshInstance2D();
-		meshInst.Material = shaderMat;
-		meshInst.Mesh = mesh;
-
-		return (shaderMat, meshInst);
+		unitMovementIndicators = TextureLoader.Load("ui.unit_control.movement_indicators");
 	}
 
 	public Color getHPColor(float fractionRemaining) {
@@ -143,7 +124,7 @@ public partial class UnitLayer : LooseLayer {
 		Vector2 position = tileCenter + animOffset - new Vector2(0, inst.FrameSize(animName).Y / 4);
 		inst.SetPosition(position);
 
-		Color civColor = Util.LoadColor(unit.owner.colorIndex);
+		Color civColor = TextureLoader.LoadColor(unit.owner.colorIndex);
 		int nextFrame = inst.GetNextFrameByProgress(animName, appearance.progress);
 		inst.material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
 
@@ -168,9 +149,7 @@ public partial class UnitLayer : LooseLayer {
 		// Initialize cursor if necessary
 		if (cursorSprite == null) {
 			cursorSprite = new AnimatedSprite2D();
-			SpriteFrames frames = new SpriteFrames();
-			cursorSprite.SpriteFrames = frames;
-			AnimationManager.loadNonTintedAnimation("Art/Animations/Cursor/Cursor.flc", "cursor", ref frames);
+			cursorSprite.SpriteFrames = TextureLoader.LoadAnimation("animations.cursor", "cursor");
 			cursorSprite.Animation = "cursor";
 			looseView.AddChild(cursorSprite);
 			cursorSprite.Play("cursor");

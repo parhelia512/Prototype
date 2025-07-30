@@ -24,11 +24,7 @@ namespace C7.Map {
 		private Vector2I tileCenter;
 
 		private AnimatedSprite2D disorderSprite;
-		private static SpriteFrames disorderFrames = new();
-
-		static CityScene() {
-			AnimationManager.loadNonTintedAnimation("Art/Animations/Disorder/DisorderDefault.flc", "disorder", ref disorderFrames);
-		}
+		private static SpriteFrames disorderFrames = TextureLoader.LoadAnimation("animations.disorder", "disorder");
 
 		public CityScene(City city) {
 			cityLabelScene = new CityLabelScene(city);

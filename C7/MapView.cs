@@ -426,23 +426,16 @@ public partial class GridLayer : LooseLayer {
 }
 
 public partial class BuildingLayer : LooseLayer {
-	private ImageTexture buildingsTex;
-	private Vector2 buildingSpriteSize;
+	private ImageTexture barbCamp;
 
 	public BuildingLayer() {
-		var buildingsPCX = new Pcx(Util.Civ3MediaPath("Art/Terrain/TerrainBuildings.PCX"));
-		buildingsTex = PCXToGodot.getImageTextureFromPCX(buildingsPCX);
-		//In Conquests, this graphic is 4x4, and the search path will now find the Conquests one first
-		buildingSpriteSize = new Vector2((float)buildingsTex.GetWidth() / 4, (float)buildingsTex.GetHeight() / 4);
+		barbCamp = TextureLoader.Load("terrain.barbarian_camp");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
 		if (tile.hasBarbarianCamp) {
-			var texRect = new Rect2(buildingSpriteSize * new Vector2(2, 0), buildingSpriteSize); //(2, 0) is the offset in the TerrainBuildings.PCX file (top row, third in)
-
-			// TODO: Modify this calculation so it doesn't assume buildingSpriteSize is the same as the size of the terrain tiles
-			var screenRect = new Rect2(tileCenter - (float)0.5 * buildingSpriteSize, buildingSpriteSize);
-			looseView.DrawTextureRectRegion(buildingsTex, screenRect, texRect);
+			Rect2 screenRect = new(tileCenter - 0.5f * barbCamp.GetSize(), barbCamp.GetSize());
+			looseView.DrawTextureRect(barbCamp, screenRect, tile: false);
 		}
 	}
 }
@@ -574,8 +567,6 @@ public partial class MapView : Node2D {
 	public CityLayer cityLayer { get; private set; }
 	public TileAssignmentLayer tileAssignmentLayer { get; private set; }
 
-	public ImageTexture civColorWhitePalette = null;
-
 	public MapView(Game game, int mapWidth, int mapHeight, bool wrapHorizontally, bool wrapVertically) {
 		this.game = game;
 		this.mapWidth = mapWidth;
@@ -620,8 +611,6 @@ public partial class MapView : Node2D {
 
 		LooseView fogOfWarView = new(this);
 		fogOfWarView.layers.Add(new FogOfWarLayer());
-
-		(civColorWhitePalette, _) = Util.loadPalettizedPCX("Art/Units/Palettes/ntp00.pcx");
 
 		AddChild(terrainView);
 		looseViews.Add(terrainView);

@@ -179,25 +179,6 @@ public partial class Util {
 		return OS.IsDebugBuild() ? "res://" : OS.GetExecutablePath().GetBaseDir();
 	}
 
-	private static Dictionary<int, Color> ColorCache = new();
-	private const string CivPalettePath = "Art/Units/Palettes/";
-
-	// Transforms color index loaded from a save file into Godot Color
-	public static Color LoadColor(int colorIndex) {
-		if (ColorCache.TryGetValue(colorIndex, out Color value)) {
-			return value;
-		}
-
-		string fileName = $"ntp{colorIndex:D2}.pcx";
-		string filePath = System.IO.Path.Combine(CivPalettePath, fileName);
-
-		Pcx pcx = TextureLoader.LoadPCX(filePath);
-		Color color = PCXToGodot.GetColorFromPCX(pcx);
-
-		ColorCache[colorIndex] = color;
-		return color;
-	}
-
 	// Replaces image colors based on a given dictionary
 	public static Image TransformColors(Image origin, Dictionary<Color, Color> colorReplacements) {
 		Image result = (Image)origin.Duplicate();
@@ -228,17 +209,6 @@ public partial class Util {
 
 		var img = Image.CreateFromData(16, 16, false, Image.Format.Rgb8, flatPalette);
 		return ImageTexture.CreateFromImage(img);
-	}
-
-	// Creates textures from a PCX file without de-palettizing it. Returns two ImageTextures, the first is 16x16 with RGB8 format containing the
-	// color palette and the second is the size of the image itself and contains the indices in R8 format.
-	public static (ImageTexture palette, ImageTexture indices) loadPalettizedPCX(string filePath) {
-		var pcx = TextureLoader.LoadPCX(filePath);
-
-		var imgIndices = Image.CreateFromData(pcx.Width, pcx.Height, false, Image.Format.R8, pcx.ColorIndices);
-		ImageTexture texIndices = ImageTexture.CreateFromImage(imgIndices);
-
-		return (createPaletteTexture(pcx.Palette), texIndices);
 	}
 
 	// A FlicSheet is a sprite sheet created from a Flic file, with each frame of the animation as its own sprite
@@ -376,7 +346,6 @@ public partial class Util {
 	// Allow clearing the caches, so that scenarios with different files that
 	// have the same name can be loaded independently.
 	public static void ClearCaches() {
-		ColorCache.Clear();
 		flicCache.Clear();
 		TextureLoader.ClearCache();
 	}

@@ -65,6 +65,11 @@ terrain.volcano = {
   jungle = TERRAIN .. "Volcanos jungles.pcx",
 }
 
+terrain.barbarian_camp = {
+  path = TERRAIN .. "TerrainBuildings.pcx",
+  crop_region = { 256, 0, 128, 64 },
+}
+
 terrain.marsh = {
   large = {
     path = TERRAIN .. "marsh.pcx",
@@ -134,6 +139,34 @@ terrain.pine = {
   tundra = {
     path = TERRAIN .. "tundra forests.pcx",
     crop_region = { 0, 704, 768, 176 },
+  },
+}
+
+terrain.fog_of_war = {
+  path = TERRAIN .. "FogOfWar.pcx",
+  pure_alpha = true,
+}
+
+terrain.borders = {
+  northwest_flat = {
+    path = TERRAIN .. "Territory.pcx",
+    transparent_color_indexes = { 1, 254, 255 },
+    crop_region = { 0, 0, 128, 72, }
+  },
+  northeast_flat = {
+    path = TERRAIN .. "Territory.pcx",
+    transparent_color_indexes = { 1, 254, 255 },
+    crop_region = { 0, 72, 128, 72, }
+  },
+  southwest_flat = {
+    path = TERRAIN .. "Territory.pcx",
+    transparent_color_indexes = { 1, 254, 255 },
+    crop_region = { 0, 144, 128, 72, }
+  },
+  southeast_flat = {
+    path = TERRAIN .. "Territory.pcx",
+    transparent_color_indexes = { 1, 254, 255 },
+    crop_region = { 0, 216, 128, 72, }
   },
 }
 

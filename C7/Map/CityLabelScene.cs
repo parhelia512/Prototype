@@ -69,7 +69,7 @@ namespace C7.Map {
 		public CityLabelScene(City city) {
 			this.city = city;
 
-			civColor = new Color(Util.LoadColor(city.owner.colorIndex), TRANSPARENCY);
+			civColor = new Color(TextureLoader.LoadColor(city.owner.colorIndex), TRANSPARENCY);
 
 			// Set up UI hierarchy
 			AddChild(labelPanel);
@@ -196,8 +196,13 @@ namespace C7.Map {
 			string turnsUntilGrowthText = turnsUntilGrowth == int.MaxValue || turnsUntilGrowth < 0 ? "- -" : "" + turnsUntilGrowth;
 
 			cityNameLabel.Text = $"{city.name} : {turnsUntilGrowthText}";
-			productionLabel.Text = $"{city.itemBeingProduced.name} : {city.TurnsUntilProductionFinished()}";
-			if (city.TurnsUntilProductionFinished() == int.MaxValue) {
+			if (city.itemBeingProduced != null) {
+				productionLabel.Text = $"{city.itemBeingProduced.name} : {city.TurnsUntilProductionFinished()}";
+			} else {
+				productionLabel.Text = "-- : --";
+			}
+
+			if (city.TurnsUntilProductionFinished() == int.MaxValue && city.itemBeingProduced != null) {
 				productionLabel.Text = $"{city.itemBeingProduced.name} : --";
 			}
 			popSizeLabel.Text = city.residents.Count.ToString();

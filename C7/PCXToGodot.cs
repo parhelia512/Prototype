@@ -70,10 +70,6 @@ public partial class PCXToGodot : GodotObject {
 		return getImageFromBufferData(croppedWidth, croppedHeight, BufferData);
 	}
 
-	public static Image getImageFromPCX(Pcx pcx, CropRegion cropRegion) {
-		return getImageFromPCX(pcx, cropRegion, ColorOptions.Default);
-	}
-
 	public static ImageTexture getPureAlphaFromPCX(Pcx alphaPcx) {
 		int[] bufferData = new int[alphaPcx.Width * alphaPcx.Height];
 		int[] alphaData = new int[MAX_PALETTE_SIZE];
@@ -159,18 +155,6 @@ public partial class PCXToGodot : GodotObject {
 			}
 		}
 		return (getImageFromBufferData(width, height, baseLayer), getImageFromBufferData(width, height, tintLayer));
-	}
-
-	// Utility for loading a civilization color from an ntp file
-	// Note that this retrieves the color of the (only) pixel, not a particular palette index.
-	public static Color GetColorFromPCX(Pcx pcx) {
-		int paletteLookupIdx = pcx.ColorIndexAt(0, 0);
-
-		return Color.Color8(
-			pcx.Palette[paletteLookupIdx, 0],
-			pcx.Palette[paletteLookupIdx, 1],
-			pcx.Palette[paletteLookupIdx, 2]
-		);
 	}
 
 	private static Image getImageFromBufferData(int width, int height, int[] bufferData) {

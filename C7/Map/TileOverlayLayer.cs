@@ -76,7 +76,7 @@ namespace C7.Map {
 		private void drawRoad(LooseView looseView, Tile tile, Rect2 screenTarget) {
 			int roadIndex = 0;
 			foreach (KeyValuePair<TileDirection, Tile> dirToTile in tile.neighbors) {
-				if (hasRoad(dirToTile.Value) || dirToTile.Value.HasCity) {
+				if (hasRoad(dirToTile.Value) || dirToTile.Value.HasCity || hasRailRoad((dirToTile.Value))) {
 					roadIndex |= getRoadFlag(dirToTile.Key);
 				}
 			}
