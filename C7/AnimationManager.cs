@@ -153,11 +153,13 @@ public partial class AnimationManager {
 			AudioStreamWav wav;
 			string pathKey = rootPath + "/" + fileName;
 			if (!wavs.TryGetValue(pathKey, out wav)) {
-				wav = Util.LoadWAVFromDisk(Util.Civ3MediaPath(pathKey));
+				wav = Util.LoadCiv3WAVFromDisk(pathKey);
 				wavs.Add(pathKey, wav);
 			}
-			audioPlayer.Stream = wav;
-			audioPlayer.Play();
+			if (wav != null) {
+				audioPlayer.Stream = wav;
+				audioPlayer.Play();
+			}
 		}
 	}
 

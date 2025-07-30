@@ -135,15 +135,32 @@ public partial class PCXToGodot : GodotObject {
 		int[] baseLayer = new int[width * height];
 		int[] tintLayer = new int[width * height];
 
-		Pcx whitePcx = TextureLoader.LoadPCX("Art/Units/Palettes/ntp00.pcx");
-		int[] whiteColorData = loadPalette(whitePcx.Palette, true);
+		// If ntp00.pcx doesn't exist, don't try to match the full palette for
+		// the "clothes" of the unit's animation - just make it solid white. We
+		// lose any sort of shading or shadows on the unit's clothing, but this
+		// is good enough for standalone mode, at least for now.
+		//
+		// TODO: consider how to improve this - do we need to include a similar
+		// palette in the c7 data? Is this information present in the flc files?
+		Func<int, int> getWhiteColorData;
+		try {
+			Pcx whitePcx = TextureLoader.LoadPCX("Art/Units/Palettes/ntp00.pcx");
+			int[] whiteColorData = loadPalette(whitePcx.Palette, true);
+			getWhiteColorData = (int index) => {
+				return whiteColorData[index];
+			};
+		} catch (Exception e) {
+			getWhiteColorData = (int index) => {
+				return ((int)new Color(1, 1, 1, 1).ToArgb32());
+			};
+		}
 
 		for (int i = 0; i < width * height; i++) {
 			int index = colorIndices[i];
 			bool tinted = index < 16 || (index < 64 && index % 2 == 0);
 			bool shadow = index >= SHADOW_START_INDEX && index <= CIVCOLOR_START_INDEX;
 			if (tinted) {
-				tintLayer[i] = whiteColorData[index];
+				tintLayer[i] = getWhiteColorData(i);
 				baseLayer[i] = 0; // transparent
 			} else if (shadow) {
 				// shadow belongs to the base texture
