@@ -13,6 +13,8 @@ namespace C7GameData {
 
 		public readonly string key;
 
+		// Each tile can have only one type of improvement per layer.
+		// This is enforced by the TileOverlays class.
 		public readonly Layer layer;
 		public readonly StrengthBonus? defenseBonus;
 

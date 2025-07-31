@@ -4,6 +4,8 @@ using Layer = C7GameData.TerrainImprovement.Layer;
 namespace C7GameData.Save;
 
 public class SaveTerrainImprovement {
+	// The following method is used to generate terrain improvement
+	// data when loading a CIV3 SAV or BIQ file
 	public static IEnumerable<SaveTerrainImprovement> Civ3Improvements() {
 		yield return new("irrigation", Layer.ResourceDevelopment, zIndex: 0);
 		yield return new("mine", Layer.ResourceDevelopment, zIndex: 2);
