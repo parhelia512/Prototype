@@ -1290,7 +1290,7 @@ namespace C7GameData {
 
 		private static void LoadTerraformLuaFunctions(SaveTerraform tf) {
 			string actionPath = tf.Action switch {
-				UnitAction.BuildMine => "build_mine",
+				UnitAction.BuildMine => "mine",
 				UnitAction.Irrigate => "irrigate",
 				UnitAction.ClearWetlands => "clear_wetlands",
 				UnitAction.ClearForest => "clear_forest",
@@ -1304,12 +1304,12 @@ namespace C7GameData {
 			switch (tf.Action) {
 				case UnitAction.BuildMine:
 				case UnitAction.Irrigate:
-					tf.Validators.Add($"terraforms.{actionPath}.validator");
+					tf.Validators.Add($"terraforms.{actionPath}_validator");
 					break;
 
 				case UnitAction.ClearWetlands:
 				case UnitAction.ClearForest:
-					tf.Validators.Add("terraforms.clear_foliage.validator");
+					tf.Validators.Add("terraforms.clear_foliage_validator");
 					break;
 			}
 
@@ -1317,7 +1317,7 @@ namespace C7GameData {
 			switch (tf.Action) {
 				case UnitAction.ClearWetlands:
 				case UnitAction.ClearForest:
-					tf.Effects.Add($"terraforms.{actionPath}.effect");
+					tf.Effects.Add($"terraforms.{actionPath}_effect");
 					break;
 			}
 		}

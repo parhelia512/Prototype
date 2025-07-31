@@ -77278,7 +77278,7 @@
       "action": "buildMine",
       "improvement": "mine",
       "validators": [
-        "terraforms.build_mine.validator"
+        "terraforms.mine_validator"
       ]
     },
     {
@@ -77289,7 +77289,7 @@
       "action": "irrigate",
       "improvement": "irrigation",
       "validators": [
-        "terraforms.irrigate.validator"
+        "terraforms.irrigate_validator"
       ]
     },
     {
@@ -77337,10 +77337,10 @@
       "turnsToComplete": 4,
       "action": "clearForest",
       "validators": [
-        "terraforms.clear_foliage.validator"
+        "terraforms.clear_foliage_validator"
       ],
       "effects": [
-        "terraforms.clear_forest.effect"
+        "terraforms.clear_forest_effect"
       ]
     },
     {
@@ -77350,10 +77350,10 @@
       "turnsToComplete": 16,
       "action": "clearWetlands",
       "validators": [
-        "terraforms.clear_foliage.validator"
+        "terraforms.clear_foliage_validator"
       ],
       "effects": [
-        "terraforms.clear_wetlands.effect"
+        "terraforms.clear_wetlands_effect"
       ]
     },
     {
