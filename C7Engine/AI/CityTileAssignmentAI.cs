@@ -40,7 +40,7 @@ namespace C7Engine.AI {
 			log.Debug($"Assigning new citizen of {city.name} to tile {preferredTile} with yield {yield}");
 
 			if (preferredTile == Tile.NONE) {
-				newResident.citizenType = city.owner.GetKnownSpecialists()[0];
+				newResident.citizenType = city.owner.GetKnownSpecialists(gameData)[0];
 			} else {
 				newResident.tileWorked = preferredTile;
 				preferredTile.personWorkingTile = newResident;
@@ -51,7 +51,7 @@ namespace C7Engine.AI {
 			City.Mood cityMood = city.RecalculateCitizenMoods(gameData);
 
 			if (cityMood == City.Mood.Unhappy && manageMoods) {
-				newResident.citizenType = city.owner.GetKnownSpecialists().MaxBy(x => x.Luxuries);
+				newResident.citizenType = city.owner.GetKnownSpecialists(gameData).MaxBy(x => x.Luxuries);
 				if (newResident.tileWorked != Tile.NONE) {
 					newResident.tileWorked = Tile.NONE;
 					preferredTile.personWorkingTile = null;

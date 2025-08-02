@@ -162,6 +162,23 @@ civ3_textures.civ_colors.color_12 = { path = "", hex_color = "F032E6" }  -- Mage
 civ3_textures.civ_colors.color_13 = { path = "", hex_color = "808000" }  -- Olive
 civ3_textures.civ_colors.color_14 = { path = "", hex_color = "DCBEFF" }  -- Lavender
 civ3_textures.civ_colors.color_15 = { path = "", hex_color = "A9A9A9" }  -- Grey
+civ3_textures.civ_colors.color_16 = { path = "", hex_color = "008080" }  -- Teal
+civ3_textures.civ_colors.color_17 = { path = "", hex_color = "FFD700" }  -- Gold
+civ3_textures.civ_colors.color_18 = { path = "", hex_color = "800000" }  -- Maroon
+civ3_textures.civ_colors.color_19 = { path = "", hex_color = "00FF00" }  -- Lime
+civ3_textures.civ_colors.color_20 = { path = "", hex_color = "FFC0CB" }  -- Hot Pink
+civ3_textures.civ_colors.color_21 = { path = "", hex_color = "4682B4" }  -- Steel Blue
+civ3_textures.civ_colors.color_22 = { path = "", hex_color = "D2B48C" }  -- Tan
+civ3_textures.civ_colors.color_23 = { path = "", hex_color = "FF7F50" }  -- Coral
+civ3_textures.civ_colors.color_24 = { path = "", hex_color = "6A5ACD" }  -- Slate Blue
+civ3_textures.civ_colors.color_25 = { path = "", hex_color = "2E8B57" }  -- Sea Green
+civ3_textures.civ_colors.color_26 = { path = "", hex_color = "DAA520" }  -- Goldenrod
+civ3_textures.civ_colors.color_27 = { path = "", hex_color = "C71585" }  -- Medium Violet Red
+civ3_textures.civ_colors.color_28 = { path = "", hex_color = "556B2F" }  -- Dark Olive Green
+civ3_textures.civ_colors.color_29 = { path = "", hex_color = "8B4513" }  -- Saddle Brown
+civ3_textures.civ_colors.color_30 = { path = "", hex_color = "B0C4DE" }  -- Light Steel Blue
+civ3_textures.civ_colors.color_31 = { path = "", hex_color = "696969" }  -- Dim Gray
+
 
 civ3_textures.animations.cursor = {
     path = "Art/Animations/Cursor.png",

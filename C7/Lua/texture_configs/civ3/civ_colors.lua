@@ -17,6 +17,22 @@ local civ_colors = {
     color_13 = { path = PALETTES .. "ntp13.pcx" },
     color_14 = { path = PALETTES .. "ntp14.pcx" },
     color_15 = { path = PALETTES .. "ntp15.pcx" },
+    color_16 = { path = PALETTES .. "ntp16.pcx" },
+    color_17 = { path = PALETTES .. "ntp17.pcx" },
+    color_18 = { path = PALETTES .. "ntp18.pcx" },
+    color_19 = { path = PALETTES .. "ntp19.pcx" },
+    color_20 = { path = PALETTES .. "ntp20.pcx" },
+    color_21 = { path = PALETTES .. "ntp21.pcx" },
+    color_22 = { path = PALETTES .. "ntp22.pcx" },
+    color_23 = { path = PALETTES .. "ntp23.pcx" },
+    color_24 = { path = PALETTES .. "ntp24.pcx" },
+    color_25 = { path = PALETTES .. "ntp25.pcx" },
+    color_26 = { path = PALETTES .. "ntp26.pcx" },
+    color_27 = { path = PALETTES .. "ntp27.pcx" },
+    color_28 = { path = PALETTES .. "ntp28.pcx" },
+    color_29 = { path = PALETTES .. "ntp29.pcx" },
+    color_30 = { path = PALETTES .. "ntp30.pcx" },
+    color_31 = { path = PALETTES .. "ntp31.pcx" },
 }
 
 return civ_colors

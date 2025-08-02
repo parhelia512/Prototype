@@ -733,8 +733,8 @@ namespace C7GameData {
 		}
 
 		// Returns a list of specialists that this player can use.
-		public List<CitizenType> GetKnownSpecialists() {
-			return C7Engine.EngineStorage.gameData.citizenTypes.FindAll(x => {
+		public List<CitizenType> GetKnownSpecialists(GameData gameData) {
+			return gameData.citizenTypes.FindAll(x => {
 				return !x.IsDefaultCitizen && (x.PrerequisiteTech == null || knownTechs.Contains(x.PrerequisiteTech));
 			});
 		}

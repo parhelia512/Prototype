@@ -201,7 +201,7 @@ public partial class CityScreen : Control {
 			CityResident resident = tile.personWorkingTile;
 			tile.personWorkingTile = null;
 			resident.tileWorked = Tile.NONE;
-			resident.citizenType = city.owner.GetKnownSpecialists()[0];
+			resident.citizenType = city.owner.GetKnownSpecialists(gameData)[0];
 			return;
 		}
 
@@ -763,7 +763,9 @@ public partial class CityScreen : Control {
 			tb.TextureNormal = PopHead.GetTexture(cr, eraNum);
 			tb.SetPosition(new Vector2(xPos, 440));
 
-			List<CitizenType> specialistTypes = city.owner.GetKnownSpecialists();
+			List<CitizenType> specialistTypes = null;
+			EngineStorage.ReadGameData((GameData gameData) => { specialistTypes = city.owner.GetKnownSpecialists(gameData); });
+
 			int index = specialistTypes.FindIndex(x => x.Id == cr.citizenType.Id);
 			tb.Pressed += () => {
 				cr.citizenType = specialistTypes[(index + 1) % specialistTypes.Count];
