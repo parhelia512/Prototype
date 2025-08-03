@@ -64,6 +64,9 @@ namespace C7GameData {
 		// a road is built or a city is created/destroyed.
 		private TradeNetwork tradeNetwork;
 
+		// An action called after initialization of EngineStorage
+		internal Action onGameCreation;
+
 		public GameData() {
 			map = new GameMap();
 			if (seed == -1) {

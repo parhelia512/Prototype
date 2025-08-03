@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using C7Engine;
 
 namespace C7GameData.Save {
 
@@ -119,13 +120,19 @@ namespace C7GameData.Save {
 			data.UpdateTileOwners();
 			data.InvalidateCachedTradeNetwork();
 
-			foreach (Player p in data.players) {
+			data.onGameCreation += OnGameCreation;
+
+			return data;
+		}
+
+		private void OnGameCreation() {
+			foreach (Player p in EngineStorage.gameData.players) {
 				// Backfill citizen assignments for scenarios that don't specify
 				// them.
 				foreach (City c in p.cities) {
 					foreach (CityResident cr in c.residents) {
 						if (cr.citizenType.IsDefaultCitizen && cr.tileWorked == Tile.NONE) {
-							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(data, cr);
+							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(EngineStorage.gameData, cr);
 						}
 					}
 				}
@@ -138,11 +145,9 @@ namespace C7GameData.Save {
 				// TODO: this may require more than one loop, because if all the
 				// citizens are happy it reduces wasted shields via we love the
 				// king day.
-				p.DoCorruptionCalculations(data);
-				p.RecalculateCitizenMoods(data);
+				p.DoCorruptionCalculations(EngineStorage.gameData);
+				p.RecalculateCitizenMoods(EngineStorage.gameData);
 			}
-
-			return data;
 		}
 
 		private GameData InitializeGameData() {
