@@ -34,9 +34,11 @@ namespace C7GameData {
 		}
 
 		public static ID FromString(string str) {
-			string[] split = str.Split('-', 2);
-			string key = split[0];
-			int n = split[1] == "none" ? magicNoneIdNumber : int.Parse(split[1]);
+			List<string> split = str.Split('-').ToList();
+			// To handle units like "Man-O-War" we need to only look at the final
+			// element of the .Split call to get the id.
+			string key = string.Join("-", split.GetRange(0, split.Count - 1));
+			int n = split[split.Count - 1] == "none" ? magicNoneIdNumber : int.Parse(split[split.Count - 1]);
 			if (n < 0) {
 				throw new Exception($"ID cannot have a negative number, got {n}");
 			}

@@ -115,7 +115,7 @@ public partial class Game : Node2D {
 				GamePaths.LuaRulesDir,
 				GamePaths.DefaultBicPath,
 				(scenarioSearchPath) => {
-					// WHen the game loading logic tries to load the PediaIcons file, set the
+					// When the game loading logic tries to load the PediaIcons file, set the
 					// scenario search path and then use our Civ3MediaPath searching logic to
 					// find the correct version of the file.
 					//
