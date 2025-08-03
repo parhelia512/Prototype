@@ -11,5 +11,10 @@ public class SaveTerraform {
 	public List<string> RequiredResources = [];
 	public UnitAction Action;
 
-	public SaveTerraform() { }
+	// Optional: a Terrain Improvement associated with the Terraform
+	public string Improvement;
+
+	// Lua functions
+	public List<string> Validators = [];
+	public List<string> Effects = [];
 }

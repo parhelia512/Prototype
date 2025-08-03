@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using C7Engine;
+using C7GameData.Save;
+using System;
 
 namespace C7GameData {
 	public class TerrainImprovement {
@@ -8,19 +11,15 @@ namespace C7GameData {
 			Holdings, // outpost, radar tower, fortress, barricade
 		}
 
-		private static Dictionary<string, TerrainImprovement> improvementByKey = [];
-
-		public static readonly TerrainImprovement road = new(nameof(road), Layer.Roads, movementCost: 1.0f / 3);
-		public static readonly TerrainImprovement railroad = new(nameof(railroad), Layer.Roads, road, movementCost: 0);
-		public static readonly TerrainImprovement mine = new(nameof(mine), Layer.ResourceDevelopment);
-		public static readonly TerrainImprovement irrigation = new(nameof(irrigation), Layer.ResourceDevelopment);
-		public static readonly TerrainImprovement fortress = new(nameof(fortress), Layer.Holdings, defenseBonus: new(nameof(fortress), 0.5));
-		public static readonly TerrainImprovement barricade = new(nameof(barricade), Layer.Holdings, fortress, defenseBonus: new(nameof(barricade), 1));
-
 		public readonly string key;
 
+		// Each tile can have only one type of improvement per layer.
+		// This is enforced by the TileOverlays class.
 		public readonly Layer layer;
 		public readonly StrengthBonus? defenseBonus;
+
+		// On the game map, overlapping terrain improvement with a higher zIndex cover those with a smaller one
+		public readonly int zIndex = 0;
 
 		// A terrain improvement with negative movement cost shouldn't affect the tile movement cost
 		public readonly float movementCost = -1;
@@ -32,24 +31,58 @@ namespace C7GameData {
 		// 3) result of pillaging (after pillaging, an upgraded improvement will downgrade)
 		public readonly TerrainImprovement upgradesFrom;
 
+		public readonly Action<Tile.Yield> tileModifier;
+
+		private Dictionary<(TerrainType, Tile.YieldType), int> bonusYields = [];
+		private readonly SaveTerrainImprovement dataSource;
+
 		public TerrainImprovement(
 			string key,
 			Layer layer,
-			TerrainImprovement upgradesFrom = null,
-			StrengthBonus? defenseBonus = null,
 			float movementCost = -1
 		) {
 			this.key = key;
 			this.layer = layer;
-			this.defenseBonus = defenseBonus;
-			this.upgradesFrom = upgradesFrom;
 			this.movementCost = movementCost;
-
-			improvementByKey[key] = this;
 		}
 
-		public static TerrainImprovement FromKey(string key) {
-			return improvementByKey[key];
+		public TerrainImprovement(
+			SaveTerrainImprovement save,
+			LuaRulesEngine rulesEngine,
+			Func<string, TerrainType> resolveTerrainType,
+			TerrainImprovement upgradesFrom = null
+		) {
+			key = save.key;
+			layer = save.layer;
+			movementCost = save.movementCost;
+			zIndex = save.zIndex;
+			defenseBonus = save.defenseBonus;
+			dataSource = save;
+			this.upgradesFrom = upgradesFrom;
+
+			if (save.tileModifier != null) {
+				tileModifier = rulesEngine.ImportFunc<Action<Tile.Yield>>(save.tileModifier);
+			}
+
+			bonusYields = [];
+			foreach (var (terrainKey, yieldDict) in save.bonusYields) {
+				var terrain = resolveTerrainType(terrainKey);
+				foreach (var (yieldType, bonus) in yieldDict) {
+					bonusYields[(terrain, yieldType)] = bonus;
+				}
+			}
+		}
+
+		public SaveTerrainImprovement ToSaveTerrainImprovement() {
+			return dataSource;
+		}
+
+		public int GetYieldBonus(TerrainType terrain, Tile.YieldType yieldType) {
+			if (bonusYields.TryGetValue((terrain, yieldType), out int res)) {
+				return res;
+			}
+
+			return 0;
 		}
 	}
 }

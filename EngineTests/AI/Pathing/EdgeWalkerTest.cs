@@ -53,6 +53,7 @@ namespace EngineTests {
 				movementCost = 1
 			}
 		};
+		private TerrainImprovement road = new("road", TerrainImprovement.Layer.Roads, movementCost: 1.0f / 3);
 
 		[Fact]
 		void testIgnoresWater() {
@@ -77,7 +78,7 @@ namespace EngineTests {
 
 			// Set up a neighbor with a road.
 			Tile end = plains;
-			end.overlays.Add(TerrainImprovement.road);
+			end.overlays.Add(road);
 			start.neighbors[TileDirection.NORTH] = end;
 
 			// The road shouldn't matter, since we don't have a road.
@@ -89,7 +90,7 @@ namespace EngineTests {
 		[Fact]
 		void testRoadOnStartNotOnDestination() {
 			Tile start = hill;
-			start.overlays.Add(TerrainImprovement.road);
+			start.overlays.Add(road);
 
 			// Set up a neighbor without a road.
 			Tile end = plains;
@@ -104,11 +105,11 @@ namespace EngineTests {
 		[Fact]
 		void testRoadOnStartAndDestination() {
 			Tile start = hill;
-			start.overlays.Add(TerrainImprovement.road);
+			start.overlays.Add(road);
 
 			// Set up a neighbor with a road.
 			Tile end = plains;
-			end.overlays.Add(TerrainImprovement.road);
+			end.overlays.Add(road);
 			start.neighbors[TileDirection.NORTH] = end;
 
 			// The cost should be adjusted because we both have a road.
@@ -214,7 +215,7 @@ namespace EngineTests {
 			// The cost should be 1, despite the city being on a hill. Land
 			// movement costs don't make sense to apply to ships.
 			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
-			Assert.Equal(edges.Count(), 0);
+			Assert.Empty(edges);
 		}
 	}
 }

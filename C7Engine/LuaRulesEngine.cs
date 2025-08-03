@@ -5,6 +5,9 @@ using System.Linq.Expressions;
 using MoonSharp.Interpreter;
 using Serilog;
 using System.IO;
+using MoonSharp.Interpreter.Loaders;
+using System.Collections.Generic;
+using C7GameData;
 
 namespace C7Engine;
 
@@ -111,6 +114,13 @@ public class LuaRulesEngine {
 		RegisterEnums();
 		RegisterGlobals();
 
+		script.Options.ScriptLoader = new FileSystemScriptLoader {
+			ModulePaths = [
+				Path.Combine(luaRulesDir, "?.lua"),
+				Path.Combine(luaRulesDir, "*", "?.lua")
+			]
+		};
+
 		string fullScriptPath = Path.Combine(luaRulesDir, rulesScript);
 		log.Information("Loading Lua rules from file: {filePath}", fullScriptPath);
 
@@ -164,6 +174,10 @@ public class LuaRulesEngine {
 			log.Debug("Registering type: {typeName}", type.FullName);
 			UserData.RegisterType(type);
 		}
+
+		// TODO: is there a way to detect and register generic types
+		// in the fields of C7GameData classes automatically?
+		UserData.RegisterType<HashSet<UnitAction>>();
 	}
 
 	void RegisterEnums() {

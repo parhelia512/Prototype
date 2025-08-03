@@ -40,6 +40,8 @@ namespace C7GameData {
 		/// <param name="theBiq">Source BIQ</param>
 		/// <param name="c7Save">Destination C7 in-memory structure</param>
 		private void ImportSharedBiqData() {
+			save.TerrainImprovements = SaveTerrainImprovement.Civ3Improvements().ToList();
+
 			ImportRaces();
 			ImportTechs();
 			ImportCiv3Resources();
@@ -722,6 +724,8 @@ namespace C7GameData {
 			if (prto.Irrigate) yield return UnitAction.Irrigate;
 			if (prto.ClearJungle) yield return UnitAction.ClearWetlands;
 			if (prto.ClearForest) yield return UnitAction.ClearForest;
+			if (prto.BuildBarricade) yield return UnitAction.BuildBarricade;
+			if (prto.BuildFortress) yield return UnitAction.BuildFortress;
 			if (prto.Bombard) yield return UnitAction.Bombard;
 			if (prto.SkipTurn) yield return UnitAction.Hold;
 			if (prto.Wait) yield return UnitAction.Wait;
@@ -1057,6 +1061,7 @@ namespace C7GameData {
 						c7TerrainType.allowedResources.Add(save.Resources[i].Key);
 					}
 				}
+				AddYieldBonusesForTerrainImprovements(c7TerrainType.Key, terrain);
 				save.TerrainTypes.Add(c7TerrainType);
 				civ3Index++;
 			}
@@ -1252,6 +1257,9 @@ namespace C7GameData {
 					TurnsToComplete = t.TurnsToComplete,
 					Action = ConvertCiv3OrderToAction(t.Order)
 				};
+
+				tf.Improvement = UnitActionToTerrainImprovement(tf.Action);
+
 				if (t.Required > -1) {
 					tf.RequiredTech = save.Techs[t.Required].id;
 				}
@@ -1261,7 +1269,80 @@ namespace C7GameData {
 				if (t.RequiredResource2 > -1) {
 					tf.RequiredResources.Add(save.Resources[t.RequiredResource2].Key);
 				}
+
+				LoadTerraformLuaFunctions(tf);
+
 				save.TerraForms.Add(tf);
+			}
+		}
+
+		private static string UnitActionToTerrainImprovement(UnitAction ua) {
+			return ua switch {
+				UnitAction.BuildMine => "mine",
+				UnitAction.Irrigate => "irrigation",
+				UnitAction.BuildFortress => "fortress",
+				UnitAction.BuildBarricade => "barricade",
+				UnitAction.BuildRoad => "road",
+				UnitAction.BuildRailroad => "railroad",
+				_ => null,
+			};
+		}
+
+		private static void LoadTerraformLuaFunctions(SaveTerraform tf) {
+			string actionPath = tf.Action switch {
+				UnitAction.BuildMine => "mine",
+				UnitAction.Irrigate => "irrigate",
+				UnitAction.ClearWetlands => "clear_wetlands",
+				UnitAction.ClearForest => "clear_forest",
+				_ => null,
+			};
+
+			if (actionPath == null)
+				return;
+
+			// Add validator
+			switch (tf.Action) {
+				case UnitAction.BuildMine:
+				case UnitAction.Irrigate:
+					tf.Validators.Add($"terraforms.{actionPath}_validator");
+					break;
+
+				case UnitAction.ClearWetlands:
+				case UnitAction.ClearForest:
+					tf.Validators.Add("terraforms.clear_foliage_validator");
+					break;
+			}
+
+			// Add effect
+			switch (tf.Action) {
+				case UnitAction.ClearWetlands:
+				case UnitAction.ClearForest:
+					tf.Effects.Add($"terraforms.{actionPath}_effect");
+					break;
+			}
+		}
+
+		private void AddYieldBonusesForTerrainImprovements(string terrainKey, TERR terrainType) {
+			void SetBonus(string improvementKey, Tile.YieldType type, int bonus) {
+				SaveTerrainImprovement improvement = save.TerrainImprovements.Find(ti => ti.key == improvementKey);
+
+				if (!improvement.bonusYields.TryGetValue(terrainKey, out var yieldDict)) {
+					yieldDict = new Dictionary<Tile.YieldType, int>();
+					improvement.bonusYields[terrainKey] = yieldDict;
+				}
+
+				yieldDict[type] = bonus;
+			}
+
+			if (terrainType.MiningBonus > 0) {
+				SetBonus("mine", Tile.YieldType.Production, terrainType.MiningBonus);
+			}
+			if (terrainType.IrrigationBonus > 0) {
+				SetBonus("irrigation", Tile.YieldType.Food, terrainType.IrrigationBonus);
+			}
+			if (terrainType.RoadBonus > 0) {
+				SetBonus("road", Tile.YieldType.Commerce, terrainType.RoadBonus);
+				SetBonus("railroad", Tile.YieldType.Commerce, terrainType.RoadBonus);
 			}
 		}
 

@@ -46,7 +46,7 @@ namespace C7GameData.Save {
 		}
 
 		// TODO: if this is slow, features can be read from JSON and then hashed so the Contains check is faster
-		public Tile ToTile(List<TerrainType> terrainTypes, List<Resource> resources) {
+		public Tile ToTile(List<TerrainType> terrainTypes, List<Resource> resources, List<TerrainImprovement> improvements) {
 			Tile tile = new Tile(id){
 				ExtraInfo = extraInfo,
 				XCoordinate = X,
@@ -73,7 +73,7 @@ namespace C7GameData.Save {
 			};
 
 			tile.Resource = tile.ResourceKey == Resource.NONE.Key ? Resource.NONE : resources.Find(r => r.Key == tile.ResourceKey);
-			overlays.ForEach(key => tile.overlays.Add(TerrainImprovement.FromKey(key)));
+			overlays.ForEach(key => tile.overlays.Add(improvements.Find(ti => ti.key == key)));
 
 			return tile;
 		}

@@ -65,18 +65,6 @@ terrain.volcano = {
   jungle = TERRAIN .. "Volcanos jungles.pcx",
 }
 
-terrain.irrigation = {
-  grass = TERRAIN .. "irrigation.pcx",
-  desert = TERRAIN .. "irrigation DESETT.pcx",
-  plains = TERRAIN .. "irrigation PLAINS.pcx",
-  tundra = TERRAIN .. "irrigation TUNDRA.pcx",
-}
-
-terrain.mine = {
-  path = TERRAIN .. "TerrainBuildings.pcx",
-  crop_region = { 256, 64, 128, 64 },
-}
-
 terrain.barbarian_camp = {
   path = TERRAIN .. "TerrainBuildings.pcx",
   crop_region = { 256, 0, 128, 64 },
@@ -96,10 +84,6 @@ terrain.marsh = {
 terrain.river = TERRAIN .. "mtnRivers.pcx"
 
 terrain.tnt = TERRAIN .. "tnt.pcx"
-
-terrain.railroad = TERRAIN .. "railroads.pcx"
-
-terrain.road = TERRAIN .. "roads.pcx"
 
 terrain.jungle = {
   large = {
