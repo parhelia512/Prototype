@@ -544,8 +544,22 @@ namespace C7GameData {
 		}
 
 		private void ImportBicUnits() {
-			// TODO: This doesn't account for default starting units.
 			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+
+			var createUnitAtLocation = (SavePlayer player, int unitType, string experienceLevel, int hitPoints, int x, int y) => {
+				PRTO prototype = theBiq.Prto[unitType];
+				SaveUnit saveUnit = new SaveUnit{
+					id = ids.CreateID(prototype.Name),
+					owner = player.id,
+					prototype = prototype.Name,
+					currentLocation = new TileLocation(x, y),
+					previousLocation = new TileLocation(x, y),
+					experience = experienceLevel,
+					hitPointsRemaining = hitPoints, // TODO: include bonus hitpoints from unit type
+					movePointsRemaining = (float)prototype.Movement,
+				};
+				return saveUnit;
+			};
 
 			foreach (UNIT unit in theBiq.Unit) {
 				if (unit.Owner >= save.Players.Count) {
@@ -555,20 +569,27 @@ namespace C7GameData {
 				// The owner index is into the list of civs, and we have a 1:1
 				// mapping of players and civs.
 				SavePlayer player = save.Players[unit.Owner];
-
-				PRTO prototype = theBiq.Prto[unit.UnitType];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
-				SaveUnit saveUnit = new SaveUnit{
-					id = ids.CreateID(prototype.Name),
-					owner = player.id,
-					prototype = prototype.Name,
-					currentLocation = new TileLocation(unit.X, unit.Y),
-					previousLocation = new TileLocation(unit.X, unit.Y),
-					experience = experience.key,
-					hitPointsRemaining = experience.baseHitPoints, // TODO: include bonus hitpoints from unit type
-					movePointsRemaining = (float)prototype.Movement,
-				};
-				save.Units.Add(saveUnit);
+				save.Units.Add(createUnitAtLocation(player, unit.UnitType, experience.key, experience.baseHitPoints, unit.X, unit.Y));
+			}
+
+			RULE rule = theBiq.Rule[0];
+			foreach (SLOC starting_location in theBiq.Sloc) {
+				// Skip barbarians
+				if (starting_location.OwnerType <= 1) {
+					continue;
+				}
+
+				// The owner index is into the list of civs, and we have a 1:1
+				// mapping of players and civs.
+				SavePlayer player = save.Players[starting_location.Owner];
+				int baseHitPoints = 3;
+				if (rule.StartUnitType1 >= 0) {
+					save.Units.Add(createUnitAtLocation(player, rule.StartUnitType1, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
+				}
+				if (rule.StartUnitType2 >= 0) {
+					save.Units.Add(createUnitAtLocation(player, rule.StartUnitType2, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
+				}
 			}
 		}
 
