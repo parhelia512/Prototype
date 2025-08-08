@@ -32,11 +32,6 @@ public partial class ScenarioSetup : Control {
 
 	[Export] Label loadingLabel;
 
-	ID.Factory ids;
-
-	// TODO: read this from the rules based on the world size
-	const int NUM_OPPONENTS = 7;
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		background.Texture = TextureLoader.Load("player_setup.background");
@@ -44,11 +39,9 @@ public partial class ScenarioSetup : Control {
 		SaveGame save = GetSave();
 
 		// Set up buttons for the civs the player can play as.
-		//
-		// TODO: Bump this to Dutch once we bump the release.
 		civilizations = save.Civilizations;
 		playerListContainer.Columns = (int)Math.Ceiling(save.Civilizations.Count / 12.0);
-		string initiallySelectedCiv = save.Civilizations.Any(x => x.name == "Carthage") ? "Carthage" : save.Civilizations[1].name;
+		string initiallySelectedCiv = save.Civilizations[1].name;
 		foreach (Civilization civ in save.Civilizations) {
 			if (civ.name == "A Barbarian Chiefdom") {
 				continue;
@@ -117,8 +110,14 @@ public partial class ScenarioSetup : Control {
 	}
 
 	private SaveGame GetSave() {
-		GlobalSingleton global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
-		return SaveManager.LoadSave(global.LoadGamePath,
+		string loadGamePath;
+		try {
+			loadGamePath = GetNode<GlobalSingleton>("/root/GlobalSingleton").LoadGamePath;
+		} catch (Exception e) {
+			// Provide a default for the editor, which can't use GlobalSingleton
+			loadGamePath = Util.Civ3MediaPath("Conquests/Conquests/9 WWII in the Pacific.biq");
+		}
+		return SaveManager.LoadSave(loadGamePath,
 									GamePaths.DefaultBicPath,
 									(string scenarioSearchPath) => {
 										// See corresponding logic in Game.cs
