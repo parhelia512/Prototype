@@ -160,7 +160,7 @@ public partial class PCXToGodot : GodotObject {
 			bool tinted = index < 16 || (index < 64 && index % 2 == 0);
 			bool shadow = index >= SHADOW_START_INDEX && index <= CIVCOLOR_START_INDEX;
 			if (tinted) {
-				tintLayer[i] = getWhiteColorData(i);
+				tintLayer[i] = getWhiteColorData(index);
 				baseLayer[i] = 0; // transparent
 			} else if (shadow) {
 				// shadow belongs to the base texture
