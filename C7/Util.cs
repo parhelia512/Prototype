@@ -128,13 +128,18 @@ public partial class Util {
 			}
 		}
 
-		//Next, before trying the base Civ paths, see if we have it packaged with C7
+		// Next, before trying the base Civ paths, see if we have it packaged 
+		// with C7 and are in standalone mode.
 		string c7Path = FileExistsIgnoringCase(getProjectDirectoryPath(), mediaPath);
-		if (c7Path != null) {
-			return c7Path;
+		if (C7Settings.UseStandaloneMode()) {
+			if (c7Path != null) {
+				return c7Path;
+			} else {
+				throw new ApplicationException("Media path not found: " + mediaPath);
+			}
 		}
 
-		//Finally, check the base Civ paths
+		//Next, check the base Civ paths
 		string[] basePaths = new string[] {
 			"Conquests",
 			"civ3PTW",
@@ -144,6 +149,13 @@ public partial class Util {
 			string actualCasePath = CheckForCiv3Media(mediaPath, basePaths[i]);
 			if (actualCasePath != null)
 				return actualCasePath;
+		}
+
+		// Finally, use a c7 path even if we aren't in standalone mode, but only
+		// if we can't find the path in civ3 graphics. This allows us to toggle
+		// to c7 art when we aren't in standalone mode.
+		if (c7Path != null) {
+			return c7Path;
 		}
 
 		throw new ApplicationException("Media path not found: " + mediaPath);
@@ -244,6 +256,19 @@ public partial class Util {
 		ImageTexture texIndices = ImageTexture.CreateFromImage(imgIndices);
 
 		return (new FlicSheet { palette = texPalette, indices = texIndices, spriteWidth = flic.Width, spriteHeight = flic.Height }, flic);
+	}
+
+	// Like LoadWAVFromDisk, but the path is a relative path, not the result of
+	// calling Civ3MediaPath.
+	//
+	// The result may be null if modern graphics are active, as we do not yet
+	// have sound replacements.
+	public static AudioStreamWav? LoadCiv3WAVFromDisk(string path) {
+		try {
+			return LoadWAVFromDisk(Civ3MediaPath(path));
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	static public AudioStreamWav LoadWAVFromDisk(string path) {

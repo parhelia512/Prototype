@@ -15,6 +15,12 @@ public partial class GlobalSingleton : Node {
 
 	public bool ModernGraphicsActive { get; private set; }
 
+	public GlobalSingleton() {
+		if (C7Settings.UseStandaloneMode()) {
+			ToggleModernGraphics();
+		}
+	}
+
 	// The characteristics of the world to generate. This exists in the singleton
 	// to allow the world setup screen to pass the information to the player
 	// setup screen, which is what actually kicks off the world generation.

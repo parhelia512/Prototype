@@ -36,5 +36,22 @@ namespace C7Engine {
 			}
 			return settings[section][key];
 		}
+
+		public static string GetSettingsValueOrDefault(string section, string key, string defaultValue) {
+			if (settings == null) {
+				LoadSettings();
+			}
+			if (settings[section] == null) {
+				return defaultValue;
+			}
+			if (settings[section][key] == null) {
+				return defaultValue;
+			}
+			return settings[section][key];
+		}
+
+		public static bool UseStandaloneMode() {
+			return GetSettingsValueOrDefault("locations", "useStandaloneMode", "false") == "true";
+		}
 	}
 }
