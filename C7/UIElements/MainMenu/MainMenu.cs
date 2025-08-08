@@ -41,6 +41,7 @@ public partial class MainMenu : Node {
 
 		LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
 		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
+		LoadScenarioDialog.GoToScenarioSetupAfterLoading = true;
 
 		ButtonContainer.NewGame.Pressed += GoToWorldSetup;
 		ButtonContainer.QuickStart.Pressed += GoToWorldSetup;

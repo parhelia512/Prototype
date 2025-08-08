@@ -9,6 +9,9 @@ public partial class Civ3FileDialog : FileDialog {
 	GlobalSingleton Global;
 	private ILogger log;
 
+	// If true, go to scenario setup after loading, for scenarios.
+	public bool GoToScenarioSetupAfterLoading = false;
+
 	public override void _Ready() {
 		base._Ready();
 		log = LogManager.ForContext<Civ3FileDialog>();
@@ -34,7 +37,11 @@ public partial class Civ3FileDialog : FileDialog {
 		if (FileMode == FileDialog.FileModeEnum.OpenFile) {
 			log.Information($"loading {path}");
 			Global.LoadGamePath = path;
-			GetTree().ChangeSceneToFile("res://C7Game.tscn");
+			if (GoToScenarioSetupAfterLoading) {
+				GetTree().ChangeSceneToFile("res://UIElements/NewGame/scenario_setup.tscn");
+			} else {
+				GetTree().ChangeSceneToFile("res://C7Game.tscn");
+			}
 		} else {
 			if (!path.EndsWith(".json")) {
 				path = path + ".json";
