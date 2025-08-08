@@ -45,6 +45,10 @@ public partial class MainMenu : Node {
 		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
 		LoadScenarioDialog.GoToScenarioSetupAfterLoading = true;
 
+		// If couldn't find the button textures when ButtonContainer._Ready, then
+		// these buttons will be null, so be sure to recreate them if we call
+		// DisplayTitleScreen after picking standalone mode or getting the civ3
+		// home path set.
 		if (ButtonContainer.NewGame == null) {
 			ButtonContainer.CreateButtons();
 		}
@@ -65,8 +69,8 @@ public partial class MainMenu : Node {
 		};
 		SetToggleGraphicsText();
 
-		// We can't toggle to using civ3 graphics without a root.
-		if (Util.GetCiv3Path == null) {
+		// We can't toggle to using civ3 graphics in standalone mode.
+		if (C7Settings.UseStandaloneMode()) {
 			ButtonContainer.ToggleGraphics.Visible = false;
 		}
 
