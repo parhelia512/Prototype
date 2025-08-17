@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI;
 
-public partial class Game : Node2D {
+public partial class Game : Node {
 	[Signal] public delegate void TurnEndedEventHandler();
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
 	[Signal] public delegate void NewAutoselectedUnitEventHandler();
@@ -80,10 +80,6 @@ public partial class Game : Node2D {
 	[Export]
 	private Diplomacy diplomacy;
 	[Export]
-	private VSlider slider;
-	[Export]
-	private AnimationPlayer animationPlayer;
-	[Export]
 	private DoubleClickHandler doubleClickHandler;
 	[Export]
 	private PalaceScreen palaceScreen;
@@ -136,12 +132,6 @@ public partial class Game : Node2D {
 			Global.ResetLoadGamePath();
 
 			InitializeMapView();
-
-			//TODO: What was this supposed to do?  It throws errors and occasinally causes crashes now, because _OnViewportSizeChanged doesn't exist
-			// GetTree().Root.Connect("size_changed",new Callable(this,"_OnViewportSizeChanged"));
-
-			// Hide slideout bar on startup
-			_on_SlideToggle_toggled(false);
 
 			log.Information("Now in game!");
 
@@ -532,32 +522,6 @@ public partial class Game : Node2D {
 		mapView.setCameraZoomFromMiddle(value);
 	}
 
-	public void AdjustZoomSlider(int numSteps, Vector2 zoomCenter) {
-		double newScale = slider.Value + slider.Step * (double)numSteps;
-		if (newScale < slider.MinValue)
-			newScale = slider.MinValue;
-		else if (newScale > slider.MaxValue)
-			newScale = slider.MaxValue;
-
-		// Note we must set the camera zoom before setting the new slider value since setting the value will trigger the callback which will
-		// adjust the zoom around a center we don't want.
-		mapView.setCameraZoom((float)newScale, zoomCenter);
-		slider.Value = newScale;
-	}
-
-	public void _on_RightButton_pressed() {
-		mapView.cameraLocation += new Vector2(128, 0);
-	}
-	public void _on_LeftButton_pressed() {
-		mapView.cameraLocation += new Vector2(-128, 0);
-	}
-	public void _on_UpButton_pressed() {
-		mapView.cameraLocation += new Vector2(0, -64);
-	}
-	public void _on_DownButton_pressed() {
-		mapView.cameraLocation += new Vector2(0, 64);
-	}
-
 	public override void _Input(InputEvent @event) {
 		if (@event is InputEventKey e && e.Pressed && !e.IsAction(C7Action.UnitGoto)) {
 			this.setGotoMode(false);
@@ -589,12 +553,16 @@ public partial class Game : Node2D {
 		} else if (eventMouseButton.ButtonIndex == MouseButton.Right && !eventMouseButton.IsPressed()) {
 			HandleRightMouseButton(eventMouseButton);
 		} else if (eventMouseButton.ButtonIndex == MouseButton.WheelUp) {
-			GetViewport().SetInputAsHandled();
-			AdjustZoomSlider(1, GetViewport().GetMousePosition());
+			AdjustZoom(0.1f);
 		} else if (eventMouseButton.ButtonIndex == MouseButton.WheelDown) {
-			GetViewport().SetInputAsHandled();
-			AdjustZoomSlider(-1, GetViewport().GetMousePosition());
+			AdjustZoom(-0.1f);
 		}
+	}
+
+	private void AdjustZoom(float delta) {
+		float newScale = mapView.cameraZoom + delta;
+		mapView.setCameraZoom(newScale, GetViewport().GetMousePosition());
+		GetViewport().SetInputAsHandled();
 	}
 
 	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
@@ -810,15 +778,9 @@ public partial class Game : Node2D {
 	}
 
 	private void HandleMagnifyGesture(InputEventMagnifyGesture magnifyGesture) {
-		// UI slider has the min/max zoom settings for now
 		double newScale = mapView.cameraZoom * magnifyGesture.Factor;
-		if (newScale < slider.MinValue)
-			newScale = slider.MinValue;
-		else if (newScale > slider.MaxValue)
-			newScale = slider.MaxValue;
+
 		mapView.setCameraZoom((float)newScale, magnifyGesture.Position);
-		// Update the UI slider
-		slider.Value = newScale;
 	}
 
 	private void ProcessActions() {
@@ -887,10 +849,8 @@ public partial class Game : Node2D {
 		if (currentAction == C7Action.ToggleZoom) {
 			if (mapView.cameraZoom != 1) {
 				mapView.setCameraZoomFromMiddle(1.0f);
-				slider.Value = 1.0f;
 			} else {
 				mapView.setCameraZoomFromMiddle(0.5f);
-				slider.Value = 0.5f;
 			}
 		}
 
@@ -1065,14 +1025,6 @@ public partial class Game : Node2D {
 		});
 
 		return result;
-	}
-
-	private void _on_SlideToggle_toggled(bool buttonPressed) {
-		if (buttonPressed) {
-			animationPlayer.PlayBackwards("SlideOutAnimation");
-		} else {
-			animationPlayer.Play("SlideOutAnimation");
-		}
 	}
 
 	/**

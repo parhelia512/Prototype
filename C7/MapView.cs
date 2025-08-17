@@ -567,6 +567,9 @@ public partial class MapView : Node2D {
 	public CityLayer cityLayer { get; private set; }
 	public TileAssignmentLayer tileAssignmentLayer { get; private set; }
 
+	const float MIN_SCALE = 0.1f;
+	const float MAX_SCALE = 4.0f;
+
 	public MapView(Game game, int mapWidth, int mapHeight, bool wrapHorizontally, bool wrapVertically) {
 		this.game = game;
 		this.mapWidth = mapWidth;
@@ -655,6 +658,8 @@ public partial class MapView : Node2D {
 	// "center" is the screen location around which the zoom is centered, e.g., if center is (0, 0) the tile in the top left corner will be the
 	// same after the zoom level is changed, and if center is screenSize/2, the tile in the center of the window won't change.
 	public void setCameraZoom(float newScale, Vector2 center) {
+		newScale = Math.Clamp(newScale, MIN_SCALE, MAX_SCALE);
+
 		Vector2 v2NewZoom = new Vector2(newScale, newScale);
 		Vector2 v2OldZoom = new Vector2(cameraZoom, cameraZoom);
 		if (v2NewZoom != v2OldZoom) {
