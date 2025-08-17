@@ -1,10 +1,10 @@
 [gd_scene load_steps=12 format=3 uid="uid://bo4yg85jcbgdx"]
 
-[ext_resource type="Script" path="res://UIElements/CityScreen/CityScreen.cs" id="1_e5kig"]
+[ext_resource type="Script" uid="uid://cc43pgbg3jt26" path="res://UIElements/CityScreen/CityScreen.cs" id="1_e5kig"]
 [ext_resource type="PackedScene" uid="uid://bnvwn0hhrsn82" path="res://UIElements/black_sidebars.tscn" id="1_hl43g"]
-[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2_0mao8"]
-[ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3_3cdyr"]
-[ext_resource type="Script" path="res://UIElements/CityScreen/ProductionMenu.cs" id="4_xfbtv"]
+[ext_resource type="Script" uid="uid://doqipc4rnaotx" path="res://UIElements/Civ3TextureRect.cs" id="2_0mao8"]
+[ext_resource type="Script" uid="uid://dcrdcjop64t6t" path="res://UIElements/Civ3TextureButton.cs" id="3_3cdyr"]
+[ext_resource type="Script" uid="uid://xd5truvfnnws" path="res://UIElements/CityScreen/ProductionMenu.cs" id="4_xfbtv"]
 [ext_resource type="FontFile" uid="uid://c1qd602n7xu3h" path="res://Fonts/NotoSans-Regular.ttf" id="5_hld1k"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_ce4da"]
