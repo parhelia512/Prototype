@@ -9,7 +9,6 @@ using ConvertCiv3Media;
 using C7GameData.Save;
 using Serilog;
 
-[Tool]
 public partial class ScenarioSetup : Control {
 	private static ILogger log = LogManager.ForContext<ScenarioSetup>();
 
@@ -34,8 +33,6 @@ public partial class ScenarioSetup : Control {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background.Texture = TextureLoader.Load("player_setup.background");
-
 		SaveGame save = GetSave();
 
 		// Set up buttons for the civs the player can play as.
@@ -89,10 +86,7 @@ public partial class ScenarioSetup : Control {
 			container.CustomMinimumSize = new Vector2(843.0f / difficultyContainer.Columns, 0);
 		}
 
-		TextureLoader.SetButtonTextures(confirm, "ui.confirm");
 		confirm.Pressed += CreateGame;
-
-		TextureLoader.SetButtonTextures(cancel, "ui.cancel");
 		cancel.Pressed += BackToMainMenu;
 	}
 
@@ -110,13 +104,7 @@ public partial class ScenarioSetup : Control {
 	}
 
 	private SaveGame GetSave() {
-		string loadGamePath;
-		try {
-			loadGamePath = GetNode<GlobalSingleton>("/root/GlobalSingleton").LoadGamePath;
-		} catch (Exception e) {
-			// Provide a default for the editor, which can't use GlobalSingleton
-			loadGamePath = Util.Civ3MediaPath("Conquests/Conquests/9 WWII in the Pacific.biq");
-		}
+		string loadGamePath = GetNode<GlobalSingleton>("/root/GlobalSingleton").LoadGamePath;
 		return SaveManager.LoadSave(loadGamePath,
 									GamePaths.DefaultBicPath,
 									(string scenarioSearchPath) => {

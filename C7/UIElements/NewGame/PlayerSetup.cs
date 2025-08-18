@@ -9,7 +9,6 @@ using ConvertCiv3Media;
 using C7GameData.Save;
 using Serilog;
 
-[Tool]
 public partial class PlayerSetup : Control {
 	private static ILogger log = LogManager.ForContext<PlayerSetup>();
 
@@ -42,8 +41,6 @@ public partial class PlayerSetup : Control {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background.Texture = TextureLoader.Load("player_setup.background");
-
 		SaveGame save = GetSave();
 
 		// Set up buttons for the civs the player can play as.
@@ -103,10 +100,7 @@ public partial class PlayerSetup : Control {
 			container.CustomMinimumSize = new Vector2(843.0f / difficultyContainer.Columns, 0);
 		}
 
-		TextureLoader.SetButtonTextures(confirm, "ui.confirm");
 		confirm.Pressed += CreateGame;
-
-		TextureLoader.SetButtonTextures(cancel, "ui.cancel");
 		cancel.Pressed += BackToMainMenu;
 	}
 
