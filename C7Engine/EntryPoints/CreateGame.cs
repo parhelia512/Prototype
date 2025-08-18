@@ -22,6 +22,7 @@ namespace C7Engine {
 			GameData gameData = save.ToGameData(luaRulesDir);
 
 			EngineStorage.gameData = gameData;
+			EngineStorage.gameData.onGameCreation();
 
 			// TODO: (pcen) initially, in the false branch I assigned gameData.CreateDummyGameData
 			// to humanPlayer, but this is not correct since there are already players and units in
