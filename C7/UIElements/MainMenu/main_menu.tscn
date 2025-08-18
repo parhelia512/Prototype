@@ -12,15 +12,15 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmerc"]
 
-[node name="MainMenu" type="Node" node_paths=PackedStringArray("LoadDialog", "SetCiv3Home", "SetCiv3HomeDialog", "LoadScenarioDialog", "ButtonContainer", "UseStandaloneMode", "player")]
+[node name="MainMenu" type="Node" node_paths=PackedStringArray("LoadDialog", "SetCiv3Home", "SetCiv3HomeDialog", "LoadScenarioDialog", "ButtonContainer", "player", "UseStandaloneMode")]
 script = ExtResource("1_akneh")
 LoadDialog = NodePath("LoadDialog")
 SetCiv3Home = NodePath("SetCiv3Home")
 SetCiv3HomeDialog = NodePath("SetCiv3HomeDialog")
 LoadScenarioDialog = NodePath("LoadScenarioDialog")
-UseStandaloneMode = NodePath("UseStandaloneMode")
 ButtonContainer = NodePath("Control/MainMenuContainer")
 player = NodePath("SoundEffectPlayer")
+UseStandaloneMode = NodePath("UseStandaloneMode")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

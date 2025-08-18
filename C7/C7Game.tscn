@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=18 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" uid="uid://yxhiwx46tety" path="res://Game.cs" id="1"]
 [ext_resource type="Script" uid="uid://cfenrvu7tnp40" path="res://DoubleClickHandler.cs" id="2_t735q"]
@@ -18,62 +18,13 @@
 [ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
 [ext_resource type="PackedScene" uid="uid://da7hbbufyfllg" path="res://UIElements/Advisors/domestic_advisor.tscn" id="15"]
 
-[sub_resource type="Animation" id="2"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1024, 80)]
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:offset_left")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(),
-"points": PackedFloat32Array(),
-"times": PackedFloat32Array()
-}
-
-[sub_resource type="Animation" id="1"]
-resource_name = "SlideOutAnimation"
-length = 0.5
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:offset_left")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(),
-"points": PackedFloat32Array(),
-"times": PackedFloat32Array()
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_bowxq"]
-_data = {
-&"RESET": SubResource("2"),
-&"SlideOutAnimation": SubResource("1")
-}
-
-[node name="C7Game" type="Node2D" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "slider", "animationPlayer", "doubleClickHandler", "palaceScreen")]
+[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "doubleClickHandler", "palaceScreen")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
 cityScreen = NodePath("CanvasLayer/CityScreen")
 advisor = NodePath("CanvasLayer/Advisor")
 diplomacy = NodePath("CanvasLayer/Diplomacy")
-slider = NodePath("CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom")
-animationPlayer = NodePath("CanvasLayer/Control/SlideOutBar/AnimationPlayer")
 doubleClickHandler = NodePath("DoubleClickHandler")
 palaceScreen = NodePath("CanvasLayer/PalaceScreen")
 
@@ -159,76 +110,6 @@ script = ExtResource("6")
 visible = false
 layout_mode = 2
 text = "End Turn"
-
-[node name="SlideOutBar" type="Control" parent="CanvasLayer/Control"]
-visible = false
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 80.0
-offset_right = 9324.0
-offset_bottom = 1086.0
-grow_horizontal = 0
-grow_vertical = 2
-mouse_filter = 1
-
-[node name="SlideToggle" type="Button" parent="CanvasLayer/Control/SlideOutBar"]
-layout_mode = 0
-offset_left = -124.27
-offset_right = -91.27
-offset_bottom = 20.0
-toggle_mode = true
-text = "<->"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/SlideOutBar"]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -45.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="DownButton" type="Button" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-text = "Down"
-
-[node name="RightButton" type="Button" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-text = "Right"
-
-[node name="LeftButton" type="Button" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-text = "Left"
-
-[node name="UpButton" type="Button" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-text = "Up"
-
-[node name="Label" type="Label" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-text = "Zoom"
-
-[node name="Zoom" type="VSlider" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 3
-min_value = 0.1
-max_value = 4.0
-step = 0.1
-value = 1.0
-
-[node name="QuitButton" type="Button" parent="CanvasLayer/Control/SlideOutBar/VBoxContainer"]
-layout_mode = 2
-text = "Quit"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Control/SlideOutBar"]
-libraries = {
-&"": SubResource("AnimationLibrary_bowxq")
-}
 
 [node name="GameStatus" type="Control" parent="CanvasLayer/Control"]
 layout_mode = 1
@@ -354,13 +235,6 @@ visible = false
 [connection signal="ActionRequested" from="CanvasLayer/Control/UnitButtons" to="." method="ProcessAction"]
 [connection signal="pressed" from="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer/AdvisorButton" to="CanvasLayer/Advisor" method="ShowLatestAdvisor"]
 [connection signal="pressed" from="CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer/UiBarEndTurnButton" to="." method="_onEndTurnButtonPressed"]
-[connection signal="toggled" from="CanvasLayer/Control/SlideOutBar/SlideToggle" to="." method="_on_SlideToggle_toggled"]
-[connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/DownButton" to="." method="_on_DownButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/RightButton" to="." method="_on_RightButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/LeftButton" to="." method="_on_LeftButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/UpButton" to="." method="_on_UpButton_pressed"]
-[connection signal="value_changed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/Zoom" to="." method="_on_Zoom_value_changed"]
-[connection signal="pressed" from="CanvasLayer/Control/SlideOutBar/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
 [connection signal="BlinkyEndTurnButtonPressed" from="CanvasLayer/Control/GameStatus/LowerRightInfoBox" to="." method="OnPlayerEndTurn"]
 [connection signal="BuildCity" from="CanvasLayer/PopupOverlay" to="." method="OnBuildCity"]
 [connection signal="DiplomacySelection" from="CanvasLayer/PopupOverlay" to="." method="OnDiplomacySelected"]
