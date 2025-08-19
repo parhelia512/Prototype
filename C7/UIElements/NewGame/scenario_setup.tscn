@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://3453656756"]
 
-[ext_resource type="Script" path="res://UIElements/NewGame/ScenarioSetup.cs" id="1"]
+[ext_resource type="Script" uid="uid://dpe8ukuhvtdvx" path="res://UIElements/NewGame/ScenarioSetup.cs" id="1"]
 [ext_resource type="Script" uid="uid://doqipc4rnaotx" path="res://UIElements/Civ3TextureRect.cs" id="2"]
 [ext_resource type="Script" uid="uid://dcrdcjop64t6t" path="res://UIElements/Civ3TextureButton.cs" id="3"]
 
@@ -38,6 +38,7 @@ loadingLabel = NodePath("Background/LoadingLabel")
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2
 script = ExtResource("2")
+textureConfigKey = "player_setup.background"
 
 [node name="Label" type="Label" parent="Background"]
 layout_mode = 0
@@ -112,6 +113,7 @@ offset_right = 979.0
 offset_bottom = 747.0
 shortcut = SubResource("Shortcut_33b04")
 script = ExtResource("3")
+textureConfigKey = "ui.confirm"
 
 [node name="Cancel" type="TextureButton" parent="Background"]
 layout_mode = 0
@@ -121,6 +123,7 @@ offset_right = 1007.0
 offset_bottom = 748.0
 shortcut = SubResource("Shortcut_7oyjg")
 script = ExtResource("3")
+textureConfigKey = "ui.cancel"
 
 [node name="LoadingLabel" type="Label" parent="Background"]
 visible = false
