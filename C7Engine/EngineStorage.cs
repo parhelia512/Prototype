@@ -1,8 +1,8 @@
 namespace C7Engine {
 	using System;
-	using System.Threading;
-	using System.Collections.Concurrent;
 	using C7GameData;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	/**
 	 * This class stores references to data that the engine needs between calls from the player.
@@ -14,60 +14,68 @@ namespace C7Engine {
 	 * so we don't forget the state of the game after we create it.
 	 **/
 	public static class EngineStorage {
-		private static readonly object gameDataLock = new object();
-		internal static GameData gameData { get; set; }
+		public static GameData gameData { get; set; }
 
 		public static ID uiControllerID;
 		internal static bool animationsEnabled = true;
 
-		public static bool isWaitingForUi = false;
+		internal static readonly Queue<MessageToEngine> pendingMessages = new();
+		internal static readonly Queue<MessageToUI> messagesToUI = new();
+		internal static readonly Queue<AnimationMessage> animationMessages = new();
 
-		public static ConcurrentQueue<MessageToUI> messagesToUI = new ConcurrentQueue<MessageToUI>();
+		internal static readonly Dictionary<Guid, TaskCompletionSource<bool>> pendingAnimations = new();
+		static readonly Dictionary<Type, TaskCompletionSource<MessageToEngine>> pendingEngineWaiters = new();
 
-		private static Thread engineThread = null;
+		public static void ProcessNextMessageToEngine() {
+			if (pendingMessages.Count > 0) {
+				var msg = pendingMessages.Dequeue();
+				msg.process();
 
-		internal static BlockingCollection<MessageToEngine> pendingMessages = new BlockingCollection<MessageToEngine>(new ConcurrentQueue<MessageToEngine>());
-
-		private static void processActions() {
-			foreach (MessageToEngine msg in pendingMessages.GetConsumingEnumerable()) {
-				lock (gameDataLock) {
-					msg.process();
-				}
-
-				if (msg is MsgShutdownEngine) {
-					break;
+				var type = msg.GetType();
+				if (pendingEngineWaiters.TryGetValue(type, out var tcs)) {
+					tcs.TrySetResult(msg);
+					pendingEngineWaiters.Remove(type);
 				}
 			}
 		}
 
-		internal static void createThread() {
-			if (engineThread == null) {
-				// TODO: What if engineThread is not null, i.e. if the thread has already been created? Should we join() it? Does it matter?
-				engineThread = new Thread(processActions);
-				engineThread.Start();
+		public static bool HasPendingAnimations() {
+			return pendingAnimations.Count > 0;
+		}
+
+		public static bool TryDequeueNextMessageToUI(out MessageToUI message) {
+			if (messagesToUI.Count > 0) {
+				message = messagesToUI.Dequeue();
+				return true;
 			}
+			message = null;
+			return false;
+		}
+
+		public static bool TryDequeueNextAnimationMessage(out AnimationMessage message) {
+			if (animationMessages.Count > 0) {
+				message = animationMessages.Dequeue();
+				return true;
+			}
+			message = null;
+			return false;
+		}
+
+		internal static Task WaitForAnimationFinished(Guid animationId) {
+			var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+			pendingAnimations[animationId] = tcs;
+			return tcs.Task;
+		}
+
+		public static Task<T> WaitForMessageToEngine<T>() where T : MessageToEngine {
+			var tcs = new TaskCompletionSource<MessageToEngine>(TaskCreationOptions.RunContinuationsAsynchronously);
+			pendingEngineWaiters[typeof(T)] = tcs;
+
+			return tcs.Task.ContinueWith(t => (T)t.Result);
 		}
 
 		public static void ReadGameData(Action<GameData> accessor) {
-			lock (gameDataLock) {
-				accessor(gameData);
-			}
-		}
-
-		internal static void WaitForUiEvent() {
-			lock (gameDataLock) {
-				isWaitingForUi = true;
-				while (isWaitingForUi) {
-					Monitor.Wait(gameDataLock);
-				}
-			}
-		}
-
-		public static void FinishUiEvent() {
-			lock (gameDataLock) {
-				isWaitingForUi = false;
-				Monitor.Pulse(gameDataLock);
-			}
+			accessor(gameData);
 		}
 
 		public static void InitializeGameDataForTests(GameData gD) {

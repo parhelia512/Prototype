@@ -1,6 +1,8 @@
 using C7GameData;
 using Serilog;
 using C7Engine.Pathing;
+using System.Threading.Tasks;
+using static C7GameData.UnitAI;
 
 namespace C7Engine {
 	// This goofy class only exists because of the arbitrary separation between
@@ -11,7 +13,7 @@ namespace C7Engine {
 		// Attempts to move the supplied unit along the given path.
 		//
 		// `path` is a ref so that the path can be recalculated if necessary.
-		public static UnitAI.Result TryToMoveAlongPath(this UnitAI unitAi, MapUnit unit, ref TilePath path, bool allowCombat) {
+		public static MoveResult TryToMoveAlongPath(this UnitAI unitAi, MapUnit unit, ref TilePath path, bool allowCombat) {
 			if (!unit.movementPoints.canMove) {
 				return UnitAI.Result.InProgress;
 			}
@@ -27,11 +29,10 @@ namespace C7Engine {
 
 				return UnitAI.Result.InProgress;
 			}
-			bool stillAlive = unit.move(unit.location.directionTo(nextTile));
-			if (!stillAlive) {
-				return UnitAI.Result.Error;
-			}
-			return UnitAI.Result.InProgress;
+
+			Task<bool> moveTask = unit.move(unit.location.directionTo(nextTile));
+
+			return MoveResult.MoveRequested(moveTask);
 		}
 	}
 }

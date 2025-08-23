@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using C7Engine.Pathing;
@@ -18,7 +19,7 @@ namespace C7Engine {
 		public static readonly int MAX_LAND_EXPLORERS = 10;
 		public static readonly int MAX_WATER_EXPLORERS = 4;
 
-		public static void PlayTurn(Player player, Random rng, List<Tech> techs) {
+		public static async Task PlayTurn(Player player, Random rng, List<Tech> techs) {
 			if (player.isHuman || player.isBarbarians) {
 				return;
 			}
@@ -31,10 +32,10 @@ namespace C7Engine {
 
 			// Roughly every 4 turns, see if there are trades to be made.
 			if (GameData.rng.Next(100) < 25) {
-				AttemptTrading(player);
+				await AttemptTrading(player);
 			}
 
-			DoUnitActions(player);
+			await DoUnitActions(player);
 
 			// Before ending the turn, adjust our sliders. We do this after unit
 			// moves so that any worker moves that finished during the unit moves
@@ -81,7 +82,7 @@ namespace C7Engine {
 			}
 		}
 
-		private static void DoUnitActions(Player player) {
+		private static async Task DoUnitActions(Player player) {
 			// Reorder the list so that settlers are last, giving our escorts a
 			// chance to configure themselves without wasting a turn.
 			player.units.Sort((x, y) => (x.unitType.name == "Settler").CompareTo(y.unitType.name == "Settler"));
@@ -120,7 +121,7 @@ namespace C7Engine {
 
 					// If the unit is still the process of doing its plan, allow
 					// it to continue next turn.
-					UnitAI.Result result = unit.currentAI.PlayTurn(player, unit);
+					UnitAI.Result result = await unit.currentAI.PlayTurn(player, unit);
 					if (result == UnitAI.Result.InProgress) {
 						break;
 					}
@@ -300,7 +301,7 @@ namespace C7Engine {
 			return possibleTechs[(int)GameData.rng.NextInt64(possibleTechs.Count)];
 		}
 
-		private static void AttemptTrading(Player us) {
+		private static async Task AttemptTrading(Player us) {
 			GameData gD = EngineStorage.gameData;
 
 			log.Information($"{us} is checking for trading opportunities");
@@ -406,10 +407,10 @@ namespace C7Engine {
 
 				if (them.isHuman) {
 					new MsgShowTradeOffer(us, them, weWant, weGive).send();
-					EngineStorage.WaitForUiEvent();
+					await EngineStorage.WaitForMessageToEngine<MsgDiplomacyCompleted>();
+				} else {
+					us.ExecuteDeal(gD, them, weWant, weGive);
 				}
-
-				us.ExecuteDeal(gD, them, weWant, weGive);
 			}
 		}
 

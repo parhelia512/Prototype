@@ -66,7 +66,7 @@ public partial class GotoLayer : LooseLayer {
 		gotoCursorSprite?.Hide();
 		gotoLabel?.Hide();
 
-		looseView.mapView.game.updateAnimations(gameData);
+		looseView.mapView.game.animationController.updateAnimations();
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {

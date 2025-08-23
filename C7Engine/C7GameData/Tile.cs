@@ -4,6 +4,7 @@ namespace C7GameData {
 	using System.Linq;
 	using C7GameData.Save;
 	using C7Engine;
+	using System.Threading.Tasks;
 
 	public class Tile {
 		public enum YieldType {
@@ -678,13 +679,17 @@ namespace C7GameData {
 			currentWorkerJob.OnComplete(player, this);
 		}
 
-		public void Animate(AnimatedEffect effect, bool wait) {
-			if (EngineStorage.animationsEnabled) {
-				new MsgStartEffectAnimation(this, effect, wait ? EngineStorage.FinishUiEvent : null, AnimationEnding.Stop).send();
-				if (wait) {
-					EngineStorage.WaitForUiEvent();
-				}
-			}
+		public async Task AnimateAsync(AnimatedEffect effect) {
+			if (!EngineStorage.animationsEnabled) return;
+
+			var msg = new MsgStartEffectAnimation(this, effect, AnimationEnding.Stop);
+			msg.send();
+
+			await EngineStorage.WaitForAnimationFinished(msg.animationId);
+		}
+
+		public void Animate(AnimatedEffect effect) {
+			_ = AnimateAsync(effect);
 		}
 
 		public void ClearTerrainOverlay() {

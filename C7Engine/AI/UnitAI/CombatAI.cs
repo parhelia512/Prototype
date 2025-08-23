@@ -35,7 +35,7 @@ namespace C7Engine.AI.UnitAI {
 
 		public void UpdateOnDeath() { }
 
-		public C7GameData.UnitAI.Result PlayTurnImpl(Player player, MapUnit unit) {
+		public C7GameData.UnitAI.MoveResult PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
 				return C7GameData.UnitAI.Result.Error;
 			}

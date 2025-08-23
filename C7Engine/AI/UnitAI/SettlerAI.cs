@@ -48,7 +48,7 @@ namespace C7Engine {
 			data.escort = null;
 		}
 
-		C7GameData.UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		C7GameData.UnitAI.MoveResult UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			switch (data.goal) {
 				case SettlerAIData.SettlerGoal.BUILD_CITY:
 					if (IsInvalidCityLocation(data.destination)) {

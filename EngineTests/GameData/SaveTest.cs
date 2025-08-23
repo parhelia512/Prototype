@@ -92,17 +92,12 @@ public class SaveTests {
 
 	private void WaitForStartTurnMessage() {
 		while (true) {
-			MessageToUI msg;
-			while (EngineStorage.messagesToUI.TryDequeue(out msg)) {
+			EngineStorage.ProcessNextMessageToEngine();
+
+			while (EngineStorage.TryDequeueNextMessageToUI(out MessageToUI msg)) {
 				switch (msg) {
 					case MsgStartTurn mST:
 						return;
-					case MsgStartUnitAnimation mSUA:
-						// Ensure we don't get stuck waiting for animations to finish.
-						if (mSUA.completionEvent != null) {
-							mSUA.completionEvent();
-						}
-						continue;
 					default:
 						continue;
 				}
@@ -115,7 +110,7 @@ public class SaveTests {
 			getPediaIconsPath = (string unused) => { return unused; };
 		}
 
-		return CreateGame.createGame(path, luaRulesDir, biqPath, getPediaIconsPath);
+		return CreateGame.createGame(path, luaRulesDir, biqPath, getPediaIconsPath).Result;
 	}
 
 	private GameData ToGameData(SaveGame game) {
@@ -156,6 +151,9 @@ public class SaveTests {
 	[Fact]
 	public void SimpleGame() {
 		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+
+		new MsgSetAnimationsEnabled(false).send();
+
 		Player human = CreateHeadlessGame(developerSave);
 
 		// Make all the players AI players while we run the game in headless mode.

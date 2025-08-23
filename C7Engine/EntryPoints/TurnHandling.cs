@@ -7,6 +7,7 @@ using Serilog;
 
 namespace C7Engine {
 	using System;
+	using System.Threading.Tasks;
 	using C7GameData;
 
 	public class TurnHandling {
@@ -21,7 +22,7 @@ namespace C7Engine {
 		}
 
 		// Implements the game loop. This method is called when the game is started and when the player signals that they're done moving.
-		internal static void AdvanceTurn() {
+		internal static async Task AdvanceTurn() {
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			GameData gameData = EngineStorage.gameData;
@@ -29,7 +30,7 @@ namespace C7Engine {
 				bool firstTurn = GetTurnNumber() == 0;
 
 				// Movement phase
-				if (PlayPlayerTurns(gameData, firstTurn)) {
+				if (await PlayPlayerTurns(gameData, firstTurn)) {
 					stopwatch.Stop();
 					log.Information("Turn time took " + stopwatch.ElapsedMilliseconds + " milliseconds");
 					return;
@@ -78,7 +79,7 @@ namespace C7Engine {
 		/// <param name="gameData"></param>
 		/// <param name="firstTurn"></param>
 		/// <returns>true when it is time for the human to take control again</returns>
-		private static bool PlayPlayerTurns(GameData gameData, bool firstTurn) {
+		private static async Task<bool> PlayPlayerTurns(GameData gameData, bool firstTurn) {
 			foreach (Player player in gameData.players) {
 				if (player.hasPlayedThisTurn || player.defeated) {
 					continue;
@@ -92,10 +93,10 @@ namespace C7Engine {
 					//Call the barbarian AI
 					//TODO: The AIs should be stored somewhere on the game state as some of them will store state (plans,
 					//strategy, etc.) For now, we only have a random AI, so that will be in a future commit
-					new BarbarianAI().PlayTurn(player, gameData);
+					await new BarbarianAI().PlayTurn(player, gameData);
 					player.hasPlayedThisTurn = true;
 				} else if (!player.isHuman) {
-					PlayerAI.PlayTurn(player, GameData.rng, gameData.techs);
+					await PlayerAI.PlayTurn(player, GameData.rng, gameData.techs);
 					player.hasPlayedThisTurn = true;
 				} else if (player.id != EngineStorage.uiControllerID) {
 					player.hasPlayedThisTurn = true;

@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=19 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" uid="uid://yxhiwx46tety" path="res://Game.cs" id="1"]
 [ext_resource type="Script" uid="uid://cfenrvu7tnp40" path="res://DoubleClickHandler.cs" id="2_t735q"]
 [ext_resource type="Script" uid="uid://ifoasmoofo6r" path="res://UIElements/Advisors/Advisors.cs" id="3"]
+[ext_resource type="Script" uid="uid://bvmc8fimjfo2j" path="res://Animations/AnimationController.cs" id="3_rmrhh"]
 [ext_resource type="Script" uid="uid://3wtlmr00bmfb" path="res://UIElements/UpperLeftNav/MenuButton.cs" id="4"]
 [ext_resource type="Script" uid="uid://cproyms6andlc" path="res://UIElements/UpperLeftNav/CivilopediaButton.cs" id="5"]
 [ext_resource type="Script" uid="uid://dg82qjp5l1007" path="res://UIElements/UpperLeftNav/AdvisorButton.cs" id="6"]
@@ -18,18 +19,23 @@
 [ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
 [ext_resource type="PackedScene" uid="uid://da7hbbufyfllg" path="res://UIElements/Advisors/domestic_advisor.tscn" id="15"]
 
-[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "doubleClickHandler", "palaceScreen")]
+[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "palaceScreen", "doubleClickHandler", "animationController")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
 cityScreen = NodePath("CanvasLayer/CityScreen")
 advisor = NodePath("CanvasLayer/Advisor")
 diplomacy = NodePath("CanvasLayer/Diplomacy")
-doubleClickHandler = NodePath("DoubleClickHandler")
 palaceScreen = NodePath("CanvasLayer/PalaceScreen")
+doubleClickHandler = NodePath("DoubleClickHandler")
+animationController = NodePath("AnimationController")
 
 [node name="DoubleClickHandler" type="Node" parent="."]
 script = ExtResource("2_t735q")
+
+[node name="AnimationController" type="Node" parent="." node_paths=PackedStringArray("game")]
+script = ExtResource("3_rmrhh")
+game = NodePath("..")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

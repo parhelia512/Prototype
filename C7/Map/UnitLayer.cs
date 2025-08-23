@@ -82,7 +82,7 @@ public partial class UnitLayer : LooseLayer {
 		}
 
 		public AnimationInstance(LooseView looseView) {
-			AnimationManager manager = looseView.mapView.game.civ3AnimData;
+			AnimationManager manager = looseView.mapView.game.animationController.civ3AnimData;
 
 			this.sprite = new AnimatedSprite2D();
 			this.sprite.ZIndex = unitAnimZIndex;
@@ -116,7 +116,7 @@ public partial class UnitLayer : LooseLayer {
 
 	public void drawUnitAnimFrame(LooseView looseView, MapUnit unit, MapUnit.Appearance appearance, Vector2 tileCenter) {
 		AnimationInstance inst = getBlankAnimationInstance(looseView);
-		looseView.mapView.game.civ3AnimData.forUnit(unit.unitType, appearance.action).loadSpriteAnimation();
+		looseView.mapView.game.animationController.civ3AnimData.forUnit(unit.unitType, appearance.action).loadSpriteAnimation();
 		string animName = AnimationManager.AnimationKey(unit.unitType, appearance.action, appearance.direction);
 
 		// Need to move the sprites upward a bit so that their feet are at the center of the tile. I don't know if spriteHeight/4 is the right
@@ -169,7 +169,7 @@ public partial class UnitLayer : LooseLayer {
 		// Hide cursor if it's been initialized
 		cursorSprite?.Hide();
 
-		looseView.mapView.game.updateAnimations(gameData);
+		looseView.mapView.game.animationController.updateAnimations();
 	}
 
 	// Returns which unit should be drawn from among a list of units. The list is assumed to be non-empty.
@@ -185,7 +185,7 @@ public partial class UnitLayer : LooseLayer {
 				selected = u;
 			if (u.HasPriorityAsDefender(bestDefender, currentlySelectedUnit))
 				bestDefender = u;
-			if (looseView.mapView.game.animTracker.getUnitAppearance(u).DeservesPlayerAttention())
+			if (looseView.mapView.game.animationController.animTracker.getUnitAppearance(u).DeservesPlayerAttention())
 				doingInterestingAnimation = u;
 		}
 
@@ -199,9 +199,9 @@ public partial class UnitLayer : LooseLayer {
 		}
 
 		// First draw animated effects. These will always appear over top of units regardless of draw order due to z-index.
-		C7Animation tileEffect = looseView.mapView.game.animTracker.getTileEffect(tile);
+		C7Animation tileEffect = looseView.mapView.game.animationController.animTracker.getTileEffect(tile);
 		if (tileEffect != null) {
-			(_, float progress, _) = looseView.mapView.game.animTracker.getCurrentActionAndProgress(tile);
+			(_, float progress, _) = looseView.mapView.game.animationController.animTracker.getCurrentActionAndProgress(tile);
 			drawEffectAnimFrame(looseView, tileEffect, progress, tileCenter);
 		}
 
@@ -212,7 +212,7 @@ public partial class UnitLayer : LooseLayer {
 		var white = Color.Color8(255, 255, 255);
 
 		MapUnit unit = selectUnitToDisplay(looseView, tile.unitsOnTile);
-		MapUnit.Appearance appearance = looseView.mapView.game.animTracker.getUnitAppearance(unit);
+		MapUnit.Appearance appearance = looseView.mapView.game.animationController.animTracker.getUnitAppearance(unit);
 		Vector2 animOffset = new Vector2(appearance.offsetX, appearance.offsetY) * MapView.cellSize;
 
 		// If the unit we're about to draw is currently selected, draw the cursor first underneath it
