@@ -3,6 +3,10 @@ using C7Engine;
 using C7GameData;
 using Godot;
 
+/// This class mediates between the Engine and the game's animation
+/// system. It receives animation messages from the Engine, checks
+/// whether they are relevant for the player, and starts and updates
+/// animations using the AnimationTracker and the AnimationManager.
 [GlobalClass]
 public partial class AnimationController : Node {
 	public AnimationManager civ3AnimData;
