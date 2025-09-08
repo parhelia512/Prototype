@@ -7,7 +7,6 @@ using Serilog;
 using C7Engine.Pathing;
 using System.Collections.Generic;
 using System.Linq;
-using C7Engine.AI;
 
 public partial class Game : Node {
 	[Signal] public delegate void TurnEndedEventHandler();
@@ -27,16 +26,9 @@ public partial class Game : Node {
 	public Player controller; // Player that's controlling the UI.
 
 	private MapView mapView;
-	public AnimationManager civ3AnimData;
-	public AnimationTracker animTracker;
 
 	GameState CurrentState = GameState.PreGame;
 
-	// True if the deal screen is open because an AI player is offering something
-	// to the human player.
-	private bool waitingForDealScreen = false;
-
-	// CurrentlySelectedUnit is a reference directly into the game state so be careful of race conditions. TODO: Consider storing a GUID instead.
 	public MapUnit CurrentlySelectedUnit = MapUnit.NONE; //The selected unit.  May be changed by clicking on a unit or the next unit being auto-selected after orders are given for the current one.
 	private bool HasCurrentlySelectedUnit() => CurrentlySelectedUnit != MapUnit.NONE;
 
@@ -80,9 +72,12 @@ public partial class Game : Node {
 	[Export]
 	private Diplomacy diplomacy;
 	[Export]
+	private PalaceScreen palaceScreen;
+
+	[Export]
 	private DoubleClickHandler doubleClickHandler;
 	[Export]
-	private PalaceScreen palaceScreen;
+	public AnimationController animationController;
 
 	bool errorOnLoad = false;
 
@@ -93,7 +88,7 @@ public partial class Game : Node {
 	// Called when the node enters the scene tree for the first time.
 	// The catch should always catch any error, as it's the general catch
 	// that gives an error if we fail to load for some reason.
-	public override void _Ready() {
+	public override async void _Ready() {
 		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 
 		try {
@@ -101,12 +96,7 @@ public partial class Game : Node {
 			// use the same filenames but have different content for them.
 			Util.ClearCaches();
 
-			var animSoundPlayer = new AudioStreamPlayer();
-			AddChild(animSoundPlayer);
-			civ3AnimData = new AnimationManager(animSoundPlayer);
-			animTracker = new AnimationTracker(civ3AnimData);
-
-			controller = CreateGame.createGame(
+			controller = await CreateGame.createGame(
 				Global.LoadGamePath,
 				GamePaths.LuaRulesDir,
 				GamePaths.DefaultBicPath,
@@ -195,152 +185,109 @@ public partial class Game : Node {
 		});
 	}
 
-	public void processEngineMessages() {
-		EngineStorage.ReadGameData((GameData gameData) => { processEngineMessagesLocked(gameData); });
-	}
+	public void HandleEngineMessage(MessageToUI msg) {
+		GameData gameData = EngineStorage.gameData;
 
-	// Must only be called while holding the game data mutex
-	public void processEngineMessagesLocked(GameData gameData) {
-		MessageToUI msg;
-		while (EngineStorage.messagesToUI.TryDequeue(out msg)) {
-			switch (msg) {
-				case MsgStartUnitAnimation mSUA:
-					MapUnit unit = gameData.GetUnit(mSUA.unitID);
-					if (unit != null && (controller.tileKnowledge.isActiveTile(unit.location) || controller.tileKnowledge.isActiveTile(unit.previousLocation))) {
-						// TODO: This needs to be extended so that the player is shown when AIs found cities, when they move units
-						// (optionally, depending on preferences) and generalized so that modders can specify whether custom
-						// animations should be shown to the player.
-						if (mSUA.action == MapUnit.AnimatedAction.ATTACK1)
-							ensureLocationIsInView(unit.location);
+		switch (msg) {
+			case MsgStartTurn mST:
+				OnPlayerStartTurn();
+				break;
+			case MsgShowCityScreen mSCS:
+				ShowCityScreenForCity(gameData, mSCS.city);
+				break;
+			case MsgCityCreated mCC:
+				ShowCityScreenForCity(gameData, mCC.city);
+				break;
+			case MsgCityDestroyed mCD:
+				mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
+				break;
+			case MsgCivilizationDestroyed mCivD:
+				popupOverlay.ShowPopup(new CivilizationDestroyed(mCivD.civilization), PopupOverlay.PopupCategory.Advisor);
 
-						animTracker.startAnimation(unit, mSUA.action, mSUA.completionEvent, mSUA.ending);
-					} else {
-						if (mSUA.completionEvent != null) {
-							mSUA.completionEvent();
-						}
-					}
-					break;
-				case MsgStartEffectAnimation mSEA:
-					int X, Y;
-					gameData.map.tileIndexToCoords(mSEA.tileIndex, out X, out Y);
-					Tile tile = gameData.map.tileAt(X, Y);
-					if (tile != Tile.NONE && controller.tileKnowledge.isActiveTile(tile))
-						animTracker.startAnimation(tile, mSEA.effect, mSEA.completionEvent, mSEA.ending);
-					else {
-						if (mSEA.completionEvent != null)
-							mSEA.completionEvent();
-					}
-					break;
-				case MsgStartTurn mST:
-					OnPlayerStartTurn();
-					break;
-				case MsgShowCityScreen mSCS:
-					ShowCityScreenForCity(gameData, mSCS.city);
-					break;
-				case MsgCityCreated mCC:
-					ShowCityScreenForCity(gameData, mCC.city);
-					break;
-				case MsgCityDestroyed mCD:
-					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
-					break;
-				case MsgCivilizationDestroyed mCivD:
-					popupOverlay.ShowPopup(new CivilizationDestroyed(mCivD.civilization), PopupOverlay.PopupCategory.Advisor);
-
-					// Break out of fast forward mode after interesting events.
-					turnsLeftToFastForward = 0;
-					break;
-				case MsgShowMilitaryAdvisorPopup mSMAP:
-					if (!popupOverlay.Visible) {
-						popupOverlay.ShowPopup(
-							new InformationalPopup(mSMAP.message, AdvisorHead.Advisor.Military, mSMAP.happy ? AdvisorHead.Mood.Happy : AdvisorHead.Mood.Angry),
-							PopupOverlay.PopupCategory.Advisor);
-					}
-					break;
-				case MsgUpdateUiAfterMove mUUAM:
-					// The unit finished moving and still has moves left, so we need to
-					// mark it as the selected unit again.
-					//
-					// Among other things, this will refresh the UI and ensure that the
-					// unit action buttons are correct.
-					if (CurrentlySelectedUnit != MapUnit.NONE) {
-						setSelectedUnit(CurrentlySelectedUnit);
-					}
-					break;
-				case MsgShowScienceAdvisor mSSA:
-					// F6 is the science advisor.
-					// TODO: Move the F* key strings to a set of constants/enum.
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
-					break;
-				case MsgUpdateUiAfterDomesticChange mUUASC:
-					// F1 is the domestic advisor.
-					// TODO: Move the F* key strings to a set of constants/enum.
-
-					// Ensure the citizen moods are correct before displaying
-					// them.
-					foreach (City c in controller.cities) {
-						c.RecalculateCitizenMoods(gameData);
-					}
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
-					break;
-				case MsgShowTradeOffer mSTO:
-					diplomacy.ShowDealScreenForPlayer(
-						mSTO.humanPlayer.id, mSTO.aiPlayer.id,
-						humanGives: mSTO.aiWant,
-						humanWants: mSTO.aiGive);
-					waitingForDealScreen = true;
-					break;
-				case MsgDisplayHurryProductionPopup mDHPP:
-					if (mDHPP.details.errorMessage != null) {
-						popupOverlay.ShowPopup(
-							new InformationalPopup(mDHPP.details.errorMessage),
-							PopupOverlay.PopupCategory.Advisor);
-					} else {
-						popupOverlay.ShowPopup(
-							new ConfirmationPopup(message: mDHPP.details.costMessage,
-												  yesText: "Yes I'm sure!",
-												  noText: "Maybe you're right. Nevermind.",
-												  yesAction: () => {
-													  new MsgDoHurryProduction(mDHPP.city).send();
-												  }),
-							PopupOverlay.PopupCategory.Advisor);
-					}
-					break;
-				case MsgWarDeclaration mWD:
+				// Break out of fast forward mode after interesting events.
+				turnsLeftToFastForward = 0;
+				break;
+			case MsgShowMilitaryAdvisorPopup mSMAP:
+				if (!popupOverlay.Visible) {
 					popupOverlay.ShowPopup(
-						new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
+						new InformationalPopup(mSMAP.message, AdvisorHead.Advisor.Military, mSMAP.happy ? AdvisorHead.Mood.Happy : AdvisorHead.Mood.Angry),
 						PopupOverlay.PopupCategory.Advisor);
+				}
+				break;
+			case MsgUpdateUiAfterMove mUUAM:
+				// The unit finished moving and still has moves left, so we need to
+				// mark it as the selected unit again.
+				//
+				// Among other things, this will refresh the UI and ensure that the
+				// unit action buttons are correct.
+				if (CurrentlySelectedUnit != MapUnit.NONE) {
+					setSelectedUnit(CurrentlySelectedUnit);
+				}
+				break;
+			case MsgShowScienceAdvisor mSSA:
+				// F6 is the science advisor.
+				// TODO: Move the F* key strings to a set of constants/enum.
+				EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
+				break;
+			case MsgUpdateUiAfterDomesticChange mUUASC:
+				// F1 is the domestic advisor.
+				// TODO: Move the F* key strings to a set of constants/enum.
 
-					// Break out of the fast forward mode when something
-					// interesting happens.
-					turnsLeftToFastForward = 0;
-					break;
-				case MsgShowTemporaryPopup mSTP:
-					TemporaryPopup popup = new(mSTP.message, 1);
-					popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
-					AddChild(popup);
-					popup.ShowPopup();
-					break;
-			}
+				// Ensure the citizen moods are correct before displaying
+				// them.
+				foreach (City c in controller.cities) {
+					c.RecalculateCitizenMoods(gameData);
+				}
+				EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
+				break;
+			case MsgShowTradeOffer mSTO:
+				diplomacy.ShowDealScreenForPlayer(
+					mSTO.humanPlayer.id, mSTO.aiPlayer.id,
+					humanGives: mSTO.aiWant,
+					humanWants: mSTO.aiGive);
+				break;
+			case MsgDisplayHurryProductionPopup mDHPP:
+				if (mDHPP.details.errorMessage != null) {
+					popupOverlay.ShowPopup(
+						new InformationalPopup(mDHPP.details.errorMessage),
+						PopupOverlay.PopupCategory.Advisor);
+				} else {
+					popupOverlay.ShowPopup(
+						new ConfirmationPopup(message: mDHPP.details.costMessage,
+												yesText: "Yes I'm sure!",
+												noText: "Maybe you're right. Nevermind.",
+												yesAction: () => {
+													new MsgDoHurryProduction(mDHPP.city).send();
+												}),
+						PopupOverlay.PopupCategory.Advisor);
+				}
+				break;
+			case MsgWarDeclaration mWD:
+				popupOverlay.ShowPopup(
+					new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
+					PopupOverlay.PopupCategory.Advisor);
+
+				// Break out of the fast forward mode when something
+				// interesting happens.
+				turnsLeftToFastForward = 0;
+				break;
+			case MsgShowTemporaryPopup mSTP:
+				TemporaryPopup popup = new(mSTP.message, 1);
+				popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
+				AddChild(popup);
+				popup.ShowPopup();
+				break;
 		}
-	}
-
-	// Instead of Game calling animTracker.update periodically (this used to happen in _Process), this method gets called as necessary to bring
-	// the animations up to date. Right now it's called from UnitLayer right before it draws the units on the map. This method also processes all
-	// waiting messages b/c some of them might pertain to animations. TODO: Consider processing only the animation messages here.
-	// Must only be called while holding the game data mutex
-	public void updateAnimations(GameData gameData) {
-		processEngineMessagesLocked(gameData);
-		animTracker.update();
 	}
 
 	public override void _Process(double delta) {
-		if (CurrentState == GameState.ComputerTurn && waitingForDealScreen && !diplomacy.Visible) {
-			waitingForDealScreen = false;
-			EngineStorage.FinishUiEvent();
-		}
-
 		ProcessActions();
-		processEngineMessages();
+
+		if (!EngineStorage.HasPendingAnimations())
+			EngineStorage.ProcessNextMessageToEngine();
+
+		if (EngineStorage.TryDequeueNextMessageToUI(out MessageToUI msg))
+			HandleEngineMessage(msg);
 
 		if (!errorOnLoad) {
 			if (CurrentState == GameState.PlayerTurn) {
@@ -352,7 +299,7 @@ public partial class Game : Node {
 				// animation we want to watch, or if it's fortified and we aren't set to keep fortified units selected.
 				if ((CurrentlySelectedUnit != MapUnit.NONE) &&
 					(((!CurrentlySelectedUnit.movementPoints.canMove || CurrentlySelectedUnit.hitPointsRemaining <= 0) &&
-					  !animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
+					  !animationController.animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
 					 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified) ||
 					 CurrentlySelectedUnit.isAutomated))
 					EngineStorage.ReadGameData((GameData gameData) => {
@@ -369,11 +316,6 @@ public partial class Game : Node {
 			if (relativeScreenLocation.DistanceTo(new Vector2((float)0.5, (float)0.5)) > 0.30)
 				mapView.centerCameraOnTile(location);
 		}
-	}
-
-	public void SetAnimationsEnabled(bool enabled) {
-		new MsgSetAnimationsEnabled(enabled).send();
-		animTracker.endAllImmediately = !enabled;
 	}
 
 	/**
@@ -749,7 +691,7 @@ public partial class Game : Node {
 		foreach (Player player in gameData.players) {
 			player.isHuman = false;
 		}
-		SetAnimationsEnabled(false);
+		animationController.SetAnimationsEnabled(false);
 		popupOverlay.ShowPopup(
 			new TextDialog("How many turns to fast forward through?",
 							"Turns: ", "100",
@@ -855,9 +797,9 @@ public partial class Game : Node {
 		}
 
 		if (currentAction == C7Action.ToggleAnimations) {
-			SetAnimationsEnabled(false);
+			animationController.SetAnimationsEnabled(false);
 		} else if (Input.IsActionJustReleased(C7Action.ToggleAnimations)) {
-			SetAnimationsEnabled(true);
+			animationController.SetAnimationsEnabled(true);
 		}
 
 		// actions with unit buttons, which are only relevant during the player
@@ -1036,14 +978,8 @@ public partial class Game : Node {
 	}
 
 	private void OnBuildCity(string name) {
-		new ActionToEngineMsg(() => {
-			// Create the city and then let the ui know, so we can show the city
-			// screen.
-			City? city = CurrentlySelectedUnit?.buildCity(name);
-			if (city != null) {
-				new MsgCityCreated(city).send();
-			}
-		}).send();
+		if (CurrentlySelectedUnit != null)
+			new MsgBuildCity(CurrentlySelectedUnit, name).send();
 	}
 
 	public void ShowCityScreenForCity(GameData gameData, City city) {

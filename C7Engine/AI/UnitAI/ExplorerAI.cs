@@ -35,7 +35,7 @@ namespace C7Engine {
 			return result;
 		}
 
-		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		UnitAI.MoveResult UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
 				return UnitAI.Result.Error;
 			}

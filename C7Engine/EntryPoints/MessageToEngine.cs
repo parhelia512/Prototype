@@ -8,7 +8,7 @@ namespace C7Engine {
 		public abstract void process();
 
 		public void send() {
-			EngineStorage.pendingMessages.Add(this);
+			EngineStorage.pendingMessages.Enqueue(this);
 		}
 	}
 
@@ -52,13 +52,15 @@ namespace C7Engine {
 			this.dir = dir;
 		}
 
-		public override void process() {
+		public override async void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.move(dir);
+			if (unit == null) return;
+
+			await unit.move(dir, true);
 
 			// The unit moved to a new tile - if it still has movement points,
 			// update the UI to reflect this new position and movement points.
-			if (unit?.movementPoints.canMove == true) {
+			if (unit.movementPoints.canMove == true) {
 				new MsgUpdateUiAfterMove().send();
 			}
 		}
@@ -73,13 +75,15 @@ namespace C7Engine {
 			this.path = path;
 		}
 
-		public override void process() {
+		public override async void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.setUnitPath(path);
+			if (unit == null) return;
+
+			await unit.setUnitPath(path);
 
 			// The unit moved to a new tile - if it still has movement points,
 			// update the UI to reflect this new position and movement points.
-			if (unit?.movementPoints.canMove == true) {
+			if (unit.movementPoints.canMove == true) {
 				new MsgUpdateUiAfterMove().send();
 			}
 		}
@@ -275,7 +279,7 @@ namespace C7Engine {
 	public class MsgEndTurn : MessageToEngine {
 		private ILogger log = Log.ForContext<MsgEndTurn>();
 
-		public override void process() {
+		public override async void process() {
 			Player controller = EngineStorage.gameData.GetPlayer(EngineStorage.uiControllerID);
 
 			// Reorder the unit list so that non-busy units will be selected
@@ -283,7 +287,7 @@ namespace C7Engine {
 			controller.units.Sort((x, y) => x.IsBusy().CompareTo(y.IsBusy()));
 
 			controller.hasPlayedThisTurn = true;
-			TurnHandling.AdvanceTurn();
+			await TurnHandling.AdvanceTurn();
 		}
 	}
 
@@ -293,8 +297,8 @@ namespace C7Engine {
 			this.unit = unit;
 		}
 
-		public override void process() {
-			unit.PerformBusyAction();
+		public override async void process() {
+			await unit.PerformBusyAction();
 		}
 	}
 
@@ -319,5 +323,26 @@ namespace C7Engine {
 		public override void process() {
 			EngineStorage.animationsEnabled = enabled;
 		}
+	}
+
+	public class MsgBuildCity : MessageToEngine {
+		private MapUnit unit;
+		private string name;
+
+		public MsgBuildCity(MapUnit unit, string name) {
+			this.unit = unit;
+			this.name = name;
+		}
+
+		public override async void process() {
+			City? city = await unit.buildCity(name);
+			if (city != null) {
+				new MsgCityCreated(city).send();
+			}
+		}
+	}
+
+	public class MsgDiplomacyCompleted : MessageToEngine {
+		public override void process() { }
 	}
 }

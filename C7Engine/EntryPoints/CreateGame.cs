@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using C7GameData;
 using C7GameData.Save;
 
@@ -12,12 +13,10 @@ namespace C7Engine {
 		 * quickly.  By keeping all the client-callable APIs in the EntryPoints folder,
 		 * hopefully it won't be too much of a goose hunt to refactor it later if we decide to do so.
 		 **/
-		public static Player createGame(string loadFilePath,
+		public static async Task<Player> createGame(string loadFilePath,
 										string luaRulesDir,
 										string defaultBicPath,
 										Func<string, string> getPediaIconsPath) {
-			EngineStorage.createThread();
-
 			SaveGame save = SaveManager.LoadSave(loadFilePath, defaultBicPath, getPediaIconsPath);
 			GameData gameData = save.ToGameData(luaRulesDir);
 
@@ -38,7 +37,7 @@ namespace C7Engine {
 
 			EngineStorage.uiControllerID = humanPlayer.id;
 			TurnHandling.OnBeginTurn(); // Call for the first turn
-			TurnHandling.AdvanceTurn();
+			await TurnHandling.AdvanceTurn();
 
 			return humanPlayer;
 		}

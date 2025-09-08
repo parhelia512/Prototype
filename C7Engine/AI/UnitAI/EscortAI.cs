@@ -53,14 +53,14 @@ namespace C7Engine {
 			return "EscortAI: " + data.ToString();
 		}
 
-		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		UnitAI.MoveResult UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null || data.unitToEscort == null || data.unitToEscort.currentAI == null) {
 				return UnitAI.Result.Error;
 			}
 
 			// Ensure the unit we're escorting has moved, in case we were first
 			// in the unit ordering.
-			UnitAI.Result result = data.unitToEscort.currentAI.PlayTurn(player, data.unitToEscort);
+			UnitAI.MoveResult result = data.unitToEscort.currentAI.PlayTurn(player, data.unitToEscort).Result;
 			if (result == UnitAI.Result.Done) {
 				return result;
 			}
