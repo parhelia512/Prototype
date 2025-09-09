@@ -689,6 +689,7 @@ namespace C7GameData {
 			}
 			WorkerJob = terraform;
 			setWorkerJobAnimation(terraform.Action);
+			wake();
 			_ = PerformBusyAction();
 		}
 
@@ -737,6 +738,7 @@ namespace C7GameData {
 		}
 
 		public void automate() {
+			wake();
 			isAutomated = true;
 			WorkerAIData? maybeAiData = WorkerAI.MakeAiData(this, owner);
 			if (maybeAiData == null) {
@@ -753,6 +755,7 @@ namespace C7GameData {
 		}
 
 		public void explore() {
+			wake();
 			isAutomated = true;
 			ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(this, owner);
 			if (maybeAiData == null) {

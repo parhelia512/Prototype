@@ -11,13 +11,14 @@ using System.Linq;
 public partial class Game : Node {
 	[Signal] public delegate void TurnEndedEventHandler();
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
-	[Signal] public delegate void NewAutoselectedUnitEventHandler();
-	[Signal] public delegate void NoMoreAutoselectableUnitsEventHandler();
 	[Signal] public delegate void ShowCityScreenEventHandler();
+
+	[Signal] public delegate void PlayerTurnStartEventHandler();
+	[Signal] public delegate void PlayerTurnEndEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
 
-	enum GameState {
+	public enum GameState {
 		PreGame,
 		PlayerTurn,
 		ComputerTurn
@@ -27,9 +28,9 @@ public partial class Game : Node {
 
 	private MapView mapView;
 
-	GameState CurrentState = GameState.PreGame;
+	public GameState CurrentState { get; private set; } = GameState.PreGame;
 
-	public MapUnit CurrentlySelectedUnit = MapUnit.NONE; //The selected unit.  May be changed by clicking on a unit or the next unit being auto-selected after orders are given for the current one.
+	public MapUnit CurrentlySelectedUnit => unitSelector.CurrentlySelectedUnit;
 	private bool HasCurrentlySelectedUnit() => CurrentlySelectedUnit != MapUnit.NONE;
 
 	// When the game is in "goto" mode, the current destination and the cost of getting
@@ -45,10 +46,6 @@ public partial class Game : Node {
 		public Player requiresWarDeclarationOnPlayer = null;
 	};
 	public GotoInfo gotoInfo = null;
-
-	// Normally if the currently selected unit (CSU) becomes fortified, we advance to the next autoselected unit. If this flag is set, we won't do
-	// that. This is useful so that the unit autoselector can be prevented from interfering with the player selecting fortified units.
-	public bool KeepCSUWhenFortified = false;
 
 	// When in observer mode, the number of turns to play before prompting the
 	// user to advance the turn manually. This allows for more rapid debugging
@@ -78,6 +75,8 @@ public partial class Game : Node {
 	private DoubleClickHandler doubleClickHandler;
 	[Export]
 	public AnimationController animationController;
+	[Export]
+	public UnitSelector unitSelector;
 
 	bool errorOnLoad = false;
 
@@ -214,16 +213,6 @@ public partial class Game : Node {
 						PopupOverlay.PopupCategory.Advisor);
 				}
 				break;
-			case MsgUpdateUiAfterMove mUUAM:
-				// The unit finished moving and still has moves left, so we need to
-				// mark it as the selected unit again.
-				//
-				// Among other things, this will refresh the UI and ensure that the
-				// unit action buttons are correct.
-				if (CurrentlySelectedUnit != MapUnit.NONE) {
-					setSelectedUnit(CurrentlySelectedUnit);
-				}
-				break;
 			case MsgShowScienceAdvisor mSSA:
 				// F6 is the science advisor.
 				// TODO: Move the F* key strings to a set of constants/enum.
@@ -288,25 +277,6 @@ public partial class Game : Node {
 
 		if (EngineStorage.TryDequeueNextMessageToUI(out MessageToUI msg))
 			HandleEngineMessage(msg);
-
-		if (!errorOnLoad) {
-			if (CurrentState == GameState.PlayerTurn) {
-				// If the selected unit is unfortified, prepare to autoselect the next one if it becomes fortified
-				if ((CurrentlySelectedUnit != MapUnit.NONE) && (!CurrentlySelectedUnit.isFortified))
-					KeepCSUWhenFortified = false;
-
-				// Advance off the currently selected unit to the next one if it's out of moves or HP and not playing an
-				// animation we want to watch, or if it's fortified and we aren't set to keep fortified units selected.
-				if ((CurrentlySelectedUnit != MapUnit.NONE) &&
-					(((!CurrentlySelectedUnit.movementPoints.canMove || CurrentlySelectedUnit.hitPointsRemaining <= 0) &&
-					  !animationController.animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
-					 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified) ||
-					 CurrentlySelectedUnit.isAutomated))
-					EngineStorage.ReadGameData((GameData gameData) => {
-						GetNextAutoselectedUnit(gameData);
-					});
-			}
-		}
 	}
 
 	// If "location" is not already near the center of the screen, moves the camera to bring it into view.
@@ -315,54 +285,6 @@ public partial class Game : Node {
 			Vector2 relativeScreenLocation = mapView.screenLocationOfTile(location, true) / mapView.getVisibleAreaSize();
 			if (relativeScreenLocation.DistanceTo(new Vector2((float)0.5, (float)0.5)) > 0.30)
 				mapView.centerCameraOnTile(location);
-		}
-	}
-
-	/**
-	 * Currently (11/14/2021), all unit selection goes through here.
-	 * Both code paths are in Game.cs for now, so it's local, but we may
-	 * want to change it event driven.
-	 *
-	 * Returns whether the selected unit has remaining moves.
-	 **/
-	public bool setSelectedUnit(MapUnit unit) {
-		unit.availableActions = UnitInteractions.GetAvailableActions(unit);
-
-		if ((unit.path?.PathLength() ?? -1) > 0) {
-			log.Debug("cancelling path for " + unit);
-			unit.path = TilePath.NONE;
-		}
-
-		// Allow cancellation of active worker jobs by clicking on the unit.
-		if (unit.WorkerJob != null) {
-			unit.resetWorkerJob();
-		}
-
-		// Allow cancellation automation via clicking on the unit.
-		if (unit.isAutomated) {
-			unit.isAutomated = false;
-			unit.currentAI = null;
-		}
-
-		this.CurrentlySelectedUnit = unit;
-		this.KeepCSUWhenFortified = unit.isFortified; // If fortified, make sure the autoselector doesn't immediately skip past the unit
-
-		if (unit != MapUnit.NONE) {
-			ensureLocationIsInView(unit.location);
-		}
-
-		if (unit != MapUnit.NONE && !unit.movementPoints.canMove) {
-			return false;
-		}
-
-		// Also emit the signal for a new unit being selected, so other areas such as Game Status and Unit Buttons can update
-		if (CurrentlySelectedUnit != MapUnit.NONE) {
-			ParameterWrapper<MapUnit> wrappedUnit = new ParameterWrapper<MapUnit>(CurrentlySelectedUnit);
-			EmitSignal(SignalName.NewAutoselectedUnit, wrappedUnit);
-			return true;
-		} else {
-			EmitSignal(SignalName.NoMoreAutoselectableUnits);
-			return false;
 		}
 	}
 
@@ -406,8 +328,9 @@ public partial class Game : Node {
 			}
 
 			CurrentState = GameState.PlayerTurn;
-			GetNextAutoselectedUnit(gameData);
 		});
+
+		EmitSignal(SignalName.PlayerTurnStart);
 	}
 
 	private void OnPlayerEndTurn() {
@@ -450,6 +373,7 @@ public partial class Game : Node {
 		log.Information("Starting computer turn");
 		CurrentState = GameState.ComputerTurn;
 		new MsgEndTurn().send(); // Triggers actual backend processing
+		EmitSignal(SignalName.PlayerTurnEnd);
 	}
 
 	public void _on_QuitButton_pressed() {
@@ -568,7 +492,7 @@ public partial class Game : Node {
 			return;
 		}
 
-		bool canMove = setSelectedUnit(to_select);
+		bool canMove = unitSelector.SetSelectedUnit(to_select);
 		if (!canMove) {
 			TemporaryPopup popup = new("This unit has already moved.", 1);
 			popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
@@ -813,10 +737,8 @@ public partial class Game : Node {
 		}
 
 		if (currentAction == C7Action.UnitWait) {
-			EngineStorage.ReadGameData((GameData gameData) => {
-				UnitInteractions.waitUnit(gameData, CurrentlySelectedUnit.id);
-				GetNextAutoselectedUnit(gameData);
-			});
+			UnitInteractions.waitUnit(CurrentlySelectedUnit.id);
+			unitSelector.SetNextUnit();
 		}
 
 		if (currentAction == C7Action.UnitFortify) {
@@ -876,10 +798,6 @@ public partial class Game : Node {
 			&& CurrentlySelectedUnit.canPerformTerraformAction(terraform)) {
 			new MsgStartWorkerJob(CurrentlySelectedUnit?.id, terraform).send();
 		}
-	}
-
-	private void GetNextAutoselectedUnit(GameData gameData) {
-		this.setSelectedUnit(UnitInteractions.getNextSelectedUnit(gameData));
 	}
 
 	private void setGotoMode(bool isOn) {

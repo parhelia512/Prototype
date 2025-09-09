@@ -129,6 +129,8 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	}
 
 	private void UpdateUnitInfo(MapUnit NewUnit, TerrainType terrain) {
+		StopToggling();
+
 		terrainType.Text = terrain.DisplayName;
 		terrainType.Visible = true;
 		lblUnitSelected.Text = NewUnit.unitType.name;

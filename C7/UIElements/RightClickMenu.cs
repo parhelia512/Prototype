@@ -208,7 +208,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
 			if (toSelect != null && toSelect.owner == game.controller) {
-				bool canMove = game.setSelectedUnit(toSelect);
+				bool canMove = game.unitSelector.SetSelectedUnit(toSelect);
 				if (!canMove) {
 					ShowCannotMovePopup();
 				}
@@ -233,7 +233,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 					new MsgSetFortification(unit.id, isFortify).send();
 
 					if (!hasSelectedUnit && !isFortify) {
-						bool canMove = game.setSelectedUnit(unit);
+						bool canMove = game.unitSelector.SetSelectedUnit(unit);
 						if (!canMove) {
 							ShowCannotMovePopup();
 						}
