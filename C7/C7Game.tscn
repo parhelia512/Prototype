@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://cldl5nk4n61m2"]
+[gd_scene load_steps=20 format=3 uid="uid://cldl5nk4n61m2"]
 
 [ext_resource type="Script" uid="uid://yxhiwx46tety" path="res://Game.cs" id="1"]
 [ext_resource type="Script" uid="uid://cfenrvu7tnp40" path="res://DoubleClickHandler.cs" id="2_t735q"]
+[ext_resource type="Script" uid="uid://dflpmvue8o7uo" path="res://UnitSelector.cs" id="2_w8hq2"]
 [ext_resource type="Script" uid="uid://ifoasmoofo6r" path="res://UIElements/Advisors/Advisors.cs" id="3"]
 [ext_resource type="Script" uid="uid://bvmc8fimjfo2j" path="res://Animations/AnimationController.cs" id="3_rmrhh"]
 [ext_resource type="Script" uid="uid://3wtlmr00bmfb" path="res://UIElements/UpperLeftNav/MenuButton.cs" id="4"]
@@ -19,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
 [ext_resource type="PackedScene" uid="uid://da7hbbufyfllg" path="res://UIElements/Advisors/domestic_advisor.tscn" id="15"]
 
-[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "palaceScreen", "doubleClickHandler", "animationController")]
+[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "palaceScreen", "doubleClickHandler", "animationController", "unitSelector")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
@@ -29,6 +30,11 @@ diplomacy = NodePath("CanvasLayer/Diplomacy")
 palaceScreen = NodePath("CanvasLayer/PalaceScreen")
 doubleClickHandler = NodePath("DoubleClickHandler")
 animationController = NodePath("AnimationController")
+unitSelector = NodePath("UnitSelector")
+
+[node name="UnitSelector" type="Node" parent="." node_paths=PackedStringArray("game")]
+script = ExtResource("2_w8hq2")
+game = NodePath("..")
 
 [node name="DoubleClickHandler" type="Node" parent="."]
 script = ExtResource("2_t735q")
@@ -229,13 +235,13 @@ control = NodePath("../Control")
 unique_name_in_owner = true
 visible = false
 
-[connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/UnitButtons" method="OnNewUnitSelected"]
-[connection signal="NewAutoselectedUnit" from="." to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="OnNewUnitSelected"]
-[connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/UnitButtons" method="OnNoMoreAutoselectableUnits"]
-[connection signal="NoMoreAutoselectableUnits" from="." to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="SetEndOfTurnStatus"]
 [connection signal="ShowCityScreen" from="." to="CanvasLayer/CityScreen" method="OnShowCityScreen"]
 [connection signal="ShowSpecificAdvisor" from="." to="CanvasLayer/Advisor" method="OnShowSpecificAdvisor"]
 [connection signal="TurnEnded" from="." to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="StopToggling"]
+[connection signal="NewAutoselectedUnit" from="UnitSelector" to="CanvasLayer/Control/UnitButtons" method="OnNewUnitSelected"]
+[connection signal="NewAutoselectedUnit" from="UnitSelector" to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="OnNewUnitSelected"]
+[connection signal="NoMoreAutoselectableUnits" from="UnitSelector" to="CanvasLayer/Control/UnitButtons" method="OnNoMoreAutoselectableUnits"]
+[connection signal="NoMoreAutoselectableUnits" from="UnitSelector" to="CanvasLayer/Control/GameStatus/LowerRightInfoBox" method="SetEndOfTurnStatus"]
 [connection signal="DoubleClick" from="DoubleClickHandler" to="." method="OnDoubleLeftMouseButtonClick"]
 [connection signal="SingleClick" from="DoubleClickHandler" to="." method="OnSingleLeftMouseButtonClick"]
 [connection signal="ActionRequested" from="CanvasLayer/Control/UnitButtons" to="." method="ProcessAction"]
