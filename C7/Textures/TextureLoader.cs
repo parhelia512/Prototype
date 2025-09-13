@@ -169,6 +169,18 @@ public static class TextureLoader {
 		return texture;
 	}
 
+	// Allows to load the texture directly by its file path, bypassing the Lua config.
+	// Supports both PCX and PNG textures
+	public static ImageTexture LoadByPath(string path) {
+		string ext = Path.GetExtension(path).ToLowerInvariant();
+
+		return ext switch {
+			".png" => LoadFromPNG(path),
+			".pcx" => LoadFromPCX(path),
+			_ => throw new FormatException($"Unknown texture format: {path}"),
+		};
+	}
+
 	/// Returns the list of textures making up an animation.
 	///
 	/// The config key should be a string separated by dots, representing the path through the
@@ -249,7 +261,7 @@ public static class TextureLoader {
 			if (table["transparent_color_indexes"] == null) {
 				transparentColorIndexes = new PCXToGodot.ColorOptions().transparentColorIndexes;
 			} else {
-				if (!(table["transparent_color_indexes"] is Table)) {
+				if (table["transparent_color_indexes"] is not Table) {
 					throw new ArgumentException($"'transparent_color_indexes' must be a table.");
 				}
 
@@ -388,7 +400,7 @@ public static class TextureLoader {
 		});
 	}
 
-	private static ImageTexture LoadFromPNG(string relPath, CropRegion? cropRegion) {
+	private static ImageTexture LoadFromPNG(string relPath, CropRegion? cropRegion = null) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
 			Image image = LoadPNG(relPath);
 			if (cropRegion != null) {

@@ -72,7 +72,7 @@ public partial class Game : Node {
 	[Export]
 	private Diplomacy diplomacy;
 	[Export]
-	private PalaceScreen palaceScreen;
+	private Control palaceScene;
 
 	[Export]
 	private DoubleClickHandler doubleClickHandler;
@@ -472,7 +472,7 @@ public partial class Game : Node {
 
 	public override void _UnhandledInput(InputEvent @event) {
 		// Don't handle mouse actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScreen.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScene.Visible) {
 			IsMovingCamera = false;
 			return;
 		}
@@ -663,7 +663,7 @@ public partial class Game : Node {
 			EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 		}
 		if (eventKeyDown.Keycode == Godot.Key.F9) {
-			palaceScreen.Show();
+			palaceScene.Show();
 		}
 		if (eventKeyDown.Keycode == Godot.Key.C && HasCurrentlySelectedUnit()) {
 			mapView.centerCameraOnTile(CurrentlySelectedUnit.location);
@@ -746,8 +746,8 @@ public partial class Game : Node {
 			return;
 		}
 
-		if (currentAction == C7Action.Escape && palaceScreen.Visible) {
-			palaceScreen.Hide();
+		if (currentAction == C7Action.Escape && palaceScene.Visible) {
+			palaceScene.Hide();
 			return;
 		}
 
@@ -762,7 +762,7 @@ public partial class Game : Node {
 		}
 
 		// never poll for actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScreen.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScene.Visible) {
 			return;
 		}
 

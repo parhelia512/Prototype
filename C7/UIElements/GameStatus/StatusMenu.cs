@@ -9,11 +9,11 @@ public partial class StatusMenu : Control {
 	[Export] ConsoleButton openPalaceScreen;
 
 	[Export] PopupOverlay popupOverlay;
-	[Export] PalaceScreen palaceScreen;
+	[Export] Control palaceScene;
 
 	public override void _Ready() {
 		openDiplomacy.Pressed += OpenDiplomacyPopup;
-		openPalaceScreen.Pressed += palaceScreen.Show;
+		openPalaceScreen.Pressed += palaceScene.Show;
 	}
 
 	public override void _Process(double delta) {
