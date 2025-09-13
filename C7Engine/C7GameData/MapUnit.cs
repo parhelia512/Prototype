@@ -247,8 +247,8 @@ namespace C7GameData {
 			double promotionChance = experienceLevel.promotionChance;
 			if (opponent.owner.isBarbarians)
 				promotionChance /= 2.0;
-			// TODO: Double promotionChance if unit is owned by a militaristic civ
-
+			if (owner.civilization.traits.Contains(Civilization.Trait.Militaristic))
+				promotionChance *= 2;
 			if (GameData.rng.NextDouble() < promotionChance) {
 				Promote();
 				animate(MapUnit.AnimatedAction.VICTORY);
