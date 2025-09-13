@@ -86,7 +86,7 @@ public static class TextureLoader {
 		// the LuaRulesEngine static constructor.
 		UserData.RegisterType<CityGraphicsDetails>();
 		UserData.RegisterType<PopHead.TextureKey>();
-		UserData.RegisterType<Civilization>();
+		UserData.RegisterType<BorderLayer.TextureDetails>();
 
 		// Note, we register all of AdvisorHeader rather than just
 		// AdvisorHead.AdvisorGraphicsDetails because we access the nums
