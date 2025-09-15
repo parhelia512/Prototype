@@ -13,7 +13,7 @@ local advisor_heads = {
 }
 
 function advisor_heads:map_object_to_sprite(details)
-  if (details:GetType().Name ~= "AdvisorGraphicsDetails") then
+  if details:GetType().Name ~= "AdvisorGraphicsDetails" then
     error "Expected a AdvisorGraphicsDetails object"
   end
 
@@ -47,12 +47,13 @@ function advisor_heads:map_object_to_sprite(details)
 
   return {
     path = path,
-    crop_region = { 
-        1 + mood_col * IMAGE_SIZE, 
-        (details.eraIndex + 1) * IMAGE_SIZE - CROP_HEIGHT,
-        IMAGE_SIZE - 1,
-        CROP_HEIGHT,
+    crop_region = {
+      1 + mood_col * IMAGE_SIZE,
+      (details.eraIndex + 1) * IMAGE_SIZE - CROP_HEIGHT,
+      IMAGE_SIZE - 1,
+      CROP_HEIGHT,
     },
+    shadows = false,
   }
 end
 
