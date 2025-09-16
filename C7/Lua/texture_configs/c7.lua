@@ -1,9 +1,10 @@
 --[[
-	This configuration file holds a table with texture definitions for "modern" graphics.
+	This configuration file returns a table with texture definitions for "modern" graphics.
 	It produces this table by copying the config of the civ3 assets and replaces the paths to the original Civilization 3 PCX textures with modern PNG versions.
 	To add new replacement texture to the config modify the "c7_texture_list" table.
 --]]
 local civ3_textures = require "civ3"
+local utils = require "utils"
 
 local c7_texture_list = {
   "Art/buttonsFINAL.png",
@@ -101,112 +102,80 @@ local c7_texture_list = {
   "Art/city screen/buildings-large.png",
 }
 
--- Helper: Strip file extension from path
-local function strip_extension(path) return path:match "^(.-)%.[^%.]+$" or path end
-
 -- Build lookup table from c7_texture_list without extensions
 local lookup = {}
 for _, path in ipairs(c7_texture_list) do
-  lookup[strip_extension(path)] = path
+  lookup[utils.strip_extension(path)] = path
 end
 
--- Recursive traversal
-local function traverse(value)
-  -- string leaf
-  if type(value) == "string" then
-    local stripped = strip_extension(value)
-    return lookup[stripped] or value
-
-  -- Table with "path" key
-  elseif type(value) == "table" and type(value.path) == "string" then
-    local stripped = strip_extension(value.path)
-    local png_path = lookup[stripped]
-
-    -- Copy rest of the table (in case it has extra keys)
-    local result = {}
-    for k, v in pairs(value) do
-      result[k] = traverse(v)
-    end
-
-    result.path = png_path or value.path
-
-    return result
-
-  -- General nested table
-  elseif type(value) == "table" then
-    local result = {}
-    for k, v in pairs(value) do
-      result[k] = traverse(v)
-    end
-    return result
-  end
-
-  -- Return any other primitive as-is
-  return value
+local function path_transformer(path)
+  local stripped = utils.strip_extension(path)
+  return lookup[stripped] or path
 end
+
+local c7_textures = utils.transform_paths(civ3_textures, path_transformer)
 
 -- For ease of editing, we define the civ colors as hex codes, not 1x1 px images
-civ3_textures.civ_colors.color_0 = { path = "", hex_color = "F0F8FF" }  -- Alice Blue (whiteish)
-civ3_textures.civ_colors.color_1 = { path = "", hex_color = "E6194B" }  -- Red
-civ3_textures.civ_colors.color_2 = { path = "", hex_color = "F58231" }  -- Orange
-civ3_textures.civ_colors.color_3 = { path = "", hex_color = "FFE119" }  -- Yellow
-civ3_textures.civ_colors.color_4 = { path = "", hex_color = "3CB44B" }  -- Green
-civ3_textures.civ_colors.color_5 = { path = "", hex_color = "4363D8" }  -- Blue
-civ3_textures.civ_colors.color_6 = { path = "", hex_color = "000075" }  -- Navy
-civ3_textures.civ_colors.color_7 = { path = "", hex_color = "FABED4" }  -- Pink
-civ3_textures.civ_colors.color_8 = { path = "", hex_color = "911EB4" }  -- Purple
-civ3_textures.civ_colors.color_9 = { path = "", hex_color = "9A6324" }  -- Brown
-civ3_textures.civ_colors.color_10 = { path = "", hex_color = "AAFFC3" }  -- Mint
-civ3_textures.civ_colors.color_11 = { path = "", hex_color = "42D4F4" }  -- Cyan
-civ3_textures.civ_colors.color_12 = { path = "", hex_color = "F032E6" }  -- Magenta
-civ3_textures.civ_colors.color_13 = { path = "", hex_color = "808000" }  -- Olive
-civ3_textures.civ_colors.color_14 = { path = "", hex_color = "DCBEFF" }  -- Lavender
-civ3_textures.civ_colors.color_15 = { path = "", hex_color = "A9A9A9" }  -- Grey
-civ3_textures.civ_colors.color_16 = { path = "", hex_color = "008080" }  -- Teal
-civ3_textures.civ_colors.color_17 = { path = "", hex_color = "FFD700" }  -- Gold
-civ3_textures.civ_colors.color_18 = { path = "", hex_color = "800000" }  -- Maroon
-civ3_textures.civ_colors.color_19 = { path = "", hex_color = "00FF00" }  -- Lime
-civ3_textures.civ_colors.color_20 = { path = "", hex_color = "FFC0CB" }  -- Hot Pink
-civ3_textures.civ_colors.color_21 = { path = "", hex_color = "4682B4" }  -- Steel Blue
-civ3_textures.civ_colors.color_22 = { path = "", hex_color = "D2B48C" }  -- Tan
-civ3_textures.civ_colors.color_23 = { path = "", hex_color = "FF7F50" }  -- Coral
-civ3_textures.civ_colors.color_24 = { path = "", hex_color = "6A5ACD" }  -- Slate Blue
-civ3_textures.civ_colors.color_25 = { path = "", hex_color = "2E8B57" }  -- Sea Green
-civ3_textures.civ_colors.color_26 = { path = "", hex_color = "DAA520" }  -- Goldenrod
-civ3_textures.civ_colors.color_27 = { path = "", hex_color = "C71585" }  -- Medium Violet Red
-civ3_textures.civ_colors.color_28 = { path = "", hex_color = "556B2F" }  -- Dark Olive Green
-civ3_textures.civ_colors.color_29 = { path = "", hex_color = "8B4513" }  -- Saddle Brown
-civ3_textures.civ_colors.color_30 = { path = "", hex_color = "B0C4DE" }  -- Light Steel Blue
-civ3_textures.civ_colors.color_31 = { path = "", hex_color = "696969" }  -- Dim Gray
+c7_textures.civ_colors.color_0 = { path = "", hex_color = "F0F8FF" } -- Alice Blue (whiteish)
+c7_textures.civ_colors.color_1 = { path = "", hex_color = "E6194B" } -- Red
+c7_textures.civ_colors.color_2 = { path = "", hex_color = "F58231" } -- Orange
+c7_textures.civ_colors.color_3 = { path = "", hex_color = "FFE119" } -- Yellow
+c7_textures.civ_colors.color_4 = { path = "", hex_color = "3CB44B" } -- Green
+c7_textures.civ_colors.color_5 = { path = "", hex_color = "4363D8" } -- Blue
+c7_textures.civ_colors.color_6 = { path = "", hex_color = "000075" } -- Navy
+c7_textures.civ_colors.color_7 = { path = "", hex_color = "FABED4" } -- Pink
+c7_textures.civ_colors.color_8 = { path = "", hex_color = "911EB4" } -- Purple
+c7_textures.civ_colors.color_9 = { path = "", hex_color = "9A6324" } -- Brown
+c7_textures.civ_colors.color_10 = { path = "", hex_color = "AAFFC3" } -- Mint
+c7_textures.civ_colors.color_11 = { path = "", hex_color = "42D4F4" } -- Cyan
+c7_textures.civ_colors.color_12 = { path = "", hex_color = "F032E6" } -- Magenta
+c7_textures.civ_colors.color_13 = { path = "", hex_color = "808000" } -- Olive
+c7_textures.civ_colors.color_14 = { path = "", hex_color = "DCBEFF" } -- Lavender
+c7_textures.civ_colors.color_15 = { path = "", hex_color = "A9A9A9" } -- Grey
+c7_textures.civ_colors.color_16 = { path = "", hex_color = "008080" } -- Teal
+c7_textures.civ_colors.color_17 = { path = "", hex_color = "FFD700" } -- Gold
+c7_textures.civ_colors.color_18 = { path = "", hex_color = "800000" } -- Maroon
+c7_textures.civ_colors.color_19 = { path = "", hex_color = "00FF00" } -- Lime
+c7_textures.civ_colors.color_20 = { path = "", hex_color = "FFC0CB" } -- Hot Pink
+c7_textures.civ_colors.color_21 = { path = "", hex_color = "4682B4" } -- Steel Blue
+c7_textures.civ_colors.color_22 = { path = "", hex_color = "D2B48C" } -- Tan
+c7_textures.civ_colors.color_23 = { path = "", hex_color = "FF7F50" } -- Coral
+c7_textures.civ_colors.color_24 = { path = "", hex_color = "6A5ACD" } -- Slate Blue
+c7_textures.civ_colors.color_25 = { path = "", hex_color = "2E8B57" } -- Sea Green
+c7_textures.civ_colors.color_26 = { path = "", hex_color = "DAA520" } -- Goldenrod
+c7_textures.civ_colors.color_27 = { path = "", hex_color = "C71585" } -- Medium Violet Red
+c7_textures.civ_colors.color_28 = { path = "", hex_color = "556B2F" } -- Dark Olive Green
+c7_textures.civ_colors.color_29 = { path = "", hex_color = "8B4513" } -- Saddle Brown
+c7_textures.civ_colors.color_30 = { path = "", hex_color = "B0C4DE" } -- Light Steel Blue
+c7_textures.civ_colors.color_31 = { path = "", hex_color = "696969" } -- Dim Gray
 
-
-civ3_textures.animations.cursor = {
-    path = "Art/Animations/Cursor.png",
-    animation_rows = 2,
-    animation_cols = 9,
-    frame_duration = .6
+c7_textures.animations.cursor = {
+  path = "Art/Animations/Cursor.png",
+  animation_rows = 2,
+  animation_cols = 9,
+  frame_duration = 0.6,
 }
-civ3_textures.animations.disorder = {
-    path = "Art/Animations/DisorderDefault.png",
-    animation_rows = 1,
-    animation_cols = 6,
-    frame_duration = .6
+c7_textures.animations.disorder = {
+  path = "Art/Animations/DisorderDefault.png",
+  animation_rows = 1,
+  animation_cols = 6,
+  frame_duration = 0.6,
 }
 
-function civ3_textures.tech_icons.small:map_object_to_sprite(tech)
-  if (tech:GetType().Name ~= "Tech") then
-    error "Expected a Tech object"
-  end
-
+function c7_textures.tech_icons.small:map_object_to_sprite(tech)
   return {
     path = "Art/Tech Chooser/Icons/placeholder.png",
   }
 end
 
-function civ3_textures.leader_heads:map_object_to_sprite(player_or_civ)
+function c7_textures.leader_heads:map_object_to_sprite(player_or_civ)
   return {
     path = "Art/Advisors/placeholder_leaderhead.png",
   }
 end
 
-return traverse(civ3_textures)
+function c7_textures.borders:find_column(_)
+  return 0
+end
+
+return c7_textures

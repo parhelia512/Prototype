@@ -458,5 +458,6 @@ textures.unit_icons = require "civ3.unit_icons"
 textures.building_icons = require "civ3.building_icons"
 textures.tech_icons = require "civ3.tech_icons"
 textures.leader_heads = require "civ3.leader_heads"
+textures.borders = require "civ3.borders"
 
 return textures

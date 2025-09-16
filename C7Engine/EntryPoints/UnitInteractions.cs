@@ -10,12 +10,16 @@ namespace C7Engine {
 		private static Queue<MapUnit> waitQueue = new Queue<MapUnit>();
 		private static ILogger log = Log.ForContext<UnitInteractions>();
 
-		public static MapUnit getNextSelectedUnit(GameData gameData) {
-			foreach (Player player in gameData.players.Where(p => p.isHuman)) {
+		public static MapUnit getNextSelectedUnit() {
+			foreach (Player player in EngineStorage.gameData.players.Where(p => p.isHuman)) {
 				//TODO: Should pass in a player GUID instead of checking for human
 				//This current limits us to one human player, although it's better
 				//than the old limit of one non-barbarian player.
 				foreach (MapUnit unit in player.units.Where(u => u.movementPoints.canMove)) {
+					if (unit.isFortified) {
+						continue;
+					}
+
 					if (unit.IsBusy()) {
 						new MsgPerformUnitAction(unit).send();
 						continue;
@@ -74,8 +78,8 @@ namespace C7Engine {
 			waitQueue.Clear();
 		}
 
-		public static void waitUnit(GameData gameData, ID id) {
-			foreach (MapUnit unit in gameData.mapUnits) {
+		public static void waitUnit(ID id) {
+			foreach (MapUnit unit in EngineStorage.gameData.mapUnits) {
 				if (unit.id == id) {
 					log.Verbose("Found matching unit with id " + id + " of type " + unit.GetType().Name + "; adding it to the wait queue");
 					waitQueue.Enqueue(unit);

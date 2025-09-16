@@ -147,27 +147,4 @@ terrain.fog_of_war = {
   pure_alpha = true,
 }
 
-terrain.borders = {
-  northwest_flat = {
-    path = TERRAIN .. "Territory.pcx",
-    transparent_color_indexes = { 1, 254, 255 },
-    crop_region = { 0, 0, 128, 72, }
-  },
-  northeast_flat = {
-    path = TERRAIN .. "Territory.pcx",
-    transparent_color_indexes = { 1, 254, 255 },
-    crop_region = { 0, 72, 128, 72, }
-  },
-  southwest_flat = {
-    path = TERRAIN .. "Territory.pcx",
-    transparent_color_indexes = { 1, 254, 255 },
-    crop_region = { 0, 144, 128, 72, }
-  },
-  southeast_flat = {
-    path = TERRAIN .. "Territory.pcx",
-    transparent_color_indexes = { 1, 254, 255 },
-    crop_region = { 0, 216, 128, 72, }
-  },
-}
-
 return terrain

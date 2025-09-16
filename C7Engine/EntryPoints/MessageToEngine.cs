@@ -57,12 +57,6 @@ namespace C7Engine {
 			if (unit == null) return;
 
 			await unit.move(dir, true);
-
-			// The unit moved to a new tile - if it still has movement points,
-			// update the UI to reflect this new position and movement points.
-			if (unit.movementPoints.canMove == true) {
-				new MsgUpdateUiAfterMove().send();
-			}
 		}
 	}
 
@@ -80,12 +74,6 @@ namespace C7Engine {
 			if (unit == null) return;
 
 			await unit.setUnitPath(path);
-
-			// The unit moved to a new tile - if it still has movement points,
-			// update the UI to reflect this new position and movement points.
-			if (unit.movementPoints.canMove == true) {
-				new MsgUpdateUiAfterMove().send();
-			}
 		}
 	}
 

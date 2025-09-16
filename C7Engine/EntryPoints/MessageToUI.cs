@@ -53,8 +53,6 @@ namespace C7Engine {
 
 	public class MsgStartTurn : MessageToUI { }
 
-	public class MsgUpdateUiAfterMove : MessageToUI { }
-
 	public class MsgShowScienceAdvisor : MessageToUI { }
 
 	public class MsgUpdateUiAfterDomesticChange : MessageToUI { }
