@@ -93,6 +93,12 @@ public static class TextureLoader {
 		// in the class as well.
 		UserData.RegisterType<AdvisorHead>();
 
+		// We need to register Civilization here, despite it being in
+		// the C7GameData namespace, since it can be passed to
+		// Moonsharp before LuaRulesEngine initialization, in the game
+		// setup screen
+		UserData.RegisterType<C7GameData.Civilization>();
+
 		// We need to register the "Type" type to be able to inspect
 		// the types of C# objects in the Lua code
 		UserData.RegisterType<Type>();

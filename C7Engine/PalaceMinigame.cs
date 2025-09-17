@@ -5,7 +5,8 @@ using System.Linq;
 namespace C7Engine.PalaceMinigame;
 
 /*
-  Parser and data models for the Civ3 Palace Minigame config file (PalaceView.txt)
+  Parser and data models for the Civ3 Palace Minigame config file (PalaceView.txt).
+  The config format description can be found on CivFanatics: https://forums.civfanatics.com/threads/palace-view-modifications-palaceview-txt.619788/post-14813780
 */
 
 using TextureConfig = Dictionary<string, Culture>;
