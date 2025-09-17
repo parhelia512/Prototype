@@ -93,6 +93,12 @@ public static class TextureLoader {
 		// in the class as well.
 		UserData.RegisterType<AdvisorHead>();
 
+		// We need to register Civilization here, despite it being in
+		// the C7GameData namespace, since it can be passed to
+		// Moonsharp before LuaRulesEngine initialization, in the game
+		// setup screen
+		UserData.RegisterType<C7GameData.Civilization>();
+
 		// We need to register the "Type" type to be able to inspect
 		// the types of C# objects in the Lua code
 		UserData.RegisterType<Type>();
@@ -167,6 +173,18 @@ public static class TextureLoader {
 			objectMappingCache[cacheKey] = texture;
 
 		return texture;
+	}
+
+	// Allows to load the texture directly by its file path, bypassing the Lua config.
+	// Supports both PCX and PNG textures
+	public static ImageTexture LoadByPath(string path) {
+		string ext = Path.GetExtension(path).ToLowerInvariant();
+
+		return ext switch {
+			".png" => LoadFromPNG(path),
+			".pcx" => LoadFromPCX(path),
+			_ => throw new FormatException($"Unknown texture format: {path}"),
+		};
 	}
 
 	/// Returns the list of textures making up an animation.
@@ -249,7 +267,7 @@ public static class TextureLoader {
 			if (table["transparent_color_indexes"] == null) {
 				transparentColorIndexes = new PCXToGodot.ColorOptions().transparentColorIndexes;
 			} else {
-				if (!(table["transparent_color_indexes"] is Table)) {
+				if (table["transparent_color_indexes"] is not Table) {
 					throw new ArgumentException($"'transparent_color_indexes' must be a table.");
 				}
 
@@ -388,7 +406,7 @@ public static class TextureLoader {
 		});
 	}
 
-	private static ImageTexture LoadFromPNG(string relPath, CropRegion? cropRegion) {
+	private static ImageTexture LoadFromPNG(string relPath, CropRegion? cropRegion = null) {
 		return GetOrAddTexture(relPath, cropRegion, () => {
 			Image image = LoadPNG(relPath);
 			if (cropRegion != null) {

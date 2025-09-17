@@ -20,14 +20,14 @@
 [ext_resource type="PackedScene" uid="uid://dkcu255o1qrt1" path="res://UIElements/PalaceScreen/palace_screen.tscn" id="14_ud8vi"]
 [ext_resource type="PackedScene" uid="uid://da7hbbufyfllg" path="res://UIElements/Advisors/domestic_advisor.tscn" id="15"]
 
-[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "palaceScreen", "doubleClickHandler", "animationController", "unitSelector")]
+[node name="C7Game" type="Node" node_paths=PackedStringArray("Toolbar", "popupOverlay", "cityScreen", "advisor", "diplomacy", "palaceScene", "doubleClickHandler", "animationController", "unitSelector")]
 script = ExtResource("1")
 Toolbar = NodePath("CanvasLayer/Control/ToolBar/MarginContainer/HBoxContainer")
 popupOverlay = NodePath("CanvasLayer/PopupOverlay")
 cityScreen = NodePath("CanvasLayer/CityScreen")
 advisor = NodePath("CanvasLayer/Advisor")
 diplomacy = NodePath("CanvasLayer/Diplomacy")
-palaceScreen = NodePath("CanvasLayer/PalaceScreen")
+palaceScene = NodePath("CanvasLayer/PalaceScene")
 doubleClickHandler = NodePath("DoubleClickHandler")
 animationController = NodePath("AnimationController")
 unitSelector = NodePath("UnitSelector")
@@ -134,12 +134,13 @@ offset_left = -301.0
 offset_top = -139.0
 grow_horizontal = 0
 grow_vertical = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="LowerRightInfoBox" type="TextureRect" parent="CanvasLayer/Control/GameStatus"]
 layout_mode = 2
 script = ExtResource("6_24l34")
 
-[node name="StatusMenu" type="VBoxContainer" parent="CanvasLayer/Control/GameStatus" node_paths=PackedStringArray("openDiplomacy", "openPalaceScreen", "popupOverlay", "palaceScreen")]
+[node name="StatusMenu" type="VBoxContainer" parent="CanvasLayer/Control/GameStatus" node_paths=PackedStringArray("openDiplomacy", "openPalaceScreen", "popupOverlay", "palaceScene")]
 layout_mode = 2
 offset_left = 272.0
 offset_top = 31.0
@@ -151,7 +152,7 @@ script = ExtResource("7_yn4xe")
 openDiplomacy = NodePath("Diplomacy")
 openPalaceScreen = NodePath("Palace")
 popupOverlay = NodePath("../../../PopupOverlay")
-palaceScreen = NodePath("../../../PalaceScreen")
+palaceScene = NodePath("../../../PalaceScene")
 
 [node name="Diplomacy" type="Control" parent="CanvasLayer/Control/GameStatus/StatusMenu"]
 custom_minimum_size = Vector2(16, 16)
@@ -205,7 +206,7 @@ layout_mode = 2
 [node name="CityScreen" parent="CanvasLayer" instance=ExtResource("11_12lt4")]
 visible = false
 
-[node name="PalaceScreen" parent="CanvasLayer" instance=ExtResource("14_ud8vi")]
+[node name="PalaceScene" parent="CanvasLayer" instance=ExtResource("14_ud8vi")]
 visible = false
 
 [node name="Diplomacy" type="CenterContainer" parent="CanvasLayer" node_paths=PackedStringArray("popupOverlay")]
