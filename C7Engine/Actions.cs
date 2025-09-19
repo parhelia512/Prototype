@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using C7GameData;
 
+namespace C7Engine;
+
 // The strings for each action correspond to values in project.godot for keyboard shortcuts
 public static class C7Action {
 	public const string EndTurn = "end_turn";
@@ -44,19 +46,6 @@ public static class C7Action {
 
 	private static readonly Dictionary<string, UnitAction> toUnitAction = new() {
 		[UnitBuildCity] = UnitAction.BuildCity,
-		[UnitBuildRoad] = UnitAction.BuildRoad,
-		[UnitBuildRailroad] = UnitAction.BuildRailroad,
-		[UnitBuildMine] = UnitAction.BuildMine,
-		[UnitBuildFortress] = UnitAction.BuildFortress,
-		[UnitClearDamage] = UnitAction.ClearDamage,
-		[UnitBuildAirfield] = UnitAction.BuildAirfield,
-		[UnitBuildRadarTower] = UnitAction.BuildRadarTower,
-		[UnitBuildOutpost] = UnitAction.BuildOutpost,
-		[UnitBuildBarricade] = UnitAction.BuildBarricade,
-		[UnitIrrigate] = UnitAction.Irrigate,
-		[UnitClearWetlands] = UnitAction.ClearWetlands,
-		[UnitClearForest] = UnitAction.ClearForest,
-		[UnitPlantForest] = UnitAction.PlantForest,
 		[UnitBombard] = UnitAction.Bombard,
 		[UnitHold] = UnitAction.Hold,
 		[UnitWait] = UnitAction.Wait,
@@ -92,6 +81,6 @@ public static class C7Action {
 	}
 
 	public static Terraform? ToTerraform(string action) {
-		return ToUnitAction(action)?.ToTerraform();
+		return EngineStorage.gameData.Terraforms.FirstOrDefault(tf => tf.UIAction == action);
 	}
 }

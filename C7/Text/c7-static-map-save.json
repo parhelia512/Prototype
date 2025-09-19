@@ -68124,7 +68124,8 @@
         "Incense",
         "Oasis"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "plains",
@@ -68134,9 +68135,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "allowedWorkerActions": [
-        "plantForest"
-      ],
       "defenseBonus": {
         "description": "Plains",
         "amount": 0.1
@@ -68149,7 +68147,8 @@
         "Wheat",
         "Sugar"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "plantForest"
     },
     {
       "key": "grassland",
@@ -68159,9 +68158,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "allowedWorkerActions": [
-        "plantForest"
-      ],
       "defenseBonus": {
         "description": "Grassland",
         "amount": 0.1
@@ -68173,7 +68169,8 @@
         "Wheat",
         "Tobacco"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "plantForest"
     },
     {
       "key": "tundra",
@@ -68183,9 +68180,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "allowedWorkerActions": [
-        "plantForest"
-      ],
       "defenseBonus": {
         "description": "Tundra",
         "amount": 0.1
@@ -68196,7 +68190,8 @@
         "Furs",
         "Game"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "plantForest"
     },
     {
       "key": "flood plain",
@@ -68213,7 +68208,8 @@
       "allowedResources": [
         "Wheat"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "hills",
@@ -68239,7 +68235,8 @@
         "Sugar",
         "Tobacco"
       ],
-      "height": 2
+      "height": 2,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "mountains",
@@ -68261,7 +68258,8 @@
         "Gems",
         "Gold"
       ],
-      "height": 4
+      "height": 4,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "forest",
@@ -68271,9 +68269,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 2,
       "allowCities": true,
-      "allowedWorkerActions": [
-        "clearForest"
-      ],
       "defenseBonus": {
         "description": "Forest",
         "amount": 0.25
@@ -68288,7 +68283,8 @@
         "Silks",
         "Game"
       ],
-      "height": 1
+      "height": 1,
+      "allowedFoliageAction": "clearForest"
     },
     {
       "key": "jungle",
@@ -68298,9 +68294,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 3,
       "allowCities": true,
-      "allowedWorkerActions": [
-        "clearWetlands"
-      ],
       "defenseBonus": {
         "description": "Jungle",
         "amount": 0.25
@@ -68314,7 +68307,8 @@
         "Gems",
         "Tropical Fruit"
       ],
-      "height": 1
+      "height": 1,
+      "allowedFoliageAction": "clearWetlands"
     },
     {
       "key": "marsh",
@@ -68324,9 +68318,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 2,
       "allowCities": false,
-      "allowedWorkerActions": [
-        "clearWetlands"
-      ],
       "defenseBonus": {
         "description": "Marsh",
         "amount": 0.2
@@ -68337,7 +68328,8 @@
         "Game",
         "Fish"
       ],
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "clearWetlands"
     },
     {
       "key": "volcano",
@@ -68351,7 +68343,8 @@
         "description": "Volcano",
         "amount": 0.8
       },
-      "height": 4
+      "height": 4,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "coast",
@@ -68368,7 +68361,8 @@
       "allowedResources": [
         "Fish"
       ],
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "sea",
@@ -68386,7 +68380,8 @@
         "Whales",
         "Fish"
       ],
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "ocean",
@@ -68400,7 +68395,8 @@
         "description": "Ocean",
         "amount": 0.1
       },
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "none"
     }
   ],
   "terrainImprovements": [
@@ -69218,14 +69214,6 @@
         "Land"
       ],
       "actions": [
-        "buildRoad",
-        "buildRailroad",
-        "buildMine",
-        "irrigate",
-        "clearWetlands",
-        "clearForest",
-        "buildBarricade",
-        "buildFortress",
         "hold",
         "wait",
         "fortify",
@@ -69233,6 +69221,16 @@
         "goto",
         "explore",
         "automate"
+      ],
+      "terraformActions": [
+        "Terraform-4",
+        "Terraform-5",
+        "Terraform-1",
+        "Terraform-2",
+        "Terraform-8",
+        "Terraform-7",
+        "Terraform-13",
+        "Terraform-3"
       ]
     },
     {
@@ -72308,6 +72306,9 @@
         "disband",
         "goto",
         "explore"
+      ],
+      "terraformActions": [
+        "Terraform-3"
       ]
     },
     {
@@ -77275,22 +77276,26 @@
       "name": "Mine",
       "civilopediaEntry": "TFRM_Mine",
       "turnsToComplete": 12,
-      "action": "buildMine",
       "improvement": "mine",
       "validators": [
-        "terraforms.mine_validator"
-      ]
+        "terraforms.mine.validator"
+      ],
+      "animation": "mine",
+      "uiAction": "unit_build_mine",
+      "buttonTexture": "ui.unit_control.unit_build_mine"
     },
     {
       "id": "Terraform-2",
       "name": "Irrigation",
       "civilopediaEntry": "TFRM_Irrigation",
       "turnsToComplete": 8,
-      "action": "irrigate",
       "improvement": "irrigation",
       "validators": [
-        "terraforms.irrigate_validator"
-      ]
+        "terraforms.irrigate.validator"
+      ],
+      "animation": "irrigate",
+      "uiAction": "unit_irrigate",
+      "buttonTexture": "ui.unit_control.unit_irrigate"
     },
     {
       "id": "Terraform-3",
@@ -77298,16 +77303,20 @@
       "civilopediaEntry": "TFRM_Fortress",
       "turnsToComplete": 16,
       "requiredTech": "tech-21",
-      "action": "buildFortress",
-      "improvement": "fortress"
+      "improvement": "fortress",
+      "animation": "fortress",
+      "uiAction": "unit_build_fortress",
+      "buttonTexture": "ui.unit_control.unit_build_fortress"
     },
     {
       "id": "Terraform-4",
       "name": "Road",
       "civilopediaEntry": "TFRM_Road",
       "turnsToComplete": 6,
-      "action": "buildRoad",
-      "improvement": "road"
+      "improvement": "road",
+      "animation": "road",
+      "uiAction": "unit_build_road",
+      "buttonTexture": "ui.unit_control.unit_build_road"
     },
     {
       "id": "Terraform-5",
@@ -77319,8 +77328,10 @@
         "Iron",
         "Coal"
       ],
-      "action": "buildRailroad",
-      "improvement": "railroad"
+      "improvement": "railroad",
+      "animation": "road",
+      "uiAction": "unit_build_railroad",
+      "buttonTexture": "ui.unit_control.unit_build_railroad"
     },
     {
       "id": "Terraform-6",
@@ -77328,40 +77339,47 @@
       "civilopediaEntry": "TFRM_Plant_Forest",
       "turnsToComplete": 18,
       "requiredTech": "tech-24",
-      "action": "plantForest"
+      "animation": "plant",
+      "uiAction": "unit_plant_forest",
+      "buttonTexture": "ui.unit_control.unit_plant_forest"
     },
     {
       "id": "Terraform-7",
       "name": "Clear Forest",
       "civilopediaEntry": "TFRM_Clear_Forest",
       "turnsToComplete": 4,
-      "action": "clearForest",
       "validators": [
-        "terraforms.clear_foliage_validator"
+        "terraforms.clear_forest.validator"
       ],
       "effects": [
-        "terraforms.clear_forest_effect"
-      ]
+        "terraforms.clear_forest.effect"
+      ],
+      "animation": "forest",
+      "uiAction": "unit_clear_forest",
+      "buttonTexture": "ui.unit_control.unit_clear_forest"
     },
     {
       "id": "Terraform-8",
       "name": "Clear Wetlands",
       "civilopediaEntry": "TFRM_Clear_Wetlands",
       "turnsToComplete": 16,
-      "action": "clearWetlands",
       "validators": [
-        "terraforms.clear_foliage_validator"
+        "terraforms.clear_wetlands.validator"
       ],
       "effects": [
-        "terraforms.clear_wetlands_effect"
-      ]
+        "terraforms.clear_wetlands.effect"
+      ],
+      "animation": "jungle",
+      "uiAction": "unit_clear_wetlands",
+      "buttonTexture": "ui.unit_control.unit_clear_wetlands"
     },
     {
       "id": "Terraform-9",
       "name": "Clear Damage",
       "civilopediaEntry": "TFRM_Clear_Damage",
       "turnsToComplete": 24,
-      "action": "clearDamage"
+      "uiAction": "unit_clear_damage",
+      "buttonTexture": "ui.unit_control.unit_clear_damage"
     },
     {
       "id": "Terraform-10",
@@ -77369,7 +77387,8 @@
       "civilopediaEntry": "TFRM_Airfield",
       "turnsToComplete": 1,
       "requiredTech": "tech-59",
-      "action": "buildAirfield"
+      "uiAction": "unit_build_airfield",
+      "buttonTexture": "ui.unit_control.unit_build_airfield"
     },
     {
       "id": "Terraform-11",
@@ -77377,7 +77396,8 @@
       "civilopediaEntry": "TFRM_Radar_Tower",
       "turnsToComplete": 1,
       "requiredTech": "tech-64",
-      "action": "buildRadarTower"
+      "uiAction": "unit_build_radar_tower",
+      "buttonTexture": "ui.unit_control.unit_build_radar_tower"
     },
     {
       "id": "Terraform-12",
@@ -77385,7 +77405,8 @@
       "civilopediaEntry": "TFRM_Outpost",
       "turnsToComplete": 1,
       "requiredTech": "tech-2",
-      "action": "buildOutpost"
+      "uiAction": "unit_build_outpost",
+      "buttonTexture": "ui.unit_control.unit_build_outpost"
     },
     {
       "id": "Terraform-13",
@@ -77393,8 +77414,10 @@
       "civilopediaEntry": "TFRM_Barricades",
       "turnsToComplete": 16,
       "requiredTech": "tech-21",
-      "action": "buildBarricade",
-      "improvement": "barricade"
+      "improvement": "barricade",
+      "animation": "fortress",
+      "uiAction": "unit_build_barricade",
+      "buttonTexture": "ui.unit_control.unit_build_barricade"
     }
   ],
   "governments": [

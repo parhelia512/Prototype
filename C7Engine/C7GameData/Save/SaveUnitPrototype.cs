@@ -31,6 +31,8 @@ namespace C7GameData.Save {
 
 		public HashSet<string> requiredResources = [];
 
+		public HashSet<ID> terraformActions = [];
+
 		public SaveUnitPrototype() { }
 
 		public SaveUnitPrototype(UnitPrototype proto) {
@@ -57,6 +59,7 @@ namespace C7GameData.Save {
 			attributes = new HashSet<string>(proto.attributes);
 
 			requiredResources = proto.requiredResources.Select(r => r.Key).ToHashSet();
+			terraformActions = proto.terraformActions.Select(r => r.Id).ToHashSet();
 		}
 	}
 }

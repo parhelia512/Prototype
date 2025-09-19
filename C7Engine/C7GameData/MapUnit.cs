@@ -51,8 +51,6 @@ namespace C7GameData {
 		public Terraform WorkerJob { get; set; }
 
 
-		[JsonIgnore]
-		public List<UnitAction> availableActions = [];
 		public UnitAI currentAI;
 
 		public MapUnit(ID id) {
@@ -675,20 +673,23 @@ namespace C7GameData {
 		}
 
 		public bool canPerformTerraformAction(Terraform terraform) {
-			return unitType.actions.Contains(terraform.Action) && terraform.MeetsRequirements(owner, location);
+			return unitType.terraformActions.Contains(terraform) && terraform.MeetsRequirements(owner, location);
 		}
 
 		public bool canPerformTerraformAction(Terraform terraform, Tile tile) {
-			return unitType.actions.Contains(terraform.Action) && terraform.MeetsRequirements(owner, tile);
+			return unitType.terraformActions.Contains(terraform) && terraform.MeetsRequirements(owner, tile);
 		}
 
 		public void PerformTerraformAction(Terraform terraform) {
 			if (!canPerformTerraformAction(terraform)) {
-				log.Warning($"can't perform {terraform.Action} by {this}");
+				log.Warning($"can't perform {terraform.Name} by {this}");
 				return;
 			}
 			WorkerJob = terraform;
-			setWorkerJobAnimation(terraform.Action);
+
+			if (terraform.Animation is AnimatedAction animation)
+				animate(animation, AnimationEnding.Repeat);
+
 			wake();
 			_ = PerformBusyAction();
 		}
@@ -707,30 +708,6 @@ namespace C7GameData {
 			WorkerJob = null;
 			WorkerProgressTowardsJob = 0;
 			animate(MapUnit.AnimatedAction.BLANK, AnimationEnding.Repeat);
-		}
-
-		private void setWorkerJobAnimation(UnitAction action) {
-			switch (action) {
-				case UnitAction.Irrigate:
-					animate(MapUnit.AnimatedAction.IRRIGATE, AnimationEnding.Repeat);
-					return;
-				case UnitAction.BuildMine:
-					animate(MapUnit.AnimatedAction.MINE, AnimationEnding.Repeat);
-					return;
-				case UnitAction.BuildRailroad:
-				case UnitAction.BuildRoad:
-					animate(MapUnit.AnimatedAction.ROAD, AnimationEnding.Repeat);
-					return;
-				case UnitAction.ClearForest:
-					animate(MapUnit.AnimatedAction.FOREST, AnimationEnding.Repeat);
-					return;
-				case UnitAction.ClearWetlands:
-					animate(MapUnit.AnimatedAction.JUNGLE, AnimationEnding.Repeat);
-					return;
-				default:
-					// do nothing;
-					return;
-			}
 		}
 
 		public bool canAutomate() {
@@ -786,6 +763,42 @@ namespace C7GameData {
 			// Do nothing after an error so control returns to the player, and
 			// nothing after an progress result, so that next turn continues the
 			// AI action.
+		}
+
+		public List<Terraform> GetAvailableTerraforms() {
+			return EngineStorage.gameData.Terraforms.Where(canPerformTerraformAction).ToList();
+		}
+
+		/**
+		 * Helper function to get the available actions for a unit
+		 * based on what terrain it is on.
+		 **/
+		public List<UnitAction> GetAvailableActions() {
+			List<UnitAction> result = new();
+
+			// Eventually, we should look this up somewhere to see what all actions we have (and mods might add more)
+			// For now, this is still an improvement over the last iteration.
+			UnitAction[] implementedActions = { UnitAction.Hold, UnitAction.Wait, UnitAction.Fortify, UnitAction.Disband, UnitAction.Goto, UnitAction.Bombard };
+			foreach (UnitAction action in implementedActions) {
+				if (unitType.actions.Contains(action)) {
+					result.Add(action);
+				}
+			}
+
+			if (canBuildCity()) {
+				result.Add(UnitAction.BuildCity);
+			}
+			if (canExplore()) {
+				result.Add(UnitAction.Explore);
+			}
+			if (canAutomate()) {
+				result.Add(UnitAction.Automate);
+			}
+
+			// Eventually we will have advanced actions too, whose availability will rely on their base actions' availability.
+			// unit.availableActions.Add("rename");
+
+			return result;
 		}
 	}
 }

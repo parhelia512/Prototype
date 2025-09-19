@@ -72,8 +72,6 @@ public partial class UnitSelector : Node {
 	 * Returns whether the selected unit has remaining moves.
 	 **/
 	public bool SetSelectedUnit(MapUnit unit) {
-		unit.availableActions = UnitInteractions.GetAvailableActions(unit);
-
 		if ((unit.path?.PathLength() ?? -1) > 0) {
 			log.Debug("cancelling path for " + unit);
 			unit.path = TilePath.NONE;

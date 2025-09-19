@@ -100,12 +100,8 @@ namespace C7Engine {
 			// Don't waste worker moves on unowned tiles. We do allow roading
 			// unowned tiles though.
 			if (t.owningCity == null || t.owningCity.owner != player) {
-				Terraform buildRoad = UnitAction.BuildRoad.ToTerraform();
-
-				if (accessibleTerraforms.Contains(buildRoad)) {
-					return buildRoad;
-				}
-				return null;
+				var buildRoad = accessibleTerraforms.FirstOrDefault(t => t.ProvidesRoad());
+				return buildRoad;
 			}
 
 			int initialCommerce = t.commerceYield(player).yield;
@@ -141,7 +137,7 @@ namespace C7Engine {
 				// seem to have no effect - but we want to encourage hooking up
 				// luxuries.
 				if ((t.Resource.Category == ResourceCategory.LUXURY || t.Resource.Category == ResourceCategory.STRATEGIC)
-					&& terraform == UnitAction.BuildRoad.ToTerraform() && player.KnowsAboutResource(t.Resource)) {
+					&& terraform.ProvidesRoad() && player.KnowsAboutResource(t.Resource)) {
 					currentScore += ResourcePoints;
 				}
 
