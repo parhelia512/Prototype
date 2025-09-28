@@ -187,21 +187,93 @@ textures.icons = {
     path = CITY_SCREEN_ICONS,
     crop_region = { 34, 2, 30, 30 },
   },
-  luxury = {
+  beaker = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 376, 2, 30, 30 },
+    crop_region = { 34, 2, 29, 29 },
   },
-  food = {
+  good_gold = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 64, 2, 29, 29 },
+  },
+  commerce = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 195, 1, 21, 30 },
+    crop_region = { 67, 1, 21, 30 },
+  },
+  wasted_gold = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 95, 2, 30, 30 },
+  },
+  good_shield = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 129, 5, 22, 22 },
   },
   shield = {
     path = CITY_SCREEN_ICONS,
     crop_region = { 133, 1, 16, 30 },
   },
-  commerce = {
+  wasted_shield = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 160, 5, 22, 22 },
+  },
+  full_food = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 191, 7, 20, 20 },
+  },
+  food = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 195, 1, 21, 30 },
+  },
+  eaten_food = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 223, 7, 20, 20 },
+  },
+  empty_shield = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 253, 5, 22, 22 },
+  },
+  empty_food = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 284, 7, 20, 20 },
+  },
+  no_food = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 315, 7, 20, 20 },
+  },
+  luxury = {
     path = CITY_SCREEN_ICONS,
-    crop_region = { 67, 1, 21, 30 },
+    crop_region = { 376, 2, 30, 30 },
+  },
+  happy_face = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 373, 2, 29, 29 },
+  },
+  effect_smiley_face = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 373, 1, 30, 30 },
+  },
+  effect_shield = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 404, 1, 30, 30 },
+  },
+  effect_good_gold = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 435, 1, 30, 30 },
+  },
+  effect_beaker = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 497, 1, 30, 30 },
+  },
+  effect_wasted_gold = {
+    path = CITY_SCREEN_ICONS,
+    crop_region = { 528, 1, 30, 30 },
+  },
+  content_face = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 591, 2, 29, 29 },
+  },
+  treasury = {
+	  path = CITY_SCREEN_ICONS,
+	  crop_region = { 746, 2, 29, 29 },
   },
   plus = {
     path = ADVISORS .. "domestic_icons_aux.pcx",
@@ -210,58 +282,6 @@ textures.icons = {
   minus = {
     path = ADVISORS .. "domestic_icons_aux.pcx",
     crop_region = { 51, 1, 22, 22 },
-  },
-  eaten_food = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 223, 7, 20, 20 },
-  },
-  full_food = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 191, 7, 20, 20 },
-  },
-  no_food = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 315, 7, 20, 20 },
-  },
-  empty_food = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 284, 7, 20, 20 },
-  },
-  wasted_shield = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 160, 5, 22, 22 },
-  },
-  good_shield = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 129, 5, 22, 22 },
-  },
-  empty_shield = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 253, 5, 22, 22 },
-  },
-  wasted_gold = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 95, 2, 29, 29 },
-  },
-  good_gold = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 64, 2, 29, 29 },
-  },
-  happy_face = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 373, 2, 29, 29 },
-  },
-  content_face = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 591, 2, 29, 29 },
-  },
-  beaker = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 34, 2, 29, 29 },
-  },
-  treasury = {
-    path = CITY_SCREEN_ICONS,
-    crop_region = { 746, 2, 29, 29 },
   },
   capital_star = {
     path = CITY_ICONS,
