@@ -174,10 +174,6 @@ public class LuaRulesEngine {
 			log.Debug("Registering type: {typeName}", type.FullName);
 			UserData.RegisterType(type);
 		}
-
-		// TODO: is there a way to detect and register generic types
-		// in the fields of C7GameData classes automatically?
-		UserData.RegisterType<HashSet<UnitAction>>();
 	}
 
 	void RegisterEnums() {

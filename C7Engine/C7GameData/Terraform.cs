@@ -18,7 +18,6 @@ public class Terraform {
 	public string CivilopediaEntry;
 	public int TurnsToComplete;
 	public ID RequiredTech;
-	public UnitAction Action;
 
 	public List<Resource> RequiredResources = [];
 
@@ -26,6 +25,14 @@ public class Terraform {
 
 	private Action<ScriptContext> Effect;
 	private List<Func<ScriptContext, bool>> ActionValidators = [];
+
+	public readonly MapUnit.AnimatedAction? Animation;
+
+	// Key of the UI action associated with the Terraform
+	public readonly string UIAction;
+
+	// Path to the texture definition in the texture config
+	public readonly string ButtonTexture;
 
 	private SaveTerraform dataSource;
 
@@ -35,7 +42,9 @@ public class Terraform {
 		CivilopediaEntry = saveTerraform.CivilopediaEntry;
 		TurnsToComplete = saveTerraform.TurnsToComplete;
 		RequiredTech = saveTerraform.RequiredTech;
-		Action = saveTerraform.Action;
+		Animation = saveTerraform.Animation;
+		UIAction = saveTerraform.UIAction;
+		ButtonTexture = saveTerraform.ButtonTexture;
 		dataSource = saveTerraform;
 		RequiredResources = saveTerraform.RequiredResources.ConvertAll(resKey => gameData.Resources.Find(res => res.Key == resKey));
 
@@ -82,5 +91,11 @@ public class Terraform {
 
 	public SaveTerraform ToSaveTerraform() {
 		return dataSource;
+	}
+
+	public bool ProvidesRoad() {
+		if (Improvement == null) return false;
+
+		return Improvement.layer == TerrainImprovement.Layer.Roads && Improvement.upgradesFrom == null;
 	}
 }

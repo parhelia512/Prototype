@@ -16,6 +16,8 @@ public partial class Game : Node {
 	[Signal] public delegate void PlayerTurnStartEventHandler();
 	[Signal] public delegate void PlayerTurnEndEventHandler();
 
+	[Signal] public delegate void GameInitializedEventHandler();
+
 	private ILogger log = LogManager.ForContext<Game>();
 
 	public enum GameState {
@@ -127,6 +129,8 @@ public partial class Game : Node {
 			loadTimer.Stop();
 			TimeSpan stopwatchElapsed = loadTimer.Elapsed;
 			log.Information("Game scene load time: " + Convert.ToInt32(stopwatchElapsed.TotalMilliseconds) + " ms");
+
+			EmitSignal(SignalName.GameInitialized);
 		} catch (Exception ex) {
 			errorOnLoad = true;
 			string message = ex.Message;

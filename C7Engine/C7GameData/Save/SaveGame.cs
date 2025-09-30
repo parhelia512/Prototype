@@ -263,7 +263,7 @@ namespace C7GameData.Save {
 		}
 
 		private void ConvertUnits(GameData data) {
-			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype => new UnitPrototype(prototype));
+			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype => new UnitPrototype(prototype, data.Terraforms));
 
 			var techDict = data.techs.ToDictionary(t => t.id);
 			var unitPrototypeDict = data.unitPrototypes.ToDictionary(b => b.name);

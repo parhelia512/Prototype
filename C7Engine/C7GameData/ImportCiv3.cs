@@ -18,6 +18,22 @@ namespace C7GameData {
 		public int BaseTerrainImageID;
 	}
 
+	public enum TerraformKey {
+		BuildRoad,
+		BuildRailroad,
+		BuildMine,
+		BuildFortress,
+		ClearDamage,
+		BuildAirfield,
+		BuildRadarTower,
+		BuildOutpost,
+		BuildBarricade,
+		Irrigate,
+		ClearWetlands,
+		ClearForest,
+		PlantForest
+	}
+
 	public class ImportCiv3 {
 		private SaveGame save;
 		private BiqData biq;
@@ -25,6 +41,7 @@ namespace C7GameData {
 		private SavData savData;
 		private PediaIcons pediaIcons;
 		private readonly ID.Factory ids;
+		private Dictionary<TerraformKey, ID> terraformIdByCiv3Key = [];
 
 		private static ILogger log = Log.ForContext<ImportCiv3>();
 
@@ -45,6 +62,7 @@ namespace C7GameData {
 			ImportRaces();
 			ImportTechs();
 			ImportCiv3Resources();
+			ImportTerraforms();
 			ImportUnitPrototypes();
 			ImportUniqueUnitReplacements();
 			ImportUnitUpgrades();
@@ -59,7 +77,6 @@ namespace C7GameData {
 			save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
 			ImportCitizenTypes();
-			ImportTerraforms();
 			ImportGovernments();
 			ImportDifficulties();
 			ImportRules();
@@ -739,14 +756,6 @@ namespace C7GameData {
 
 		private static IEnumerable<UnitAction> GetUnitActions(PRTO prto) {
 			if (prto.BuildCity) yield return UnitAction.BuildCity;
-			if (prto.BuildRoad) yield return UnitAction.BuildRoad;
-			if (prto.BuildRailroad) yield return UnitAction.BuildRailroad;
-			if (prto.BuildMine) yield return UnitAction.BuildMine;
-			if (prto.Irrigate) yield return UnitAction.Irrigate;
-			if (prto.ClearJungle) yield return UnitAction.ClearWetlands;
-			if (prto.ClearForest) yield return UnitAction.ClearForest;
-			if (prto.BuildBarricade) yield return UnitAction.BuildBarricade;
-			if (prto.BuildFortress) yield return UnitAction.BuildFortress;
 			if (prto.Bombard) yield return UnitAction.Bombard;
 			if (prto.SkipTurn) yield return UnitAction.Hold;
 			if (prto.Wait) yield return UnitAction.Wait;
@@ -755,6 +764,17 @@ namespace C7GameData {
 			if (prto.GoTo) yield return UnitAction.Goto;
 			if (prto.Explore) yield return UnitAction.Explore;
 			if (prto.Automate) yield return UnitAction.Automate;
+		}
+
+		private static IEnumerable<TerraformKey> GetUnitTerraforms(PRTO prto) {
+			if (prto.BuildRoad) yield return TerraformKey.BuildRoad;
+			if (prto.BuildRailroad) yield return TerraformKey.BuildRailroad;
+			if (prto.BuildMine) yield return TerraformKey.BuildMine;
+			if (prto.Irrigate) yield return TerraformKey.Irrigate;
+			if (prto.ClearJungle) yield return TerraformKey.ClearWetlands;
+			if (prto.ClearForest) yield return TerraformKey.ClearForest;
+			if (prto.BuildBarricade) yield return TerraformKey.BuildBarricade;
+			if (prto.BuildFortress) yield return TerraformKey.BuildFortress;
 		}
 
 		private SaveUnitPrototype.Unique ImportUniqueUnitData(PRTO prto) {
@@ -796,6 +816,7 @@ namespace C7GameData {
 				prototype.bombard = prto.BombardStrength;
 				prototype.iconIndex = prto.IconIndex;
 				prototype.actions.UnionWith(GetUnitActions(prto));
+				prototype.terraformActions.UnionWith(GetUnitTerraforms(prto).Select(tfKey => terraformIdByCiv3Key[tfKey]));
 
 				prototype.unique = ImportUniqueUnitData(prto);
 				prototype.unproducible = IsUnproducible(prto);
@@ -1271,15 +1292,16 @@ namespace C7GameData {
 			for (int i = 0; i < theBiq.Tfrm.Length; ++i) {
 				TFRM t = theBiq.Tfrm[i];
 
+				TerraformKey tfKey = ConvertCiv3Order(t.Order);
+
 				SaveTerraform tf = new() {
 					Id = ids.CreateID("Terraform"),
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
 					TurnsToComplete = t.TurnsToComplete,
-					Action = ConvertCiv3OrderToAction(t.Order)
 				};
 
-				tf.Improvement = UnitActionToTerrainImprovement(tf.Action);
+				tf.SetUpByTerraformKey(tfKey);
 
 				if (t.Required > -1) {
 					tf.RequiredTech = save.Techs[t.Required].id;
@@ -1291,55 +1313,8 @@ namespace C7GameData {
 					tf.RequiredResources.Add(save.Resources[t.RequiredResource2].Key);
 				}
 
-				LoadTerraformLuaFunctions(tf);
-
 				save.TerraForms.Add(tf);
-			}
-		}
-
-		private static string UnitActionToTerrainImprovement(UnitAction ua) {
-			return ua switch {
-				UnitAction.BuildMine => "mine",
-				UnitAction.Irrigate => "irrigation",
-				UnitAction.BuildFortress => "fortress",
-				UnitAction.BuildBarricade => "barricade",
-				UnitAction.BuildRoad => "road",
-				UnitAction.BuildRailroad => "railroad",
-				_ => null,
-			};
-		}
-
-		private static void LoadTerraformLuaFunctions(SaveTerraform tf) {
-			string actionPath = tf.Action switch {
-				UnitAction.BuildMine => "mine",
-				UnitAction.Irrigate => "irrigate",
-				UnitAction.ClearWetlands => "clear_wetlands",
-				UnitAction.ClearForest => "clear_forest",
-				_ => null,
-			};
-
-			if (actionPath == null)
-				return;
-
-			// Add validator
-			switch (tf.Action) {
-				case UnitAction.BuildMine:
-				case UnitAction.Irrigate:
-					tf.Validators.Add($"terraforms.{actionPath}_validator");
-					break;
-
-				case UnitAction.ClearWetlands:
-				case UnitAction.ClearForest:
-					tf.Validators.Add("terraforms.clear_foliage_validator");
-					break;
-			}
-
-			// Add effect
-			switch (tf.Action) {
-				case UnitAction.ClearWetlands:
-				case UnitAction.ClearForest:
-					tf.Effects.Add($"terraforms.{actionPath}_effect");
-					break;
+				terraformIdByCiv3Key[tfKey] = tf.Id;
 			}
 		}
 
@@ -1367,21 +1342,21 @@ namespace C7GameData {
 			}
 		}
 
-		private static UnitAction ConvertCiv3OrderToAction(string order) {
+		private static TerraformKey ConvertCiv3Order(string order) {
 			return order switch {
-				"Build Mine" => UnitAction.BuildMine,
-				"Irrigate" => UnitAction.Irrigate,
-				"Build Fortress" => UnitAction.BuildFortress,
-				"Build Road" => UnitAction.BuildRoad,
-				"Build Railroad" => UnitAction.BuildRailroad,
-				"Plant Forest" => UnitAction.PlantForest,
-				"Clear Forest" => UnitAction.ClearForest,
-				"Clear Wetlands" => UnitAction.ClearWetlands,
-				"Clear Damage" => UnitAction.ClearDamage,
-				"Build Airfield" => UnitAction.BuildAirfield,
-				"Build Radar Tower" => UnitAction.BuildRadarTower,
-				"Build Outpost" => UnitAction.BuildOutpost,
-				"Build Barricade" or "Build Barricades" => UnitAction.BuildBarricade,
+				"Build Mine" => TerraformKey.BuildMine,
+				"Irrigate" => TerraformKey.Irrigate,
+				"Build Fortress" => TerraformKey.BuildFortress,
+				"Build Road" => TerraformKey.BuildRoad,
+				"Build Railroad" => TerraformKey.BuildRailroad,
+				"Plant Forest" => TerraformKey.PlantForest,
+				"Clear Forest" => TerraformKey.ClearForest,
+				"Clear Wetlands" => TerraformKey.ClearWetlands,
+				"Clear Damage" => TerraformKey.ClearDamage,
+				"Build Airfield" => TerraformKey.BuildAirfield,
+				"Build Radar Tower" => TerraformKey.BuildRadarTower,
+				"Build Outpost" => TerraformKey.BuildOutpost,
+				"Build Barricade" or "Build Barricades" => TerraformKey.BuildBarricade,
 				_ => throw new NotSupportedException($"Unknown order: {order}"),
 			};
 		}

@@ -17,10 +17,18 @@ namespace C7GameData {
 		public int baseCommerceProduction { get; set; }
 		public int movementCost { get; set; }
 		public bool allowCities { get; set; } = true;
-		public HashSet<UnitAction> allowedWorkerActions = [];
 		public StrengthBonus defenseBonus;
 		public HashSet<string> allowedResources = new();
 		public int height = -1;
+
+		// These enum and field are kept for compatibility with CIV3 saves.
+		public enum Civ3FoliageAction {
+			None,
+			ClearForest,
+			ClearWetlands,
+			PlantForest
+		}
+		public Civ3FoliageAction allowedFoliageAction = Civ3FoliageAction.None;
 
 		//some stuff about graphics would probably make sense, too
 
@@ -61,7 +69,7 @@ namespace C7GameData {
 					description = civ3Terrain.Name,
 					amount = civ3Terrain.DefenseBonus / 100.0
 				},
-				allowedWorkerActions = LoadWorkerActions(civ3Terrain).ToHashSet(),
+				allowedFoliageAction = LoadFoliageAction(civ3Terrain),
 			};
 
 			if (c7Terrain.Key == "mountains" || c7Terrain.Key == "volcano") {
@@ -79,10 +87,12 @@ namespace C7GameData {
 			return c7Terrain;
 		}
 
-		private static IEnumerable<UnitAction> LoadWorkerActions(TERR civ3Terrain) {
-			if (civ3Terrain.CanChopForest) yield return UnitAction.ClearForest;
-			if (civ3Terrain.CanClearWetlands) yield return UnitAction.ClearWetlands;
-			if (civ3Terrain.CanPlantForest) yield return UnitAction.PlantForest;
+		private static Civ3FoliageAction LoadFoliageAction(TERR civ3Terrain) {
+			if (civ3Terrain.CanChopForest) return Civ3FoliageAction.ClearForest;
+			if (civ3Terrain.CanClearWetlands) return Civ3FoliageAction.ClearWetlands;
+			if (civ3Terrain.CanPlantForest) return Civ3FoliageAction.PlantForest;
+
+			return Civ3FoliageAction.None;
 		}
 
 		//This only works for Conquests due to the new terrains being added in the middle of the list.

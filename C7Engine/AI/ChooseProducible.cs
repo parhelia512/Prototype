@@ -51,7 +51,7 @@ namespace C7Engine {
 
 		private static float ScoreUnit(ProducibleStats stats, City city, Player player, UnitPrototype unit) {
 			bool isSettler = unit.actions.Contains(UnitAction.BuildCity);
-			bool isWorker = unit.actions.Contains(UnitAction.BuildMine);
+			bool isWorker = unit.isWorker;
 			bool atWar = PlayerAI.PlayerIsAtWarWithSomeone(player);
 			bool cityGuarded = city.location.unitsOnTile.Count(u => u.CanDefendOnLand()) > 0;
 			bool hasUnescortedSettler = HasUnescortedSettler(city);
@@ -163,7 +163,7 @@ namespace C7Engine {
 				// If we have unworked tiles and fewer workers than cities, boost
 				// the odds of producing a worker.
 				int numUnworkedTiles = NumUnworkedTiles(city);
-				int numWorkers = player.units.Count(x => x.unitType.actions.Contains(UnitAction.BuildMine));
+				int numWorkers = player.units.Count(x => x.unitType.isWorker);
 				if (numUnworkedTiles > 0 && numWorkers < player.cities.Count * 1.5f) {
 					score += populationCostPenalty * Math.Min(3.0f, 1 + numUnworkedTiles);
 				}
