@@ -76047,7 +76047,9 @@
     "buildingDiscountForCivTraits": 0.5,
     "startUnitType1": "Settler",
     "startUnitType2": "Worker",
-    "scoutUnitType": "Scout"
+    "scoutUnitType": "Scout",
+	"maxRankOfWorkableTiles": 2,
+	"maxRankOfBarbarianCampTiles": 2
   },
   "techs": [
     {

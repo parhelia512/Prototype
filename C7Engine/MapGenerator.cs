@@ -767,7 +767,7 @@ namespace C7Engine {
 			// We're done if we flowed into water or off the edge.
 			//
 			// TODO: This doesn't quite seem to avoid the problem of running
-			// alongside water. 
+			// alongside water.
 			if (t == Tile.NONE || !t.IsLand()) {
 				return false;
 			}
@@ -801,7 +801,7 @@ namespace C7Engine {
 				return false; // no flow happened.
 			}
 
-			// Flow in the main direction. 
+			// Flow in the main direction.
 			bool flowed = flowRiver(hm, rand, t.neighbors[options[bestIndex]], options[bestIndex], depth + 1);
 
 			// See if there's a second valid flow direction.
@@ -1122,7 +1122,7 @@ namespace C7Engine {
 		private static bool HasSufficientLandNeighborsForResource(Tile t) {
 			int landTiles = 0;
 
-			foreach (Tile x in t.GetTilesWithinRankDistance(2)) {
+			foreach (Tile x in t.GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfWorkableTiles)) {
 				if (x.IsLand()) {
 					++landTiles;
 				}
@@ -1330,7 +1330,7 @@ namespace C7Engine {
 			}
 
 			// No barbarian camps within the big fat cross of another camp.
-			foreach (Tile n in t.GetTilesWithinRankDistance(2)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfBarbarianCampTiles)) {
 				if (n.hasBarbarianCamp) {
 					return false;
 				}
@@ -1488,7 +1488,7 @@ namespace C7Engine {
 
 			// Then do it again for the full big fat cross, effectively weighting
 			// the immediate neighbors at a 2x rate.
-			foreach (Tile n in t.GetTilesWithinRankDistance(2)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfWorkableTiles)) {
 				score += CommercePoints * n.commerceYield(player).yield;
 				score += ShieldPoints * n.productionYield(player).yield;
 				score += FoodPoints * n.foodYield(player).yield;

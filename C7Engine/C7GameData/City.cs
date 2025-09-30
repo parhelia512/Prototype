@@ -641,12 +641,9 @@ namespace C7GameData {
 		// This isn't necessarily a subset of our borders, because we're allowed
 		// to work tiles owned by our civ in our big fat cross, even if our
 		// borders haven't expanded yet.
-		//
-		// TODO: we should make this configurable to allow for the bigger cross
-		// if a mod wants it.
 		public List<Tile> GetWorkableTiles() {
 			List<Tile> result = new();
-			foreach (Tile t in GetTilesOfRank(2)) {
+			foreach (Tile t in GetTilesOfRank(owner.rules.MaxRankOfWorkableTiles)) {
 				// Skip tiles not owned by this player.
 				if (t.owningCity == null || t.owningCity.owner != this.owner) {
 					continue;

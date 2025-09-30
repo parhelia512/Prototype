@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using C7GameData;
 using C7Engine;
-using ConvertCiv3Media;
 using C7GameData.Save;
 using Serilog;
 
@@ -201,6 +200,11 @@ public partial class PlayerSetup : Control {
 		loadingLabel.Visible = true;
 		GlobalSingleton global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 		SaveGame save = GetSave();
+
+		// This is a hacky way of setting up the rules early
+		// because we need them during map gen.
+		EngineStorage.gameData = save.ToGameData(GamePaths.LuaRulesDir);
+		EngineStorage.gameData.rules = save.Rules;
 
 		// World generation can take a bit of time if multiple attempts are
 		// needed, so we don't want to tie up the UI thread.

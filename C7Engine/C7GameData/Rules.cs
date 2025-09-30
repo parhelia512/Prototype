@@ -15,5 +15,7 @@ namespace C7GameData {
 		public string StartUnitType1;
 		public string StartUnitType2;
 		public string ScoutUnitType;
+		public int MaxRankOfWorkableTiles;
+		public int MaxRankOfBarbarianCampTiles;
 	}
 }
