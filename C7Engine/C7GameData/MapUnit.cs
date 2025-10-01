@@ -588,8 +588,8 @@ namespace C7GameData {
 		private float SumWorkerProgress(Tile tile, Terraform workerJob) {
 			float result = 0;
 			foreach (MapUnit unit in tile.unitsOnTile) {
-				if (WorkerJob == workerJob) {
-					result += WorkerProgressTowardsJob;
+				if (unit.WorkerJob == workerJob) {
+					result += unit.WorkerProgressTowardsJob;
 				}
 			}
 			return result;
