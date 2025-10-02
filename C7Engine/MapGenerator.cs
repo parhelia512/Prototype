@@ -59,6 +59,9 @@ namespace C7Engine {
 		public List<TerrainType> terrainTypes;
 		public List<Resource> resources = new();
 		public Government defaultGovernment = new();
+
+		public int maxRankOfWorkableTiles;
+		public int maxRankOfBarbarianCampTiles;
 	}
 
 	public class MapGenerator {
@@ -1045,8 +1048,8 @@ namespace C7Engine {
 					continue;
 				}
 
-				// Skip tiles that don't meed the luxury-specific criteria.
-				if (!IsValidForLuxuryPlacement(m, r, t)) {
+				// Skip tiles that don't need the luxury-specific criteria.
+				if (!IsValidForLuxuryPlacement(wc, m, r, t)) {
 					continue;
 				}
 
@@ -1089,7 +1092,7 @@ namespace C7Engine {
 			return false;
 		}
 
-		private static bool IsValidForLuxuryPlacement(GameMap m, Resource r, Tile t) {
+		private static bool IsValidForLuxuryPlacement(WorldCharacteristics wc, GameMap m, Resource r, Tile t) {
 			HashSet<Tile> continent = m.continents.First(x => x.Contains(t));
 
 			// Don't put luxuries on islands too small for players.
@@ -1112,17 +1115,17 @@ namespace C7Engine {
 
 			// If this is a water-based resource, ensure it doesn't end up in the
 			// middle of the ocean.
-			if (!t.IsLand() && !HasSufficientLandNeighborsForResource(t)) {
+			if (!t.IsLand() && !HasSufficientLandNeighborsForResource(wc, t)) {
 				return false;
 			}
 
 			return true;
 		}
 
-		private static bool HasSufficientLandNeighborsForResource(Tile t) {
+		private static bool HasSufficientLandNeighborsForResource(WorldCharacteristics wc, Tile t) {
 			int landTiles = 0;
 
-			foreach (Tile x in t.GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfWorkableTiles)) {
+			foreach (Tile x in t.GetTilesWithinRankDistance(wc.maxRankOfWorkableTiles)) {
 				if (x.IsLand()) {
 					++landTiles;
 				}
@@ -1148,8 +1151,8 @@ namespace C7Engine {
 					continue;
 				}
 
-				// Skip tiles that don't meed the strategic resource-specific criteria.
-				if (!IsValidForStrategicResourcePlacement(m, r, t)) {
+				// Skip tiles that don't need the strategic resource-specific criteria.
+				if (!IsValidForStrategicResourcePlacement(wc, m, r, t)) {
 					continue;
 				}
 
@@ -1164,7 +1167,7 @@ namespace C7Engine {
 			}
 		}
 
-		private static bool IsValidForStrategicResourcePlacement(GameMap m, Resource r, Tile t) {
+		private static bool IsValidForStrategicResourcePlacement(WorldCharacteristics wc, GameMap m, Resource r, Tile t) {
 			HashSet<Tile> continent = m.continents.First(x => x.Contains(t));
 
 			// Don't put strategic resources on super tiny islands - though
@@ -1189,7 +1192,7 @@ namespace C7Engine {
 
 			// If this is a water-based resource, ensure it doesn't end up in the
 			// middle of the ocean.
-			if (!t.IsLand() && !HasSufficientLandNeighborsForResource(t)) {
+			if (!t.IsLand() && !HasSufficientLandNeighborsForResource(wc, t)) {
 				return false;
 			}
 
@@ -1227,14 +1230,14 @@ namespace C7Engine {
 						continue;
 					}
 
-					if (PlaceBonusResource(m, r, tileIndicies)) {
+					if (PlaceBonusResource(wc, m, r, tileIndicies)) {
 						++placed;
 					}
 				}
 			}
 		}
 
-		private static bool PlaceBonusResource(GameMap m, Resource r, List<int> tileIndicies) {
+		private static bool PlaceBonusResource(WorldCharacteristics wc, GameMap m, Resource r, List<int> tileIndicies) {
 			// We want to place this resource. Find the first valid tile
 			// we can stick it on.
 			//
@@ -1252,7 +1255,7 @@ namespace C7Engine {
 					continue;
 				}
 
-				if (!t.IsLand() && !HasSufficientLandNeighborsForResource(t)) {
+				if (!t.IsLand() && !HasSufficientLandNeighborsForResource(wc, t)) {
 					continue;
 				}
 
@@ -1302,7 +1305,7 @@ namespace C7Engine {
 			int numCamps = 0;
 			for (int i = 0; i < tileIndicies.Count && numCamps < totalPossibleBarbCamps; ++i) {
 				Tile t = m.tiles[tileIndicies[i]];
-				if (IsValidForBarbarianCamp(m, t)) {
+				if (IsValidForBarbarianCamp(wc, m, t)) {
 					m.barbarianCamps.Add(t);
 					t.hasBarbarianCamp = true;
 					++numCamps;
@@ -1310,7 +1313,7 @@ namespace C7Engine {
 			}
 		}
 
-		private static bool IsValidForBarbarianCamp(GameMap m, Tile t) {
+		private static bool IsValidForBarbarianCamp(WorldCharacteristics wc, GameMap m, Tile t) {
 			// No barbarian camps on water, volcanos, or mountains.
 			if (!t.IsLand() || t == Tile.NONE || t.overlayTerrainType.Key == "volcano" || t.overlayTerrainType.Key == "mountains") {
 				return false;
@@ -1330,7 +1333,7 @@ namespace C7Engine {
 			}
 
 			// No barbarian camps within the big fat cross of another camp.
-			foreach (Tile n in t.GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfBarbarianCampTiles)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(wc.maxRankOfBarbarianCampTiles)) {
 				if (n.hasBarbarianCamp) {
 					return false;
 				}
@@ -1488,7 +1491,7 @@ namespace C7Engine {
 
 			// Then do it again for the full big fat cross, effectively weighting
 			// the immediate neighbors at a 2x rate.
-			foreach (Tile n in t.GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfWorkableTiles)) {
+			foreach (Tile n in t.GetTilesWithinRankDistance(wc.maxRankOfWorkableTiles)) {
 				score += CommercePoints * n.commerceYield(player).yield;
 				score += ShieldPoints * n.productionYield(player).yield;
 				score += FoodPoints * n.foodYield(player).yield;
