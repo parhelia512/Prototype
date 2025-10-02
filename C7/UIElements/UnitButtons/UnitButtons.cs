@@ -4,6 +4,7 @@ using C7Engine;
 using C7GameData;
 using Serilog;
 using System.Linq;
+using System.Globalization;
 
 /*
  UnitButtons contains the buttons at the bottom of the game UI when viewing the
@@ -84,10 +85,35 @@ public partial class UnitButtons : VBoxContainer {
 		}
 	}
 
+
+	public static string ActionToTooltipText(string input) {
+		// Strip off the "unit_" from actions like "unit_build_city"
+		const string prefix = "unit_";
+		string result = input;
+		if (result.StartsWith(prefix)) {
+			result = result.Substring(prefix.Length);
+		}
+
+		// Turn "build_city" into "build city"
+		result = result.Replace('_', ' ');
+
+		// Turn "build city" into "Build City"
+		return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(result);
+	}
+
 	private void AddNewButton(HBoxContainer row, string action) {
 		TextureButton button = new();
 		TextureLoader.SetButtonTextures(button, "ui.unit_control." + action);
 		button.Pressed += () => { EmitSignal(SignalName.ActionRequested, action); };
+
+		// Add a tooltip to the button to explain what it does, and ensure that
+		// the tooltip is readable.
+		button.TooltipText = ActionToTooltipText(action);
+
+		var customTheme = new Theme();
+		customTheme.SetStylebox("panel", "TooltipPanel", TemporaryPopup.PopupStyleBox());
+		customTheme.SetColor("font_color", "TooltipLabel", Colors.White);
+		button.Theme = customTheme;
 
 		row.AddChild(button);
 		buttonMap[action] = button;
