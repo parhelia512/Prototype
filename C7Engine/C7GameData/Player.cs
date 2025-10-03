@@ -186,6 +186,9 @@ namespace C7GameData {
 		}
 
 		public void EnsureRelationshipExists(Player other) {
+			if (isBarbarians || other.isBarbarians)
+				return;
+
 			if (!playerRelationships.ContainsKey(other.id)) {
 				playerRelationships.Add(other.id, new PlayerRelationship());
 			}
