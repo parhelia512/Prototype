@@ -486,8 +486,8 @@ namespace C7GameData {
 				return;
 			}
 
-			// Check all the tiles within rank 2 of the forest.
-			foreach (Tile other in GetTilesWithinRankDistance(2)) {
+			// Check all the tiles of the forest that a city could be in, taking into account the big fat cross size.
+			foreach (Tile other in GetTilesWithinRankDistance(EngineStorage.gameData.rules.MaxRankOfWorkableTiles)) {
 				if (other.cityAtTile == null) {
 					continue;
 				}

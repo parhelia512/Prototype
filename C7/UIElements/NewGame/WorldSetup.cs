@@ -334,6 +334,8 @@ public partial class WorldSetup : Control {
 			resources = save.Resources,
 			defaultGovernment = save.Governments.Find(x => x.defaultType),
 			mapSeed = Int32.Parse(seedInput.Text),
+			maxRankOfWorkableTiles = save.Rules.MaxRankOfWorkableTiles,
+			maxRankOfBarbarianCampTiles = save.Rules.MaxRankOfBarbarianCampTiles,
 		};
 
 		GetTree().ChangeSceneToFile("res://UIElements/NewGame/player_setup.tscn");

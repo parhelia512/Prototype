@@ -1439,6 +1439,8 @@ namespace C7GameData {
 			if (rule.Scout >= 0) {
 				save.Rules.ScoutUnitType = theBiq.Prto[rule.Scout].Name;
 			}
+			save.Rules.MaxRankOfWorkableTiles = 2;
+			save.Rules.MaxRankOfBarbarianCampTiles = 2;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {
