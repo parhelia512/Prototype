@@ -193,14 +193,15 @@ public partial class RightClickTileMenu : RightClickMenu {
 				foreach (MapUnit unit in nonPlayerUnits) {
 					AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
 				}
-				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 			} else {
 				// TODO: This isn't necessarily the top unit, get that code to an accessible
 				// location and then use it here.
 				MapUnit unit = nonPlayerUnits[0];
 				AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
-				AddItem($"Contact {unit.owner.civilization.name}", contactCiv);
 			}
+
+			if (!nonPlayerUnits[0].owner.isBarbarians)
+				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 		}
 	}
 
