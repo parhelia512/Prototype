@@ -56,6 +56,33 @@ public static class C7Action {
 		[UnitAutomate] = UnitAction.Automate
 	};
 
+	private static readonly Dictionary<string, string> toTooltip = new() {
+		[UnitBombard] = "Bombard",
+		[UnitBuildCity] = "Build City",
+		[UnitBuildRoad] = "Build Road",
+		[UnitBuildMine] = "Build Mine",
+		[UnitIrrigate] = "Irrigate",
+		[UnitBuildRailroad] = "Build Railroad",
+		[UnitBuildFortress] = "Build Fortress",
+		[UnitPlantForest] = "Plant Forest",
+		[UnitClearForest] = "Clear Forest",
+		[UnitClearWetlands] = "Clear Wetlands",
+		[UnitClearDamage] = "Clear Damage",
+		[UnitBuildAirfield] = "Build Airfield",
+		[UnitBuildRadarTower] = "Build Radar Tower",
+		[UnitBuildOutpost] = "Build Outpost",
+		[UnitBuildBarricade] = "Build Barricade",
+		[UnitAutomate] = "Automate",
+		[UnitDisband] = "Disband",
+		[UnitExplore] = "Explore",
+		[UnitFortify] = "Fortify",
+		[UnitGoto] = "Goto",
+		[UnitHold] = "Hold",
+		[UnitSentry] = "Sentry",
+		[UnitSentryEnemyOnly] = "Sentry Enemy Only",
+		[UnitWait] = "Wait",
+	};
+
 	public static UnitAction? ToUnitAction(string action) {
 		return toUnitAction.TryGetValue(action, out var result) ? result : null;
 	}
@@ -82,5 +109,9 @@ public static class C7Action {
 
 	public static Terraform? ToTerraform(string action) {
 		return EngineStorage.gameData.Terraforms.FirstOrDefault(tf => tf.UIAction == action);
+	}
+
+	public static string? ToTooltip(string action) {
+		return toTooltip.TryGetValue(action, out var result) ? result : null;
 	}
 }
