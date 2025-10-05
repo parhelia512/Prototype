@@ -4,6 +4,7 @@ using C7Engine;
 using C7GameData;
 using Serilog;
 using System.Linq;
+using System.Globalization;
 
 /*
  UnitButtons contains the buttons at the bottom of the game UI when viewing the
@@ -88,6 +89,18 @@ public partial class UnitButtons : VBoxContainer {
 		TextureButton button = new();
 		TextureLoader.SetButtonTextures(button, "ui.unit_control." + action);
 		button.Pressed += () => { EmitSignal(SignalName.ActionRequested, action); };
+
+		// Add a tooltip to the button to explain what it does, and ensure that
+		// the tooltip is readable.
+		string? tooltipText = C7Action.ToTooltip(action);
+		if (tooltipText != null) {
+			button.TooltipText = tooltipText;
+
+			var customTheme = new Theme();
+			customTheme.SetStylebox("panel", "TooltipPanel", TemporaryPopup.PopupStyleBox());
+			customTheme.SetColor("font_color", "TooltipLabel", Colors.White);
+			button.Theme = customTheme;
+		}
 
 		row.AddChild(button);
 		buttonMap[action] = button;
