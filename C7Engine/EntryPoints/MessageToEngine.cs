@@ -166,32 +166,48 @@ namespace C7Engine {
 	}
 
 	public class MsgChooseResearch : MessageToEngine {
-		private ID techId;
-		private bool showAdvisor;
-		public MsgChooseResearch(ID techId, bool showAdvisor) {
-			this.techId = techId;
-			this.showAdvisor = showAdvisor;
+		private Tech tech;
+		private AdvisorState advisorState;
+		private SelectionMode selectionMode;
+
+		public enum AdvisorState : byte {
+			DontShow,
+			Show,
+		}
+		public enum SelectionMode : byte {
+			Single,
+			Multi,
+		}
+
+		public MsgChooseResearch(Tech tech, AdvisorState advisorState, SelectionMode selectionMode = SelectionMode.Single) {
+			this.tech = tech;
+			this.advisorState = advisorState;
+			this.selectionMode = selectionMode;
 		}
 
 		public override void process() {
 			Player player = EngineStorage.gameData.GetFirstHumanPlayer();
-			if (player.currentlyResearchedTech == techId) {
+
+			bool isTechEraBeyondPlayerEra = EraUtils.GetEraIndex(tech.EraCivilopediaName) > EraUtils.GetEraIndex(player.eraCivilopediaName);
+			if (isTechEraBeyondPlayerEra)
+				return;
+			if (player.currentlyResearchedTech == tech.id && player.ResearchQueue.Count == 1) {
 				return;
 			}
-			Tech requestedTech = EngineStorage.gameData.techs.Find(t => t.id == techId);
 
-			// Ensure this is an eligible tech to research.
-			//
-			// TODO: do a topological sort to allow a queue of techs to study.
-			foreach (Tech prereq in requestedTech.Prerequisites) {
-				if (!player.knownTechs.Contains(prereq.id)) {
-					return;
-				}
+			// Start the tech queueing process
+			// and start researching the first tech in the queue
+			// or append a new queue to the current one if it's a multiselection process
+			if (selectionMode == SelectionMode.Single) {
+				player.CalculateFreshTechQueueAndAssignNewCurrent(tech);
+			} else {
+				player.CalculateTechQueueAndAppendToCurrentQueue(tech);
+
 			}
 
-			// Start researching this tech and update the UI.
-			player.SetCurrentlyResearchedTech(requestedTech.id);
-			if (showAdvisor) {
+			// update the UI
+			if (advisorState == AdvisorState.Show) {
+
 				new MsgShowScienceAdvisor().send();
 			}
 		}

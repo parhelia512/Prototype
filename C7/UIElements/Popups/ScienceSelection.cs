@@ -1,10 +1,8 @@
 using Godot;
-using System;
-using System.Diagnostics;
 using C7GameData;
 using C7Engine;
-using Serilog;
 using System.Collections.Generic;
+using static C7Engine.MsgChooseResearch;
 
 public partial class ScienceSelection : Popup {
 	Player player;
@@ -41,7 +39,7 @@ public partial class ScienceSelection : Popup {
 		optionButton.SetPosition(new Vector2(25, 190));
 
 		AddButton("OK. Sounds good.", 235, () => {
-			new MsgChooseResearch(options[optionButton.Selected].id, showAdvisor: false).send();
+			new MsgChooseResearch(options[optionButton.Selected], AdvisorState.DontShow).send();
 			GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 		});
 		AddButton("What's the big picture?", 265, () => {
@@ -50,7 +48,7 @@ public partial class ScienceSelection : Popup {
 		});
 
 		AddConfirmButton(new Vector2(width - 40, height - 40), () => {
-			new MsgChooseResearch(options[optionButton.Selected].id, showAdvisor: false).send();
+			new MsgChooseResearch(options[optionButton.Selected], AdvisorState.DontShow).send();
 			GetParent().EmitSignal(PopupOverlay.SignalName.HidePopup);
 		});
 	}
@@ -76,11 +74,15 @@ public partial class ScienceSelection : Popup {
 		popup.AddThemeStyleboxOverride("panel", styleBox);
 
 		EngineStorage.ReadGameData((GameData gameData) => {
+			// first suggest the next item in the queue
+			if (player.ResearchQueue.Count > 0) {
+				AddItem(gameData, player.ResearchQueue.Peek(), optionButton);
+			}
+			// then the rest
 			foreach (Tech tech in player.GetAvailableTechsToResearch(gameData)) {
-				int turns = player.EstimateTurnsToResearch(gameData, tech);
-				string turnsStr = turns == int.MaxValue ? "--" : $"{turns}";
-				optionButton.AddItem($"{tech.Name} ({turnsStr} turns)");
-				options.Add(tech);
+				if (!options.Contains(tech)) {
+					AddItem(gameData, tech, optionButton);
+				}
 			}
 
 			for (int i = 0; i < popup.ItemCount; ++i) {
@@ -90,5 +92,12 @@ public partial class ScienceSelection : Popup {
 		});
 
 		return optionButton;
+	}
+
+	private void AddItem(GameData gameData, Tech tech, OptionButton optionButton) {
+		int turns = player.EstimateTurnsToResearch(gameData, tech);
+		string turnsStr = turns == int.MaxValue ? "--" : $"{turns}";
+		optionButton.AddItem($"{tech.Name} ({turnsStr} turns)");
+		options.Add(tech);
 	}
 }

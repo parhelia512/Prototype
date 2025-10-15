@@ -1,8 +1,10 @@
 using C7Engine;
 using C7GameData;
 using Godot;
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using static C7Engine.MsgChooseResearch;
+using static C7GameData.EraUtils;
 
 public partial class ScienceAdvisor : TextureRect {
 	private ImageTexture AncientBackground;
@@ -17,6 +19,21 @@ public partial class ScienceAdvisor : TextureRect {
 	// Stored separately so we can modify this without mutating the player.
 	private string eraName;
 
+	// store the last opened era window so next time we open the advisor, it opens at the same era window
+	private static string lastOpenedEra = string.Empty;
+
+	private string advisorTitleString;
+
+	private FontFile regularFont = new();
+	private Theme regularBigFontTheme = new();
+	// private Theme regularMediumFontTheme = new();
+
+	private int bigFontSize = 26;
+	// private int middleFontSize = 20;
+
+	private int bigFontGlyphSpacing = 14;
+	private int bigFontGlyphSpaceSpacing = 22;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		this.CreateUI();
@@ -24,12 +41,19 @@ public partial class ScienceAdvisor : TextureRect {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			List<Tech> techs = gameData.techs;
 			Player player = gameData.GetFirstHumanPlayer();
-			eraName = player.eraCivilopediaName;
+			eraName = string.IsNullOrEmpty(lastOpenedEra) ? player.eraCivilopediaName : lastOpenedEra;
 			this.DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
 		});
 	}
 
 	private void CreateUI() {
+
+		regularFont = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf");
+		// regularMediumFontTheme.DefaultFont = regularFont;
+		regularBigFontTheme.DefaultFont = regularFont;
+		regularBigFontTheme.SetFontSize("font_size", "Label", bigFontSize);
+		// regularMediumFontTheme.SetFontSize("font_size", "Label", middleFontSize);
+
 		// science_industrial_new is used as the industrial tech tree is
 		// different from vanilla civ3.
 		AncientBackground = TextureLoader.Load("advisors.science.background.ancient");
@@ -40,6 +64,36 @@ public partial class ScienceAdvisor : TextureRect {
 		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(851, 0));
 		AddChild(advisorHead);
+
+		// Advisor Label
+		advisorTitleString = GetAdvisorName();
+
+		FontVariation fontVariation = new FontVariation
+		{
+			BaseFont = regularFont,
+			SpacingGlyph = bigFontGlyphSpacing,
+			SpacingSpace = bigFontGlyphSpaceSpacing,
+		};
+
+		Theme regularThemeWithCustomSpacing = new Theme();
+		regularThemeWithCustomSpacing.SetFont("font", "Label", fontVariation);
+		regularThemeWithCustomSpacing.SetFontSize("font_size", "Label", bigFontSize);
+
+		float containerWidth = AncientBackground.GetWidth();
+
+		float advisorTitleStringWidth = GetStringSizeWithCustomSpacing(regularFont, advisorTitleString, bigFontSize,
+			bigFontGlyphSpacing, bigFontGlyphSpaceSpacing).X;
+
+		float advisorTitleOffsetLeft = (containerWidth / 2.0f) - (advisorTitleStringWidth) / 2.0f;
+
+		Label advisorTitle = new() {
+			Text = advisorTitleString,
+			OffsetLeft = advisorTitleOffsetLeft,
+			OffsetTop = 15,
+			Theme = regularThemeWithCustomSpacing,
+		};
+		AddChild(advisorTitle);
+
 
 		ImageTexture DialogBoxTexture = TextureLoader.Load("advisors.dialog_box");
 		TextureButton DialogBox = new TextureButton();
@@ -100,15 +154,19 @@ public partial class ScienceAdvisor : TextureRect {
 		previousEra.Show();
 		nextEra.Show();
 
+		lastOpenedEra = eraName;
+
+		Queue<Tech> queue = player.ResearchQueue;
+
 		// Set the tech background based on the player's era.
-		if (eraName == "ERAS_Ancient_Times") {
+		if (eraName == ANCIENT_TIMES_CVLPD) {
 			previousEra.Hide();
 			this.Texture = AncientBackground;
-		} else if (eraName == "ERAS_Middle_Ages") {
+		} else if (eraName == MIDDLE_AGES_CVLPD) {
 			this.Texture = MiddleBackground;
-		} else if (eraName == "ERAS_Industrial_Age") {
+		} else if (eraName == INDUSTRIAL_AGE_CVLPD) {
 			this.Texture = IndustrialBackground;
-		} else if (eraName == "ERAS_Modern_Era") {
+		} else if (eraName == MODERN_ERA_CVLPD) {
 			this.Texture = ModernBackground;
 			nextEra.Hide();
 		}
@@ -124,16 +182,21 @@ public partial class ScienceAdvisor : TextureRect {
 				techState = TechBox.TechState.kKnown;
 			} else if (player.currentlyResearchedTech == tech.id) {
 				techState = TechBox.TechState.kInProgress;
+			} else if (queue.Count > 0 && queue.Contains(tech)) {
+				techState = TechBox.TechState.kQueued;
 			} else if (availableTechsToResearch.Contains(tech)) {
 				techState = TechBox.TechState.kPossible;
 			} else {
 				techState = TechBox.TechState.kBlocked;
 			}
 
-			TechBox techButton = new(tech, techState);
+			int queueNumber = queue.ToList().IndexOf(tech) + 1;
+
+			TechBox techButton = new(tech, techState, queueNumber);
 			techButton.SetPosition(new Vector2(tech.X, tech.Y));
 			techButton.Pressed += () => {
-				new MsgChooseResearch(tech.id, showAdvisor: true).send();
+				SelectionMode selection = Input.IsKeyPressed(Key.Shift) ? SelectionMode.Multi : SelectionMode.Single;
+				new MsgChooseResearch(tech, AdvisorState.Show, selection).send();
 			};
 			AddChild(techButton);
 			techBoxes.Add(techButton);
@@ -150,12 +213,35 @@ public partial class ScienceAdvisor : TextureRect {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			List<Tech> techs = gameData.techs;
 			Player player = gameData.GetFirstHumanPlayer();
-			eraName = Player.EraIndexToEra(Player.EraIndex(eraName) + delta);
+			eraName = string.IsNullOrEmpty(lastOpenedEra)
+				? EraIndexToEra(GetEraIndex(eraName) + delta)
+				: EraIndexToEra(GetEraIndex(lastOpenedEra) + delta);
 			DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
 		});
 	}
 
 	private void ReturnToMenu() {
 		GetParent<Advisors>().Hide();
+	}
+
+	private string GetAdvisorName() {
+		return string.Concat(this.GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).Trim().ToUpper();
+	}
+
+	private Vector2 GetStringSizeWithCustomSpacing(Font font, string input, int fontSize = 16, int glyphSpacing = 0, int glyphSpaceSpacing = 0) {
+
+		float extraSpacing = 0.0f;
+		for (int i = 0; i < input.Length; i++) {
+			if (i < input.Length - 1) {
+				if (char.IsWhiteSpace(input[i]) && glyphSpaceSpacing > 0) {
+					extraSpacing += glyphSpaceSpacing;
+				} else {
+					extraSpacing += glyphSpacing;
+				}
+			}
+		}
+
+		Vector2 originalSize = font.GetStringSize(input, fontSize: fontSize);
+		return new Vector2(originalSize.X + extraSpacing, originalSize.Y);
 	}
 }
