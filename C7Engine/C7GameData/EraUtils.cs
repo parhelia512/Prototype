@@ -2,6 +2,7 @@ namespace C7GameData;
 
 public static class EraUtils {
 
+	// The civilopedia (CVLPD) version for each of the era names
 	public const string ANCIENT_TIMES_CVLPD = "ERAS_Ancient_Times";
 	public const string MIDDLE_AGES_CVLPD = "ERAS_Middle_Ages";
 	public const string INDUSTRIAL_AGE_CVLPD = "ERAS_Industrial_Age";

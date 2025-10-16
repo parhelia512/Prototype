@@ -18,9 +18,8 @@ public partial class TechBox : TextureButton {
 	private readonly Dictionary<ID, List<Terraform>> Terraforms = new();
 	private readonly Dictionary<ID, List<UnitPrototype>> Units = new();
 
-	private static readonly Dictionary<string, ImageTexture> CachedObsoleteBuildingTextures = new();
-
 	private static readonly Dictionary<string, string> TruncatedToFullTechTextMap = new();
+	private static readonly Dictionary<string, ImageTexture> CachedObsoleteBuildingTextures = new();
 
 	private FontFile smallFont = new();
 	private Theme smallFontTheme = new();
@@ -51,7 +50,6 @@ public partial class TechBox : TextureButton {
 	}
 
 	public override void _Ready() {
-
 		smallFont = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf");
 
 		if (!tech.RequiredForEraAdvancement)
@@ -69,10 +67,10 @@ public partial class TechBox : TextureButton {
 		string techBoxSize = CostToStringKey(techBoxSizeCost);
 		string era = CalculateTechEraTexture(tech.EraCivilopediaName);
 
-		ImageTexture knownTechBox = TextureLoader.Load($"tech_box.known.{era}.{techBoxSize}");
-		ImageTexture inProgressTechBox = TextureLoader.Load($"tech_box.in_progress.{era}.{techBoxSize}");
-		ImageTexture possibleTechBox = TextureLoader.Load($"tech_box.possible.{era}.{techBoxSize}");
-		ImageTexture blockedTechBox = TextureLoader.Load($"tech_box.blocked.{era}.{techBoxSize}");
+		ImageTexture knownTechBox = TextureLoader.Load($"tech_boxes.known.{era}.{techBoxSize}");
+		ImageTexture inProgressTechBox = TextureLoader.Load($"tech_boxes.in_progress.{era}.{techBoxSize}");
+		ImageTexture possibleTechBox = TextureLoader.Load($"tech_boxes.possible.{era}.{techBoxSize}");
+		ImageTexture blockedTechBox = TextureLoader.Load($"tech_boxes.blocked.{era}.{techBoxSize}");
 
 		TextureNormal = techState switch {
 			TechState.kKnown => knownTechBox,
@@ -88,7 +86,10 @@ public partial class TechBox : TextureButton {
 		icon.SetPosition(new Vector2(12, 32));
 		AddChild(icon);
 
-		// we could be calculating this every time based on the font size,
+		// Figure out how many characters can fit in the tech box's width.
+		// We use this for truncation when creating the label below.
+		//
+		// We could be calculating this every time based on the font size,
 		// but I don't think it's worth the computation cost
 		// a larger char length, means a smaller Tech name (more chars will be truncated)
 		float averageCharLength = 6.0f;
@@ -125,10 +126,6 @@ public partial class TechBox : TextureButton {
 		int offsetY = 0;
 		int counter = 0;
 
-		// TODO : would be nice to figure out a way to cache these textures.
-		// A simple static dict won't work because of changes in scenarios etc
-		// because, if you Retire from one game, and into a new one,
-		// the textures will be from another set of rules
 		List<ImageTexture> techEffects = TechEffectTextures();
 
 		for (int i = 0; i < techEffects.Count; i++) {
@@ -149,7 +146,7 @@ public partial class TechBox : TextureButton {
 		AddChild(techNameLabel);
 
 		if (!tech.RequiredForEraAdvancement) {
-			TextureRect notRequired = new() { Texture = TextureLoader.Load("tech_box.non_required"), };
+			TextureRect notRequired = new() { Texture = TextureLoader.Load("tech_boxes.non_required"), };
 			notRequired.SetPosition(new Vector2(TextureNormal.GetWidth() - 20, 0));
 			AddChild(notRequired);
 		}
@@ -163,14 +160,13 @@ public partial class TechBox : TextureButton {
 		customTheme.SetColor("font_color", "TooltipLabel", Colors.Black);
 		customTheme.SetFontSize("font_size", "TooltipLabel", 12);
 		this.Theme = customTheme;
+
 		if (TruncatedToFullTechTextMap.TryGetValue(tech.Name, out string fullText))
 			this.TooltipText = $"{fullText}";
 	}
 
 	private void UpdateLabelTheme() {
-
 		Color color = Colors.Black;
-
 		bool isTechEraBeyondPlayerEra = GetEraIndex(tech.EraCivilopediaName) > GetEraIndex(EngineStorage.gameData.GetFirstHumanPlayer().eraCivilopediaName);
 
 		if (techState is TechState.kKnown)
@@ -186,26 +182,20 @@ public partial class TechBox : TextureButton {
 	}
 
 	private string TruncateAndCacheName(string input, int limit) {
-
 		if (input.Length > limit) {
-
 			if (TruncatedToFullTechTextMap.ContainsKey(tech.Name)) {
 				TruncatedToFullTechTextMap[tech.Name] = input;
 			} else {
 				TruncatedToFullTechTextMap.TryAdd(tech.Name, input);
 			}
-
 			return $"{input.Trim().Substring(0, limit - 1)}...";
 		}
-
 		TruncatedToFullTechTextMap.Remove(tech.Name);
-
 		return input;
 	}
 
 	// TODO: When we figure out how to load the data, load the correct textures
 	private List<ImageTexture> TechEffectTextures() {
-
 		List<ImageTexture> textures = new ();
 
 		// Units
@@ -245,7 +235,6 @@ public partial class TechBox : TextureButton {
 	}
 
 	private int CalculateTechBoxSizeCost(GameData gameData) {
-
 		int cost = 0;
 
 		// List of building that require this tech to be built

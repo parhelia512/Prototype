@@ -78,75 +78,6 @@ textures.advisors = {
   },
 }
 
-function add_tables(t1, t2)
-	result = {}
-	for i = 1, math.min(#t1, #t2) do
-		result[i] = t1[i] + t2[i]
-	end
-	return result
-end
-
-tech_boxes_texture = ADVISORS .. "techboxes.pcx"
-
--- different era boxes have slightly different sizes in pcx files
--- this is the max size they could be
--- seeing where the "Not required" sign renders in the original as well
--- this is probably how they did it originally
-tbl_small = { 1, 1, 106, 82 }
-tbl_medium = { 1, 84, 163, 82 }
-tbl_large = { 1, 167, 163, 106 }
-tbl_long = { 1, 274, 188, 82 }
-
-local function create_entry(offset)
-	local entry = {
-		small = {
-			path = tech_boxes_texture,
-			crop_region = add_tables(tbl_small, offset),
-		},
-		medium = {
-			path = tech_boxes_texture,
-			crop_region = add_tables(tbl_medium, offset),
-		},
-		large = {
-			path = tech_boxes_texture,
-			crop_region = add_tables(tbl_large, offset),
-		},
-		long = {
-			path = tech_boxes_texture,
-			crop_region = add_tables(tbl_long, offset),
-		},
-	}
-	return entry
-end
-
-textures.tech_box = {
-	known = {
-		ancient = create_entry({0, 0, 0, 0}),
-		middle = create_entry({0, 356, 0, 0}),
-		industrial = create_entry({0, 712, 0, 0}),
-		modern = create_entry({0, 1068, 0, 0}),
-	},
-	in_progress = {
-		ancient = create_entry({189, 0, 0, 0}),
-		middle = create_entry({189, 356, 0, 0}),
-		industrial = create_entry({189, 712, 0, 0}),
-		modern = create_entry({189, 1068, 0, 0}),
-	},
-	possible = {
-		ancient = create_entry({378, 0, 0, 0}),
-		middle = create_entry({378, 356, 0, 0}),
-		industrial = create_entry({378, 712, 0, 0}),
-		modern = create_entry({378, 1068, 0, 0}),
-	},
-	blocked = {
-		ancient = create_entry({567, 0, 0, 0}),
-		middle = create_entry({567, 356, 0, 0}),
-		industrial = create_entry({567, 712, 0, 0}),
-		modern = create_entry({567, 1068, 0, 0}),
-	},
-	non_required = ADVISORS .. "non_required.pcx",
-}
-
 textures.ui = {
   button = {
     inactive = {
@@ -526,6 +457,7 @@ textures.civ_colors = require "civ3.civ_colors"
 textures.unit_icons = require "civ3.unit_icons"
 textures.building_icons = require "civ3.building_icons"
 textures.tech_icons = require "civ3.tech_icons"
+textures.tech_boxes = require "civ3.tech_boxes"
 textures.leader_heads = require "civ3.leader_heads"
 textures.borders = require "civ3.borders"
 

@@ -22,11 +22,10 @@ public partial class ScienceAdvisor : TextureRect {
 	// store the last opened era window so next time we open the advisor, it opens at the same era window
 	private static string lastOpenedEra = string.Empty;
 
-	private string advisorTitleString;
+	private string advisorTitleString = "SCIENCE ADVISOR";
 
 	private FontFile regularFont = new();
 	private Theme regularBigFontTheme = new();
-	// private Theme regularMediumFontTheme = new();
 
 	private int bigFontSize = 26;
 	// private int middleFontSize = 20;
@@ -49,10 +48,8 @@ public partial class ScienceAdvisor : TextureRect {
 	private void CreateUI() {
 
 		regularFont = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf");
-		// regularMediumFontTheme.DefaultFont = regularFont;
 		regularBigFontTheme.DefaultFont = regularFont;
 		regularBigFontTheme.SetFontSize("font_size", "Label", bigFontSize);
-		// regularMediumFontTheme.SetFontSize("font_size", "Label", middleFontSize);
 
 		// science_industrial_new is used as the industrial tech tree is
 		// different from vanilla civ3.
@@ -64,9 +61,6 @@ public partial class ScienceAdvisor : TextureRect {
 		advisorHead.Texture = AdvisorHead.GetPopupImage(AdvisorHead.Advisor.Science, AdvisorHead.Mood.Happy, eraIndex: 0);
 		advisorHead.SetPosition(new Vector2(851, 0));
 		AddChild(advisorHead);
-
-		// Advisor Label
-		advisorTitleString = GetAdvisorName();
 
 		FontVariation fontVariation = new FontVariation
 		{
@@ -222,10 +216,6 @@ public partial class ScienceAdvisor : TextureRect {
 
 	private void ReturnToMenu() {
 		GetParent<Advisors>().Hide();
-	}
-
-	private string GetAdvisorName() {
-		return string.Concat(this.GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).Trim().ToUpper();
 	}
 
 	private Vector2 GetStringSizeWithCustomSpacing(Font font, string input, int fontSize = 16, int glyphSpacing = 0, int glyphSpaceSpacing = 0) {
