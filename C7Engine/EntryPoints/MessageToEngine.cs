@@ -189,7 +189,7 @@ namespace C7Engine {
 			Player player = EngineStorage.gameData.GetFirstHumanPlayer();
 
 			bool isTechEraBeyondPlayerEra = EraUtils.GetEraIndex(tech.EraCivilopediaName) > EraUtils.GetEraIndex(player.eraCivilopediaName);
-			if (isTechEraBeyondPlayerEra)
+			if (player.knownTechs.Contains(tech.id) || isTechEraBeyondPlayerEra)
 				return;
 			if (player.currentlyResearchedTech == tech.id && player.ResearchQueue.Count == 1) {
 				return;

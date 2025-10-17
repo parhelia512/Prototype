@@ -478,6 +478,12 @@ namespace C7GameData {
 					}
 				}
 
+				// Populate player's research queue
+				for (int t = 0; t < savData.LeadTechQueue[i].Length; ++t) {
+					int techItem = savData.LeadTechQueue[i][t];
+					player.researchQueue.Add(save.Techs[techItem].id);
+				}
+
 				player.gold = leader.Gold;
 				player.beakers = leader.Beakers;
 				player.turnsResearched = leader.TurnsResearched;

@@ -46,10 +46,6 @@ namespace C7GameData {
 		public ID currentlyResearchedTech { get; private set; }
 
 		// A queue of technologies the player has specified they want to research
-		//
-		// TODO: save the research queue (see SavePlayer.cs)
-		//
-		// TODO: be able to import the research queue in ImportCiv3.cs
 		public Queue<Tech> ResearchQueue { get; private set; } = new();
 
 		// The civilopedia name of the era this player is in.
@@ -155,6 +151,10 @@ namespace C7GameData {
 			// Clear out previous progress.
 			beakers = 0;
 			turnsResearched = 0;
+		}
+
+		public void AddTechItemToResearchQueue(Tech tech) {
+			ResearchQueue.Enqueue(tech);
 		}
 
 		public string GetNextCityName() {
@@ -418,7 +418,7 @@ namespace C7GameData {
 			IEnumerable<Tech> techQueue = GetResearchQueueFor(tech, new Queue<Tech>()).Reverse();
 			foreach (Tech t in techQueue) {
 				if (!ResearchQueue.Contains(t)) {
-					ResearchQueue.Enqueue(t);
+					AddTechItemToResearchQueue(t);
 				}
 			}
 		}
