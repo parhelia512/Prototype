@@ -105,8 +105,10 @@ namespace C7GameData.Save {
 
 			ConvertTerrainImprovements(data);
 			ConvertTerraforms(data);
-			ConvertMapAndPlayers(data);
+			// convert technologies earlier than the player data,
+			// because we need to fill in current research and research queues
 			ConvertTechnologies(data);
+			ConvertMapAndPlayers(data);
 			ConvertBuildings(data);
 			ConvertUnits(data);
 			ConvertCities(data);
@@ -179,7 +181,7 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.rules));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.techs, data.rules));
 		}
 
 		private void ConvertTerrainImprovements(GameData gameData) {

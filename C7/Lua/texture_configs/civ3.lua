@@ -78,26 +78,6 @@ textures.advisors = {
   },
 }
 
-textures.tech_box = {
-  known = {
-    path = ADVISORS .. "techboxes.pcx",
-    crop_region = { 1, 1, 180, 80 },
-  },
-  in_progress = {
-    path = ADVISORS .. "techboxes.pcx",
-    crop_region = { 192, 1, 180, 80 },
-  },
-  possible = {
-    path = ADVISORS .. "techboxes.pcx",
-    crop_region = { 381, 1, 180, 80 },
-  },
-  blocked = {
-    path = ADVISORS .. "techboxes.pcx",
-    crop_region = { 568, 1, 180, 80 },
-  },
-  non_required = ADVISORS .. "non_required.pcx",
-}
-
 textures.ui = {
   button = {
     inactive = {
@@ -477,6 +457,7 @@ textures.civ_colors = require "civ3.civ_colors"
 textures.unit_icons = require "civ3.unit_icons"
 textures.building_icons = require "civ3.building_icons"
 textures.tech_icons = require "civ3.tech_icons"
+textures.tech_boxes = require "civ3.tech_boxes"
 textures.leader_heads = require "civ3.leader_heads"
 textures.borders = require "civ3.borders"
 

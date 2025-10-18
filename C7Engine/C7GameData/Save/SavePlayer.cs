@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace C7GameData.Save {
 	// A class holding all the state of the relationship between two civs.
@@ -40,6 +41,9 @@ namespace C7GameData.Save {
 		// The tech the player is currently researching.
 		public ID currentlyResearchedTech;
 
+		// The tech queue the player is currently researching.
+		public List<ID> researchQueue = new();
+
 		// The civilopedia name of the era this player is in.
 		//
 		// The civilopedia name is what is used for art lookups, not the actual
@@ -73,7 +77,7 @@ namespace C7GameData.Save {
 		// The current government of the player.
 		public ID governmentId;
 
-		public Player ToPlayer(GameMap map, List<Civilization> civilizations, List<Government> governments, Rules rules) {
+		public Player ToPlayer(GameMap map, List<Civilization> civilizations, List<Government> governments, List<Tech> techs, Rules rules) {
 			Player player = new Player{
 				id = id,
 				isBarbarians = barbarian,
@@ -113,6 +117,11 @@ namespace C7GameData.Save {
 			player.beakers = beakers;
 			player.turnsResearched = turnsResearched;
 
+			foreach (ID techId in researchQueue) {
+				Tech tech = techs.Find(x => x.id == techId);
+				player.AddTechItemToResearchQueue(tech);
+			}
+
 			return player;
 		}
 
@@ -133,6 +142,7 @@ namespace C7GameData.Save {
 			turnsUntilPriorityReevaluation = player.turnsUntilPriorityReevaluation;
 			knownTechs = player.knownTechs;
 			currentlyResearchedTech = player.currentlyResearchedTech;
+			researchQueue = new List<ID>(player.ResearchQueue.Select(t => t.id));
 			eraCivilopediaName = player.eraCivilopediaName;
 			luxuryRate = player.luxuryRate;
 			scienceRate = player.scienceRate;
