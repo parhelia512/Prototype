@@ -334,14 +334,14 @@ namespace C7GameData.Save {
 		private void ConvertBarbarianInfo(GameData data) {
 			data.barbarianInfo = BarbarianInfo;
 
-			if (BarbarianInfo.basicBarbarianIndex != -1) {
-				data.barbarianInfo.basicBarbarian = data.unitPrototypes[data.barbarianInfo.basicBarbarianIndex];
+			if (BarbarianInfo.basicBarbarianUnit != null) {
+				data.barbarianInfo.basicBarbarian = data.unitPrototypes.Where(up => up.name == data.barbarianInfo.basicBarbarianUnit).First();
 			}
-			if (BarbarianInfo.advancedBarbarianIndex != -1) {
-				data.barbarianInfo.advancedBarbarian = data.unitPrototypes[data.barbarianInfo.advancedBarbarianIndex];
+			if (BarbarianInfo.advancedBarbarianUnit != null) {
+				data.barbarianInfo.advancedBarbarian = data.unitPrototypes.Where(up => up.name == data.barbarianInfo.advancedBarbarianUnit).First();
 			}
-			if (BarbarianInfo.barbarianSeaUnitIndex != -1) {
-				data.barbarianInfo.barbarianSeaUnit = data.unitPrototypes[data.barbarianInfo.barbarianSeaUnitIndex];
+			if (BarbarianInfo.barbarianSeaUnit != null) {
+				data.barbarianInfo.barbarianSeaUnitProto = data.unitPrototypes.Where(up => up.name == data.barbarianInfo.barbarianSeaUnit).First();
 			}
 		}
 

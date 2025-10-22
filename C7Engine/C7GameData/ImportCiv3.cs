@@ -1169,15 +1169,20 @@ namespace C7GameData {
 			});
 		}
 
+		private SaveUnitPrototype MatchCiv3IndexToImportedUnit(int civ3Index) {
+			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
+			if (civ3Index == -1) return null;
+			return save.UnitPrototypes.Where(up => up.name == Prto[civ3Index].Name).First();
+		}
+
 		private void ImportBarbarianInfo() {
 			RULE Rule = biq?.Rule?[0] ?? defaultBiq.Rule[0];
 			PRTO[] Prto = biq?.Prto ?? defaultBiq.Prto;
 			BarbarianInfo barbInfo = save.BarbarianInfo;
-			// TODO: this relies on the unit prototypes in SaveGame being
-			// at the same indices as in PRTO...
-			barbInfo.basicBarbarianIndex = Rule.BasicBarbarianUnitType;
-			barbInfo.advancedBarbarianIndex = Rule.AdvancedBarbarianUnitType;
-			barbInfo.barbarianSeaUnitIndex = Rule.BarbarianSeaUnitType;
+
+			barbInfo.basicBarbarianUnit = MatchCiv3IndexToImportedUnit(Rule.BasicBarbarianUnitType)?.name;
+			barbInfo.advancedBarbarianUnit = MatchCiv3IndexToImportedUnit(Rule.AdvancedBarbarianUnitType)?.name;
+			barbInfo.barbarianSeaUnit = MatchCiv3IndexToImportedUnit(Rule.BarbarianSeaUnitType)?.name;
 		}
 
 		private void ImportTechs() {

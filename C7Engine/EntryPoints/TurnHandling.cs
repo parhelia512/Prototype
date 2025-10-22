@@ -134,7 +134,7 @@ namespace C7Engine {
 
 				// Give costal camps a chance to spawn a boat.
 				if (tile.NeighborsWater() && GameData.rng.Next(100) < 20) {
-					newUnit.unitType = gameData.barbarianInfo.barbarianSeaUnit;
+					newUnit.unitType = gameData.barbarianInfo.barbarianSeaUnitProto;
 					log.Debug("New barbarian galley added at " + tile);
 					continue;
 				}

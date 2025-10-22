@@ -1,6 +1,9 @@
 public static class GamePaths {
 	// This is the 'static map' used in lieu of terrain generation
-	public const string DefaultGamePath = "./Text/c7-static-map-save.json";
+	public static string DefaultGamePath {
+		get =>
+			C7Engine.C7Settings.UseStandaloneMode() ? "./Text/c7-static-map-save-standalone.json" : "./Text/c7-static-map-save.json";
+	}
 
 	public const string LuaRulesDir = "./Lua/rules/";
 	public const string TextureConfigsDir = "./Lua/texture_configs/";
