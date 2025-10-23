@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using C7GameData;
-using ConvertCiv3Media;
 using Godot;
 
 namespace C7.Map {

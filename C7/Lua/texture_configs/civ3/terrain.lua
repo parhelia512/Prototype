@@ -68,16 +68,19 @@ terrain.volcano = {
 terrain.barbarian_camp = {
   path = TERRAIN .. "TerrainBuildings.pcx",
   crop_region = { 256, 0, 128, 64 },
+  shadows = false,
 }
 
 terrain.marsh = {
   large = {
     path = TERRAIN .. "marsh.pcx",
     crop_region = { 0, 0, 512, 176 },
+    shadows = false,
   },
   small = {
     path = TERRAIN .. "marsh.pcx",
     crop_region = { 0, 176, 640, 176 },
+    shadows = false,
   },
 }
 
@@ -89,10 +92,12 @@ terrain.jungle = {
   large = {
     path = TERRAIN .. "grassland forests.pcx",
     crop_region = { 0, 0, 512, 176 },
+    shadows = false,
   },
   small = {
     path = TERRAIN .. "grassland forests.pcx",
     crop_region = { 0, 176, 768, 176 },
+    shadows = false,
   },
 }
 
@@ -100,29 +105,35 @@ terrain.forest = {
   large = {
     path = TERRAIN .. "grassland forests.pcx",
     crop_region = { 0, 352, 512, 176 },
+    shadows = false,
   },
   small = {
     path = TERRAIN .. "grassland forests.pcx",
     crop_region = { 0, 528, 640, 176 },
+    shadows = false,
   },
   plains = {
     large = {
       path = TERRAIN .. "plains forests.pcx",
       crop_region = { 0, 352, 512, 176 },
+      shadows = false,
     },
     small = {
       path = TERRAIN .. "plains forests.pcx",
       crop_region = { 0, 528, 640, 176 },
+      shadows = false,
     },
   },
   tundra = {
     large = {
       path = TERRAIN .. "tundra forests.pcx",
       crop_region = { 0, 352, 512, 176 },
+      	shadows = false,
     },
     small = {
       path = TERRAIN .. "tundra forests.pcx",
       crop_region = { 0, 528, 640, 176 },
+      	shadows = false,
     },
   },
 }
@@ -131,14 +142,17 @@ terrain.pine = {
   forest = {
     path = TERRAIN .. "grassland forests.pcx",
     crop_region = { 0, 704, 768, 176 },
+    shadows = false,
   },
   plains = {
     path = TERRAIN .. "plains forests.pcx",
     crop_region = { 0, 704, 768, 176 },
+    shadows = false,
   },
   tundra = {
     path = TERRAIN .. "tundra forests.pcx",
     crop_region = { 0, 704, 768, 176 },
+    shadows = false,
   },
 }
 

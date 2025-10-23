@@ -70,7 +70,7 @@ public partial class PCXToGodot : GodotObject {
 		return getImageFromBufferData(croppedWidth, croppedHeight, BufferData);
 	}
 
-	public static ImageTexture getPureAlphaFromPCX(Pcx alphaPcx) {
+	public static ImageTexture getPureAlphaFromPCX(Pcx alphaPcx, HashSet<int> transparentColorIndexes) {
 		int[] bufferData = new int[alphaPcx.Width * alphaPcx.Height];
 		int[] alphaData = new int[MAX_PALETTE_SIZE];
 		for (int i = 0; i < MAX_PALETTE_SIZE; i++) {
@@ -80,6 +80,20 @@ public partial class PCXToGodot : GodotObject {
 		for (int y = 0; y < alphaPcx.Height; y++) {
 			for (int x = 0; x < alphaPcx.Width; x++, dataIndex++) {
 				int index = alphaPcx.ColorIndexAt(x, y);
+				// While we might want to treat the image as pure alpha
+				// there are cases like the FogOfWar texture that has some extra pixels
+				// that were probably used for alignment, that we don't want to render as opaque
+				// since they are producing ugly dark dots in every tile.
+				// This option allows us to use any transparentColorIndexes that we define,
+				// or the default ones from ColorOptions along with the pure alpha option
+				// Just to make the point as clear as I can, if we really want to use ONLY the pure_alpha option
+				// without excluding any indexes, we would have to do this in lua
+				// transparent_color_indexes = {}
+				// since if we don't define even an empty table, the default indexes are still [254, 255]
+				if (transparentColorIndexes.Contains(index)) {
+					bufferData[dataIndex] = 0;
+					continue;
+				}
 				bufferData[dataIndex] = (255 - alphaData[index]) << 24;
 			}
 		}
