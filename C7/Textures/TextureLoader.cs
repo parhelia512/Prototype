@@ -28,7 +28,7 @@ public readonly record struct CropRegion(int LeftStart, int TopStart, int Croppe
 ///    - Optional: "alpha_row_offset" (number) - Row offset for alpha blending
 ///    - Optional: "transparent_color_indexes" (table) - List of color indexes to treat as transparent
 ///    - Optional: "pure_alpha" - The pcx file only contains transparency information.
-/// 
+///
 ///    For c7 files:
 ///    - Optional: "hex_color" (string) - A 6 character hex string for a civ color
 ///
@@ -210,7 +210,7 @@ public static class TextureLoader {
 	}
 
 	/// Gets a color given a "civ index".
-	/// 
+	///
 	/// This exists in the TextureLoader because civ3 implements civ colors
 	/// as 1x1 pixel pcx files.
 	public static Color LoadColor(int civIndex) {
@@ -303,7 +303,7 @@ public static class TextureLoader {
 
 		return ext switch {
 			".png" => LoadFromPNG(config.Path, config.CropRegion),
-			".pcx" when config.PureAlpha => PCXToGodot.getPureAlphaFromPCX(new Pcx(Util.Civ3MediaPath(config.Path))),
+			".pcx" when config.PureAlpha => PCXToGodot.getPureAlphaFromPCX(new Pcx(Util.Civ3MediaPath(config.Path)), config.ColorOptions.transparentColorIndexes),
 			".pcx" when config.UseAlpha => LoadWithAlphaBlend(config.Path, config.AlphaPath!, config.CropRegion, config.AlphaRowOffset),
 			".pcx" => LoadFromPCX(config.Path, config.CropRegion, config.ColorOptions),
 			_ => throw new FormatException($"Unknown texture format: {config.Path}"),

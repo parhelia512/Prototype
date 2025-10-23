@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using C7GameData;
-using ConvertCiv3Media;
 using Godot;
 
 namespace C7.Map {
@@ -51,6 +48,11 @@ namespace C7.Map {
 				row += 6;
 			} else if (tileKnowledge.isTileKnown(south)) {
 				row += 3;
+			}
+
+			// save a few draw calls when the tile is completely visible
+			if (column == 8 && row == 8) {
+				return;
 			}
 
 			var fogOrigin = new Vector2(tileCenter.X - tileSize.X/2, tileCenter.Y - tileSize.Y);

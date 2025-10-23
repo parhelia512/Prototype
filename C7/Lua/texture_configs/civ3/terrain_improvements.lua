@@ -16,6 +16,7 @@ local function make_entry(x, y)
   return {
     path = TERRAIN .. "TerrainBuildings.pcx",
     crop_region = { 128 * x, 64 * y, 128, 64 },
+    shadows = false,
   }
 end
 
