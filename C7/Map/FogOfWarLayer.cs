@@ -50,6 +50,11 @@ namespace C7.Map {
 				row += 3;
 			}
 
+			// save a few draw calls when the tile is completely visible
+			if (column == 8 && row == 8) {
+				return;
+			}
+
 			var fogOrigin = new Vector2(tileCenter.X - tileSize.X/2, tileCenter.Y - tileSize.Y);
 			var fogRect = new Rect2(fogOrigin, tileSize);
 			var spriteRect = new Rect2(column * tileSize.X, row * tileSize.Y, tileSize * 0.999f);
