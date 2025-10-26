@@ -261,7 +261,7 @@ namespace C7Engine {
 				caid.destination = closestBarbCamp;
 
 				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp);
+				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp, unit);
 				log.Information($"Set unit {unit} to take out barb camp at {closestBarbCamp}");
 				return new CombatAI(caid);
 			}

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using C7GameData;
-using C7Engine;
-using ConvertCiv3Media;
 using Godot;
 
 // The layer responsible for drawing the cursor when the player is selecting a
@@ -16,7 +14,7 @@ public partial class GotoLayer : LooseLayer {
 		//
 		// We use FixedSize so Godot can calculate the width of the text for centering.
 		gotoLabelFont = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf", null, ResourceLoader.CacheMode.Ignore);
-		gotoLabelFont.FixedSize = 25;
+		gotoLabelFont.FixedSize = 20;
 
 		whiteFontTheme.DefaultFont = gotoLabelFont;
 		whiteFontTheme.SetColor("font_color", "Label", Colors.White);
@@ -29,41 +27,45 @@ public partial class GotoLayer : LooseLayer {
 
 	// The GoTo cursor and label fields.
 	private AnimatedSprite2D gotoCursorSprite = null;
+	private TextureRect staticCursorRect = null;
+	private ImageTexture staticCursor = null;
 	private Label gotoLabel = null;
 	Theme whiteFontTheme = new();
 	Theme redFontTheme = new();
 	FontFile gotoLabelFont = new();
 
-	public void drawGotoCursor(LooseView looseView, Vector2 position, int moves, bool attackingMove) {
-		// Initialize cursor if necessary
-		if (gotoCursorSprite == null) {
-			gotoCursorSprite = new AnimatedSprite2D();
-			gotoCursorSprite.SpriteFrames = TextureLoader.LoadAnimation("animations.cursor", "cursor");
-			gotoCursorSprite.Animation = "cursor";
+	public void DrawStaticGoToCursor(LooseView looseView, Vector2 position, int moves, bool attackingMove) {
+		gotoCursorSprite?.Hide();
+		gotoLabel?.Hide();
+		staticCursorRect?.Hide();
+		if (staticCursor == null) {
+			staticCursor = (ImageTexture)TextureLoader.LoadAnimation("animations.cursor", "cursor").GetFrameTexture("cursor", 1);
+			TextureRect tr = new() { Texture = staticCursor};
+			staticCursorRect = tr;
 
 			gotoLabel = new() {
 				Theme = whiteFontTheme
 			};
 
+			looseView.AddChild(staticCursorRect);
 			looseView.AddChild(gotoLabel);
-			looseView.AddChild(gotoCursorSprite);
-			gotoCursorSprite.Play("cursor");
 		}
 
+		staticCursorRect.Position = position - new Vector2(staticCursor.GetWidth(), staticCursor.GetHeight()) / 2;
+
 		gotoLabel.Theme = attackingMove ? redFontTheme : whiteFontTheme;
-		gotoLabel.Text = moves.ToString();
+		gotoLabel.Text = moves > 0 ? moves.ToString() : " ";
 		Vector2 labelSize = gotoLabelFont.GetStringSize(gotoLabel.Text);
 		gotoLabel.Position = position - labelSize / 2;
-		gotoCursorSprite.Position = position;
 
-		// Now that we're positioned our objects, we can display them again.
-		gotoCursorSprite.Show();
+		staticCursorRect.Show();
 		gotoLabel.Show();
 	}
 
 	public override void onBeginDraw(LooseView looseView, GameData gameData) {
 		// Hide the cursor if it has been initialized
 		gotoCursorSprite?.Hide();
+		staticCursorRect?.Hide();
 		gotoLabel?.Hide();
 
 		looseView.mapView.game.animationController.updateAnimations();
@@ -73,15 +75,49 @@ public partial class GotoLayer : LooseLayer {
 		if (looseView.mapView.game.gotoInfo == null) {
 			return;
 		}
-		Game.GotoInfo gotoInfo = looseView.mapView.game.gotoInfo;
 
-		// We set the move cost to -1 in Game.cs if the move is invalid for some reason.
-		if (gotoInfo.destinationTile == tile && gotoInfo.moveCost >= 0) {
-			drawGotoCursor(looseView, tileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);
-		} else if (gotoInfo.pathCoords
-				?.Contains(new System.Numerics.Vector2(tile.XCoordinate, tile.YCoordinate)) == true) {
-			// If this tile is part of the path, draw a little dot to represent that.
-			looseView.DrawCircle(tileCenter, 5, Colors.White);
+		Game.GotoInfo gotoInfo = looseView.mapView.game.gotoInfo;
+		MapUnit unit = looseView.mapView.game.CurrentlySelectedUnit;
+		Tile unitOriginTile = unit.location;
+
+		if (gotoInfo.destinationTile == tile){
+			DrawStaticGoToCursor(looseView, tileCenter,0,true );
+		}
+
+		if (gotoInfo.path != null && unit.CanEnterTile(gotoInfo.destinationTile, true ,true)) {
+			List<Tile> tiles = new List<Tile>();
+			tiles.Add(unitOriginTile);
+			tiles.AddRange(gotoInfo.path.path);
+
+			for (int i = 0; i < tiles.Count - 1; i++) {
+				Tile currentTile = tiles[i];
+				Tile nextTile = tiles[i + 1];
+
+				// Variable width of the line to account for various camera zoom levels.
+				// The end result should look pretty much the same to the player on any zoom level.
+				float lineWidth = Math.Max(1f / looseView.mapView.cameraZoom, 1f);
+
+				// We draw only the lines between tiles that are in our visible area
+				// with one or two tile buffer on both axis. How many is determined in the MapView
+				// by the getVisibleRegion().
+				// This is not only saving draw calls which is great, but there is a bigger reason.
+				// Imagine just loading the game, not moving the camera at all
+				// and press G to instruct a unit to move somewhere.
+				// The path is precomputed by another module, so we know the route to our destination.
+				// But if the path goes outside the visible area + the buffer, there is an issue.
+				// The visible region is only what you see at the screen plus the tiny buffer.
+				// These are the only tiles the player has seen and calculated the centers of, so far.
+				// If we try to draw lines between tiles that are outside this visible region, we will
+				// get an error because we don't know yet what these centers are. We either have to move the camera
+				// and calculate them, or precompute a huge buffer of tiles which is not practical at all.
+				if (looseView.tileCenters.TryGetValue(currentTile, out Vector2 currentTileCenter)
+				    && looseView.tileCenters.TryGetValue(nextTile, out Vector2 nextTileCenter)) {
+					staticCursorRect?.Hide();
+					looseView.DrawLine(currentTileCenter, nextTileCenter, Colors.Red, width: lineWidth);
+					// drawGotoCursor(looseView, nextTileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);
+					DrawStaticGoToCursor(looseView, nextTileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);
+				}
+			}
 		}
 	}
 }

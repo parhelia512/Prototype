@@ -176,7 +176,7 @@ namespace C7Engine {
 					log.Information($"Set AI for unit at {unit.location} to {improvement} with destination of " + result.destination);
 
 					PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-					result.pathToDestination = algorithm.PathFrom(unit.location, result.destination);
+					result.pathToDestination = algorithm.PathFrom(unit.location, result.destination, unit);
 
 					return result;
 				}

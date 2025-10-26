@@ -175,6 +175,10 @@ namespace C7GameData {
 			tileKnowledge = new TileKnowledge(this);
 		}
 
+		public bool HasExploredTile(Tile tile) {
+			return this.tileKnowledge.knownTiles.Contains(tile);
+		}
+
 		public bool IsAtPeaceWith(Player other) {
 			// Evaluate this before checking for barbarians so barbarians don't
 			// attack themselves.
@@ -263,6 +267,9 @@ namespace C7GameData {
 		}
 
 		public static bool CanMoveFreely(Player player, Tile sourceTile, Tile targetTile) {
+			if (!player.HasExploredTile(targetTile))
+				return true;
+
 			Player targetTileOwner = targetTile.OwningPlayer();
 			Player sourceTileOwner = sourceTile.OwningPlayer();
 

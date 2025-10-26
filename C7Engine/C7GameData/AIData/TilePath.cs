@@ -89,6 +89,10 @@ namespace C7GameData {
 		}
 
 		public static float GetMovementCost(Player player, Tile from, TileDirection dir, Tile newLocation) {
+			// If the player hasn't yet explored a tile, assume it's a generic tile
+			// and give back a generic cost, since we don't know yet what it is.
+			if(player.isHuman && !player.HasExploredTile(newLocation))
+				return 1f;
 
 			// River crossings disrupt roads, so check that first.
 			if (from.HasRiverCrossing(dir)) {
@@ -100,7 +104,6 @@ namespace C7GameData {
 			if (!Player.CanMoveFreely(player, from, newLocation)) {
 				return newLocation.MovementCost();
 			}
-
 
 			// Special case: if we are a water unit, traveling from the water into
 			// a city, it doesn't matter if the city is on hills or on grassland,

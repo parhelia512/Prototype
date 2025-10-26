@@ -143,7 +143,7 @@ namespace C7Engine.AI.UnitAI {
 			foreach (KeyValuePair<Tile, float> p in sortedScoredTiles) {
 				CombatAIData result = new();
 				result.destination = p.Key;
-				result.path = algorithm.PathFrom(unit.location, result.destination);
+				result.path = algorithm.PathFrom(unit.location, result.destination, unit);
 
 				// If we can't reach the destination, go to the next candidate.
 				if ((result.path?.PathLength() ?? -1) == -1) {
@@ -188,8 +188,8 @@ namespace C7Engine.AI.UnitAI {
 
 				foreach (Tile neighbor in t.neighbors.Values) {
 					// Units next to our cities are an even bigger threat. Note
-					// that it is possible for an enemy unit to be next to a 
-					// city but not in our borders if two cities are very close 
+					// that it is possible for an enemy unit to be next to a
+					// city but not in our borders if two cities are very close
 					// together.
 					if (neighbor.cityAtTile != null && neighbor.cityAtTile.owner == player) {
 						score += 3 * defender.unitType.attack;
