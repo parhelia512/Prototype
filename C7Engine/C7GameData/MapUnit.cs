@@ -539,7 +539,7 @@ namespace C7GameData {
 
 			// Check for cities belonging to other civs.
 			if (tile.cityAtTile != null && tile.cityAtTile.owner != owner) {
-				if(!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile))
+				if (!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile))
 					return allowCombat;
 				return false;
 			}

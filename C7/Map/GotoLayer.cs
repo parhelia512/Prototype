@@ -80,11 +80,11 @@ public partial class GotoLayer : LooseLayer {
 		MapUnit unit = looseView.mapView.game.CurrentlySelectedUnit;
 		Tile unitOriginTile = unit.location;
 
-		if (gotoInfo.destinationTile == tile){
-			DrawStaticGoToCursor(looseView, tileCenter,0,true );
+		if (gotoInfo.destinationTile == tile) {
+			DrawStaticGoToCursor(looseView, tileCenter, 0, true);
 		}
 
-		if (gotoInfo.path != null && unit.CanEnterTile(gotoInfo.destinationTile, true ,true)) {
+		if (gotoInfo.path != null && unit.CanEnterTile(gotoInfo.destinationTile, true, true)) {
 			List<Tile> tiles = new List<Tile>();
 			tiles.Add(unitOriginTile);
 			tiles.AddRange(gotoInfo.path.path);
@@ -111,7 +111,7 @@ public partial class GotoLayer : LooseLayer {
 				// get an error because we don't know yet what these centers are. We either have to move the camera
 				// and calculate them, or precompute a huge buffer of tiles which is not practical at all.
 				if (looseView.tileCenters.TryGetValue(currentTile, out Vector2 currentTileCenter)
-				    && looseView.tileCenters.TryGetValue(nextTile, out Vector2 nextTileCenter)) {
+					&& looseView.tileCenters.TryGetValue(nextTile, out Vector2 nextTileCenter)) {
 					staticCursorRect?.Hide();
 					looseView.DrawLine(currentTileCenter, nextTileCenter, Colors.Red, width: lineWidth);
 					// drawGotoCursor(looseView, nextTileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);

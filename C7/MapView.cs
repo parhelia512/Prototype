@@ -514,8 +514,7 @@ public partial class LooseView : Node2D {
 		});
 	}
 
-	private void GetVisibleTiles(MapView.VisibleRegion visRegion, GameData gD)
-	{
+	private void GetVisibleTiles(MapView.VisibleRegion visRegion, GameData gD) {
 		for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++) {
 			if (gD.map.isRowAt(Y)) {
 				for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {

@@ -129,26 +129,26 @@ namespace C7Engine.Pathing {
 			if (current.IsWater() && neighbor.IsWater()) {
 				// current:east -> neighbor:west case
 				if (current.neighbors[TileDirection.WEST] == neighbor
-				    && current.neighbors[TileDirection.SOUTHWEST].IsLand()
-				    && current.neighbors[TileDirection.NORTHWEST].IsLand()) {
+					&& current.neighbors[TileDirection.SOUTHWEST].IsLand()
+					&& current.neighbors[TileDirection.NORTHWEST].IsLand()) {
 					return true;
 				}
 				// current:west -> neighbor:east case
 				if (current.neighbors[TileDirection.EAST] == neighbor
-				    && current.neighbors[TileDirection.SOUTHEAST].IsLand()
-				    && current.neighbors[TileDirection.NORTHEAST].IsLand()) {
+					&& current.neighbors[TileDirection.SOUTHEAST].IsLand()
+					&& current.neighbors[TileDirection.NORTHEAST].IsLand()) {
 					return true;
 				}
 				// current:south -> neighbor:north case
 				if (current.neighbors[TileDirection.NORTH] == neighbor
-				    && current.neighbors[TileDirection.NORTHWEST].IsLand()
-				    && current.neighbors[TileDirection.NORTHEAST].IsLand()) {
+					&& current.neighbors[TileDirection.NORTHWEST].IsLand()
+					&& current.neighbors[TileDirection.NORTHEAST].IsLand()) {
 					return true;
 				}
 				// current:north -> neighbor:south case
 				if (current.neighbors[TileDirection.SOUTH] == neighbor
-				    && current.neighbors[TileDirection.SOUTHWEST].IsLand()
-				    && current.neighbors[TileDirection.SOUTHEAST].IsLand()) {
+					&& current.neighbors[TileDirection.SOUTHWEST].IsLand()
+					&& current.neighbors[TileDirection.SOUTHEAST].IsLand()) {
 					return true;
 				}
 			}

@@ -25,9 +25,9 @@ namespace C7Engine.Pathing {
 				if (!unit.owner.HasExploredTile(neighbor)) {
 					isPassable = true;
 				} else {
-					if(unit.IsLandUnit())
+					if (unit.IsLandUnit())
 						isPassable = neighbor.IsLand();
-					else if(unit.IsWaterUnit())
+					else if (unit.IsWaterUnit())
 						isPassable = neighbor.IsWater() || neighborHasCityWithSameOwner;
 				}
 
