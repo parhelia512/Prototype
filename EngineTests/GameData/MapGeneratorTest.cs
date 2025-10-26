@@ -1,16 +1,12 @@
-using C7GameData;
-using C7Engine;
-using Xunit;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using C7Engine;
+using C7GameData;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using Xunit;
 
-
-namespace C7GameDataTests;
+namespace EngineTests.GameData;
 
 public class GameMapTest {
 	public static void SaveMapsAsWaterLandPng(List<List<GameMap>> maps, string filePath) {

@@ -2,61 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.Pathing;
 using C7GameData;
+using EngineTests.Utils;
 using Xunit;
 
-namespace EngineTests {
-	public class WalkerOnLandTest {
-		private static MapUnit MakeLandUnit() {
-			MapUnit result = new(ID.None("")) {
-				unitType = new UnitPrototype() {
-					movement = 2,
-				},
-			};
-			result.unitType.categories.Add("Land");
-			return result;
-		}
-
-		private UnitWalker walker = new(MakeLandUnit());
-		private Tile mountain  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "mountains"
-			},
-			overlayTerrainType = new() {
-				Key = "mountains",
-				movementCost = 3
-			}
-		};
-		private Tile hill  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "hills"
-			},
-			overlayTerrainType = new() {
-				Key = "hills",
-				movementCost = 2
-			}
-		};
-		private Tile plains  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "plains"
-			},
-			overlayTerrainType = new() {
-				Key = "plains",
-				movementCost = 1
-			}
-		};
-		private Tile coast  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "coast"
-			},
-			overlayTerrainType = new() {
-				Key = "coast",
-				movementCost = 1
-			}
-		};
-		private TerrainImprovement road = new("road", TerrainImprovement.Layer.Roads, movementCost: 1.0f / 3);
-
+namespace EngineTests.AI.Pathing {
+	public sealed class WalkerOnLandTest : MapBase {
 		[Fact]
-		void testIgnoresWater() {
+		private void TestHumanPlayerLandUnitIgnoresKnownWater() {
 			Tile start = hill;
 
 			// Add 3 neighbors, one of which is water.
@@ -64,16 +16,85 @@ namespace EngineTests {
 			start.neighbors[TileDirection.SOUTH] = mountain;
 			start.neighbors[TileDirection.WEST] = plains;
 
+			float movementPoints = 2.0f;
+			MapUnit landUnit =  MakeLandUnit((int)movementPoints);
+
+			// make player human, so that they can't see unknown tiles
+			landUnit.owner.isHuman = true;
+
+			// Add tiles to Player's known tiles
+			landUnit.owner.tileKnowledge.knownTiles.Add(start);
+			landUnit.owner.tileKnowledge.knownTiles.Add(coast);
+			landUnit.owner.tileKnowledge.knownTiles.Add(mountain);
+			landUnit.owner.tileKnowledge.knownTiles.Add(plains);
+
+			UnitWalker unitWalker = new(landUnit);
+
 			// The water tile should be ignored, and the costs should be correct.
-			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
 			Assert.Equal(2, edges.Count());
 
 			Assert.Contains(edges, item => item.current == mountain && item.distanceToCurrent == 1);
-			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1 / 2.0f);
+			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1 / movementPoints);
 		}
 
 		[Fact]
-		void testRoadOnDestinationNotOnStart() {
+		private void TestHumanPlayerLandUnitIncludesUnknownWater() {
+			Tile start = hill;
+
+			// Add 3 neighbors, one of which is water.
+			start.neighbors[TileDirection.NORTH] = coast;
+			start.neighbors[TileDirection.SOUTH] = mountain;
+			start.neighbors[TileDirection.WEST] = plains;
+
+			float movementPoints = 2.0f;
+			MapUnit landUnit =  MakeLandUnit((int)movementPoints);
+			landUnit.owner.isHuman = true;
+
+			// Add tiles to Player's known tiles
+			landUnit.owner.tileKnowledge.knownTiles.Add(start);
+			landUnit.owner.tileKnowledge.knownTiles.Add(mountain);
+			landUnit.owner.tileKnowledge.knownTiles.Add(plains);
+
+			UnitWalker unitWalker = new(landUnit);
+
+			// The water tile should not be ignored, and the costs should be correct.
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
+			Assert.Equal(3, edges.Count());
+
+			Assert.Contains(edges, item => item.current == mountain && item.distanceToCurrent == 1);
+			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1 / movementPoints);
+			// 1 cost because the human player does not know the nature of the unexplored tile
+			Assert.Contains(edges, item => item.current == coast && item.distanceToCurrent == 1 / movementPoints);
+		}
+
+		[Fact]
+		private void TestAiPlayerLandUnitIgnoresUnknownWater() {
+			Tile start = hill;
+
+			// Add 3 neighbors, one of which is water.
+			start.neighbors[TileDirection.NORTH] = coast;
+			start.neighbors[TileDirection.SOUTH] = mountain;
+			start.neighbors[TileDirection.WEST] = plains;
+
+			float movementPoints = 2.0f;
+			MapUnit landUnit =  MakeLandUnit((int)movementPoints);
+
+			// make player human, so that they can't see unknown tiles
+			landUnit.owner.isHuman = false;
+
+			UnitWalker unitWalker = new(landUnit);
+
+			// The water tile should be ignored, even if it's unexplored because player is AI, and the costs should be correct.
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
+			Assert.Equal(2, edges.Count());
+
+			Assert.Contains(edges, item => item.current == mountain && item.distanceToCurrent == 1);
+			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1 / movementPoints);
+		}
+
+		[Fact]
+		private void TestRoadOnDestinationNotOnStart() {
 			Tile start = hill;
 
 			// Set up a neighbor with a road.
@@ -81,14 +102,19 @@ namespace EngineTests {
 			end.overlays.Add(road);
 			start.neighbors[TileDirection.NORTH] = end;
 
+			float movementPoints = 2.0f;
+			MapUnit landUnit =  MakeLandUnit((int)movementPoints);
+
+			UnitWalker unitWalker = new(landUnit);
+
 			// The road shouldn't matter, since we don't have a road.
-			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
 			Assert.Single(edges);
 			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1 / 2.0f);
 		}
 
 		[Fact]
-		void testRoadOnStartNotOnDestination() {
+		private void TestRoadOnStartNotOnDestination() {
 			Tile start = hill;
 			start.overlays.Add(road);
 
@@ -96,14 +122,19 @@ namespace EngineTests {
 			Tile end = plains;
 			start.neighbors[TileDirection.NORTH] = end;
 
+			float movementPoints = 2.0f;
+			MapUnit landUnit =  MakeLandUnit((int)movementPoints);
+
+			UnitWalker unitWalker = new(landUnit);
+
 			// The road shouldn't matter, since the destination doesn't have a road.
-			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
 			Assert.Single(edges);
 			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1 / 2.0f);
 		}
 
 		[Fact]
-		void testRoadOnStartAndDestination() {
+		private void TestRoadOnStartAndDestination() {
 			Tile start = hill;
 			start.overlays.Add(road);
 
@@ -112,80 +143,92 @@ namespace EngineTests {
 			end.overlays.Add(road);
 			start.neighbors[TileDirection.NORTH] = end;
 
+			float movementPoints = 2.0f;
+			MapUnit landUnit =  MakeLandUnit((int)movementPoints);
+
+			UnitWalker unitWalker = new(landUnit);
+
 			// The cost should be adjusted because we both have a road.
-			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
 			Assert.Single(edges);
 			Assert.Contains(edges, item => item.current == plains && item.distanceToCurrent == 1.0f / 3.0f / 2.0f);
 		}
 	}
 
-	public class WalkerOnWaterTest {
-		private static MapUnit MakeWaterUnit() {
-			MapUnit result = new(ID.None("")) {
-				unitType = new UnitPrototype() {
-					movement = 2,
-				},
-			};
-			return result;
-		}
-
-		private Player player = new();
-		private MapUnit nonLandUnit = MakeWaterUnit();
-		private Tile hill  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "hills"
-			},
-			overlayTerrainType = new() {
-				Key = "hills",
-				movementCost = 2
-			}
-		};
-		private Tile coast  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "coast"
-			},
-			overlayTerrainType = new() {
-				Key = "coast",
-				movementCost = 1
-			}
-		};
-		private Tile sea  = new(ID.None("")) {
-			baseTerrainType = new() {
-				Key = "sea"
-			},
-			overlayTerrainType = new() {
-				Key = "sea",
-				movementCost = 1
-			}
-		};
-
+	public sealed class WalkerOnWaterTest : MapBase {
 		[Fact]
-		void testIgnoresLand() {
-			UnitWalker walker = new(nonLandUnit);
+		private void TestHumanWaterUnitIgnoresKnownLand() {
 			Tile start = coast;
 
 			// Add 2 neighbors, one of which is land.
 			start.neighbors[TileDirection.NORTH] = hill;
 			start.neighbors[TileDirection.SOUTH] = sea;
 
+			float movementPoints = 2.0f;
+			MapUnit nonLandUnit =  MakeWaterUnit((int)movementPoints);
+
+			// make player human, so that they can't see unknown tiles
+			nonLandUnit.owner.isHuman = true;
+
+			// Add tiles to Player's known tiles
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(start);
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(hill);
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(sea);
+
+			UnitWalker unitWalker = new(nonLandUnit);
+
 			// The land tile should be ignored, and the costs should be correct.
-			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
 			Assert.Single(edges);
 
-			Assert.Contains(edges, item => item.current == sea && item.distanceToCurrent == 1 / 2.0f);
+			Assert.Contains(edges, item => item.current == sea && item.distanceToCurrent == 1 / movementPoints);
 		}
 
 		[Fact]
-		void testLandIncludedIfItHasCityWithSameOwner() {
-			UnitWalker walker = new(nonLandUnit);
-			nonLandUnit.owner = player;
-
+		private void TestHumanWaterUnitDoesNotIgnoreUnknownLand() {
 			Tile start = coast;
+
+			// Add 2 neighbors, one of which is land.
+			start.neighbors[TileDirection.NORTH] = hill;
+			start.neighbors[TileDirection.SOUTH] = sea;
+
+			float movementPoints = 2.0f;
+			MapUnit nonLandUnit =  MakeWaterUnit((int)movementPoints);
+
+			// make player human, so that they can't see unknown tiles
+			nonLandUnit.owner.isHuman = true;
+
+			// Add tiles to Player's known tiles
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(start);
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(sea);
+
+			UnitWalker unitWalker = new(nonLandUnit);
+
+			// The land tile should be ignored, and the costs should be correct.
+			IEnumerable<Edge<Tile>> edges = unitWalker.getEdges(start);
+			Assert.Equal(2, edges.Count());
+
+			Assert.Contains(edges, item => item.current == sea && item.distanceToCurrent == 1 / movementPoints);
+			Assert.Contains(edges, item => item.current == hill && item.distanceToCurrent == 1 / movementPoints);
+		}
+
+		[Fact]
+		private void TestLandIncludedIfItHasCityWithSameOwner() {
+			Tile start = coast;
+
+			float movementPoints = 2.0f;
+			MapUnit nonLandUnit =  MakeWaterUnit((int)movementPoints);
 
 			// Set up a neighbor on land with a city of the same owner.
 			Tile end = hill;
-			end.cityAtTile = new City(Tile.NONE, player, "", ID.None(""));
+			end.cityAtTile = new City(Tile.NONE, nonLandUnit.owner, "", ID.None(""));
 			start.neighbors[TileDirection.NORTH] = end;
+
+			// Add tiles to Player's known tiles
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(start);
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(end);
+
+			UnitWalker walker = new(nonLandUnit);
 
 			// The city tile should be included, to allow for canals, and so
 			// that ships can go back into harbors.
@@ -194,20 +237,28 @@ namespace EngineTests {
 			// movement costs don't make sense to apply to ships.
 			IEnumerable<Edge<Tile>> edges = walker.getEdges(start);
 			Assert.Single(edges);
-			Assert.Contains(edges, item => item.current == hill && item.distanceToCurrent == 1 / 2.0f);
+			Assert.Contains(edges, item => item.current == hill && item.distanceToCurrent == 1 / movementPoints);
 		}
 
 		[Fact]
-		void testCityWithDifferentOwnerNotIncluded() {
-			UnitWalker walker = new(nonLandUnit);
+		private void TestCityWithDifferentOwnerNotIncluded() {
 			Tile start = coast;
-			nonLandUnit.owner = player;
-			Player otherPlayer =new();
+
+			float movementPoints = 2.0f;
+			MapUnit nonLandUnit =  MakeWaterUnit((int)movementPoints);
+
+			Player otherPlayer = new Player();
 
 			// Set up a neighbor on land with a city of the same owner.
 			Tile end = hill;
 			end.cityAtTile = new City(Tile.NONE, otherPlayer, "", ID.None(""));
 			start.neighbors[TileDirection.NORTH] = end;
+
+			// Add tiles to Player's known tiles
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(start);
+			nonLandUnit.owner.tileKnowledge.knownTiles.Add(end);
+
+			UnitWalker walker = new(nonLandUnit);
 
 			// The city tile should be included, to allow for canals, and so
 			// that ships can go back into harbors.

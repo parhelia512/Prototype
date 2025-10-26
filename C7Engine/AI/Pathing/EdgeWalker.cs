@@ -22,7 +22,7 @@ namespace C7Engine.Pathing {
 
 				bool isPassable = false;
 
-				if (!unit.owner.HasExploredTile(neighbor)) {
+				if (unit.owner.isHuman && !unit.owner.HasExploredTile(neighbor)) {
 					isPassable = true;
 				} else {
 					if (unit.IsLandUnit())
