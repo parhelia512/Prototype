@@ -1,6 +1,6 @@
 [color=black][center]
-[b]C7 0.3 "Dutch"[/b]
-[url]c7-game.github.io[/url]
+[b]OpenCiv3 0.3 "Dutch" Preview 1[/b]
+[url]www.openciv3.org[/url]
 
 [b]An open source project
 by the 4X gaming community
@@ -20,6 +20,7 @@ Yegor Budylin
 
 Armageddon1
 Caro-Kann
+craven
 David1Socha
 Flintlock / maxpetul
 JimOfLeisure
@@ -36,8 +37,19 @@ Yegor Budylin
 
 [b]Artists[/b]
 
+aaglo
+embryodead
+imperator1961
 Kyriakos
+Micaelus
+Orthanc
 Plotinus
+register
+Sandris
+ShiroKobbure
+utahjazz7
+Virote_Considon
+Vuldacon
 
 [b]Co-conspirators[/b]
 
@@ -61,7 +73,7 @@ Thunderfall and leif erikson for the development forum at CivFanatics
 Sid Meier for creating [i]Civilization[/i]
 Soren Johnson and Firaxis for [i]Civilization III[/i]
 
-C7 is not affiliated with civfanatics.com,
+OpenCiv3 is not affiliated with civfanatics.com,
 Firaxis Games, Infogrames Interactive,
 Atari Interactive, or Take-Two Interactive Software.
 All trademarks are property of their respective owners.
