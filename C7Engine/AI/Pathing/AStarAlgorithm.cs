@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using C7GameData;
+using Serilog;
 
 namespace C7Engine.Pathing {
 	public class TileAndCost : IComparable<TileAndCost> {
@@ -38,17 +39,15 @@ namespace C7Engine.Pathing {
 		}
 
 		public override TilePath PathFrom(Tile start, Tile destination, MapUnit unit) {
-			// Exit early if we're starting and ending on land, and we're on
+			// Exit early if AI is starting and ending on land, and it's on
 			// different continents. Don't waste time checking every tile on the
 			// continent just to discover the path is impossible.
-			if (!unit.owner.isHuman || unit.owner.HasExploredTile(destination)) {
-				if (unit.IsLandUnit() && start.IsLand() && destination.IsLand() && start.continent != destination.continent) {
+			if (!unit.owner.isHuman) {
+				if (start.IsLand() && destination.IsLand() && start.continent != destination.continent) {
 					return TilePath.EmptyPath(destination);
 				}
-				// Avoid trying to calculate an impossible path, for example, from the sea to a lake
-				if (unit.IsWaterUnit() && start.IsWater() && destination.IsWater() && start.continent != destination.continent) {
-					return TilePath.EmptyPath(destination);
-				}
+				// TODO: We can add more restrictions to avoid calculations,
+				// especially for the water AI units, but requires careful planning/testing
 			}
 			// The set of tiles to explore next, ordered by their cumulative cost
 			// so far and the estimate of the cost to the goal.
@@ -83,7 +82,9 @@ namespace C7Engine.Pathing {
 
 					// TODO: the possibility here is to create a building/improvement/tech effect like "canal"
 					// (much like what the Panama canal is irl) that allows that kind of movement
-					if (unit.IsWaterUnit() && IsLandStrip(current, neighbor)) continue;
+					if (unit.IsWaterUnit()
+						&& (unit.owner.HasExploredTile(destination) || !unit.owner.isHuman)
+						&& GameMap.IsLandStrip(current, neighbor)) continue;
 
 					if (!isPassable(neighbor, destination)) {
 						continue;
@@ -106,53 +107,6 @@ namespace C7Engine.Pathing {
 			}
 
 			return TilePath.EmptyPath(destination);
-		}
-
-		private bool IsLandStrip(Tile current, Tile neighbor) {
-			// Account for small strips of land(visually) that water units must go around.
-			// These are coast tiles that bridge land tiles, and that a sea unit couldn't go through
-			// because otherwise that would make them islands of sorts.
-			// But in reality they are sea tiles with the coast texture, right next to each other,
-			// and nothing was preventing a sea unit to just cross from one to the other.
-			//
-			// Because of the isometric nature of the tiles, it seems that
-			// tiles that have a different relationship other than W<->E and N<->S
-			// like NW<->SE and NE<->SW can't possibly have the same issues
-			// because the never meet in a corner, but rather an edge.
-			//
-			//  east<->west case       north<->south case
-			//
-			//        <L>                    <S>
-			//      <S> <S>       or       <L> <L>
-			//        <L>                    <S>
-			//
-			if (current.IsWater() && neighbor.IsWater()) {
-				// current:east -> neighbor:west case
-				if (current.neighbors[TileDirection.WEST] == neighbor
-					&& current.neighbors[TileDirection.SOUTHWEST].IsLand()
-					&& current.neighbors[TileDirection.NORTHWEST].IsLand()) {
-					return true;
-				}
-				// current:west -> neighbor:east case
-				if (current.neighbors[TileDirection.EAST] == neighbor
-					&& current.neighbors[TileDirection.SOUTHEAST].IsLand()
-					&& current.neighbors[TileDirection.NORTHEAST].IsLand()) {
-					return true;
-				}
-				// current:south -> neighbor:north case
-				if (current.neighbors[TileDirection.NORTH] == neighbor
-					&& current.neighbors[TileDirection.NORTHWEST].IsLand()
-					&& current.neighbors[TileDirection.NORTHEAST].IsLand()) {
-					return true;
-				}
-				// current:north -> neighbor:south case
-				if (current.neighbors[TileDirection.SOUTH] == neighbor
-					&& current.neighbors[TileDirection.SOUTHWEST].IsLand()
-					&& current.neighbors[TileDirection.SOUTHEAST].IsLand()) {
-					return true;
-				}
-			}
-			return false;
 		}
 
 		private static TilePath makePath(Dictionary<Tile, Tile> cameFrom, Tile current) {

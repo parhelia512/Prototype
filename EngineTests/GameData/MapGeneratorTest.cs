@@ -8,7 +8,7 @@ using Xunit;
 
 namespace EngineTests.GameData;
 
-public class GameMapTest {
+public class GameMapGeneratorTest {
 	public static void SaveMapsAsWaterLandPng(List<List<GameMap>> maps, string filePath) {
 		int mapWidthPx = maps[0][0].numTilesWide * 2 + 1;
 		int mapHeightPx = maps[0][0].numTilesTall + 1;

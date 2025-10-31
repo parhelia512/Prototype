@@ -72,12 +72,13 @@ public partial class GotoLayer : LooseLayer {
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
-		if (looseView.mapView.game.gotoInfo == null) {
+		MapUnit unit = looseView.mapView.game.CurrentlySelectedUnit;
+		// When no unit is selected, at the end of a turn for example, we don't need to draw anything
+		if (looseView.mapView.game.gotoInfo == null || unit == MapUnit.NONE || unit == null) {
 			return;
 		}
 
 		Game.GotoInfo gotoInfo = looseView.mapView.game.gotoInfo;
-		MapUnit unit = looseView.mapView.game.CurrentlySelectedUnit;
 		Tile unitOriginTile = unit.location;
 
 		if (gotoInfo.destinationTile == tile) {
@@ -114,7 +115,6 @@ public partial class GotoLayer : LooseLayer {
 					&& looseView.tileCenters.TryGetValue(nextTile, out Vector2 nextTileCenter)) {
 					staticCursorRect?.Hide();
 					looseView.DrawLine(currentTileCenter, nextTileCenter, Colors.Red, width: lineWidth);
-					// drawGotoCursor(looseView, nextTileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);
 					DrawStaticGoToCursor(looseView, nextTileCenter, gotoInfo.moveCost, gotoInfo.attackingMove);
 				}
 			}
