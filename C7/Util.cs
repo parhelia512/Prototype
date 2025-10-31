@@ -128,7 +128,7 @@ public partial class Util {
 			}
 		}
 
-		// Next, before trying the base Civ paths, see if we have it packaged 
+		// Next, before trying the base Civ paths, see if we have it packaged
 		// with C7 and are in standalone mode.
 		string c7Path = FileExistsIgnoringCase(getProjectDirectoryPath(), mediaPath);
 		if (C7Settings.UseStandaloneMode()) {
@@ -226,7 +226,11 @@ public partial class Util {
 	// A FlicSheet is a sprite sheet created from a Flic file, with each frame of the animation as its own sprite
 	public struct FlicSheet {
 		public ImageTexture palette, indices;
+		public int spriteOriginalWidth, spriteOriginalHeight;
 		public int spriteWidth, spriteHeight;
+		public int offsetLeft, offsetTop;
+		public int framesPerAnimation, numberOfAnimations;
+		public int animationSpeed, animationTime;
 	}
 
 	// Loads a Flic and also converts it into a sprite sheet
@@ -255,7 +259,20 @@ public partial class Util {
 		var imgIndices = Image.CreateFromData(countColumns * flic.Width, countRows * flic.Height, false, Image.Format.R8, allIndices);
 		ImageTexture texIndices = ImageTexture.CreateFromImage(imgIndices);
 
-		return (new FlicSheet { palette = texPalette, indices = texIndices, spriteWidth = flic.Width, spriteHeight = flic.Height }, flic);
+		return (new FlicSheet {
+			palette = texPalette,
+			indices = texIndices,
+			spriteOriginalWidth = flic.OriginalWidth,
+			spriteOriginalHeight = flic.OriginalHeight,
+			spriteWidth = flic.Width,
+			spriteHeight = flic.Height,
+			offsetLeft = flic.OffsetLeft,
+			offsetTop = flic.OffsetTop,
+			framesPerAnimation = flic.FramesPerAnimation,
+			numberOfAnimations = flic.NumAnimations,
+			animationSpeed = flic.AnimationSpeed,
+			animationTime = flic.AnimationTime
+		}, flic);
 	}
 
 	// Like LoadWAVFromDisk, but the path is a relative path, not the result of
