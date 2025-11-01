@@ -5,7 +5,11 @@ using Serilog;
 namespace ConvertCiv3Media {
 	// Under construction
 	// Not intended to be a generalized/universal Flic reader
-	// Implementing from description at https://www.drdobbs.com/windows/the-flic-file-format/184408954
+	// [BROKEN LINK] Implementing from description at https://www.drdobbs.com/windows/the-flic-file-format/184408954
+	//
+	// The link above is broken at the time of writing this 28/10/2025
+	// The link below probably is the same article as above, on another site
+	// https://jacobfilipp.com/DrDobbs/articles/DDJ/1993/9303/9303a/9303a.htm#00af_0005
 	public class Flic {
 		private static ILogger log = Log.ForContext<Flic>();
 		// Images is an array of animations,images, each of which is a byte array of palette indexes
@@ -13,10 +17,16 @@ namespace ConvertCiv3Media {
 		// All animations/images have same palette, height, and width
 		// Palette is 256 colors in red, green, blue order
 		public byte[,] Palette = new byte[256,3];
+		public int OriginalWidth = 0;
+		public int OriginalHeight = 0;
 		public int Width = 0;
 		public int Height = 0;
+		public int OffsetLeft = 0;
+		public int OffsetTop = 0;
 		public int NumAnimations = 0;
 		public int FramesPerAnimation = 0;
+		public int AnimationTime = 0;
+		public int AnimationSpeed = 0;
 
 		private string path;
 
@@ -40,6 +50,19 @@ namespace ConvertCiv3Media {
 			int NumFrames = BitConverter.ToUInt16(FlicBytes, 6);
 			this.Width = BitConverter.ToUInt16(FlicBytes, 8);
 			this.Height = BitConverter.ToUInt16(FlicBytes, 10);
+
+			this.AnimationSpeed = BitConverter.ToInt32(FlicBytes, 16);
+
+			this.OffsetLeft = BitConverter.ToUInt16(FlicBytes, 100);
+			this.OffsetTop = BitConverter.ToUInt16(FlicBytes, 102);
+
+			// Disclaimer! I don't know if the width & height order is correct here
+			// but since the game always assumes a 240x240 size, maybe it doesn't matter
+			this.OriginalWidth = BitConverter.ToUInt16(FlicBytes, 104);
+			this.OriginalHeight = BitConverter.ToUInt16(FlicBytes, 106);
+
+			this.AnimationTime = BitConverter.ToUInt16(FlicBytes, 108);
+
 			int ImageLength = this.Width * this.Height;
 
 			// Civ3-specific values
