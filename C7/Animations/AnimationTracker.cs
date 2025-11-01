@@ -1,10 +1,7 @@
-
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
 using C7GameData;
-using Godot;
 
 public partial class AnimationTracker {
 	private AnimationManager civ3AnimData;
@@ -29,7 +26,7 @@ public partial class AnimationTracker {
 
 	private void startAnimation(ID id, C7Animation anim, Action completionEvent, AnimationEnding ending) {
 		long currentTimeMS = getCurrentTimeMS();
-		long animDurationMS = (long)(1000.0 * anim.getDuration());
+		long animDurationMS = (long)(anim.getDuration());
 
 		ActiveAnimation aa;
 		if (activeAnims.TryGetValue(id, out aa)) {

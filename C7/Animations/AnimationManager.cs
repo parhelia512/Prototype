@@ -232,7 +232,14 @@ public partial class C7Animation {
 
 	public double getDuration() {
 		Util.FlicSheet flicSheet = getFlicSheet();
-		double frameCount = flicSheet.indices.GetWidth() / flicSheet.spriteWidth;
-		return frameCount / 20.0; // Civ 3 anims often run at 20 FPS   TODO: Do they all? How could we tell? Is it exactly 20 FPS?
+		return flicSheet.animationSpeed * flicSheet.framesPerAnimation;
+	}
+
+	public Vector2I GetFlicAnimationOffset() {
+		return new Vector2I(getFlicSheet().offsetLeft, getFlicSheet().offsetTop);
+	}
+
+	public Vector2I GetFlicAnimationOriginalSize() {
+		return new Vector2I(getFlicSheet().spriteOriginalWidth, getFlicSheet().spriteOriginalHeight);
 	}
 }
