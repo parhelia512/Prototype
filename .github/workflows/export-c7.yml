@@ -29,7 +29,7 @@ on:
 
 env:
   GODOT_VERSION: 4.4.1
-  EXPORT_NAME: C7
+  EXPORT_NAME: OpenCiv3
 
 jobs:
   Export-C7-Windows:

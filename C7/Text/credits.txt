@@ -1,5 +1,6 @@
 [color=black][center]
 [b]OpenCiv3 0.3 "Dutch" Preview 1[/b]
+© The OpenCiv3 Project 2021-2025
 [url]www.openciv3.org[/url]
 
 [b]An open source project
