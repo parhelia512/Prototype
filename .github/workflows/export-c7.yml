@@ -7,7 +7,7 @@ on:
         description: Checked for debug build, unchecked for release
         default: true
       folder-suffix:
-        description: Will be added to "C7" for folder name
+        description: Will be added to $EXPORT_NAME for folder name
         required: false
       include-username:
         type: boolean
@@ -45,7 +45,7 @@ jobs:
     - name: Windows Build
       run: |
         mkdir -v -p build/${FOLDER_NAME}
-        cd ${EXPORT_NAME}
+        cd C7
         dotnet build
         godot -v --headless --export${BUILD_SUFFIX} "Windows Desktop" ../build/${FOLDER_NAME}/${EXPORT_NAME}.exe
     - name: Run tests
@@ -83,7 +83,7 @@ jobs:
     - name: Linux Build
       run: |
         mkdir -v -p build/${FOLDER_NAME}
-        cd ${EXPORT_NAME}
+        cd C7
         dotnet build
         godot -v --headless --export${BUILD_SUFFIX} "Linux/X11" ../build/${FOLDER_NAME}/${EXPORT_NAME}.x86_64
     - name: Run tests
@@ -124,7 +124,7 @@ jobs:
     - name: Mac Build
       run: |
         mkdir -v -p build/${FOLDER_NAME}
-        cd ${EXPORT_NAME}
+        cd C7
         dotnet build
         godot -v --headless --export${BUILD_SUFFIX} "macOS" ../build/${FOLDER_NAME}.zip
     - name: Run tests
