@@ -852,7 +852,7 @@ public partial class Game : Node {
 			// different than the tile the unit is on, calculate the path to move there.
 			MapUnit unit = tile == null ? null : gameData.GetUnit(CurrentlySelectedUnit.id);
 			if (unit != null && unit.location != tile) {
-				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
+				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile, unit);
 				result.moveCost =
 					result.path.PathCost(unit.owner, unit.location, unit.unitType.movement, unit.movementPoints.remaining);
 				result.pathCoords = result.path.GetPathCoords();

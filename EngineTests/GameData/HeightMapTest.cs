@@ -1,15 +1,11 @@
-using C7GameData;
-using Xunit;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using C7GameData;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using Xunit;
 
-
-namespace C7GameDataTests;
+namespace EngineTests.GameData;
 
 public class HeightMapTest {
 	public static void SaveNoiseMapAsPng(List<HeightMap> heightMaps, string filePath) {

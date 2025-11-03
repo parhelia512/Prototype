@@ -1,7 +1,9 @@
 using System.Collections.Generic;
-using Xunit;
 using C7GameData;
 using C7GameData.Save;
+using Xunit;
+
+namespace EngineTests.GameData;
 
 public class IDFactoryTests {
 	[Fact]
@@ -59,4 +61,3 @@ public class IDFactoryTests {
 		Assert.Equal("unit-1", id.ToString());
 	}
 }
-

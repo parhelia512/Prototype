@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using C7GameData;
+using Serilog;
 
 namespace C7Engine.Pathing {
 	public class TileAndCost : IComparable<TileAndCost> {
@@ -37,14 +38,17 @@ namespace C7Engine.Pathing {
 			this.isPassable = isPassable;
 		}
 
-		public override TilePath PathFrom(Tile start, Tile destination) {
-			// Exit early if we're starting and ending on land, and we're on
+		public override TilePath PathFrom(Tile start, Tile destination, MapUnit unit) {
+			// Exit early if AI is starting and ending on land, and it's on
 			// different continents. Don't waste time checking every tile on the
 			// continent just to discover the path is impossible.
-			if (start.IsLand() && destination.IsLand() && start.continent != destination.continent) {
-				return TilePath.EmptyPath(destination);
+			if (!unit.owner.isHuman) {
+				if (start.IsLand() && destination.IsLand() && start.continent != destination.continent) {
+					return TilePath.EmptyPath(destination);
+				}
+				// TODO: We can add more restrictions to avoid calculations,
+				// especially for the water AI units, but requires careful planning/testing
 			}
-
 			// The set of tiles to explore next, ordered by their cumulative cost
 			// so far and the estimate of the cost to the goal.
 			BinaryMinHeap<TileAndCost> openSet = new();
@@ -75,6 +79,12 @@ namespace C7Engine.Pathing {
 				// Otherwise check each neighbor that we can use.
 				foreach (Edge<Tile> neighborEdge in edgeWalker.getEdges(current)) {
 					Tile neighbor = neighborEdge.current;
+
+					// TODO: the possibility here is to create a building/improvement/tech effect like "canal"
+					// (much like what the Panama canal is irl) that allows that kind of movement
+					if (unit.IsWaterUnit()
+						&& (unit.owner.HasExploredTile(destination) || !unit.owner.isHuman)
+						&& GameMap.IsLandStrip(current, neighbor)) continue;
 
 					if (!isPassable(neighbor, destination)) {
 						continue;
