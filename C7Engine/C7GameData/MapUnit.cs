@@ -66,6 +66,9 @@ namespace C7GameData {
 		public bool IsLandUnit() {
 			return this.unitType.categories.Contains("Land");
 		}
+		public bool IsWaterUnit() {
+			return this.unitType.categories.Contains("Sea");
+		}
 
 		public bool CanDefendOnLand() {
 			return IsLandUnit() && unitType.defense > 0;
@@ -487,13 +490,25 @@ namespace C7GameData {
 		// Like above, but allows specifying that we want to handle the case
 		// where a war declaration could be made before the move.
 		public bool CanEnterTile(Tile tile, bool allowCombat, bool allowWarDeclaration) {
+			if (this.owner.isHuman && !this.owner.HasExploredTile(tile))
+				return true;
+
+			// TODO: Add sea/ocean restrictions for water units
+			// Check if the player has the appropriate tech or wonder to move freely.
+			// Civ3 seems to not allow to set a destination on sea/ocean without tech/wonder
+			// (even if you can actually go there using the keyboard keys)
+			// but it will go through it if it's just a shortcut to an allowed tile.
+
 			// Keep land units on land and sea units on water
-			if (unitType.categories.Contains("Sea") && tile.IsLand()) {
+			if (this.IsWaterUnit() && tile.IsLand()) {
 				if (tile.HasCity && tile.cityAtTile.owner == owner) {
 					return true;
 				}
 				return false;
-			} else if (unitType.categories.Contains("Land") && !tile.IsLand())
+			}
+			// TODO: to be modified to allow boarding on ships,
+			// that have the capacity and can take units of this kind
+			if (this.IsLandUnit() && !tile.IsLand())
 				return false;
 
 			// If we allow declaring war on this move, then it doesn't matter if
@@ -503,19 +518,30 @@ namespace C7GameData {
 				return true;
 			}
 
-			// Check for units belonging to other civs
-			foreach (MapUnit other in tile.unitsOnTile) {
-				if (other.owner != owner) {
-					if (!other.owner.IsAtPeaceWith(owner))
-						return allowCombat && unitType.attack > 0;
-					else
+			// Allow AI to "see" human/other AI units even if they are in an unexplored or inactive tile
+			// from their perspective, but allow humans to set a course if the tile
+			// is unknown or not active, aka, the human player shouldn't know what's on the tile
+			// if the tile is not active, or they haven't  discovered it yet.
+			//
+			// If we don't want to have the AI have this advantage over the human player
+			// we can simply remove the !isHuman() condition. This can also be tied to
+			// AI difficulty level, or be made moddable somehow, etc...
+			if (!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile)) {
+				// Check for units belonging to other civs
+				foreach (MapUnit other in tile.unitsOnTile) {
+					if (other.owner != owner) {
+						if (!other.owner.IsAtPeaceWith(owner))
+							return allowCombat && unitType.attack > 0;
 						return false;
+					}
 				}
 			}
 
 			// Check for cities belonging to other civs.
 			if (tile.cityAtTile != null && tile.cityAtTile.owner != owner) {
-				return allowCombat;
+				if (!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile))
+					return allowCombat;
+				return false;
 			}
 
 			return true;
@@ -599,6 +625,23 @@ namespace C7GameData {
 			return result;
 		}
 
+		public int TurnsToCompleteTerraform(Terraform t) {
+			// Figure out how much work remains to do on this particular job.
+			int remainingTerraformCost = GetWorkerJobCost(location, t) - (int)SumWorkerProgress(location, t);
+
+			// Figure out how fast all of the wokers doing this particular
+			// terraform will work.
+			float combinedWorkerSpeed = workerSpeed();
+			foreach (MapUnit unit in location.unitsOnTile) {
+				if (unit.WorkerJob == t) {
+					combinedWorkerSpeed += unit.workerSpeed();
+				}
+			}
+
+			// Divide the two, rounding up.
+			return (int)Math.Ceiling(remainingTerraformCost / combinedWorkerSpeed);
+		}
+
 		public async Task PerformBusyAction() {
 			if (isFortified) {
 				return;
@@ -613,7 +656,8 @@ namespace C7GameData {
 			// work towards it. We do this before any automation logic, so that
 			// automated units properly contribute their efforts.
 			if (WorkerJob != null) {
-				updateWorkerJob();
+				WorkerProgressTowardsJob += workerSpeed();
+				movementPoints.onConsumeAll();
 
 				// See if this worker finished the job.
 				if ((int)SumWorkerProgress(location, WorkerJob) >= GetWorkerJobCost(location, WorkerJob)) {
@@ -698,14 +742,12 @@ namespace C7GameData {
 			_ = PerformBusyAction();
 		}
 
-		public void updateWorkerJob() {
+		public float workerSpeed() {
 			float progressPerTurn = JOB_PROGRESS_WORKER;
 			if (owner.civilization.traits.Contains(Civilization.Trait.Industrious)) {
 				progressPerTurn *= 1.5f;
 			}
-
-			WorkerProgressTowardsJob += progressPerTurn;
-			movementPoints.onConsumeAll();
+			return progressPerTurn;
 		}
 
 		public void resetWorkerJob() {

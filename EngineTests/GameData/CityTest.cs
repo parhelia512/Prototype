@@ -1,10 +1,12 @@
 using C7GameData;
 using Xunit;
 
+namespace EngineTests.GameData;
+
 public class CityTest {
 	[Fact]
 	public void CityWith2ProductionPerTurn_ShouldReturn1TurnIf9_of_10ProductionDone() {
-		C7Engine.EngineStorage.InitializeGameDataForTests(new GameData() {
+		C7Engine.EngineStorage.InitializeGameDataForTests(new C7GameData.GameData() {
 			gameDifficulty = new Difficulty(),
 		});
 		Player player = new() {
@@ -62,7 +64,7 @@ public class CityTest {
 
 	[Fact]
 	public void CityShouldShrinkWhenItRunsOutOfFood() {
-		GameData gameData = new();
+		C7GameData.GameData gameData = new();
 		Player player = new();
 		player.government = new Government();
 		player.rules = new() { MaximumLevel1CitySize = 6 };

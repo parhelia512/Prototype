@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-
+using C7Engine;
+using C7GameData;
+using C7GameData.Save;
+using Newtonsoft.Json.Linq;
+using QueryCiv3;
 using Xunit;
 
-using C7GameData;
-using C7Engine;
-using C7GameData.Save;
-using QueryCiv3;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
+namespace EngineTests.GameData;
 
 public class SaveTests {
 
@@ -67,7 +67,7 @@ public class SaveTests {
 		SaveGame saveNeverGameData = SaveGame.Load(developerSave, (string unused) => { return unused; });
 
 		saveNeverGameData.Save(outputNeverGameDataPath);
-		GameData gameData = ToGameData(saveNeverGameData);
+		C7GameData.GameData gameData = ToGameData(saveNeverGameData);
 		SaveGame saveWasGameData = SaveGame.FromGameData(gameData);
 		saveWasGameData.Save(outputWasGameDataPath);
 
@@ -115,13 +115,13 @@ public class SaveTests {
 		return CreateGame.createGame(path, luaRulesDir, biqPath, getPediaIconsPath).Result;
 	}
 
-	private GameData ToGameData(SaveGame game) {
+	private C7GameData.GameData ToGameData(SaveGame game) {
 		return game.ToGameData(luaRulesDir);
 	}
 
 	private void CheckAiInvariants() {
-		EngineStorage.ReadGameData((GameData gameData) => {
-			GameData game = gameData;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => {
+			C7GameData.GameData game = gameData;
 
 			foreach (Player p in game.players) {
 				foreach (MapUnit u in p.units) {
@@ -173,8 +173,8 @@ public class SaveTests {
 
 		// Make the player a human again so we can save and load the game.
 		human.isHuman = true;
-		GameData game = null;
-		EngineStorage.ReadGameData((GameData gameData) => {
+		C7GameData.GameData game = null;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => {
 			game = gameData;
 		});
 		Assert.Equal(50, game.turn);
@@ -185,7 +185,7 @@ public class SaveTests {
 
 		// Load the saved game and save it again.
 		string roundTrippedSavePath = getDataPath($"output/headless-game-round-tripped-save-{outputFilePostfix}.json");
-		GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath, (string unused) => { return unused; }));
+		C7GameData.GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath, (string unused) => { return unused; }));
 		SaveGame.FromGameData(roundTrippedGameData).Save(roundTrippedSavePath);
 
 		string[] directSaveLines = File.ReadAllLines(outputDirectSavePath);
@@ -205,8 +205,8 @@ public class SaveTests {
 		Player human = CreateHeadlessGame(developerSave);
 		WaitForStartTurnMessage();
 
-		GameData gd = null;
-		EngineStorage.ReadGameData((GameData gameData) => { gd = gameData; });
+		C7GameData.GameData gd = null;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => { gd = gameData; });
 
 		Tile t0 = gd.map.tileAt(97, 33);
 		Tile t1 = gd.map.tileAt(99, 33);
@@ -247,7 +247,7 @@ public class SaveTests {
 		int i = 0;
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			SaveGame game = null;
-			GameData gd = null;
+			C7GameData.GameData gd = null;
 			Console.WriteLine(saveFileInfo.FullName);
 			Exception ex = Record.Exception(() => {
 				game = ImportCiv3.ImportSav(saveFileInfo.FullName, defaultBicPath, (relativeModePath) => {
@@ -298,7 +298,7 @@ public class SaveTests {
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			string name = saveFileInfo.Name;
 			SaveGame game = null;
-			GameData gd = null;
+			C7GameData.GameData gd = null;
 
 			Func<string, string> getPediaIconsPath = (relativeModPath) => {
 				if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
@@ -343,7 +343,7 @@ public class SaveTests {
 				// The human player should always have either a city or a settler.
 				if (player.human) {
 					Assert.True(cityCount + settlerCount > 0,
-								name + " : " + player.civilization);
+						name + " : " + player.civilization);
 				}
 			}
 
@@ -362,7 +362,7 @@ public class SaveTests {
 				// The human player should always have either a city or a settler.
 				if (player.isHuman) {
 					Assert.True(cityCount + settlerCount > 0,
-								name + " : " + player.civilization.name);
+						name + " : " + player.civilization.name);
 				}
 			}
 

@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace C7GameData {
 	using System;
 	using System.Linq;
@@ -180,7 +182,7 @@ namespace C7GameData {
 					currentContinent.Add(x);
 
 					foreach (Tile n in x.neighbors.Values) {
-						if (!seen.Contains(n) && n.IsLand() == x.IsLand()) {
+						if (!seen.Contains(n) && n.IsLand() == x.IsLand() && !IsLandStrip(x, n)) {
 							seen.Add(n);
 							toCheck.Enqueue(n);
 						}
@@ -210,6 +212,65 @@ namespace C7GameData {
 					}
 				}
 			}
+		}
+
+		public static bool IsLandStrip(Tile current, Tile neighbor) {
+			// Account for small strips of land(visually) that water units must go around.
+			// These are coast tiles that bridge land tiles, and that a sea unit couldn't go through
+			// because otherwise that would make them islands of sorts.
+			// But in reality they are sea tiles with the coast texture, right next to each other,
+			// and nothing was preventing a sea unit to just cross from one to the other.
+			//
+			// Because of the isometric nature of the tiles, it seems that
+			// tiles that have a different relationship other than W<->E and N<->S
+			// like NW<->SE and NE<->SW can't possibly have the same issues
+			// because the never meet in a corner, but rather an edge.
+			//
+			//  east<->west case       north<->south case
+			//
+			//        <L>                    <S>
+			//      <S> <S>       or       <L> <L>
+			//        <L>                    <S>
+			//
+			if (current.IsWater() && neighbor.IsWater()) {
+				// current:east -> neighbor:west case
+				if (current.neighbors.TryGetValue(TileDirection.WEST, out Tile westNeighbor)
+					&& westNeighbor == neighbor
+					&& current.neighbors.TryGetValue(TileDirection.SOUTHWEST, out Tile eastWest_southWestTile)
+					&& eastWest_southWestTile.IsLand()
+					&& current.neighbors.TryGetValue(TileDirection.NORTHWEST, out Tile eastWest_NorthWestTile)
+					&& eastWest_NorthWestTile.IsLand()) {
+					return true;
+				}
+				// current:west -> neighbor:east case
+				if (current.neighbors.TryGetValue(TileDirection.EAST, out Tile eastNeighbor)
+					&& eastNeighbor == neighbor
+					&& current.neighbors.TryGetValue(TileDirection.SOUTHEAST, out Tile westEast_SouthEastTile)
+					&& westEast_SouthEastTile.IsLand()
+					&& current.neighbors.TryGetValue(TileDirection.NORTHEAST, out Tile westEast_NorthEastTile)
+					&& westEast_NorthEastTile.IsLand()) {
+					return true;
+				}
+				// current:south -> neighbor:north case
+				if (current.neighbors.TryGetValue(TileDirection.NORTH, out Tile northNeighbor)
+					&& northNeighbor == neighbor
+					&& current.neighbors.TryGetValue(TileDirection.NORTHWEST, out Tile southNorth_NorthWestTile)
+					&& southNorth_NorthWestTile.IsLand()
+					&& current.neighbors.TryGetValue(TileDirection.NORTHEAST, out Tile southNorth_NorthEastTile)
+					&& southNorth_NorthEastTile.IsLand()) {
+					return true;
+				}
+				// current:north -> neighbor:south case
+				if (current.neighbors.TryGetValue(TileDirection.SOUTH, out Tile southNeighbor)
+					&& southNeighbor == neighbor
+					&& current.neighbors.TryGetValue(TileDirection.SOUTHWEST, out Tile northSouth_SouthWestTile)
+					&& northSouth_SouthWestTile.IsLand()
+					&& current.neighbors.TryGetValue(TileDirection.SOUTHEAST, out Tile northSouth_SouthEastTile)
+					&& northSouth_SouthEastTile.IsLand()) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
