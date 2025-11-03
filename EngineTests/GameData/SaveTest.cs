@@ -52,15 +52,17 @@ public class SaveTests {
 		return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
 	}
 
-	[Fact]
-	public void SimpleSave() {
+	[Theory]
+	[InlineData("../C7/Text/c7-static-map-save.json", "basic")]
+	[InlineData("../C7/Text/c7-static-map-save-standalone.json", "standalone")]
+	public void SimpleSave(string developerSavePath, string outputFilePostfix) {
 		// simple load SaveGame and save to file:
-		string outputNeverGameDataPath = getDataPath("output/static-save-never-game-data.json");
+		string outputNeverGameDataPath = getDataPath($"output/static-save-never-game-data-{outputFilePostfix}.json");
 
 		// load SaveGame but convert to and from GameData before saving to file:
-		string outputWasGameDataPath = getDataPath("output/static-save-was-game-data.json");
+		string outputWasGameDataPath = getDataPath($"output/static-save-was-game-data-{outputFilePostfix}.json");
 
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+		string developerSave = getBasePath(developerSavePath);
 
 		SaveGame saveNeverGameData = SaveGame.Load(developerSave, (string unused) => { return unused; });
 
@@ -148,9 +150,11 @@ public class SaveTests {
 		});
 	}
 
-	[Fact]
-	public void SimpleGame() {
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+	[Theory]
+	[InlineData("../C7/Text/c7-static-map-save.json", "basic")]
+	[InlineData("../C7/Text/c7-static-map-save-standalone.json", "standalone")]
+	public void SimpleGame(string developerSavePath, string outputFilePostfix) {
+		string developerSave = getBasePath(developerSavePath);
 
 		new MsgSetAnimationsEnabled(false).send();
 
@@ -176,11 +180,11 @@ public class SaveTests {
 		Assert.Equal(50, game.turn);
 
 		// Save the game.
-		string outputDirectSavePath = getDataPath("output/headless-game-direct-save.json");
+		string outputDirectSavePath = getDataPath($"output/headless-game-direct-save-{outputFilePostfix}.json");
 		SaveGame.FromGameData(game).Save(outputDirectSavePath);
 
 		// Load the saved game and save it again.
-		string roundTrippedSavePath = getDataPath("output/headless-game-round-tripped-save.json");
+		string roundTrippedSavePath = getDataPath($"output/headless-game-round-tripped-save-{outputFilePostfix}.json");
 		GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath, (string unused) => { return unused; }));
 		SaveGame.FromGameData(roundTrippedGameData).Save(roundTrippedSavePath);
 
