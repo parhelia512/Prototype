@@ -188,9 +188,9 @@ public partial class Util {
 
 	static private string getProjectDirectoryPath() {
 		// see issue https://github.com/godotengine/godot/issues/24222#issuecomment-709092664
-		// - use local resource folder in debug mode
-		// - use executable folder in release mode
-		return OS.IsDebugBuild() ? "res://" : OS.GetExecutablePath().GetBaseDir();
+		// - use local resource folder while running from the editor binary
+		// - use executable folder in the exported builds
+		return OS.HasFeature("editor") ? "res://" : OS.GetExecutablePath().GetBaseDir();
 	}
 
 	// Replaces image colors based on a given dictionary
