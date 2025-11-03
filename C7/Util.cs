@@ -70,7 +70,7 @@ public partial class Util {
 
 			foreach (string step in ignoredCaseExtension.Replace('\\', '/').Split('/')) {
 				string goal = System.IO.Path.Combine(tr, step);
-				List<string> matches = System.IO.Directory.EnumerateFileSystemEntries(tr, "**")
+				List<string> matches = System.IO.Directory.EnumerateFileSystemEntries(tr, "*")
 					.Where(p => p.Equals(goal, StringComparison.CurrentCultureIgnoreCase))
 					.ToList();
 
