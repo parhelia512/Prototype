@@ -599,6 +599,23 @@ namespace C7GameData {
 			return result;
 		}
 
+		public int TurnsToCompleteTerraform(Terraform t) {
+			// Figure out how much work remains to do on this particular job.
+			int remainingTerraformCost = GetWorkerJobCost(location, t) - (int)SumWorkerProgress(location, t);
+
+			// Figure out how fast all of the wokers doing this particular
+			// terraform will work.
+			float combinedWorkerSpeed = workerSpeed();
+			foreach (MapUnit unit in location.unitsOnTile) {
+				if (unit.WorkerJob == t) {
+					combinedWorkerSpeed += unit.workerSpeed();
+				}
+			}
+
+			// Divide the two, rounding up.
+			return (int)Math.Ceiling(remainingTerraformCost / combinedWorkerSpeed);
+		}
+
 		public async Task PerformBusyAction() {
 			if (isFortified) {
 				return;
@@ -613,7 +630,8 @@ namespace C7GameData {
 			// work towards it. We do this before any automation logic, so that
 			// automated units properly contribute their efforts.
 			if (WorkerJob != null) {
-				updateWorkerJob();
+				WorkerProgressTowardsJob += workerSpeed();
+				movementPoints.onConsumeAll();
 
 				// See if this worker finished the job.
 				if ((int)SumWorkerProgress(location, WorkerJob) >= GetWorkerJobCost(location, WorkerJob)) {
@@ -698,14 +716,12 @@ namespace C7GameData {
 			_ = PerformBusyAction();
 		}
 
-		public void updateWorkerJob() {
+		public float workerSpeed() {
 			float progressPerTurn = JOB_PROGRESS_WORKER;
 			if (owner.civilization.traits.Contains(Civilization.Trait.Industrious)) {
 				progressPerTurn *= 1.5f;
 			}
-
-			WorkerProgressTowardsJob += progressPerTurn;
-			movementPoints.onConsumeAll();
+			return progressPerTurn;
 		}
 
 		public void resetWorkerJob() {

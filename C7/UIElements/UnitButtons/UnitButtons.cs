@@ -17,7 +17,11 @@ public partial class UnitButtons : VBoxContainer {
 
 	private ILogger log = LogManager.ForContext<UnitButtons>();
 
-	private Dictionary<string, TextureButton> buttonMap = new();
+	// A record holding a button and the base tooltip (without any indication
+	// of how many turns an action might take).
+	public record ButtonAndTooltip(TextureButton button, string baseTooltip);
+
+	private Dictionary<string, ButtonAndTooltip> buttonMap = new();
 
 	[Export]
 	HBoxContainer primaryControls;
@@ -28,7 +32,7 @@ public partial class UnitButtons : VBoxContainer {
 	[Export]
 	HBoxContainer advancedControls;
 
-	private static readonly  string[] terraformOrder = [
+	private static readonly string[] terraformOrder = [
 		C7Action.UnitBuildRoad,
 		C7Action.UnitBuildRailroad,
 		C7Action.UnitBuildMine,
@@ -103,7 +107,7 @@ public partial class UnitButtons : VBoxContainer {
 		}
 
 		row.AddChild(button);
-		buttonMap[action] = button;
+		buttonMap[action] = new ButtonAndTooltip(button, button.TooltipText);
 	}
 
 	private void OnNoMoreAutoselectableUnits() {
@@ -112,21 +116,34 @@ public partial class UnitButtons : VBoxContainer {
 
 	private void OnNewUnitSelected(ParameterWrapper<MapUnit> wrappedMapUnit) {
 		MapUnit unit = wrappedMapUnit.Value;
-		foreach (TextureButton button in buttonMap.Values) {
-			button.Visible = false;
+
+		// Reset the visibility and tooltip whenever the unit changes.
+		foreach (ButtonAndTooltip btt in buttonMap.Values) {
+			btt.button.Visible = false;
+			btt.button.TooltipText = btt.baseTooltip;
 		}
 
 		var unitActions = unit.GetAvailableActions().Select(C7Action.ToActionString);
-		var terraformActions = unit.GetAvailableTerraforms().Select(t => t.UIAction);
-		IEnumerable<string> availableActions = unitActions.Concat(terraformActions);
 
 		// Mark all the buttons corresponding to the unit's available actions
 		// as visible. We do this rather than using the unit prototype's actions
 		// so that we don't display buttons that do nothing - we don't want to
 		// show the "road" button if we can't build a road, etc.
-		foreach (string actionKey in availableActions) {
-			if (buttonMap.TryGetValue(actionKey, out TextureButton value)) {
-				value.Visible = true;
+		foreach (string actionKey in unitActions) {
+			if (buttonMap.TryGetValue(actionKey, out ButtonAndTooltip value)) {
+				value.button.Visible = true;
+			} else {
+				log.Warning("Could not find button " + actionKey);
+			}
+		}
+
+		// Do the same thing for each available terraform, but update the button
+		// tooltip to include how many turns it will take.
+		foreach (Terraform terraform in unit.GetAvailableTerraforms()) {
+			string actionKey = terraform.UIAction;
+			if (buttonMap.TryGetValue(actionKey, out ButtonAndTooltip value)) {
+				value.button.Visible = true;
+				value.button.TooltipText = $"{value.baseTooltip} ({unit.TurnsToCompleteTerraform(terraform)} turns)";
 			} else {
 				log.Warning("Could not find button " + actionKey);
 			}
