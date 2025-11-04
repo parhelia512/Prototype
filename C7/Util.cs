@@ -70,7 +70,7 @@ public partial class Util {
 
 			foreach (string step in ignoredCaseExtension.Replace('\\', '/').Split('/')) {
 				string goal = System.IO.Path.Combine(tr, step);
-				List<string> matches = System.IO.Directory.EnumerateFileSystemEntries(tr, "**")
+				List<string> matches = System.IO.Directory.EnumerateFileSystemEntries(tr, "*")
 					.Where(p => p.Equals(goal, StringComparison.CurrentCultureIgnoreCase))
 					.ToList();
 
@@ -130,7 +130,9 @@ public partial class Util {
 
 		// Next, before trying the base Civ paths, see if we have it packaged
 		// with C7 and are in standalone mode.
-		string c7Path = FileExistsIgnoringCase(getProjectDirectoryPath(), mediaPath);
+		string c7BasePath = System.IO.Path.Combine(getProjectDirectoryPath(), "Assets");
+		string c7Path = FileExistsIgnoringCase(c7BasePath, mediaPath);
+
 		if (C7Settings.UseStandaloneMode()) {
 			if (c7Path != null) {
 				return c7Path;
@@ -186,9 +188,9 @@ public partial class Util {
 
 	static private string getProjectDirectoryPath() {
 		// see issue https://github.com/godotengine/godot/issues/24222#issuecomment-709092664
-		// - use local resource folder in debug mode
-		// - use executable folder in release mode
-		return OS.IsDebugBuild() ? "res://" : OS.GetExecutablePath().GetBaseDir();
+		// - use local resource folder while running from the editor binary
+		// - use executable folder in the exported builds
+		return OS.HasFeature("editor") ? "res://" : OS.GetExecutablePath().GetBaseDir();
 	}
 
 	// Replaces image colors based on a given dictionary
