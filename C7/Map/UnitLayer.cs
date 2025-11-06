@@ -287,27 +287,33 @@ public partial class UnitLayer : LooseLayer {
 			}
 		}
 
+		// TODO: Maybe add this is as a player configuration for a "harder" mode,
+		// where players can't see how many enemy units there are even in tiles that don't have a city.
+		// RightClickMenu functionality would need to be made configurable if this gets implemented in the future.
+		if (unit.location.HasCity && unit.owner != looseView.mapView.game.controller)
+			return;
+
+		// Draw movement indicator for our units
 		if (looseView.mapView.game.controller == unit.owner) {
-			// Draw movement indicator for unit
 			int moveIndIndex = (!unit.movementPoints.canMove) ? 4 : ((unit.movementPoints.remaining >= unit.unitType.movement) ? 0 : 2);
 			Vector2 moveIndUpperLeft = new Vector2((1 + 7 * moveIndIndex), 1);
 			Rect2 moveIndRect = new Rect2(moveIndUpperLeft, movementLedCropping);
-			Rect2 screenRect = new Rect2(hpIndBackgroundRect.Position - (new Vector2(2, 6)/cameraZoom), movementLedSize);
+			Rect2 screenRect = new Rect2(hpIndBackgroundRect.Position - (new Vector2(2, 6) / cameraZoom), movementLedSize);
 			looseView.DrawTextureRectRegion(unitMovementIndicators, screenRect, moveIndRect);
+		}
 
-			float lineMarginFromBar = 3 / cameraZoom;
+		float lineMarginFromBar = 3 / cameraZoom;
 
-			// Draw lines to show that there are more units on this tile
-			if (tile.unitsOnTile.Count > 1) {
-				int lineCount = tile.unitsOnTile.Count;
-				// TODO: Make configurable to taste, with cap of 8?
-				if (lineCount > 8)
-					lineCount = 8;
-				for (int n = 0; n < lineCount; n++) {
-					Vector2 lineStart = hpStartingLocation - new Vector2(lineWidth, offsetYFromCenter - lineMarginFromBar - lineMarginFromBar*n);
-					looseView.DrawLine(lineStart, lineStart + new Vector2(4, 0) / cameraZoom, white, width: lineWidth);
-					looseView.DrawLine(lineStart + new Vector2(0, 1) / cameraZoom, lineStart + new Vector2(4, 1) / cameraZoom, Color.Color8(75, 75, 75));
-				}
+		// Draw lines to show that there are more units on this tile
+		if (tile.unitsOnTile.Count > 1) {
+			int lineCount = tile.unitsOnTile.Count;
+			// TODO: Make configurable to taste, with cap of 8?
+			if (lineCount > 8)
+				lineCount = 8;
+			for (int n = 0; n < lineCount; n++) {
+				Vector2 lineStart = hpStartingLocation - new Vector2(lineWidth, offsetYFromCenter - lineMarginFromBar - lineMarginFromBar*n);
+				looseView.DrawLine(lineStart, lineStart + new Vector2(4, 0) / cameraZoom, white, width: lineWidth);
+				looseView.DrawLine(lineStart + new Vector2(0, 1) / cameraZoom, lineStart + new Vector2(4, 1) / cameraZoom, Color.Color8(75, 75, 75));
 			}
 		}
 	}
