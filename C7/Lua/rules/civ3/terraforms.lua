@@ -40,6 +40,7 @@ local food_points = 5
 local resource_points = 20
 local clear_forest_points = 2
 local clear_wetlands_points = 3
+local railroad_transport_points = 10
 
 -- placeholder
 function terraforms.ai_score.default(_)
@@ -48,6 +49,10 @@ end
 
 function terraforms.ai_score.clear_wetlands(context)
   return clear_wetlands_points
+end
+
+function terraforms.ai_score.railroad(context)
+  return railroad_transport_points
 end
 
 function terraforms.ai_score.clear_forest(context)
@@ -93,7 +98,7 @@ function terraforms.ai_score.road(context)
   local knows_about_resource = context.player.KnowsAboutResource(resource)
 
   if important_resource and knows_about_resource then
-    base_score = base_score + resource_points
+    return base_score + resource_points
   end
 
   return base_score

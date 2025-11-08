@@ -74765,7 +74765,7 @@
         "Coal"
       ],
       "improvement": "railroad",
-      "aiScore": "terraforms.ai_score.default",
+      "aiScore": "terraforms.ai_score.railroad",
       "animation": "road",
       "uiAction": "unit_build_railroad",
       "buttonTexture": "ui.unit_control.unit_build_railroad"
