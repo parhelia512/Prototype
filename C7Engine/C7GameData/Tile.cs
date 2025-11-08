@@ -695,12 +695,6 @@ namespace C7GameData {
 		public void ClearTerrainOverlay() {
 			overlayTerrainType = baseTerrainType;
 		}
-
-		public Tile Copy() {
-			Tile clone = (Tile)MemberwiseClone();
-			clone.overlays = new TileOverlays(overlays);
-			return clone;
-		}
 	}
 
 	public enum TileDirection {
@@ -750,11 +744,6 @@ namespace C7GameData {
 
 		public TileOverlays(Tile tile) {
 			this.tile = tile;
-		}
-
-		public TileOverlays(TileOverlays other)
-			: this(other.tile) {
-			terrainImprovementByLayer = new(other.terrainImprovementByLayer);
 		}
 
 		public void Add(TerrainImprovement improvement) {
