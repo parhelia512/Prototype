@@ -8,7 +8,7 @@ namespace C7Engine {
 		public abstract void process();
 
 		public void send() {
-			EngineStorage.pendingMessages.Add(this);
+			EngineStorage.pendingMessages.Enqueue(this);
 		}
 	}
 
@@ -52,15 +52,11 @@ namespace C7Engine {
 			this.dir = dir;
 		}
 
-		public override void process() {
+		public override async void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.move(dir);
+			if (unit == null) return;
 
-			// The unit moved to a new tile - if it still has movement points,
-			// update the UI to reflect this new position and movement points.
-			if (unit?.movementPoints.canMove == true) {
-				new MsgUpdateUiAfterMove().send();
-			}
+			await unit.move(dir, true);
 		}
 	}
 
@@ -73,15 +69,11 @@ namespace C7Engine {
 			this.path = path;
 		}
 
-		public override void process() {
+		public override async void process() {
 			MapUnit unit = EngineStorage.gameData.GetUnit(unitID);
-			unit?.setUnitPath(path);
+			if (unit == null) return;
 
-			// The unit moved to a new tile - if it still has movement points,
-			// update the UI to reflect this new position and movement points.
-			if (unit?.movementPoints.canMove == true) {
-				new MsgUpdateUiAfterMove().send();
-			}
+			await unit.setUnitPath(path);
 		}
 	}
 
@@ -174,32 +166,48 @@ namespace C7Engine {
 	}
 
 	public class MsgChooseResearch : MessageToEngine {
-		private ID techId;
-		private bool showAdvisor;
-		public MsgChooseResearch(ID techId, bool showAdvisor) {
-			this.techId = techId;
-			this.showAdvisor = showAdvisor;
+		private Tech tech;
+		private AdvisorState advisorState;
+		private SelectionMode selectionMode;
+
+		public enum AdvisorState : byte {
+			DontShow,
+			Show,
+		}
+		public enum SelectionMode : byte {
+			Single,
+			Multi,
+		}
+
+		public MsgChooseResearch(Tech tech, AdvisorState advisorState, SelectionMode selectionMode = SelectionMode.Single) {
+			this.tech = tech;
+			this.advisorState = advisorState;
+			this.selectionMode = selectionMode;
 		}
 
 		public override void process() {
 			Player player = EngineStorage.gameData.GetFirstHumanPlayer();
-			if (player.currentlyResearchedTech == techId) {
+
+			bool isTechEraBeyondPlayerEra = EraUtils.GetEraIndex(tech.EraCivilopediaName) > EraUtils.GetEraIndex(player.eraCivilopediaName);
+			if (player.knownTechs.Contains(tech.id) || isTechEraBeyondPlayerEra)
+				return;
+			if (player.currentlyResearchedTech == tech.id && player.ResearchQueue.Count == 1) {
 				return;
 			}
-			Tech requestedTech = EngineStorage.gameData.techs.Find(t => t.id == techId);
 
-			// Ensure this is an eligible tech to research.
-			//
-			// TODO: do a topological sort to allow a queue of techs to study.
-			foreach (Tech prereq in requestedTech.Prerequisites) {
-				if (!player.knownTechs.Contains(prereq.id)) {
-					return;
-				}
+			// Start the tech queueing process
+			// and start researching the first tech in the queue
+			// or append a new queue to the current one if it's a multiselection process
+			if (selectionMode == SelectionMode.Single) {
+				player.CalculateFreshTechQueueAndAssignNewCurrent(tech);
+			} else {
+				player.CalculateTechQueueAndAppendToCurrentQueue(tech);
+
 			}
 
-			// Start researching this tech and update the UI.
-			player.SetCurrentlyResearchedTech(requestedTech.id);
-			if (showAdvisor) {
+			// update the UI
+			if (advisorState == AdvisorState.Show) {
+
 				new MsgShowScienceAdvisor().send();
 			}
 		}
@@ -275,7 +283,7 @@ namespace C7Engine {
 	public class MsgEndTurn : MessageToEngine {
 		private ILogger log = Log.ForContext<MsgEndTurn>();
 
-		public override void process() {
+		public override async void process() {
 			Player controller = EngineStorage.gameData.GetPlayer(EngineStorage.uiControllerID);
 
 			// Reorder the unit list so that non-busy units will be selected
@@ -283,7 +291,7 @@ namespace C7Engine {
 			controller.units.Sort((x, y) => x.IsBusy().CompareTo(y.IsBusy()));
 
 			controller.hasPlayedThisTurn = true;
-			TurnHandling.AdvanceTurn();
+			await TurnHandling.AdvanceTurn();
 		}
 	}
 
@@ -293,8 +301,8 @@ namespace C7Engine {
 			this.unit = unit;
 		}
 
-		public override void process() {
-			unit.PerformBusyAction();
+		public override async void process() {
+			await unit.PerformBusyAction();
 		}
 	}
 
@@ -319,5 +327,26 @@ namespace C7Engine {
 		public override void process() {
 			EngineStorage.animationsEnabled = enabled;
 		}
+	}
+
+	public class MsgBuildCity : MessageToEngine {
+		private MapUnit unit;
+		private string name;
+
+		public MsgBuildCity(MapUnit unit, string name) {
+			this.unit = unit;
+			this.name = name;
+		}
+
+		public override async void process() {
+			City? city = await unit.buildCity(name);
+			if (city != null) {
+				new MsgCityCreated(city).send();
+			}
+		}
+	}
+
+	public class MsgDiplomacyCompleted : MessageToEngine {
+		public override void process() { }
 	}
 }

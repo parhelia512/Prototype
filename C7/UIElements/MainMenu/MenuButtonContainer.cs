@@ -19,7 +19,7 @@ public partial class MenuButtonContainer : VBoxContainer {
 		CreateButtons();
 	}
 
-	private void CreateButtons() {
+	public void CreateButtons() {
 		NewGame = new Civ3MenuButton() { Text = "New Game" };
 		AddChild(NewGame);
 

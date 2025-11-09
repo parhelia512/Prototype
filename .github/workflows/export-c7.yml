@@ -42,6 +42,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         lfs: true
+        submodules: true
     - uses: ./.github/workflows/composite/buildSetup
     - name: Windows Build
       run: |
@@ -58,7 +59,7 @@ jobs:
     - name: Copy Static Files
       run: |
         if cp -r ${PROJECT_DIR}/Text build/${FOLDER_NAME}/Text && \\
-           cp -r ${PROJECT_DIR}/Art build/${FOLDER_NAME}/Art && \\
+           cp -r ${PROJECT_DIR}/Assets build/${FOLDER_NAME}/Assets && \\
            cp -r ${PROJECT_DIR}/Lua build/${FOLDER_NAME}/Lua
         then
           echo "successfully copied static files to build"
@@ -80,6 +81,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         lfs: true
+        submodules: true
     - uses: ./.github/workflows/composite/buildSetup
     - name: Linux Build
       run: |
@@ -96,7 +98,7 @@ jobs:
     - name: Copy Static Files
       run: |
         if cp -r ${PROJECT_DIR}/Text build/${FOLDER_NAME}/Text && \\
-           cp -r ${PROJECT_DIR}/Art build/${FOLDER_NAME}/Art && \\
+           cp -r ${PROJECT_DIR}/Assets build/${FOLDER_NAME}/Assets && \\
            cp -r ${PROJECT_DIR}/Lua build/${FOLDER_NAME}/Lua
         then
           echo "successfully copied static files to build"
@@ -121,6 +123,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         lfs: true
+        submodules: true
     - uses: ./.github/workflows/composite/buildSetup
     - name: Mac Build
       run: |
@@ -137,7 +140,7 @@ jobs:
     - name: Copy Static Files
       run: |
         cd ${PROJECT_DIR}
-        if zip -r ../build/${FOLDER_NAME}.zip Art Text Lua
+        if zip -r ../build/${FOLDER_NAME}.zip Assets Text Lua
         then
           echo "successfully copied static files to build"
         else

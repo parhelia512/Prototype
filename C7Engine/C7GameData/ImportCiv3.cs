@@ -18,6 +18,22 @@ namespace C7GameData {
 		public int BaseTerrainImageID;
 	}
 
+	public enum TerraformKey {
+		BuildRoad,
+		BuildRailroad,
+		BuildMine,
+		BuildFortress,
+		ClearDamage,
+		BuildAirfield,
+		BuildRadarTower,
+		BuildOutpost,
+		BuildBarricade,
+		Irrigate,
+		ClearWetlands,
+		ClearForest,
+		PlantForest
+	}
+
 	public class ImportCiv3 {
 		private SaveGame save;
 		private BiqData biq;
@@ -25,6 +41,7 @@ namespace C7GameData {
 		private SavData savData;
 		private PediaIcons pediaIcons;
 		private readonly ID.Factory ids;
+		private Dictionary<TerraformKey, ID> terraformIdByCiv3Key = [];
 
 		private static ILogger log = Log.ForContext<ImportCiv3>();
 
@@ -40,9 +57,12 @@ namespace C7GameData {
 		/// <param name="theBiq">Source BIQ</param>
 		/// <param name="c7Save">Destination C7 in-memory structure</param>
 		private void ImportSharedBiqData() {
+			save.TerrainImprovements = SaveTerrainImprovement.Civ3Improvements().ToList();
+
 			ImportRaces();
 			ImportTechs();
 			ImportCiv3Resources();
+			ImportTerraforms();
 			ImportUnitPrototypes();
 			ImportUniqueUnitReplacements();
 			ImportUnitUpgrades();
@@ -57,7 +77,6 @@ namespace C7GameData {
 			save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
 			ImportCitizenTypes();
-			ImportTerraforms();
 			ImportGovernments();
 			ImportDifficulties();
 			ImportRules();
@@ -459,6 +478,12 @@ namespace C7GameData {
 					}
 				}
 
+				// Populate player's research queue
+				for (int t = 0; t < savData.LeadTechQueue[i].Length; ++t) {
+					int techItem = savData.LeadTechQueue[i][t];
+					player.researchQueue.Add(save.Techs[techItem].id);
+				}
+
 				player.gold = leader.Gold;
 				player.beakers = leader.Beakers;
 				player.turnsResearched = leader.TurnsResearched;
@@ -542,8 +567,22 @@ namespace C7GameData {
 		}
 
 		private void ImportBicUnits() {
-			// TODO: This doesn't account for default starting units.
 			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+
+			var createUnitAtLocation = (SavePlayer player, int unitType, string experienceLevel, int hitPoints, int x, int y) => {
+				PRTO prototype = theBiq.Prto[unitType];
+				SaveUnit saveUnit = new SaveUnit{
+					id = ids.CreateID(prototype.Name),
+					owner = player.id,
+					prototype = prototype.Name,
+					currentLocation = new TileLocation(x, y),
+					previousLocation = new TileLocation(x, y),
+					experience = experienceLevel,
+					hitPointsRemaining = hitPoints, // TODO: include bonus hitpoints from unit type
+					movePointsRemaining = (float)prototype.Movement,
+				};
+				return saveUnit;
+			};
 
 			foreach (UNIT unit in theBiq.Unit) {
 				if (unit.Owner >= save.Players.Count) {
@@ -553,20 +592,27 @@ namespace C7GameData {
 				// The owner index is into the list of civs, and we have a 1:1
 				// mapping of players and civs.
 				SavePlayer player = save.Players[unit.Owner];
-
-				PRTO prototype = theBiq.Prto[unit.UnitType];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
-				SaveUnit saveUnit = new SaveUnit{
-					id = ids.CreateID(prototype.Name),
-					owner = player.id,
-					prototype = prototype.Name,
-					currentLocation = new TileLocation(unit.X, unit.Y),
-					previousLocation = new TileLocation(unit.X, unit.Y),
-					experience = experience.key,
-					hitPointsRemaining = experience.baseHitPoints, // TODO: include bonus hitpoints from unit type
-					movePointsRemaining = (float)prototype.Movement,
-				};
-				save.Units.Add(saveUnit);
+				save.Units.Add(createUnitAtLocation(player, unit.UnitType, experience.key, experience.baseHitPoints, unit.X, unit.Y));
+			}
+
+			RULE rule = theBiq.Rule[0];
+			foreach (SLOC starting_location in theBiq.Sloc) {
+				// Skip barbarians
+				if (starting_location.OwnerType <= 1) {
+					continue;
+				}
+
+				// The owner index is into the list of civs, and we have a 1:1
+				// mapping of players and civs.
+				SavePlayer player = save.Players[starting_location.Owner];
+				int baseHitPoints = 3;
+				if (rule.StartUnitType1 >= 0) {
+					save.Units.Add(createUnitAtLocation(player, rule.StartUnitType1, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
+				}
+				if (rule.StartUnitType2 >= 0) {
+					save.Units.Add(createUnitAtLocation(player, rule.StartUnitType2, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
+				}
 			}
 		}
 
@@ -716,12 +762,6 @@ namespace C7GameData {
 
 		private static IEnumerable<UnitAction> GetUnitActions(PRTO prto) {
 			if (prto.BuildCity) yield return UnitAction.BuildCity;
-			if (prto.BuildRoad) yield return UnitAction.BuildRoad;
-			if (prto.BuildRailroad) yield return UnitAction.BuildRailroad;
-			if (prto.BuildMine) yield return UnitAction.BuildMine;
-			if (prto.Irrigate) yield return UnitAction.Irrigate;
-			if (prto.ClearJungle) yield return UnitAction.ClearWetlands;
-			if (prto.ClearForest) yield return UnitAction.ClearForest;
 			if (prto.Bombard) yield return UnitAction.Bombard;
 			if (prto.SkipTurn) yield return UnitAction.Hold;
 			if (prto.Wait) yield return UnitAction.Wait;
@@ -730,6 +770,17 @@ namespace C7GameData {
 			if (prto.GoTo) yield return UnitAction.Goto;
 			if (prto.Explore) yield return UnitAction.Explore;
 			if (prto.Automate) yield return UnitAction.Automate;
+		}
+
+		private static IEnumerable<TerraformKey> GetUnitTerraforms(PRTO prto) {
+			if (prto.BuildRoad) yield return TerraformKey.BuildRoad;
+			if (prto.BuildRailroad) yield return TerraformKey.BuildRailroad;
+			if (prto.BuildMine) yield return TerraformKey.BuildMine;
+			if (prto.Irrigate) yield return TerraformKey.Irrigate;
+			if (prto.ClearJungle) yield return TerraformKey.ClearWetlands;
+			if (prto.ClearForest) yield return TerraformKey.ClearForest;
+			if (prto.BuildBarricade) yield return TerraformKey.BuildBarricade;
+			if (prto.BuildFortress) yield return TerraformKey.BuildFortress;
 		}
 
 		private SaveUnitPrototype.Unique ImportUniqueUnitData(PRTO prto) {
@@ -771,6 +822,7 @@ namespace C7GameData {
 				prototype.bombard = prto.BombardStrength;
 				prototype.iconIndex = prto.IconIndex;
 				prototype.actions.UnionWith(GetUnitActions(prto));
+				prototype.terraformActions.UnionWith(GetUnitTerraforms(prto).Select(tfKey => terraformIdByCiv3Key[tfKey]));
 
 				prototype.unique = ImportUniqueUnitData(prto);
 				prototype.unproducible = IsUnproducible(prto);
@@ -1057,6 +1109,7 @@ namespace C7GameData {
 						c7TerrainType.allowedResources.Add(save.Resources[i].Key);
 					}
 				}
+				AddYieldBonusesForTerrainImprovements(c7TerrainType.Key, terrain);
 				save.TerrainTypes.Add(c7TerrainType);
 				civ3Index++;
 			}
@@ -1116,15 +1169,20 @@ namespace C7GameData {
 			});
 		}
 
+		private SaveUnitPrototype MatchCiv3IndexToImportedUnit(int civ3Index) {
+			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
+			if (civ3Index == -1) return null;
+			return save.UnitPrototypes.Where(up => up.name == Prto[civ3Index].Name).First();
+		}
+
 		private void ImportBarbarianInfo() {
 			RULE Rule = biq?.Rule?[0] ?? defaultBiq.Rule[0];
 			PRTO[] Prto = biq?.Prto ?? defaultBiq.Prto;
 			BarbarianInfo barbInfo = save.BarbarianInfo;
-			// TODO: this relies on the unit prototypes in SaveGame being
-			// at the same indices as in PRTO...
-			barbInfo.basicBarbarianIndex = Rule.BasicBarbarianUnitType;
-			barbInfo.advancedBarbarianIndex = Rule.AdvancedBarbarianUnitType;
-			barbInfo.barbarianSeaUnitIndex = Rule.BarbarianSeaUnitType;
+
+			barbInfo.basicBarbarianUnit = MatchCiv3IndexToImportedUnit(Rule.BasicBarbarianUnitType)?.name;
+			barbInfo.advancedBarbarianUnit = MatchCiv3IndexToImportedUnit(Rule.AdvancedBarbarianUnitType)?.name;
+			barbInfo.barbarianSeaUnit = MatchCiv3IndexToImportedUnit(Rule.BarbarianSeaUnitType)?.name;
 		}
 
 		private void ImportTechs() {
@@ -1205,6 +1263,7 @@ namespace C7GameData {
 		private static IEnumerable<SaveTech.Flag> LoadTechFlags(TECH t) {
 			return new[] {
 				(t.BonusTechToFirstCivThatResearches, SaveTech.Flag.BonusTechToFirstCivThatResearches),
+				(t.EnablesBridges, SaveTech.Flag.EnablesBridges),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);
@@ -1245,13 +1304,17 @@ namespace C7GameData {
 			for (int i = 0; i < theBiq.Tfrm.Length; ++i) {
 				TFRM t = theBiq.Tfrm[i];
 
+				TerraformKey tfKey = ConvertCiv3Order(t.Order);
+
 				SaveTerraform tf = new() {
 					Id = ids.CreateID("Terraform"),
 					Name = t.Name,
 					CivilopediaEntry = t.CivilopediaEntry,
 					TurnsToComplete = t.TurnsToComplete,
-					Action = ConvertCiv3OrderToAction(t.Order)
 				};
+
+				tf.SetUpByTerraformKey(tfKey);
+
 				if (t.Required > -1) {
 					tf.RequiredTech = save.Techs[t.Required].id;
 				}
@@ -1261,25 +1324,51 @@ namespace C7GameData {
 				if (t.RequiredResource2 > -1) {
 					tf.RequiredResources.Add(save.Resources[t.RequiredResource2].Key);
 				}
+
 				save.TerraForms.Add(tf);
+				terraformIdByCiv3Key[tfKey] = tf.Id;
 			}
 		}
 
-		private static UnitAction ConvertCiv3OrderToAction(string order) {
+		private void AddYieldBonusesForTerrainImprovements(string terrainKey, TERR terrainType) {
+			void SetBonus(string improvementKey, Tile.YieldType type, int bonus) {
+				SaveTerrainImprovement improvement = save.TerrainImprovements.Find(ti => ti.key == improvementKey);
+
+				if (!improvement.bonusYields.TryGetValue(terrainKey, out var yieldDict)) {
+					yieldDict = new Dictionary<Tile.YieldType, int>();
+					improvement.bonusYields[terrainKey] = yieldDict;
+				}
+
+				yieldDict[type] = bonus;
+			}
+
+			if (terrainType.MiningBonus > 0) {
+				SetBonus("mine", Tile.YieldType.Production, terrainType.MiningBonus);
+			}
+			if (terrainType.IrrigationBonus > 0) {
+				SetBonus("irrigation", Tile.YieldType.Food, terrainType.IrrigationBonus);
+			}
+			if (terrainType.RoadBonus > 0) {
+				SetBonus("road", Tile.YieldType.Commerce, terrainType.RoadBonus);
+				SetBonus("railroad", Tile.YieldType.Commerce, terrainType.RoadBonus);
+			}
+		}
+
+		private static TerraformKey ConvertCiv3Order(string order) {
 			return order switch {
-				"Build Mine" => UnitAction.BuildMine,
-				"Irrigate" => UnitAction.Irrigate,
-				"Build Fortress" => UnitAction.BuildFortress,
-				"Build Road" => UnitAction.BuildRoad,
-				"Build Railroad" => UnitAction.BuildRailroad,
-				"Plant Forest" => UnitAction.PlantForest,
-				"Clear Forest" => UnitAction.ClearForest,
-				"Clear Wetlands" => UnitAction.ClearWetlands,
-				"Clear Damage" => UnitAction.ClearDamage,
-				"Build Airfield" => UnitAction.BuildAirfield,
-				"Build Radar Tower" => UnitAction.BuildRadarTower,
-				"Build Outpost" => UnitAction.BuildOutpost,
-				"Build Barricade" or "Build Barricades" => UnitAction.BuildBarricade,
+				"Build Mine" => TerraformKey.BuildMine,
+				"Irrigate" => TerraformKey.Irrigate,
+				"Build Fortress" => TerraformKey.BuildFortress,
+				"Build Road" => TerraformKey.BuildRoad,
+				"Build Railroad" => TerraformKey.BuildRailroad,
+				"Plant Forest" => TerraformKey.PlantForest,
+				"Clear Forest" => TerraformKey.ClearForest,
+				"Clear Wetlands" => TerraformKey.ClearWetlands,
+				"Clear Damage" => TerraformKey.ClearDamage,
+				"Build Airfield" => TerraformKey.BuildAirfield,
+				"Build Radar Tower" => TerraformKey.BuildRadarTower,
+				"Build Outpost" => TerraformKey.BuildOutpost,
+				"Build Barricade" or "Build Barricades" => TerraformKey.BuildBarricade,
 				_ => throw new NotSupportedException($"Unknown order: {order}"),
 			};
 		}
@@ -1362,6 +1451,8 @@ namespace C7GameData {
 			if (rule.Scout >= 0) {
 				save.Rules.ScoutUnitType = theBiq.Prto[rule.Scout].Name;
 			}
+			save.Rules.MaxRankOfWorkableTiles = 2;
+			save.Rules.MaxRankOfBarbarianCampTiles = 2;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

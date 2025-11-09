@@ -5,11 +5,9 @@ using System.Linq;
 using System.Threading;
 using C7GameData;
 using C7Engine;
-using ConvertCiv3Media;
 using C7GameData.Save;
 using Serilog;
 
-[Tool]
 public partial class PlayerSetup : Control {
 	private static ILogger log = LogManager.ForContext<PlayerSetup>();
 
@@ -42,8 +40,6 @@ public partial class PlayerSetup : Control {
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		background.Texture = TextureLoader.Load("player_setup.background");
-
 		SaveGame save = GetSave();
 
 		// Set up buttons for the civs the player can play as.
@@ -103,10 +99,7 @@ public partial class PlayerSetup : Control {
 			container.CustomMinimumSize = new Vector2(843.0f / difficultyContainer.Columns, 0);
 		}
 
-		TextureLoader.SetButtonTextures(confirm, "ui.confirm");
 		confirm.Pressed += CreateGame;
-
-		TextureLoader.SetButtonTextures(cancel, "ui.cancel");
 		cancel.Pressed += BackToMainMenu;
 	}
 
@@ -191,11 +184,7 @@ public partial class PlayerSetup : Control {
 	}
 
 	private void DisplaySelectedLeader() {
-		Pcx headPcx = TextureLoader.LoadPCX(civilization.leaderArtFile);
-		leaderHead.Texture = PCXToGodot.getImageTextureFromPCX(
-					headPcx,
-					new(0, 115, 115, 115),
-					new(false, [255]));
+		leaderHead.Texture = TextureLoader.Load("leader_heads", civilization);
 		leaderHead.Scale = new Vector2(1.7f, 1.7f);
 		leaderHead.SetPosition(new Vector2(414, 46));
 
@@ -227,7 +216,7 @@ public partial class PlayerSetup : Control {
 		ids = new(save);
 
 		// Hack: reuse the save but clear out the non-barbarian players.
-		// 
+		//
 		// Longer term we'll need to split out our own
 		// "conquests.bic" type file and load that - until then we'll use this
 		// hack of reusing the static save.

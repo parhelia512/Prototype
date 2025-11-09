@@ -18,12 +18,14 @@ public partial class MainMenu : Node {
 	MenuButtonContainer ButtonContainer;
 	[Export]
 	AudioStreamPlayer player;
+	[Export] Button UseStandaloneMode;
 
 	GlobalSingleton Global;
 
 	public override void _Ready() {
 		log = LogManager.ForContext<MainMenu>();
 		log.Debug("enter MainMenu._Ready");
+		UseStandaloneMode.Pressed += UseStandaloneModePressed;
 
 		DisplayServer.WindowSetTitle((string)ProjectSettings.GetSetting("application/config/name"));
 
@@ -41,7 +43,15 @@ public partial class MainMenu : Node {
 
 		LoadDialog.SetDirectoryForLoading(@"Conquests/Saves");
 		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
+		LoadScenarioDialog.GoToScenarioSetupAfterLoading = true;
 
+		// If couldn't find the button textures when ButtonContainer._Ready, then
+		// these buttons will be null, so be sure to recreate them if we call
+		// DisplayTitleScreen after picking standalone mode or getting the civ3
+		// home path set.
+		if (ButtonContainer.NewGame == null) {
+			ButtonContainer.CreateButtons();
+		}
 		ButtonContainer.NewGame.Pressed += GoToWorldSetup;
 		ButtonContainer.QuickStart.Pressed += GoToWorldSetup;
 		ButtonContainer.Tutorial.Pressed += StartGame;
@@ -59,8 +69,14 @@ public partial class MainMenu : Node {
 		};
 		SetToggleGraphicsText();
 
+		// We can't toggle to using civ3 graphics in standalone mode.
+		if (C7Settings.UseStandaloneMode()) {
+			ButtonContainer.ToggleGraphics.Visible = false;
+		}
+
 		// Hide select home folder if valid path is present as proven by reaching this point in code
 		SetCiv3Home.Visible = false;
+		UseStandaloneMode.Visible = false;
 	}
 
 	private void SetToggleGraphicsText() {
@@ -112,7 +128,10 @@ public partial class MainMenu : Node {
 	}
 
 	private void PlayButtonPressedSound() {
-		AudioStreamWav wav = Util.LoadWAVFromDisk(Util.Civ3MediaPath("Sounds/Button1.wav"));
+		AudioStreamWav wav = Util.LoadCiv3WAVFromDisk("Sounds/Button1.wav");
+		if (wav == null) {
+			return;
+		}
 		player.Stream = wav;
 		player.Play();
 	}
@@ -126,6 +145,13 @@ public partial class MainMenu : Node {
 		C7Settings.SetValue("locations", "civ3InstallDir", path);
 		C7Settings.SaveSettings();
 		// This function should only be reachable if DisplayTitleScreen failed on previous runs, so should be OK to run here
+		DisplayTitleScreen();
+	}
+
+	private void UseStandaloneModePressed() {
+		Global.ToggleModernGraphics();
+		C7Settings.SetValue("locations", "useStandaloneMode", "true");
+		C7Settings.SaveSettings();
 		DisplayTitleScreen();
 	}
 }

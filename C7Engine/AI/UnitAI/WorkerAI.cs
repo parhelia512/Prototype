@@ -58,7 +58,7 @@ namespace C7Engine {
 
 		public void UpdateOnDeath() { }
 
-		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		UnitAI.MoveResult UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
 				return UnitAI.Result.Error;
 			}
@@ -100,58 +100,19 @@ namespace C7Engine {
 			// Don't waste worker moves on unowned tiles. We do allow roading
 			// unowned tiles though.
 			if (t.owningCity == null || t.owningCity.owner != player) {
-				Terraform buildRoad = UnitAction.BuildRoad.ToTerraform();
-
-				if (accessibleTerraforms.Contains(buildRoad)) {
-					return buildRoad;
-				}
-				return null;
+				var buildRoad = accessibleTerraforms.FirstOrDefault(t => t.ProvidesRoad());
+				return buildRoad;
 			}
 
-			int initialCommerce = t.commerceYield(player).yield;
-			int initialShields = t.productionYield(player).yield;
-			int initialFood = t.foodYield(player).yield;
+			var best = (
+				from at in accessibleTerraforms
+				let aiScore = at.CalculateAIScore(player, t)
+				where aiScore > 0
+				orderby aiScore descending, at.TurnsToComplete
+				select at
+			).FirstOrDefault();
 
-			int bestScore = 0;
-			Terraform? bestTerraform = null;
-
-			const int CommercePoints = 1;
-			const int ShieldPoints = 3;
-			const int FoodPoints = 5;
-			const int ResourcePoints = 20;
-
-			foreach (Terraform terraform in accessibleTerraforms) {
-				Tile tAfterImprovement = t.Copy();
-				terraform.OnComplete(unit.owner, tAfterImprovement);
-
-				int newCommerce = tAfterImprovement.commerceYield(player).yield;
-				int newShields = tAfterImprovement.productionYield(player).yield;
-				int newFood = tAfterImprovement.foodYield(player).yield;
-
-				int commerceDiff = newCommerce - initialCommerce;
-				int shieldDiff = newShields - initialShields;
-				int foodDiff = newFood - initialFood;
-
-				int currentScore = commerceDiff * CommercePoints +
-						  shieldDiff * ShieldPoints +
-						  foodDiff * FoodPoints;
-
-				// Provide an additional bonus for roading resources. In despotism
-				// some resources may already have 2 commerce, so roading would
-				// seem to have no effect - but we want to encourage hooking up
-				// luxuries.
-				if ((t.Resource.Category == ResourceCategory.LUXURY || t.Resource.Category == ResourceCategory.STRATEGIC)
-					&& terraform == UnitAction.BuildRoad.ToTerraform() && player.KnowsAboutResource(t.Resource)) {
-					currentScore += ResourcePoints;
-				}
-
-				if (currentScore > bestScore) {
-					bestScore = currentScore;
-					bestTerraform = terraform;
-				}
-			}
-
-			return bestTerraform;
+			return best;
 		}
 
 		private UnitAI.Result PerformWorkerMove(MapUnit unit, Terraform workerMove) {
@@ -180,7 +141,7 @@ namespace C7Engine {
 					log.Information($"Set AI for unit at {unit.location} to {improvement} with destination of " + result.destination);
 
 					PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-					result.pathToDestination = algorithm.PathFrom(unit.location, result.destination);
+					result.pathToDestination = algorithm.PathFrom(unit.location, result.destination, unit);
 
 					return result;
 				}

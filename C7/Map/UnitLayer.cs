@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using C7GameData;
-using C7Engine;
-using ConvertCiv3Media;
 using Godot;
 
 public partial class UnitLayer : LooseLayer {
@@ -82,7 +79,7 @@ public partial class UnitLayer : LooseLayer {
 		}
 
 		public AnimationInstance(LooseView looseView) {
-			AnimationManager manager = looseView.mapView.game.civ3AnimData;
+			AnimationManager manager = looseView.mapView.game.animationController.civ3AnimData;
 
 			this.sprite = new AnimatedSprite2D();
 			this.sprite.ZIndex = unitAnimZIndex;
@@ -116,21 +113,50 @@ public partial class UnitLayer : LooseLayer {
 
 	public void drawUnitAnimFrame(LooseView looseView, MapUnit unit, MapUnit.Appearance appearance, Vector2 tileCenter) {
 		AnimationInstance inst = getBlankAnimationInstance(looseView);
-		looseView.mapView.game.civ3AnimData.forUnit(unit.unitType, appearance.action).loadSpriteAnimation();
+		C7Animation unitAnimation = looseView.mapView.game.animationController.civ3AnimData.forUnit(unit.unitType, appearance.action);
+		unitAnimation.loadSpriteAnimation();
+
 		string animName = AnimationManager.AnimationKey(unit.unitType, appearance.action, appearance.direction);
 
-		// Need to move the sprites upward a bit so that their feet are at the center of the tile. I don't know if spriteHeight/4 is the right
-		var animOffset = MapView.cellSize * new Vector2(appearance.offsetX, appearance.offsetY);
-		Vector2 position = tileCenter + animOffset - new Vector2(0, inst.FrameSize(animName).Y / 4);
-		inst.SetPosition(position);
+		Vector2 framePosition = GetFramePosition(appearance, unitAnimation, inst, animName, tileCenter);
 
-		Color civColor = Util.LoadColor(unit.owner.colorIndex);
+		inst.SetPosition(framePosition);
+
+		Color civColor = TextureLoader.LoadColor(unit.owner.colorIndex);
 		int nextFrame = inst.GetNextFrameByProgress(animName, appearance.progress);
 		inst.material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
 
 		inst.SetAnimation(animName);
 		inst.SetFrame(nextFrame);
 		inst.Show();
+	}
+
+	private Vector2 GetFramePosition(MapUnit.Appearance appearance, C7Animation unitAnimation, AnimationInstance inst, string animName, Vector2 tileCenter) {
+		// 1. Place unit in the center of the tile.
+		//	  This places the *center* of the sprite frame at the center point of the tile.
+		//
+		// 2. Apply animation offset.
+		//    This applies the offset of the animation when a unit moves from one tile to another, it "follows" the movement
+		//    it's pretty much a noop for the default or other animations that stay in the same tile.
+		//
+		// 3. Apply the offsets from the flic file to place them correctly in a 240x240 rect
+		//    (which starts at the center of the tile extending to the right and bottom).
+		//    The offsets we read from the flic file represent the offsets from the top left corner of the frame,
+		//    so this is why here we need to add half the width and height since the transforms
+		//    in our frames are applied at the center of the image
+		//
+		// 4. Offset the frame by half the width and height of the original size of the animation (which is usually 240x240 in pixels)
+		//    to place it correctly on the tile.
+		//
+		// 5. Finally add (or subtract if negative in .ini) any custom offset from the ini file
+
+		Vector2 animOffset = MapView.cellSize * new Vector2(appearance.offsetX, appearance.offsetY);
+		Vector2I flicOffset = unitAnimation.GetFlicAnimationOffset();
+		Vector2 flicOffsetWithAlignedFrame = new ((inst.FrameSize(animName).X / 2) + flicOffset.X,
+												  (inst.FrameSize(animName).Y / 2) + flicOffset.Y);
+		Vector2I flicOriginalSize = unitAnimation.GetFlicAnimationOriginalSize();
+
+		return tileCenter + animOffset + flicOffsetWithAlignedFrame - (flicOriginalSize / 2);
 	}
 
 	public void drawEffectAnimFrame(LooseView looseView, C7Animation anim, float progress, Vector2 tileCenter) {
@@ -149,9 +175,7 @@ public partial class UnitLayer : LooseLayer {
 		// Initialize cursor if necessary
 		if (cursorSprite == null) {
 			cursorSprite = new AnimatedSprite2D();
-			SpriteFrames frames = new SpriteFrames();
-			cursorSprite.SpriteFrames = frames;
-			AnimationManager.loadNonTintedAnimation("Art/Animations/Cursor/Cursor.flc", "cursor", ref frames);
+			cursorSprite.SpriteFrames = TextureLoader.LoadAnimation("animations.cursor", "cursor");
 			cursorSprite.Animation = "cursor";
 			looseView.AddChild(cursorSprite);
 			cursorSprite.Play("cursor");
@@ -171,7 +195,7 @@ public partial class UnitLayer : LooseLayer {
 		// Hide cursor if it's been initialized
 		cursorSprite?.Hide();
 
-		looseView.mapView.game.updateAnimations(gameData);
+		looseView.mapView.game.animationController.updateAnimations();
 	}
 
 	// Returns which unit should be drawn from among a list of units. The list is assumed to be non-empty.
@@ -187,7 +211,7 @@ public partial class UnitLayer : LooseLayer {
 				selected = u;
 			if (u.HasPriorityAsDefender(bestDefender, currentlySelectedUnit))
 				bestDefender = u;
-			if (looseView.mapView.game.animTracker.getUnitAppearance(u).DeservesPlayerAttention())
+			if (looseView.mapView.game.animationController.animTracker.getUnitAppearance(u).DeservesPlayerAttention())
 				doingInterestingAnimation = u;
 		}
 
@@ -201,9 +225,9 @@ public partial class UnitLayer : LooseLayer {
 		}
 
 		// First draw animated effects. These will always appear over top of units regardless of draw order due to z-index.
-		C7Animation tileEffect = looseView.mapView.game.animTracker.getTileEffect(tile);
+		C7Animation tileEffect = looseView.mapView.game.animationController.animTracker.getTileEffect(tile);
 		if (tileEffect != null) {
-			(_, float progress, _) = looseView.mapView.game.animTracker.getCurrentActionAndProgress(tile);
+			(_, float progress, _) = looseView.mapView.game.animationController.animTracker.getCurrentActionAndProgress(tile);
 			drawEffectAnimFrame(looseView, tileEffect, progress, tileCenter);
 		}
 
@@ -214,7 +238,7 @@ public partial class UnitLayer : LooseLayer {
 		var white = Color.Color8(255, 255, 255);
 
 		MapUnit unit = selectUnitToDisplay(looseView, tile.unitsOnTile);
-		MapUnit.Appearance appearance = looseView.mapView.game.animTracker.getUnitAppearance(unit);
+		MapUnit.Appearance appearance = looseView.mapView.game.animationController.animTracker.getUnitAppearance(unit);
 		Vector2 animOffset = new Vector2(appearance.offsetX, appearance.offsetY) * MapView.cellSize;
 
 		// If the unit we're about to draw is currently selected, draw the cursor first underneath it

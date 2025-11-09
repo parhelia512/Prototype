@@ -8,12 +8,12 @@ namespace C7GameData {
 	/// </summary>
 	public class BarbarianInfo {
 		//Legacy Civ3-compatible config
-		public int basicBarbarianIndex = 0;
-		public int advancedBarbarianIndex = 0;
-		public int barbarianSeaUnitIndex = 0;
+		public string basicBarbarianUnit;
+		public string advancedBarbarianUnit;
+		public string barbarianSeaUnit;
 		[JsonIgnore] public UnitPrototype basicBarbarian;
 		[JsonIgnore] public UnitPrototype advancedBarbarian;
-		[JsonIgnore] public UnitPrototype barbarianSeaUnit;
+		[JsonIgnore] public UnitPrototype barbarianSeaUnitProto;
 
 		public int defaultHitpoints = 2;
 		public int maxHitpoints = 2;

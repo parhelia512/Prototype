@@ -35,7 +35,7 @@ namespace C7Engine {
 			return result;
 		}
 
-		UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		UnitAI.MoveResult UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data == null) {
 				return UnitAI.Result.Error;
 			}
@@ -101,14 +101,14 @@ namespace C7Engine {
 				int score = numUnknownNeighbors;
 				score *= numUnknownNeighbors;
 
-				// But penalize tiles that are far away from our cities, to 
+				// But penalize tiles that are far away from our cities, to
 				// encourate semi-local exploration. Without this we won't know
 				// city sites.
 				if (player.cities.Count > 0) {
 					score -= DistanceToNearestCity(player, t);
 				}
 
-				// Similarly with tiles that are far away from us. We use 
+				// Similarly with tiles that are far away from us. We use
 				// distanceTo as a quick heuristic to avoid expensive
 				// pathfinding.
 				score -= unit.location.distanceTo(t);
@@ -137,7 +137,7 @@ namespace C7Engine {
 			foreach (KeyValuePair<Tile, float> p in orderedScores) {
 				ExplorerAIData result = new ();
 				result.destination = p.Key;
-				result.pathToDestination = algorithm.PathFrom(unit.location, result.destination);
+				result.pathToDestination = algorithm.PathFrom(unit.location, result.destination, unit);
 
 				// If we can't reach the destination, go to the next candidate.
 				if ((result.pathToDestination?.PathLength() ?? -1) == -1) {

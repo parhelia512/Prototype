@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using C7Engine.Pathing;
 using Xunit;
 
-namespace EngineTests {
+namespace EngineTests.AI.Pathing {
 	public class BinaryMinHeapTest {
 		private void checkBunchInsert<T>(List<T> list) where T : IComparable<T> {
 			BinaryMinHeap<T> heap = new BinaryMinHeap<T>();

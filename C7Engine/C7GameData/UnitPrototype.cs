@@ -8,19 +8,6 @@ namespace C7GameData {
 
 	public enum UnitAction {
 		BuildCity,
-		BuildRoad,
-		BuildRailroad,
-		BuildMine,
-		BuildFortress,
-		ClearDamage,
-		BuildAirfield,
-		BuildRadarTower,
-		BuildOutpost,
-		BuildBarricade,
-		Irrigate,
-		ClearWetlands,
-		ClearForest,
-		PlantForest,
 		Bombard,
 		Hold,
 		Wait,
@@ -64,9 +51,12 @@ namespace C7GameData {
 
 		public HashSet<Resource> requiredResources { get; set; } = [];
 
+		public HashSet<Terraform> terraformActions = [];
+		public bool isWorker => terraformActions.Count > 0;
+
 		public UnitPrototype() { }
 
-		public UnitPrototype(SaveUnitPrototype proto) {
+		public UnitPrototype(SaveUnitPrototype proto, IEnumerable<Terraform> terraforms) {
 			(name, artName, shieldCost, populationCost, attack, defense, bombard, movement, iconIndex, unproducible) =
 			(proto.name, proto.artName, proto.shieldCost, proto.populationCost,
 			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex, proto.unproducible);
@@ -74,6 +64,8 @@ namespace C7GameData {
 			categories = new HashSet<string>(proto.categories);
 			actions = proto.actions;
 			attributes = new HashSet<string>(proto.attributes);
+
+			terraformActions = proto.terraformActions.Select(id => terraforms.First(t => t.Id == id)).ToHashSet();
 		}
 
 		public override string ToString() {
@@ -143,12 +135,6 @@ namespace C7GameData {
 			}
 
 			return true;
-		}
-	}
-
-	public static class UnitActionExtension {
-		public static Terraform? ToTerraform(this UnitAction action) {
-			return EngineStorage.gameData.Terraforms.Find(t => t.Action == action);
 		}
 	}
 }

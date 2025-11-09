@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Linq;
 using Serilog;
 using System.Collections.Generic;
 using C7GameData;
@@ -18,6 +17,14 @@ public partial class CityScreen : Control {
 	public MapView mapView;
 	public List<CitizenType> citizenTypes;
 	private List<TextureButton> popHeads = new();
+	private List<TextureRect> popHeadEffects = new();
+
+	private const int POP_HEAD_OFFSET_Y = 433;
+	private const string LUXURIES = "luxuries";
+	private const string TAXES = "taxes";
+	private const string RESEARCH = "research";
+	private const string CORRUPTION = "corruption";
+	private const string CONSTRUCTION = "construction";
 
 	[Export] private TextureRect background;
 	[Export] private VBoxContainer existingBuildings;
@@ -63,6 +70,14 @@ public partial class CityScreen : Control {
 	private ImageTexture emptyFoodTexture;
 	private ImageTexture noFoodTexture;
 	private ImageTexture eatenFoodTexture;
+
+	private ImageTexture smileyFaceTexture;
+	private ImageTexture goodShieldTexture;
+	private ImageTexture beakerTexture;
+	private ImageTexture goodGoldTexture;
+	private ImageTexture wastedGoldTexture;
+
+	private Dictionary<string, ImageTexture> effectIcons = new();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -134,6 +149,20 @@ public partial class CityScreen : Control {
 		emptyFoodTexture = TextureLoader.Load("icons.empty_food");
 		noFoodTexture = TextureLoader.Load("icons.no_food");
 		eatenFoodTexture = TextureLoader.Load("icons.eaten_food");
+		// effects
+		smileyFaceTexture = TextureLoader.Load("icons.effect_smiley_face");
+		goodGoldTexture = TextureLoader.Load("icons.effect_good_gold");
+		beakerTexture = TextureLoader.Load("icons.effect_beaker");
+		wastedGoldTexture = TextureLoader.Load("icons.effect_wasted_gold");
+		goodShieldTexture = TextureLoader.Load("icons.effect_shield");
+
+		effectIcons = new() {
+			{LUXURIES,  smileyFaceTexture},
+			{TAXES,  goodGoldTexture},
+			{RESEARCH,  beakerTexture},
+			{CORRUPTION,  wastedGoldTexture},
+			{CONSTRUCTION,  goodShieldTexture}
+		};
 
 		RenderShieldBox(shieldCost: 30, shieldsInBox: 15);
 		RenderShieldRow(goodShields: 10, corruptShields: 3);
@@ -201,7 +230,7 @@ public partial class CityScreen : Control {
 			CityResident resident = tile.personWorkingTile;
 			tile.personWorkingTile = null;
 			resident.tileWorked = Tile.NONE;
-			resident.citizenType = city.owner.GetKnownSpecialists()[0];
+			resident.citizenType = city.owner.GetKnownSpecialists(gameData)[0];
 			return;
 		}
 
@@ -573,7 +602,7 @@ public partial class CityScreen : Control {
 			// animation frame below.
 			ShaderMaterial material = new();
 			material.Shader = GD.Load<Shader>("res://UnitTint.gdshader");
-			Color civColor = Util.LoadColor(city.owner.colorIndex);
+			Color civColor = TextureLoader.LoadColor(city.owner.colorIndex);
 			material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
 
 			// See flicRowToAnimationDirection for the mapping, row 2 is facing
@@ -598,11 +627,8 @@ public partial class CityScreen : Control {
 			imageTintSprite.Position = baseImageSprite.Position;
 			productionButton.AddChild(imageTintSprite);
 		} else if (city.itemBeingProduced is Building b) {
-			int y = 32 + 1 + 41 * b.iconRowIndex;
-			const int iconWidth = 50, iconHeight = 40;
-
 			Sprite2D icon = new();
-			icon.Texture = TextureLoader.LoadFromPCX("Art/city screen/buildings-large.pcx", new(33, y, iconWidth, iconHeight));
+			icon.Texture = TextureLoader.Load("building_icons.large", b, useCache: true);
 			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
 			productionButton.AddChild(icon);
 		}
@@ -692,7 +718,14 @@ public partial class CityScreen : Control {
 			background.RemoveChild(head);
 			head.QueueFree();
 		}
+		// Reset any old head effects.
+		foreach (TextureRect effect in popHeadEffects) {
+			background.RemoveChild(effect);
+			effect.QueueFree();
+		}
+
 		popHeads.Clear();
+		popHeadEffects.Clear();
 
 		int eraNum = city.owner.EraIndex();
 
@@ -764,9 +797,11 @@ public partial class CityScreen : Control {
 		foreach (CityResident cr in specialists) {
 			TextureButton tb = new();
 			tb.TextureNormal = PopHead.GetTexture(cr, eraNum);
-			tb.SetPosition(new Vector2(xPos, 440));
+			tb.SetPosition(new Vector2(xPos, POP_HEAD_OFFSET_Y));
 
-			List<CitizenType> specialistTypes = city.owner.GetKnownSpecialists();
+			List<CitizenType> specialistTypes = null;
+			EngineStorage.ReadGameData((GameData gameData) => { specialistTypes = city.owner.GetKnownSpecialists(gameData); });
+
 			int index = specialistTypes.FindIndex(x => x.Id == cr.citizenType.Id);
 			tb.Pressed += () => {
 				cr.citizenType = specialistTypes[(index + 1) % specialistTypes.Count];
@@ -777,6 +812,32 @@ public partial class CityScreen : Control {
 			};
 
 			background.AddChild(tb);
+
+			float iconOffset = 0.0f;
+			foreach (KeyValuePair<string, int> entry in GetSpecialistEffectInfo(cr)) {
+				if (!effectIcons.TryGetValue(entry.Key, out ImageTexture texture)) continue;
+				for (int i = 0; i < entry.Value; i++) {
+					TextureRect icon = new();
+					icon.Texture = texture;
+
+					float iconHalfWidth = icon.Texture.GetWidth() / 2.0f;
+					float iconXPos = tb.Position.X + iconHalfWidth * i + iconOffset;
+					float iconYPos = tb.Position.Y + PopHead.HEAD_SIZE - 10;
+
+					icon.SetPosition(new Vector2(iconXPos, iconYPos));
+					background.AddChild(icon);
+					popHeadEffects.Add(icon);
+
+					// If multiple effects are applicable we need to
+					// calculate the total offset that comes before each type.
+					// The offset is only calculated on the last iteration
+					// because we don't want any extra offset between effects of the same type.
+					if (i == entry.Value - 1) {
+						iconOffset += iconHalfWidth * entry.Value;
+					}
+				}
+			}
+
 			popHeads.Add(tb);
 			xPos += PopHead.HEAD_SIZE;
 		}
@@ -805,9 +866,20 @@ public partial class CityScreen : Control {
 	private int AddDefaultCitizen(CityResident cr, int xPos, int eraNum) {
 		TextureButton tb = new();
 		tb.TextureNormal = PopHead.GetTexture(cr, eraNum);
-		tb.SetPosition(new Vector2(xPos, 440));
+		tb.SetPosition(new Vector2(xPos, POP_HEAD_OFFSET_Y));
 		background.AddChild(tb);
 		popHeads.Add(tb);
 		return xPos + PopHead.HEAD_SIZE;
+	}
+
+	private Dictionary<string, int> GetSpecialistEffectInfo(CityResident cityResident) {
+		Dictionary<string, int> specialistEffectInfo = new();
+		specialistEffectInfo.TryAdd(LUXURIES, cityResident.citizenType.Luxuries);
+		specialistEffectInfo.TryAdd(TAXES, cityResident.citizenType.Taxes);
+		specialistEffectInfo.TryAdd(RESEARCH, cityResident.citizenType.Research);
+		specialistEffectInfo.TryAdd(CORRUPTION, cityResident.citizenType.Corruption);
+		specialistEffectInfo.TryAdd(CONSTRUCTION, cityResident.citizenType.Construction);
+
+		return specialistEffectInfo;
 	}
 }

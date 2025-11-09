@@ -30,7 +30,7 @@ namespace C7GameData.Save {
 				wrapVertically = wrapVertically,
 				techRate = techRate,
 				optimalNumberOfCities = optimalNumberOfCities,
-				tiles = tiles.ConvertAll(tile => tile.ToTile(gd.terrainTypes, gd.Resources)),
+				tiles = tiles.ConvertAll(tile => tile.ToTile(gd.terrainTypes, gd.Resources, gd.terrainImprovements)),
 			};
 			foreach (SaveTile st in startingLocations) {
 				gameMap.startingLocations.Add(gameMap.tiles.Find(t => t.XCoordinate == st.X && t.YCoordinate == st.Y));

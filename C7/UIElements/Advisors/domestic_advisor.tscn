@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://da7hbbufyfllg"]
 
-[ext_resource type="Script" path="res://UIElements/Advisors/DomesticAdvisor.cs" id="1"]
-[ext_resource type="Script" path="res://UIElements/Civ3TextureRect.cs" id="2"]
-[ext_resource type="Script" path="res://UIElements/Civ3TextureButton.cs" id="3"]
+[ext_resource type="Script" uid="uid://ch2d6f1o1sxh2" path="res://UIElements/Advisors/DomesticAdvisor.cs" id="1"]
+[ext_resource type="Script" uid="uid://doqipc4rnaotx" path="res://UIElements/Civ3TextureRect.cs" id="2"]
+[ext_resource type="Script" uid="uid://dcrdcjop64t6t" path="res://UIElements/Civ3TextureButton.cs" id="3"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0b8py"]
 font_size = 13

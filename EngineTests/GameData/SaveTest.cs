@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-
+using C7Engine;
+using C7GameData;
+using C7GameData.Save;
+using Newtonsoft.Json.Linq;
+using QueryCiv3;
 using Xunit;
 
-using C7GameData;
-using C7Engine;
-using C7GameData.Save;
-using QueryCiv3;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
+namespace EngineTests.GameData;
 
 public class SaveTests {
 
@@ -52,20 +52,22 @@ public class SaveTests {
 		return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
 	}
 
-	[Fact]
-	public void SimpleSave() {
+	[Theory]
+	[InlineData("../C7/Text/c7-static-map-save.json", "basic")]
+	[InlineData("../C7/Text/c7-static-map-save-standalone.json", "standalone")]
+	public void SimpleSave(string developerSavePath, string outputFilePostfix) {
 		// simple load SaveGame and save to file:
-		string outputNeverGameDataPath = getDataPath("output/static-save-never-game-data.json");
+		string outputNeverGameDataPath = getDataPath($"output/static-save-never-game-data-{outputFilePostfix}.json");
 
 		// load SaveGame but convert to and from GameData before saving to file:
-		string outputWasGameDataPath = getDataPath("output/static-save-was-game-data.json");
+		string outputWasGameDataPath = getDataPath($"output/static-save-was-game-data-{outputFilePostfix}.json");
 
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+		string developerSave = getBasePath(developerSavePath);
 
 		SaveGame saveNeverGameData = SaveGame.Load(developerSave, (string unused) => { return unused; });
 
 		saveNeverGameData.Save(outputNeverGameDataPath);
-		GameData gameData = ToGameData(saveNeverGameData);
+		C7GameData.GameData gameData = ToGameData(saveNeverGameData);
 		SaveGame saveWasGameData = SaveGame.FromGameData(gameData);
 		saveWasGameData.Save(outputWasGameDataPath);
 
@@ -92,17 +94,12 @@ public class SaveTests {
 
 	private void WaitForStartTurnMessage() {
 		while (true) {
-			MessageToUI msg;
-			while (EngineStorage.messagesToUI.TryDequeue(out msg)) {
+			EngineStorage.ProcessNextMessageToEngine();
+
+			while (EngineStorage.TryDequeueNextMessageToUI(out MessageToUI msg)) {
 				switch (msg) {
 					case MsgStartTurn mST:
 						return;
-					case MsgStartUnitAnimation mSUA:
-						// Ensure we don't get stuck waiting for animations to finish.
-						if (mSUA.completionEvent != null) {
-							mSUA.completionEvent();
-						}
-						continue;
 					default:
 						continue;
 				}
@@ -115,16 +112,16 @@ public class SaveTests {
 			getPediaIconsPath = (string unused) => { return unused; };
 		}
 
-		return CreateGame.createGame(path, luaRulesDir, biqPath, getPediaIconsPath);
+		return CreateGame.createGame(path, luaRulesDir, biqPath, getPediaIconsPath).Result;
 	}
 
-	private GameData ToGameData(SaveGame game) {
+	private C7GameData.GameData ToGameData(SaveGame game) {
 		return game.ToGameData(luaRulesDir);
 	}
 
 	private void CheckAiInvariants() {
-		EngineStorage.ReadGameData((GameData gameData) => {
-			GameData game = gameData;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => {
+			C7GameData.GameData game = gameData;
 
 			foreach (Player p in game.players) {
 				foreach (MapUnit u in p.units) {
@@ -153,9 +150,14 @@ public class SaveTests {
 		});
 	}
 
-	[Fact]
-	public void SimpleGame() {
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+	[Theory]
+	[InlineData("../C7/Text/c7-static-map-save.json", "basic")]
+	[InlineData("../C7/Text/c7-static-map-save-standalone.json", "standalone")]
+	public void SimpleGame(string developerSavePath, string outputFilePostfix) {
+		string developerSave = getBasePath(developerSavePath);
+
+		new MsgSetAnimationsEnabled(false).send();
+
 		Player human = CreateHeadlessGame(developerSave);
 
 		// Make all the players AI players while we run the game in headless mode.
@@ -171,19 +173,19 @@ public class SaveTests {
 
 		// Make the player a human again so we can save and load the game.
 		human.isHuman = true;
-		GameData game = null;
-		EngineStorage.ReadGameData((GameData gameData) => {
+		C7GameData.GameData game = null;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => {
 			game = gameData;
 		});
 		Assert.Equal(50, game.turn);
 
 		// Save the game.
-		string outputDirectSavePath = getDataPath("output/headless-game-direct-save.json");
+		string outputDirectSavePath = getDataPath($"output/headless-game-direct-save-{outputFilePostfix}.json");
 		SaveGame.FromGameData(game).Save(outputDirectSavePath);
 
 		// Load the saved game and save it again.
-		string roundTrippedSavePath = getDataPath("output/headless-game-round-tripped-save.json");
-		GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath, (string unused) => { return unused; }));
+		string roundTrippedSavePath = getDataPath($"output/headless-game-round-tripped-save-{outputFilePostfix}.json");
+		C7GameData.GameData roundTrippedGameData = ToGameData(SaveGame.Load(outputDirectSavePath, (string unused) => { return unused; }));
 		SaveGame.FromGameData(roundTrippedGameData).Save(roundTrippedSavePath);
 
 		string[] directSaveLines = File.ReadAllLines(outputDirectSavePath);
@@ -203,8 +205,8 @@ public class SaveTests {
 		Player human = CreateHeadlessGame(developerSave);
 		WaitForStartTurnMessage();
 
-		GameData gd = null;
-		EngineStorage.ReadGameData((GameData gameData) => { gd = gameData; });
+		C7GameData.GameData gd = null;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => { gd = gameData; });
 
 		Tile t0 = gd.map.tileAt(97, 33);
 		Tile t1 = gd.map.tileAt(99, 33);
@@ -245,7 +247,7 @@ public class SaveTests {
 		int i = 0;
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			SaveGame game = null;
-			GameData gd = null;
+			C7GameData.GameData gd = null;
 			Console.WriteLine(saveFileInfo.FullName);
 			Exception ex = Record.Exception(() => {
 				game = ImportCiv3.ImportSav(saveFileInfo.FullName, defaultBicPath, (relativeModePath) => {
@@ -296,7 +298,7 @@ public class SaveTests {
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			string name = saveFileInfo.Name;
 			SaveGame game = null;
-			GameData gd = null;
+			C7GameData.GameData gd = null;
 
 			Func<string, string> getPediaIconsPath = (relativeModPath) => {
 				if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
@@ -341,7 +343,7 @@ public class SaveTests {
 				// The human player should always have either a city or a settler.
 				if (player.human) {
 					Assert.True(cityCount + settlerCount > 0,
-								name + " : " + player.civilization);
+						name + " : " + player.civilization);
 				}
 			}
 
@@ -360,7 +362,7 @@ public class SaveTests {
 				// The human player should always have either a city or a settler.
 				if (player.isHuman) {
 					Assert.True(cityCount + settlerCount > 0,
-								name + " : " + player.civilization.name);
+						name + " : " + player.civilization.name);
 				}
 			}
 

@@ -193,14 +193,15 @@ public partial class RightClickTileMenu : RightClickMenu {
 				foreach (MapUnit unit in nonPlayerUnits) {
 					AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
 				}
-				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 			} else {
 				// TODO: This isn't necessarily the top unit, get that code to an accessible
 				// location and then use it here.
 				MapUnit unit = nonPlayerUnits[0];
 				AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
-				AddItem($"Contact {unit.owner.civilization.name}", contactCiv);
 			}
+
+			if (!nonPlayerUnits[0].owner.isBarbarians)
+				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 		}
 	}
 
@@ -208,7 +209,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
 			if (toSelect != null && toSelect.owner == game.controller) {
-				bool canMove = game.setSelectedUnit(toSelect);
+				bool canMove = game.unitSelector.SetSelectedUnit(toSelect);
 				if (!canMove) {
 					ShowCannotMovePopup();
 				}
@@ -233,7 +234,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 					new MsgSetFortification(unit.id, isFortify).send();
 
 					if (!hasSelectedUnit && !isFortify) {
-						bool canMove = game.setSelectedUnit(unit);
+						bool canMove = game.unitSelector.SetSelectedUnit(unit);
 						if (!canMove) {
 							ShowCannotMovePopup();
 						}
@@ -285,15 +286,10 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 	private ID cityID;
 
 	public static ImageTexture GetProducibleIcon(IProducible producible) {
-		const int iconWidth = 32, iconHeight = 32;
 		if (producible is UnitPrototype proto) {
-			const int iconsPerRow = 14;
-			int x = 1 + 33 * (proto.iconIndex % iconsPerRow),
-				y = 1 + 33 * (proto.iconIndex / iconsPerRow);
-			return TextureLoader.LoadFromPCX("Art/Units/units_32.pcx", new(x, y, iconWidth, iconHeight));
+			return TextureLoader.Load("unit_icons", proto, useCache: true);
 		} else if (producible is Building b) {
-			int y = 1 + 33 * (1 + b.iconRowIndex);
-			return TextureLoader.LoadFromPCX("Art/city screen/buildings-small.pcx", new(33, y, iconWidth, iconHeight));
+			return TextureLoader.Load("building_icons.small", b, useCache: true);
 		} else {
 			return null;
 		}

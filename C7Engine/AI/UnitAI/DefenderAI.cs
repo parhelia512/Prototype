@@ -34,7 +34,7 @@ namespace C7Engine.AI.UnitAI {
 			ai.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
 
 			PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-			ai.pathToDestination = algorithm.PathFrom(unit.location, ai.destination);
+			ai.pathToDestination = algorithm.PathFrom(unit.location, ai.destination, unit);
 
 			log.Information($"Unit {unit} tasked with defending {cityToDefend.name}");
 			return ai;
@@ -44,7 +44,7 @@ namespace C7Engine.AI.UnitAI {
 			data = d;
 		}
 
-		C7GameData.UnitAI.Result C7GameData.UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		C7GameData.UnitAI.MoveResult C7GameData.UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			if (data.destination == unit.location) {
 				if (!unit.isFortified) {
 					unit.fortify();
@@ -66,7 +66,7 @@ namespace C7Engine.AI.UnitAI {
 		/**
 		 * Finds a nearby city that could use extra defenders.
 		 *
-		 * This is not a brilliant method, with many flaws such as whether the 
+		 * This is not a brilliant method, with many flaws such as whether the
 		 * city needs more defenders, or if the units present are defenders.
 		 */
 		private static City FindAtRiskCityToDefend(MapUnit unit, Player player, int minDefenders) {

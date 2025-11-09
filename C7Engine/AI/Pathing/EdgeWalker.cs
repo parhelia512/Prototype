@@ -14,27 +14,28 @@ namespace C7Engine.Pathing {
 		}
 
 		public override IEnumerable<Edge<Tile>> getEdges(Tile node) {
-			bool landUnit = unit.IsLandUnit();
-
 			List<Edge<Tile>> result = new List<Edge<Tile>>();
 			foreach (KeyValuePair<TileDirection, Tile> pair in node.neighbors) {
 				TileDirection direction = pair.Key;
 				Tile neighbor = pair.Value;
 				bool neighborHasCityWithSameOwner = neighbor.cityAtTile != null && neighbor.cityAtTile.owner == unit.owner;
 
+				bool isPassable = false;
 
-				// Land units can only go on to land.
-				if (landUnit && !neighbor.IsLand()) {
+				if (unit.owner.isHuman && !unit.owner.HasExploredTile(neighbor)) {
+					isPassable = true;
+				} else {
+					if (unit.IsLandUnit())
+						isPassable = neighbor.IsLand();
+					else if (unit.IsWaterUnit())
+						isPassable = neighbor.IsWater() || neighborHasCityWithSameOwner;
+				}
+
+				if (!isPassable) {
 					continue;
 				}
 
-				// Water units can only go on water or coastal cities with the
-				// same owner (to support canals).
-				if (!landUnit && !(neighbor.IsWater() || neighborHasCityWithSameOwner)) {
-					continue;
-				}
-
-				float tileMovementCost = TilePath.getMovementCost(node, direction, neighbor);
+				float tileMovementCost = TilePath.GetMovementCost(unit.owner, node, direction, neighbor);
 				float unitMovementPoints = unit.unitType.movement;
 
 				// If this tile would consume all of the movement points of this

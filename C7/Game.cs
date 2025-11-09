@@ -7,18 +7,20 @@ using Serilog;
 using C7Engine.Pathing;
 using System.Collections.Generic;
 using System.Linq;
-using C7Engine.AI;
 
-public partial class Game : Node2D {
+public partial class Game : Node {
 	[Signal] public delegate void TurnEndedEventHandler();
 	[Signal] public delegate void ShowSpecificAdvisorEventHandler();
-	[Signal] public delegate void NewAutoselectedUnitEventHandler();
-	[Signal] public delegate void NoMoreAutoselectableUnitsEventHandler();
 	[Signal] public delegate void ShowCityScreenEventHandler();
+
+	[Signal] public delegate void PlayerTurnStartEventHandler();
+	[Signal] public delegate void PlayerTurnEndEventHandler();
+
+	[Signal] public delegate void GameInitializedEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
 
-	enum GameState {
+	public enum GameState {
 		PreGame,
 		PlayerTurn,
 		ComputerTurn
@@ -27,17 +29,10 @@ public partial class Game : Node2D {
 	public Player controller; // Player that's controlling the UI.
 
 	private MapView mapView;
-	public AnimationManager civ3AnimData;
-	public AnimationTracker animTracker;
 
-	GameState CurrentState = GameState.PreGame;
+	public GameState CurrentState { get; private set; } = GameState.PreGame;
 
-	// True if the deal screen is open because an AI player is offering something
-	// to the human player.
-	private bool waitingForDealScreen = false;
-
-	// CurrentlySelectedUnit is a reference directly into the game state so be careful of race conditions. TODO: Consider storing a GUID instead.
-	public MapUnit CurrentlySelectedUnit = MapUnit.NONE; //The selected unit.  May be changed by clicking on a unit or the next unit being auto-selected after orders are given for the current one.
+	public MapUnit CurrentlySelectedUnit => unitSelector.CurrentlySelectedUnit;
 	private bool HasCurrentlySelectedUnit() => CurrentlySelectedUnit != MapUnit.NONE;
 
 	// When the game is in "goto" mode, the current destination and the cost of getting
@@ -53,10 +48,6 @@ public partial class Game : Node2D {
 		public Player requiresWarDeclarationOnPlayer = null;
 	};
 	public GotoInfo gotoInfo = null;
-
-	// Normally if the currently selected unit (CSU) becomes fortified, we advance to the next autoselected unit. If this flag is set, we won't do
-	// that. This is useful so that the unit autoselector can be prevented from interfering with the player selecting fortified units.
-	public bool KeepCSUWhenFortified = false;
 
 	// When in observer mode, the number of turns to play before prompting the
 	// user to advance the turn manually. This allows for more rapid debugging
@@ -80,13 +71,14 @@ public partial class Game : Node2D {
 	[Export]
 	private Diplomacy diplomacy;
 	[Export]
-	private VSlider slider;
-	[Export]
-	private AnimationPlayer animationPlayer;
+	private Control palaceScene;
+
 	[Export]
 	private DoubleClickHandler doubleClickHandler;
 	[Export]
-	private PalaceScreen palaceScreen;
+	public AnimationController animationController;
+	[Export]
+	public UnitSelector unitSelector;
 
 	bool errorOnLoad = false;
 
@@ -97,7 +89,7 @@ public partial class Game : Node2D {
 	// Called when the node enters the scene tree for the first time.
 	// The catch should always catch any error, as it's the general catch
 	// that gives an error if we fail to load for some reason.
-	public override void _Ready() {
+	public override async void _Ready() {
 		Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 
 		try {
@@ -105,17 +97,12 @@ public partial class Game : Node2D {
 			// use the same filenames but have different content for them.
 			Util.ClearCaches();
 
-			var animSoundPlayer = new AudioStreamPlayer();
-			AddChild(animSoundPlayer);
-			civ3AnimData = new AnimationManager(animSoundPlayer);
-			animTracker = new AnimationTracker(civ3AnimData);
-
-			controller = CreateGame.createGame(
+			controller = await CreateGame.createGame(
 				Global.LoadGamePath,
 				GamePaths.LuaRulesDir,
 				GamePaths.DefaultBicPath,
 				(scenarioSearchPath) => {
-					// WHen the game loading logic tries to load the PediaIcons file, set the
+					// When the game loading logic tries to load the PediaIcons file, set the
 					// scenario search path and then use our Civ3MediaPath searching logic to
 					// find the correct version of the file.
 					//
@@ -137,17 +124,13 @@ public partial class Game : Node2D {
 
 			InitializeMapView();
 
-			//TODO: What was this supposed to do?  It throws errors and occasinally causes crashes now, because _OnViewportSizeChanged doesn't exist
-			// GetTree().Root.Connect("size_changed",new Callable(this,"_OnViewportSizeChanged"));
-
-			// Hide slideout bar on startup
-			_on_SlideToggle_toggled(false);
-
 			log.Information("Now in game!");
 
 			loadTimer.Stop();
 			TimeSpan stopwatchElapsed = loadTimer.Elapsed;
 			log.Information("Game scene load time: " + Convert.ToInt32(stopwatchElapsed.TotalMilliseconds) + " ms");
+
+			EmitSignal(SignalName.GameInitialized);
 		} catch (Exception ex) {
 			errorOnLoad = true;
 			string message = ex.Message;
@@ -205,171 +188,99 @@ public partial class Game : Node2D {
 		});
 	}
 
-	public void processEngineMessages() {
-		EngineStorage.ReadGameData((GameData gameData) => { processEngineMessagesLocked(gameData); });
-	}
+	public void HandleEngineMessage(MessageToUI msg) {
+		GameData gameData = EngineStorage.gameData;
 
-	// Must only be called while holding the game data mutex
-	public void processEngineMessagesLocked(GameData gameData) {
-		MessageToUI msg;
-		while (EngineStorage.messagesToUI.TryDequeue(out msg)) {
-			switch (msg) {
-				case MsgStartUnitAnimation mSUA:
-					MapUnit unit = gameData.GetUnit(mSUA.unitID);
-					if (unit != null && (controller.tileKnowledge.isActiveTile(unit.location) || controller.tileKnowledge.isActiveTile(unit.previousLocation))) {
-						// TODO: This needs to be extended so that the player is shown when AIs found cities, when they move units
-						// (optionally, depending on preferences) and generalized so that modders can specify whether custom
-						// animations should be shown to the player.
-						if (mSUA.action == MapUnit.AnimatedAction.ATTACK1)
-							ensureLocationIsInView(unit.location);
+		switch (msg) {
+			case MsgStartTurn mST:
+				OnPlayerStartTurn();
+				break;
+			case MsgShowCityScreen mSCS:
+				ShowCityScreenForCity(gameData, mSCS.city);
+				break;
+			case MsgCityCreated mCC:
+				ShowCityScreenForCity(gameData, mCC.city);
+				break;
+			case MsgCityDestroyed mCD:
+				mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
+				break;
+			case MsgCivilizationDestroyed mCivD:
+				popupOverlay.ShowPopup(new CivilizationDestroyed(mCivD.civilization), PopupOverlay.PopupCategory.Advisor);
 
-						animTracker.startAnimation(unit, mSUA.action, mSUA.completionEvent, mSUA.ending);
-					} else {
-						if (mSUA.completionEvent != null) {
-							mSUA.completionEvent();
-						}
-					}
-					break;
-				case MsgStartEffectAnimation mSEA:
-					int X, Y;
-					gameData.map.tileIndexToCoords(mSEA.tileIndex, out X, out Y);
-					Tile tile = gameData.map.tileAt(X, Y);
-					if (tile != Tile.NONE && controller.tileKnowledge.isActiveTile(tile))
-						animTracker.startAnimation(tile, mSEA.effect, mSEA.completionEvent, mSEA.ending);
-					else {
-						if (mSEA.completionEvent != null)
-							mSEA.completionEvent();
-					}
-					break;
-				case MsgStartTurn mST:
-					OnPlayerStartTurn();
-					break;
-				case MsgShowCityScreen mSCS:
-					ShowCityScreenForCity(gameData, mSCS.city);
-					break;
-				case MsgCityCreated mCC:
-					ShowCityScreenForCity(gameData, mCC.city);
-					break;
-				case MsgCityDestroyed mCD:
-					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
-					break;
-				case MsgCivilizationDestroyed mCivD:
-					popupOverlay.ShowPopup(new CivilizationDestroyed(mCivD.civilization), PopupOverlay.PopupCategory.Advisor);
-
-					// Break out of fast forward mode after interesting events.
-					turnsLeftToFastForward = 0;
-					break;
-				case MsgShowMilitaryAdvisorPopup mSMAP:
-					if (!popupOverlay.Visible) {
-						popupOverlay.ShowPopup(
-							new InformationalPopup(mSMAP.message, AdvisorHead.Advisor.Military, mSMAP.happy ? AdvisorHead.Mood.Happy : AdvisorHead.Mood.Angry),
-							PopupOverlay.PopupCategory.Advisor);
-					}
-					break;
-				case MsgUpdateUiAfterMove mUUAM:
-					// The unit finished moving and still has moves left, so we need to
-					// mark it as the selected unit again.
-					//
-					// Among other things, this will refresh the UI and ensure that the
-					// unit action buttons are correct.
-					if (CurrentlySelectedUnit != MapUnit.NONE) {
-						setSelectedUnit(CurrentlySelectedUnit);
-					}
-					break;
-				case MsgShowScienceAdvisor mSSA:
-					// F6 is the science advisor.
-					// TODO: Move the F* key strings to a set of constants/enum.
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
-					break;
-				case MsgUpdateUiAfterDomesticChange mUUASC:
-					// F1 is the domestic advisor.
-					// TODO: Move the F* key strings to a set of constants/enum.
-
-					// Ensure the citizen moods are correct before displaying
-					// them.
-					foreach (City c in controller.cities) {
-						c.RecalculateCitizenMoods(gameData);
-					}
-					EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
-					break;
-				case MsgShowTradeOffer mSTO:
-					diplomacy.ShowDealScreenForPlayer(
-						mSTO.humanPlayer.id, mSTO.aiPlayer.id,
-						humanGives: mSTO.aiWant,
-						humanWants: mSTO.aiGive);
-					waitingForDealScreen = true;
-					break;
-				case MsgDisplayHurryProductionPopup mDHPP:
-					if (mDHPP.details.errorMessage != null) {
-						popupOverlay.ShowPopup(
-							new InformationalPopup(mDHPP.details.errorMessage),
-							PopupOverlay.PopupCategory.Advisor);
-					} else {
-						popupOverlay.ShowPopup(
-							new ConfirmationPopup(message: mDHPP.details.costMessage,
-												  yesText: "Yes I'm sure!",
-												  noText: "Maybe you're right. Nevermind.",
-												  yesAction: () => {
-													  new MsgDoHurryProduction(mDHPP.city).send();
-												  }),
-							PopupOverlay.PopupCategory.Advisor);
-					}
-					break;
-				case MsgWarDeclaration mWD:
+				// Break out of fast forward mode after interesting events.
+				turnsLeftToFastForward = 0;
+				break;
+			case MsgShowMilitaryAdvisorPopup mSMAP:
+				if (!popupOverlay.Visible) {
 					popupOverlay.ShowPopup(
-						new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
+						new InformationalPopup(mSMAP.message, AdvisorHead.Advisor.Military, mSMAP.happy ? AdvisorHead.Mood.Happy : AdvisorHead.Mood.Angry),
 						PopupOverlay.PopupCategory.Advisor);
+				}
+				break;
+			case MsgShowScienceAdvisor mSSA:
+				// F6 is the science advisor.
+				// TODO: Move the F* key strings to a set of constants/enum.
+				EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
+				break;
+			case MsgUpdateUiAfterDomesticChange mUUASC:
+				// F1 is the domestic advisor.
+				// TODO: Move the F* key strings to a set of constants/enum.
 
-					// Break out of the fast forward mode when something
-					// interesting happens.
-					turnsLeftToFastForward = 0;
-					break;
-				case MsgShowTemporaryPopup mSTP:
-					TemporaryPopup popup = new(mSTP.message, 1);
-					popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
-					AddChild(popup);
-					popup.ShowPopup();
-					break;
-			}
+				// Ensure the citizen moods are correct before displaying
+				// them.
+				foreach (City c in controller.cities) {
+					c.RecalculateCitizenMoods(gameData);
+				}
+				EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
+				break;
+			case MsgShowTradeOffer mSTO:
+				diplomacy.ShowDealScreenForPlayer(
+					mSTO.humanPlayer.id, mSTO.aiPlayer.id,
+					humanGives: mSTO.aiWant,
+					humanWants: mSTO.aiGive);
+				break;
+			case MsgDisplayHurryProductionPopup mDHPP:
+				if (mDHPP.details.errorMessage != null) {
+					popupOverlay.ShowPopup(
+						new InformationalPopup(mDHPP.details.errorMessage),
+						PopupOverlay.PopupCategory.Advisor);
+				} else {
+					popupOverlay.ShowPopup(
+						new ConfirmationPopup(message: mDHPP.details.costMessage,
+												yesText: "Yes I'm sure!",
+												noText: "Maybe you're right. Nevermind.",
+												yesAction: () => {
+													new MsgDoHurryProduction(mDHPP.city).send();
+												}),
+						PopupOverlay.PopupCategory.Advisor);
+				}
+				break;
+			case MsgWarDeclaration mWD:
+				popupOverlay.ShowPopup(
+					new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
+					PopupOverlay.PopupCategory.Advisor);
+
+				// Break out of the fast forward mode when something
+				// interesting happens.
+				turnsLeftToFastForward = 0;
+				break;
+			case MsgShowTemporaryPopup mSTP:
+				TemporaryPopup popup = new(mSTP.message, 1);
+				popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
+				AddChild(popup);
+				popup.ShowPopup();
+				break;
 		}
-	}
-
-	// Instead of Game calling animTracker.update periodically (this used to happen in _Process), this method gets called as necessary to bring
-	// the animations up to date. Right now it's called from UnitLayer right before it draws the units on the map. This method also processes all
-	// waiting messages b/c some of them might pertain to animations. TODO: Consider processing only the animation messages here.
-	// Must only be called while holding the game data mutex
-	public void updateAnimations(GameData gameData) {
-		processEngineMessagesLocked(gameData);
-		animTracker.update();
 	}
 
 	public override void _Process(double delta) {
-		if (CurrentState == GameState.ComputerTurn && waitingForDealScreen && !diplomacy.Visible) {
-			waitingForDealScreen = false;
-			EngineStorage.FinishUiEvent();
-		}
-
 		ProcessActions();
-		processEngineMessages();
 
-		if (!errorOnLoad) {
-			if (CurrentState == GameState.PlayerTurn) {
-				// If the selected unit is unfortified, prepare to autoselect the next one if it becomes fortified
-				if ((CurrentlySelectedUnit != MapUnit.NONE) && (!CurrentlySelectedUnit.isFortified))
-					KeepCSUWhenFortified = false;
+		if (!EngineStorage.HasPendingAnimations())
+			EngineStorage.ProcessNextMessageToEngine();
 
-				// Advance off the currently selected unit to the next one if it's out of moves or HP and not playing an
-				// animation we want to watch, or if it's fortified and we aren't set to keep fortified units selected.
-				if ((CurrentlySelectedUnit != MapUnit.NONE) &&
-					(((!CurrentlySelectedUnit.movementPoints.canMove || CurrentlySelectedUnit.hitPointsRemaining <= 0) &&
-					  !animTracker.getUnitAppearance(CurrentlySelectedUnit).DeservesPlayerAttention()) ||
-					 (CurrentlySelectedUnit.isFortified && !KeepCSUWhenFortified) ||
-					 CurrentlySelectedUnit.isAutomated))
-					EngineStorage.ReadGameData((GameData gameData) => {
-						GetNextAutoselectedUnit(gameData);
-					});
-			}
-		}
+		if (EngineStorage.TryDequeueNextMessageToUI(out MessageToUI msg))
+			HandleEngineMessage(msg);
 	}
 
 	// If "location" is not already near the center of the screen, moves the camera to bring it into view.
@@ -378,59 +289,6 @@ public partial class Game : Node2D {
 			Vector2 relativeScreenLocation = mapView.screenLocationOfTile(location, true) / mapView.getVisibleAreaSize();
 			if (relativeScreenLocation.DistanceTo(new Vector2((float)0.5, (float)0.5)) > 0.30)
 				mapView.centerCameraOnTile(location);
-		}
-	}
-
-	public void SetAnimationsEnabled(bool enabled) {
-		new MsgSetAnimationsEnabled(enabled).send();
-		animTracker.endAllImmediately = !enabled;
-	}
-
-	/**
-	 * Currently (11/14/2021), all unit selection goes through here.
-	 * Both code paths are in Game.cs for now, so it's local, but we may
-	 * want to change it event driven.
-	 *
-	 * Returns whether the selected unit has remaining moves.
-	 **/
-	public bool setSelectedUnit(MapUnit unit) {
-		unit.availableActions = UnitInteractions.GetAvailableActions(unit);
-
-		if ((unit.path?.PathLength() ?? -1) > 0) {
-			log.Debug("cancelling path for " + unit);
-			unit.path = TilePath.NONE;
-		}
-
-		// Allow cancellation of active worker jobs by clicking on the unit.
-		if (unit.WorkerJob != null) {
-			unit.resetWorkerJob();
-		}
-
-		// Allow cancellation automation via clicking on the unit.
-		if (unit.isAutomated) {
-			unit.isAutomated = false;
-			unit.currentAI = null;
-		}
-
-		this.CurrentlySelectedUnit = unit;
-		this.KeepCSUWhenFortified = unit.isFortified; // If fortified, make sure the autoselector doesn't immediately skip past the unit
-
-		if (unit != MapUnit.NONE) {
-			ensureLocationIsInView(unit.location);
-		}
-
-		if (unit != MapUnit.NONE && !unit.movementPoints.canMove) {
-			return false;
-		}
-
-		// Also emit the signal for a new unit being selected, so other areas such as Game Status and Unit Buttons can update
-		if (CurrentlySelectedUnit != MapUnit.NONE) {
-			ParameterWrapper<MapUnit> wrappedUnit = new ParameterWrapper<MapUnit>(CurrentlySelectedUnit);
-			EmitSignal(SignalName.NewAutoselectedUnit, wrappedUnit);
-			return true;
-		} else {
-			EmitSignal(SignalName.NoMoreAutoselectableUnits);
-			return false;
 		}
 	}
 
@@ -474,8 +332,9 @@ public partial class Game : Node2D {
 			}
 
 			CurrentState = GameState.PlayerTurn;
-			GetNextAutoselectedUnit(gameData);
 		});
+
+		EmitSignal(SignalName.PlayerTurnStart);
 	}
 
 	private void OnPlayerEndTurn() {
@@ -484,6 +343,7 @@ public partial class Game : Node2D {
 		}
 
 		// Prompt the user if they would have a city riot when the turn ended.
+		bool doEndTurn = true;
 		EngineStorage.ReadGameData((GameData gameData) => {
 			foreach (City city in controller.cities) {
 				if (!controller.isHuman) {
@@ -501,11 +361,14 @@ public partial class Game : Node2D {
 								DoActualEndTurn();
 							}),
 						PopupOverlay.PopupCategory.Advisor);
+					doEndTurn = false;
 					return;
 				}
 			}
 		});
-		DoActualEndTurn();
+		if (doEndTurn) {
+			DoActualEndTurn();
+		}
 	}
 
 	private void DoActualEndTurn() {
@@ -514,6 +377,7 @@ public partial class Game : Node2D {
 		log.Information("Starting computer turn");
 		CurrentState = GameState.ComputerTurn;
 		new MsgEndTurn().send(); // Triggers actual backend processing
+		EmitSignal(SignalName.PlayerTurnEnd);
 	}
 
 	public void _on_QuitButton_pressed() {
@@ -528,32 +392,6 @@ public partial class Game : Node2D {
 		mapView.setCameraZoomFromMiddle(value);
 	}
 
-	public void AdjustZoomSlider(int numSteps, Vector2 zoomCenter) {
-		double newScale = slider.Value + slider.Step * (double)numSteps;
-		if (newScale < slider.MinValue)
-			newScale = slider.MinValue;
-		else if (newScale > slider.MaxValue)
-			newScale = slider.MaxValue;
-
-		// Note we must set the camera zoom before setting the new slider value since setting the value will trigger the callback which will
-		// adjust the zoom around a center we don't want.
-		mapView.setCameraZoom((float)newScale, zoomCenter);
-		slider.Value = newScale;
-	}
-
-	public void _on_RightButton_pressed() {
-		mapView.cameraLocation += new Vector2(128, 0);
-	}
-	public void _on_LeftButton_pressed() {
-		mapView.cameraLocation += new Vector2(-128, 0);
-	}
-	public void _on_UpButton_pressed() {
-		mapView.cameraLocation += new Vector2(0, -64);
-	}
-	public void _on_DownButton_pressed() {
-		mapView.cameraLocation += new Vector2(0, 64);
-	}
-
 	public override void _Input(InputEvent @event) {
 		if (@event is InputEventKey e && e.Pressed && !e.IsAction(C7Action.UnitGoto)) {
 			this.setGotoMode(false);
@@ -562,7 +400,7 @@ public partial class Game : Node2D {
 
 	public override void _UnhandledInput(InputEvent @event) {
 		// Don't handle mouse actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScreen.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScene.Visible) {
 			IsMovingCamera = false;
 			return;
 		}
@@ -585,12 +423,16 @@ public partial class Game : Node2D {
 		} else if (eventMouseButton.ButtonIndex == MouseButton.Right && !eventMouseButton.IsPressed()) {
 			HandleRightMouseButton(eventMouseButton);
 		} else if (eventMouseButton.ButtonIndex == MouseButton.WheelUp) {
-			GetViewport().SetInputAsHandled();
-			AdjustZoomSlider(1, GetViewport().GetMousePosition());
+			AdjustZoom(0.1f);
 		} else if (eventMouseButton.ButtonIndex == MouseButton.WheelDown) {
-			GetViewport().SetInputAsHandled();
-			AdjustZoomSlider(-1, GetViewport().GetMousePosition());
+			AdjustZoom(-0.1f);
 		}
+	}
+
+	private void AdjustZoom(float delta) {
+		float newScale = mapView.cameraZoom + delta;
+		mapView.setCameraZoom(newScale, GetViewport().GetMousePosition());
+		GetViewport().SetInputAsHandled();
 	}
 
 	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
@@ -654,7 +496,7 @@ public partial class Game : Node2D {
 			return;
 		}
 
-		bool canMove = setSelectedUnit(to_select);
+		bool canMove = unitSelector.SetSelectedUnit(to_select);
 		if (!canMove) {
 			TemporaryPopup popup = new("This unit has already moved.", 1);
 			popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
@@ -749,7 +591,7 @@ public partial class Game : Node2D {
 			EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
 		}
 		if (eventKeyDown.Keycode == Godot.Key.F9) {
-			palaceScreen.Show();
+			palaceScene.Show();
 		}
 		if (eventKeyDown.Keycode == Godot.Key.C && HasCurrentlySelectedUnit()) {
 			mapView.centerCameraOnTile(CurrentlySelectedUnit.location);
@@ -777,7 +619,7 @@ public partial class Game : Node2D {
 		foreach (Player player in gameData.players) {
 			player.isHuman = false;
 		}
-		SetAnimationsEnabled(false);
+		animationController.SetAnimationsEnabled(false);
 		popupOverlay.ShowPopup(
 			new TextDialog("How many turns to fast forward through?",
 							"Turns: ", "100",
@@ -806,15 +648,9 @@ public partial class Game : Node2D {
 	}
 
 	private void HandleMagnifyGesture(InputEventMagnifyGesture magnifyGesture) {
-		// UI slider has the min/max zoom settings for now
 		double newScale = mapView.cameraZoom * magnifyGesture.Factor;
-		if (newScale < slider.MinValue)
-			newScale = slider.MinValue;
-		else if (newScale > slider.MaxValue)
-			newScale = slider.MaxValue;
+
 		mapView.setCameraZoom((float)newScale, magnifyGesture.Position);
-		// Update the UI slider
-		slider.Value = newScale;
 	}
 
 	private void ProcessActions() {
@@ -838,8 +674,8 @@ public partial class Game : Node2D {
 			return;
 		}
 
-		if (currentAction == C7Action.Escape && palaceScreen.Visible) {
-			palaceScreen.Hide();
+		if (currentAction == C7Action.Escape && palaceScene.Visible) {
+			palaceScene.Hide();
 			return;
 		}
 
@@ -854,7 +690,7 @@ public partial class Game : Node2D {
 		}
 
 		// never poll for actions if UI elements are visible
-		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScreen.Visible) {
+		if (popupOverlay.Visible || cityScreen.Visible || advisor.Visible || diplomacy.Visible || palaceScene.Visible) {
 			return;
 		}
 
@@ -883,17 +719,15 @@ public partial class Game : Node2D {
 		if (currentAction == C7Action.ToggleZoom) {
 			if (mapView.cameraZoom != 1) {
 				mapView.setCameraZoomFromMiddle(1.0f);
-				slider.Value = 1.0f;
 			} else {
 				mapView.setCameraZoomFromMiddle(0.5f);
-				slider.Value = 0.5f;
 			}
 		}
 
 		if (currentAction == C7Action.ToggleAnimations) {
-			SetAnimationsEnabled(false);
+			animationController.SetAnimationsEnabled(false);
 		} else if (Input.IsActionJustReleased(C7Action.ToggleAnimations)) {
-			SetAnimationsEnabled(true);
+			animationController.SetAnimationsEnabled(true);
 		}
 
 		// actions with unit buttons, which are only relevant during the player
@@ -907,10 +741,8 @@ public partial class Game : Node2D {
 		}
 
 		if (currentAction == C7Action.UnitWait) {
-			EngineStorage.ReadGameData((GameData gameData) => {
-				UnitInteractions.waitUnit(gameData, CurrentlySelectedUnit.id);
-				GetNextAutoselectedUnit(gameData);
-			});
+			UnitInteractions.waitUnit(CurrentlySelectedUnit.id);
+			unitSelector.SetNextUnit();
 		}
 
 		if (currentAction == C7Action.UnitFortify) {
@@ -972,10 +804,6 @@ public partial class Game : Node2D {
 		}
 	}
 
-	private void GetNextAutoselectedUnit(GameData gameData) {
-		this.setSelectedUnit(UnitInteractions.getNextSelectedUnit(gameData));
-	}
-
 	private void setGotoMode(bool isOn) {
 		if (isOn) {
 			gotoInfo = new();
@@ -1024,9 +852,9 @@ public partial class Game : Node2D {
 			// different than the tile the unit is on, calculate the path to move there.
 			MapUnit unit = tile == null ? null : gameData.GetUnit(CurrentlySelectedUnit.id);
 			if (unit != null && unit.location != tile) {
-				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile);
+				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile, unit);
 				result.moveCost =
-					result.path.PathCost(unit.location, unit.unitType.movement, unit.movementPoints.remaining);
+					result.path.PathCost(unit.owner, unit.location, unit.unitType.movement, unit.movementPoints.remaining);
 				result.pathCoords = result.path.GetPathCoords();
 
 				// If we couldn't path onto the tile, but the tile is next to us and
@@ -1039,7 +867,7 @@ public partial class Game : Node2D {
 					pathQueue.Enqueue(tile);
 
 					result.path = new TilePath(tile, pathQueue);
-					result.moveCost = result.path.PathCost(unit.location, unit.unitType.movement,
+					result.moveCost = result.path.PathCost(unit.owner, unit.location, unit.unitType.movement,
 						unit.movementPoints.remaining);
 					result.pathCoords = result.path.GetPathCoords();
 					result.attackingMove = true;
@@ -1063,14 +891,6 @@ public partial class Game : Node2D {
 		return result;
 	}
 
-	private void _on_SlideToggle_toggled(bool buttonPressed) {
-		if (buttonPressed) {
-			animationPlayer.PlayBackwards("SlideOutAnimation");
-		} else {
-			animationPlayer.Play("SlideOutAnimation");
-		}
-	}
-
 	/**
 	 * User quit.  We *may* want to do some things here like make a back-up save, or call the server and let it know we're bailing (esp. in MP).
 	 **/
@@ -1080,14 +900,8 @@ public partial class Game : Node2D {
 	}
 
 	private void OnBuildCity(string name) {
-		new ActionToEngineMsg(() => {
-			// Create the city and then let the ui know, so we can show the city
-			// screen.
-			City? city = CurrentlySelectedUnit?.buildCity(name);
-			if (city != null) {
-				new MsgCityCreated(city).send();
-			}
-		}).send();
+		if (CurrentlySelectedUnit != null)
+			new MsgBuildCity(CurrentlySelectedUnit, name).send();
 	}
 
 	public void ShowCityScreenForCity(GameData gameData, City city) {

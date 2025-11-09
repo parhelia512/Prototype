@@ -1,45 +1,57 @@
 namespace C7Engine {
-	using System.Threading;
 	using C7GameData;
 	using System;
 
-	public class MessageToUI {
+	public interface IMessageToUI {
+		public void send();
+	}
+
+	public class MessageToUI : IMessageToUI {
 		public void send() {
 			EngineStorage.messagesToUI.Enqueue(this);
 		}
 	}
 
-	public class MsgStartUnitAnimation : MessageToUI {
+	public class AnimationMessage : IMessageToUI {
+		internal Guid animationId = Guid.NewGuid();
+
+		public void send() {
+			EngineStorage.animationMessages.Enqueue(this);
+		}
+
+		public void markCompleted() {
+			if (EngineStorage.pendingAnimations.TryGetValue(animationId, out var tcs)) {
+				EngineStorage.pendingAnimations.Remove(animationId);
+				tcs.TrySetResult(true);
+			}
+		}
+	}
+
+	public class MsgStartUnitAnimation : AnimationMessage {
 		public ID unitID;
 		public MapUnit.AnimatedAction action;
-		public Action completionEvent;
 		public AnimationEnding ending;
 
-		public MsgStartUnitAnimation(MapUnit unit, MapUnit.AnimatedAction action, Action completionEvent, AnimationEnding ending) {
+		public MsgStartUnitAnimation(MapUnit unit, MapUnit.AnimatedAction action, AnimationEnding ending) {
 			this.unitID = unit.id;
 			this.action = action;
-			this.completionEvent = completionEvent;
 			this.ending = ending;
 		}
 	}
 
-	public class MsgStartEffectAnimation : MessageToUI {
+	public class MsgStartEffectAnimation : AnimationMessage {
 		public int tileIndex;
 		public AnimatedEffect effect;
-		public Action completionEvent;
 		public AnimationEnding ending;
 
-		public MsgStartEffectAnimation(Tile tile, AnimatedEffect effect, Action completionEvent, AnimationEnding ending) {
+		public MsgStartEffectAnimation(Tile tile, AnimatedEffect effect, AnimationEnding ending) {
 			this.tileIndex = EngineStorage.gameData.map.tileCoordsToIndex(tile.XCoordinate, tile.YCoordinate);
 			this.effect = effect;
-			this.completionEvent = completionEvent;
 			this.ending = ending;
 		}
 	}
 
 	public class MsgStartTurn : MessageToUI { }
-
-	public class MsgUpdateUiAfterMove : MessageToUI { }
 
 	public class MsgShowScienceAdvisor : MessageToUI { }
 

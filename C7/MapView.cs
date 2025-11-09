@@ -445,11 +445,15 @@ public partial class LooseView : Node2D {
 	public List<LooseLayer> layers = new List<LooseLayer>();
 	private static ILogger log = Log.ForContext<LooseView>();
 
+	protected List<VisibleTile> visibleKnownTiles;
+	protected List<VisibleTile> visibleUnKnownTiles;
+	public Dictionary<Tile, Vector2> tileCenters { get; private set; } = new Dictionary<Tile, Vector2>();
+
 	public LooseView(MapView mapView) {
 		this.mapView = mapView;
 	}
 
-	private struct VisibleTile {
+	protected struct VisibleTile {
 		public Tile tile;
 		public Vector2 tileCenter;
 	}
@@ -461,26 +465,24 @@ public partial class LooseView : Node2D {
 			// Iterating over visible tiles is unfortunately pretty expensive. Assemble a list of Tile references and centers first so we don't
 			// have to reiterate for each layer. Doing this improves framerate significantly.
 			MapView.VisibleRegion visRegion = mapView.getVisibleRegion();
-			List<VisibleTile> visibleTiles = new List<VisibleTile>();
-			for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++) {
-				if (gD.map.isRowAt(Y)) {
-					for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {
-						Tile tile = gD.map.tileAt(X, Y);
-						if (IsTileKnown(tile, gD)) {
-							visibleTiles.Add(new VisibleTile {
-								tile = tile,
-								tileCenter = MapView.cellSize * new Vector2(X + 1, Y + 1)
-							});
-						}
-					}
-				}
-			}
+			visibleKnownTiles = new List<VisibleTile>();
+			visibleUnKnownTiles = new List<VisibleTile>();
+			GetVisibleTiles(visRegion, gD);
 
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
-			foreach (LooseLayer layer in layers.FindAll(L => L.visible && !(L is FogOfWarLayer))) {
+			foreach (LooseLayer layer in layers.FindAll(L => L.visible && !(L is FogOfWarLayer) && !(L is GridLayer))) {
 				layer.onBeginDraw(this, gD);
-				foreach (VisibleTile vT in visibleTiles) {
+				foreach (VisibleTile vT in visibleKnownTiles) {
+					layer.drawObject(this, gD, vT.tile, vT.tileCenter);
+				}
+
+				layer.onEndDraw(this, gD);
+			}
+
+			foreach (GridLayer layer in layers.Where(layer => layer.visible && layer is GridLayer).Cast<GridLayer>()) {
+				layer.onBeginDraw(this, gD);
+				foreach (VisibleTile vT in visibleKnownTiles.Concat(visibleUnKnownTiles)) {
 					layer.drawObject(this, gD, vT.tile, vT.tileCenter);
 				}
 
@@ -493,8 +495,8 @@ public partial class LooseView : Node2D {
 
 			if (!gD.observerMode) {
 				foreach (FogOfWarLayer layer in layers.Where(layer => layer is FogOfWarLayer).Cast<FogOfWarLayer>()) {
-					for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++)
-						if (gD.map.isRowAt(Y))
+					for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++) {
+						if (gD.map.isRowAt(Y)) {
 							for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {
 								Tile tile = gD.map.tileAt(X, Y);
 								if (tile != Tile.NONE) {
@@ -505,10 +507,36 @@ public partial class LooseView : Node2D {
 									layer.drawObject(this, gD, tile, invisibleTile.tileCenter);
 								}
 							}
+						}
+					}
 				}
 			}
 		});
 	}
+
+	private void GetVisibleTiles(MapView.VisibleRegion visRegion, GameData gD) {
+		for (int Y = visRegion.upperLeftY; Y < visRegion.lowerRightY; Y++) {
+			if (gD.map.isRowAt(Y)) {
+				for (int X = visRegion.getRowStartX(Y); X < visRegion.lowerRightX; X += 2) {
+					Tile tile = gD.map.tileAt(X, Y);
+					Vector2 tileCenter = MapView.cellSize * new Vector2(X + 1, Y + 1);
+					if (IsTileKnown(tile, gD)) {
+						visibleKnownTiles.Add(new VisibleTile {
+							tile = tile,
+							tileCenter = tileCenter
+						});
+					} else {
+						visibleUnKnownTiles.Add(new VisibleTile {
+							tile = tile,
+							tileCenter = tileCenter
+						});
+					}
+					tileCenters[tile] = tileCenter;
+				}
+			}
+		}
+	}
+
 	private static bool IsTileKnown(Tile tile, GameData gameData) {
 		if (gameData.observerMode) {
 			return true;
@@ -567,6 +595,9 @@ public partial class MapView : Node2D {
 	public CityLayer cityLayer { get; private set; }
 	public TileAssignmentLayer tileAssignmentLayer { get; private set; }
 
+	const float MIN_SCALE = 0.1f;
+	const float MAX_SCALE = 4.0f;
+
 	public MapView(Game game, int mapWidth, int mapHeight, bool wrapHorizontally, bool wrapVertically) {
 		this.game = game;
 		this.mapWidth = mapWidth;
@@ -601,10 +632,6 @@ public partial class MapView : Node2D {
 		this.cityLayer = new();
 		cityView.layers.Add(this.cityLayer);
 
-		LooseView unitView = new(this);
-		unitView.layers.Add(new UnitLayer());
-		unitView.layers.Add(new GotoLayer());
-
 		LooseView tileAssignmentView = new(this);
 		this.tileAssignmentLayer = new();
 		tileAssignmentView.layers.Add(this.tileAssignmentLayer);
@@ -612,20 +639,27 @@ public partial class MapView : Node2D {
 		LooseView fogOfWarView = new(this);
 		fogOfWarView.layers.Add(new FogOfWarLayer());
 
+		LooseView unitView = new(this);
+		unitView.layers.Add(new GotoLayer());
+		LooseView otherView = new(this);
+		otherView.layers.Add(new UnitLayer());
+
 		AddChild(terrainView);
 		looseViews.Add(terrainView);
 
 		AddChild(cityView);
 		looseViews.Add(cityView);
 
-		AddChild(unitView);
-		looseViews.Add(unitView);
-
 		AddChild(tileAssignmentView);
 		looseViews.Add(tileAssignmentView);
 
 		AddChild(fogOfWarView);
 		looseViews.Add(fogOfWarView);
+
+		AddChild(unitView);
+		looseViews.Add(unitView);
+		AddChild(otherView);
+		looseViews.Add(otherView);
 	}
 
 	public override void _Process(double delta) {
@@ -655,6 +689,8 @@ public partial class MapView : Node2D {
 	// "center" is the screen location around which the zoom is centered, e.g., if center is (0, 0) the tile in the top left corner will be the
 	// same after the zoom level is changed, and if center is screenSize/2, the tile in the center of the window won't change.
 	public void setCameraZoom(float newScale, Vector2 center) {
+		newScale = Math.Clamp(newScale, MIN_SCALE, MAX_SCALE);
+
 		Vector2 v2NewZoom = new Vector2(newScale, newScale);
 		Vector2 v2OldZoom = new Vector2(cameraZoom, cameraZoom);
 		if (v2NewZoom != v2OldZoom) {

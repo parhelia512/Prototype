@@ -10,12 +10,13 @@ using C7Engine.AI.UnitAI;
 namespace C7Engine {
 	using C7GameData;
 	using System;
+	using System.Threading.Tasks;
 
 	public class BarbarianAI {
 
 		private ILogger log = Log.ForContext<BarbarianAI>();
 
-		public void PlayTurn(Player player, GameData gameData) {
+		public async Task PlayTurn(Player player, GameData gameData) {
 			if (!player.isBarbarians) {
 				throw new System.Exception("Barbarian AI can only play barbarian players");
 			}
@@ -52,7 +53,7 @@ namespace C7Engine {
 
 					// If the unit is still the process of doing its plan, allow
 					// it to continue next turn.
-					UnitAI.Result result = unit.currentAI.PlayTurn(player, unit);
+					UnitAI.Result result = await unit.currentAI.PlayTurn(player, unit);
 					if (result == UnitAI.Result.InProgress) {
 						break;
 					}

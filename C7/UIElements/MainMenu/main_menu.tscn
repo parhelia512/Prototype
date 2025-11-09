@@ -1,18 +1,18 @@
 [gd_scene load_steps=9 format=3 uid="uid://gnt0y3og7nk6"]
 
-[ext_resource type="Script" path="res://UIElements/MainMenu/MainMenu.cs" id="1_akneh"]
+[ext_resource type="Script" uid="uid://dgpuse88jc2hc" path="res://UIElements/MainMenu/MainMenu.cs" id="1_akneh"]
 [ext_resource type="Texture2D" uid="uid://s55xvcaini8h" path="res://title-screen.png" id="2_erxyj"]
-[ext_resource type="Script" path="res://UIElements/MainMenu/MenuButtonContainer.cs" id="3_t1nuq"]
-[ext_resource type="Script" path="res://UIElements/MainMenu/MainMenuMusicPlayer.cs" id="4_tqr50"]
+[ext_resource type="Script" uid="uid://ca14gkdccjfcg" path="res://UIElements/MainMenu/MenuButtonContainer.cs" id="3_t1nuq"]
+[ext_resource type="Script" uid="uid://dauceqein40wj" path="res://UIElements/MainMenu/MainMenuMusicPlayer.cs" id="4_tqr50"]
 [ext_resource type="PackedScene" uid="uid://bvncm1bgcii5e" path="res://UIElements/civ3_file_dialog.tscn" id="5_rw2g7"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmerc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbij8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e20w6"]
 
-[node name="MainMenu" type="Node" node_paths=PackedStringArray("LoadDialog", "SetCiv3Home", "SetCiv3HomeDialog", "LoadScenarioDialog", "ButtonContainer", "player")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmerc"]
+
+[node name="MainMenu" type="Node" node_paths=PackedStringArray("LoadDialog", "SetCiv3Home", "SetCiv3HomeDialog", "LoadScenarioDialog", "ButtonContainer", "player", "UseStandaloneMode")]
 script = ExtResource("1_akneh")
 LoadDialog = NodePath("LoadDialog")
 SetCiv3Home = NodePath("SetCiv3Home")
@@ -20,6 +20,7 @@ SetCiv3HomeDialog = NodePath("SetCiv3HomeDialog")
 LoadScenarioDialog = NodePath("LoadScenarioDialog")
 ButtonContainer = NodePath("Control/MainMenuContainer")
 player = NodePath("SoundEffectPlayer")
+UseStandaloneMode = NodePath("UseStandaloneMode")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -81,10 +82,40 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/h_separation = 50
 theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_gmerc")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vbij8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_e20w6")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gmerc")
 text = "Select Civ3 Home Folder"
+
+[node name="UseStandaloneMode" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.0
+offset_top = 54.0
+offset_right = 157.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 50
+theme_override_font_sizes/font_size = 24
+theme_override_styles/hover = SubResource("StyleBoxFlat_vbij8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e20w6")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gmerc")
+text = "Play in standalone mode"
+
+[node name="Label" type="Label" parent="UseStandaloneMode"]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 314.0
+offset_bottom = 68.0
+theme_override_font_sizes/font_size = 11
+text = "Warning: AI was used for some placeholder art"
+horizontal_alignment = 1
 
 [node name="SetCiv3HomeDialog" type="FileDialog" parent="."]
 mode = 3

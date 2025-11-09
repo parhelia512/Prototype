@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
 using C7GameData.Save;
-using C7Engine.Pathing;
 using C7Engine;
 using Serilog;
+using static C7GameData.EraUtils;
 
 namespace C7GameData {
 	public class Player {
@@ -44,6 +44,9 @@ namespace C7GameData {
 
 		// The tech the player is currently researching.
 		public ID currentlyResearchedTech { get; private set; }
+
+		// A queue of technologies the player has specified they want to research
+		public Queue<Tech> ResearchQueue { get; private set; } = new();
 
 		// The civilopedia name of the era this player is in.
 		//
@@ -98,7 +101,7 @@ namespace C7GameData {
 		public int freeTechsRemaining = 0;
 
 		public int EraIndex() {
-			return EraIndex(eraCivilopediaName);
+			return GetEraIndex(eraCivilopediaName);
 		}
 
 		public static int EraIndex(string era) {
@@ -150,6 +153,10 @@ namespace C7GameData {
 			turnsResearched = 0;
 		}
 
+		public void AddTechItemToResearchQueue(Tech tech) {
+			ResearchQueue.Enqueue(tech);
+		}
+
 		public string GetNextCityName() {
 			string name = civilization.cityNames[cityNameIndex % civilization.cityNames.Count];
 			int bonusLoops = cityNameIndex / civilization.cityNames.Count;
@@ -166,6 +173,10 @@ namespace C7GameData {
 
 		public Player() {
 			tileKnowledge = new TileKnowledge(this);
+		}
+
+		public bool HasExploredTile(Tile tile) {
+			return this.tileKnowledge.knownTiles.Contains(tile);
 		}
 
 		public bool IsAtPeaceWith(Player other) {
@@ -186,6 +197,9 @@ namespace C7GameData {
 		}
 
 		public void EnsureRelationshipExists(Player other) {
+			if (isBarbarians || other.isBarbarians)
+				return;
+
 			if (!playerRelationships.ContainsKey(other.id)) {
 				playerRelationships.Add(other.id, new PlayerRelationship());
 			}
@@ -244,6 +258,36 @@ namespace C7GameData {
 		public bool SitsOutFirstTurn() {
 			// TODO: Scenarios can also specify that certain players sit out the first turn. E.g. WW2 in the Pacific
 			return isBarbarians;
+		}
+
+		// TODO : This is a placeholder so that we can factor this in when calculating movement costs
+		// since multiturn deals are not yet implemented
+		public bool HasRightOfPassageAgreementWith(Player other) {
+			return false;
+		}
+
+		public static bool CanMoveFreely(Player player, Tile sourceTile, Tile targetTile) {
+			if (!player.HasExploredTile(targetTile))
+				return true;
+
+			Player targetTileOwner = targetTile.OwningPlayer();
+			Player sourceTileOwner = sourceTile.OwningPlayer();
+
+			// We are free to move if:
+			// - the tile we are on is unowned, or we own the tile
+			// - and the tile we are moving to is unowned, or we own the tile
+			if ((sourceTileOwner == null || sourceTileOwner == player)
+				&& (targetTileOwner == player || targetTileOwner == null))
+				return true;
+
+			// All the other cases are either from or to "enemy" tiles
+			// and without a RoP agreement the cost is never reduced.
+			// check other && RoP
+			if (player.HasRightOfPassageAgreementWith(targetTileOwner)) {
+				return true;
+			}
+
+			return false;
 		}
 
 		public bool KnowsAboutResource(Resource resource) {
@@ -364,13 +408,78 @@ namespace C7GameData {
 			return $"{tech.Name} ({turns} turns)";
 		}
 
+		// Get a fresh research queue that overrides any current or previous queues.
+		// This queue is being reversed in the end, to provide the actual queue
+		// that the player would go through
+		public void CalculateFreshTechQueueAndAssignNewCurrent(Tech tech) {
+			ResearchQueue.Clear();
+			IEnumerable<Tech> techQueue = GetResearchQueueFor(tech, ResearchQueue).Reverse();
+			ResearchQueue = new Queue<Tech>(techQueue);
+
+			if (ResearchQueue.Count > 0)
+				SetCurrentlyResearchedTech(ResearchQueue.Peek().id);
+		}
+
+		// Append a new queue at the tail end of the current queue
+		public void CalculateTechQueueAndAppendToCurrentQueue(Tech tech) {
+			IEnumerable<Tech> techQueue = GetResearchQueueFor(tech, new Queue<Tech>()).Reverse();
+			foreach (Tech t in techQueue) {
+				if (!ResearchQueue.Contains(t)) {
+					AddTechItemToResearchQueue(t);
+				}
+			}
+		}
+
+		/// <summary>
+		/// This produces a queue, but in reverse order, going from the last tech to the first.
+		/// We can't reverse when returning from this method, because of its recursive nature,
+		/// so this must be done from the caller method.
+		/// </summary>
+		/// <param name="gameData"></param>
+		/// <param name="tech"></param>
+		/// <returns></returns>
+		private Queue<Tech> GetResearchQueueFor(Tech tech, Queue<Tech> tempQueue) {
+
+			if (tech == null) {
+				return new Queue<Tech>();
+			}
+
+			// TODO: maybe sort these on some other score, perhaps the order the AI would have picked them
+			// Right now the tech with the highest cost comes first
+			List<Tech> requiredTechs = tech.Prerequisites.OrderBy(t => t.Cost).ToList();
+
+			// first, add the tech the user clicked
+			if (!tempQueue.Contains(tech)) {
+				tempQueue.Enqueue(tech);
+			}
+
+			// second, get the direct required techs
+			foreach (Tech t in requiredTechs) {
+				if (!knownTechs.Contains(t.id)) {
+					if (!tempQueue.Contains(t)) {
+						tempQueue.Enqueue(t);
+					}
+				}
+			}
+
+			// last, recursively get the required techs of these required techs
+			foreach (Tech t in requiredTechs) {
+				if (!knownTechs.Contains(t.id)) {
+					if (t.Prerequisites.Count > 0) {
+						GetResearchQueueFor(t, tempQueue);
+					}
+				}
+			}
+			return tempQueue;
+		}
+
 		public HashSet<Tech> GetAvailableTechsToResearch(GameData gameData) {
 			HashSet<Tech> result = new();
 			foreach (Tech tech in gameData.techs) {
 				if (knownTechs.Contains(tech.id)) {
 					continue;
 				}
-				if (EraIndex(tech.EraCivilopediaName) > EraIndex()) {
+				if (GetEraIndex(tech.EraCivilopediaName) > EraIndex()) {
 					continue;
 				}
 
@@ -591,8 +700,13 @@ namespace C7GameData {
 			knownTechs.Add(tech.id);
 			SetCurrentlyResearchedTech(null);
 
+			// remove completed tech from the current research queue
+			if (ResearchQueue.Count > 0) {
+				ResearchQueue.Dequeue();
+			}
+
 			if (CanAdvanceToNextEra(gameData)) {
-				eraCivilopediaName = EraIndexToEra(EraIndex() + 1);
+				eraCivilopediaName = GetNextEraNameByIndex(EraIndex());
 			}
 		}
 
@@ -733,8 +847,8 @@ namespace C7GameData {
 		}
 
 		// Returns a list of specialists that this player can use.
-		public List<CitizenType> GetKnownSpecialists() {
-			return C7Engine.EngineStorage.gameData.citizenTypes.FindAll(x => {
+		public List<CitizenType> GetKnownSpecialists(GameData gameData) {
+			return gameData.citizenTypes.FindAll(x => {
 				return !x.IsDefaultCitizen && (x.PrerequisiteTech == null || knownTechs.Contains(x.PrerequisiteTech));
 			});
 		}
@@ -801,6 +915,11 @@ namespace C7GameData {
 		public bool HasRequiredTechnology(IProducible producible) {
 			return producible.requiredTech == null ||
 				   knownTechs.Contains(producible.requiredTech.id);
+		}
+
+		public bool CanBridgeRoads() {
+			ID engineeringTechId = EngineStorage.gameData.techs.FirstOrDefault(tech => tech.EnablesBridges)?.id;
+			return knownTechs?.FirstOrDefault(tech => tech == engineeringTechId) != null;
 		}
 
 		public int ShieldCost(IProducible producible) {

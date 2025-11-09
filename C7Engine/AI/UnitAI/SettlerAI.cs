@@ -26,7 +26,7 @@ namespace C7Engine {
 					log.Information($"Set AI for unit {unit.id} of {unit.owner.civilization.name} to JOIN_CITY due to lack of locations to settle");
 				} else {
 					PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit);
-					settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination);
+					settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination, unit);
 					log.Information($"Set AI for unit {unit.id} of {unit.owner.civilization.name} to BUILD_CITY with destination of " + settlerAiData.destination);
 				}
 
@@ -48,7 +48,7 @@ namespace C7Engine {
 			data.escort = null;
 		}
 
-		C7GameData.UnitAI.Result UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
+		C7GameData.UnitAI.MoveResult UnitAI.PlayTurnImpl(Player player, MapUnit unit) {
 			switch (data.goal) {
 				case SettlerAIData.SettlerGoal.BUILD_CITY:
 					if (IsInvalidCityLocation(data.destination)) {

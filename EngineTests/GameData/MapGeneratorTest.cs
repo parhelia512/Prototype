@@ -1,18 +1,14 @@
-using C7GameData;
-using C7Engine;
-using Xunit;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using C7Engine;
+using C7GameData;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using Xunit;
 
+namespace EngineTests.GameData;
 
-namespace C7GameDataTests;
-
-public class GameMapTest {
+public class GameMapGeneratorTest {
 	public static void SaveMapsAsWaterLandPng(List<List<GameMap>> maps, string filePath) {
 		int mapWidthPx = maps[0][0].numTilesWide * 2 + 1;
 		int mapHeightPx = maps[0][0].numTilesTall + 1;

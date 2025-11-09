@@ -6,6 +6,7 @@ namespace C7GameData {
 	using C7Engine;
 	using C7GameData.AIData;
 	using System;
+	using System.Threading.Tasks;
 
 	/**
 	 * A unit on the map.  Not to be confused with a unit prototype.
@@ -50,8 +51,6 @@ namespace C7GameData {
 		public Terraform WorkerJob { get; set; }
 
 
-		[JsonIgnore]
-		public List<UnitAction> availableActions = [];
 		public UnitAI currentAI;
 
 		public MapUnit(ID id) {
@@ -66,6 +65,9 @@ namespace C7GameData {
 
 		public bool IsLandUnit() {
 			return this.unitType.categories.Contains("Land");
+		}
+		public bool IsWaterUnit() {
+			return this.unitType.categories.Contains("Sea");
 		}
 
 		public bool CanDefendOnLand() {
@@ -154,19 +156,23 @@ namespace C7GameData {
 			return workerJob.TurnsToComplete * tile.overlayTerrainType.movementCost;
 		}
 
-		public void animate(MapUnit.AnimatedAction action, bool wait, AnimationEnding ending = AnimationEnding.Stop) {
-			if (EngineStorage.animationsEnabled) {
-				new MsgStartUnitAnimation(this, action, wait ? EngineStorage.FinishUiEvent : null, ending).send();
-				if (wait) {
-					EngineStorage.WaitForUiEvent();
-				}
-			}
+		public async Task animateAsync(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
+			if (!EngineStorage.animationsEnabled) return;
+
+			var msg = new MsgStartUnitAnimation(this, action, ending);
+			msg.send();
+
+			await EngineStorage.WaitForAnimationFinished(msg.animationId);
+		}
+
+		public void animate(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
+			_ = animateAsync(action, ending);
 		}
 
 		public void fortify() {
 			facingDirection = TileDirection.SOUTHEAST;
 			isFortified = true;
-			animate(MapUnit.AnimatedAction.FORTIFY, false);
+			animate(MapUnit.AnimatedAction.FORTIFY);
 		}
 
 		public void wake() {
@@ -181,6 +187,10 @@ namespace C7GameData {
 					yield return gD.fortificationBonus;
 
 				yield return location.overlayTerrainType.defenseBonus;
+
+				foreach (StrengthBonus sb in location.overlays.GetDefenseBonuses()) {
+					yield return sb;
+				}
 
 				if ((!role.Bombarding()) && (attackDirection is TileDirection dir) && location.HasRiverCrossing(dir.reversed()))
 					yield return gD.riverCrossingBonus;
@@ -233,7 +243,7 @@ namespace C7GameData {
 		}
 
 
-		public void RollToPromote(MapUnit opponent, bool waitForAnimation) {
+		public void RollToPromote(MapUnit opponent) {
 			// Barbarians can't promote.
 			if (owner.isBarbarians) {
 				return;
@@ -242,11 +252,11 @@ namespace C7GameData {
 			double promotionChance = experienceLevel.promotionChance;
 			if (opponent.owner.isBarbarians)
 				promotionChance /= 2.0;
-			// TODO: Double promotionChance if unit is owned by a militaristic civ
-
+			if (owner.civilization.traits.Contains(Civilization.Trait.Militaristic))
+				promotionChance *= 2;
 			if (GameData.rng.NextDouble() < promotionChance) {
 				Promote();
-				animate(MapUnit.AnimatedAction.VICTORY, waitForAnimation);
+				animate(MapUnit.AnimatedAction.VICTORY);
 			}
 		}
 
@@ -263,7 +273,7 @@ namespace C7GameData {
 			return ((unitType.movement > 1) && (opponent.unitType.movement <= 1)) ? experienceLevel.retreatChance : 0.0;
 		}
 
-		public CombatResult fight(MapUnit defender) {
+		public async Task<CombatResult> fight(MapUnit defender) {
 			var attacker = this;
 
 			// Rotate defender to face its attacker. We'll restore the original facing direction at the end of the battle.
@@ -306,7 +316,7 @@ namespace C7GameData {
 				var dBOriginalDirection = defensiveBombarder.facingDirection;
 				defensiveBombarder.facingDirection = defender.facingDirection;
 
-				defensiveBombarder.animate(MapUnit.AnimatedAction.ATTACK1, true);
+				await defensiveBombarder.animateAsync(MapUnit.AnimatedAction.ATTACK1);
 
 				// dADB = defense Against Defensive Bombard
 				double dADB = attacker.StrengthVersus(defensiveBombarder, CombatRole.DefensiveBombardDefense, defensiveBombarder.facingDirection);
@@ -321,8 +331,8 @@ namespace C7GameData {
 
 			// Do combat rounds
 			while (true) {
-				defender.animate(MapUnit.AnimatedAction.ATTACK1, false);
-				attacker.animate(MapUnit.AnimatedAction.ATTACK1, true);
+				defender.animate(MapUnit.AnimatedAction.ATTACK1);
+				await attacker.animateAsync(MapUnit.AnimatedAction.ATTACK1);
 				if (GameData.rng.NextDouble() < attackerOdds) {
 					if (defenderEligibleToRetreat &&
 						defender.hitPointsRemaining == 1 &&
@@ -331,7 +341,7 @@ namespace C7GameData {
 						// https://github.com/C7-Game/Prototype/issues/274
 						Tile retreatDestination = defender.location.neighbors[attacker.facingDirection];
 						if ((retreatDestination != Tile.NONE) && defender.CanEnterTile(retreatDestination, false)) {
-							defender.move(attacker.facingDirection, true);
+							await defender.move(attacker.facingDirection, true);
 							result = CombatResult.DefenderRetreated;
 							break;
 						}
@@ -357,8 +367,8 @@ namespace C7GameData {
 
 			if ((result == CombatResult.AttackerKilled) || (result == CombatResult.DefenderKilled)) {
 				var (dead, alive) = (result == CombatResult.AttackerKilled) ? (attacker, defender) : (defender, attacker);
-				alive.RollToPromote(dead, false);
-				dead.animate(MapUnit.AnimatedAction.DEATH, true);
+				alive.RollToPromote(dead);
+				await dead.animateAsync(MapUnit.AnimatedAction.DEATH);
 				dead.disband();
 			}
 
@@ -368,7 +378,7 @@ namespace C7GameData {
 			return result;
 		}
 
-		public void bombard(Tile tile) {
+		public async Task bombard(Tile tile) {
 			MapUnit target = tile.FindTopDefender(this);
 			if ((unitType.bombard == 0) || (target == MapUnit.NONE))
 				return; // Do nothing if we don't have a unit to attack. TODO: Attack city or tile improv if possible
@@ -383,17 +393,17 @@ namespace C7GameData {
 			if (Double.IsNaN(attackerOdds))
 				return;
 
-			animate(MapUnit.AnimatedAction.ATTACK1, true);
+			await animateAsync(MapUnit.AnimatedAction.ATTACK1);
 			movementPoints.onUnitMove(1);
 			if (GameData.rng.NextDouble() < attackerOdds) {
 				target.hitPointsRemaining -= 1;
-				tile.Animate(AnimatedEffect.Hit3, false);
+				tile.Animate(AnimatedEffect.Hit3);
 			} else
-				tile.Animate(AnimatedEffect.Miss, false);
+				tile.Animate(AnimatedEffect.Miss);
 
 			if (target.hitPointsRemaining <= 0) {
-				RollToPromote(target, false);
-				target.animate(MapUnit.AnimatedAction.DEATH, true);
+				RollToPromote(target);
+				await target.animateAsync(MapUnit.AnimatedAction.DEATH);
 				target.disband();
 			}
 
@@ -433,7 +443,7 @@ namespace C7GameData {
 			if (tile.hasBarbarianCamp && !owner.isBarbarians) {
 				EngineStorage.gameData.map.barbarianCamps.Remove(tile);
 				tile.hasBarbarianCamp = false;
-				animate(MapUnit.AnimatedAction.VICTORY, false);
+				animate(MapUnit.AnimatedAction.VICTORY);
 
 				// TODO: make this configurable
 				owner.gold += 25;
@@ -480,13 +490,25 @@ namespace C7GameData {
 		// Like above, but allows specifying that we want to handle the case
 		// where a war declaration could be made before the move.
 		public bool CanEnterTile(Tile tile, bool allowCombat, bool allowWarDeclaration) {
+			if (this.owner.isHuman && !this.owner.HasExploredTile(tile))
+				return true;
+
+			// TODO: Add sea/ocean restrictions for water units
+			// Check if the player has the appropriate tech or wonder to move freely.
+			// Civ3 seems to not allow to set a destination on sea/ocean without tech/wonder
+			// (even if you can actually go there using the keyboard keys)
+			// but it will go through it if it's just a shortcut to an allowed tile.
+
 			// Keep land units on land and sea units on water
-			if (unitType.categories.Contains("Sea") && tile.IsLand()) {
+			if (this.IsWaterUnit() && tile.IsLand()) {
 				if (tile.HasCity && tile.cityAtTile.owner == owner) {
 					return true;
 				}
 				return false;
-			} else if (unitType.categories.Contains("Land") && !tile.IsLand())
+			}
+			// TODO: to be modified to allow boarding on ships,
+			// that have the capacity and can take units of this kind
+			if (this.IsLandUnit() && !tile.IsLand())
 				return false;
 
 			// If we allow declaring war on this move, then it doesn't matter if
@@ -496,19 +518,30 @@ namespace C7GameData {
 				return true;
 			}
 
-			// Check for units belonging to other civs
-			foreach (MapUnit other in tile.unitsOnTile) {
-				if (other.owner != owner) {
-					if (!other.owner.IsAtPeaceWith(owner))
-						return allowCombat && unitType.attack > 0;
-					else
+			// Allow AI to "see" human/other AI units even if they are in an unexplored or inactive tile
+			// from their perspective, but allow humans to set a course if the tile
+			// is unknown or not active, aka, the human player shouldn't know what's on the tile
+			// if the tile is not active, or they haven't  discovered it yet.
+			//
+			// If we don't want to have the AI have this advantage over the human player
+			// we can simply remove the !isHuman() condition. This can also be tied to
+			// AI difficulty level, or be made moddable somehow, etc...
+			if (!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile)) {
+				// Check for units belonging to other civs
+				foreach (MapUnit other in tile.unitsOnTile) {
+					if (other.owner != owner) {
+						if (!other.owner.IsAtPeaceWith(owner))
+							return allowCombat && unitType.attack > 0;
 						return false;
+					}
 				}
 			}
 
 			// Check for cities belonging to other civs.
 			if (tile.cityAtTile != null && tile.cityAtTile.owner != owner) {
-				return allowCombat;
+				if (!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile))
+					return allowCombat;
+				return false;
 			}
 
 			return true;
@@ -522,7 +555,7 @@ namespace C7GameData {
 		/// <param name="wait">Whether the method should wait to return until animations complete</param>
 		/// <returns>True if the unit is alive after the movement, false otherwise</returns>
 		/// <exception cref="Exception"></exception>
-		public bool move(TileDirection dir, bool wait = false) {
+		public async Task<bool> move(TileDirection dir, bool wait = false) {
 			(int dx, int dy) = dir.toCoordDiff();
 			Tile newLoc = EngineStorage.gameData.map.tileAt(dx + location.XCoordinate, dy + location.YCoordinate);
 			if ((newLoc != Tile.NONE) && CanEnterTile(newLoc, true) && (movementPoints.canMove)) {
@@ -533,7 +566,7 @@ namespace C7GameData {
 				MapUnit defender = newLoc.FindTopDefender(this);
 				if (defender != MapUnit.NONE && !owner.IsAtPeaceWith(defender.owner)) {
 					if (unitType.attack > 0) {
-						CombatResult combatResult = fight(defender);
+						CombatResult combatResult = await fight(defender);
 						// If we were killed then of course there's nothing more to do. If the combat couldn't happen for whatever
 						// reason, just give up on trying to move.
 						if (combatResult == CombatResult.AttackerKilled) {
@@ -557,22 +590,27 @@ namespace C7GameData {
 							return true;
 						}
 					} else if (unitType.bombard > 0) {
-						bombard(newLoc);
+						await bombard(newLoc);
 						return true;
 					} else {
 						return true;
 					}
 				}
 
-				float movementCost = TilePath.getMovementCost(location, dir, newLoc);
+				float movementCost = TilePath.GetMovementCost(this.owner, location, dir, newLoc);
 				if (!location.unitsOnTile.Remove(this))
 					throw new System.Exception("Failed to remove unit from tile it's supposed to be on");
 				// Make sure the unit is on the new location before claiming we have entered the tile
 				newLoc.unitsOnTile.Add(this);
 				location = newLoc;
 				OnEnterTile(newLoc);
+
+				if (wait)
+					await animateAsync(MapUnit.AnimatedAction.RUN);
+				else
+					animate(MapUnit.AnimatedAction.RUN);
+
 				movementPoints.onUnitMove(movementCost);
-				animate(MapUnit.AnimatedAction.RUN, wait);
 			}
 			return true;
 		}
@@ -580,20 +618,37 @@ namespace C7GameData {
 		private float SumWorkerProgress(Tile tile, Terraform workerJob) {
 			float result = 0;
 			foreach (MapUnit unit in tile.unitsOnTile) {
-				if (WorkerJob == workerJob) {
-					result += WorkerProgressTowardsJob;
+				if (unit.WorkerJob == workerJob) {
+					result += unit.WorkerProgressTowardsJob;
 				}
 			}
 			return result;
 		}
 
-		public void PerformBusyAction() {
+		public int TurnsToCompleteTerraform(Terraform t) {
+			// Figure out how much work remains to do on this particular job.
+			int remainingTerraformCost = GetWorkerJobCost(location, t) - (int)SumWorkerProgress(location, t);
+
+			// Figure out how fast all of the wokers doing this particular
+			// terraform will work.
+			float combinedWorkerSpeed = workerSpeed();
+			foreach (MapUnit unit in location.unitsOnTile) {
+				if (unit.WorkerJob == t) {
+					combinedWorkerSpeed += unit.workerSpeed();
+				}
+			}
+
+			// Divide the two, rounding up.
+			return (int)Math.Ceiling(remainingTerraformCost / combinedWorkerSpeed);
+		}
+
+		public async Task PerformBusyAction() {
 			if (isFortified) {
 				return;
 			}
 
 			if (path != null && path.PathLength() > 0) {
-				moveAlongPath();
+				await moveAlongPath();
 				return;
 			}
 
@@ -601,7 +656,8 @@ namespace C7GameData {
 			// work towards it. We do this before any automation logic, so that
 			// automated units properly contribute their efforts.
 			if (WorkerJob != null) {
-				updateWorkerJob();
+				WorkerProgressTowardsJob += workerSpeed();
+				movementPoints.onConsumeAll();
 
 				// See if this worker finished the job.
 				if ((int)SumWorkerProgress(location, WorkerJob) >= GetWorkerJobCost(location, WorkerJob)) {
@@ -615,16 +671,16 @@ namespace C7GameData {
 			}
 		}
 
-		public void moveAlongPath() {
+		public async Task moveAlongPath() {
 			while (movementPoints.canMove && path?.PathLength() > 0) {
 				TileDirection dir = location.directionTo(path.Next());
-				move(dir, true); //TODO: don't wait on last move animation?
+				await move(dir, true); //TODO: don't wait on last move animation?
 			}
 		}
 
-		public void setUnitPath(TilePath path) {
+		public async Task setUnitPath(TilePath path) {
 			this.path = path;
-			moveAlongPath();
+			await moveAlongPath();
 		}
 
 		public void skipTurn() {
@@ -645,13 +701,13 @@ namespace C7GameData {
 			return location.neighbors.Values.All(tile => !tile.HasCity);
 		}
 
-		public City? buildCity(string cityName) {
+		public async Task<City?> buildCity(string cityName) {
 			if (!canBuildCity()) {
 				log.Warning($"can't build city at {location}");
 				return null;
 			}
 
-			animate(MapUnit.AnimatedAction.BUILD, true);
+			await animateAsync(MapUnit.AnimatedAction.BUILD);
 
 			// TODO: Need to check somewhere that this unit is allowed to build a city on its current tile. Either do that here or in every caller
 			// (probably best to just do it here).
@@ -665,61 +721,39 @@ namespace C7GameData {
 		}
 
 		public bool canPerformTerraformAction(Terraform terraform) {
-			return unitType.actions.Contains(terraform.Action) && terraform.MeetsRequirements(owner, location);
+			return unitType.terraformActions.Contains(terraform) && terraform.MeetsRequirements(owner, location);
 		}
 
 		public bool canPerformTerraformAction(Terraform terraform, Tile tile) {
-			return unitType.actions.Contains(terraform.Action) && terraform.MeetsRequirements(owner, tile);
+			return unitType.terraformActions.Contains(terraform) && terraform.MeetsRequirements(owner, tile);
 		}
 
 		public void PerformTerraformAction(Terraform terraform) {
 			if (!canPerformTerraformAction(terraform)) {
-				log.Warning($"can't perform {terraform.Action} by {this}");
+				log.Warning($"can't perform {terraform.Name} by {this}");
 				return;
 			}
 			WorkerJob = terraform;
-			setWorkerJobAnimation(terraform.Action);
-			PerformBusyAction();
+
+			if (terraform.Animation is AnimatedAction animation)
+				animate(animation, AnimationEnding.Repeat);
+
+			wake();
+			_ = PerformBusyAction();
 		}
 
-		public void updateWorkerJob() {
+		public float workerSpeed() {
 			float progressPerTurn = JOB_PROGRESS_WORKER;
 			if (owner.civilization.traits.Contains(Civilization.Trait.Industrious)) {
 				progressPerTurn *= 1.5f;
 			}
-
-			WorkerProgressTowardsJob += progressPerTurn;
-			movementPoints.onConsumeAll();
+			return progressPerTurn;
 		}
 
 		public void resetWorkerJob() {
 			WorkerJob = null;
 			WorkerProgressTowardsJob = 0;
-			animate(MapUnit.AnimatedAction.BLANK, false, AnimationEnding.Repeat);
-		}
-
-		private void setWorkerJobAnimation(UnitAction action) {
-			switch (action) {
-				case UnitAction.Irrigate:
-					animate(MapUnit.AnimatedAction.IRRIGATE, false, AnimationEnding.Repeat);
-					return;
-				case UnitAction.BuildMine:
-					animate(MapUnit.AnimatedAction.MINE, false, AnimationEnding.Repeat);
-					return;
-				case UnitAction.BuildRailroad:
-				case UnitAction.BuildRoad:
-					animate(MapUnit.AnimatedAction.ROAD, false, AnimationEnding.Repeat);
-					return;
-				case UnitAction.ClearForest:
-					animate(MapUnit.AnimatedAction.FOREST, false, AnimationEnding.Repeat);
-					return;
-				case UnitAction.ClearWetlands:
-					animate(MapUnit.AnimatedAction.JUNGLE, false, AnimationEnding.Repeat);
-					return;
-				default:
-					// do nothing;
-					return;
-			}
+			animate(MapUnit.AnimatedAction.BLANK, AnimationEnding.Repeat);
 		}
 
 		public bool canAutomate() {
@@ -727,6 +761,7 @@ namespace C7GameData {
 		}
 
 		public void automate() {
+			wake();
 			isAutomated = true;
 			WorkerAIData? maybeAiData = WorkerAI.MakeAiData(this, owner);
 			if (maybeAiData == null) {
@@ -743,6 +778,7 @@ namespace C7GameData {
 		}
 
 		public void explore() {
+			wake();
 			isAutomated = true;
 			ExplorerAIData? maybeAiData = ExplorerAI.MaybeMakeAiData(this, owner);
 			if (maybeAiData == null) {
@@ -754,14 +790,14 @@ namespace C7GameData {
 			playAutomatedTurn();
 		}
 
-		public void playAutomatedTurn() {
+		public async void playAutomatedTurn() {
 			if (currentAI == null) {
 				// TODO: handle giving automated workers from loaded saves the
 				// proper unit ai.
 				isAutomated = false;
 				return;
 			}
-			UnitAI.Result result = currentAI.PlayTurn(owner, this);
+			UnitAI.Result result = await currentAI.PlayTurn(owner, this);
 			if (result == UnitAI.Result.Done) {
 				if (currentAI is WorkerAI) {
 					automate();
@@ -773,6 +809,42 @@ namespace C7GameData {
 			// Do nothing after an error so control returns to the player, and
 			// nothing after an progress result, so that next turn continues the
 			// AI action.
+		}
+
+		public List<Terraform> GetAvailableTerraforms() {
+			return EngineStorage.gameData.Terraforms.Where(canPerformTerraformAction).ToList();
+		}
+
+		/**
+		 * Helper function to get the available actions for a unit
+		 * based on what terrain it is on.
+		 **/
+		public List<UnitAction> GetAvailableActions() {
+			List<UnitAction> result = new();
+
+			// Eventually, we should look this up somewhere to see what all actions we have (and mods might add more)
+			// For now, this is still an improvement over the last iteration.
+			UnitAction[] implementedActions = { UnitAction.Hold, UnitAction.Wait, UnitAction.Fortify, UnitAction.Disband, UnitAction.Goto, UnitAction.Bombard };
+			foreach (UnitAction action in implementedActions) {
+				if (unitType.actions.Contains(action)) {
+					result.Add(action);
+				}
+			}
+
+			if (canBuildCity()) {
+				result.Add(UnitAction.BuildCity);
+			}
+			if (canExplore()) {
+				result.Add(UnitAction.Explore);
+			}
+			if (canAutomate()) {
+				result.Add(UnitAction.Automate);
+			}
+
+			// Eventually we will have advanced actions too, whose availability will rely on their base actions' availability.
+			// unit.availableActions.Add("rename");
+
+			return result;
 		}
 	}
 }

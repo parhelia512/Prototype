@@ -68114,9 +68114,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "miningBonus": 1,
-      "irrigationBonus": 1,
-      "roadBonus": 1,
       "defenseBonus": {
         "description": "Desert",
         "amount": 0.1
@@ -68127,7 +68124,8 @@
         "Incense",
         "Oasis"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "plains",
@@ -68137,12 +68135,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "miningBonus": 1,
-      "irrigationBonus": 1,
-      "roadBonus": 1,
-      "allowedWorkerActions": [
-        "plantForest"
-      ],
       "defenseBonus": {
         "description": "Plains",
         "amount": 0.1
@@ -68155,7 +68147,8 @@
         "Wheat",
         "Sugar"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "plantForest"
     },
     {
       "key": "grassland",
@@ -68165,12 +68158,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "miningBonus": 1,
-      "irrigationBonus": 1,
-      "roadBonus": 1,
-      "allowedWorkerActions": [
-        "plantForest"
-      ],
       "defenseBonus": {
         "description": "Grassland",
         "amount": 0.1
@@ -68182,7 +68169,8 @@
         "Wheat",
         "Tobacco"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "plantForest"
     },
     {
       "key": "tundra",
@@ -68192,12 +68180,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "miningBonus": 1,
-      "irrigationBonus": 0,
-      "roadBonus": 1,
-      "allowedWorkerActions": [
-        "plantForest"
-      ],
       "defenseBonus": {
         "description": "Tundra",
         "amount": 0.1
@@ -68208,7 +68190,8 @@
         "Furs",
         "Game"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "plantForest"
     },
     {
       "key": "flood plain",
@@ -68218,9 +68201,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": true,
-      "miningBonus": 0,
-      "irrigationBonus": 1,
-      "roadBonus": 1,
       "defenseBonus": {
         "description": "Flood Plain",
         "amount": 0.1
@@ -68228,7 +68208,8 @@
       "allowedResources": [
         "Wheat"
       ],
-      "height": 0
+      "height": 0,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "hills",
@@ -68238,9 +68219,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 2,
       "allowCities": true,
-      "miningBonus": 2,
-      "irrigationBonus": 0,
-      "roadBonus": 1,
       "defenseBonus": {
         "description": "Hills",
         "amount": 0.5
@@ -68257,7 +68235,8 @@
         "Sugar",
         "Tobacco"
       ],
-      "height": 2
+      "height": 2,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "mountains",
@@ -68267,9 +68246,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 3,
       "allowCities": false,
-      "miningBonus": 2,
-      "irrigationBonus": 0,
-      "roadBonus": 1,
       "defenseBonus": {
         "description": "Mountains",
         "amount": 1
@@ -68282,7 +68258,8 @@
         "Gems",
         "Gold"
       ],
-      "height": 4
+      "height": 4,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "forest",
@@ -68292,12 +68269,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 2,
       "allowCities": true,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 1,
-      "allowedWorkerActions": [
-        "clearForest"
-      ],
       "defenseBonus": {
         "description": "Forest",
         "amount": 0.25
@@ -68312,7 +68283,8 @@
         "Silks",
         "Game"
       ],
-      "height": 1
+      "height": 1,
+      "allowedFoliageAction": "clearForest"
     },
     {
       "key": "jungle",
@@ -68322,12 +68294,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 3,
       "allowCities": true,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 1,
-      "allowedWorkerActions": [
-        "clearWetlands"
-      ],
       "defenseBonus": {
         "description": "Jungle",
         "amount": 0.25
@@ -68341,7 +68307,8 @@
         "Gems",
         "Tropical Fruit"
       ],
-      "height": 1
+      "height": 1,
+      "allowedFoliageAction": "clearWetlands"
     },
     {
       "key": "marsh",
@@ -68351,12 +68318,6 @@
       "baseCommerceProduction": 0,
       "movementCost": 2,
       "allowCities": false,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 1,
-      "allowedWorkerActions": [
-        "clearWetlands"
-      ],
       "defenseBonus": {
         "description": "Marsh",
         "amount": 0.2
@@ -68367,7 +68328,8 @@
         "Game",
         "Fish"
       ],
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "clearWetlands"
     },
     {
       "key": "volcano",
@@ -68377,14 +68339,12 @@
       "baseCommerceProduction": 0,
       "movementCost": 3,
       "allowCities": false,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 0,
       "defenseBonus": {
         "description": "Volcano",
         "amount": 0.8
       },
-      "height": 4
+      "height": 4,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "coast",
@@ -68394,9 +68354,6 @@
       "baseCommerceProduction": 2,
       "movementCost": 1,
       "allowCities": false,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 0,
       "defenseBonus": {
         "description": "Coast",
         "amount": 0.1
@@ -68404,7 +68361,8 @@
       "allowedResources": [
         "Fish"
       ],
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "sea",
@@ -68414,9 +68372,6 @@
       "baseCommerceProduction": 1,
       "movementCost": 1,
       "allowCities": false,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 0,
       "defenseBonus": {
         "description": "Sea",
         "amount": 0.1
@@ -68425,7 +68380,8 @@
         "Whales",
         "Fish"
       ],
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "none"
     },
     {
       "key": "ocean",
@@ -68435,14 +68391,159 @@
       "baseCommerceProduction": 0,
       "movementCost": 1,
       "allowCities": false,
-      "miningBonus": 0,
-      "irrigationBonus": 0,
-      "roadBonus": 0,
       "defenseBonus": {
         "description": "Ocean",
         "amount": 0.1
       },
-      "height": -2
+      "height": -2,
+      "allowedFoliageAction": "none"
+    }
+  ],
+  "terrainImprovements": [
+    {
+      "key": "irrigation",
+      "layer": "resourceDevelopment",
+      "zIndex": 0,
+      "movementCost": -1,
+      "bonusYields": {
+        "desert": {
+          "food": 1
+        },
+        "plains": {
+          "food": 1
+        },
+        "grassland": {
+          "food": 1
+        },
+        "flood plain": {
+          "food": 1
+        }
+      }
+    },
+    {
+      "key": "road",
+      "layer": "roads",
+      "zIndex": 1,
+      "movementCost": 0.33333334,
+      "bonusYields": {
+        "desert": {
+          "commerce": 1
+        },
+        "plains": {
+          "commerce": 1
+        },
+        "grassland": {
+          "commerce": 1
+        },
+        "tundra": {
+          "commerce": 1
+        },
+        "flood plain": {
+          "commerce": 1
+        },
+        "hills": {
+          "commerce": 1
+        },
+        "mountains": {
+          "commerce": 1
+        },
+        "forest": {
+          "commerce": 1
+        },
+        "jungle": {
+          "commerce": 1
+        },
+        "marsh": {
+          "commerce": 1
+        }
+      }
+    },
+    {
+      "key": "railroad",
+      "layer": "roads",
+      "zIndex": 1,
+      "movementCost": 0,
+      "upgradesFrom": "road",
+      "bonusYields": {
+        "desert": {
+          "commerce": 1
+        },
+        "plains": {
+          "commerce": 1
+        },
+        "grassland": {
+          "commerce": 1
+        },
+        "tundra": {
+          "commerce": 1
+        },
+        "flood plain": {
+          "commerce": 1
+        },
+        "hills": {
+          "commerce": 1
+        },
+        "mountains": {
+          "commerce": 1
+        },
+        "forest": {
+          "commerce": 1
+        },
+        "jungle": {
+          "commerce": 1
+        },
+        "marsh": {
+          "commerce": 1
+        }
+      },
+      "tileModifier": "terrain_improvements.railroad.tile_modifier"
+    },
+    {
+      "key": "mine",
+      "layer": "resourceDevelopment",
+      "zIndex": 2,
+      "movementCost": -1,
+      "bonusYields": {
+        "desert": {
+          "production": 1
+        },
+        "plains": {
+          "production": 1
+        },
+        "grassland": {
+          "production": 1
+        },
+        "tundra": {
+          "production": 1
+        },
+        "hills": {
+          "production": 2
+        },
+        "mountains": {
+          "production": 2
+        }
+      }
+    },
+    {
+      "key": "fortress",
+      "layer": "holdings",
+      "defenseBonus": {
+        "description": "fortress",
+        "amount": 0.5
+      },
+      "zIndex": 3,
+      "movementCost": -1
+    },
+    {
+      "key": "barricade",
+      "layer": "holdings",
+      "defenseBonus": {
+        "description": "barricade",
+        "amount": 1
+      },
+      "zIndex": 3,
+      "movementCost": -1,
+      "upgradesFrom": "fortress"
     }
   ],
   "resources": [
@@ -69113,11 +69214,6 @@
         "Land"
       ],
       "actions": [
-        "buildRoad",
-        "buildMine",
-        "irrigate",
-        "clearWetlands",
-        "clearForest",
         "hold",
         "wait",
         "fortify",
@@ -69125,6 +69221,16 @@
         "goto",
         "explore",
         "automate"
+      ],
+      "terraformActions": [
+        "Terraform-4",
+        "Terraform-5",
+        "Terraform-1",
+        "Terraform-2",
+        "Terraform-8",
+        "Terraform-7",
+        "Terraform-13",
+        "Terraform-3"
       ]
     },
     {
@@ -72200,6 +72306,9 @@
         "disband",
         "goto",
         "explore"
+      ],
+      "terraformActions": [
+        "Terraform-3"
       ]
     },
     {
@@ -74342,9 +74451,9 @@
     }
   ],
   "barbarianInfo": {
-    "basicBarbarianIndex": 6,
-    "advancedBarbarianIndex": 11,
-    "barbarianSeaUnitIndex": 29,
+    "basicBarbarianUnit": "Warrior",
+    "advancedBarbarianUnit": "Horseman",
+    "barbarianSeaUnit": "Galley",
     "defaultHitpoints": 2,
     "maxHitpoints": 2
   },
@@ -75939,7 +76048,9 @@
     "buildingDiscountForCivTraits": 0.5,
     "startUnitType1": "Settler",
     "startUnitType2": "Worker",
-    "scoutUnitType": "Scout"
+    "scoutUnitType": "Scout",
+	"maxRankOfWorkableTiles": 2,
+	"maxRankOfBarbarianCampTiles": 2
   },
   "techs": [
     {
@@ -76255,7 +76366,10 @@
       "requiredForEraAdvancement": true,
       "smallIconPath": "Art\\tech chooser\\Icons\\22-engineering-small.pcx",
       "x": 73,
-      "y": 610
+      "y": 610,
+	  "flags": [
+        "enablesBridges"
+      ]
     },
     {
       "name": "Theology",
@@ -77167,14 +77281,28 @@
       "name": "Mine",
       "civilopediaEntry": "TFRM_Mine",
       "turnsToComplete": 12,
-      "action": "buildMine"
+      "improvement": "mine",
+      "validators": [
+        "terraforms.validators.mine"
+      ],
+      "aiScore": "terraforms.ai_score.yield_improvement",
+      "animation": "mine",
+      "uiAction": "unit_build_mine",
+      "buttonTexture": "ui.unit_control.unit_build_mine"
     },
     {
       "id": "Terraform-2",
       "name": "Irrigation",
       "civilopediaEntry": "TFRM_Irrigation",
       "turnsToComplete": 8,
-      "action": "irrigate"
+      "improvement": "irrigation",
+      "validators": [
+        "terraforms.validators.irrigate"
+      ],
+      "aiScore": "terraforms.ai_score.yield_improvement",
+      "animation": "irrigate",
+      "uiAction": "unit_irrigate",
+      "buttonTexture": "ui.unit_control.unit_irrigate"
     },
     {
       "id": "Terraform-3",
@@ -77182,14 +77310,22 @@
       "civilopediaEntry": "TFRM_Fortress",
       "turnsToComplete": 16,
       "requiredTech": "tech-21",
-      "action": "buildFortress"
+      "improvement": "fortress",
+      "aiScore": "terraforms.ai_score.default",
+      "animation": "fortress",
+      "uiAction": "unit_build_fortress",
+      "buttonTexture": "ui.unit_control.unit_build_fortress"
     },
     {
       "id": "Terraform-4",
       "name": "Road",
       "civilopediaEntry": "TFRM_Road",
       "turnsToComplete": 6,
-      "action": "buildRoad"
+      "improvement": "road",
+      "aiScore": "terraforms.ai_score.road",
+      "animation": "road",
+      "uiAction": "unit_build_road",
+      "buttonTexture": "ui.unit_control.unit_build_road"
     },
     {
       "id": "Terraform-5",
@@ -77201,7 +77337,11 @@
         "Iron",
         "Coal"
       ],
-      "action": "buildRailroad"
+      "improvement": "railroad",
+      "aiScore": "terraforms.ai_score.railroad",
+      "animation": "road",
+      "uiAction": "unit_build_railroad",
+      "buttonTexture": "ui.unit_control.unit_build_railroad"
     },
     {
       "id": "Terraform-6",
@@ -77209,28 +77349,51 @@
       "civilopediaEntry": "TFRM_Plant_Forest",
       "turnsToComplete": 18,
       "requiredTech": "tech-24",
-      "action": "plantForest"
+      "aiScore": "terraforms.ai_score.default",
+      "animation": "plant",
+      "uiAction": "unit_plant_forest",
+      "buttonTexture": "ui.unit_control.unit_plant_forest"
     },
     {
       "id": "Terraform-7",
       "name": "Clear Forest",
       "civilopediaEntry": "TFRM_Clear_Forest",
       "turnsToComplete": 4,
-      "action": "clearForest"
+      "validators": [
+        "terraforms.validators.clear_forest"
+      ],
+      "effects": [
+        "terraforms.effects.clear_forest"
+      ],
+      "aiScore": "terraforms.ai_score.clear_forest",
+      "animation": "forest",
+      "uiAction": "unit_clear_forest",
+      "buttonTexture": "ui.unit_control.unit_clear_forest"
     },
     {
       "id": "Terraform-8",
       "name": "Clear Wetlands",
       "civilopediaEntry": "TFRM_Clear_Wetlands",
       "turnsToComplete": 16,
-      "action": "clearWetlands"
+      "validators": [
+        "terraforms.validators.clear_wetlands"
+      ],
+      "effects": [
+        "terraforms.effects.clear_wetlands"
+      ],
+      "aiScore": "terraforms.ai_score.clear_wetlands",
+      "animation": "jungle",
+      "uiAction": "unit_clear_wetlands",
+      "buttonTexture": "ui.unit_control.unit_clear_wetlands"
     },
     {
       "id": "Terraform-9",
       "name": "Clear Damage",
       "civilopediaEntry": "TFRM_Clear_Damage",
       "turnsToComplete": 24,
-      "action": "clearDamage"
+      "aiScore": "terraforms.ai_score.default",
+      "uiAction": "unit_clear_damage",
+      "buttonTexture": "ui.unit_control.unit_clear_damage"
     },
     {
       "id": "Terraform-10",
@@ -77238,7 +77401,9 @@
       "civilopediaEntry": "TFRM_Airfield",
       "turnsToComplete": 1,
       "requiredTech": "tech-59",
-      "action": "buildAirfield"
+      "aiScore": "terraforms.ai_score.default",
+      "uiAction": "unit_build_airfield",
+      "buttonTexture": "ui.unit_control.unit_build_airfield"
     },
     {
       "id": "Terraform-11",
@@ -77246,7 +77411,9 @@
       "civilopediaEntry": "TFRM_Radar_Tower",
       "turnsToComplete": 1,
       "requiredTech": "tech-64",
-      "action": "buildRadarTower"
+      "aiScore": "terraforms.ai_score.default",
+      "uiAction": "unit_build_radar_tower",
+      "buttonTexture": "ui.unit_control.unit_build_radar_tower"
     },
     {
       "id": "Terraform-12",
@@ -77254,7 +77421,9 @@
       "civilopediaEntry": "TFRM_Outpost",
       "turnsToComplete": 1,
       "requiredTech": "tech-2",
-      "action": "buildOutpost"
+      "aiScore": "terraforms.ai_score.default",
+      "uiAction": "unit_build_outpost",
+      "buttonTexture": "ui.unit_control.unit_build_outpost"
     },
     {
       "id": "Terraform-13",
@@ -77262,7 +77431,11 @@
       "civilopediaEntry": "TFRM_Barricades",
       "turnsToComplete": 16,
       "requiredTech": "tech-21",
-      "action": "buildBarricade"
+      "improvement": "barricade",
+      "aiScore": "terraforms.ai_score.default",
+      "animation": "fortress",
+      "uiAction": "unit_build_barricade",
+      "buttonTexture": "ui.unit_control.unit_build_barricade"
     }
   ],
   "governments": [

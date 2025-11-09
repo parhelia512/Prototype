@@ -81,7 +81,7 @@ public partial class PopupOverlay : HBoxContainer {
 		if (soundFile == "") {
 			log.Error("Invalid popup category");
 		}
-		AudioStreamWav wav = Util.LoadWAVFromDisk(Util.Civ3MediaPath(soundFile));
+		AudioStreamWav wav = Util.LoadCiv3WAVFromDisk(soundFile);
 
 		// 1. prevent mouse interaction with non-UI elements (ie. the map)
 		MouseFilter = MouseFilterEnum.Stop;
@@ -93,7 +93,9 @@ public partial class PopupOverlay : HBoxContainer {
 		setMouseFilter(control, MouseFilterEnum.Ignore);
 
 		Show();
-		PlaySound(wav);
+		if (wav != null) {
+			PlaySound(wav);
+		}
 	}
 
 	/**

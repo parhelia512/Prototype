@@ -5,6 +5,9 @@ using System.Linq.Expressions;
 using MoonSharp.Interpreter;
 using Serilog;
 using System.IO;
+using MoonSharp.Interpreter.Loaders;
+using System.Collections.Generic;
+using C7GameData;
 
 namespace C7Engine;
 
@@ -111,6 +114,13 @@ public class LuaRulesEngine {
 		RegisterEnums();
 		RegisterGlobals();
 
+		script.Options.ScriptLoader = new FileSystemScriptLoader {
+			ModulePaths = [
+				Path.Combine(luaRulesDir, "?.lua"),
+				Path.Combine(luaRulesDir, "*", "?.lua")
+			]
+		};
+
 		string fullScriptPath = Path.Combine(luaRulesDir, rulesScript);
 		log.Information("Loading Lua rules from file: {filePath}", fullScriptPath);
 
@@ -127,6 +137,8 @@ public class LuaRulesEngine {
 	public T ImportFunc<T>(string functionPath) where T : Delegate {
 		if (script == null || rules == null)
 			throw new InvalidOperationException("Engine is not initialized");
+		if (functionPath == null)
+			throw new InvalidOperationException("Non-null function path expected");
 
 		Closure closure = ResolveFunctionPath(functionPath);
 		Delegate del = LuaDelegateConverter.CreateDelegate(script, closure, typeof(T));

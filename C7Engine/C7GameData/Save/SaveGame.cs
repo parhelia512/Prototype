@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using C7Engine;
 
 namespace C7GameData.Save {
 
@@ -71,7 +72,8 @@ namespace C7GameData.Save {
 				Governments = data.governments,
 				Difficulties = data.difficulties,
 				GameDifficulty = data.gameDifficulty,
-				Rules = data.rules
+				Rules = data.rules,
+				TerrainImprovements = data.terrainImprovements.ConvertAll(ti => ti.ToSaveTerrainImprovement())
 			};
 			save.StrengthBonuses.Add(data.fortificationBonus);
 			save.StrengthBonuses.Add(data.riverCrossingBonus);
@@ -101,9 +103,12 @@ namespace C7GameData.Save {
 			string rulesScript = "civ3.lua";
 			data.luaRulesEngine.Initialize(luaRulesDir, rulesScript);
 
+			ConvertTerrainImprovements(data);
 			ConvertTerraforms(data);
-			ConvertMapAndPlayers(data);
+			// convert technologies earlier than the player data,
+			// because we need to fill in current research and research queues
 			ConvertTechnologies(data);
+			ConvertMapAndPlayers(data);
 			ConvertBuildings(data);
 			ConvertUnits(data);
 			ConvertCities(data);
@@ -117,13 +122,19 @@ namespace C7GameData.Save {
 			data.UpdateTileOwners();
 			data.InvalidateCachedTradeNetwork();
 
-			foreach (Player p in data.players) {
+			data.onGameCreation += OnGameCreation;
+
+			return data;
+		}
+
+		private void OnGameCreation() {
+			foreach (Player p in EngineStorage.gameData.players) {
 				// Backfill citizen assignments for scenarios that don't specify
 				// them.
 				foreach (City c in p.cities) {
 					foreach (CityResident cr in c.residents) {
 						if (cr.citizenType.IsDefaultCitizen && cr.tileWorked == Tile.NONE) {
-							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(data, cr);
+							C7Engine.AI.CityTileAssignmentAI.AssignNewCitizenToTile(EngineStorage.gameData, cr);
 						}
 					}
 				}
@@ -136,11 +147,9 @@ namespace C7GameData.Save {
 				// TODO: this may require more than one loop, because if all the
 				// citizens are happy it reduces wasted shields via we love the
 				// king day.
-				p.DoCorruptionCalculations(data);
-				p.RecalculateCitizenMoods(data);
+				p.DoCorruptionCalculations(EngineStorage.gameData);
+				p.RecalculateCitizenMoods(EngineStorage.gameData);
 			}
-
-			return data;
 		}
 
 		private GameData InitializeGameData() {
@@ -172,7 +181,41 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.rules));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.techs, data.rules));
+		}
+
+		private void ConvertTerrainImprovements(GameData gameData) {
+			var saveByKey = TerrainImprovements.ToDictionary(s => s.key);
+			var terrainTypeByKey = TerrainTypes.ToDictionary(tt => tt.Key);
+
+			var created = new Dictionary<string, TerrainImprovement>();
+
+			TerrainType ResolveTerrainType(string key) {
+				return terrainTypeByKey[key];
+			}
+
+			TerrainImprovement Create(string key) {
+				if (created.TryGetValue(key, out var existing)) {
+					return existing;
+				}
+
+				var save = saveByKey[key];
+				TerrainImprovement upgradesFrom = null;
+
+				if (!string.IsNullOrEmpty(save.upgradesFrom)) {
+					upgradesFrom = Create(save.upgradesFrom);
+				}
+
+				var improvement = new TerrainImprovement(save, gameData.luaRulesEngine, ResolveTerrainType, upgradesFrom);
+				created[key] = improvement;
+				return improvement;
+			}
+
+			foreach (var key in saveByKey.Keys) {
+				Create(key);
+			}
+
+			gameData.terrainImprovements = created.Values.ToList();
 		}
 
 		private void ConvertTechnologies(GameData data) {
@@ -222,7 +265,7 @@ namespace C7GameData.Save {
 		}
 
 		private void ConvertUnits(GameData data) {
-			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype => new UnitPrototype(prototype));
+			data.unitPrototypes = UnitPrototypes.ConvertAll(prototype => new UnitPrototype(prototype, data.Terraforms));
 
 			var techDict = data.techs.ToDictionary(t => t.id);
 			var unitPrototypeDict = data.unitPrototypes.ToDictionary(b => b.name);
@@ -291,14 +334,14 @@ namespace C7GameData.Save {
 		private void ConvertBarbarianInfo(GameData data) {
 			data.barbarianInfo = BarbarianInfo;
 
-			if (BarbarianInfo.basicBarbarianIndex != -1) {
-				data.barbarianInfo.basicBarbarian = data.unitPrototypes[data.barbarianInfo.basicBarbarianIndex];
+			if (BarbarianInfo.basicBarbarianUnit != null) {
+				data.barbarianInfo.basicBarbarian = data.unitPrototypes.Where(up => up.name == data.barbarianInfo.basicBarbarianUnit).First();
 			}
-			if (BarbarianInfo.advancedBarbarianIndex != -1) {
-				data.barbarianInfo.advancedBarbarian = data.unitPrototypes[data.barbarianInfo.advancedBarbarianIndex];
+			if (BarbarianInfo.advancedBarbarianUnit != null) {
+				data.barbarianInfo.advancedBarbarian = data.unitPrototypes.Where(up => up.name == data.barbarianInfo.advancedBarbarianUnit).First();
 			}
-			if (BarbarianInfo.barbarianSeaUnitIndex != -1) {
-				data.barbarianInfo.barbarianSeaUnit = data.unitPrototypes[data.barbarianInfo.barbarianSeaUnitIndex];
+			if (BarbarianInfo.barbarianSeaUnit != null) {
+				data.barbarianInfo.barbarianSeaUnitProto = data.unitPrototypes.Where(up => up.name == data.barbarianInfo.barbarianSeaUnit).First();
 			}
 		}
 
@@ -336,6 +379,7 @@ namespace C7GameData.Save {
 		public int TurnNumber = 0;
 		public SaveMap Map = new SaveMap();
 		public List<TerrainType> TerrainTypes = new List<TerrainType>();
+		public List<SaveTerrainImprovement> TerrainImprovements = [];
 		public List<Resource> Resources = new List<Resource>();
 		public List<SaveUnit> Units = new List<SaveUnit>();
 		public List<SaveUnitPrototype> UnitPrototypes = [];
