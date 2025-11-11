@@ -25,7 +25,7 @@ public partial class MainMenu : Node {
 		log = LogManager.ForContext<MainMenu>();
 		log.Debug("enter MainMenu._Ready");
 
-		DisplayServer.WindowSetTitle("C7 - Godot 4");
+		DisplayServer.WindowSetTitle((string)ProjectSettings.GetSetting("application/config/name"));
 
 		try {
 			DisplayTitleScreen();
@@ -78,9 +78,9 @@ public partial class MainMenu : Node {
 
 	private void SetToggleGraphicsText() {
 		if (Global.ModernGraphicsActive) {
-			ButtonContainer.ToggleGraphics.Text = "Turn on Civ3 Graphics";
+			ButtonContainer.ToggleGraphics.Text = "Import Civilization III Graphics";
 		} else {
-			ButtonContainer.ToggleGraphics.Text = "Turn on C7 Graphics";
+			ButtonContainer.ToggleGraphics.Text = "Use OpenCiv3 Graphics";
 		}
 	}
 

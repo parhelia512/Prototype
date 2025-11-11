@@ -71336,12 +71336,12 @@
     },
     {
       "id": "player-2",
-      "colorIndex": 9,
+      "colorIndex": 2,
       "barbarian": false,
       "human": true,
       "hasPlayedCurrentTurn": false,
       "defeated": false,
-      "civilization": "Carthage",
+      "civilization": "Netherlands",
       "cityNameIndex": 0,
       "tileKnowledge": [
         {
@@ -71399,7 +71399,7 @@
       ],
       "knownTechs": [
         "tech-3",
-        "tech-2"
+        "tech-4"
       ],
       "eraCivilopediaName": "ERAS_Ancient_Times",
       "turnsUntilPriorityReevaluation": 0,
