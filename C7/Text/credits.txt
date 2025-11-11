@@ -1,6 +1,6 @@
 [color=black][center]
 [b]OpenCiv3 0.3 "Dutch" Preview 1[/b]
-© The OpenCiv3 Project 2021-2025
+© OpenCiv3 contributors
 [url]www.openciv3.org[/url]
 
 [b]An open source project
@@ -20,12 +20,14 @@ Yegor Budylin
 [b]Developers[/b]
 
 Armageddon1
+benskywalker
 Caro-Kann
 craven
 David1Socha
 Flintlock / maxpetul
 JimOfLeisure
 Kright
+KulkoBSW
 Lanzelot
 lt-brlara
 pcen
@@ -33,6 +35,7 @@ Quintillus
 rchoffardet
 steviek
 Tom Werner
+TomKode
 WildWeazel
 Yegor Budylin
 
