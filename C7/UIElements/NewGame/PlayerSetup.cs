@@ -128,6 +128,7 @@ public partial class PlayerSetup : Control {
 			PopupMenu popup = optionButton.GetPopup();
 			popup.AddThemeStyleboxOverride("panel", styleBox);
 			popup.MaxSize = new Vector2I(popup.MaxSize.X, 300);
+			popup.SetTransparentBackground(false);
 			opponentSelectors.Add(optionButton);
 
 			CenterContainer container = new();
