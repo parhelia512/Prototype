@@ -554,7 +554,7 @@ public partial class MapView : Node2D {
 
 	public Game game;
 
-	public MapView(){}
+	public MapView() { }
 
 	public int mapWidth { get; private set; }
 	public int mapHeight { get; private set; }

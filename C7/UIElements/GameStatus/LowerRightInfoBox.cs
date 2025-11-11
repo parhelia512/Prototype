@@ -256,9 +256,9 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	}
 
 	private void UpdateUnitGraphic(MapUnit unit) {
-		if(this.GetChildren().Contains(unitPlaceholder))
+		if (this.GetChildren().Contains(unitPlaceholder))
 			this.RemoveChild(unitPlaceholder);
-		if(this.GetChildren().Contains(unitTintPlaceholder))
+		if (this.GetChildren().Contains(unitTintPlaceholder))
 			this.RemoveChild(unitTintPlaceholder);
 
 		if (unit == MapUnit.NONE || unit == null) {
@@ -282,7 +282,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 		// Add the tint sprite, hooking up the shader.
 		unitTintPlaceholder = new Sprite2D();
-		unitTintPlaceholder.Texture =  tintFrame;
+		unitTintPlaceholder.Texture = tintFrame;
 		unitTintPlaceholder.Material = material;
 		unitTintPlaceholder.Position = unitPlaceholder.Position;
 		this.AddChild(unitTintPlaceholder);

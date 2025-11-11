@@ -70,16 +70,15 @@ public partial class AnimationManager {
 	}
 
 	public static string GetUnitDefaultThumbnailKey(UnitPrototype unit) {
-		return  $"{unit.artName}_{thumbnailDirection}_{thumbnailAction}_{thumbnailFrame}";
+		return $"{unit.artName}_{thumbnailDirection}_{thumbnailAction}_{thumbnailFrame}";
 	}
 
 	public (ImageTexture baseFrame, ImageTexture tintFrame) GetAnimationFrameAndTintTextures(UnitPrototype unit) {
 
 		string key = GetUnitDefaultThumbnailKey(unit);
 
-		if(AnimationThumbnails.TryGetValue(key, out ImageTexture baseImage)
-		   && AnimationTintThumbnails.TryGetValue(key, out ImageTexture tintImage))
-		{
+		if (AnimationThumbnails.TryGetValue(key, out ImageTexture baseImage)
+		   && AnimationTintThumbnails.TryGetValue(key, out ImageTexture tintImage)) {
 			return (baseImage, tintImage);
 		}
 
