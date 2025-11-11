@@ -103,6 +103,7 @@ public partial class UnitSelector : Node {
 		if (CurrentlySelectedUnit != MapUnit.NONE) {
 			NoMoreAutoselectableUnitsEmitted = false;
 			ParameterWrapper<MapUnit> wrappedUnit = new(CurrentlySelectedUnit);
+			PreLoadUnitAnimationThumbnail(wrappedUnit.Value.unitType);
 			EmitSignal(SignalName.NewAutoselectedUnit, wrappedUnit);
 			return true;
 		}
@@ -113,5 +114,9 @@ public partial class UnitSelector : Node {
 		}
 
 		return false;
+	}
+
+	private void PreLoadUnitAnimationThumbnail(UnitPrototype unit) {
+		game.animationController.civ3AnimData.GetAnimationFrameAndTintTextures(unit);
 	}
 }
