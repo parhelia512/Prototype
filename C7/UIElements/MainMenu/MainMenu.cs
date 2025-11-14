@@ -50,18 +50,19 @@ public partial class MainMenu : Node {
 		if (ButtonContainer.NewGame == null) {
 			ButtonContainer.CreateButtons();
 		}
+		// TODO: enable buttons are features are implemented
 		ButtonContainer.NewGame.Pressed += GoToWorldSetup;
 		ButtonContainer.QuickStart.Pressed += StartGame;
 		ButtonContainer.Tutorial.Pressed += StartGame;
-  ButtonContainer.Tutorial.Visible = false;
+		ButtonContainer.Tutorial.Visible = false;
 		ButtonContainer.LoadGame.Pressed += LoadGame;
 		ButtonContainer.LoadScenario.Pressed += LoadScenario;
 		ButtonContainer.HallOfFame.Pressed += HallOfFame;
-  ButtonContainer.HallOfFame.Visible = false;
+		ButtonContainer.HallOfFame.Visible = false;
 		ButtonContainer.Preferences.Pressed += Preferences;
-  ButtonContainer.Preferences.Visible = false;
+		ButtonContainer.Preferences.Visible = false;
 		ButtonContainer.AudioPreferences.Pressed += Preferences;
-  ButtonContainer.AudioPreferences.Visible = false;
+		ButtonContainer.AudioPreferences.Visible = false;
 		ButtonContainer.Credits.Pressed += showCredits;
 		ButtonContainer.Exit.Pressed += _on_Exit_pressed;
 
