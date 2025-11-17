@@ -649,14 +649,18 @@ namespace C7GameData {
 		/// Eventually, we should also have a method to make relevant units (workers, artillery, etc.) be captured.
 		/// </summary>
 		/// <param name="tile"></param>
-		public void DisbandNonDefendingUnits() {
+		public void DisbandNonDefendingUnits(Player owner) {
 			//There may have been naval units, if so, disband them
 			if (unitsOnTile.Count > 0) {
 				//Copy to a separate array so we don't crash due to concurrent modification exceptions
 				MapUnit[] unitsOnTile = new MapUnit[this.unitsOnTile.Count];
 				this.unitsOnTile.CopyTo(unitsOnTile);
 				foreach (MapUnit destroyedUnit in unitsOnTile) {
-					destroyedUnit.disband();
+					// Ensure we only destroy units of the losing side of the
+					// combat, not the unit entering the city.
+					if (destroyedUnit.owner == owner) {
+						destroyedUnit.disband();
+					}
 				}
 			}
 		}
