@@ -38,10 +38,10 @@ public partial class ScienceAdvisor : TextureRect {
 		this.CreateUI();
 
 		EngineStorage.ReadGameData((GameData gameData) => {
-			List<Tech> techs = gameData.techs;
+			List<Tech> allTechs = gameData.techs;
 			Player player = gameData.GetFirstHumanPlayer();
 			eraName = string.IsNullOrEmpty(lastOpenedEra) ? player.eraCivilopediaName : lastOpenedEra;
-			this.DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
+			this.DrawTechTree(eraName, player, allTechs, player.GetAvailableTechsToResearch(allTechs));
 		});
 	}
 
@@ -205,12 +205,12 @@ public partial class ScienceAdvisor : TextureRect {
 		techBoxes.Clear();
 
 		EngineStorage.ReadGameData((GameData gameData) => {
-			List<Tech> techs = gameData.techs;
+			List<Tech> allTechs = gameData.techs;
 			Player player = gameData.GetFirstHumanPlayer();
 			eraName = string.IsNullOrEmpty(lastOpenedEra)
 				? EraIndexToEra(GetEraIndex(eraName) + delta)
 				: EraIndexToEra(GetEraIndex(lastOpenedEra) + delta);
-			DrawTechTree(eraName, player, techs, player.GetAvailableTechsToResearch(gameData));
+			DrawTechTree(eraName, player, allTechs, player.GetAvailableTechsToResearch(allTechs));
 		});
 	}
 
