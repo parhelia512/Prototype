@@ -217,6 +217,11 @@ public partial class AnimationManager {
 	public C7Animation forEffect(AnimatedEffect effect) {
 		return new C7Animation(this, effect);
 	}
+
+	public static void ClearCache() {
+		AnimationThumbnails.Clear();
+		AnimationTintThumbnails.Clear();
+	}
 }
 
 public partial class C7Animation {
