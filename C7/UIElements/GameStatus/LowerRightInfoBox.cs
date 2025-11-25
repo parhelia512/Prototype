@@ -12,8 +12,6 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	private const float offsetUnitThumbnailX = 14;
 	private const float offsetUnitThumbnailY = 16;
 
-	private MapUnit activeUnit;
-
 	private TextureRect boxRightRectangle = new();
 	private TextureButton boxRightRectangleButton = new();
 
@@ -240,16 +238,10 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		});
 
 		base._Process(delta);
-
-		if (activeUnit == MapUnit.NONE || activeUnit == null)
-			return;
-
-		UpdateUnitInfo(activeUnit, activeUnit.location.overlayTerrainType);
 	}
 
 	private void OnNewUnitSelected(ParameterWrapper<MapUnit> wrappedMapUnit) {
 		MapUnit unit = wrappedMapUnit.Value;
-		activeUnit = unit;
 		log.Information("Selected unit: " + unit + " at " + unit.location);
 		UpdateUnitGraphic(unit);
 		UpdateUnitInfo(unit, unit.location.overlayTerrainType);
@@ -262,7 +254,6 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 			this.RemoveChild(unitTintPlaceholder);
 
 		if (unit == MapUnit.NONE || unit == null) {
-			activeUnit = MapUnit.NONE;
 			return;
 		}
 
@@ -296,5 +287,10 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		}
 		// Otherwise we can center the camera to the unit currently active
 		EmitSignal(SignalName.CenterCameraOnActiveUnit);
+	}
+
+	private void OnUnitMoved(ParameterWrapper<MapUnit> wrappedMapUnit) {
+		MapUnit unit = wrappedMapUnit.Value;
+		UpdateUnitInfo(unit, unit.location.overlayTerrainType);
 	}
 }
