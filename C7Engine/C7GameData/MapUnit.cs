@@ -157,12 +157,14 @@ namespace C7GameData {
 		}
 
 		public async Task animateAsync(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
-			if (!EngineStorage.animationsEnabled) return;
+			if (EngineStorage.animationsEnabled) {
+				var msg = new MsgStartUnitAnimation(this, action, ending);
+				msg.send();
 
-			var msg = new MsgStartUnitAnimation(this, action, ending);
-			msg.send();
-
-			await EngineStorage.WaitForAnimationFinished(msg.animationId);
+				await EngineStorage.WaitForAnimationFinished(msg.animationId);
+			}
+			if (this.owner.isHuman)
+				new MsgUnitMoved(this).send();
 		}
 
 		public void animate(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {

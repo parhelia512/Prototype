@@ -15,8 +15,9 @@ public partial class Game : Node {
 
 	[Signal] public delegate void PlayerTurnStartEventHandler();
 	[Signal] public delegate void PlayerTurnEndEventHandler();
-
 	[Signal] public delegate void GameInitializedEventHandler();
+
+	[Signal] public delegate void UnitMovedEventHandler();
 
 	private ILogger log = LogManager.ForContext<Game>();
 
@@ -269,6 +270,9 @@ public partial class Game : Node {
 				popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
 				AddChild(popup);
 				popup.ShowPopup();
+				break;
+			case MsgUnitMoved mUUAAB:
+				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mUUAAB.Unit));
 				break;
 		}
 	}
