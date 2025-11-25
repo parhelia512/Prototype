@@ -772,6 +772,12 @@ namespace C7GameData {
 			return ti;
 		}
 
+		public TerrainImprovement ImprovementAtLayer(Terraform terraform) {
+			TerrainImprovement.Layer currentLayer = terraform.Improvement.layer;
+			terrainImprovementByLayer.TryGetValue(currentLayer, out TerrainImprovement ti);
+			return ti;
+		}
+
 		public bool HasImprovement(TerrainImprovement improvement) {
 			return terrainImprovementByLayer.TryGetValue(improvement.layer, out TerrainImprovement val) && val == improvement;
 		}
@@ -787,10 +793,7 @@ namespace C7GameData {
 			if (!terrainImprovementByLayer.TryGetValue(improvement.layer, out var current))
 				return improvement.upgradesFrom == null;
 
-			if (current == improvement || current.upgradesFrom == improvement)
-				return false;
-
-			return improvement.upgradesFrom == current;
+			return current.CanBeReplacedBy(improvement);
 		}
 
 		public bool HasRoad() {
