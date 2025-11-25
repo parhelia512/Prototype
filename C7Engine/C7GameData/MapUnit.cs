@@ -163,7 +163,7 @@ namespace C7GameData {
 
 				await EngineStorage.WaitForAnimationFinished(msg.animationId);
 			}
-			if(this.owner.isHuman)
+			if (this.owner.isHuman)
 				new MsgUnitMoved(this).send();
 		}
 
