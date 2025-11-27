@@ -10,7 +10,7 @@
 
 > [!NOTE]
 > OpenCiv3 is not affiliated with civfanatics.com,
-> Firaxis Games, Infogrames Interactive,
+> Firaxis Games, BreakAway Games, Hasbro Interactive, Infogrames Interactive,
 > Atari Interactive, or Take-Two Interactive Software.
 > All trademarks are property of their respective owners.
 
