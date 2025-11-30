@@ -186,9 +186,13 @@ namespace C7GameData {
 		/// This is used by some graphics algorithms.
 		/// </summary>
 		/// <returns></returns>
-		public Tile[] getEdgeNeighbors() {
-			Tile[] edgeNeighbors =  { neighbors[TileDirection.NORTHEAST], neighbors[TileDirection.NORTHWEST], neighbors[TileDirection.SOUTHEAST], neighbors[TileDirection.SOUTHWEST]};
-			return edgeNeighbors;
+		public Tile[] GetEdgeNeighbors() {
+			List<Tile> edgeNeighbors = new();
+			if (neighbors.TryGetValue(TileDirection.NORTHEAST, out Tile ne)) edgeNeighbors.Add(ne);
+			if (neighbors.TryGetValue(TileDirection.NORTHWEST, out Tile nw)) edgeNeighbors.Add(nw);
+			if (neighbors.TryGetValue(TileDirection.SOUTHEAST, out Tile se)) edgeNeighbors.Add(se);
+			if (neighbors.TryGetValue(TileDirection.SOUTHWEST, out Tile sw)) edgeNeighbors.Add(sw);
+			return edgeNeighbors.ToArray();
 		}
 
 		public override string ToString() {
@@ -610,6 +614,37 @@ namespace C7GameData {
 			}
 
 			return map.tileAt(XCoordinate + xDelta, YCoordinate + yDelta);
+		}
+
+		public Tile FindInRing(int rank, Func<Tile, bool> predicate, bool clockwise = true) {
+			Tile startingTile = map.tileAt(this.XCoordinate, this.YCoordinate - (2 * rank));
+
+			if (predicate(startingTile)) return startingTile;
+
+			int dx = startingTile.XCoordinate;
+			int dy = startingTile.YCoordinate;
+
+			// Going SW(counter-clockwise) or SE(clockwise)
+			for (int _ = 1; _ < (2 * rank) + 1; _++) {
+				if (clockwise) { dx++; dy++; } else { dx--; dy++; }
+				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+			}
+			// Going SE(counter-clockwise) or SW(clockwise)
+			for (int _ = 1; _ < (2 * rank) + 1; _++) {
+				if (clockwise) { dx--; dy++; } else { dx++; dy++; }
+				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+			}
+			// Going NE(counter-clockwise) or NW(clockwise)
+			for (int _ = 1; _ < (2 * rank) + 1; _++) {
+				if (clockwise) { dx--; dy--; } else { dx++; dy--; }
+				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+			}
+			// Going NW(counter-clockwise) or NE(clockwise)
+			for (int _ = 1; _ < (2 * rank); _++) {
+				if (clockwise) { dx++; dy--; } else { dx--; dy--; }
+				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+			}
+			return null;
 		}
 
 		// Returns the tiles in the spiral ordering defined by

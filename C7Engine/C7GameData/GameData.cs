@@ -147,6 +147,26 @@ namespace C7GameData {
 			foreach (Player player in players) {
 				player.tileKnowledge.RecomputeActiveTiles();
 				player.UpdateResourcesInBorders(map.tiles.Where(t => t.owningCity?.owner == player));
+
+				foreach (Tile t in player.tileKnowledge.knownTiles.Where(t => t.owningCity == null && t.GetEdgeNeighbors().Any(e => e.owningCity != null)).ToList()) {
+					// Law VII
+					if (t.neighbors.TryGetValue(TileDirection.NORTHWEST, out Tile tnw)
+						&& t.neighbors.TryGetValue(TileDirection.SOUTHEAST, out Tile tse)
+						&& tnw.owningCity != null && tse.owningCity != null
+						&& tnw.owningCity.owner == tse.owningCity.owner) {
+						t.owningCity = ResolveTileOwnershipConflict(tnw.owningCity, tse.owningCity, t);
+						t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
+						continue;
+					}
+					// Law VIII
+					if (t.neighbors.TryGetValue(TileDirection.NORTHEAST, out Tile tne)
+						&& t.neighbors.TryGetValue(TileDirection.SOUTHWEST, out Tile tsw)
+						&& tne.owningCity != null && tsw.owningCity != null
+						&& tne.owningCity.owner == tsw.owningCity.owner) {
+						t.owningCity = ResolveTileOwnershipConflict(tne.owningCity, tsw.owningCity, t);
+						t.owningCity.owner.tileKnowledge.AddTilesToKnown(t);
+					}
+				}
 			}
 		}
 
@@ -256,26 +276,46 @@ namespace C7GameData {
 
 		// Rules taken from https://forums.civfanatics.com/threads/the-eight-laws-of-border-dynamics.106882/
 		private City ResolveTileOwnershipConflict(City a, City b, Tile t) {
+			if (a.Equals(b)) return a;
+
 			int aRank = a.location.rankDistanceTo(t);
 			int bRank = b.location.rankDistanceTo(t);
 
+			// Law I
+			// Cities can claim tiles of rank n+1, where n is the city's expansion level
+			if (a.GetBorderExpansionLevel() + 1 < aRank && b.GetBorderExpansionLevel() + 1 >= bRank) return b;
+			if (b.GetBorderExpansionLevel() + 1 < bRank && a.GetBorderExpansionLevel() + 1 >= aRank) return a;
+
+			// Law III
 			// The city with the lowest rank claim gets the tile.
-			if (aRank > bRank) {
-				return b;
-			} else if (aRank < bRank) {
-				return a;
-			}
+			if (aRank > bRank) return b;
+			if (aRank < bRank) return a;
 
+			// Law IV
 			// If the ranks are equal, the city with more culture gets the tile.
-			if (a.GetCulture() < b.GetCulture()) {
-				return b;
-			} else if (a.GetCulture() > b.GetCulture()) {
-				return a;
+			if (a.GetCulture() + a.GetCulturePerTurn() < b.GetCulture() + b.GetCulturePerTurn()) return b;
+			if (a.GetCulture() + a.GetCulturePerTurn() > b.GetCulture() + b.GetCulturePerTurn()) return a;
+
+			// Law V
+			// If the cultures are equal the oldest city gets the tile.
+			// TODO: track city age - for now we are going to skip this.
+			// return a;
+
+			// Law VI
+			// Starting North of the disputed tile, we go counter-clockwise
+			// trying to find the first tile that has one of the competing cities.
+			// We start at (rank - 1) because the rank distance does not necessarily reflect the actual "ring"
+			// the city tile is in, so a tile at rank 3, could well mean it's in the 2nd ring.
+			for (int r = aRank - 1; r <= aRank; r++) {
+				if (r <= 0) continue;
+				Tile winner = t.FindInRing(r, tile => tile.HasCity && (tile.cityAtTile == a || tile.cityAtTile == b), false);
+				if (winner != null) {
+					return winner.owningCity;
+				}
 			}
 
-			// If the cultures are equal the oldest city gets the tile.
-			// TODO: track city age - for now we just return the first.
-			return a;
+			// should never happen, if it does some part of the algorithm has gone wrong
+			throw new Exception($"Failed to resolve ownership of {t} between {a.name} and {b.name}, something went wrong");
 		}
 	}
 }
