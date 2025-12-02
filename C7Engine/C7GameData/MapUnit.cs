@@ -74,6 +74,14 @@ namespace C7GameData {
 			return IsLandUnit() && unitType.defense > 0;
 		}
 
+		public bool HasRank() {
+			return this.unitType.attack > 0 || this.unitType.defense > 0;
+		}
+
+		public bool CanBeActive() {
+			return !this.IsBusy() && this.movementPoints.canMove;
+		}
+
 		public override string ToString() {
 			if (this != MapUnit.NONE) {
 				return this.owner + " " + unitType.name + " at (" + location.XCoordinate + ", " + location.YCoordinate + ") with " + movementPoints.getMixedNumber() + " MP and " + hitPointsRemaining + " HP, id = " + id;
