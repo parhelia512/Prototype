@@ -138,12 +138,9 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 	private void SetEndOfTurnStatus() {
 		UpdateUnitGraphic(MapUnit.NONE);
+		HideUnitInfo();
 		suggestion.Text = "ENTER or SPACEBAR for next turn";
 		suggestion.Visible = true;
-		unitRank.Visible = false;
-		unitType.Visible = false;
-		attackDefenseMovement.Visible = false;
-		terrainType.Visible = false;
 
 		toggleEndTurnButton();
 
@@ -167,10 +164,15 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 	private void StopToggling() {
 		nextTurnButton.TextureNormal = nextTurnOffTexture;
-		suggestion.Text = "Please wait...";
-		suggestion.Visible = true;
 		blinkingTimer.Stop();
 		timerStarted = false;
+		suggestion.Visible = false;
+	}
+
+	private void PleaseWait() {
+		HideUnitInfo();
+		suggestion.Text = "Please wait...";
+		suggestion.Visible = true;
 	}
 
 	private void turnEnded() {
@@ -179,33 +181,51 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	}
 
 	private void UpdateUnitInfo(MapUnit unit, TerrainType terrain) {
-		StopToggling();
+		if (!unit.CanBeActive()) return;
+
+		bool showRank = false;
 
 		terrainType.Text = terrain.DisplayName;
 		if (unit.location.HasCity && unit.owner == unit.location.cityAtTile.owner) {
 			terrainType.Text = unit.location.cityAtTile.name;
 		}
-		if (unit.unitType.attack > 0 || unit.unitType.defense > 0) {
-			unitRank.Visible = true;
+		if (unit.HasRank()) {
+			showRank = true;
 			unitRank.Text = unit.experienceLevel.displayName;
 			attackDefenseMovement.SetPosition(new Vector2(0, 46));
 			terrainType.SetPosition(new Vector2(0, 60));
 		} else {
-			unitRank.Visible = false;
 			attackDefenseMovement.SetPosition(new Vector2(0, 32));
 			terrainType.SetPosition(new Vector2(0, 46));
 		}
-		suggestion.Visible = false;
-		terrainType.Visible = true;
 		unitType.Text = unit.unitType.name;
-		unitType.Visible = true;
 		string movementPointsRemaining = unit.movementPoints.canMove ? "" + $"{(unit.movementPoints.getMixedNumber())}" : "0";
 		string bombardText = "";
 		if (unit.unitType.bombard > 0) {
 			bombardText = $"({unit.unitType.bombard})";
 		}
 		attackDefenseMovement.Text = $"{unit.unitType.attack}{bombardText}.{unit.unitType.defense} {movementPointsRemaining}/{unit.unitType.movement}";
+
+		suggestion.Visible = false;
+
+		ShowUnitInfo(showRank);
+	}
+
+	private void HideUnitInfo() {
+		terrainType.Visible = false;
+		unitType.Visible = false;
+		unitRank.Visible = false;
+		attackDefenseMovement.Visible = false;
+		unitPlaceholder.Visible = false;
+		unitTintPlaceholder.Visible = false;
+	}
+	private void ShowUnitInfo(bool showRank) {
+		terrainType.Visible = true;
+		unitType.Visible = true;
+		unitRank.Visible = showRank;
 		attackDefenseMovement.Visible = true;
+		unitPlaceholder.Visible = true;
+		unitTintPlaceholder.Visible = true;
 	}
 
 	public override void _Process(double delta) {
@@ -243,6 +263,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 	private void OnNewUnitSelected(ParameterWrapper<MapUnit> wrappedMapUnit) {
 		MapUnit unit = wrappedMapUnit.Value;
 		log.Information("Selected unit: " + unit + " at " + unit.location);
+		StopToggling();
 		UpdateUnitGraphic(unit);
 		UpdateUnitInfo(unit, unit.location.overlayTerrainType);
 	}

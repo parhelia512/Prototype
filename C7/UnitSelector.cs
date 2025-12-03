@@ -26,7 +26,10 @@ public partial class UnitSelector : Node {
 	private bool NoMoreAutoselectableUnitsEmitted = false;
 
 	public override void _Ready() {
-		game.PlayerTurnEnd += () => { NoMoreAutoselectableUnitsEmitted = false; };
+		game.PlayerTurnEnd += () => {
+			NoMoreAutoselectableUnitsEmitted = false;
+			CurrentlySelectedUnit = MapUnit.NONE;
+		};
 	}
 
 	public override void _Process(double delta) {
@@ -101,6 +104,7 @@ public partial class UnitSelector : Node {
 
 		// Also emit the signal for a new unit being selected, so other areas such as Game Status and Unit Buttons can update
 		if (CurrentlySelectedUnit != MapUnit.NONE) {
+			unit.wake();
 			NoMoreAutoselectableUnitsEmitted = false;
 			ParameterWrapper<MapUnit> wrappedUnit = new(CurrentlySelectedUnit);
 			PreLoadUnitAnimationThumbnail(wrappedUnit.Value.unitType);
