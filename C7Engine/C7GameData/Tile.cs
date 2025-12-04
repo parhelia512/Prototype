@@ -672,8 +672,7 @@ namespace C7GameData {
 			return null;
 		}
 
-		private bool IsInValidCoordinates(int dx, int dy, out Tile currentTile)
-		{
+		private bool IsInValidCoordinates(int dx, int dy, out Tile currentTile) {
 			if (map.wrapHorizontally) dx %= map.numTilesWide;
 			if (map.wrapVertically) dy %= map.numTilesTall;
 			currentTile = map.tileAt(dx, dy);
