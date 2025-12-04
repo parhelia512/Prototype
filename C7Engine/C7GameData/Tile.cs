@@ -640,33 +640,44 @@ namespace C7GameData {
 		/// <returns></returns>
 		public Tile FindInRing(int rank, Func<Tile, bool> predicate, bool clockwise = true) {
 			Tile startingTile = map.tileAt(this.XCoordinate, this.YCoordinate - (2 * rank));
-
-			if (predicate(startingTile)) return startingTile;
-
 			int dx = startingTile.XCoordinate;
 			int dy = startingTile.YCoordinate;
+
+			if (startingTile != Tile.NONE && predicate(startingTile)) return startingTile;
 
 			// Going SW(counter-clockwise) or SE(clockwise)
 			for (int _ = 1; _ < (2 * rank) + 1; _++) {
 				if (clockwise) { dx++; dy++; } else { dx--; dy++; }
-				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				return currentTile;
 			}
 			// Going SE(counter-clockwise) or SW(clockwise)
 			for (int _ = 1; _ < (2 * rank) + 1; _++) {
 				if (clockwise) { dx--; dy++; } else { dx++; dy++; }
-				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				return currentTile;
 			}
 			// Going NE(counter-clockwise) or NW(clockwise)
 			for (int _ = 1; _ < (2 * rank) + 1; _++) {
 				if (clockwise) { dx--; dy--; } else { dx++; dy--; }
-				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				return currentTile;
 			}
 			// Going NW(counter-clockwise) or NE(clockwise)
 			for (int _ = 1; _ < (2 * rank); _++) {
 				if (clockwise) { dx++; dy--; } else { dx--; dy--; }
-				if (predicate(map.tileAt(dx, dy))) return map.tileAt(dx, dy);
+				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				return currentTile;
 			}
 			return null;
+		}
+
+		private bool IsInValidCoordinates(int dx, int dy, out Tile currentTile)
+		{
+			if (map.wrapHorizontally) dx %= map.numTilesWide;
+			if (map.wrapVertically) dy %= map.numTilesTall;
+			currentTile = map.tileAt(dx, dy);
+			return currentTile != null && currentTile != Tile.NONE;
 		}
 
 		// Returns the tiles in the spiral ordering defined by
