@@ -639,44 +639,41 @@ namespace C7GameData {
 		/// <param name="clockwise"></param>
 		/// <returns></returns>
 		public Tile FindInRing(int rank, Func<Tile, bool> predicate, bool clockwise = true) {
-			Tile startingTile = map.tileAt(this.XCoordinate, this.YCoordinate - (2 * rank));
-			int dx = startingTile.XCoordinate;
-			int dy = startingTile.YCoordinate;
+			int x = this.XCoordinate;
+			int y = this.YCoordinate - (2 * rank);
 
-			if (startingTile != Tile.NONE && predicate(startingTile)) return startingTile;
+			Tile currentTile = map.tileAt(x, y);
+			if (currentTile != Tile.NONE && predicate(currentTile)) return currentTile;
 
 			// Going SW(counter-clockwise) or SE(clockwise)
 			for (int _ = 1; _ < (2 * rank) + 1; _++) {
-				if (clockwise) { dx++; dy++; } else { dx--; dy++; }
-				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				if (clockwise) { x++; y++; } else { x--; y++; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
 				return currentTile;
 			}
 			// Going SE(counter-clockwise) or SW(clockwise)
 			for (int _ = 1; _ < (2 * rank) + 1; _++) {
-				if (clockwise) { dx--; dy++; } else { dx++; dy++; }
-				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				if (clockwise) { x--; y++; } else { x++; y++; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
 				return currentTile;
 			}
 			// Going NE(counter-clockwise) or NW(clockwise)
 			for (int _ = 1; _ < (2 * rank) + 1; _++) {
-				if (clockwise) { dx--; dy--; } else { dx++; dy--; }
-				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				if (clockwise) { x--; y--; } else { x++; y--; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
 				return currentTile;
 			}
 			// Going NW(counter-clockwise) or NE(clockwise)
 			for (int _ = 1; _ < (2 * rank); _++) {
-				if (clockwise) { dx++; dy--; } else { dx--; dy--; }
-				if (!IsInValidCoordinates(dx, dy, out Tile currentTile) || !predicate(currentTile)) continue;
+				if (clockwise) { x++; y--; } else { x--; y--; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
 				return currentTile;
 			}
 			return null;
-		}
-
-		private bool IsInValidCoordinates(int dx, int dy, out Tile currentTile) {
-			if (map.wrapHorizontally) dx %= map.numTilesWide;
-			if (map.wrapVertically) dy %= map.numTilesTall;
-			currentTile = map.tileAt(dx, dy);
-			return currentTile != null && currentTile != Tile.NONE;
 		}
 
 		// Returns the tiles in the spiral ordering defined by
