@@ -1,4 +1,3 @@
-using System;
 using C7Engine;
 using C7GameData;
 using Godot;
@@ -50,6 +49,9 @@ public partial class AnimationController : Node {
 					mSEA.markCompleted();
 				}
 				break;
+			case MsgStartStopAllAnimations mSSAA:
+				animTracker.endAllImmediately = !mSSAA.animationsEnabled;
+				break;
 		}
 	}
 
@@ -63,8 +65,11 @@ public partial class AnimationController : Node {
 		animTracker.update();
 	}
 
+	public void ToggleAnimationsEnabled() {
+		new MsgToggleAnimationsEnabled().send();
+	}
+
 	public void SetAnimationsEnabled(bool enabled) {
 		new MsgSetAnimationsEnabled(enabled).send();
-		animTracker.endAllImmediately = !enabled;
 	}
 }

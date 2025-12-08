@@ -51,6 +51,13 @@ namespace C7Engine {
 		}
 	}
 
+	public class MsgStartStopAllAnimations : AnimationMessage {
+		public bool animationsEnabled;
+		public MsgStartStopAllAnimations() {
+			animationsEnabled = EngineStorage.animationsEnabled;
+		}
+	}
+
 	public class MsgStartTurn : MessageToUI { }
 
 	public class MsgShowScienceAdvisor : MessageToUI { }
