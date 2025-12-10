@@ -49,9 +49,6 @@ public partial class AnimationController : Node {
 					mSEA.markCompleted();
 				}
 				break;
-			case MsgStartStopAllAnimations mSSAA:
-				animTracker.endAllImmediately = !mSSAA.animationsEnabled;
-				break;
 		}
 	}
 
@@ -67,9 +64,11 @@ public partial class AnimationController : Node {
 
 	public void ToggleAnimationsEnabled() {
 		new MsgToggleAnimationsEnabled().send();
+		animTracker.endAllImmediately = !animTracker.endAllImmediately;
 	}
 
 	public void SetAnimationsEnabled(bool enabled) {
 		new MsgSetAnimationsEnabled(enabled).send();
+		animTracker.endAllImmediately = !enabled;
 	}
 }

@@ -326,7 +326,6 @@ namespace C7Engine {
 
 		public override void process() {
 			EngineStorage.animationsEnabled = enabled;
-			new MsgStartStopAllAnimations().send();
 		}
 	}
 
@@ -337,7 +336,6 @@ namespace C7Engine {
 
 		public override void process() {
 			EngineStorage.animationsEnabled = !EngineStorage.animationsEnabled;
-			new MsgStartStopAllAnimations().send();
 		}
 	}
 
