@@ -73477,7 +73477,8 @@
     "startUnitType2": "Worker",
     "scoutUnitType": "Scout",
 	"maxRankOfWorkableTiles": 2,
-	"maxRankOfBarbarianCampTiles": 2
+	"maxRankOfBarbarianCampTiles": 2,
+    "defaultDealDuration": 20
   },
   "techs": [
     {

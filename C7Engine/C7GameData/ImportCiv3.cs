@@ -454,6 +454,7 @@ namespace C7GameData {
 
 		private void ImportSavLeaders() {
 			BiqData theBiq = biq.Eras is null ? defaultBiq : biq;
+			int currentTurn = save.TurnNumber;
 			int i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
 				if (leader.RaceID == -1) {
@@ -518,6 +519,124 @@ namespace C7GameData {
 					}
 				}
 				++i;
+			}
+
+			// Multi-Turn deals
+			i = 0;
+			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
+				int turnsRemaining = 0;
+				int dealStart = 0;
+				int defaultDealDuration = save.Rules.DefaultDealDuration;
+				List<int> contacts = leader.GetContact();
+				for (int j = 0; j < contacts.Count; ++j) {
+					if (contacts[j] > 0) {
+						// skip barbarians, they can't have any diplomatic relationships, they are at war against everyone, at all times
+						if (i <= 0 || j <= 0) continue;
+
+						// skip indexes of players that are not active
+						if (j >= save.Players.Count || i >= save.Players.Count) continue;
+
+						QueryCiv3.Sav.LEAD_LEAD_Diplomacy[] diplomacy = savData.LeadLeadDiplomacy[i, j];
+						// a civ doesn't have any diplomatic relationships with itself, or with another civ they are at war with
+						if (i == j || diplomacy.Length == 0) continue;
+
+						for (int d = 0; d < diplomacy.Length; ++d) {
+							DealType deadType = DealType.None;
+							DealSubType dealSubType = DealSubType.None;
+							DealDetails dealDetails = DealDetails.None;
+							int goldPerTurn = 0;
+							int resourceIndex = -1;
+							string resourcePerTurn = null;
+							ID againstPlayer = null;
+							if (diplomacy[d].EntryType == -1) {
+								turnsRemaining = diplomacy[d].Data2 - currentTurn > 0 ? diplomacy[d].Data2 - currentTurn : 0;
+								dealStart = diplomacy[d].Data2 > 0 ? currentTurn - (defaultDealDuration - turnsRemaining) : 0;
+								// I am pretty sure that is what these values represent, take it with a grain of salt.
+								// We assign these manually anyway in each deal
+								// but still could come handy at some point to know what they are.
+								if (diplomacy[d].Data1 == 0) {
+									dealDetails = DealDetails.Inbound;
+								} else if (diplomacy[d].Data1 == 1) {
+									dealDetails = DealDetails.Outbound;
+								}
+							}
+
+							if (d + 1 <= diplomacy.Length - 1) {
+								deadType = (DealType)diplomacy[d + 1].EntryType;
+								if (deadType == DealType.DiplomaticAgreement) {
+									if (diplomacy[d + 1].Data1 == 0) {
+										dealSubType = DealSubType.Peace;
+									} else if (diplomacy[d + 1].Data1 == 1) {
+										dealSubType = DealSubType.MutualProtectionPact;
+									} else if (diplomacy[d + 1].Data1 == 2) {
+										dealSubType = DealSubType.RightOfPassage;
+									}
+
+									dealDetails = DealDetails.Exchange;
+								} else if (deadType == DealType.Alliance) {
+									dealSubType = DealSubType.MilitaryAlliance;
+									againstPlayer = save.Players[diplomacy[d + 1].Data1].id;
+									dealDetails = DealDetails.Exchange;
+								} else if (deadType == DealType.Embargo) {
+									dealSubType = DealSubType.TradeEmbargo;
+									againstPlayer = save.Players[diplomacy[d + 1].Data1].id;
+									dealDetails = DealDetails.Exchange;
+								}
+								  // These types of deals are only present in full on the civ that gives the gold/resources/luxuries
+								  else if (deadType == DealType.Gold) {
+									dealSubType = DealSubType.GoldPerTurn;
+									goldPerTurn = diplomacy[d + 1].Data2;
+									dealDetails = DealDetails.Outbound;
+								} else if (deadType == DealType.Luxury) {
+									dealSubType = DealSubType.LuxuryPerTurn;
+									resourceIndex = diplomacy[d + 1].Data1;
+									resourcePerTurn = save.Resources[resourceIndex].Key;
+									dealDetails = DealDetails.Outbound;
+								} else if (deadType == DealType.Resource) {
+									dealSubType = DealSubType.ResourcePerTurn;
+									resourceIndex = diplomacy[d + 1].Data1;
+									resourcePerTurn = save.Resources[resourceIndex].Key;
+									dealDetails = DealDetails.Outbound;
+								} else {
+									continue;
+								}
+
+								if (dealSubType != DealSubType.None
+									&& save.Players[i].playerRelationships.TryGetValue(save.Players[j].id.ToString(), out PlayerRelationship pr)) {
+									MultiTurnDeal mtd = new MultiTurnDeal(deadType, dealSubType, dealDetails, goldPerTurn, resourcePerTurn, defaultDealDuration, dealStart, againstPlayer);
+									pr.multiTurnDeals.Add(mtd);
+								}
+
+								// Add inbound info to other player because that info is not exactly present in the binary
+								if (dealDetails == DealDetails.Outbound
+									&& dealSubType != DealSubType.None
+									&& save.Players[j].playerRelationships.TryGetValue(save.Players[i].id.ToString(), out PlayerRelationship prOther)) {
+									MultiTurnDeal mtd = new MultiTurnDeal(deadType, dealSubType, DealDetails.Inbound, goldPerTurn, resourcePerTurn, defaultDealDuration, dealStart, againstPlayer);
+									prOther.multiTurnDeals.Add(mtd);
+								}
+							}
+						}
+					}
+				}
+				++i;
+			}
+
+			foreach (SavePlayer savePlayer in save.Players) {
+				int other = 0;
+				log.Information($"- - - - - - - - - - - - - - - - - - {savePlayer.civilization} - - - - - - - - - - - - - - - - - - ");
+				foreach (PlayerRelationship pr in savePlayer.playerRelationships.Values) {
+					other++;
+					foreach (MultiTurnDeal mtd in pr.multiTurnDeals) {
+						string against = mtd.dealSubType == DealSubType.MilitaryAlliance || mtd.dealSubType == DealSubType.TradeEmbargo ? $"(against: {save.Players.First(p => p.id == mtd.againstPlayer).civilization}({mtd.againstPlayer}))" : "";
+						string gpt = mtd.dealSubType == DealSubType.GoldPerTurn? $"({mtd.goldPerTurn} gold per turn)" : "";
+						string rpt = mtd.dealSubType == DealSubType.LuxuryPerTurn || mtd.dealSubType == DealSubType.ResourcePerTurn ? $"({mtd.resourcePerTurn} per turn)" : "";
+						log.Information($"{savePlayer.civilization}({savePlayer.id}) " +
+										$"has {mtd.dealSubType} " +
+										$"with {save.Players[other].civilization}({save.Players[other].id}) " +
+										$"for another {mtd.TurnsRemaining(save.TurnNumber)} turns {mtd.turnStartDeal}-{mtd.turnEndDeal}" +
+										$" {against} {gpt} {rpt} {mtd.dealDetails}");
+					}
+				}
 			}
 		}
 
@@ -1453,6 +1572,7 @@ namespace C7GameData {
 			}
 			save.Rules.MaxRankOfWorkableTiles = 2;
 			save.Rules.MaxRankOfBarbarianCampTiles = 2;
+			save.Rules.DefaultDealDuration = 20;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {
