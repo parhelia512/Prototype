@@ -48,6 +48,11 @@ public class MultiTurnDealTest {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_A() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) {
 			return;
@@ -128,6 +133,11 @@ public class MultiTurnDealTest {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_B() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) {
 			return;
@@ -233,6 +243,11 @@ public class MultiTurnDealTest {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_C() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) {
 			return;
@@ -384,6 +399,11 @@ public class MultiTurnDealTest {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_D() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) {
 			return;
@@ -490,6 +510,11 @@ public class MultiTurnDealTest {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_E() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) {
 			return;
@@ -645,6 +670,11 @@ public class MultiTurnDealTest {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_F() {
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) {
 			return;
