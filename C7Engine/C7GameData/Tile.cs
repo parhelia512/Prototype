@@ -186,9 +186,13 @@ namespace C7GameData {
 		/// This is used by some graphics algorithms.
 		/// </summary>
 		/// <returns></returns>
-		public Tile[] getEdgeNeighbors() {
-			Tile[] edgeNeighbors =  { neighbors[TileDirection.NORTHEAST], neighbors[TileDirection.NORTHWEST], neighbors[TileDirection.SOUTHEAST], neighbors[TileDirection.SOUTHWEST]};
-			return edgeNeighbors;
+		public Tile[] GetEdgeNeighbors() {
+			List<Tile> edgeNeighbors = new();
+			if (neighbors.TryGetValue(TileDirection.NORTHEAST, out Tile ne)) edgeNeighbors.Add(ne);
+			if (neighbors.TryGetValue(TileDirection.NORTHWEST, out Tile nw)) edgeNeighbors.Add(nw);
+			if (neighbors.TryGetValue(TileDirection.SOUTHEAST, out Tile se)) edgeNeighbors.Add(se);
+			if (neighbors.TryGetValue(TileDirection.SOUTHWEST, out Tile sw)) edgeNeighbors.Add(sw);
+			return edgeNeighbors.ToArray();
 		}
 
 		public override string ToString() {
@@ -610,6 +614,66 @@ namespace C7GameData {
 			}
 
 			return map.tileAt(XCoordinate + xDelta, YCoordinate + yDelta);
+		}
+
+
+		/// <summary>
+		/// <para>
+		/// Walks clockwise/counter-clockwise the nth ring around
+		/// the specified tile starting on the northmost tile
+		/// and tries to find the first tile that matches our boolean criterion.
+		/// </para>
+		/// <para>
+		/// This differs from <see cref="GetTilesWithinRankDistance"/>,
+		/// because it includes all the tiles regardless of the distance.
+		/// An example would be that GetTilesWithinRankDistance() with a rank of 2
+		/// will not return a NN, SS, WW, or EE tile, whereas this method will.
+		/// </para>
+		/// <para>
+		/// It is mostly used to calculate to whom we should assign tiles
+		/// that are being claimed by more than 1 city or civilization.
+		/// </para>
+		/// </summary>
+		/// <param name="rank"></param>
+		/// <param name="predicate"></param>
+		/// <param name="clockwise"></param>
+		/// <returns></returns>
+		public Tile FindInRing(int rank, Func<Tile, bool> predicate, bool clockwise = true) {
+			int x = this.XCoordinate;
+			int y = this.YCoordinate - (2 * rank);
+
+			Tile currentTile = map.tileAt(x, y);
+			if (currentTile != Tile.NONE && predicate(currentTile)) return currentTile;
+
+			// Going SW(counter-clockwise) or SE(clockwise)
+			for (int _ = 1; _ < (2 * rank) + 1; _++) {
+				if (clockwise) { x++; y++; } else { x--; y++; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
+				return currentTile;
+			}
+			// Going SE(counter-clockwise) or SW(clockwise)
+			for (int _ = 1; _ < (2 * rank) + 1; _++) {
+				if (clockwise) { x--; y++; } else { x++; y++; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
+				return currentTile;
+			}
+			// Going NE(counter-clockwise) or NW(clockwise)
+			for (int _ = 1; _ < (2 * rank) + 1; _++) {
+				if (clockwise) { x--; y--; } else { x++; y--; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
+				return currentTile;
+			}
+			// Going NW(counter-clockwise) or NE(clockwise)
+			for (int _ = 1; _ < (2 * rank); _++) {
+				if (clockwise) { x++; y--; } else { x--; y--; }
+				currentTile = map.tileAt(x, y);
+				if (currentTile == Tile.NONE || !predicate(currentTile)) continue;
+				return currentTile;
+			}
+			return null;
 		}
 
 		// Returns the tiles in the spiral ordering defined by
