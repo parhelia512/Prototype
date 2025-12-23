@@ -457,7 +457,9 @@ public partial class Game : Node {
 
 	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
 		GetViewport().SetInputAsHandled();
-		if (eventMouseButton.IsPressed()) {
+		Control uiHover = GetViewport().GuiGetHoveredControl();
+		// Can't drag the map when the mouse is over a ui element
+		if (eventMouseButton.IsPressed() && uiHover is not TextureButton) {
 			OldPosition = eventMouseButton.Position;
 			IsMovingCamera = true;
 
@@ -595,9 +597,6 @@ public partial class Game : Node {
 		if (eventKeyDown.Keycode == Godot.Key.O && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
 			ToggleObserverMode();
 		}
-		if (eventKeyDown.Keycode == Godot.Key.G && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
-			ToggleGridCoordinates();
-		}
 		if (eventKeyDown.Keycode == Godot.Key.T && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
 			ToggleC7Graphics();
 		}
@@ -620,6 +619,32 @@ public partial class Game : Node {
 			City capital = controller.cities.Find(c => c.IsCapital());
 			if (capital != null) {
 				mapView.centerCameraOnTile(capital.location);
+			}
+		}
+		// For inputs that have the same keys mapped to multiple actions like G
+		// we need to manually handle what is triggered by adding extra conditions.
+		// Otherwise when pressing CTRL + G for example, both the go-to
+		// and the toggle grid actions are triggered, because godot does not distinguish
+		// single key presses from combos, it sends both signals.
+		// Sometimes even worse, when pressing CTRL + G, it only sends the go-to signal.
+		// We continue to map these to an action and not call them directly,
+		// because we could add a button in the ui that does the same and this would call the action too.
+		if (eventKeyDown.Keycode == Godot.Key.G) {
+			// Toggle Coordinates
+			if (eventKeyDown.IsCommandOrControlPressed()
+				&& eventKeyDown.ShiftPressed
+				&& eventKeyDown.AltPressed) {
+				ProcessAction(C7Action.ToggleCoordinates);
+			}
+			// Toggle Grid
+			else if (eventKeyDown.IsCommandOrControlPressed()) {
+				ProcessAction(C7Action.ToggleGrid);
+			}
+			// Trigger Unit go-to
+			else if (!eventKeyDown.IsCommandOrControlPressed()
+					   && !eventKeyDown.ShiftPressed
+					   && !eventKeyDown.AltPressed) {
+				ProcessAction(C7Action.UnitGoto);
 			}
 		}
 	}
@@ -679,7 +704,15 @@ public partial class Game : Node {
 		foreach (StringName action in actions) {
 			if (Input.IsActionJustPressed(action)) {
 				ProcessAction(action.ToString());
+			} else if (Input.IsActionJustReleased(action)) {
+				ProcessOnReleaseAction(action.ToString());
 			}
+		}
+	}
+
+	private void ProcessOnReleaseAction(string currentAction) {
+		if (currentAction == C7Action.EnableTempAnimations) {
+			animationController.SetAnimationsEnabled(true);
 		}
 	}
 
@@ -731,6 +764,10 @@ public partial class Game : Node {
 			this.mapView.gridLayer.visible = !this.mapView.gridLayer.visible;
 		}
 
+		if (currentAction == C7Action.ToggleCoordinates) {
+			ToggleGridCoordinates();
+		}
+
 		if (currentAction == C7Action.Escape && this.gotoInfo == null) {
 			log.Debug("Got request for escape/quit");
 			popupOverlay.ShowPopup(new EscapeQuitPopup(), PopupOverlay.PopupCategory.Info);
@@ -745,9 +782,11 @@ public partial class Game : Node {
 		}
 
 		if (currentAction == C7Action.ToggleAnimations) {
+			animationController.ToggleAnimationsEnabled();
+		}
+
+		if (currentAction == C7Action.EnableTempAnimations) {
 			animationController.SetAnimationsEnabled(false);
-		} else if (Input.IsActionJustReleased(C7Action.ToggleAnimations)) {
-			animationController.SetAnimationsEnabled(true);
 		}
 
 		// actions with unit buttons, which are only relevant during the player
@@ -770,6 +809,9 @@ public partial class Game : Node {
 		}
 
 		if (currentAction == C7Action.UnitDisband) {
+			if (CurrentlySelectedUnit == null || CurrentlySelectedUnit == MapUnit.NONE) {
+				return;
+			}
 			popupOverlay.ShowPopup(
 				new ConfirmationPopup(
 					$"Disband {CurrentlySelectedUnit.unitType.name}? Pardon me but these are OUR people. Do \nyou really want to disband them?",
