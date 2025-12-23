@@ -596,7 +596,7 @@ namespace C7GameData {
 			// ---------------------- Second Deal -------------------------------
 			// [2] =
 			//   Data1 = 1       <- "Gives" ROP to Player2
-			//   Data2 = 40       <- This deal will end at turn 40 (it's being active for 5 turns)
+			//   Data2 = 40       <- This deal will end at turn 40 (it's been active for 5 turns)
 			//   EntryType = -1
 			// [3] =
 			//   Data1 = 2       <- Right-of-passage (DealSubtype)
@@ -612,7 +612,7 @@ namespace C7GameData {
 			// ---------------------- Second Deal -------------------------------
 			// [2] =
 			//   Data1 = 1       <- "Gives" Spices to Player2
-			//   Data2 = 40       <- This deal will end at turn 40 (it's being active for 5 turns)
+			//   Data2 = 40       <- This deal will end at turn 40 (it's been active for 5 turns)
 			//   EntryType = -1
 			// [3] =
 			//   Data1 = 12      <- Luxury per turn (Spices)
@@ -627,7 +627,7 @@ namespace C7GameData {
 			// ---------------------- Second Deal -------------------------------
 			// [2] =
 			//   Data1 = 1       <- "Gives" 3 gpt to Player2
-			//   Data2 = 40       <- This deal will end at turn 40 (it's being active for 5 turns)
+			//   Data2 = 40       <- This deal will end at turn 40 (it's been active for 5 turns)
 			//   EntryType = -1
 			// [3] =
 			//   Data1 = 0
@@ -642,7 +642,7 @@ namespace C7GameData {
 			// ---------------------- Second Deal -------------------------------
 			// [2] =
 			//   Data1 = 0       <- "Receives" 3 gpt from Player1
-			//   Data2 = 40       <- This deal will end at turn 40 (it's being active for 5 turns)
+			//   Data2 = 40       <- This deal will end at turn 40 (it's been active for 5 turns)
 			//   EntryType = -1
 			// ---------------------- End ------------------------------
 			//
