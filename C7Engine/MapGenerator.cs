@@ -1388,7 +1388,7 @@ namespace C7Engine {
 						continue;
 					}
 
-					if (TileIsTooCloseToOtherStarts(t, startingLocations, wc.worldSize.distanceBetweenCivs, attempt)) {
+					if (TileIsTooCloseToOtherStarts(t, m, startingLocations, wc.worldSize.distanceBetweenCivs, attempt)) {
 						continue;
 					}
 
@@ -1443,13 +1443,17 @@ namespace C7Engine {
 			return startsOnContinent < luxuriesOnContinent;
 		}
 
-		private static bool TileIsTooCloseToOtherStarts(Tile t, List<Tile> startingLocations, int minDistance, int attempt) {
+		private static bool TileIsTooCloseToOtherStarts(Tile t, GameMap m, List<Tile> startingLocations, int minDistance, int attempt) {
+			
+			// Minimum barb camp distance is 10 tiles away, scaling down to 5 based on # of attempts
+			int minBarbDistance = Math.Max(10 - attempt, 5);
+			
 			if (attempt > 2) {
 				minDistance /= 2;
 			}
 
 			foreach (Tile start in startingLocations) {
-				if (start.continent == t.continent && start.distanceTo(t) < minDistance) {
+				if (start.continent == t.continent && start.distanceTo(t) < minDistance && m.barbarianCamps.All(x => start.distanceTo(x) < minBarbDistance)) {
 					return true;
 				}
 			}
