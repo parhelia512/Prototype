@@ -122,7 +122,7 @@ namespace C7Engine {
 
 			// TODO: Goody huts, barbarian camps.
 
-			
+
 
 			// Last step: Assign the terrain file and image ids to each tile so
 			// we know which texture to use when displaying them.
@@ -1453,7 +1453,6 @@ namespace C7Engine {
 		}
 
 		private static bool TileIsTooCloseToOtherStarts(Tile t, List<Tile> startingLocations, int minDistance, int attempt) {
-			
 			if (attempt > 2) {
 				minDistance /= 2;
 			}
