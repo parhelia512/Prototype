@@ -23,7 +23,6 @@ namespace C7GameData {
 		public bool defeated = false;
 
 		public Civilization civilization;
-		internal int cityNameIndex = 0;
 
 		public List<MapUnit> units = new List<MapUnit>();
 		public List<City> cities = new List<City>();
@@ -157,8 +156,8 @@ namespace C7GameData {
 			ResearchQueue.Enqueue(tech);
 		}
 
-		private IEnumerable<string> cityNameGenerator() {
-			List<String> cityNames = civilization.cityNames;
+		private IEnumerable<string> CityNameGenerator() {
+			List<string> cityNames = civilization.cityNames;
 			int loopCounter = 0;
 
 			// Perpetual generator expression to yield all city names lazily
@@ -177,14 +176,9 @@ namespace C7GameData {
 
 		public string GetNextCityName() {
 			// Convert to hashset for faster lookups
-			HashSet<String> cityNameHashSet = cities.Select(city => city.name).ToHashSet();
+			HashSet<string> cityNameHashSet = cities.Select(city => city.name).ToHashSet();
 
-			foreach (string city in cityNameGenerator()) {
-				if (!cityNameHashSet.Contains(city)) return city;
-			}
-
-			// Dummy return value so compiler is happy
-			return "";
+			return CityNameGenerator().First(x => !cityNameHashSet.Contains(x));
 		}
 
 		public Player() {
