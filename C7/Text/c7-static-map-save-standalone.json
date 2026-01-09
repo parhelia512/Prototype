@@ -71983,7 +71983,18 @@
         "Kushite",
         "Barbarian"
       ],
-      "isBarbarian": true
+      "isBarbarian": true,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Rome",
@@ -72046,7 +72057,18 @@
         "militaristic",
         "commercial"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Egypt",
@@ -72094,7 +72116,18 @@
         "religious",
         "industrious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Greece",
@@ -72142,7 +72175,18 @@
         "commercial",
         "scientific"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Babylon",
@@ -72188,7 +72232,18 @@
         "scientific",
         "religious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Germany",
@@ -72223,7 +72278,18 @@
         "militaristic",
         "scientific"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Russia",
@@ -72281,7 +72347,18 @@
         "expansionist",
         "scientific"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "China",
@@ -72318,7 +72395,18 @@
         "militaristic",
         "industrious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "America",
@@ -72377,7 +72465,18 @@
         "expansionist",
         "industrious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Japan",
@@ -72422,7 +72521,18 @@
         "militaristic",
         "religious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "France",
@@ -72462,7 +72572,18 @@
         "commercial",
         "industrious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "India",
@@ -72498,7 +72619,18 @@
         "commercial",
         "religious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Persia",
@@ -72546,7 +72678,18 @@
         "scientific",
         "industrious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Aztecs",
@@ -72601,7 +72744,18 @@
         "militaristic",
         "agricultural"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Zululand",
@@ -72636,7 +72790,18 @@
         "militaristic",
         "expansionist"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Iroquois",
@@ -72684,7 +72849,18 @@
         "commercial",
         "agricultural"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "England",
@@ -72732,7 +72908,18 @@
         "commercial",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Mongols",
@@ -72781,7 +72968,18 @@
         "militaristic",
         "expansionist"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Spain",
@@ -72831,7 +73029,18 @@
         "religious",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Scandinavia",
@@ -72883,7 +73092,18 @@
         "militaristic",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Ottomans",
@@ -72931,7 +73151,18 @@
         "scientific",
         "industrious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Celts",
@@ -72980,7 +73211,18 @@
         "religious",
         "agricultural"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Arabia",
@@ -73027,7 +73269,18 @@
         "expansionist",
         "religious"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Carthage",
@@ -73076,7 +73329,18 @@
         "industrious",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Korea",
@@ -73125,7 +73389,18 @@
         "commercial",
         "scientific"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Sumeria",
@@ -73169,7 +73444,18 @@
         "scientific",
         "agricultural"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Hittites",
@@ -73213,7 +73499,18 @@
         "commercial",
         "expansionist"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Netherlands",
@@ -73257,7 +73554,18 @@
         "agricultural",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Portugal",
@@ -73312,7 +73620,18 @@
         "expansionist",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Byzantines",
@@ -73356,7 +73675,18 @@
         "scientific",
         "seafaring"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Inca",
@@ -73400,7 +73730,18 @@
         "expansionist",
         "agricultural"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     },
     {
       "name": "Maya",
@@ -73445,7 +73786,18 @@
         "industrious",
         "agricultural"
       ],
-      "isBarbarian": false
+      "isBarbarian": false,
+      "adjustments": {
+        "distancePenaltyRadius": 4,
+        "commerceYieldBonus": 2,
+        "distancePenalty": -2,
+        "foodYieldBonus": 5,
+        "productionYieldBonus": 3,
+        "hillsBonus": 10,
+        "luxuryResourceBonus": 15,
+        "strategicResourceBonus": 20,
+        "waterBonus": 10
+      }
     }
   ],
   "strengthBonuses": [
@@ -73492,8 +73844,8 @@
     "startUnitType1": "Settler",
     "startUnitType2": "Worker",
     "scoutUnitType": "Scout",
-	"maxRankOfWorkableTiles": 2,
-	"maxRankOfBarbarianCampTiles": 2,
+    "maxRankOfWorkableTiles": 2,
+    "maxRankOfBarbarianCampTiles": 2,
     "defaultDealDuration": 20
   },
   "techs": [
@@ -73811,7 +74163,7 @@
       "smallIconPath": "Art\\tech chooser\\Icons\\22-engineering-small.pcx",
       "x": 73,
       "y": 610,
-	  "flags": [
+      "flags": [
         "enablesBridges"
       ]
     },

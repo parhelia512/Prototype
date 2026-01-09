@@ -53,7 +53,7 @@ namespace C7Engine {
 				float preDistanceScore = score;
 				int distance = startTile.distanceTo(t);
 				if (distance > player.civilization.Adjustments.DistancePenaltyRadius) {
-					score += player.civilization.Adjustments.DistancePenalty(distance);
+					score += player.civilization.Adjustments.DistancePenalty * distance;
 				}
 				if (distance > 8) {
 					score -= distance * 4;
@@ -70,9 +70,9 @@ namespace C7Engine {
 		}
 
 		private static float GetTileYieldScore(Tile t, Player owner) {
-			float score = owner.civilization.Adjustments.FoodYieldBonus(t.foodYield(owner).yield);
-			score += owner.civilization.Adjustments.ProductionYieldBonus(t.productionYield(owner).yield);
-			score += owner.civilization.Adjustments.CommerceYieldBonus(t.commerceYield(owner).yield);
+			float score = owner.civilization.Adjustments.FoodYieldBonus * t.foodYield(owner).yield;
+			score += owner.civilization.Adjustments.ProductionYieldBonus * t.productionYield(owner).yield;
+			score += owner.civilization.Adjustments.CommerceYieldBonus * t.commerceYield(owner).yield;
 			if (owner.KnowsAboutResource(t.Resource)) {
 				if (t.Resource.Category == ResourceCategory.STRATEGIC) {
 					score += owner.civilization.Adjustments.StrategicResourceBonus;

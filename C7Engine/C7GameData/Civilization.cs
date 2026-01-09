@@ -52,12 +52,16 @@ namespace C7GameData {
 
 		public class SettlerTileAdjustments {
 			public int DistancePenaltyRadius = 4;
-			public Func<float, float> CommerceYieldBonus = yield => yield * 2;
-			public Func<int, float> DistancePenalty = distance => distance * -2;
-			public Func<float, float> FoodYieldBonus = yield => yield * 5;
+
+			// multipliers
+			public float CommerceYieldBonus = 2;
+			public float DistancePenalty = -2;
+			public float FoodYieldBonus = 5;
+			public float ProductionYieldBonus = 3;
+
+			// constants
 			public float HillsBonus = 10;
 			public float LuxuryResourceBonus = 15;
-			public Func<float, float> ProductionYieldBonus = yield => yield * 3;
 			public float StrategicResourceBonus = 20;
 			public float WaterBonus = 10;
 		}
