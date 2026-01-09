@@ -21,7 +21,7 @@ namespace C7Engine {
 			return result;
 		}
 
-		public static Dictionary<Tile, int> GetScoredSettlerCandidates(Tile start, Player player) {
+		public static Dictionary<Tile, float> GetScoredSettlerCandidates(Tile start, Player player) {
 			List<MapUnit> playerUnits = player.units;
 			// TODO: handle settling other continents
 			IEnumerable<Tile> candidates = player.tileKnowledge.AllKnownTiles().Where(t => !IsInvalidCityLocation(t) && t.continent == start.continent);
@@ -43,17 +43,17 @@ namespace C7Engine {
 
 				//Prefer hills for defense, and coast for boats and such.
 				if (t.baseTerrainType.Key == "hills") {
-					score += player.Civilization.Adjustments.HillsBonus;
+					score += player.civilization.Adjustments.HillsBonus;
 				}
 				if (t.NeighborsWater()) {
-					score += player.Civilization.Adjustments.WaterBonus;
+					score += player.civilization.Adjustments.WaterBonus;
 				}
 
 				//Lower scores if they are far away
 				float preDistanceScore = score;
 				int distance = startTile.distanceTo(t);
-				if (distance > player.Civilization.Adjustments.DistancePenaltyRadius) {
-					score += player.Civilization.Adjustments.DistancePenalty(distance);
+				if (distance > player.civilization.Adjustments.DistancePenaltyRadius) {
+					score += player.civilization.Adjustments.DistancePenalty(distance);
 				}
 				if (distance > 8) {
 					score -= distance * 4;
@@ -70,14 +70,14 @@ namespace C7Engine {
 		}
 
 		private static float GetTileYieldScore(Tile t, Player owner) {
-			float score = owner.Civilization.Adjustments.FoodYieldBonus(t.foodYield(owner));
-			score += owner.Civilization.Adjustments.ProductionYieldBonus(t.productionYield(owner));
-			score += owner.Civilization.Adjustments.CommerceYieldBonus(t.commerceYield(owner));
+			float score = owner.civilization.Adjustments.FoodYieldBonus(t.foodYield(owner).yield);
+			score += owner.civilization.Adjustments.ProductionYieldBonus(t.productionYield(owner).yield);
+			score += owner.civilization.Adjustments.CommerceYieldBonus(t.commerceYield(owner).yield);
 			if (owner.KnowsAboutResource(t.Resource)) {
 				if (t.Resource.Category == ResourceCategory.STRATEGIC) {
-					score += owner.Civilization.Adjustments.StrategicResourceBonus;
+					score += owner.civilization.Adjustments.StrategicResourceBonus;
 				} else if (t.Resource.Category == ResourceCategory.LUXURY) {
-					score += owner.Civilization.Adjustments.LuxuryResourceBonus;
+					score += owner.civilization.Adjustments.LuxuryResourceBonus;
 				}
 			}
 			return score;

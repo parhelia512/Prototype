@@ -15,7 +15,7 @@ namespace C7Engine.AI.StrategicAI {
 
 		public static int CalculateAvailableLandScore(Player player) {
 			//Figure out if there's land to settle, and how much
-			Dictionary<Tile, float> possibleLocations = SettlerLocationAi.GetScoredSettlerCandidates(player.Cities[0].location, player);
+			Dictionary<Tile, float> possibleLocations = SettlerLocationAi.GetScoredSettlerCandidates(player.cities[0].location, player);
 			int score = possibleLocations.Count * PossibleCityLocationScore;
 			foreach (int i in possibleLocations.Values) {
 				score += i / TileScoreDivider;

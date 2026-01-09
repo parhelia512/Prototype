@@ -315,10 +315,10 @@ namespace C7Engine {
 
 			// Note: GetScoredSettlerCandidates already excludes tiles with
 			// settlers moving towards them.
-			Dictionary<Tile, int> scoredLocations = SettlerLocationAI.GetScoredSettlerCandidates(city.location, city.owner);
-			List<KeyValuePair<Tile, int>> orderedScores = scoredLocations.OrderByDescending(t => t.Value).ToList();
+			Dictionary<Tile, float> scoredLocations = SettlerLocationAi.GetScoredSettlerCandidates(city.location, city.owner);
+			List<KeyValuePair<Tile, float>> orderedScores = scoredLocations.OrderByDescending(t => t.Value).ToList();
 
-			foreach ((Tile tile, int score) in orderedScores) {
+			foreach ((Tile tile, float score) in orderedScores) {
 				if (scoredLocations.ContainsKey(tile)) {
 					++result;
 
