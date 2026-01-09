@@ -106,7 +106,7 @@ namespace C7GameData.Save {
 
 			// once unit owners are known, players can reference units
 			data.players.ForEach(player => {
-				player.Units = data.mapUnits.Where(unit => unit.owner.Id == player.Id).ToList(); ;
+				player.units = data.mapUnits.Where(unit => unit.owner.id == player.id).ToList(); ;
 			});
 
 			// cities require game map for location and players for city owner
@@ -114,7 +114,7 @@ namespace C7GameData.Save {
 
 			// Once cities are known, players can reference cities.
 			data.players.ForEach(player => {
-				player.Cities = data.cities.Where(city => city.owner.Id == player.Id).ToList(); ;
+				player.cities = data.cities.Where(city => city.owner.id == player.id).ToList(); ;
 			});
 
 			foreach (City city in data.cities) {

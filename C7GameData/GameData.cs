@@ -54,7 +54,7 @@ namespace C7GameData {
 		}
 
 		public List<Player> GetHumanPlayers() {
-			return players.FindAll(p => p.IsHuman);
+			return players.FindAll(p => p.isHuman);
 		}
 
 		public MapUnit GetUnit(ID id) {
@@ -62,7 +62,7 @@ namespace C7GameData {
 		}
 
 		public Player GetPlayer(ID id) {
-			return players.Find(p => p.Id == id);
+			return players.Find(p => p.id == id);
 		}
 
 		public ExperienceLevel GetExperienceLevelAfter(ExperienceLevel experienceLevel) {

@@ -128,8 +128,8 @@ public partial class RightClickTileMenu : RightClickMenu {
 		RemoveAll();
 
 		int fortifiedCount = 0;
-		List<MapUnit> playerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.Id == game.controller.Id);
-		List<MapUnit> nonPlayerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.Id != game.controller.Id);
+		List<MapUnit> playerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id == game.controller.id);
+		List<MapUnit> nonPlayerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id != game.controller.id);
 
 		foreach (MapUnit unit in playerUnits) {
 			bool isFortified = isUnitFortified(unit, uiUpdatedUnitStates);
@@ -159,15 +159,15 @@ public partial class RightClickTileMenu : RightClickMenu {
 		if (nonPlayerUnits.Count > 0) {
 			if (tile.cityAtTile == null) {
 				foreach (MapUnit unit in nonPlayerUnits) {
-					AddItem($"{unit.owner.Civilization.Noun} {unit.Describe()}", null);
+					AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
 				}
-				AddItem($"Contact {nonPlayerUnits[0].owner.Civilization.Name}", null);
+				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", null);
 			} else {
 				// TODO: This isn't necessarily the top unit, get that code to an accessible
 				// location and then use it here.
 				MapUnit unit = nonPlayerUnits[0];
-				AddItem($"{unit.owner.Civilization.Noun} {unit.Describe()}", null);
-				AddItem($"Contact {unit.owner.Civilization.Name}", null);
+				AddItem($"{unit.owner.civilization.noun} {unit.Describe()}", null);
+				AddItem($"Contact {unit.owner.civilization.name}", null);
 			}
 		}
 	}

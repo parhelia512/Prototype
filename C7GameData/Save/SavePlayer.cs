@@ -33,25 +33,25 @@ namespace C7GameData.Save {
 
 		public Player ToPlayer(GameMap map, List<Civilization> civilizations) {
 			Player player = new Player{
-				Id = id,
-				IsBarbarians = barbarian,
-				IsHuman = human,
-				HasPlayedThisTurn = hasPlayedCurrentTurn,
-				ColorIndex = colorIndex,
-				Civilization = civilization is not null ? civilizations.Find(civ => civ.Name == civilization) : null,
-				CityNameIndex = cityNameIndex,
-				TileKnowledge = new TileKnowledge(),
-				KnownTechs = knownTechs,
-				CurrentlyResearchedTech = currentlyResearchedTech,
-				EraCivilopediaName = eraCivilopediaName,
-				Gold = gold,
+				id = id,
+				isBarbarians = barbarian,
+				isHuman = human,
+				hasPlayedThisTurn = hasPlayedCurrentTurn,
+				colorIndex = colorIndex,
+				civilization = civilization is not null ? civilizations.Find(civ => civ.name == civilization) : null,
+				cityNameIndex = cityNameIndex,
+				tileKnowledge = new TileKnowledge(),
+				knownTechs = knownTechs,
+				currentlyResearchedTech = currentlyResearchedTech,
+				eraCivilopediaName = eraCivilopediaName,
+				gold = gold,
 			};
 			foreach (TileLocation tile in tileKnowledge) {
-				player.TileKnowledge.AddTileToKnown(map.tileAt(tile.x, tile.y));
+				player.tileKnowledge.AddTileToKnown(map.tileAt(tile.x, tile.y));
 			}
-			foreach (ID techId in player.Civilization.StartingTechs) {
-				if (!player.KnownTechs.Contains(techId)) {
-					player.KnownTechs.Add(techId);
+			foreach (ID techId in player.civilization.startingTechs) {
+				if (!player.knownTechs.Contains(techId)) {
+					player.knownTechs.Add(techId);
 				}
 			}
 			return player;
@@ -60,21 +60,21 @@ namespace C7GameData.Save {
 		public SavePlayer() { }
 
 		public SavePlayer(Player player) {
-			id = player.Id;
-			colorIndex = player.ColorIndex;
-			barbarian = player.IsBarbarians;
-			human = player.IsHuman;
-			hasPlayedCurrentTurn = player.HasPlayedThisTurn;
-			civilization = player.Civilization?.Name;
+			id = player.id;
+			colorIndex = player.colorIndex;
+			barbarian = player.isBarbarians;
+			human = player.isHuman;
+			hasPlayedCurrentTurn = player.hasPlayedThisTurn;
+			civilization = player.civilization?.name;
 			// TODO: this should be computed by looking at cities defined in the save
 			// so that adding cities in the save structure doesn't require updating this value
-			cityNameIndex = player.CityNameIndex;
-			tileKnowledge = player.TileKnowledge.AllKnownTiles().ConvertAll(tile => new TileLocation(tile));
-			turnsUntilPriorityReevaluation = player.TurnsUntilPriorityReevaluation;
-			knownTechs = player.KnownTechs;
-			currentlyResearchedTech = player.CurrentlyResearchedTech;
-			eraCivilopediaName = player.EraCivilopediaName;
-			gold = player.Gold;
+			cityNameIndex = player.cityNameIndex;
+			tileKnowledge = player.tileKnowledge.AllKnownTiles().ConvertAll(tile => new TileLocation(tile));
+			turnsUntilPriorityReevaluation = player.turnsUntilPriorityReevaluation;
+			knownTechs = player.knownTechs;
+			currentlyResearchedTech = player.currentlyResearchedTech;
+			eraCivilopediaName = player.eraCivilopediaName;
+			gold = player.gold;
 		}
 	}
 }

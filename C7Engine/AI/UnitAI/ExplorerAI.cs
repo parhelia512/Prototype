@@ -70,7 +70,7 @@ namespace C7Engine {
 			Stopwatch watch = new Stopwatch();
 			watch.Start();
 			List<Tile> validExplorerTiles = new List<Tile>();
-			foreach (Tile t in player.TileKnowledge.AllKnownTiles()
+			foreach (Tile t in player.tileKnowledge.AllKnownTiles()
 					.Where(t => unit.CanEnterTile(t, false) && t.cityAtTile == null && numUnknownNeighboringTiles(player, t) > 0)) {
 				validExplorerTiles.Add(t);
 			}
@@ -145,7 +145,7 @@ namespace C7Engine {
 						explorationScore[t] = 0;
 					}
 					int distanceToNearestCity = int.MaxValue;
-					foreach (City c in player.Cities) {
+					foreach (City c in player.cities) {
 						int distance = t.distanceTo(c.location);
 						if (distance < distanceToNearestCity) {
 							distanceToNearestCity = distance;
@@ -169,11 +169,11 @@ namespace C7Engine {
 			}
 			//Calculate whether it, and its neighbors are in known tiles.
 			int discoverableTiles = 0;
-			if (!player.TileKnowledge.isTileKnown(t)) {
+			if (!player.tileKnowledge.isTileKnown(t)) {
 				discoverableTiles++;
 			}
 			foreach (Tile n in t.neighbors.Values) {
-				if (!player.TileKnowledge.isTileKnown(n)) {
+				if (!player.tileKnowledge.isTileKnown(n)) {
 					discoverableTiles++;
 				}
 			}

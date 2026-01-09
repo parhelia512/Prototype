@@ -19,7 +19,7 @@ namespace C7GameData.AIData {
 		}
 
 		public override void CalculateWeightAndMetadata(Player player) {
-			if (player.Cities.Count < 2) {
+			if (player.cities.Count < 2) {
 				this.calculatedWeight = 1000;
 			} else {
 				int score = UtilityCalculations.CalculateAvailableLandScore(player);

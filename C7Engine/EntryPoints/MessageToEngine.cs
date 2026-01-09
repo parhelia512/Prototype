@@ -134,7 +134,7 @@ namespace C7Engine {
 
 		public override void process() {
 			Player player = EngineStorage.gameData.GetHumanPlayers()[0];
-			if (player.CurrentlyResearchedTech == techId) {
+			if (player.currentlyResearchedTech == techId) {
 				return;
 			}
 			Tech requestedTech = EngineStorage.gameData.techs.Find(t => t.id == techId);
@@ -143,13 +143,13 @@ namespace C7Engine {
 			//
 			// TODO: do a topological sort to allow a queue of techs to study.
 			foreach (Tech prereq in requestedTech.Prerequisites) {
-				if (!player.KnownTechs.Contains(prereq.id)) {
+				if (!player.knownTechs.Contains(prereq.id)) {
 					return;
 				}
 			}
 
 			// Start researching this tech and update the UI.
-			player.CurrentlyResearchedTech = requestedTech.id;
+			player.currentlyResearchedTech = requestedTech.id;
 			new MsgUpdateUiAfterTechSelection().send();
 		}
 	}
@@ -161,14 +161,14 @@ namespace C7Engine {
 		public override void process() {
 			Player controller = EngineStorage.gameData.GetPlayer(EngineStorage.uiControllerID);
 
-			foreach (MapUnit unit in controller.Units) {
+			foreach (MapUnit unit in controller.units) {
 				log.Debug($"{unit}, path length: {unit.path?.PathLength() ?? 0}");
 				if (unit.path?.PathLength() > 0) {
 					unit.moveAlongPath();
 				}
 			}
 
-			controller.HasPlayedThisTurn = true;
+			controller.hasPlayedThisTurn = true;
 			TurnHandling.AdvanceTurn();
 		}
 	}

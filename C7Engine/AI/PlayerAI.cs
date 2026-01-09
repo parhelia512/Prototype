@@ -8,38 +8,32 @@ using C7Engine.AI;
 using C7Engine.AI.StrategicAI;
 using C7Engine.AI.UnitAI;
 using Serilog;
-// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-// ReSharper disable InvertIf
-// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
-// ReSharper disable CheckNamespace
 
 namespace C7Engine {
-	// ReSharper disable once ClassNeverInstantiated.Global
-	public class PlayerAi {
-		// ReSharper disable once InconsistentNaming
-		private static readonly ILogger log = Log.ForContext<PlayerAi>();
+	public class PlayerAI {
+		private static ILogger log = Log.ForContext<PlayerAI>();
 
 		public static void PlayTurn(Player player, Random rng) {
-			if (player.IsHuman || player.IsBarbarians) {
+			if (player.isHuman || player.isBarbarians) {
 				return;
 			}
-			log.Information("-> Begin " + player.Civilization.CityNames[0] + " turn");
+			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
 
-			if (player.TurnsUntilPriorityReevaluation == 0) {
+			if (player.turnsUntilPriorityReevaluation == 0) {
 				log.Information("Re-evaluating strategic priorities for " + player);
 				List<StrategicPriority> priorities = StrategicPriorityArbitrator.Arbitrate(player);
-				player.StrategicPriorityData.Clear();
+				player.strategicPriorityData.Clear();
 				foreach (StrategicPriority priority in priorities) {
-					player.StrategicPriorityData.Add(priority);
+					player.strategicPriorityData.Add(priority);
 				}
-				player.TurnsUntilPriorityReevaluation = 15 + GameData.rng.Next(10);
-				log.Information(player.TurnsUntilPriorityReevaluation + " turns until next re-evaluation");
+				player.turnsUntilPriorityReevaluation = 15 + GameData.rng.Next(10);
+				log.Information(player.turnsUntilPriorityReevaluation + " turns until next re-evaluation");
 			} else {
-				player.TurnsUntilPriorityReevaluation--;
+				player.turnsUntilPriorityReevaluation--;
 			}
 
 			//Do things with units.  Copy into an array first to avoid collection-was-modified exception
-			foreach (MapUnit unit in player.Units.ToArray()) {
+			foreach (MapUnit unit in player.units.ToArray()) {
 				//For each unit, if there's already an AI task assigned, it will attempt to complete its goal.
 				//It may fail due to conditions having changed since that goal was assigned; in that case it will
 				//get a new task to try to complete.
@@ -49,10 +43,10 @@ namespace C7Engine {
 				int maxAttempts = 2;    //safety valve so we don't freeze the UI if SetAIForUnit returns something that fails
 				while (!unitDone) {
 					if (unit.currentAIData == null || attempts > 0) {
-						SetAiForUnit(unit, player);
+						SetAIForUnit(unit, player);
 					}
 
-					UnitAI artificialIntelligence = GetAiForUnitStrategy(unit.currentAIData);
+					UnitAI artificialIntelligence = getAIForUnitStrategy(unit.currentAIData);
 					unitDone = artificialIntelligence.PlayTurn(player, unit);
 
 					attempts++;
@@ -62,56 +56,60 @@ namespace C7Engine {
 					}
 				}
 
-				player.TileKnowledge.AddTilesToKnown(unit.location);
+				player.tileKnowledge.AddTilesToKnown(unit.location);
 			}
 		}
 
-		public static void SetAiForUnit(MapUnit unit, Player player) {
+		public static void SetAIForUnit(MapUnit unit, Player player) {
 			//figure out an AI behavior
 			//TODO: Use strategies, not names
 			if (unit.unitType.name == "Settler") {
-				SettlerAiData settlerAiData = new() { Goal = SettlerAiData.SettlerGoal.BuildCity };
+				SettlerAIData settlerAiData = new SettlerAIData();
+				settlerAiData.goal = SettlerAIData.SettlerGoal.BUILD_CITY;
 				//If it's the starting settler, have it settle in place.  Otherwise, use an AI to find a location.
-				if (player.Cities.Count == 0 && unit.location.cityAtTile == null) {
-					settlerAiData.Destination = unit.location;
-					log.Information("No cities yet!  Set AI for unit to settler AI with destination of " + settlerAiData.Destination);
+				if (player.cities.Count == 0 && unit.location.cityAtTile == null) {
+					settlerAiData.destination = unit.location;
+					log.Information("No cities yet!  Set AI for unit to settler AI with destination of " + settlerAiData.destination);
 				} else {
-					settlerAiData.Destination = SettlerLocationAi.FindSettlerLocation(unit.location, player);
-					if (settlerAiData.Destination == Tile.NONE) {
+					settlerAiData.destination = SettlerLocationAI.findSettlerLocation(unit.location, player);
+					if (settlerAiData.destination == Tile.NONE) {
 						//This is possible if all tiles within 4 tiles of a city are either not land, or already claimed
 						//by another colonist.  Longer-term, the AI shouldn't be building settlers if that is the case,
 						//but right now we'll just spike the football to stop the clock and avoid building immediately next to another city.
-						settlerAiData.Goal = SettlerAiData.SettlerGoal.JoinCity;
+						settlerAiData.goal = SettlerAIData.SettlerGoal.JOIN_CITY;
 						log.Information("Set AI for unit to JOIN_CITY due to lack of locations to settle");
 					} else {
 						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
-						settlerAiData.PathToDestination = algorithm.PathFrom(unit.location, settlerAiData.Destination);
-						log.Information("Set AI for unit to BUILD_CITY with destination of " + settlerAiData.Destination);
+						settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination);
+						log.Information("Set AI for unit to BUILD_CITY with destination of " + settlerAiData.destination);
 					}
 				}
 				unit.currentAIData = settlerAiData;
 			} else if (unit.location.cityAtTile != null && unit.location.unitsOnTile.Count(u => u.unitType.defense > 0 && u != unit) == 0) {
-				DefenderAIData ai = new() {
-					goal = DefenderAIData.DefenderGoal.DEFEND_CITY, destination = unit.location
-				};
+				DefenderAIData ai = new DefenderAIData();
+				ai.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
+				ai.destination = unit.location;
 				log.Information("Set defender AI for " + unit + " with destination of " + ai.destination);
 				unit.currentAIData = ai;
 			} else if (UnitCanAttackNearbyBarbCamp(unit, player)) {
 				log.Information("Set unit " + unit + " to take out barb camp");
 			} else if (unit.unitType.name == "Catapult") {
 				//For now tell catapults to sit tight.  It's getting really annoying watching them pointlessly bombard barb camps forever
-				DefenderAIData ai = new() {
-					goal = DefenderAIData.DefenderGoal.DEFEND_CITY, destination = unit.location
-				};
+				DefenderAIData ai = new DefenderAIData();
+				ai.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
+				ai.destination = unit.location;
 				log.Information("Set defender AI for " + unit + " with destination of " + ai.destination);
 				unit.currentAIData = ai;
 			} else {
+
 				if (unit.unitType.categories.Contains("Sea")) {
-					ExplorerAIData ai = new() { type = ExplorerAIData.ExplorationType.COASTLINE };
+					ExplorerAIData ai = new ExplorerAIData();
+					ai.type = ExplorerAIData.ExplorationType.COASTLINE;
 					unit.currentAIData = ai;
 					log.Information("Set coastline exploration AI for " + unit);
 				} else if (unit.location.unitsOnTile.Exists((x) => x.unitType.categories.Contains("Sea"))) {
-					ExplorerAIData ai = new() { type = ExplorerAIData.ExplorationType.ON_A_BOAT };
+					ExplorerAIData ai = new ExplorerAIData();
+					ai.type = ExplorerAIData.ExplorationType.ON_A_BOAT;
 					unit.currentAIData = ai;
 					//TODO: Actually put the unit on the boat
 					log.Information("Set ON_A_BOAT exploration AI for " + unit);
@@ -119,18 +117,19 @@ namespace C7Engine {
 					//Isn't a Settler.  If there's a city at the location, it's defended.  No boats involved.  What's our priority?
 					//If there is land to explore, we'll try to explore it.
 					//Long-term TODO: Should only send tiles on this landmass.
-					KeyValuePair<Tile, float> tileToExplore = ExplorerAI.FindTopScoringTileForExploration(player, player.TileKnowledge.AllKnownTiles().Where(t => t.IsLand()), ExplorerAIData.ExplorationType.RANDOM);
+					KeyValuePair<Tile, float> tileToExplore = ExplorerAI.FindTopScoringTileForExploration(player, player.tileKnowledge.AllKnownTiles().Where(t => t.IsLand()), ExplorerAIData.ExplorationType.RANDOM);
 					if (tileToExplore.Value > 0) {
 						ExplorerAIData ai = new ExplorerAIData();
 						//What type of exploration should we do?
 						int nearbyExplorers = 0;
-						foreach (MapUnit mapUnit in player.Units) {
-							if (mapUnit.currentAIData is ExplorerAIData { type: ExplorerAIData.ExplorationType.NEAR_CITIES }) {
-								nearbyExplorers++;
+						foreach (MapUnit mapUnit in player.units) {
+							if (mapUnit.currentAIData is ExplorerAIData explorerAI) {
+								if (explorerAI.type == ExplorerAIData.ExplorationType.NEAR_CITIES) {
+									nearbyExplorers++;
+								}
 							}
 						}
-						// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-						if (nearbyExplorers < (player.Cities.Count + 1)) {
+						if (nearbyExplorers < (player.cities.Count + 1)) {
 							ai.type = ExplorerAIData.ExplorationType.NEAR_CITIES;
 						} else {
 							ai.type = ExplorerAIData.ExplorationType.RANDOM;
@@ -149,21 +148,20 @@ namespace C7Engine {
 						//resources.  I expect we'll have some sort of arbiter that decides between competing priorities, with each being given a score as to how important
 						//they are, including a weight by how far away the task is.  But this will evolve gradually over a long time)
 
-						// ReSharper disable once GrammarMistakeInComment
 						//As of today (4/7/2022), let's tackle just one of those - adequate defense of cities.  The AI is really good at losing cities to barbs right now,
 						//and that's a problem.
 
 						City nearestCityToDefend = FindNearbyCityToDefend(unit, player);
 
-						DefenderAIData newUnitAiData = new() {
-							destination = nearestCityToDefend.location, goal = DefenderAIData.DefenderGoal.DEFEND_CITY
-						};
+						DefenderAIData newUnitAIData = new DefenderAIData();
+						newUnitAIData.destination = nearestCityToDefend.location;
+						newUnitAIData.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
 
 						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
-						newUnitAiData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAiData.destination);
+						newUnitAIData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAIData.destination);
 
 						log.Information($"Unit {unit} tasked with defending {nearestCityToDefend.name}");
-						unit.currentAIData = newUnitAiData;
+						unit.currentAIData = newUnitAIData;
 					}
 				}
 			}
@@ -174,7 +172,7 @@ namespace C7Engine {
 				return false;
 			}
 
-			List<Tile> reachableBarbCampsTiles = player.TileKnowledge.AllKnownTiles()
+			List<Tile> reachableBarbCampsTiles = player.tileKnowledge.AllKnownTiles()
 				.Where(t => unit.CanEnterTile(t, true) && t.hasBarbarianCamp).ToList();
 
 			Tile closestBarbCamp = Tile.NONE;
@@ -188,11 +186,11 @@ namespace C7Engine {
 			}
 
 			if (closestBarbDistance <= 3) {
-				CombatAIData combatAiData = new CombatAIData();
+				CombatAIData caid = new CombatAIData();
 
 				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
-				combatAiData.path = algorithm.PathFrom(unit.location, closestBarbCamp);
-				unit.currentAIData = combatAiData;
+				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp);
+				unit.currentAIData = caid;
 				return true;
 			}
 			return false;
@@ -209,9 +207,9 @@ namespace C7Engine {
 		 */
 		private static City FindNearbyCityToDefend(MapUnit unit, Player player) {
 			int minDefenders = int.MaxValue;
-			// TODO: Just being there doesn't mean a unit is a defender.
+			//TODO: Just being there doesn't mean a unit is a defender.
 			List<City> citiesWithFewestDefenders = new List<City>();
-			foreach (City c in player.Cities) {
+			foreach (City c in player.cities) {
 				if (c.location.unitsOnTile.Count < minDefenders) {
 					minDefenders = c.location.unitsOnTile.Count;
 					citiesWithFewestDefenders.Clear();
@@ -243,14 +241,14 @@ namespace C7Engine {
 		 * too, for example, and one AIData class might be able to call up multiple types of AIs.
 		 * It also likely will become mod-supporting someday, but we can't add everything on day one.
 		 **/
-		private static UnitAI GetAiForUnitStrategy(UnitAIData aiData) {
-			if (aiData is SettlerAiData) {
+		public static UnitAI getAIForUnitStrategy(UnitAIData aiData) {
+			if (aiData is SettlerAIData sai) {
 				return new SettlerAI();
-			} else if (aiData is DefenderAIData) {
+			} else if (aiData is DefenderAIData dai) {
 				return new DefenderAI();
-			} else if (aiData is ExplorerAIData) {
+			} else if (aiData is ExplorerAIData eai) {
 				return new ExplorerAI();
-			} else if (aiData is CombatAIData) {
+			} else if (aiData is CombatAIData cai) {
 				return new CombatAI();
 			}
 			throw new Exception("AI data not recognized" + aiData);

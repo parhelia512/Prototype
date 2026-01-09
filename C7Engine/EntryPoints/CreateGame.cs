@@ -28,12 +28,12 @@ namespace C7Engine {
 			// members containing numerous references to eachother, but with SaveGame, each entity is
 			// only defined once in the save file, and references to it are stored as IDs making it easy
 			// to generate and modify valid save files.
-			Player humanPlayer = gameData.players.Any(p => p.IsHuman) switch {
-				true => gameData.players.Find(p => p.IsHuman),
+			Player humanPlayer = gameData.players.Any(p => p.isHuman) switch {
+				true => gameData.players.Find(p => p.isHuman),
 				false => throw new Exception($"{loadFilePath} does not contain a human player"),
 			};
 
-			EngineStorage.uiControllerID = humanPlayer.Id;
+			EngineStorage.uiControllerID = humanPlayer.id;
 			TurnHandling.OnBeginTurn(); // Call for the first turn
 			TurnHandling.AdvanceTurn();
 

@@ -113,12 +113,12 @@ public partial class Game : Node2D {
 
 				// Set initial camera location. If the UI controller has any cities, focus on their capital. Otherwise, focus on their
 				// starting settler.
-				if (controller.Cities.Count > 0) {
-					City capital = controller.Cities.Find(c => c.IsCapital());
+				if (controller.cities.Count > 0) {
+					City capital = controller.cities.Find(c => c.IsCapital());
 					if (capital != null)
 						mapView.centerCameraOnTile(capital.location);
 				} else {
-					MapUnit startingSettler = controller.Units.Find(u => u.unitType.actions.Contains(C7Action.UnitBuildCity));
+					MapUnit startingSettler = controller.units.Find(u => u.unitType.actions.Contains(C7Action.UnitBuildCity));
 					if (startingSettler != null)
 						mapView.centerCameraOnTile(startingSettler.location);
 				}
@@ -155,7 +155,7 @@ public partial class Game : Node2D {
 			switch (msg) {
 				case MsgStartUnitAnimation mSUA:
 					MapUnit unit = gameData.GetUnit(mSUA.unitID);
-					if (unit != null && (controller.TileKnowledge.isTileKnown(unit.location) || controller.TileKnowledge.isTileKnown(unit.previousLocation))) {
+					if (unit != null && (controller.tileKnowledge.isTileKnown(unit.location) || controller.tileKnowledge.isTileKnown(unit.previousLocation))) {
 						// TODO: This needs to be extended so that the player is shown when AIs found cities, when they move units
 						// (optionally, depending on preferences) and generalized so that modders can specify whether custom
 						// animations should be shown to the player.
@@ -173,7 +173,7 @@ public partial class Game : Node2D {
 					int x, y;
 					gameData.map.tileIndexToCoords(mSEA.tileIndex, out x, out y);
 					Tile tile = gameData.map.tileAt(x, y);
-					if (tile != Tile.NONE && controller.TileKnowledge.isTileKnown(tile))
+					if (tile != Tile.NONE && controller.tileKnowledge.isTileKnown(tile))
 						animTracker.startAnimation(tile, mSEA.effect, mSEA.completionEvent, mSEA.ending);
 					else {
 						if (mSEA.completionEvent != null)
@@ -193,9 +193,9 @@ public partial class Game : Node2D {
 					// handling cases like 1 city elimination, regicide, settlers that
 					// are still alive, etc.
 					if (mCD.city.owner.RemainingCities() == 0) {
-						popupOverlay.ShowPopup(new CivilizationDestroyed(mCD.city.owner.Civilization), PopupOverlay.PopupCategory.Advisor);
-						for (int i = 0; i < mCD.city.owner.Units.Count; ++i) {
-							MapUnitExtensions.disband(mCD.city.owner.Units[i]);
+						popupOverlay.ShowPopup(new CivilizationDestroyed(mCD.city.owner.civilization), PopupOverlay.PopupCategory.Advisor);
+						for (int i = 0; i < mCD.city.owner.units.Count; ++i) {
+							MapUnitExtensions.disband(mCD.city.owner.units[i]);
 						}
 					}
 					break;
@@ -213,7 +213,7 @@ public partial class Game : Node2D {
 					// F6 is the science advisor.
 					// TODO: Move the F* key strings to a set of constants/enum.
 					EmitSignal(SignalName.ShowSpecificAdvisor, "F6");
-					Tech tech = gameData.techs.Find(x => x.id == gameData.GetHumanPlayers()[0].CurrentlyResearchedTech);
+					Tech tech = gameData.techs.Find(x => x.id == gameData.GetHumanPlayers()[0].currentlyResearchedTech);
 
 					// TODO: calculate research speed.
 					EmitSignal(SignalName.UpdateTechProgress, tech.Name, -1);
@@ -287,7 +287,7 @@ public partial class Game : Node2D {
 
 	// If "location" is not already near the center of the screen, moves the camera to bring it into view.
 	public void ensureLocationIsInView(Tile location) {
-		if (controller.TileKnowledge.isTileKnown(location) && location != Tile.NONE) {
+		if (controller.tileKnowledge.isTileKnown(location) && location != Tile.NONE) {
 			Vector2 relativeScreenLocation = mapView.screenLocationOfTile(location, true) / mapView.getVisibleAreaSize();
 			if (relativeScreenLocation.DistanceTo(new Vector2((float)0.5, (float)0.5)) > 0.30)
 				mapView.centerCameraOnTile(location);
@@ -342,7 +342,7 @@ public partial class Game : Node2D {
 			int turnNumber = TurnHandling.GetTurnNumber();
 			Player player = gameDataAccess.gameData.GetHumanPlayers()[0];
 
-			EmitSignal(SignalName.TurnStarted, turnNumber, player.Gold, /*goldPerTurn=*/0);
+			EmitSignal(SignalName.TurnStarted, turnNumber, player.gold, /*goldPerTurn=*/0);
 			CurrentState = GameState.PlayerTurn;
 
 			GetNextAutoselectedUnit(gameDataAccess.gameData);
@@ -510,12 +510,12 @@ public partial class Game : Node2D {
 					gameDataAccess.gameData.observerMode = !gameDataAccess.gameData.observerMode;
 					if (gameDataAccess.gameData.observerMode) {
 						foreach (Player player in gameDataAccess.gameData.players) {
-							player.IsHuman = false;
+							player.isHuman = false;
 						}
 					} else {
 						foreach (Player player in gameDataAccess.gameData.players) {
-							if (player.Id == EngineStorage.uiControllerID) {
-								player.IsHuman = true;
+							if (player.id == EngineStorage.uiControllerID) {
+								player.isHuman = true;
 							}
 						}
 					}

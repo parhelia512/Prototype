@@ -517,7 +517,7 @@ public partial class LooseView : Node2D {
 		if (gameDataAccess.gameData.observerMode) {
 			return true;
 		}
-		return tile != Tile.NONE && gameDataAccess.gameData.GetHumanPlayers()[0].TileKnowledge.isTileKnown(tile);
+		return tile != Tile.NONE && gameDataAccess.gameData.GetHumanPlayers()[0].tileKnowledge.isTileKnown(tile);
 	}
 }
 

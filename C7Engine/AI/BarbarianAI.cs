@@ -12,14 +12,14 @@ namespace C7Engine {
 		private ILogger log = Log.ForContext<BarbarianAI>();
 
 		public void PlayTurn(Player player, GameData gameData) {
-			if (!player.IsBarbarians) {
+			if (!player.isBarbarians) {
 				throw new System.Exception("Barbarian AI can only play barbarian players");
 			}
 
 			// Copy unit list into temporary array so we can remove units while iterating.
 			// TODO: We also need to handle units spawned during the loop, e.g. leaders, armies, enslaved units. This is not so much an
 			// issue for the barbs but will be for similar loops elsewhere in the AI logic.
-			foreach (MapUnit unit in player.Units.ToArray()) {
+			foreach (MapUnit unit in player.units.ToArray()) {
 				if (UnitIsFreeToMove(unit)) {
 					while (unit.movementPoints.canMove) {
 						//Move randomly
