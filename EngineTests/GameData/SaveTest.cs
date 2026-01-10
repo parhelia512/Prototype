@@ -287,15 +287,22 @@ public class SaveTests {
 	private void CheckScenariosInCiv3Subfolder(string subfolder, bool runOneTurn) {
 		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
 		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
-		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi => {
-			// currently only test 1 Mesopotamia.biq -> 9 WWII in the Pacific.biq:
-			int prefix = fi.Name[0];
-			if (prefix == '7') {
-				// skip 7 Sengoku - Sword of the Shogun.biq for now because biq parsing fails
-				return false;
-			}
-			return fi.Extension.EndsWith(".biq", true, null) && char.IsAsciiDigit(fi.Name[0]);
-		});
+		// skip all scenarios whose file names aren't explicitly listed here
+		string[] scenarioNamesToTest = {
+			"1 Mesopotamia.biq",
+			"2 Rise of Rome.biq",
+			"3 Fall of Rome.biq",
+			"4 Middle Ages.biq",
+			"5 Mesoamerica.biq",
+			"6 Age of Discovery.biq",
+			// skip for now because BIQ parsing fails
+			// "7 Sengoku - Sword of the Shogun.biq",
+			"8 Napoleonic Europe.biq",
+			"9 WWII in the Pacific.biq",
+		};
+		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi =>
+			scenarioNamesToTest.Contains(fi.Name)
+		);
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			string name = saveFileInfo.Name;
 			SaveGame game = null;
