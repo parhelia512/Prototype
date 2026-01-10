@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -52,6 +51,8 @@ namespace C7GameData {
 
 		public class SettlerTileAdjustments {
 			public int DistancePenaltyRadius = 4;
+
+			// TODO #802: Consider the full BFC with lower weights for the outer ring.
 
 			// multipliers
 			public float CommerceYieldBonus = 2;

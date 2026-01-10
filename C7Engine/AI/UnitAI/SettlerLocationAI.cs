@@ -1,14 +1,10 @@
-using System.Collections.Generic;
 using C7GameData;
+using System.Collections.Generic;
 using System.Linq;
-using C7GameData.AIData;
-using Serilog;
-// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
-// ReSharper disable CheckNamespace
 
 namespace C7Engine {
 	public class SettlerLocationAi {
-		private static readonly ILogger Log = Serilog.Log.ForContext<SettlerLocationAi>();
+		private static readonly Serilog.ILogger Log = Serilog.Log.ForContext<SettlerLocationAi>();
 
 		//Figures out where to plant Settlers
 		public static Tile FindSettlerLocation(Tile start, Player player) {
