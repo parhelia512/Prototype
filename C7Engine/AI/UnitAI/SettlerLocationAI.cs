@@ -35,7 +35,7 @@ namespace C7Engine {
 				foreach (Tile nt in t.neighbors.Values) {
 					score += GetTileYieldScore(nt, player);
 				}
-				//TODO: Also look at the next ring out, with lower weights.
+				//TODO #802: Also look at the next ring out, with lower weights.
 
 				//Prefer hills for defense, and coast for boats and such.
 				if (t.baseTerrainType.Key == "hills") {

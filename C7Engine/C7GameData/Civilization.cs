@@ -52,7 +52,9 @@ namespace C7GameData {
 		public class SettlerTileAdjustments {
 			public int DistancePenaltyRadius = 4;
 
-			// TODO #802: Consider the full BFC with lower weights for the outer ring.
+			// TODO: Eventually, there should be different weights based on whether the AI already
+			// has the resource or not (more important to secure ones that they don't have).
+			// But since we don't have trade networks yet, for now there's only one value.
 
 			// multipliers
 			public float CommerceYieldBonus = 2;
