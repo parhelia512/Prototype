@@ -1,3 +1,8 @@
+--[[
+The art replacements for units in the standalone mode.
+A key represents a name of a unit prototype,
+a value refers to a directory with unit art in C7/Assets/Art/Units
+]]
 local unit_replacement_art_map = {
   ["Settler"] = "Carthaginian Settler",
   ["Worker"] = "Carthaginian Worker",
@@ -28,6 +33,15 @@ local unit_replacement_art_map = {
   ["Curragh"] = "MinoanGalley",
 }
 
+--[[
+This function defines the standalone addon to the base ruleset.
+
+This function takes the initial save data from `base-ruleset.json` and
+removes the units for which we don't have graphics replacements.
+
+On the C# side, this function is called as part of addon loading logic
+in GameModeLoader class
+]]
 return function(civ3_game_mode)
   local updated_unit_prototypes = {}
 
