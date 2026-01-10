@@ -16,7 +16,7 @@ namespace C7Engine {
 				settlerAiData.destination = unit.location;
 				log.Information("No cities yet!  Set AI for unit to settler AI with destination of " + settlerAiData.destination);
 			} else {
-				settlerAiData.destination = SettlerLocationAi.FindSettlerLocation(unit.location, player);
+				settlerAiData.destination = SettlerLocationAI.FindSettlerLocation(unit.location, player);
 				if (settlerAiData.destination == Tile.NONE) {
 					//This is possible if all tiles within 4 tiles of a city are either not land, or already claimed
 					//by another colonist.  Longer-term, the AI shouldn't be building settlers if that is the case,

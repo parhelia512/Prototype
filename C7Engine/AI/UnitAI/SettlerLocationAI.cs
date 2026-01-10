@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace C7Engine {
-	public class SettlerLocationAi {
-		private static readonly Serilog.ILogger Log = Serilog.Log.ForContext<SettlerLocationAi>();
+	public class SettlerLocationAI {
+		private static readonly Serilog.ILogger Log = Serilog.Log.ForContext<SettlerLocationAI>();
 
 		//Figures out where to plant Settlers
 		public static Tile FindSettlerLocation(Tile start, Player player) {

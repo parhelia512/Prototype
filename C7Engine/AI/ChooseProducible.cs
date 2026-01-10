@@ -73,9 +73,9 @@ namespace C7Engine {
 			temp.location = city.location;
 
 			////////////////////////////////////////////////////////////////////
-			/// 
+			///
 			/// Raw score adjustments based on unit stats.
-			/// 
+			///
 
 			// Weight the unit's attack and defense score by comparing it to the
 			// best stat available.
@@ -89,9 +89,9 @@ namespace C7Engine {
 			score -= populationCostPenalty;
 
 			////////////////////////////////////////////////////////////////////
-			/// 
+			///
 			/// Naval units
-			/// 
+			///
 
 			if (unit.categories.Contains("Sea")) {
 				// Don't bother building naval units unless we border the ocean.
@@ -108,9 +108,9 @@ namespace C7Engine {
 			}
 
 			////////////////////////////////////////////////////////////////////
-			/// 
+			///
 			/// Adjustments based on the city situation.
-			/// 
+			///
 
 			// Prioritize defending the city if it is unguarded.
 			if (!cityGuarded && unit.defense == 0) {
@@ -129,9 +129,9 @@ namespace C7Engine {
 			}
 
 			////////////////////////////////////////////////////////////////////
-			/// 
+			///
 			/// Adjustments for settlers and workers.
-			/// 
+			///
 
 			// Don't built a worker or settler if we don't have enough population.
 			if (CityIsTooSmall(city, unit)) {
@@ -315,7 +315,7 @@ namespace C7Engine {
 
 			// Note: GetScoredSettlerCandidates already excludes tiles with
 			// settlers moving towards them.
-			Dictionary<Tile, float> scoredLocations = SettlerLocationAi.GetScoredSettlerCandidates(city.location, city.owner);
+			Dictionary<Tile, float> scoredLocations = SettlerLocationAI.GetScoredSettlerCandidates(city.location, city.owner);
 			List<KeyValuePair<Tile, float>> orderedScores = scoredLocations.OrderByDescending(t => t.Value).ToList();
 
 			foreach ((Tile tile, float score) in orderedScores) {
