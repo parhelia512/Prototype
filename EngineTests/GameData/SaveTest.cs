@@ -304,11 +304,11 @@ public class SaveTests {
 		};
 		// Only bother running one turn of the newer scenarios, just to keep the
 		// tests faster.
-		CheckScenariosInCiv3Subfolder("Conquests/Conquests", singleplayerScenarios, runOneTurn: true);
-		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", multiplayerScenarios, runOneTurn: false);
+		CheckScenariosInCiv3Subfolder("Conquests/Conquests", singleplayerScenarios, runOneTurn: true, "singleplayer");
+		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", multiplayerScenarios, runOneTurn: false, "multiplayer");
 	}
 
-	private void CheckScenariosInCiv3Subfolder(string subfolder, string[] scenarioNamesToTest, bool runOneTurn) {
+	private void CheckScenariosInCiv3Subfolder(string subfolder, string[] scenarioNamesToTest, bool runOneTurn, string basename) {
 		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
 		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
 		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi => scenarioNamesToTest.Contains(fi.Name));
@@ -387,7 +387,7 @@ public class SaveTests {
 				}
 			}
 
-			game.Save(Path.Combine(testDirectory, "data", "output", $"conquest_{name[0]}.json"));
+			game.Save(Path.Combine(testDirectory, "data", "output", $"{basename}_{name[0]}.json"));
 
 			// Finally, ensure we can run the first turn of the scenario.
 			if (runOneTurn) {
