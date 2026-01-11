@@ -278,17 +278,7 @@ public class SaveTests {
 		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
 		if (is_on_github != null) { return; }
 
-		// Only bother running one turn of the newer scenarios, just to keep the
-		// tests faster.
-		CheckScenariosInCiv3Subfolder("Conquests/Conquests", runOneTurn: true);
-		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", runOneTurn: false);
-	}
-
-	private void CheckScenariosInCiv3Subfolder(string subfolder, bool runOneTurn) {
-		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
-		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
-		// skip all scenarios whose file names aren't explicitly listed here
-		string[] scenarioNamesToTest = {
+		string[] singleplayerScenarios = {
 			"1 Mesopotamia.biq",
 			"2 Rise of Rome.biq",
 			"3 Fall of Rome.biq",
@@ -300,8 +290,31 @@ public class SaveTests {
 			"8 Napoleonic Europe.biq",
 			"9 WWII in the Pacific.biq",
 		};
-		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi =>
-			scenarioNamesToTest.Contains(fi.Name)
+		string[] multiplayerScenarios = {
+			"1 MP Mesopotamia.biq",
+			"2 MP Rise of Rome.biq",
+			"3 MP Fall of Rome.biq",
+			"4 MP Middle Ages.biq",
+			"5 MP Mesoamerica.biq",
+			"6 MP Age of Discovery.biq",
+			// skip for now because BIQ parsing fails
+			// "7 MP Sengoku - Sword of the Shogun.biq",
+			"8 MP Napoleonic Europe.biq",
+			"9 MP WWII in the Pacific.biq",
+		};
+		// Only bother running one turn of the newer scenarios, just to keep the
+		// tests faster.
+		CheckScenariosInCiv3Subfolder("Conquests/Conquests", singleplayerScenarios, runOneTurn: true);
+		CheckScenariosInCiv3Subfolder("Conquests/Scenarios", multiplayerScenarios, runOneTurn: false);
+	}
+
+	private void CheckScenariosInCiv3Subfolder(string subfolder, string[] scenarioNamesToTest, bool runOneTurn) {
+		string conquests = Path.Join(Civ3Location.GetCiv3Path(), subfolder);
+		DirectoryInfo directoryInfo = new DirectoryInfo(conquests);
+		IEnumerable<FileInfo> saveFiles = directoryInfo.EnumerateFiles().Where(fi => scenarioNamesToTest.Contains(fi.Name));
+		Assert.True(
+			scenarioNamesToTest.Count() == saveFiles.Count(),
+			$"Expected {scenarioNamesToTest.Count()} files but got {saveFiles.Count()}"
 		);
 		foreach (FileInfo saveFileInfo in saveFiles) {
 			string name = saveFileInfo.Name;
