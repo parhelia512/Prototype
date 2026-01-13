@@ -8,26 +8,6 @@ using Xunit;
 
 namespace EngineTests.AI.UnitAI {
 	public sealed class SettlerLocationAITests : MapBase {
-		private Player MakeTestPlayer(List<Tile> knownTiles) {
-			Player player = MakePlayer(true);
-			player.civilization = new Civilization();
-			player.government = new Government();
-			foreach (Tile tile in knownTiles) { player.tileKnowledge.knownTiles.Add(tile); }
-			return player;
-		}
-		private List<Tile> SurroundTile(Tile center, System.Func<Tile> neighbors) {
-			List<Tile> map = new();
-			map.Add(center);
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.NORTH));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.NORTHEAST));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.EAST));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.SOUTHEAST));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.SOUTH));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.SOUTHWEST));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.WEST));
-			map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.NORTHWEST));
-			return map;
-		}
 		private Tile MakeDesertTileWithDefaultYield() {
 			Tile tile = MakeDesertTile();
 			tile.overlayTerrainType.baseFoodProduction = 0;
