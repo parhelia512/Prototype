@@ -147,6 +147,18 @@ public class MapBase {
 			overlayTerrainType = new() { Key = "plains", movementCost = 1 }
 		};
 	}
+	protected Tile MakeDesertTile() {
+		return new(ID.None("")) {
+			baseTerrainType = new() { Key = "desert" },
+			overlayTerrainType = new() { Key = "desert", movementCost = 1 }
+		};
+	}
+	protected Tile MakeFloodPlainTile() {
+		return new(ID.None("")) {
+			baseTerrainType = new() { Key = "flood plain" },
+			overlayTerrainType = new() { Key = "flood plain", movementCost = 1 }
+		};
+	}
 	protected Tile MakeCoastTile() {
 		return new(ID.None("")) {
 			baseTerrainType = new() { Key = "coast" },
