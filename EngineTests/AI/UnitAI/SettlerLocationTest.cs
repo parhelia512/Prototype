@@ -26,18 +26,23 @@ namespace EngineTests.AI.UnitAI {
 		[Fact]
 		private void HillsOverPlains() {
 			// a single hill tile surrounded by desert
-			InitilizeStartTile(MakeHillTile(), new TileLocation(50, 50));
+			InitilizeStartTile(MakeHillTile(), new TileLocation(56, 50));
 			Tile hills = startTile;
 			List<Tile> map = SurroundTile(hills, MakeDesertTile);
 
 			// a single plains tile surrounded by desert
-			InitilizeStartTile(MakePlainsTile(), new TileLocation(50, 50));
+			InitilizeStartTile(MakePlainsTile(), new TileLocation(44, 50));
 			Tile plains = startTile;
 			map.AddRange(SurroundTile(plains, MakeDesertTile));
 
+			// starting position at the midpoint between the two viable candidates
+			InitilizeStartTile(MakeDesertTile(), new TileLocation(50, 50));
+			Tile start = startTile;
+			startTile.map = gameMap;
+
 			// settler should choose the hill
 			Player player = MakeTestPlayer(map);
-			Tile chosenTile = SettlerLocationAI.FindSettlerLocation(plains, player);
+			Tile chosenTile = SettlerLocationAI.FindSettlerLocation(start, player);
 			Assert.Equal(hills, chosenTile);
 		}
 		[Fact]
@@ -45,7 +50,7 @@ namespace EngineTests.AI.UnitAI {
 			List<Tile> map = new();
 
 			// a hill tile with a coast tile neighbor
-			InitilizeStartTile(MakeHillTile(), new TileLocation(50, 50));
+			InitilizeStartTile(MakeHillTile(), new TileLocation(56, 50));
 			Tile coastalHills = startTile;
 			map.Add(coastalHills);
 			map.Add(AddNeighborsAndUpdateMap(coastalHills, MakeCoastTile(), TileDirection.NORTH));
@@ -58,13 +63,18 @@ namespace EngineTests.AI.UnitAI {
 			map.Add(AddNeighborsAndUpdateMap(coastalHills, MakeDesertTile(), TileDirection.NORTHWEST));
 
 			// a hill surrounded by desert
-			InitilizeStartTile(MakeHillTile(), new TileLocation(60, 50));
+			InitilizeStartTile(MakeHillTile(), new TileLocation(44, 50));
 			Tile inlandHills = startTile;
 			map.AddRange(SurroundTile(inlandHills, MakeDesertTile));
 
+			// starting position at the midpoint between the two viable candidates
+			InitilizeStartTile(MakeDesertTile(), new TileLocation(50, 50));
+			Tile start = startTile;
+			startTile.map = gameMap;
+
 			// settler should choose the coastal hill even when starting on the inland one a few tiles away
 			Player player = MakeTestPlayer(map);
-			Tile chosenTile = SettlerLocationAI.FindSettlerLocation(inlandHills, player);
+			Tile chosenTile = SettlerLocationAI.FindSettlerLocation(start, player);
 			Assert.Equal(coastalHills, chosenTile);
 		}
 		[Fact]
