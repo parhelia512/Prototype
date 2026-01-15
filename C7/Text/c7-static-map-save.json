@@ -73497,7 +73497,10 @@
       "contentFacesInCity": 0,
       "combatDefenseBonus": 0,
       "maintenanceCost": 0,
-      "iconRowIndex": 59
+      "iconRowIndex": 59,
+      "flags": [
+        "treasuryEarnsInterest"
+      ]
     },
     {
       "name": "Apollo Program",
@@ -76417,9 +76420,11 @@
     "startUnitType1": "Settler",
     "startUnitType2": "Worker",
     "scoutUnitType": "Scout",
-    "maxRankOfWorkableTiles": 2,
-    "maxRankOfBarbarianCampTiles": 2,
-    "defaultDealDuration": 20
+	"maxRankOfWorkableTiles": 2,
+	"maxRankOfBarbarianCampTiles": 2,
+    "defaultDealDuration": 20,
+    "treasuryInterestRate": 0.05,
+    "maxInterest": 50
   },
   "techs": [
     {
