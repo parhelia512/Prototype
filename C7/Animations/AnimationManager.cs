@@ -63,7 +63,7 @@ public partial class AnimationManager {
 	public IniData getINIData(string pathKey) {
 		if (!iniDatas.TryGetValue(pathKey, out IniData tr)) {
 			string fullPath = Util.Civ3MediaPath(pathKey);
-			tr = new FileIniDataParser().ReadFile(fullPath);
+			tr = C7Engine.Util.GetFileIniDataParser().ReadFile(fullPath);
 			iniDatas.Add(pathKey, tr);
 		}
 		return tr;
