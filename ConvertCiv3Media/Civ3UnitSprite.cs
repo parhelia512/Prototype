@@ -67,6 +67,7 @@ namespace ConvertCiv3Media {
 		public Civ3UnitSprite(Civ3UnitSprite civ3UnitSprite) {
 		}
 
+		/*
 		public Civ3UnitSprite(string unitPath, byte unitColor = 0) {
 			// TODO: Parameterize this and/or take ini path and chop it up
 			// string UnitIniPath = unitPath + "Warrior.INI";
@@ -101,7 +102,9 @@ namespace ConvertCiv3Media {
 				}
 			}
 		}
+		/*
 
+        /*
 		// Returns all non-empty key, value pairs for the "Animations" section of a unit INI file. I'm copying this out of the Civ3UnitSprite
 		// constructor for use by UnitLayer.
 		public static Dictionary<string, string> getINIAnimationsInfo(string iniPath) {
@@ -115,6 +118,7 @@ namespace ConvertCiv3Media {
 			}
 			return tr;
 		}
+		/*
 
 		/*
 		public virtual void InitDisplay() {

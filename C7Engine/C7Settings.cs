@@ -1,17 +1,14 @@
-using System.IO;
+using IniParser.Model;
 using IniParser.Exceptions;
 
 namespace C7Engine {
-	using IniParser;
-	using IniParser.Model;
-
 	public class C7Settings {
 		private const string SETTINGS_FILE_NAME = "C7.ini";
 		public static IniData settings;
 
 		public static void LoadSettings() {
 			try {
-				settings = new FileIniDataParser().ReadFile(SETTINGS_FILE_NAME);
+				settings = Util.GetFileIniDataParser().ReadFile(SETTINGS_FILE_NAME);
 			} catch (ParsingException) {
 				//First run.  The file doesn't exist.  That's okay.  We'll use sensible defaults.
 				settings = new IniData();
@@ -20,7 +17,7 @@ namespace C7Engine {
 		}
 
 		public static void SaveSettings() {
-			new FileIniDataParser().WriteFile(SETTINGS_FILE_NAME, settings);
+			Util.GetFileIniDataParser().WriteFile(SETTINGS_FILE_NAME, settings);
 		}
 
 		public static void SetValue(string section, string key, string value) {
