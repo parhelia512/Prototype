@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using C7Engine.AI;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Linq;
 using Serilog;
+using static C7GameData.PlayerRelationship;
 
 namespace C7Engine {
 	using System;
@@ -16,6 +16,12 @@ namespace C7Engine {
 		internal static void OnBeginTurn() {
 			GameData gameData = EngineStorage.gameData;
 			log.Information("\n*** Beginning turn " + gameData.turn + " ***");
+
+			// TODO: We could make this more versatile.
+			// For example unless we have a good reason, as a human, receiving luxuries, gpt,
+			// or having an active RoP, doesn't hurt us.
+			log.Information("Checking to terminate any deals past their due duration");
+			CheckForObsoleteDeals(gameData.players, GetTurnNumber());
 
 			foreach (MapUnit mapUnit in gameData.mapUnits)
 				mapUnit.OnBeginTurn();

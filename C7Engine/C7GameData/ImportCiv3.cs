@@ -502,14 +502,15 @@ namespace C7GameData {
 			i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
 				List<int> contacts = leader.GetContact();
-				List<bool> warStatus = leader.GetWarStatuses();
 				List<int> refuseContactForTurns = leader.GetRefuseContactForTurns();
 				for (int j = 0; j < contacts.Count; ++j) {
 					if (contacts[j] > 0) {
 						QueryCiv3.Sav.LEAD_LEAD relationship = savData.ReputationRelationship[i][j];
 						save.Players[i].playerRelationships.Add(save.Players[j].id.ToString(), new PlayerRelationship() {
-							atWar = warStatus[j],
 							warDeclarationCount = relationship.WarDeclarationCount,
+							// I don't think there is a way to figure this out for .sav or .biq files
+							// so by default we set this to 0 for these games
+							warDeclarationWithRoPActiveCount = 0,
 							wasSneakAttacked = relationship.WasSneakAttacked == 1,
 							refuseContactUntilTurn =
 								refuseContactForTurns[j] > 0 ?
