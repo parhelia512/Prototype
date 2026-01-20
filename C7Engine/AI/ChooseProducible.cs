@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using C7Engine.AI.StrategicAI;
 using Serilog;
 using C7GameData;
+using static C7GameData.PlayerRelationship;
 
 namespace C7Engine {
 	public class ChooseProducible {
@@ -52,7 +52,7 @@ namespace C7Engine {
 		private static float ScoreUnit(ProducibleStats stats, City city, Player player, UnitPrototype unit) {
 			bool isSettler = unit.actions.Contains(UnitAction.BuildCity);
 			bool isWorker = unit.isWorker;
-			bool atWar = PlayerAI.PlayerIsAtWarWithSomeone(player);
+			bool atWar = IsInAnyWar(player, EngineStorage.gameData.players);
 			bool cityGuarded = city.location.unitsOnTile.Count(u => u.CanDefendOnLand()) > 0;
 			bool hasUnescortedSettler = HasUnescortedSettler(city);
 			var (totalUnits, allowedUnits, unitSupportCost) = player.TotalUnitsAllowedUnitsAndSupportCost();
@@ -179,7 +179,7 @@ namespace C7Engine {
 		}
 
 		private static float ScoreBuilding(ProducibleStats stats, City city, Player player, Building building) {
-			bool atWar = PlayerAI.PlayerIsAtWarWithSomeone(player);
+			bool atWar = IsInAnyWar(player, EngineStorage.gameData.players);
 
 			float score = 0;
 

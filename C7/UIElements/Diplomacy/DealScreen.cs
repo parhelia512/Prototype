@@ -1,9 +1,8 @@
 using C7Engine;
 using C7GameData;
 using Godot;
-using System;
 using System.Collections.Generic;
-using ConvertCiv3Media;
+using static C7GameData.PlayerRelationship;
 
 // At a high level the deal screen has 4 parts; 2 "TradingTree"s per player, and
 // 2 "TradeOfferUi"s per player.
@@ -73,7 +72,7 @@ public partial class DealScreen : TextureRect {
 		EngineStorage.ReadGameData((GameData gD) => {
 			Player opponentPlayer = gD.players.Find(x => x.id == opponentPlayerId);
 			Player humanPlayer = gD.players.Find(x => x.id == humanPlayerId);
-			bool playersAtWar = humanPlayer.playerRelationships[opponentPlayer.id].atWar;
+			bool playersAtWar = AtWar(humanPlayer, opponentPlayer);
 			GetParent<Diplomacy>().AddLeaderHeadAndLabel(this, opponentPlayer, fontTheme);
 
 			// Figure out which technologies can be traded by each player, if any.

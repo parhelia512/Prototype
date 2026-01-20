@@ -103,7 +103,7 @@ namespace C7Engine.AI.UnitAI {
 			}
 
 			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
-				if (p.Value.atWar) {
+				if (p.Value.AtWar()) {
 					enemyIds.Add(p.Key);
 				}
 			}
