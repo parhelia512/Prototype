@@ -41,7 +41,6 @@ public class PlayerRelationship {
 
 	public static bool AtWar(Player left, Player right) {
 		if (left.id == right.id) return false;
-		// throw new Exception("Players cannot be at war with themselves");
 
 		if (right.defeated || left.defeated) return false;
 
@@ -67,19 +66,10 @@ public class PlayerRelationship {
 	}
 
 	public static bool HaveActiveRightOfPassage(Player left, Player right) {
-		if (left == null && right == null)
-			throw new Exception("Something went wrong, both players are null");
-
-		// for when a unit wants to move on a tile that is not owned by anyone
-		if ((left != null && right == null) || (right != null && left == null)) return true;
-
-		// for when we want to move inside our own borders
-		if (left.id == right.id) return true;
-
-		// if a relationship is not established for some reason we can't have a deal already with them
-		if (left.id == right.id || (!left.playerRelationships.TryGetValue(right.id, out var pr) || AtWar(left, right))) return false;
-
-		return pr.multiTurnDeals.Any(d => d.dealSubType == DealSubType.RightOfPassage);
+		if (left == null || right == null)
+			throw new Exception("Player(s) should not be null");
+		return left.playerRelationships.TryGetValue(right.id, out var pr) &&
+		pr.multiTurnDeals.Any(d => d.dealSubType == DealSubType.RightOfPassage);
 	}
 
 	// Breaks peace and all other multiturn deals when war is declared 
