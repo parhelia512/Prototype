@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
-using C7GameData.Save;
 using C7Engine;
 using Serilog;
 using static C7GameData.EraUtils;
@@ -312,7 +311,12 @@ namespace C7GameData {
 			// All the other cases are either from or to "enemy" tiles
 			// and without a RoP agreement the cost is never reduced.
 			// check other && RoP
-			if (HaveActiveRightOfPassage(player, targetTileOwner)) {
+			if (sourceTileOwner != null && sourceTileOwner != player
+				&& HaveActiveRightOfPassage(player, sourceTileOwner)) {
+				return true;
+			}
+			if (targetTileOwner != null && targetTileOwner != player
+				&& HaveActiveRightOfPassage(player, targetTileOwner)) {
 				return true;
 			}
 
