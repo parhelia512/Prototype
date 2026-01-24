@@ -220,7 +220,7 @@ namespace C7GameData {
 		}
 
 		public bool IsAtPeaceWith(Player other) {
-			return !AtWar(this, other);
+			return AtPeace(this, other);
 		}
 
 		public void EnsureRelationshipExists(Player other) {
@@ -283,7 +283,7 @@ namespace C7GameData {
 			EnsureRelationshipExists(other);
 
 			PlayerRelationship pr = playerRelationships[other.id];
-			if (!AtWar(this, other)) {
+			if (AtPeace(this, other)) {
 				return true;
 			}
 			return currentTurn >= pr.refuseContactUntilTurn;

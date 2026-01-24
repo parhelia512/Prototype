@@ -1,15 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using C7Engine;
 using Serilog;
 
 namespace C7GameData;
 
 // A class holding all the state of the relationship between two civs.
-// If a relationship between 2 civs doesn't exit it means that they haven't met yet.
+// If a relationship between 2 active civs doesn't exist it means that they haven't met yet.
 // If a relationship exists but doesn't have any multi-turn deals on either side,
 // it means that these 2 civs are at war, because Peace itself is a multi-turn deal.
 // A civ can't (and shouldn't) have a relationship with themselves, barbarians or defeated players.
+//
+// Another important detail is that, a PlayerRelationship is a two part relationship,
+// or a two-way relationship if it's easier to think about it like that.
+// Therefore, a multiturn deal exists in both player's relationship info.
+// If a deal is removed from player's 1 multiTurnDeals list, it still very much exists in player's 2 list,
+// unless explicitly removed.
 public class PlayerRelationship {
 	private static ILogger log = Log.ForContext<PlayerRelationship>();
 
@@ -39,26 +46,51 @@ public class PlayerRelationship {
 		return multiTurnDeals.Count == 0;
 	}
 
-	public static bool AtWar(Player left, Player right) {
+	/// <summary>
+	/// Returns <b>true</b>, and the left's player relationship to the right player, if it exists.<br/>
+	/// Otherwise returns <b>false</b>.<br/>
+	/// If you want the opposite relationship, flip the arguments when calling the method.
+	/// </summary>
+	/// <param name="left"></param>
+	/// <param name="right"></param>
+	/// <param name="relationship"></param>
+	/// <returns></returns>
+	public static bool TryGetRelationship(Player left, Player right, out PlayerRelationship relationship) {
+		relationship = null;
+
+		if (left == null || right == null) return false;
 		if (left.id == right.id) return false;
-
-		if (right.defeated || left.defeated) return false;
-
-		if ((left.isBarbarians && !right.isBarbarians) || (right.isBarbarians && !left.isBarbarians)) return true;
-
+		if (left.isBarbarians || right.isBarbarians) return false;
+		if (left.defeated || right.defeated) return false;
 		if (!left.playerRelationships.TryGetValue(right.id, out var pr)) return false;
 
-		return pr.multiTurnDeals.Count == 0;
+		relationship = pr;
+		return true;
 	}
 
+	public static bool AtWar(Player left, Player right) {
+		// only one is barbarians, but not both
+		if (left.isBarbarians != right.isBarbarians) return true;
+
+		if (TryGetRelationship(left, right, out var relationship) && relationship.AtWar()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static bool AtPeace(Player left, Player right) {
+		return !AtWar(left, right);
+	}
+
+	/// <summary>
+	/// Returns true if the player is at war with any of the other players/AI except the barbarians.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="players"></param>
+	/// <returns></returns>
 	public static bool IsInAnyWar(Player player, List<Player> players) {
-		if (players
-			// any player that is not barbarians, is not us,
-			.Any(other => !other.isBarbarians && other.id != player.id
-				// that we have a relationship with,
-				&& player.playerRelationships.TryGetValue(other.id, out var playerRelationship)
-				// but we don't have any multi turn deals, which means we don't have peace
-				&& playerRelationship != null && playerRelationship.multiTurnDeals.Count == 0)) {
+		if (players.Any(other => !other.isBarbarians && AtWar(player, other))) {
 			return true;
 		}
 
@@ -66,38 +98,42 @@ public class PlayerRelationship {
 	}
 
 	public static bool HaveActiveRightOfPassage(Player left, Player right) {
-		if (left == null || right == null)
-			throw new Exception("Player(s) should not be null");
-		return left.playerRelationships.TryGetValue(right.id, out var pr) &&
-		pr.multiTurnDeals.Any(d => d.dealSubType == DealSubType.RightOfPassage);
+		return TryGetRelationship(left, right, out var pr) &&
+			   pr.multiTurnDeals.Any(d => d.dealSubType == DealSubType.RightOfPassage);
 	}
 
 	// Breaks peace and all other multiturn deals when war is declared 
 	public static void DeclareWar(Player aggressor, Player defender, bool sneakAttack, int refuseContactUntilTurn) {
+		var defenderRelationshipToAggressor = defender.playerRelationships[aggressor.id];
+		var aggressorRelationshipToDefender = aggressor.playerRelationships[defender.id];
 		// increment the times the aggressor has declared war on the defender
-		defender.playerRelationships[aggressor.id].warDeclarationCount++;
+		defenderRelationshipToAggressor.warDeclarationCount++;
 
 		// increment the times the aggressor has declared war on the defender while there is an active RoP
 		if (HaveActiveRightOfPassage(aggressor, defender)) {
-			defender.playerRelationships[aggressor.id].warDeclarationWithRoPActiveCount++;
+			defenderRelationshipToAggressor.warDeclarationWithRoPActiveCount++;
 		}
 
 		// update whether the defender was sneak attacked
-		defender.playerRelationships[aggressor.id].wasSneakAttacked = sneakAttack;
+		defenderRelationshipToAggressor.wasSneakAttacked = sneakAttack;
 
-		// TODO: do we need the same for the aggressor? Perhaps a few turns less what the defender's is?
-		// The thinking is that if AI attacks a human, the human might try to talk to them
-		// earlier than the AI is programmed to do.
-		//
 		// Set for how many turns the defender will refuse contact from the aggressor
-		defender.playerRelationships[aggressor.id].refuseContactUntilTurn = refuseContactUntilTurn;
+		defenderRelationshipToAggressor.refuseContactUntilTurn = refuseContactUntilTurn;
 
-		// Finally clear all multi-turn deals, including Peace
-		aggressor.playerRelationships[defender.id].multiTurnDeals = new List<MultiTurnDeal>();
-		defender.playerRelationships[aggressor.id].multiTurnDeals = new List<MultiTurnDeal>();
+		// TODO: Figure out a better formula to calculate the aggressor's refusal in turns.
+		// Right now it's hardcoded to half of what the defender's value is.
+		//
+		// The thinking is that if AI attacks a human, the human as a defender
+		// might try to talk to the AI aggressor earlier than an AI in it's place is programmed to do.
+		aggressorRelationshipToDefender.refuseContactUntilTurn = refuseContactUntilTurn / 2;
 
-		log.Information($"{aggressor} declared war on {defender}{(sneakAttack ? $" in a sneak attack" : "")}! " +
-						$"Defender is refusing contact for at least up to turn {refuseContactUntilTurn}!");
+		// Finally clear all multi-turn deals, including Peace, which is how we actually declare war
+		aggressorRelationshipToDefender.multiTurnDeals = new List<MultiTurnDeal>();
+		defenderRelationshipToAggressor.multiTurnDeals = new List<MultiTurnDeal>();
+
+		log.Information($"{aggressor} declared war on {defender}{(sneakAttack ? $" in a sneak attack" : "")}!" +
+						$" Defender is refusing contact for at least up to turn {refuseContactUntilTurn}" +
+						$" ({refuseContactUntilTurn - EngineStorage.gameData.turn} turns)!");
 	}
 
 	public static void SignPeaceAfterWar(Player left, Player right, GameData gameData) {
@@ -151,41 +187,42 @@ public class PlayerRelationship {
 
 		// add the deal for the other player
 		right.playerRelationships[left.id].multiTurnDeals.Add(mtd);
-		// right.playerRelationships[left.id].multiTurnDeals.Add(new MultiTurnDeal(mtd.dealType, mtd.dealSubType,
-		// 	mtd.dealDetails, mtd.goldPerTurn, mtd.resourcePerTurn, mtd.dealDuration, mtd.turnStartDeal, mtd.againstPlayer));
 	}
 
 	/// <summary>
-	/// This automatically ends all deals except peace when they go over the initial agreed upon duration
+	/// This ends all multi-turn deals except peace, when they go over the initial agreed upon duration.<br/>
+	/// The multi-turn deal is only cancelled for the Player and not the other party.
 	/// </summary>
+	/// <param name="player"></param>
 	/// <param name="players"></param>
 	/// <param name="currentTurn"></param>
-	public static void CheckForObsoleteDeals(List<Player> players, int currentTurn) {
-		var activeNotBarbPlayers = players.Where(p => !p.isBarbarians && !p.defeated).ToList();
-		var playerIds = activeNotBarbPlayers.Select(x => x.id).ToList();
+	public static void CheckForObsoleteDeals(Player player, List<Player> players, int currentTurn) {
+		var playerIds = players.Select(x => x.id).ToList();
 
-		// check each player's relationship with the other players
-		foreach (Player player in activeNotBarbPlayers) {
-			foreach (var playerId in playerIds) {
-				// we don't have a relationship with ourselves
-				if (playerId == player.id) continue;
-				// if the player has a relationship with the other civ, and are at peace
-				if (player.playerRelationships.TryGetValue(playerId, out var pr) && pr.multiTurnDeals != null && pr.multiTurnDeals.Count > 0) {
-					// we don't want to cancel peace
-					List<MultiTurnDeal> deadDeals = pr.multiTurnDeals.Where(mtd => mtd != null && mtd.dealSubType != DealSubType.Peace && mtd.TurnsRemaining(currentTurn) <= 0).ToList();
-					foreach (MultiTurnDeal deadDeal in deadDeals) {
-						log.Information($"Cancelling multi turn deal: {player} -- {activeNotBarbPlayers.First(p => p.id == playerId)}");
-						UnRegisterMultiTurnDeal(player, activeNotBarbPlayers.First(p => p.id == playerId), deadDeal);
-					}
+		// check player's relationship with the other players
+		foreach (var playerId in playerIds) {
+			Player other = players.First(p => p.id == playerId);
+			// if the player doesn't have a relationship with the other civ, or they are at war exit
+			if (TryGetRelationship(player, other, out var relationship) && !relationship.AtWar()) {
+				// we don't want to cancel peace
+				List<MultiTurnDeal> deadDeals = relationship.multiTurnDeals
+					.Where(mtd => mtd != null
+							  && mtd.dealSubType != DealSubType.Peace
+							  && mtd.TurnsRemaining(currentTurn) <= 0)
+					.ToList();
+
+				foreach (MultiTurnDeal deadDeal in deadDeals) {
+					// TODO: Add a popup to notify if an AI/Human deal expires
+					// TODO: Add renegotiate logic (plus preferences option Always Renegotiate Deals)
+					log.Information($"Cancelling multi turn deal: {player} -- {other}");
+					UnRegisterMultiTurnDeal(relationship, deadDeal);
 				}
 			}
 		}
 	}
 
-	// Removes a multi turn deal from both parties
-	private static void UnRegisterMultiTurnDeal(Player left, Player right, MultiTurnDeal mtd) {
-		left.playerRelationships[right.id].multiTurnDeals.Remove(mtd);
-		right.playerRelationships[left.id].multiTurnDeals.Remove(mtd);
+	private static void UnRegisterMultiTurnDeal(PlayerRelationship relationship, MultiTurnDeal mtd) {
+		relationship.multiTurnDeals.Remove(mtd);
 	}
 }
 
@@ -230,6 +267,50 @@ public class MultiTurnDeal {
 	public static MultiTurnDeal DEFAULT_PEACE => new MultiTurnDeal(DealType.DiplomaticAgreement, DealSubType.Peace,
 			DealDetails.Exchange, 0, null, 0, 0, null);
 
+	/// <summary>
+	/// Returns the counterpart to a deal.<br/><br/>
+	/// The simplest example would be, if PlayerA gives wines to PlayerB,
+	/// PlayerA has an Outbound deal in their multiTurnDeals info,
+	/// whereas PlayerB has an Inbound deal, while the rest is the same.<br/><br/>
+	/// This method, given PlayerA, PlayerB and the PlayerA's side of the deal (Outbound),
+	/// returns the PlayerB's side of the deal (Inbound).<br/><br/>
+	/// We could have this also the other way around, and provide
+	/// PlayerB, PlayerA and PlayerB's side of the deal (Inbound),
+	/// and retrieve PlayerA's side of the deal (Outbound).
+	/// </summary>
+	/// <param name="playerA"></param>
+	/// <param name="playerB"></param>
+	/// <param name="original"></param>
+	/// <returns></returns>
+	public static MultiTurnDeal GetCounterpartDeal(Player playerA, Player playerB, MultiTurnDeal original) {
+		MultiTurnDeal mtd = null;
+		if (PlayerRelationship.TryGetRelationship(playerB, playerA, out var relationship)) {
+			DealDetails oppositeDetails = DealDetails.None;
+			if (original.dealDetails == DealDetails.Exchange) {
+				oppositeDetails = DealDetails.Exchange;
+			} else {
+				if (original.dealDetails == DealDetails.Inbound) {
+					oppositeDetails = DealDetails.Outbound;
+				} else {
+					oppositeDetails = DealDetails.Inbound;
+				}
+			}
+
+			mtd = relationship.multiTurnDeals.FirstOrDefault(d => {
+				return
+					d.dealType == original.dealType
+					&& d.dealSubType == original.dealSubType
+					&& d.dealDetails == oppositeDetails
+					&& d.goldPerTurn == original.goldPerTurn
+					&& d.resourcePerTurn == original.resourcePerTurn
+					&& d.dealDuration == original.dealDuration
+					&& d.turnStartDeal == original.turnStartDeal
+					&& d.againstPlayer == original.againstPlayer;
+			});
+
+		}
+		return mtd;
+	}
 }
 
 // https://github.com/maxpetul/C3X/blob/064c8307c5085205c0dc8f2ee5b61ad2c2606523/Civ3Conquests.h#L1399

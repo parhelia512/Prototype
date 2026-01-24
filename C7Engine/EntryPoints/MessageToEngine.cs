@@ -1,3 +1,4 @@
+using System.Linq;
 using Serilog;
 
 namespace C7Engine {
@@ -358,5 +359,23 @@ namespace C7Engine {
 
 	public class MsgDiplomacyCompleted : MessageToEngine {
 		public override void process() { }
+	}
+
+	public class MsgCheckObsoleteDeals : MessageToEngine {
+		private ILogger log = Log.ForContext<MsgCheckObsoleteDeals>();
+		private Player player;
+
+		public MsgCheckObsoleteDeals(Player player) {
+			this.player = player;
+		}
+
+		public override void process() {
+			log.Information($"Checking to terminate any deals past their due duration for player {player}");
+
+			// TODO: Before we call this method to automatically end obsolete deals, we could make this more versatile.
+			// For example unless we have a good reason, as a human, receiving luxuries, gpt,
+			// or having an active RoP, doesn't hurt us.
+			PlayerRelationship.CheckForObsoleteDeals(player, EngineStorage.gameData.players, EngineStorage.gameData.turn);
+		}
 	}
 }
