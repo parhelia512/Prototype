@@ -28,6 +28,8 @@ namespace C7Engine {
 			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
 
+			new MsgCheckObsoleteDeals(player).send();
+
 			MaybeDoPriorityReevaluation(player);
 			MaybePickTechToResearch(player, techs);
 

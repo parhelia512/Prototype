@@ -320,6 +320,8 @@ public partial class Game : Node {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			log.Information("Starting player turn");
 
+			new MsgCheckObsoleteDeals(controller).send();
+
 			// If the player can now pick a new government, force them to do so.
 			// When the popup is closed we call OnPlayerStartTurn again. This isn't
 			// ideal, but we don't yet have a general purpose "show a popup and
