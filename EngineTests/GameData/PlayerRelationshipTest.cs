@@ -10,7 +10,7 @@ using static C7GameData.PlayerRelationship;
 namespace EngineTests.GameData;
 
 public class PlayerRelationshipTest {
-    private static readonly string C7GameDataTestsFolderName = "EngineTests";
+	private static readonly string C7GameDataTestsFolderName = "EngineTests";
 	private static string luaRulesDir => getBasePath("../C7/Lua/rules");
 	private static string getBasePath(string file) => Path.Combine(testDirectory, file);
 
@@ -23,134 +23,134 @@ public class PlayerRelationshipTest {
 			return Path.GetFullPath(relativePath);
 		}
 	}
-    
+
 
 	[Fact]
 	public void TestHumanToBarbarianRelationship() {
 		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
-        SaveGame saveGame = SaveGame.Load(developerSave, null);
-        C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
-        EngineStorage.InitializeGameDataForTests(gd);
-		
+		SaveGame saveGame = SaveGame.Load(developerSave, null);
+		C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
+		EngineStorage.InitializeGameDataForTests(gd);
+
 		Player playerA = gd.players[0];
 		Player playerB = gd.players[2];
-		
+
 		Assert.False(TryGetRelationship(playerA, playerB, out _));
-		
+
 		Assert.True(AtWar(playerA, playerB));
-        // because playerA is barbarians
+		// because playerA is barbarians
 		Assert.False(IsInAnyWar(playerB, gd.players));
-		
-        // because a player can't sign peace with barbarians
+
+		// because a player can't sign peace with barbarians
 		Assert.Throws<Exception>(() => SignPeaceAfterWar(playerA, playerB, gd));
-		
+
 		Assert.False(TryGetRelationship(playerA, playerB, out _));
 	}
 
-    [Fact]
-    public void TestRelationshipAtVariousPoints() {
-        string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
-        SaveGame saveGame = SaveGame.Load(developerSave, null);
-        C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
-        EngineStorage.InitializeGameDataForTests(gd);
-        
-        Player playerA = gd.players[1];
-        Player playerB = gd.players[2];
+	[Fact]
+	public void TestRelationshipAtVariousPoints() {
+		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+		SaveGame saveGame = SaveGame.Load(developerSave, null);
+		C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
+		EngineStorage.InitializeGameDataForTests(gd);
 
-        Assert.False(TryGetRelationship(playerA, playerB, out _));
+		Player playerA = gd.players[1];
+		Player playerB = gd.players[2];
 
-        playerA.EnsureRelationshipExists(playerB);
-        Assert.True(TryGetRelationship(playerA, playerB, out var relationshipA));
-        PlayerRelationship relationshipB = null;
-        if (TryGetRelationship(playerB, playerA, out var relB)) {
-            relationshipB = relB;
-        }
-        Assert.True(AtPeace(playerA, playerB));
-        Assert.False(IsInAnyWar(playerA, gd.players));
-        Assert.False(IsInAnyWar(playerB, gd.players));
-        Assert.False(HaveActiveRightOfPassage(playerA, playerB));
+		Assert.False(TryGetRelationship(playerA, playerB, out _));
 
-        // because players not at war can't sign a peace treaty
-        Assert.Throws<Exception>(() => SignPeaceAfterWar(playerA, playerB, gd));
+		playerA.EnsureRelationshipExists(playerB);
+		Assert.True(TryGetRelationship(playerA, playerB, out var relationshipA));
+		PlayerRelationship relationshipB = null;
+		if (TryGetRelationship(playerB, playerA, out var relB)) {
+			relationshipB = relB;
+		}
+		Assert.True(AtPeace(playerA, playerB));
+		Assert.False(IsInAnyWar(playerA, gd.players));
+		Assert.False(IsInAnyWar(playerB, gd.players));
+		Assert.False(HaveActiveRightOfPassage(playerA, playerB));
 
-        MultiTurnDeal rop = new MultiTurnDeal(DealType.DiplomaticAgreement, DealSubType.RightOfPassage, DealDetails.Exchange,
-            0, null, 20, 0, null);
+		// because players not at war can't sign a peace treaty
+		Assert.Throws<Exception>(() => SignPeaceAfterWar(playerA, playerB, gd));
 
-        RegisterMultiTurnDeal(playerA, playerB, rop);
-        Assert.True(HaveActiveRightOfPassage(playerA, playerB));
+		MultiTurnDeal rop = new MultiTurnDeal(DealType.DiplomaticAgreement, DealSubType.RightOfPassage, DealDetails.Exchange,
+			0, null, 20, 0, null);
 
-        int refusal = 10;
-        DeclareWar(playerA, playerB, false, refusal);
-        Assert.True(AtWar(playerA, playerB));
-        Assert.True(IsInAnyWar(playerA, gd.players));
-        Assert.True(IsInAnyWar(playerB, gd.players));
-        Assert.True(relationshipA.multiTurnDeals.Count == 0);
-        Assert.True(relationshipB.multiTurnDeals.Count == 0);
-        Assert.False(HaveActiveRightOfPassage(playerA, playerB));
-        Assert.False(relationshipA.wasSneakAttacked);
-        Assert.False(relationshipB.wasSneakAttacked);
-        Assert.False(relationshipA.warDeclarationWithRoPActiveCount == 1);
-        Assert.True(relationshipB.warDeclarationWithRoPActiveCount == 1);
-        Assert.True(relationshipA.refuseContactUntilTurn == refusal / 2);
-        Assert.True(relationshipB.refuseContactUntilTurn == refusal);
+		RegisterMultiTurnDeal(playerA, playerB, rop);
+		Assert.True(HaveActiveRightOfPassage(playerA, playerB));
 
-        SignPeaceAfterWar(playerA, playerB, gd);
-        Assert.True(AtPeace(playerA, playerB));
-        Assert.False(IsInAnyWar(playerA, gd.players));
-        Assert.False(IsInAnyWar(playerB, gd.players));
-        Assert.False(HaveActiveRightOfPassage(playerA, playerB));
-    }
+		int refusal = 10;
+		DeclareWar(playerA, playerB, false, refusal);
+		Assert.True(AtWar(playerA, playerB));
+		Assert.True(IsInAnyWar(playerA, gd.players));
+		Assert.True(IsInAnyWar(playerB, gd.players));
+		Assert.True(relationshipA.multiTurnDeals.Count == 0);
+		Assert.True(relationshipB.multiTurnDeals.Count == 0);
+		Assert.False(HaveActiveRightOfPassage(playerA, playerB));
+		Assert.False(relationshipA.wasSneakAttacked);
+		Assert.False(relationshipB.wasSneakAttacked);
+		Assert.False(relationshipA.warDeclarationWithRoPActiveCount == 1);
+		Assert.True(relationshipB.warDeclarationWithRoPActiveCount == 1);
+		Assert.True(relationshipA.refuseContactUntilTurn == refusal / 2);
+		Assert.True(relationshipB.refuseContactUntilTurn == refusal);
 
-
-    [Fact]
-    public void TestMultiTurnDealRegistration() {
-        string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
-        SaveGame saveGame = SaveGame.Load(developerSave, null);
-        C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
-        EngineStorage.InitializeGameDataForTests(gd);
-        
-        Player playerA = gd.players[2];
-        Player playerB = gd.players[3];
-        playerA.EnsureRelationshipExists(playerB);
-
-        // A's relationship to B (to be)
-        PlayerRelationship relationshipA = null;
-        // B's relationship to A (to be)
-        PlayerRelationship relationshipB = null;
-
-        if (TryGetRelationship(playerA, playerB, out var relA))
-            relationshipA = relA;
-        if (TryGetRelationship(playerB, playerA, out var relB))
-            relationshipB = relB;
-
-        Assert.True(relationshipA.multiTurnDeals.Count == 1);
-        Assert.True(relationshipB.multiTurnDeals.Count == 1);
-
-        MultiTurnDeal horseDeal = new MultiTurnDeal(DealType.Resource, DealSubType.ResourcePerTurn, DealDetails.Inbound,
-            0, "Horses", 20, 0, null);
-
-        RegisterMultiTurnDeal(playerA, playerB, horseDeal);
-
-        Assert.Contains(horseDeal, relationshipA.multiTurnDeals);
-        Assert.True(relationshipA.multiTurnDeals.Count == 2);
-        Assert.DoesNotContain(horseDeal, relationshipB.multiTurnDeals);
-        Assert.True(relationshipB.multiTurnDeals.Count == 2);
-
-        Assert.Contains(horseDeal, relationshipA.multiTurnDeals);
-        Assert.Contains(MultiTurnDeal.GetCounterpartDeal(playerA, playerB, horseDeal), relationshipB.multiTurnDeals);
+		SignPeaceAfterWar(playerA, playerB, gd);
+		Assert.True(AtPeace(playerA, playerB));
+		Assert.False(IsInAnyWar(playerA, gd.players));
+		Assert.False(IsInAnyWar(playerB, gd.players));
+		Assert.False(HaveActiveRightOfPassage(playerA, playerB));
+	}
 
 
-        MultiTurnDeal winesDeal = new MultiTurnDeal(DealType.Resource, DealSubType.ResourcePerTurn, DealDetails.Outbound,
-            0, "Wines", 20, 0, null);
+	[Fact]
+	public void TestMultiTurnDealRegistration() {
+		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
+		SaveGame saveGame = SaveGame.Load(developerSave, null);
+		C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
+		EngineStorage.InitializeGameDataForTests(gd);
 
-        RegisterMultiTurnDeal(playerB, playerA, winesDeal);
+		Player playerA = gd.players[2];
+		Player playerB = gd.players[3];
+		playerA.EnsureRelationshipExists(playerB);
 
-        Assert.DoesNotContain(winesDeal, relationshipA.multiTurnDeals);
-        Assert.True(relationshipA.multiTurnDeals.Count == 3);
-        Assert.Contains(winesDeal, relationshipB.multiTurnDeals);
-        Assert.True(relationshipB.multiTurnDeals.Count == 3);
+		// A's relationship to B (to be)
+		PlayerRelationship relationshipA = null;
+		// B's relationship to A (to be)
+		PlayerRelationship relationshipB = null;
 
-        Assert.Contains(winesDeal, relationshipB.multiTurnDeals);
-        Assert.Contains(MultiTurnDeal.GetCounterpartDeal(playerB, playerA, winesDeal), relationshipA.multiTurnDeals);
-    }
+		if (TryGetRelationship(playerA, playerB, out var relA))
+			relationshipA = relA;
+		if (TryGetRelationship(playerB, playerA, out var relB))
+			relationshipB = relB;
+
+		Assert.True(relationshipA.multiTurnDeals.Count == 1);
+		Assert.True(relationshipB.multiTurnDeals.Count == 1);
+
+		MultiTurnDeal horseDeal = new MultiTurnDeal(DealType.Resource, DealSubType.ResourcePerTurn, DealDetails.Inbound,
+			0, "Horses", 20, 0, null);
+
+		RegisterMultiTurnDeal(playerA, playerB, horseDeal);
+
+		Assert.Contains(horseDeal, relationshipA.multiTurnDeals);
+		Assert.True(relationshipA.multiTurnDeals.Count == 2);
+		Assert.DoesNotContain(horseDeal, relationshipB.multiTurnDeals);
+		Assert.True(relationshipB.multiTurnDeals.Count == 2);
+
+		Assert.Contains(horseDeal, relationshipA.multiTurnDeals);
+		Assert.Contains(MultiTurnDeal.GetCounterpartDeal(playerA, playerB, horseDeal), relationshipB.multiTurnDeals);
+
+
+		MultiTurnDeal winesDeal = new MultiTurnDeal(DealType.Resource, DealSubType.ResourcePerTurn, DealDetails.Outbound,
+			0, "Wines", 20, 0, null);
+
+		RegisterMultiTurnDeal(playerB, playerA, winesDeal);
+
+		Assert.DoesNotContain(winesDeal, relationshipA.multiTurnDeals);
+		Assert.True(relationshipA.multiTurnDeals.Count == 3);
+		Assert.Contains(winesDeal, relationshipB.multiTurnDeals);
+		Assert.True(relationshipB.multiTurnDeals.Count == 3);
+
+		Assert.Contains(winesDeal, relationshipB.multiTurnDeals);
+		Assert.Contains(MultiTurnDeal.GetCounterpartDeal(playerB, playerA, winesDeal), relationshipA.multiTurnDeals);
+	}
 }
