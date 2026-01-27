@@ -382,7 +382,7 @@ namespace C7GameData {
 				result.beakers += cityCommerce.beakers;
 				result.happiness += cityCommerce.happiness;
 				result.maintenance += city.MaintenanceCosts();
-                result.wealthProduction += cityCommerce.wealth;
+				result.wealthProduction += cityCommerce.wealth;
 
 				interestBuildings += city.constructed_buildings.Count(cb => cb.building.treasuryEarnsInterest);
 
