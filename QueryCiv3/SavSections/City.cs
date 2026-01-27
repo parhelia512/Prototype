@@ -31,7 +31,7 @@ namespace QueryCiv3.Sav {
 		public int ShieldsCollected;
 		public int Pollution;
 		public int Constructing; // Index into BLDG or UNIT
-		public int ConstructingType; // 0: wealth, 1: building, 2: unit
+		public int ConstructingType; // 0: wealth (is this ever in the files or is it assumed?), 1: building, 2: unit
 		public int YearBuilt;
 		private int UnknownBuffer2;
 

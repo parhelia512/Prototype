@@ -966,8 +966,13 @@ namespace C7GameData {
 			PRTO[] unitPrototypes = biq.Prto ?? defaultBiq.Prto;
 			BiqData theBiq = biq.Bldg is null ? defaultBiq : biq;
 
+			// 29 is the wealth code
+			// In .sav files wealth is ConstructingType 1, but we want to translate it differently
+			if (city is { ConstructingType: 1, Constructing: 29 })
+				city.ConstructingType = 0;
+
 			return city.ConstructingType switch {
-				0 => ("Worker", ProducibleType.UNIT), // TODO: Wealth production is not implemented yet
+				0 => (theBiq.Bldg[city.Constructing].Name, ProducibleType.INFLOW),
 				1 => (theBiq.Bldg[city.Constructing].Name, ProducibleType.BUILDING),
 				2 => (unitPrototypes[city.Constructing].Name, ProducibleType.UNIT),
 				_ => throw new NotImplementedException()
@@ -1210,6 +1215,14 @@ namespace C7GameData {
 
 			foreach (BLDG bldg in Bldg) {
 				if (bldg.Name == "Wealth") {
+					SaveInflow inflow = new () {
+						name = bldg.Name,
+						iconRowIndex = pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
+						localYield = [
+							new SaveLocalYield(InflowYield.Commerce, "inflows.result.wealth.commerce"),
+						],
+					};
+					save.Inflows.Add(inflow);
 					continue; // We don't consider Wealth as a building
 				}
 
@@ -1509,6 +1522,7 @@ namespace C7GameData {
 			return new[] {
 				(t.BonusTechToFirstCivThatResearches, SaveTech.Flag.BonusTechToFirstCivThatResearches),
 				(t.EnablesBridges, SaveTech.Flag.EnablesBridges),
+				(t.DoublesWealthProduction, SaveTech.Flag.DoublesWealthProduction),
 			}
 			.Where(t => t.Item1)
 			.Select(t => t.Item2);
@@ -1699,6 +1713,7 @@ namespace C7GameData {
 			save.Rules.MaxRankOfWorkableTiles = 2;
 			save.Rules.MaxRankOfBarbarianCampTiles = 2;
 			save.Rules.DefaultDealDuration = 20;
+			save.Rules.ShieldCostPerGold = rule.ShieldsCostPerGold;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

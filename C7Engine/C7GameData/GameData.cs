@@ -21,6 +21,7 @@ namespace C7GameData {
 		public List<MapUnit> mapUnits { get; set; } = new List<MapUnit>();
 		public List<UnitPrototype> unitPrototypes = new();
 		public List<Building> Buildings = new();
+		public List<Inflow> Inflows = new();
 
 		// The names of all great wonders that have been built.
 		public HashSet<string> GreatWondersBuilt = new();

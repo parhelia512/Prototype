@@ -8,7 +8,8 @@ namespace C7GameData.Save {
 	public class SaveTech {
 		public enum Flag {
 			BonusTechToFirstCivThatResearches,
-			EnablesBridges
+			EnablesBridges,
+			DoublesWealthProduction,
 		}
 
 		public ID id;
@@ -42,8 +43,9 @@ namespace C7GameData.Save {
 				CivilopediaEntry = this.CivilopediaEntry,
 				Cost = this.Cost,
 				RequiredForEraAdvancement = this.RequiredForEraAdvancement,
-				BonusTechToFirstCivThatResearches = this.flags.Contains(SaveTech.Flag.BonusTechToFirstCivThatResearches),
-				EnablesBridges = this.flags.Contains(SaveTech.Flag.EnablesBridges),
+				BonusTechToFirstCivThatResearches = this.flags.Contains(Flag.BonusTechToFirstCivThatResearches),
+				EnablesBridges = this.flags.Contains(Flag.EnablesBridges),
+				DoublesWealthProduction = this.flags.Contains(Flag.DoublesWealthProduction),
 				EraCivilopediaName = this.EraCivilopediaName,
 				SmallIconPath = this.SmallIconPath,
 				X = this.X,

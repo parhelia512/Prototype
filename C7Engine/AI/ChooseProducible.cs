@@ -44,9 +44,19 @@ namespace C7Engine {
 				return ScoreUnit(stats, city, player, unit);
 			} else if (option is Building building) {
 				return ScoreBuilding(stats, city, player, building);
+			} else if (option is Inflow inflow) {
+				return ScoreInflow(stats, city, player, inflow);
 			} else {
 				throw new Exception($"Unexpected producible: {option}");
 			}
+		}
+
+		private static float ScoreInflow(ProducibleStats stats, City city, Player player, Inflow inflow) {
+			// TODO: score this properly, right now we give a very low score to avoid auto picking this
+			// I am not sure how civ III does this, although I guess we should consider stuff like
+			// no more buildings to build, reached unit cap, very bad economy with no other options,
+			// the WealthNever and WealthOften flags from RACE, etc
+			return -1000f;
 		}
 
 		private static float ScoreUnit(ProducibleStats stats, City city, Player player, UnitPrototype unit) {

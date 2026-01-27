@@ -593,6 +593,8 @@ public partial class CityScreen : Control {
 			child.QueueFree();
 		}
 
+		int marginTop = 35;
+
 		if (city.itemBeingProduced is UnitPrototype up) {
 			AnimationManager animationManager = mapView.game.animationController.civ3AnimData.forUnit(up, MapUnit.AnimatedAction.DEFAULT).animationManager;
 			ShaderMaterial material = TextureLoader.GetShaderMaterialForUnit(city.owner.colorIndex);
@@ -601,7 +603,7 @@ public partial class CityScreen : Control {
 			// Add the base sprite.
 			Sprite2D baseImageSprite = new();
 			baseImageSprite.Texture = baseImage;
-			baseImageSprite.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
+			baseImageSprite.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2.0f, marginTop);
 			productionButton.AddChild(baseImageSprite);
 
 			// Add the tint sprite, hooking up the shader.
@@ -613,7 +615,12 @@ public partial class CityScreen : Control {
 		} else if (city.itemBeingProduced is Building b) {
 			Sprite2D icon = new();
 			icon.Texture = TextureLoader.Load("building_icons.large", b, useCache: true);
-			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2, 35);
+			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2.0f, marginTop);
+			productionButton.AddChild(icon);
+		} else if (city.itemBeingProduced is Inflow inflow) {
+			Sprite2D icon = new();
+			icon.Texture = TextureLoader.Load("building_icons.large", inflow, useCache: true);
+			icon.Position = new Vector2(productionButton.TextureNormal.GetWidth() / 2.0f, marginTop);
 			productionButton.AddChild(icon);
 		}
 
@@ -626,7 +633,8 @@ public partial class CityScreen : Control {
 			EngineStorage.ReadGameData((GameData gameData) => {
 				city.SetItemBeingProduced(p);
 				RenderProductionDetails(gameData, city);
-			});
+                RenderCulture(city);
+            });
 		});
 	}
 
@@ -664,11 +672,13 @@ public partial class CityScreen : Control {
 			child.QueueFree();
 		}
 
+		int itemsPerColumn = (int)Math.Ceiling((float)shieldCost / shieldsInBoxContainer.Columns);
+		if (itemsPerColumn == 0) return;
+
 		int width = (int)shieldsInBoxContainer.GetParent<CenterContainer>().Size.X;
 		int height = (int)shieldsInBoxContainer.GetParent<CenterContainer>().Size.Y;
 
 		shieldsInBoxContainer.Columns = (int)Math.Ceiling(Math.Sqrt(shieldCost));
-		int itemsPerColumn = (int)Math.Ceiling((float)shieldCost / shieldsInBoxContainer.Columns);
 		int iconSize = Math.Min(height / itemsPerColumn, width / shieldsInBoxContainer.Columns);
 
 		for (int i = 0; i < Math.Min(shieldCost, shieldsInBox); ++i) {

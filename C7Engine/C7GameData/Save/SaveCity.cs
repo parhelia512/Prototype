@@ -35,7 +35,7 @@ namespace C7GameData.Save {
 
 	}
 
-	public enum ProducibleType { WEALTH, BUILDING, UNIT };
+	public enum ProducibleType { INFLOW, BUILDING, UNIT };
 
 	public class SaveCity : IHasID {
 		public ID id { get; set; }
@@ -63,6 +63,7 @@ namespace C7GameData.Save {
 			name = city.name;
 			producible = city.itemBeingProduced.name;
 			producibleType = city.itemBeingProduced switch {
+				Inflow => ProducibleType.INFLOW,
 				UnitPrototype => ProducibleType.UNIT,
 				Building => ProducibleType.BUILDING,
 			};
@@ -89,13 +90,15 @@ namespace C7GameData.Save {
 							List<UnitPrototype> unitPrototypes,
 							List<Civilization> civilizations,
 							List<Building> buildings,
-							List<CitizenType> citizenTypes) {
+							List<CitizenType> citizenTypes,
+							List<Inflow> inflows) {
 			City city = new City{
 				id = id,
 				location = gameMap.tileAt(location.X, location.Y),
 				owner = players.Find(p => p.id == owner),
 				name = name,
 				itemBeingProduced = producibleType switch {
+					ProducibleType.INFLOW => inflows.Find(inflow => inflow.name == producible),
 					ProducibleType.UNIT => unitPrototypes.Find(proto => proto.name == producible),
 					ProducibleType.BUILDING => buildings.Find(building => building.name == producible),
 				},

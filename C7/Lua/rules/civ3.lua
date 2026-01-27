@@ -7,4 +7,5 @@ return {
   --]]
   terraforms = require "civ3.terraforms",
   terrain_improvements = require "civ3.terrain_improvements",
+  inflows = require "civ3.inflows"
 }
