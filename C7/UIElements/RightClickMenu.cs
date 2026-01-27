@@ -290,6 +290,8 @@ public partial class RightClickChooseProductionMenu : RightClickMenu {
 			return TextureLoader.Load("unit_icons", proto, useCache: true);
 		} else if (producible is Building b) {
 			return TextureLoader.Load("building_icons.small", b, useCache: true);
+		} else if (producible is Inflow inflow) {
+			return TextureLoader.Load("building_icons.small", inflow, useCache: true);
 		} else {
 			return null;
 		}

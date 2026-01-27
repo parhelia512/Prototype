@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace C7GameData {
 	/**
 	 * Represents something that can be produced by a city.
-	 * Known examples are Buildings and UnitPrototypes.
+	 * Known examples are Buildings and UnitPrototypes and Inflows.
 	 */
 	public interface IProducible {
 		string name { get; set; }
