@@ -633,8 +633,8 @@ public partial class CityScreen : Control {
 			EngineStorage.ReadGameData((GameData gameData) => {
 				city.SetItemBeingProduced(p);
 				RenderProductionDetails(gameData, city);
-                RenderCulture(city);
-            });
+				RenderCulture(city);
+			});
 		});
 	}
 

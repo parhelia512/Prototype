@@ -546,19 +546,19 @@ namespace C7GameData {
 				result.taxes += cr.citizenType.Taxes;
 			}
 
-            // Wealth
-            if (this.itemBeingProduced is Inflow inflowCommerce && inflowCommerce.GetCommerceYieldFunc() != null) {
-                int usefulShields = this.CurrentProductionYield().useful;
-                int extraCommerce = inflowCommerce.GetCommerceYieldFunc().Invoke(new ScriptContext(usefulShields, this.owner.GetKnownTechs()));
-                result.wealth += extraCommerce;
-            }
-            
-            // Expertise
-            if (this.itemBeingProduced is Inflow inflowScience && result.beakers > 0 && inflowScience.GetScienceYieldFunc() != null) {
-                int extraBeakers = inflowScience.GetScienceYieldFunc().Invoke(new ScriptContext(result.beakers, this.owner.GetKnownTechs()));
-                result.beakers += extraBeakers;
-            }
-            
+			// Wealth
+			if (this.itemBeingProduced is Inflow inflowCommerce && inflowCommerce.GetCommerceYieldFunc() != null) {
+				int usefulShields = this.CurrentProductionYield().useful;
+				int extraCommerce = inflowCommerce.GetCommerceYieldFunc().Invoke(new ScriptContext(usefulShields, this.owner.GetKnownTechs()));
+				result.wealth += extraCommerce;
+			}
+
+			// Expertise
+			if (this.itemBeingProduced is Inflow inflowScience && result.beakers > 0 && inflowScience.GetScienceYieldFunc() != null) {
+				int extraBeakers = inflowScience.GetScienceYieldFunc().Invoke(new ScriptContext(result.beakers, this.owner.GetKnownTechs()));
+				result.beakers += extraBeakers;
+			}
+
 			return result;
 		}
 
@@ -619,7 +619,7 @@ namespace C7GameData {
 				result += cb.building.culturePerTurn;
 			}
 
-            // this should go last I reckon
+			// this should go last I reckon
 			if (bonus && itemBeingProduced is Inflow inflow && inflow.GetCultureYieldFunc() != null) {
 				int extraCulture = inflow.GetCultureYieldFunc().Invoke(new ScriptContext(result, this.owner.GetKnownTechs()));
 				result += extraCulture;
@@ -784,7 +784,7 @@ namespace C7GameData {
 			}
 
 
-            // TODO: add extra from Inflow
+			// TODO: add extra from Inflow
 
 			return start != GetBorderExpansionLevel();
 		}

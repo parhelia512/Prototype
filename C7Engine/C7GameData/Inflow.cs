@@ -7,9 +7,9 @@ using C7GameData.Save;
 namespace C7GameData;
 
 public enum InflowYield {
-    Commerce,
-    Culture,
-    Science,
+	Commerce,
+	Culture,
+	Science,
 }
 public class Inflow : IProducible {
 	public string name { get; set; }
