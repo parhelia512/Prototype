@@ -6,76 +6,119 @@ local inflows = {}
 
 -- to match an item in a list based on a predicate
 local function any(list, predicate)
-    for _, v in ipairs(list) do
-        if predicate(v) then
-            return true
-        end
+  for _, v in ipairs(list) do
+    if predicate(v) then
+      return true
     end
-    return false
+  end
+  return false
 end
-    
--- context is [ int input, List<Tech> techs ]
--- this is the actual implementation we would do for Wealth, for conquests
+  
+local function doubles_wealth_production(tech)
+  return tech.DoublesWealthProduction == true
+end
+
+-- context is [ Player player, City city ]
+-- this is the actual (minimal) implementation we would do for Wealth, for conquests
 local function extra_commerce_calculation(context)
-    local useful_shields = context.input
-    local known_techs = context.techs
-    local double_effect = any(known_techs,
-    function(x) 
-                return x.DoublesWealthProduction == true
-            end
-            )
-    local ratio = rules().ShieldCostPerGold
-    return math.max(1, useful_shields / (double_effect and (ratio / 2) or ratio))
+  local player = context.player
+  local city = context.city
+  
+  local useful_shields = city.CurrentProductionYield().useful
+  local known_techs = player.GetKnownTechs()
+  local double_effect = any(known_techs, doubles_wealth_production)
+  local ratio = double_effect and (rules().ShieldCostPerGold / 2) or rules().ShieldCostPerGold
+  
+  return math.max(1, useful_shields / ratio)
 end
 
--- example
-local function extra_culture_calculation(context)
-    local city_culture = context.input
-    return math.max(1, city_culture/2)
-end
+-- Any and all of the table values below should return an integer
+-- that will be added to the respective base value.
+--
+-- for example commerce will be added to the overall commerce income, culture to the current culture per turn.
+--
+-- maintenance, unitsupport and corruption are the ones that will be subtracted by their current base value
+-- so if you want MORE corruption/maintenance/unit support, the number should be negative
 
--- example
-local function extra_science_calculation(context)
-    local beakers = context.input
-    return math.max(0, beakers/10)
-end
-    
 inflows.result = {
   wealth = {
-      commerce = function(context)
-          return extra_commerce_calculation(context)
-      end,
-      culture = function(context)
-          return extra_culture_calculation(context)
-      end,
-      science = function(context)
-          return extra_science_calculation(context)
-      end,
+    commerce = function(context)
+      return extra_commerce_calculation(context)
+    end,
   },
-  -- example
-  cultivation = {
-      commerce = function(context)
-          return extra_commerce_calculation(context) * 2
-      end,
-      culture = function(context)
-          return extra_culture_calculation(context) * 2
-      end,
-      science = function(context)
-          return extra_science_calculation(context) * 2
-      end,
-  },
-  -- example
-  expertise = {
-      commerce = function(context)
-          return extra_commerce_calculation(context) * 3
-      end,
-      culture = function(context)
-          return extra_culture_calculation(context) * 3
-      end,
-      science = function(context)
-          return extra_science_calculation(context) * 3
-      end,
-  },
+  -- add new inflow(s) as the example below.
+  -- The respective json entry with the yieldCalculation having the path to this new item
+  -- should be added in the json save file, under inflows
+  -- not all fields like commerce, culture, science etc are mandatory, as long as they reflect the ones in the json
+  
+  --placeholder = {
+  --  commerce = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --  culture = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --  science = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --  happiness = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --  maintenance = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --  unitsupport = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --  corruption = function(context)
+  --    -- replace with a hadcoded value, a method call, etc
+  --    return 0
+  --  end,
+  --},
+  
+  
+  -- json example of an entry
+  
+  --{
+  --  "name": "Placeholder", <- this is the display name in the production box
+  --  "iconRowIndex": 29,
+  --  "localYield": [
+  --    {
+  --      "yieldType": "commerce",
+  --      "yieldCalculation": "inflows.result.placeholder.commerce" 
+  --    },
+  --    {
+  --      "yieldType": "culture",
+  --      "yieldCalculation": "inflows.result.placeholder.culture"
+  --    },
+  --    {
+  --      "yieldType": "science",
+  --      "yieldCalculation": "inflows.result.placeholder.science"
+  --    },
+  --    {
+  --      "yieldType": "happiness",
+  --      "yieldCalculation": "inflows.result.placeholder.happiness"
+  --    },
+  --    {
+  --      "yieldType": "maintenance",
+  --      "yieldCalculation": "inflows.result.placeholder.maintenance"
+  --    },
+  --    {
+  --      "yieldType": "unitsupport",
+  --      "yieldCalculation": "inflows.result.placeholder.unitsupport"
+  --    },
+  --    {
+  --      "yieldType": "corruption",
+  --      "yieldCalculation": "inflows.result.placeholder.corruption"
+  --    }
+  --  ]
+  --}
 }
 
 return inflows

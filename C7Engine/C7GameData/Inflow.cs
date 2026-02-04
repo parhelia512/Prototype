@@ -6,10 +6,21 @@ using C7GameData.Save;
 
 namespace C7GameData;
 
+// TODO: ideas for other city related stuff that are not yet implemented;
+// pollution + -, luxury happy face + -, some tile modifier? ,
+// more/less units in  the city -> happier/sadder population
+
+// We should keep these names in all lower case form
+// to avoid any case mismatch between this code, the json and lua.
+// It's not pretty but at least it will be consistent across all these.
 public enum InflowYield {
-	Commerce,
-	Culture,
-	Science,
+	commerce,
+	culture,
+	science,
+	happiness,
+	maintenance,
+	unitsupport,
+	corruption,
 }
 public class Inflow : IProducible {
 	public string name { get; set; }
@@ -35,13 +46,25 @@ public class Inflow : IProducible {
 	}
 
 	public Func<ScriptContext, int> GetCommerceYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.Commerce).yieldCalculation;
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.commerce).yieldCalculation;
 	}
 	public Func<ScriptContext, int> GetCultureYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.Culture).yieldCalculation;
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.culture).yieldCalculation;
 	}
 	public Func<ScriptContext, int> GetScienceYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.Science).yieldCalculation;
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.science).yieldCalculation;
+	}
+	public Func<ScriptContext, int> GetHappinessYieldFunc() {
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.happiness).yieldCalculation;
+	}
+	public Func<ScriptContext, int> GetMaintenanceYieldFunc() {
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.maintenance).yieldCalculation;
+	}
+	public Func<ScriptContext, int> GetUnitSupportYieldFunc() {
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.unitsupport).yieldCalculation;
+	}
+	public Func<ScriptContext, int> GetCorruptionYieldFunc() {
+		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.corruption).yieldCalculation;
 	}
 }
 
@@ -68,7 +91,7 @@ public struct SaveLocalYield {
 	}
 }
 
-public struct ScriptContext(int input, List<Tech> techs) {
-	public int input = input;
-	public List<Tech> techs = techs;
+public struct ScriptContext(Player player, City city) {
+	public Player player = player;
+	public City city = city;
 }

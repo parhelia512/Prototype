@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
 using C7Engine;
+using MoonSharp.Interpreter;
 using Serilog;
 using static C7GameData.EraUtils;
 
@@ -840,7 +841,7 @@ namespace C7GameData {
 			return true;
 		}
 
-		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
+		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCostRaw() {
 			int freeUnits = 0;
 
 			Difficulty difficulty = EngineStorage.gameData.gameDifficulty;
@@ -869,6 +870,23 @@ namespace C7GameData {
 			int allowedUnits = freeUnits;
 			int unitSupportCost = Math.Max(0, (totalUnits - allowedUnits) * government.unitCost);
 			return (totalUnits, allowedUnits, unitSupportCost);
+		}
+
+		[MoonSharpHidden]
+		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
+			(int totalUnits, int allowedUnits, int unitSupportCost) result = TotalUnitsAllowedUnitsAndSupportCostRaw();
+
+			foreach (City city in cities) {
+				// unitSupport lua infow
+				if (city.itemBeingProduced is Inflow inflowUnitSupport && inflowUnitSupport.GetUnitSupportYieldFunc() != null) {
+					int unitSupportLess = inflowUnitSupport.GetUnitSupportYieldFunc().Invoke(new ScriptContext(this, city));
+					result.unitSupportCost -= unitSupportLess;
+				}
+			}
+
+			result.unitSupportCost = Math.Max(0, result.unitSupportCost);
+
+			return (result.totalUnits, result.allowedUnits, result.unitSupportCost);
 		}
 
 		// See https://forums.civfanatics.com/threads/military-advisor-relative-strength-assessment-definition.62980/post-1211499 and

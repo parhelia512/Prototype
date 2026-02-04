@@ -1219,7 +1219,7 @@ namespace C7GameData {
 						name = bldg.Name,
 						iconRowIndex = pediaIcons.buildingToRowNumberMapping[bldg.CivilopediaEntry],
 						localYield = [
-							new SaveLocalYield(InflowYield.Commerce, "inflows.result.wealth.commerce"),
+							new SaveLocalYield(InflowYield.commerce, "inflows.result.wealth.commerce"),
 						],
 					};
 					save.Inflows.Add(inflow);
