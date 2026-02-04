@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Serilog;
 using C7Engine;
+using MoonSharp.Interpreter;
 
 namespace C7GameData {
 	public class CityBuilding {
@@ -511,7 +512,7 @@ namespace C7GameData {
 			return result;
 		}
 
-		public CommerceBreakdown CurrentCommerceYield(bool respectCivilDisorder = true) {
+		public CommerceBreakdown CurrentCommerceYieldRaw(bool respectCivilDisorder = true) {
 			int uncorruptedCommerce = location.commerceYield(this).yield;
 			foreach (CityResident r in residents) {
 				uncorruptedCommerce += r.tileWorked.commerceYield(this).yield;
@@ -546,26 +547,56 @@ namespace C7GameData {
 				result.taxes += cr.citizenType.Taxes;
 			}
 
-			// Wealth
+			return result;
+		}
+
+		[MoonSharpHidden]
+		public CommerceBreakdown CurrentCommerceYield(bool respectCivilDisorder = true) {
+			CommerceBreakdown result = CurrentCommerceYieldRaw(respectCivilDisorder);
+
+			// commerce lua infow
 			if (this.itemBeingProduced is Inflow inflowCommerce && inflowCommerce.GetCommerceYieldFunc() != null) {
-				int usefulShields = this.CurrentProductionYield().useful;
-				int extraCommerce = inflowCommerce.GetCommerceYieldFunc().Invoke(new ScriptContext(usefulShields, this.owner.GetKnownTechs()));
+				int extraCommerce = inflowCommerce.GetCommerceYieldFunc().Invoke(new ScriptContext(this.owner, this));
 				result.wealth += extraCommerce;
 			}
 
-			// Expertise
-			if (this.itemBeingProduced is Inflow inflowScience && result.beakers > 0 && inflowScience.GetScienceYieldFunc() != null) {
-				int extraBeakers = inflowScience.GetScienceYieldFunc().Invoke(new ScriptContext(result.beakers, this.owner.GetKnownTechs()));
+			// science lua infow
+			if (this.itemBeingProduced is Inflow inflowScience && inflowScience.GetScienceYieldFunc() != null) {
+				int extraBeakers = inflowScience.GetScienceYieldFunc().Invoke(new ScriptContext(this.owner, this));
 				result.beakers += extraBeakers;
+			}
+
+			// happiness lua infow
+			if (this.itemBeingProduced is Inflow inflowHappiness && inflowHappiness.GetHappinessYieldFunc() != null) {
+				int extraHappiness = inflowHappiness.GetHappinessYieldFunc().Invoke(new ScriptContext(this.owner, this));
+				result.happiness += extraHappiness;
+			}
+
+			// corruption lua infow
+			if (this.itemBeingProduced is Inflow inflowCorruption && inflowCorruption.GetCorruptionYieldFunc() != null) {
+				int lessCorruption = inflowCorruption.GetCorruptionYieldFunc().Invoke(new ScriptContext(this.owner, this));
+				result.corrupted -= lessCorruption;
 			}
 
 			return result;
 		}
 
-		public int MaintenanceCosts() {
+		public int MaintenanceCostsRaw() {
 			int result = 0;
 			foreach (CityBuilding cb in constructed_buildings) {
 				result += cb.building.maintenanceCost;
+			}
+			return result;
+		}
+
+		[MoonSharpHidden]
+		public int MaintenanceCosts() {
+			int result = 0;
+			result += MaintenanceCostsRaw();
+			// maintenance lua infow
+			if (this.itemBeingProduced is Inflow inflowMaintenance && inflowMaintenance.GetMaintenanceYieldFunc() != null) {
+				int lessMaintenance = inflowMaintenance.GetMaintenanceYieldFunc().Invoke(new ScriptContext(this.owner, this));
+				result -= lessMaintenance;
 			}
 			return result;
 		}
@@ -613,17 +644,23 @@ namespace C7GameData {
 			return perPlayerCulture[owner];
 		}
 
-		public int GetCulturePerTurn(bool bonus = true) {
+		public int GetCulturePerTurnRaw() {
 			int result = 0;
 			foreach (CityBuilding cb in GetBuildings()) {
 				result += cb.building.culturePerTurn;
 			}
+			return result;
+		}
 
-			// this should go last I reckon
-			if (bonus && itemBeingProduced is Inflow inflow && inflow.GetCultureYieldFunc() != null) {
-				int extraCulture = inflow.GetCultureYieldFunc().Invoke(new ScriptContext(result, this.owner.GetKnownTechs()));
+		[MoonSharpHidden]
+		public int GetCulturePerTurn() {
+			int result = GetCulturePerTurnRaw();
+			// culture lua infow
+			if (this.itemBeingProduced is Inflow inflow && inflow.GetCultureYieldFunc() != null) {
+				int extraCulture = inflow.GetCultureYieldFunc().Invoke(new ScriptContext(this.owner, this));
 				result += extraCulture;
 			}
+
 			return result;
 		}
 
@@ -780,11 +817,9 @@ namespace C7GameData {
 			int start = GetBorderExpansionLevel();
 			foreach (CityBuilding cb in GetBuildings()) {
 				cb.totalCulture += cb.building.culturePerTurn;
-				perPlayerCulture[owner] += cb.building.culturePerTurn;
 			}
 
-
-			// TODO: add extra from Inflow
+			perPlayerCulture[owner] += GetCulturePerTurn();
 
 			return start != GetBorderExpansionLevel();
 		}

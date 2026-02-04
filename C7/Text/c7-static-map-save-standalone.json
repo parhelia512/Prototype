@@ -71325,50 +71325,6 @@
         {
           "yieldType": "commerce",
           "yieldCalculation": "inflows.result.wealth.commerce"
-        },
-        {
-          "yieldType": "culture",
-          "yieldCalculation": "inflows.result.wealth.culture"
-        },
-        {
-          "yieldType": "science",
-          "yieldCalculation": "inflows.result.wealth.science"
-        }
-      ]
-    },
-    {
-      "name": "Cultivation",
-      "iconRowIndex": 29,
-      "localYield": [
-        {
-          "yieldType": "commerce",
-          "yieldCalculation": "inflows.result.cultivation.commerce"
-        },
-        {
-          "yieldType": "culture",
-          "yieldCalculation": "inflows.result.cultivation.culture"
-        },
-        {
-          "yieldType": "science",
-          "yieldCalculation": "inflows.result.cultivation.science"
-        }
-      ]
-    },
-    {
-      "name": "Expertise",
-      "iconRowIndex": 29,
-      "localYield": [
-        {
-          "yieldType": "commerce",
-          "yieldCalculation": "inflows.result.expertise.commerce"
-        },
-        {
-          "yieldType": "culture",
-          "yieldCalculation": "inflows.result.expertise.culture"
-        },
-        {
-          "yieldType": "science",
-          "yieldCalculation": "inflows.result.expertise.science"
         }
       ]
     }
