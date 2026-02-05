@@ -30,12 +30,16 @@ public class Inflow : IProducible {
 
 	public int iconRowIndex;
 	public List<LocalYield> localYield { get; set; }
+	// TODO: Implement a globalYield where for example, 10 cities must be producing this in order for something to happen
 
 	public int ShieldCost(HashSet<Civilization.Trait> civTraits, float costFactor) {
+		// TODO: add the option to consume shields
 		return 0;
 	}
 
 	public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
+		// TODO: add the option to unlock after researching a tech, or have a certain building, or having a certain resource
+		// as well as rendering it obsolete by a building/tech/resource. Basically make this as configurable as it can be
 		return true;
 	}
 
@@ -45,26 +49,19 @@ public class Inflow : IProducible {
 		this.localYield = saveInflow.localYield.ConvertAll(y => new LocalYield(y.yieldType, luaRulesEngine, y.yieldCalculation));
 	}
 
-	public Func<ScriptContext, int> GetCommerceYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.commerce).yieldCalculation;
+	public Func<ScriptContext, int> GetInflowYieldFunc(InflowYield yieldType) {
+		return this.localYield.FirstOrDefault(y => y.yieldType == yieldType).yieldCalculation;
 	}
-	public Func<ScriptContext, int> GetCultureYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.culture).yieldCalculation;
-	}
-	public Func<ScriptContext, int> GetScienceYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.science).yieldCalculation;
-	}
-	public Func<ScriptContext, int> GetHappinessYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.happiness).yieldCalculation;
-	}
-	public Func<ScriptContext, int> GetMaintenanceYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.maintenance).yieldCalculation;
-	}
-	public Func<ScriptContext, int> GetUnitSupportYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.unitsupport).yieldCalculation;
-	}
-	public Func<ScriptContext, int> GetCorruptionYieldFunc() {
-		return this.localYield.FirstOrDefault(y => y.yieldType == InflowYield.corruption).yieldCalculation;
+
+	public bool TryGetInflowYieldFunc(InflowYield yieldType, out Func<ScriptContext, int> yieldFunc) {
+		Func<ScriptContext, int> yieldCalculation = GetInflowYieldFunc(yieldType);
+		if (yieldCalculation != null) {
+			yieldFunc = yieldCalculation;
+			return true;
+		}
+
+		yieldFunc = null;
+		return false;
 	}
 }
 
