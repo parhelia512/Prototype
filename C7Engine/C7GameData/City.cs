@@ -555,26 +555,26 @@ namespace C7GameData {
 			CommerceBreakdown result = CurrentCommerceYieldRaw(respectCivilDisorder);
 
 			// commerce lua infow
-			if (this.itemBeingProduced is Inflow inflowCommerce && inflowCommerce.GetCommerceYieldFunc() != null) {
-				int extraCommerce = inflowCommerce.GetCommerceYieldFunc().Invoke(new ScriptContext(this.owner, this));
+			if (this.itemBeingProduced is Inflow inflowCommerce && inflowCommerce.TryGetInflowYieldFunc(InflowYield.commerce, out var commerceYieldFunc)) {
+				int extraCommerce = commerceYieldFunc.Invoke(new ScriptContext(this.owner, this));
 				result.wealth += extraCommerce;
 			}
 
 			// science lua infow
-			if (this.itemBeingProduced is Inflow inflowScience && inflowScience.GetScienceYieldFunc() != null) {
-				int extraBeakers = inflowScience.GetScienceYieldFunc().Invoke(new ScriptContext(this.owner, this));
+			if (this.itemBeingProduced is Inflow inflowScience && inflowScience.TryGetInflowYieldFunc(InflowYield.science, out var scienceYieldFunc)) {
+				int extraBeakers = scienceYieldFunc.Invoke(new ScriptContext(this.owner, this));
 				result.beakers += extraBeakers;
 			}
 
 			// happiness lua infow
-			if (this.itemBeingProduced is Inflow inflowHappiness && inflowHappiness.GetHappinessYieldFunc() != null) {
-				int extraHappiness = inflowHappiness.GetHappinessYieldFunc().Invoke(new ScriptContext(this.owner, this));
+			if (this.itemBeingProduced is Inflow inflowHappiness && inflowHappiness.TryGetInflowYieldFunc(InflowYield.happiness, out var happinessYieldFunc)) {
+				int extraHappiness = happinessYieldFunc.Invoke(new ScriptContext(this.owner, this));
 				result.happiness += extraHappiness;
 			}
 
 			// corruption lua infow
-			if (this.itemBeingProduced is Inflow inflowCorruption && inflowCorruption.GetCorruptionYieldFunc() != null) {
-				int lessCorruption = inflowCorruption.GetCorruptionYieldFunc().Invoke(new ScriptContext(this.owner, this));
+			if (this.itemBeingProduced is Inflow inflowCorruption && inflowCorruption.TryGetInflowYieldFunc(InflowYield.corruption, out var corruptionYieldFunc)) {
+				int lessCorruption = corruptionYieldFunc.Invoke(new ScriptContext(this.owner, this));
 				result.corrupted -= lessCorruption;
 			}
 
@@ -594,8 +594,8 @@ namespace C7GameData {
 			int result = 0;
 			result += MaintenanceCostsRaw();
 			// maintenance lua infow
-			if (this.itemBeingProduced is Inflow inflowMaintenance && inflowMaintenance.GetMaintenanceYieldFunc() != null) {
-				int lessMaintenance = inflowMaintenance.GetMaintenanceYieldFunc().Invoke(new ScriptContext(this.owner, this));
+			if (this.itemBeingProduced is Inflow inflowMaintenance && inflowMaintenance.TryGetInflowYieldFunc(InflowYield.maintenance, out var maintenanceYieldFunc)) {
+				int lessMaintenance = maintenanceYieldFunc.Invoke(new ScriptContext(this.owner, this));
 				result -= lessMaintenance;
 			}
 			return result;
@@ -656,8 +656,8 @@ namespace C7GameData {
 		public int GetCulturePerTurn() {
 			int result = GetCulturePerTurnRaw();
 			// culture lua infow
-			if (this.itemBeingProduced is Inflow inflow && inflow.GetCultureYieldFunc() != null) {
-				int extraCulture = inflow.GetCultureYieldFunc().Invoke(new ScriptContext(this.owner, this));
+			if (this.itemBeingProduced is Inflow inflow && inflow.TryGetInflowYieldFunc(InflowYield.culture, out var cultureYieldFunc)) {
+				int extraCulture = cultureYieldFunc.Invoke(new ScriptContext(this.owner, this));
 				result += extraCulture;
 			}
 

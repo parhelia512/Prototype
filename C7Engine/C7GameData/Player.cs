@@ -878,8 +878,8 @@ namespace C7GameData {
 
 			foreach (City city in cities) {
 				// unitSupport lua infow
-				if (city.itemBeingProduced is Inflow inflowUnitSupport && inflowUnitSupport.GetUnitSupportYieldFunc() != null) {
-					int unitSupportLess = inflowUnitSupport.GetUnitSupportYieldFunc().Invoke(new ScriptContext(this, city));
+				if (city.itemBeingProduced is Inflow inflowUnitSupport && inflowUnitSupport.TryGetInflowYieldFunc(InflowYield.unitsupport, out var unitSupportYieldFunc)) {
+					int unitSupportLess = unitSupportYieldFunc.Invoke(new ScriptContext(this, city));
 					result.unitSupportCost -= unitSupportLess;
 				}
 			}
