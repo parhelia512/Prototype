@@ -16,7 +16,7 @@
 
 ## Status
 
-The latest stable version can be downloaded from the [Releases page](releases). Current information on installation and features can always be found on the [project homepage.](https://www.openciv3.org/)
+The latest stable version can be downloaded from the [Releases page](https://github.com/C7-Game/Prototype/releases). Current information on installation and features can always be found on the [project homepage.](https://www.openciv3.org/)
 
 OpenCiv3 is in a pre-alpha state. It is a rudimentary playable game but lacking many mechanics and late-game content, and errors are likely. Keep up with our development for the latest updates and opportunities to contribute!
 
