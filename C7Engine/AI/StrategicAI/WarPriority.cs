@@ -40,7 +40,7 @@ namespace C7GameData.AIData {
 			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
 				// TODO: Make sure having seen barbarians doesn't prevent us from
 				// declaring new wars.
-				if (p.Value.atWar) {
+				if (p.Value.AtWar()) {
 					this.calculatedWeight = 1000;
 					return;
 				}

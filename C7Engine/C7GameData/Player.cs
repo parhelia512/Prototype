@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
-using C7GameData.Save;
 using C7Engine;
 using Serilog;
 using static C7GameData.EraUtils;
+using static C7GameData.MultiTurnDeal;
+using static C7GameData.PlayerRelationship;
 
 namespace C7GameData {
 
@@ -219,76 +220,70 @@ namespace C7GameData {
 		}
 
 		public bool IsAtPeaceWith(Player other) {
-			// Evaluate this before checking for barbarians so barbarians don't
-			// attack themselves.
-			if (other == this) {
-				return true;
-			}
-
-			if (other.isBarbarians || this.isBarbarians) {
-				return false;
-			}
-
-			if (playerRelationships.ContainsKey(other.id)) {
-				return !playerRelationships[other.id].atWar;
-			}
-			return true;
+			return AtPeace(this, other);
 		}
 
 		public void EnsureRelationshipExists(Player other) {
-			if (isBarbarians || other.isBarbarians)
+			if (this.isBarbarians || other.isBarbarians || this.id == other.id || this.defeated || other.defeated)
 				return;
 
-			if (!playerRelationships.ContainsKey(other.id)) {
-				playerRelationships.Add(other.id, new PlayerRelationship());
-			}
-			if (!other.playerRelationships.ContainsKey(this.id)) {
-				other.playerRelationships.Add(this.id, new PlayerRelationship());
+			// If the mutual relationship is not established it means that the 2 civs
+			// were not aware of each other (aka they just met), and therefore cannot be at war.
+			// Initialize the relationship and establish peace automatically between them.
+			if (!this.playerRelationships.ContainsKey(other.id) || !other.playerRelationships.ContainsKey(this.id)) {
+				this.playerRelationships.TryAdd(other.id, new PlayerRelationship());
+				other.playerRelationships.TryAdd(this.id, new PlayerRelationship());
+				RegisterMultiTurnDeal(this, other, DEFAULT_PEACE);
+
+				log.Information($"Established first contact and relationship between players {this} and {other}");
 			}
 		}
 
 		public void DeclareWarOn(Player other, int currentTurn) {
 			EnsureRelationshipExists(other);
 
-			playerRelationships[other.id].atWar = true;
-
-			PlayerRelationship pr = other.playerRelationships[this.id];
-			pr.atWar = true;
-			pr.warDeclarationCount += 1;
-
 			// Check to see if there was a sneak attack - we consider a sneak
 			// attack any attack where the player's units were inside the
 			// borders of the civ they're declaring war on.
-			foreach (Tile t in other.tileKnowledge.knownTiles) {
-				if (t.owningCity == null || t.owningCity.owner != other) {
-					continue;
-				}
-				if (t.unitsOnTile.Count == 0) {
-					continue;
-				}
-				if (t.unitsOnTile[0].owner == this) {
-					pr.wasSneakAttacked = true;
-					break;
-				}
-			}
+			bool isSneakAttack = IsASneakAttackOn(other);
 
-
+			// TODO: take into account broken right of passage, or other deals, etc?
+			// Perhaps we need a dedicated method to calculate this.
+			//
 			// Refuse contact from the aggressor civ until enough turns have
 			// elapsed. The exact civ3 mechanism here is unknown, so we just
 			// pick some reasonable random number. To penalize sneak attacks we
 			// use a higher upper bound.
-			pr.refuseContactUntilTurn = currentTurn + new Random().Next(5, pr.wasSneakAttacked ? 16 : 12);
+			int refuseContactUntilTurn = currentTurn + new Random().Next(5, isSneakAttack ? 16 : 12);
+
+			DeclareWar(this, other, isSneakAttack, refuseContactUntilTurn);
 
 			// Whenever war is declared, re-evaluate priorities.
 			turnsUntilPriorityReevaluation = 0;
 			other.turnsUntilPriorityReevaluation = 0;
 		}
 
+		private bool IsASneakAttackOn(Player other) {
+			foreach (Tile location in other.tileKnowledge.knownTiles) {
+				if (location.owningCity == null || location.owningCity.owner != other) {
+					continue;
+				}
+				if (location.unitsOnTile.Count == 0) {
+					continue;
+				}
+				if (location.unitsOnTile[0].owner == this) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public bool WillAcceptCommunicationFrom(Player other, int currentTurn) {
 			EnsureRelationshipExists(other);
 
 			PlayerRelationship pr = playerRelationships[other.id];
-			if (!pr.atWar) {
+			if (AtPeace(this, other)) {
 				return true;
 			}
 			return currentTurn >= pr.refuseContactUntilTurn;
@@ -297,12 +292,6 @@ namespace C7GameData {
 		public bool SitsOutFirstTurn() {
 			// TODO: Scenarios can also specify that certain players sit out the first turn. E.g. WW2 in the Pacific
 			return isBarbarians;
-		}
-
-		// TODO : This is a placeholder so that we can factor this in when calculating movement costs
-		// since multiturn deals are not yet implemented
-		public bool HasRightOfPassageAgreementWith(Player other) {
-			return false;
 		}
 
 		public static bool CanMoveFreely(Player player, Tile sourceTile, Tile targetTile) {
@@ -322,7 +311,12 @@ namespace C7GameData {
 			// All the other cases are either from or to "enemy" tiles
 			// and without a RoP agreement the cost is never reduced.
 			// check other && RoP
-			if (player.HasRightOfPassageAgreementWith(targetTileOwner)) {
+			if (sourceTileOwner != null && sourceTileOwner != player
+				&& HaveActiveRightOfPassage(player, sourceTileOwner)) {
+				return true;
+			}
+			if (targetTileOwner != null && targetTileOwner != player
+				&& HaveActiveRightOfPassage(player, targetTileOwner)) {
 				return true;
 			}
 
@@ -349,7 +343,7 @@ namespace C7GameData {
 
 		public override string ToString() {
 			if (civilization != null)
-				return civilization.cityNames.First();
+				return $"{civilization.name} [{this.id}]";
 			return "";
 		}
 
@@ -434,9 +428,7 @@ namespace C7GameData {
 			log.Information($"  {this} gives {ourOffer.ToString()}, worth {ourOffer.GoldEquivalentFor(gameData, other)} gold");
 			log.Information($"  {other} gives {theirOffer.ToString()}, worth {theirOffer.GoldEquivalentFor(gameData, this)} gold)");
 			if (theirOffer.partOfPeaceTreaty) {
-				log.Information($"  {this} is now at peace with {other}");
-				this.playerRelationships[other.id].atWar = false;
-				other.playerRelationships[this.id].atWar = false;
+				SignPeaceAfterWar(this, other, gameData);
 			}
 
 			if (ourOffer.gold.HasValue) {

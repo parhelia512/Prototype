@@ -135,5 +135,11 @@ namespace C7GameData.Save {
 				playerRelationships.Add(keyValuePair.Key.ToString(), keyValuePair.Value);
 			}
 		}
+
+		public override string ToString() {
+			if (civilization != null)
+				return $"{civilization} [{this.id}]";
+			return "";
+		}
 	}
 }

@@ -1,10 +1,6 @@
 using Godot;
-using System;
-using System.Diagnostics;
 using C7GameData;
-using C7GameData.Save;
 using System.Collections.Generic;
-using Serilog;
 
 // The popup for selecting which other civilization to contact.
 public partial class DiplomacySelection : Popup {
@@ -29,7 +25,7 @@ public partial class DiplomacySelection : Popup {
 
 		int vOffset = 65;
 		foreach (KeyValuePair<ID, PlayerRelationship> kvp in player.playerRelationships) {
-			string status = kvp.Value.atWar ? "War" : "Peace";
+			string status = kvp.Value.AtWar() ? "War" : "Peace";
 			AddButton($"{allPlayers.Find(x => x.id == kvp.Key).civilization.noun} (at {status})", vOffset, () => {
 				Node parent = GetParent();
 				parent.EmitSignal(PopupOverlay.SignalName.HidePopup);

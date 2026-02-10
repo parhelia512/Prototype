@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using C7Engine.AI;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Linq;
 using Serilog;
+using static C7GameData.PlayerRelationship;
 
 namespace C7Engine {
 	using System;

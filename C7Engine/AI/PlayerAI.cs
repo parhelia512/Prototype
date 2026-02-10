@@ -11,6 +11,7 @@ using C7Engine.AI.StrategicAI;
 using C7Engine.AI.UnitAI;
 using Serilog;
 using System.Diagnostics;
+using static C7GameData.PlayerRelationship;
 
 namespace C7Engine {
 	public class PlayerAI {
@@ -26,6 +27,8 @@ namespace C7Engine {
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
+
+			new MsgCheckObsoleteDeals(player).send();
 
 			MaybeDoPriorityReevaluation(player);
 			MaybePickTechToResearch(player, techs);
@@ -167,7 +170,7 @@ namespace C7Engine {
 			}
 
 			// Special case: we're at war.
-			if (PlayerIsAtWarWithSomeone(player)) {
+			if (IsInAnyWar(player, EngineStorage.gameData.players)) {
 				// Priority 1: ensure we don't have any unguarded cities.
 				//
 				// If this is an offensive unit only go defend if there are
@@ -227,20 +230,6 @@ namespace C7Engine {
 			return new DefenderAI(DefenderAI.MakeAiDataForDefendAtRiskCity(unit, player, minDefenders: int.MaxValue));
 		}
 
-		public static bool PlayerIsAtWarWithSomeone(Player player) {
-			foreach (KeyValuePair<ID, PlayerRelationship> p in player.playerRelationships) {
-				if (p.Value.atWar) {
-					Player other = EngineStorage.gameData.players.Find(x => x.id == p.Key);
-					if (other.isBarbarians) {
-						continue;
-					}
-
-					return true;
-				}
-			}
-			return false;
-		}
-
 		private static UnitAI GetCombatAIIfUnitCanAttackNearbyBarbCamp(MapUnit unit, Player player) {
 			if (unit.unitType.attack <= 0) {
 				return null;
@@ -278,7 +267,7 @@ namespace C7Engine {
 			foreach (Player them in EngineStorage.gameData.players) {
 				// We can't trade with players we don't know or players we're at
 				// war with.
-				if (!us.playerRelationships.ContainsKey(them.id) || us.playerRelationships[them.id].atWar) {
+				if (!us.playerRelationships.ContainsKey(them.id) || AtWar(us, them)) {
 					continue;
 				}
 

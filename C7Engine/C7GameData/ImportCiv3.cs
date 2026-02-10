@@ -502,14 +502,15 @@ namespace C7GameData {
 			i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
 				List<int> contacts = leader.GetContact();
-				List<bool> warStatus = leader.GetWarStatuses();
 				List<int> refuseContactForTurns = leader.GetRefuseContactForTurns();
 				for (int j = 0; j < contacts.Count; ++j) {
 					if (contacts[j] > 0) {
 						QueryCiv3.Sav.LEAD_LEAD relationship = savData.ReputationRelationship[i][j];
 						save.Players[i].playerRelationships.Add(save.Players[j].id.ToString(), new PlayerRelationship() {
-							atWar = warStatus[j],
 							warDeclarationCount = relationship.WarDeclarationCount,
+							// I don't think there is a way to figure this out for .sav or .biq files
+							// so by default we set this to 0 for these games
+							warDeclarationWithRoPActiveCount = 0,
 							wasSneakAttacked = relationship.WasSneakAttacked == 1,
 							refuseContactUntilTurn =
 								refuseContactForTurns[j] > 0 ?
@@ -749,17 +750,19 @@ namespace C7GameData {
 			}
 
 			foreach (SavePlayer savePlayer in save.Players) {
-				int other = 0;
 				log.Information($"- - - - - - - - - - - - - - - - - - {savePlayer.civilization} - - - - - - - - - - - - - - - - - - ");
-				foreach (PlayerRelationship pr in savePlayer.playerRelationships.Values) {
-					other++;
-					foreach (MultiTurnDeal mtd in pr.multiTurnDeals) {
-						string against = mtd.dealSubType == DealSubType.MilitaryAlliance || mtd.dealSubType == DealSubType.TradeEmbargo ? $"(against: {save.Players.First(p => p.id == mtd.againstPlayer).civilization}({mtd.againstPlayer}))" : "";
+				foreach (KeyValuePair<string, PlayerRelationship> pr in savePlayer.playerRelationships) {
+					if (pr.Value.multiTurnDeals.Count == 0) {
+						log.Information($"{savePlayer} is at war with {save.Players.First(c => c.id.ToString() == pr.Key)}");
+						continue;
+					}
+					foreach (MultiTurnDeal mtd in pr.Value.multiTurnDeals) {
+						string against = mtd.dealSubType == DealSubType.MilitaryAlliance || mtd.dealSubType == DealSubType.TradeEmbargo ? $"(against: {save.Players.First(p => p.id == mtd.againstPlayer)})" : "";
 						string gpt = mtd.dealSubType == DealSubType.GoldPerTurn? $"({mtd.goldPerTurn} gold per turn)" : "";
 						string rpt = mtd.dealSubType == DealSubType.LuxuryPerTurn || mtd.dealSubType == DealSubType.ResourcePerTurn ? $"({mtd.resourcePerTurn} per turn)" : "";
-						log.Information($"{savePlayer.civilization}({savePlayer.id}) " +
+						log.Information($"{savePlayer} " +
 										$"has {mtd.dealSubType} " +
-										$"with {save.Players[other].civilization}({save.Players[other].id}) " +
+										$"with {save.Players.First(c => c.id.ToString() == pr.Key)} " +
 										$"for another {mtd.TurnsRemaining(save.TurnNumber)} turns {mtd.turnStartDeal}-{mtd.turnEndDeal}" +
 										$" {against} {gpt} {rpt} {mtd.dealDetails}");
 					}
