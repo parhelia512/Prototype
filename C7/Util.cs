@@ -293,15 +293,15 @@ public partial class Util {
 	static public AudioStreamWav LoadWAVFromDisk(string path) {
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 
-		string riffString = System.Text.Encoding.UTF8.GetString(file.GetBuffer(4));
-		if (riffString != "RIFF") {
-			throw new Exception("Unsupported file");
+		byte[] riffBytes = file.GetBuffer(4);
+		if (!riffBytes.SequenceEqual("RIFF"u8)) {
+			throw new Exception("Unsupported file, missing 'RIFF' tag");
 		}
 		uint fileSize = file.Get32();   //minus 8 bytes
 
-		string waveString = System.Text.Encoding.UTF8.GetString(file.GetBuffer(4));
-		if (waveString != "WAVE") {
-			throw new Exception("Unsupported file");
+		byte[] waveBytes = file.GetBuffer(4);
+		if (!waveBytes.SequenceEqual("WAVE"u8)) {
+			throw new Exception("Unsupported file, missing 'WAVE' tag");
 		}
 
 		bool formatFound = false;
@@ -310,7 +310,7 @@ public partial class Util {
 		AudioStreamWav wav = new AudioStreamWav();
 
 		while (!file.EofReached()) {
-			string chunk = System.Text.Encoding.UTF8.GetString(file.GetBuffer(4));
+			byte[] chunkBytes = file.GetBuffer(4);
 			uint chunkSize = file.Get32();
 			ulong position = file.GetPosition();
 
@@ -319,7 +319,7 @@ public partial class Util {
 				break;
 			}
 
-			if (chunk == "fmt ")    //format chunk
+			if (chunkBytes.SequenceEqual("fmt "u8))    //format chunk
 			{
 				//There is some disagreement between the C++ and GDScript sources
 				//as to which compression codes Godot supports.  The C++ has a comment
@@ -355,7 +355,7 @@ public partial class Util {
 					throw new Exception("Format bits must be a multiple of 8");
 				}
 				formatFound = true;
-			} else if (chunk == "data") {
+			} else if (chunkBytes.SequenceEqual("data"u8)) {
 				byte[] allTheData = file.GetBuffer(chunkSize);
 				wav.Data = allTheData;
 				dataFound = true;
