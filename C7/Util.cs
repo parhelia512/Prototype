@@ -294,13 +294,13 @@ public partial class Util {
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 
 		byte[] riffBytes = file.GetBuffer(4);
-		if (!riffBytes.SequenceEqual("RIFF"u8)) {
+		if (!"RIFF"u8.SequenceEqual(riffBytes)) {
 			throw new Exception("Unsupported file, missing 'RIFF' tag");
 		}
 		uint fileSize = file.Get32();   //minus 8 bytes
 
 		byte[] waveBytes = file.GetBuffer(4);
-		if (!waveBytes.SequenceEqual("WAVE"u8)) {
+		if (!"WAVE"u8.SequenceEqual(waveBytes)) {
 			throw new Exception("Unsupported file, missing 'WAVE' tag");
 		}
 
@@ -319,7 +319,7 @@ public partial class Util {
 				break;
 			}
 
-			if (chunkBytes.SequenceEqual("fmt "u8))    //format chunk
+			if ("fmt "u8.SequenceEqual(chunkBytes))    //format chunk
 			{
 				//There is some disagreement between the C++ and GDScript sources
 				//as to which compression codes Godot supports.  The C++ has a comment
@@ -355,7 +355,7 @@ public partial class Util {
 					throw new Exception("Format bits must be a multiple of 8");
 				}
 				formatFound = true;
-			} else if (chunkBytes.SequenceEqual("data"u8)) {
+			} else if ("data"u8.SequenceEqual(chunkBytes)) {
 				byte[] allTheData = file.GetBuffer(chunkSize);
 				wav.Data = allTheData;
 				dataFound = true;
