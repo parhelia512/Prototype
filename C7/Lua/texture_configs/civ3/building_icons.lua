@@ -17,11 +17,11 @@ local building_icons = {
 }
 
 function building_icons.small:map_object_to_sprite(building)
-  if (building:GetType().Name ~= "Building") then
-    error "Expected a Building object"
+  if (building:GetType().Name ~= "Building" and building.GetType().Name ~= "Inflow") then
+    error("Expected a Building or a Inflow object, got " .. type(building:GetType().Name))
   end
 
-  local y = 1 + 33 * (1 + building.iconRowIndex)
+  local y = 33 + (SMALL_ICON_HEIGHT + 1) * building.iconRowIndex
 
   return {
     path = self.extra_data.path,
@@ -30,8 +30,8 @@ function building_icons.small:map_object_to_sprite(building)
 end
 
 function building_icons.large:map_object_to_sprite(building)
-  if (building:GetType().Name ~= "Building") then
-    error "Expected a Building object"
+  if (building:GetType().Name ~= "Building" and building.GetType().Name ~= "Inflow") then
+    error("Expected a Building or a Inflow object, got " .. type(building:GetType().Name))
   end
 
   local y = 33 + (LARGE_ICON_HEIGHT + 1) * building.iconRowIndex

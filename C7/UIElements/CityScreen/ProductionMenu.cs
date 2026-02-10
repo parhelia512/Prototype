@@ -19,7 +19,7 @@ public partial class ProductionMenu : Civ3TextureRect {
 
 		// Load the font we'll use.
 		FontFile font = ResourceLoader.Load<FontFile>("res://Fonts/NotoSans-Regular.ttf", null, ResourceLoader.CacheMode.Ignore);
-		font.FixedSize = 12;
+		font.FixedSize = 10;
 		fontTheme.DefaultFont = font;
 	}
 
@@ -36,6 +36,9 @@ public partial class ProductionMenu : Civ3TextureRect {
 		AddChild(tree);
 		tree.Columns = 2;
 		tree.Size = new Vector2(203, 360);
+		tree.SetColumnExpand(0, true);
+		tree.SetColumnExpand(1, false);
+		tree.SetColumnCustomMinimumWidth(1, 50);
 		TradingTree.ConfigureTreeTheme(tree, fontTheme);
 
 		TreeItem root = TradingTree.CreateTreeRoot(tree);
@@ -46,11 +49,15 @@ public partial class ProductionMenu : Civ3TextureRect {
 			TreeItem child = tree.CreateItem(root);
 			string text = $"{option.name}";
 			if (option is UnitPrototype proto) {
-				text += $" {proto.attack}.{proto.defense}.{proto.movement}";
+				string attackDesc = (proto.bombard > 0) ? $"{proto.attack}({proto.bombard})" : proto.attack.ToString();
+				text += $" {attackDesc}.{proto.defense}.{proto.movement}";
 			}
 			child.SetText(0, text);
 			child.SetText(1, $"{buildTime} turns");
 			child.SetIcon(0, RightClickChooseProductionMenu.GetProducibleIcon(option));
+			child.SetCustomMinimumHeight(40);
+			child.SetAutowrapMode(0, TextServer.AutowrapMode.WordSmart);
+			tree.SetColumnTitleAlignment(1, HorizontalAlignment.Right);
 			itemMapping[child] = option;
 		}
 

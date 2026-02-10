@@ -20,5 +20,6 @@ namespace C7GameData {
 		public int DefaultDealDuration;
 		public float TreasuryInterestRate = .05f;
 		public int MaxInterest = 50;
+		public int ShieldCostPerGold;
 	}
 }

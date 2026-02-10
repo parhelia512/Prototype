@@ -71317,6 +71317,18 @@
       ]
     }
   ],
+  "inflows": [
+    {
+      "name": "Wealth",
+      "iconRowIndex": 29,
+      "localYield": [
+        {
+          "yieldType": "commerce",
+          "yieldCalculation": "inflows.result.wealth.commerce"
+        }
+      ]
+    }
+  ],
   "players": [
     {
       "id": "player-1",
@@ -73497,9 +73509,10 @@
     "scoutUnitType": "Scout",
 	"maxRankOfWorkableTiles": 2,
 	"maxRankOfBarbarianCampTiles": 2,
-  "defaultDealDuration": 20,
+    "defaultDealDuration": 20,
     "treasuryInterestRate": 0.05,
-    "maxInterest": 50
+    "maxInterest": 50,
+    "shieldCostPerGold": 4
   },
   "techs": [
     {
@@ -73989,6 +74002,9 @@
       "y": 276,
       "prerequisites": [
         "tech-32"
+      ],
+      "flags": [
+        "doublesWealthProduction"
       ]
     },
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using C7Engine.AI.StrategicAI;
 using C7Engine;
+using MoonSharp.Interpreter;
 using Serilog;
 using static C7GameData.EraUtils;
 using static C7GameData.MultiTurnDeal;
@@ -11,19 +12,20 @@ using static C7GameData.PlayerRelationship;
 namespace C7GameData {
 
 	public struct PlayerCommerceBreakdown {
-		public int corrupted;       // Amount of commerce lost directly to corruption
-		public int taxes;           // Amount of treasury income from REGULAR citizens working tiles
-		public int taxmenTaxes;     // Amount of treasury income from tax collector specialists
-		public int beakers;         // Amount of commerce going to science
-		public int happiness;       // Amount of commerce going to entertainment
-		public int fromOtherCivs;   // Income from other Civ GPT deals
-		public int toOtherCivs;     // Expenses paid to other Civ GPT deals
-		public int interest;        // Interest income from Wall Street-flag small wonder
-		public int maintenance;     // Expenses due to aggregate building maintenance
-		public int unitSupport;     // Expenses due to unit support costs
+		public int corrupted;           // Amount of commerce lost directly to corruption
+		public int taxes;               // Amount of treasury income from REGULAR citizens working tiles
+		public int taxmenTaxes;         // Amount of treasury income from tax collector specialists
+		public int beakers;             // Amount of commerce going to science
+		public int happiness;           // Amount of commerce going to entertainment
+		public int fromOtherCivs;       // Income from other Civ GPT deals
+		public int toOtherCivs;         // Expenses paid to other Civ GPT deals
+		public int interest;            // Interest income from Wall Street-flag small wonder
+		public int maintenance;         // Expenses due to aggregate building maintenance
+		public int unitSupport;         // Expenses due to unit support costs
+		public int wealthProduction;    // Amount of extra commerce from "building" an Inflow that produces commerce
 
 		public int Inflows() {
-			return corrupted + taxes + taxmenTaxes + beakers + happiness + fromOtherCivs + interest;
+			return corrupted + taxes + taxmenTaxes + beakers + happiness + fromOtherCivs + interest + wealthProduction;
 		}
 
 		public int Outflows() {
@@ -35,7 +37,7 @@ namespace C7GameData {
 		}
 
 		public int CityInflows() {
-			return corrupted + taxes + beakers + happiness;
+			return corrupted + taxes + beakers + happiness + wealthProduction;
 		}
 	}
 	public class Player {
@@ -347,6 +349,10 @@ namespace C7GameData {
 			return "";
 		}
 
+		public List<Tech> GetKnownTechs() {
+			return EngineStorage.gameData?.techs.Where(x => this.knownTechs.Contains(x.id)).ToList();
+		}
+
 		public PlayerCommerceBreakdown AggregateFlows() {
 			var result = new PlayerCommerceBreakdown
 			{
@@ -359,7 +365,8 @@ namespace C7GameData {
 				toOtherCivs = 0,
 				interest = 0,
 				maintenance = 0,
-				unitSupport = 0
+				unitSupport = 0,
+				wealthProduction = 0
 			};
 
 			// If player has no cities, apply no expenses or income.
@@ -376,6 +383,7 @@ namespace C7GameData {
 				result.beakers += cityCommerce.beakers;
 				result.happiness += cityCommerce.happiness;
 				result.maintenance += city.MaintenanceCosts();
+				result.wealthProduction += cityCommerce.wealth;
 
 				interestBuildings += city.constructed_buildings.Count(cb => cb.building.treasuryEarnsInterest);
 
@@ -826,7 +834,7 @@ namespace C7GameData {
 			return true;
 		}
 
-		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
+		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCostRaw() {
 			int freeUnits = 0;
 
 			Difficulty difficulty = EngineStorage.gameData.gameDifficulty;
@@ -855,6 +863,23 @@ namespace C7GameData {
 			int allowedUnits = freeUnits;
 			int unitSupportCost = Math.Max(0, (totalUnits - allowedUnits) * government.unitCost);
 			return (totalUnits, allowedUnits, unitSupportCost);
+		}
+
+		[MoonSharpHidden]
+		public (int, int, int) TotalUnitsAllowedUnitsAndSupportCost() {
+			(int totalUnits, int allowedUnits, int unitSupportCost) result = TotalUnitsAllowedUnitsAndSupportCostRaw();
+
+			foreach (City city in cities) {
+				// unitSupport lua infow
+				if (city.itemBeingProduced is Inflow inflowUnitSupport && inflowUnitSupport.TryGetInflowYieldFunc(InflowYield.unitsupport, out var unitSupportYieldFunc)) {
+					int unitSupportLess = unitSupportYieldFunc.Invoke(new ScriptContext(this, city));
+					result.unitSupportCost -= unitSupportLess;
+				}
+			}
+
+			result.unitSupportCost = Math.Max(0, result.unitSupportCost);
+
+			return (result.totalUnits, result.allowedUnits, result.unitSupportCost);
 		}
 
 		// See https://forums.civfanatics.com/threads/military-advisor-relative-strength-assessment-definition.62980/post-1211499 and

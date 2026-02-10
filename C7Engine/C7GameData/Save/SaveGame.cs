@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using C7Engine;
+using Serilog;
 
 namespace C7GameData.Save {
 
@@ -57,6 +58,7 @@ namespace C7GameData.Save {
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
 				Buildings = data.Buildings.ConvertAll(building => building.ToSaveBuilding()),
+				Inflows = data.Inflows.ConvertAll(inflow => new SaveInflow(inflow)),
 				GreatWondersBuilt = data.GreatWondersBuilt,
 				BarbarianInfo = data.barbarianInfo,
 				Units = data.mapUnits.ConvertAll(unit => new SaveUnit(unit, data.map)),
@@ -111,6 +113,7 @@ namespace C7GameData.Save {
 			ConvertMapAndPlayers(data);
 			ConvertBuildings(data);
 			ConvertUnits(data);
+			ConvertInflow(data);
 			ConvertCities(data);
 			ConvertBarbarianInfo(data);
 			ConvertStrengthBonuses(data);
@@ -233,6 +236,10 @@ namespace C7GameData.Save {
 			}
 		}
 
+		private void ConvertInflow(GameData data) {
+			data.Inflows = Inflows.ConvertAll(saveInflow => new Inflow(saveInflow, data.luaRulesEngine));
+		}
+
 		private void ConvertBuildings(GameData data) {
 			data.Buildings = Buildings.ConvertAll(building => new Building(building, data));
 
@@ -315,7 +322,7 @@ namespace C7GameData.Save {
 		private void ConvertCities(GameData data) {
 			// cities require game map for location and players for city owner
 			data.cities = Cities.ConvertAll(city =>
-				city.ToCity(data.map, data.players, data.unitPrototypes, Civilizations, data.Buildings, CitizenTypes)
+				city.ToCity(data.map, data.players, data.unitPrototypes, Civilizations, data.Buildings, CitizenTypes, data.Inflows)
 			);
 
 			// add references to map tiles after units and cities are defined
@@ -384,6 +391,7 @@ namespace C7GameData.Save {
 		public List<SaveUnit> Units = new List<SaveUnit>();
 		public List<SaveUnitPrototype> UnitPrototypes = [];
 		public List<SaveBuilding> Buildings = [];
+		public List<SaveInflow> Inflows = [];
 		public HashSet<string> GreatWondersBuilt = new();
 		public List<SavePlayer> Players = new List<SavePlayer>();
 		public List<SaveCity> Cities = new List<SaveCity>();
