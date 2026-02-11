@@ -1,24 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using C7GameData;
+using System.Collections.Generic;
 using System.Linq;
-using C7GameData.AIData;
-using Serilog;
 
 namespace C7Engine {
 	public class SettlerLocationAI {
-		private static ILogger log = Log.ForContext<SettlerLocationAI>();
-
-		//Eventually, there should be different weights based on whether the AI already
-		//has the resource or not (more important to secure ones that they don't have).
-		//But since we don't have trade networks yet, for now there's only one value.
-		static int STRATEGIC_RESOURCE_BONUS = 20;
-		static int LUXURY_RESOURCE_BONUS = 15;
+		private static readonly Serilog.ILogger Log = Serilog.Log.ForContext<SettlerLocationAI>();
 
 		//Figures out where to plant Settlers
-		public static Tile findSettlerLocation(Tile start, Player player) {
-			Dictionary<Tile, int> scores = GetScoredSettlerCandidates(start, player);
+		public static Tile FindSettlerLocation(Tile start, Player player) {
+			Dictionary<Tile, float> scores = GetScoredSettlerCandidates(start, player);
 			if (scores.Count == 0 || scores.Values.Max() <= 0) {
 				return Tile.NONE;   //nowhere to settle
 			}
@@ -27,43 +17,41 @@ namespace C7Engine {
 			return result;
 		}
 
-		public static Dictionary<Tile, int> GetScoredSettlerCandidates(Tile start, Player player) {
+		public static Dictionary<Tile, float> GetScoredSettlerCandidates(Tile start, Player player) {
 			List<MapUnit> playerUnits = player.units;
 			// TODO: handle settling other continents
 			IEnumerable<Tile> candidates = player.tileKnowledge.AllKnownTiles().Where(t => !IsInvalidCityLocation(t) && t.continent == start.continent);
-			Dictionary<Tile, int> scores = AssignTileScores(start, player, candidates, playerUnits.FindAll(u => u.unitType.name == "Settler"));
+			Dictionary<Tile, float> scores = AssignTileScores(start, player, candidates, playerUnits.FindAll(u => u.unitType.name == "Settler"));
 			return scores;
 		}
 
-		private static Dictionary<Tile, int> AssignTileScores(Tile startTile, Player player, IEnumerable<Tile> candidates, List<MapUnit> playerSettlers) {
-			Dictionary<Tile, int> scores = new Dictionary<Tile, int>();
+		private static Dictionary<Tile, float> AssignTileScores(Tile startTile, Player player, IEnumerable<Tile> candidates, List<MapUnit> playerSettlers) {
+			Dictionary<Tile, float> scores = new();
 			candidates = candidates.Where(t => !SettlerAlreadyMovingTowardsTile(t, playerSettlers) && t.IsAllowCities());
 			foreach (Tile t in candidates) {
-				int score = GetTileYieldScore(t, player);
+				float score = GetTileYieldScore(t, player);
 				//For simplicity's sake, I'm only going to look at immediate neighbors here, but
 				//a lot more things should be considered over time.
 				foreach (Tile nt in t.neighbors.Values) {
 					score += GetTileYieldScore(nt, player);
 				}
-				//TODO: Also look at the next ring out, with lower weights.
+				//TODO #802: Also look at the next ring out, with lower weights.
 
 				//Prefer hills for defense, and coast for boats and such.
 				if (t.baseTerrainType.Key == "hills") {
-					score += 10;
+					score += player.civilization.Adjustments.HillsBonus;
 				}
 				if (t.NeighborsWater()) {
-					score += 10;
+					score += player.civilization.Adjustments.WaterBonus;
 				}
 
 				//Lower scores if they are far away
-				int preDistanceScore = score;
+				float preDistanceScore = score;
 				int distance = startTile.distanceTo(t);
-				if (distance > 4) {
-					score -= distance * 2;
+				if (distance > player.civilization.Adjustments.DistancePenaltyRadius) {
+					score += player.civilization.Adjustments.DistancePenalty * distance;
 				}
-				if (distance > 8) {
-					score -= distance * 4;
-				}
+
 				//Distance can never lower score beyond 1; the AI will always try to settle those worthless tundras.
 				//(This could actually be modified in the future, but for now is also a safety rail)
 				if (preDistanceScore > 0 && score <= 0) {
@@ -75,15 +63,15 @@ namespace C7Engine {
 			return scores;
 		}
 
-		private static int GetTileYieldScore(Tile t, Player owner) {
-			int score = t.foodYield(owner).yield * 5;
-			score += t.productionYield(owner).yield * 3;
-			score += t.commerceYield(owner).yield * 2;
+		private static float GetTileYieldScore(Tile t, Player owner) {
+			float score = owner.civilization.Adjustments.FoodYieldBonus * t.foodYield(owner).yield;
+			score += owner.civilization.Adjustments.ProductionYieldBonus * t.productionYield(owner).yield;
+			score += owner.civilization.Adjustments.CommerceYieldBonus * t.commerceYield(owner).yield;
 			if (owner.KnowsAboutResource(t.Resource)) {
 				if (t.Resource.Category == ResourceCategory.STRATEGIC) {
-					score += STRATEGIC_RESOURCE_BONUS;
+					score += owner.civilization.Adjustments.StrategicResourceBonus;
 				} else if (t.Resource.Category == ResourceCategory.LUXURY) {
-					score += LUXURY_RESOURCE_BONUS;
+					score += owner.civilization.Adjustments.LuxuryResourceBonus;
 				}
 			}
 			return score;

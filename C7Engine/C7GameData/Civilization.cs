@@ -49,6 +49,28 @@ namespace C7GameData {
 
 		public bool isBarbarian = false;
 
+		public class SettlerTileAdjustments {
+			public int DistancePenaltyRadius = 4;
+
+			// TODO: Eventually, there should be different weights based on whether the AI already
+			// has the resource or not (more important to secure ones that they don't have).
+			// But since we don't have trade networks yet, for now there's only one value.
+
+			// multipliers
+			public float CommerceYieldBonus = 2;
+			public float DistancePenalty = -2;
+			public float FoodYieldBonus = 5;
+			public float ProductionYieldBonus = 3;
+
+			// constants
+			public float HillsBonus = 10;
+			public float LuxuryResourceBonus = 15;
+			public float StrategicResourceBonus = 20;
+			public float WaterBonus = 10;
+		}
+
+		public SettlerTileAdjustments Adjustments = new();
+
 		[JsonIgnore]
 		public UnitPrototype uniqueUnit;
 

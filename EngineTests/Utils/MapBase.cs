@@ -41,6 +41,14 @@ public class MapBase {
 		return new Player() { isHuman = isHuman };
 	}
 
+	protected Player MakeTestPlayer(List<Tile> knownTiles) {
+		Player player = MakePlayer(true);
+		player.civilization = new Civilization();
+		player.government = new Government();
+		foreach (Tile tile in knownTiles) { player.tileKnowledge.knownTiles.Add(tile); }
+		return player;
+	}
+
 	private TileDirection[] directions = {
 		TileDirection.NORTH,
 		TileDirection.NORTHEAST,
@@ -51,6 +59,20 @@ public class MapBase {
 		TileDirection.EAST,
 		TileDirection.WEST,
 	};
+
+	protected List<Tile> SurroundTile(Tile center, System.Func<Tile> neighbors) {
+		List<Tile> map = new();
+		map.Add(center);
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.NORTH));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.NORTHEAST));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.EAST));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.SOUTHEAST));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.SOUTH));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.SOUTHWEST));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.WEST));
+		map.Add(AddNeighborsAndUpdateMap(startTile, neighbors(), TileDirection.NORTHWEST));
+		return map;
+	}
 
 	// Probably not the best way to update all he neighbors,
 	// but it's only meant to be used in the unit tests
@@ -145,6 +167,18 @@ public class MapBase {
 		return new(ID.None("")) {
 			baseTerrainType = new() { Key = "plains" },
 			overlayTerrainType = new() { Key = "plains", movementCost = 1 }
+		};
+	}
+	protected Tile MakeDesertTile() {
+		return new(ID.None("")) {
+			baseTerrainType = new() { Key = "desert" },
+			overlayTerrainType = new() { Key = "desert", movementCost = 1 }
+		};
+	}
+	protected Tile MakeFloodPlainTile() {
+		return new(ID.None("")) {
+			baseTerrainType = new() { Key = "flood plain" },
+			overlayTerrainType = new() { Key = "flood plain", movementCost = 1 }
 		};
 	}
 	protected Tile MakeCoastTile() {
