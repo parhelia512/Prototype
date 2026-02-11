@@ -5,6 +5,7 @@ namespace C7GameData.Save {
 
 	public class SaveUnit : IHasID {
 		public ID id { get; set; }
+		public string name;
 		public string prototype;
 		public ID owner;
 		public TileLocation previousLocation = new TileLocation();
@@ -26,6 +27,7 @@ namespace C7GameData.Save {
 
 		public SaveUnit(MapUnit unit, GameMap map) {
 			id = unit.id;
+			name = unit.name;
 			prototype = unit.unitType.name;
 			owner = unit.owner.id;
 			if (unit.previousLocation is not null) {
@@ -65,6 +67,7 @@ namespace C7GameData.Save {
 			};
 			unit.location.unitsOnTile.Add(unit);
 			unit.movementPoints.reset(movePointsRemaining);
+            unit.name = string.IsNullOrEmpty(name) ? unit.unitType.name : name;
 
 			return unit;
 		}

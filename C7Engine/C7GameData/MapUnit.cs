@@ -13,6 +13,7 @@ namespace C7GameData {
 	 **/
 	public class MapUnit {
 		public ID id { get; internal set; }
+		public string name { get; internal set; }
 		public UnitPrototype unitType { get; set; }
 		public Player owner { get; set; }
 		public Tile previousLocation { get; internal set; }
@@ -94,7 +95,7 @@ namespace C7GameData {
 			UnitPrototype type = this.unitType;
 			string hPDesc = ((type.attack > 0) || (type.defense > 0)) ? $" ({hitPointsRemaining}/{maxHitPoints})" : "";
 			string attackDesc = (type.bombard > 0) ? $"{type.attack}({type.bombard})" : type.attack.ToString();
-			return $"{experienceLevel.displayName}{hPDesc} {type.name} ({attackDesc}.{type.defense}.{movementPoints.getMixedNumber()}/{type.movement})";
+			return $"{experienceLevel.displayName}{hPDesc} {this.name} ({attackDesc}.{type.defense}.{movementPoints.getMixedNumber()}/{type.movement})";
 		}
 
 		// TODO: The contents of this enum are copy-pasted from UnitAction in Civ3UnitSprite.cs. We should unify these so we don't have two different

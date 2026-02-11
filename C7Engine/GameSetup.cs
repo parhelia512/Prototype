@@ -100,6 +100,7 @@ public class GameSetup {
 	private void AddUnit(SaveGame save, SavePlayer player, string unitType, TileLocation location) {
 		SaveUnit unit = new() {
 			id = ids.CreateID(unitType),
+            name = unitType,
 			prototype = unitType,
 			owner = player.id,
 			previousLocation = new TileLocation(-1, -1),
