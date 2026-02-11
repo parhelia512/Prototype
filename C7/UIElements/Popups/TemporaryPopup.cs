@@ -39,6 +39,14 @@ public partial class TemporaryPopup : Label {
 		return styleBox;
 	}
 
+	public static void Show(Node parent, string msg, Vector2 rootPosition) {
+		TemporaryPopup popup = new(msg, 1);
+		Vector2 offset = new(0, -64);
+		popup.SetPosition(rootPosition + offset);
+		parent.AddChild(popup);
+		popup.ShowPopup();
+	}
+
 	public async void ShowPopup() {
 		// Wait until we hit our duration then destroy ourself.
 		await Task.Delay(durationInMillis);

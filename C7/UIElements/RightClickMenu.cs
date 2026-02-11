@@ -102,10 +102,7 @@ public partial class RightClickMenu : VBoxContainer {
 	}
 
 	public void ShowCannotMovePopup() {
-		TemporaryPopup popup = new("This unit has already moved.", 1);
-		popup.SetPosition(position + new Vector2(0, -64));
-		GetParent().AddChild(popup);
-		popup.ShowPopup();
+		TemporaryPopup.Show(GetParent(), "This unit has already moved.", position);
 	}
 }
 

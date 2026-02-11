@@ -278,10 +278,9 @@ public partial class Game : Node {
 				turnsLeftToFastForward = 0;
 				break;
 			case MsgShowTemporaryPopup mSTP:
-				TemporaryPopup popup = new(mSTP.message, 1);
-				popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
-				AddChild(popup);
-				popup.ShowPopup();
+				Vector2 pos = mapView.screenLocationOfTile(mSTP.location, true);
+				Vector2 offset = new(0, -32);
+				TemporaryPopup.Show(this, mSTP.message, pos + offset);
 				break;
 			case MsgUnitMoved mUUAAB:
 				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mUUAAB.Unit));
