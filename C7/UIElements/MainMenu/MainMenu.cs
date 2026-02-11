@@ -43,13 +43,15 @@ public partial class MainMenu : Node {
 		LoadScenarioDialog.SetDirectoryForLoading(@"Conquests/Scenarios");
 		LoadScenarioDialog.GoToScenarioSetupAfterLoading = true;
 
-		// If couldn't find the button textures when ButtonContainer._Ready, then
-		// these buttons will be null, so be sure to recreate them if we call
-		// DisplayTitleScreen after picking standalone mode or getting the civ3
-		// home path set.
-		if (ButtonContainer.NewGame == null) {
-			ButtonContainer.CreateButtons();
+		if (!C7Settings.UseStandaloneMode() && !ClassicGraphicsAvailable()) {
+			NoCiv3Options.Visible = true;
+			ButtonContainer.Visible = false;
+			return;
 		}
+
+		ButtonContainer.Visible = true;
+		ButtonContainer.CreateButtons();
+
 		// TODO: enable buttons are features are implemented
 		ButtonContainer.NewGame.Pressed += GoToWorldSetup;
 		ButtonContainer.QuickStart.Pressed += StartGame;
@@ -79,6 +81,22 @@ public partial class MainMenu : Node {
 
 		// Hide if valid path is present as proven by reaching this point in code
 		NoCiv3Options.Visible = false;
+	}
+
+	private bool ClassicGraphicsAvailable() {
+		if (string.IsNullOrEmpty(Util.Civ3Root)) {
+			return false;
+		}
+
+		string[] basePaths = ["Conquests", "civ3PTW", ""];
+		foreach (string basePath in basePaths) {
+			string relPath = string.IsNullOrEmpty(basePath) ? "Art/buttonsFINAL.pcx" : $"{basePath}/Art/buttonsFINAL.pcx";
+			if (Util.FileExistsIgnoringCase(Util.Civ3Root, relPath) != null) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void SetToggleGraphicsText() {
@@ -151,7 +169,9 @@ public partial class MainMenu : Node {
 	}
 
 	private void UseStandaloneModePressed() {
-		Global.ToggleModernGraphics();
+		if (!Global.ModernGraphicsActive) {
+			Global.ToggleModernGraphics();
+		}
 		C7Settings.SetValue("locations", "useStandaloneMode", "true");
 		C7Settings.SaveSettings();
 		DisplayTitleScreen();

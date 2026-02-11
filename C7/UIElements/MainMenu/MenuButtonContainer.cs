@@ -15,11 +15,24 @@ public partial class MenuButtonContainer : VBoxContainer {
 	public Civ3MenuButton Credits { get; private set; }
 	public Civ3MenuButton Exit { get; private set; }
 
-	public override void _Ready() {
-		CreateButtons();
-	}
-
 	public void CreateButtons() {
+		foreach (Node child in GetChildren()) {
+			RemoveChild(child);
+			child.QueueFree();
+		}
+
+		NewGame = null;
+		QuickStart = null;
+		Tutorial = null;
+		LoadGame = null;
+		LoadScenario = null;
+		HallOfFame = null;
+		ToggleGraphics = null;
+		Preferences = null;
+		AudioPreferences = null;
+		Credits = null;
+		Exit = null;
+
 		NewGame = new Civ3MenuButton() { Text = "New Game" };
 		AddChild(NewGame);
 
