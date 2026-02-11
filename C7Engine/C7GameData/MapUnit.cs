@@ -74,6 +74,10 @@ namespace C7GameData {
 			return IsLandUnit() && unitType.defense > 0;
 		}
 
+		public bool IsNonCombatUnit() {
+			return unitType.attack == 0;
+		}
+
 		public bool HasRank() {
 			return this.unitType.attack > 0 || this.unitType.defense > 0;
 		}
@@ -500,6 +504,14 @@ namespace C7GameData {
 		// Like above, but allows specifying that we want to handle the case
 		// where a war declaration could be made before the move.
 		public bool CanEnterTile(Tile tile, bool allowCombat, bool allowWarDeclaration) {
+			return CanEnterTile(tile, new TileProbe() {
+				AllowCombat = allowCombat,
+				AllowWarDeclaration = allowWarDeclaration
+			});
+		}
+
+		// Generalized check to see whether a given tile is accessible to the unit in a given context.
+		public bool CanEnterTile(Tile tile, TileProbe probe) {
 			if (this.owner.isHuman && !this.owner.HasExploredTile(tile))
 				return true;
 
@@ -521,10 +533,25 @@ namespace C7GameData {
 			if (this.IsLandUnit() && !tile.IsLand())
 				return false;
 
+			if (IsNonCombatUnit()) {
+				if (HasHostileCity(tile, owner)) {
+					if (probe.RaiseNotice) {
+						new MsgShowTemporaryPopup($"Only combat units can capture cities and improvements.", tile).send();
+					}
+					return false;
+				}
+				if (HasHostileUnits(tile, owner)) {
+					if (probe.RaiseNotice) {
+						new MsgShowTemporaryPopup($"Non-combat units may not attack.", tile).send();
+					}
+					return false;
+				}
+			}
+
 			// If we allow declaring war on this move, then it doesn't matter if
 			// there are units belonging to another player on the tile.
 			// TODO: unbreakable alliances
-			if (allowWarDeclaration) {
+			if (probe.AllowWarDeclaration) {
 				return true;
 			}
 
@@ -541,7 +568,7 @@ namespace C7GameData {
 				foreach (MapUnit other in tile.unitsOnTile) {
 					if (other.owner != owner) {
 						if (!other.owner.IsAtPeaceWith(owner))
-							return allowCombat && unitType.attack > 0;
+							return probe.AllowCombat && unitType.attack > 0;
 						return false;
 					}
 				}
@@ -550,11 +577,23 @@ namespace C7GameData {
 			// Check for cities belonging to other civs.
 			if (tile.cityAtTile != null && tile.cityAtTile.owner != owner) {
 				if (!this.owner.isHuman || this.owner.tileKnowledge.isActiveTile(tile))
-					return allowCombat;
+					return probe.AllowCombat;
 				return false;
 			}
 
 			return true;
+		}
+
+		private static bool HasHostileUnits(Tile tile, Player player) {
+			foreach (MapUnit other in tile.unitsOnTile) {
+				if (player != other.owner && !player.IsAtPeaceWith(other.owner))
+					return true;
+			}
+			return false;
+		}
+
+		private static bool HasHostileCity(Tile tile, Player player) {
+			return tile.HasCity && !player.IsAtPeaceWith(tile.cityAtTile.owner);
 		}
 
 		/// <summary>
@@ -568,7 +607,7 @@ namespace C7GameData {
 		public async Task<bool> move(TileDirection dir, bool wait = false) {
 			(int dx, int dy) = dir.toCoordDiff();
 			Tile newLoc = EngineStorage.gameData.map.tileAt(dx + location.XCoordinate, dy + location.YCoordinate);
-			if ((newLoc != Tile.NONE) && CanEnterTile(newLoc, true) && (movementPoints.canMove)) {
+			if ((newLoc != Tile.NONE) && CanEnterTile(newLoc, TileProbe.MoveProbe()) && (movementPoints.canMove)) {
 				facingDirection = dir;
 				wake();
 
@@ -855,6 +894,16 @@ namespace C7GameData {
 			// unit.availableActions.Add("rename");
 
 			return result;
+		}
+	}
+
+	public class TileProbe {
+		public bool AllowCombat { get; set; }
+		public bool AllowWarDeclaration { get; set; }
+		public bool RaiseNotice { get; set; }
+
+		public static TileProbe MoveProbe() {
+			return new TileProbe() { AllowCombat = true, RaiseNotice = true };
 		}
 	}
 }
