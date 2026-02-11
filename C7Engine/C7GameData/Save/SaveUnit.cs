@@ -67,7 +67,7 @@ namespace C7GameData.Save {
 			};
 			unit.location.unitsOnTile.Add(unit);
 			unit.movementPoints.reset(movePointsRemaining);
-            unit.name = string.IsNullOrEmpty(name) ? unit.unitType.name : name;
+			unit.name = string.IsNullOrEmpty(name) ? unit.unitType.name : name;
 
 			return unit;
 		}

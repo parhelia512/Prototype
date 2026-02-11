@@ -794,7 +794,7 @@ namespace C7GameData {
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
 				SaveUnit saveUnit = new SaveUnit{
 					id = ids.CreateID(prototype.Name),
-                    name = String.IsNullOrEmpty(unit.Name) ? prototype.Name : unit.Name,
+					name = String.IsNullOrEmpty(unit.Name) ? prototype.Name : unit.Name,
 					owner = player.id,
 					prototype = prototype.Name,
 					currentLocation = new TileLocation(unit.X, unit.Y),
