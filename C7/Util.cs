@@ -130,7 +130,7 @@ public partial class Util {
 
 		// Next, before trying the base Civ paths, see if we have it packaged
 		// with C7 and are in standalone mode.
-		string c7BasePath = System.IO.Path.Combine(getProjectDirectoryPath(), "Assets");
+		string c7BasePath = GetC7AssetsPath();
 		string c7Path = FileExistsIgnoringCase(c7BasePath, mediaPath);
 
 		if (C7Settings.UseStandaloneMode()) {
@@ -186,11 +186,12 @@ public partial class Util {
 		return result;
 	}
 
-	static private string getProjectDirectoryPath() {
-		// see issue https://github.com/godotengine/godot/issues/24222#issuecomment-709092664
-		// - use local resource folder while running from the editor binary
-		// - use executable folder in the exported builds
-		return OS.HasFeature("editor") ? "res://" : OS.GetExecutablePath().GetBaseDir();
+	static private string GetC7AssetsPath() {
+		if (OS.HasFeature("editor")) {
+			return "res://Assets";
+		}
+
+		return System.IO.Path.Combine(GamePaths.BaseDir, "Assets");
 	}
 
 	// Replaces image colors based on a given dictionary
