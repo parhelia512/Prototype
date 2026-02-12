@@ -536,13 +536,13 @@ namespace C7GameData {
 			if (IsNonCombatUnit()) {
 				if (HasHostileCity(tile, owner)) {
 					if (probe.RaiseNotice) {
-						new MsgShowTemporaryPopup($"Only combat units can capture cities and improvements.", tile).send();
+						new MsgShowTemporaryPopup($"Only combat units can capture cities and improvements.", location).send();
 					}
 					return false;
 				}
 				if (HasHostileUnits(tile, owner)) {
 					if (probe.RaiseNotice) {
-						new MsgShowTemporaryPopup($"Non-combat units may not attack.", tile).send();
+						new MsgShowTemporaryPopup($"Non-combat units may not attack.", location).send();
 					}
 					return false;
 				}

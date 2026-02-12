@@ -14,13 +14,23 @@ public partial class TemporaryPopup : Label {
 	}
 
 	// A stylebox that works well for temporary popups or tooltips in game.
-	public static StyleBoxFlat PopupStyleBox() {
+	public static StyleBoxFlat TooltipStyleBox() {
 		StyleBoxFlat styleBox = new();
 		styleBox.ContentMarginLeft = 5;
 		styleBox.ContentMarginRight = 5;
 		styleBox.ContentMarginTop = 2;
 		styleBox.ContentMarginBottom = 2;
 		styleBox.BgColor = Color.FromHtml("1C1C1C");
+		return styleBox;
+	}
+
+	public static StyleBoxFlat PopupStyleBox() {
+		StyleBoxFlat styleBox = new();
+		styleBox.ContentMarginLeft = 5;
+		styleBox.ContentMarginRight = 5;
+		styleBox.ContentMarginTop = 2;
+		styleBox.ContentMarginBottom = 2;
+		styleBox.BgColor = Color.FromHtml("1C1C1C99");
 		return styleBox;
 	}
 
@@ -40,10 +50,15 @@ public partial class TemporaryPopup : Label {
 	}
 
 	public static void Show(Node parent, string msg, Vector2 rootPosition) {
-		TemporaryPopup popup = new(msg, 1);
-		Vector2 offset = new(0, -64);
-		popup.SetPosition(rootPosition + offset);
+		TemporaryPopup popup = new(msg, 2);
+		popup.SetPosition(rootPosition);
 		parent.AddChild(popup);
+
+		// Center the text, adjust it slightly above the target (tile) position.
+		// Note: Label size isn't defined until node has been added to the tree.
+		Vector2 offset = new(-(popup.Size.X / 2), -64);
+		popup.SetPosition(rootPosition + offset);
+
 		popup.ShowPopup();
 	}
 

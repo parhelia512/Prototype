@@ -279,8 +279,7 @@ public partial class Game : Node {
 				break;
 			case MsgShowTemporaryPopup mSTP:
 				Vector2 pos = mapView.screenLocationOfTile(mSTP.location, true);
-				Vector2 offset = new(0, -32);
-				TemporaryPopup.Show(this, mSTP.message, pos + offset);
+				TemporaryPopup.Show(this, mSTP.message, pos);
 				break;
 			case MsgUnitMoved mUUAAB:
 				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mUUAAB.Unit));
@@ -519,10 +518,7 @@ public partial class Game : Node {
 
 		bool canMove = unitSelector.SetSelectedUnit(to_select);
 		if (!canMove) {
-			TemporaryPopup popup = new("This unit has already moved.", 1);
-			popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
-			AddChild(popup);
-			popup.ShowPopup();
+			TemporaryPopup.Show(this, "This unit has already moved.", eventMouseButton.Position);
 		}
 	}
 
