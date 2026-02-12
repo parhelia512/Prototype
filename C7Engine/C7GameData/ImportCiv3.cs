@@ -794,6 +794,7 @@ namespace C7GameData {
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
 				SaveUnit saveUnit = new SaveUnit{
 					id = ids.CreateID(prototype.Name),
+					name = String.IsNullOrEmpty(unit.Name) ? prototype.Name : unit.Name,
 					owner = player.id,
 					prototype = prototype.Name,
 					currentLocation = new TileLocation(unit.X, unit.Y),
@@ -816,10 +817,11 @@ namespace C7GameData {
 		private void ImportBicUnits() {
 			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
 
-			var createUnitAtLocation = (SavePlayer player, int unitType, string experienceLevel, int hitPoints, int x, int y) => {
+			var createUnitAtLocation = (SavePlayer player, string unitName, int unitType, string experienceLevel, int hitPoints, int x, int y) => {
 				PRTO prototype = theBiq.Prto[unitType];
 				SaveUnit saveUnit = new SaveUnit{
 					id = ids.CreateID(prototype.Name),
+					name = String.IsNullOrEmpty(unitName) ? prototype.Name : unitName,
 					owner = player.id,
 					prototype = prototype.Name,
 					currentLocation = new TileLocation(x, y),
@@ -840,7 +842,7 @@ namespace C7GameData {
 				// mapping of players and civs.
 				SavePlayer player = save.Players[unit.Owner];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
-				save.Units.Add(createUnitAtLocation(player, unit.UnitType, experience.key, experience.baseHitPoints, unit.X, unit.Y));
+				save.Units.Add(createUnitAtLocation(player, unit.Name, unit.UnitType, experience.key, experience.baseHitPoints, unit.X, unit.Y));
 			}
 
 			RULE rule = theBiq.Rule[0];
@@ -855,10 +857,10 @@ namespace C7GameData {
 				SavePlayer player = save.Players[starting_location.Owner];
 				int baseHitPoints = 3;
 				if (rule.StartUnitType1 >= 0) {
-					save.Units.Add(createUnitAtLocation(player, rule.StartUnitType1, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
+					save.Units.Add(createUnitAtLocation(player, theBiq.Prto[rule.StartUnitType1].Name, rule.StartUnitType1, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
 				}
 				if (rule.StartUnitType2 >= 0) {
-					save.Units.Add(createUnitAtLocation(player, rule.StartUnitType2, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
+					save.Units.Add(createUnitAtLocation(player, theBiq.Prto[rule.StartUnitType2].Name, rule.StartUnitType2, "Regular", baseHitPoints, starting_location.X, starting_location.Y));
 				}
 			}
 		}

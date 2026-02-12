@@ -68871,6 +68871,7 @@
   "units": [
     {
       "id": "Settler-1",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-2",
       "previousLocation": {
@@ -68890,6 +68891,7 @@
     },
     {
       "id": "Worker-1",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-2",
       "previousLocation": {
@@ -68909,6 +68911,7 @@
     },
     {
       "id": "Settler-2",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-3",
       "previousLocation": {
@@ -68928,6 +68931,7 @@
     },
     {
       "id": "Worker-2",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-3",
       "previousLocation": {
@@ -68947,6 +68951,7 @@
     },
     {
       "id": "Scout-1",
+      "name": "Scout",
       "prototype": "Scout",
       "owner": "player-3",
       "previousLocation": {
@@ -68966,6 +68971,7 @@
     },
     {
       "id": "Settler-3",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-4",
       "previousLocation": {
@@ -68985,6 +68991,7 @@
     },
     {
       "id": "Worker-3",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-4",
       "previousLocation": {
@@ -69004,6 +69011,7 @@
     },
     {
       "id": "Settler-4",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-5",
       "previousLocation": {
@@ -69023,6 +69031,7 @@
     },
     {
       "id": "Worker-4",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-5",
       "previousLocation": {
@@ -69042,6 +69051,7 @@
     },
     {
       "id": "Scout-2",
+      "name": "Scout",
       "prototype": "Scout",
       "owner": "player-5",
       "previousLocation": {
@@ -69061,6 +69071,7 @@
     },
     {
       "id": "Settler-5",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-6",
       "previousLocation": {
@@ -69080,6 +69091,7 @@
     },
     {
       "id": "Worker-5",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-6",
       "previousLocation": {
@@ -69099,6 +69111,7 @@
     },
     {
       "id": "Settler-6",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-7",
       "previousLocation": {
@@ -69118,6 +69131,7 @@
     },
     {
       "id": "Worker-6",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-7",
       "previousLocation": {
@@ -69137,6 +69151,7 @@
     },
     {
       "id": "Settler-7",
+      "name": "Settler",
       "prototype": "Settler",
       "owner": "player-8",
       "previousLocation": {
@@ -69156,6 +69171,7 @@
     },
     {
       "id": "Worker-7",
+      "name": "Worker",
       "prototype": "Worker",
       "owner": "player-8",
       "previousLocation": {
