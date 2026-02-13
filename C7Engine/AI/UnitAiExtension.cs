@@ -13,17 +13,17 @@ namespace C7Engine {
 		// Attempts to move the supplied unit along the given path.
 		//
 		// `path` is a ref so that the path can be recalculated if necessary.
-		public static MoveResult TryToMoveAlongPath(this UnitAI unitAi, MapUnit unit, ref TilePath path, bool allowCombat) {
+		public static MoveResult TryToMoveAlongPath(this UnitAI unitAi, MapUnit unit, ref TilePath path, TileProbe probe) {
 			if (!unit.movementPoints.canMove) {
 				return UnitAI.Result.InProgress;
 			}
 			Tile nextTile = path.Next();
-			if (nextTile == Tile.NONE || !unit.CanEnterTile(nextTile, allowCombat)) {
+			if (nextTile == Tile.NONE || !unit.CanEnterTile(nextTile, probe)) {
 				log.Information($"Attempting to repath {unit} from {unit.location} to {path.destination}");
 				// Attempt to repath. If we succeed, return inprogress so we get
 				// called again.
 				path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, path.destination, unit);
-				if ((path?.PathLength() ?? -1) == -1 || path.PeekNext() == Tile.NONE || !unit.CanEnterTile(path.PeekNext(), allowCombat)) {
+				if ((path?.PathLength() ?? -1) == -1 || path.PeekNext() == Tile.NONE || !unit.CanEnterTile(path.PeekNext(), probe)) {
 					return UnitAI.Result.Error;
 				}
 

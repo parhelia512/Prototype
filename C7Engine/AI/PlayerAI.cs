@@ -247,7 +247,7 @@ namespace C7Engine {
 			}
 
 			List<Tile> reachableBarbCampsTiles = player.tileKnowledge.AllKnownTiles()
-				.Where(t => unit.CanEnterTile(t, true) && t.hasBarbarianCamp).ToList();
+				.Where(t => unit.CanEnterTile(t, TileProbe.AiCombatProbe()) && t.hasBarbarianCamp).ToList();
 
 			Tile closestBarbCamp = Tile.NONE;
 			int closestBarbDistance = int.MaxValue;

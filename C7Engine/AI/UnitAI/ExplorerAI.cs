@@ -51,7 +51,7 @@ namespace C7Engine {
 				return UnitAI.Result.Done;
 			}
 
-			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, allowCombat: false);
+			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, TileProbe.AiMoveProbe());
 		}
 
 		public string SummarizePlan() {
