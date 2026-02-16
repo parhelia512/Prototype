@@ -115,6 +115,7 @@ public partial class HillsLayer : LooseLayer {
 		jungleHillsTexture = TextureLoader.Load("terrain.hill.jungle");
 		volcanosTexture = TextureLoader.Load("terrain.volcano.base");
 		forestVolcanoTexture = TextureLoader.Load("terrain.volcano.forest");
+		jungleVolcanoTexture = TextureLoader.Load("terrain.volcano.jungle");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
