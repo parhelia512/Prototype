@@ -230,7 +230,6 @@ public partial class PlayerSetup : Control {
 		// needed, so we don't want to tie up the UI thread.
 		Thread thread = new(() => {
 			gameSetup.Populate(save);
-			global.SaveGame = save;
 
 			log.Information("opening map");
 			CallDeferred(nameof(StartGame));

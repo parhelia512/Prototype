@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Linq;
 using C7Engine;
 using C7GameData;
 using C7GameData.Save;
@@ -9,28 +7,37 @@ using static C7GameData.PlayerRelationship;
 
 namespace EngineTests.GameData;
 
-public class PlayerRelationshipTest {
-	private static readonly string C7GameDataTestsFolderName = "EngineTests";
-	private static string luaRulesDir => getBasePath("../C7/Lua/rules");
-	private static string getBasePath(string file) => Path.Combine(testDirectory, file);
+public class GameDataFixture : IDisposable {
+	public SaveGame SaveGame { get; }
+	public C7GameData.GameData GameData { get; }
 
-	private static string testDirectory {
-		get {
-			string[] parts = AppDomain.CurrentDomain.BaseDirectory.Split(Path.DirectorySeparatorChar);
-			int pos = parts.Reverse().ToList().FindIndex(s => s == C7GameDataTestsFolderName);
-			string up = string.Concat("..", Path.DirectorySeparatorChar);
-			string relativePath = string.Concat(Enumerable.Repeat(up, pos - 1));
-			return Path.GetFullPath(relativePath);
-		}
+	public GameDataFixture(SaveGameFixture saveGameFixture) {
+		SaveGame = saveGameFixture.saveGame;
+
+		GameData = SaveGame.ToGameData(PathUtils.luaRulesDir);
+
+		EngineStorage.InitializeGameDataForTests(GameData);
 	}
 
+	public void Dispose() {
+		return;
+	}
+}
+
+[CollectionDefinition("GameDataCollection")]
+public class GameDataCollection : ICollectionFixture<SaveGameFixture> { }
+
+[Collection("GameDataCollection")]
+public class PlayerRelationshipTest : IClassFixture<GameDataFixture> {
+	GameDataFixture fixture;
+
+	public PlayerRelationshipTest(GameDataFixture fixture) {
+		this.fixture = fixture;
+	}
 
 	[Fact]
 	public void TestHumanToBarbarianRelationship() {
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
-		SaveGame saveGame = SaveGame.Load(developerSave, null);
-		C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
-		EngineStorage.InitializeGameDataForTests(gd);
+		C7GameData.GameData gd = fixture.GameData;
 
 		Player playerA = gd.players[0];
 		Player playerB = gd.players[2];
@@ -49,10 +56,7 @@ public class PlayerRelationshipTest {
 
 	[Fact]
 	public void TestRelationshipAtVariousPoints() {
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
-		SaveGame saveGame = SaveGame.Load(developerSave, null);
-		C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
-		EngineStorage.InitializeGameDataForTests(gd);
+		C7GameData.GameData gd = fixture.GameData;
 
 		Player playerA = gd.players[1];
 		Player playerB = gd.players[2];
@@ -104,10 +108,7 @@ public class PlayerRelationshipTest {
 
 	[Fact]
 	public void TestMultiTurnDealRegistration() {
-		string developerSave = getBasePath("../C7/Text/c7-static-map-save.json");
-		SaveGame saveGame = SaveGame.Load(developerSave, null);
-		C7GameData.GameData gd = saveGame.ToGameData(luaRulesDir);
-		EngineStorage.InitializeGameDataForTests(gd);
+		C7GameData.GameData gd = fixture.GameData;
 
 		Player playerA = gd.players[2];
 		Player playerB = gd.players[3];

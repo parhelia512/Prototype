@@ -315,7 +315,7 @@ public partial class WorldSetup : Control {
 		Global.ResetLoadGameFields();
 		SaveGame save = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
 
-		Global.WorldCharacteristics = new WorldCharacteristics() {
+		Global.WorldCharacteristics = new WorldCharacteristics(save) {
 			landform = landform,
 			oceanCoverage = ocean,
 			age = age,
@@ -329,12 +329,7 @@ public partial class WorldSetup : Control {
 				techRate = 240,
 				optimalNumberOfCities = 20,
 			},
-			terrainTypes = save.TerrainTypes,
-			resources = save.Resources,
-			defaultGovernment = save.Governments.Find(x => x.defaultType),
 			mapSeed = Int32.Parse(seedInput.Text),
-			maxRankOfWorkableTiles = save.Rules.MaxRankOfWorkableTiles,
-			maxRankOfBarbarianCampTiles = save.Rules.MaxRankOfBarbarianCampTiles,
 		};
 
 		Global.SaveGame = save;
