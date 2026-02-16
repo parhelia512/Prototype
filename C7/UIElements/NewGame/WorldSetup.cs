@@ -1,8 +1,7 @@
 using Godot;
 using System;
-using System.Threading;
-using C7GameData;
 using C7Engine;
+using C7Engine.Lua;
 using C7GameData.Save;
 using Serilog;
 
@@ -314,9 +313,9 @@ public partial class WorldSetup : Control {
 	private void CreateGame() {
 		GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 		Global.ResetLoadGameFields();
-		SaveGame save = SaveManager.LoadSave(GamePaths.DefaultGamePath, GamePaths.DefaultBicPath, (string unused) => { return unused; });
+		SaveGame save = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
 
-		Global.WorldCharacteristics = new WorldCharacteristics() {
+		Global.WorldCharacteristics = new WorldCharacteristics(save) {
 			landform = landform,
 			oceanCoverage = ocean,
 			age = age,
@@ -330,13 +329,10 @@ public partial class WorldSetup : Control {
 				techRate = 240,
 				optimalNumberOfCities = 20,
 			},
-			terrainTypes = save.TerrainTypes,
-			resources = save.Resources,
-			defaultGovernment = save.Governments.Find(x => x.defaultType),
 			mapSeed = Int32.Parse(seedInput.Text),
-			maxRankOfWorkableTiles = save.Rules.MaxRankOfWorkableTiles,
-			maxRankOfBarbarianCampTiles = save.Rules.MaxRankOfBarbarianCampTiles,
 		};
+
+		Global.SaveGame = save;
 
 		GetTree().ChangeSceneToFile("res://UIElements/NewGame/player_setup.tscn");
 	}

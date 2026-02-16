@@ -6,6 +6,7 @@ namespace C7Engine {
 	using Serilog;
 	using System.Diagnostics;
 	using C7GameData;
+	using C7GameData.Save;
 
 	public class WorldSize {
 		public int width;
@@ -62,6 +63,17 @@ namespace C7Engine {
 
 		public int maxRankOfWorkableTiles;
 		public int maxRankOfBarbarianCampTiles;
+
+		public WorldCharacteristics() { }
+
+		public WorldCharacteristics(SaveGame save) {
+			terrainTypes = save.TerrainTypes;
+			resources = save.Resources;
+			defaultGovernment = save.Governments.Find(g => g.defaultType);
+
+			maxRankOfWorkableTiles = save.Rules.MaxRankOfWorkableTiles;
+			maxRankOfBarbarianCampTiles = save.Rules.MaxRankOfBarbarianCampTiles;
+		}
 	}
 
 	public class MapGenerator {

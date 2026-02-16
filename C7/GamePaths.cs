@@ -1,5 +1,6 @@
 using Godot;
 using System.IO;
+using C7Engine.Lua;
 
 public static class GamePaths {
 	// Base directory for finding data files (Lua/, Text/, Assets/).
@@ -27,15 +28,16 @@ public static class GamePaths {
 	}
 
 	// This is the 'static map' used in lieu of terrain generation
-	public static string DefaultGamePath {
-		get =>
-			C7Engine.C7Settings.UseStandaloneMode()
-				? BaseDir + "Text/c7-static-map-save-standalone.json"
-				: BaseDir + "Text/c7-static-map-save.json";
+	public static GameModeConfig GameMode {
+		get => C7Engine.C7Settings.UseStandaloneMode() ? standalone : basic;
 	}
 
-	public static string LuaRulesDir => BaseDir + "Lua/rules/";
-	public static string TextureConfigsDir => BaseDir + "Lua/texture_configs/";
+	public static GameModeConfig basic = new("base-ruleset.json");
+	public static GameModeConfig standalone = new("base-ruleset.json", ["standalone.lua"]);
+
+	public static string LuaRulesDir => Path.Combine(BaseDir, "Lua/rules/");
+	public static string TextureConfigsDir => Path.Combine(BaseDir, "Lua/texture_configs/");
+	public static string GameModesDir => Path.Combine(BaseDir, "Lua/game_modes/");
 
 	public const string ModernGraphicsConfig = "c7.lua";
 	public const string ClassicGraphicsConfig = "civ3.lua";

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Linq;
 using Serilog;
-using static C7GameData.PlayerRelationship;
 
 namespace C7Engine {
 	using System;
@@ -121,27 +120,28 @@ namespace C7Engine {
 
 			for (int i = 0; i < barbariansToSpawn; ++i) {
 				Tile tile = gameData.map.barbarianCamps[tileIndicies[i]];
-				MapUnit newUnit = new(gameData.ids.CreateID("barbarian"));
+
+				// Its a 3:1 ratio of advanced to basic barbarians.
+				UnitPrototype unitType = GameData.rng.Next(100) < 25 ? gameData.barbarianInfo.advancedBarbarian : gameData.barbarianInfo.basicBarbarian;
+				// Give costal camps a chance to spawn a boat.
+				if (tile.NeighborsWater() && GameData.rng.Next(100) < 20) {
+					unitType = gameData.barbarianInfo.barbarianSeaUnitProto;
+				}
+
+				MapUnit newUnit = unitType.GetInstance(gameData);
 				newUnit.location = tile;
 				newUnit.owner = barbPlayer;
+
 				// TODO: make this a conscript.
 				newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
 				newUnit.experienceLevel = gameData.defaultExperienceLevel;
 				newUnit.hitPointsRemaining = 3;
+
 				tile.unitsOnTile.Add(newUnit);
 				gameData.mapUnits.Add(newUnit);
 				barbPlayer.units.Add(newUnit);
 
-				// Give costal camps a chance to spawn a boat.
-				if (tile.NeighborsWater() && GameData.rng.Next(100) < 20) {
-					newUnit.unitType = gameData.barbarianInfo.barbarianSeaUnitProto;
-					log.Debug("New barbarian galley added at " + tile);
-					continue;
-				}
-
-				// Otherwise its a 3:1 ratio of advanced to basic barbarians.
-				newUnit.unitType = GameData.rng.Next(100) < 25 ? gameData.barbarianInfo.advancedBarbarian : gameData.barbarianInfo.basicBarbarian;
-				log.Debug("New barbarian added at " + tile);
+				log.Debug("New barbarian of type {type} added at {tile}", unitType.name, tile);
 			}
 		}
 
