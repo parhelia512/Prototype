@@ -856,8 +856,8 @@ namespace C7GameData {
 				}
 			}
 
-            freeUnits += units.Count(u => u.IsCaptive());
-            
+			freeUnits += units.Count(u => u.IsCaptive());
+
 			if (government.allUnitsFree) {
 				freeUnits = units.Count;
 			}
