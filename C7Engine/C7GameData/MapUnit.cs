@@ -166,7 +166,7 @@ namespace C7GameData {
 		}
 
 		public async Task animateAsync(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
-			if (EngineStorage.animationsEnabled) {
+			if (EngineStorage.animationsEnabled && !EngineStorage.gameData.observerMode) {
 				var msg = new MsgStartUnitAnimation(this, action, ending);
 				msg.send();
 
