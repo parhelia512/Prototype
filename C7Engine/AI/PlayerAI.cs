@@ -28,7 +28,10 @@ namespace C7Engine {
 			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
 
-			new MsgCheckObsoleteDeals(player).send();
+			// TODO: Before we call this method to automatically end obsolete deals, we could make this more versatile.
+			// For example unless we have a good reason, as a human, receiving luxuries, gpt,
+			// or having an active RoP, doesn't hurt us.
+			PlayerRelationship.CheckForObsoleteDeals(player, EngineStorage.gameData.players, EngineStorage.gameData.turn);
 
 			MaybeDoPriorityReevaluation(player);
 			MaybePickTechToResearch(player, techs);

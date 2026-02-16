@@ -320,7 +320,10 @@ public partial class Game : Node {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			log.Information("Starting player turn");
 
-			new MsgCheckObsoleteDeals(controller).send();
+			// TODO: Before we call this method to automatically end obsolete deals, we could make this more versatile.
+			// For example unless we have a good reason, as a human, receiving luxuries, gpt,
+			// or having an active RoP, doesn't hurt us.
+			PlayerRelationship.CheckForObsoleteDeals(controller, gameData.players, gameData.turn);
 
 			// If the player can now pick a new government, force them to do so.
 			// When the popup is closed we call OnPlayerStartTurn again. This isn't

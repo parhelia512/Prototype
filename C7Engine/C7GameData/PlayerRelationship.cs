@@ -197,6 +197,8 @@ public class PlayerRelationship {
 	/// <param name="players"></param>
 	/// <param name="currentTurn"></param>
 	public static void CheckForObsoleteDeals(Player player, List<Player> players, int currentTurn) {
+		log.Information($"Checking to terminate any deals past their due duration for player {player}");
+
 		var playerIds = players.Select(x => x.id).ToList();
 
 		// check player's relationship with the other players
