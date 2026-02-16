@@ -189,7 +189,7 @@ namespace C7GameData {
 				foreach (var fringeTile in tile.GetEdgeNeighbors().Where(x => !borderTileIds.Contains(x.Id))) {
 					if (fringeTile.HasCity) // skip encountered cities, just in case 
 						continue;
-					
+
 					fringeTile.owningCity = null;
 				}
 			}
