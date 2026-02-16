@@ -1,8 +1,7 @@
 using System.Collections.Generic;
+using C7.Textures;
 using C7GameData;
 using Godot;
-using ConvertCiv3Media;
-using System;
 
 namespace C7.Map {
 	// The layer responsible for drawing civilization borders.
@@ -57,7 +56,7 @@ namespace C7.Map {
 				return;
 			}
 
-			Color borderColor = TextureLoader.LoadColor(tile.owningCity.owner.colorIndex);
+			Color borderColor = TextureLoader.LoadColor(tile.owningCity.owner.GetPlayerColor());
 			TileDirection[] borderDirections = [TileDirection.NORTHEAST, TileDirection.NORTHWEST, TileDirection.SOUTHEAST, TileDirection.SOUTHWEST];
 
 			foreach (TileDirection dir in borderDirections) {

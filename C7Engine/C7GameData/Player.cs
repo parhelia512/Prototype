@@ -44,7 +44,8 @@ namespace C7GameData {
 		private static ILogger log = Log.ForContext<Player>();
 
 		public ID id { get; internal set; }
-		public int colorIndex;
+		public int primaryColorIndex;
+		public int secondaryColorIndex;
 		public bool isBarbarians { get => civilization.isBarbarian; }
 		//TODO: Refactor front-end so it sends player GUID with requests.
 		//We should allow multiple humans, this is a temporary measure.

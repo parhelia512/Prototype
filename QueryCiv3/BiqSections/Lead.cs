@@ -40,7 +40,7 @@ namespace QueryCiv3.Biq {
 		public int StartCash; // $$$$$$$$$$$$$$$$$
 		public int Government;
 		public int Civ; // -3: any, -2: random
-		public int Color;
+		public int Color; // the team color
 		public int SkipFirstTurn;
 		private fixed byte UnknownBuffer2[4];
 		public byte StartEmbassies;

@@ -1,5 +1,5 @@
+using C7.Textures;
 using C7GameData;
-using ConvertCiv3Media;
 using Godot;
 
 namespace C7.Map {
@@ -69,7 +69,7 @@ namespace C7.Map {
 		public CityLabelScene(City city) {
 			this.city = city;
 
-			civColor = new Color(TextureLoader.LoadColor(city.owner.colorIndex), TRANSPARENCY);
+			civColor = new Color(TextureLoader.LoadColor(city.owner.GetPlayerColor()), TRANSPARENCY);
 
 			// Set up UI hierarchy
 			AddChild(labelPanel);
