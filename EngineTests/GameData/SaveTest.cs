@@ -12,6 +12,7 @@ using C7GameData.Save;
 using Newtonsoft.Json.Linq;
 using QueryCiv3;
 using Xunit;
+using Serilog;
 
 namespace EngineTests.GameData;
 
@@ -169,7 +170,12 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 				switch (msg) {
 					case MsgStartTurn mST:
 						return;
+					case MsgWarDeclaration mWD:
+						continue;
+					case MsgShowTemporaryPopup mSTP:
+						continue;
 					default:
+						throw new Exception($"{msg}");
 						continue;
 				}
 			}
@@ -229,6 +235,11 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 	[InlineData(SaveType.basic, "basic")]
 	[InlineData(SaveType.standalone, "standalone")]
 	public void SimpleGame(SaveType saveType, string outputFilePostfix) {
+		Log.Logger = new LoggerConfiguration()
+			.WriteTo.Console(outputTemplate: "[{Level:u3}] {Timestamp:HH:mm:ss} {SourceContext}: {Message:lj} {NewLine}{Exception}")
+			.MinimumLevel.Information()
+			.CreateLogger();
+
 		SaveGame developerSave = GetSave(saveType);
 
 		new MsgSetAnimationsEnabled(false).send();
