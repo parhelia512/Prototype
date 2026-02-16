@@ -5514,6 +5514,18 @@
     }
   ],
   "defaultExperienceLevel": "Regular",
+  "inflows": [
+    {
+      "name": "Wealth",
+      "localYield": [
+        {
+          "yieldType": "commerce",
+          "yieldCalculation": "inflows.result.wealth.commerce"
+        }
+      ],
+      "iconRowIndex": 29
+    }
+  ],
   "civilizations": [
     {
       "name": "A Barbarian Chiefdom",
@@ -7108,7 +7120,11 @@
     "startUnitType2": "Worker",
     "scoutUnitType": "Scout",
     "maxRankOfWorkableTiles": 2,
-    "maxRankOfBarbarianCampTiles": 2
+    "maxRankOfBarbarianCampTiles": 2,
+    "defaultDealDuration": 20,
+    "treasuryInterestRate": 0.05,
+    "maxInterest": 50,
+    "shieldCostPerGold": 4
   },
   "techs": [
     {
