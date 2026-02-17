@@ -74,7 +74,8 @@ public class GameSetup {
 		SavePlayer player = new() {
 			human = isHuman,
 			id = ids.CreateID("Player"),
-			colorIndex = civ.colorIndex,
+			primaryColorIndex = civ.primaryColorIndex,
+			secondaryColorIndex = civ.secondaryColorIndex,
 			civilization = civ.name,
 			knownTechs = civ.startingTechs,
 			// TODO: stop hardcoding this

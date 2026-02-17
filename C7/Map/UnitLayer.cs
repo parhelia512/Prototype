@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using C7.Textures;
 using C7GameData;
 using Godot;
 
@@ -123,7 +124,7 @@ public partial class UnitLayer : LooseLayer {
 
 		inst.SetPosition(framePosition);
 
-		Color civColor = TextureLoader.LoadColor(unit.owner.colorIndex);
+		Color civColor = TextureLoader.LoadColor(unit.owner.GetPlayerColor());
 		int nextFrame = inst.GetNextFrameByProgress(animName, appearance.progress);
 		inst.material.SetShaderParameter("tintColor", new Vector3(civColor.R, civColor.G, civColor.B));
 

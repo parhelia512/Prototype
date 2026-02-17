@@ -4,6 +4,7 @@ using Serilog;
 using System.Collections.Generic;
 using C7GameData;
 using C7.Map;
+using C7.Textures;
 using C7Engine;
 using C7Engine.AI;
 
@@ -597,7 +598,7 @@ public partial class CityScreen : Control {
 
 		if (city.itemBeingProduced is UnitPrototype up) {
 			AnimationManager animationManager = mapView.game.animationController.civ3AnimData.forUnit(up, MapUnit.AnimatedAction.DEFAULT).animationManager;
-			ShaderMaterial material = TextureLoader.GetShaderMaterialForUnit(city.owner.colorIndex);
+			ShaderMaterial material = PlayerTextureUtil.GetShaderMaterialForUnit(city.owner.GetPlayerColor());
 			(ImageTexture baseImage, ImageTexture imageTint) = animationManager.GetAnimationFrameAndTintTextures(up);
 
 			// Add the base sprite.

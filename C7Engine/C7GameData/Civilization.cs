@@ -33,7 +33,8 @@ namespace C7GameData {
 		// `noun` is "Americans" for "America", or "Spanish" for "Spain", etc.
 		public string noun;
 		public string leader;
-		public int colorIndex;
+		public int primaryColorIndex;
+		public int secondaryColorIndex;
 		public Gender leaderGender;
 
 		// Like `art\advisors\LZ_all.pcx` for the English.

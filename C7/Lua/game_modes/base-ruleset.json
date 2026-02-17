@@ -5530,7 +5530,8 @@
     {
       "name": "A Barbarian Chiefdom",
       "noun": "Barbarians",
-      "colorIndex": 0,
+      "primaryColorIndex": 0,
+      "secondaryColorIndex": 0,
       "leaderGender": "male",
       "cityNames": [
         "Chanca",
@@ -5616,7 +5617,8 @@
       "name": "Rome",
       "noun": "Romans",
       "leader": "Caesar",
-      "colorIndex": 1,
+      "primaryColorIndex": 1,
+      "secondaryColorIndex": 1,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\CE_all.pcx",
       "cityNames": [
@@ -5679,7 +5681,8 @@
       "name": "Egypt",
       "noun": "Egyptians",
       "leader": "Cleopatra",
-      "colorIndex": 3,
+      "primaryColorIndex": 3,
+      "secondaryColorIndex": 3,
       "leaderGender": "female",
       "leaderArtFile": "art\\advisors\\CL_all.pcx",
       "cityNames": [
@@ -5727,7 +5730,8 @@
       "name": "Greece",
       "noun": "Greeks",
       "leader": "Alexander",
-      "colorIndex": 10,
+      "primaryColorIndex": 10,
+      "secondaryColorIndex": 10,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\AL_all.pcx",
       "cityNames": [
@@ -5775,7 +5779,8 @@
       "name": "Babylon",
       "noun": "Babylonians",
       "leader": "Hammurabi",
-      "colorIndex": 1,
+      "primaryColorIndex": 1,
+      "secondaryColorIndex": 13,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\HA_all.pcx",
       "cityNames": [
@@ -5821,7 +5826,8 @@
       "name": "Germany",
       "noun": "Germans",
       "leader": "Bismarck",
-      "colorIndex": 6,
+      "primaryColorIndex": 6,
+      "secondaryColorIndex": 6,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\BS_all.pcx",
       "cityNames": [
@@ -5856,7 +5862,8 @@
       "name": "Russia",
       "noun": "Russians",
       "leader": "Catherine",
-      "colorIndex": 9,
+      "primaryColorIndex": 9,
+      "secondaryColorIndex": 9,
       "leaderGender": "female",
       "leaderArtFile": "art\\advisors\\CA_all.pcx",
       "cityNames": [
@@ -5914,7 +5921,8 @@
       "name": "China",
       "noun": "Chinese",
       "leader": "Mao",
-      "colorIndex": 5,
+      "primaryColorIndex": 5,
+      "secondaryColorIndex": 15,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\MO_all.pcx",
       "cityNames": [
@@ -5951,7 +5959,8 @@
       "name": "America",
       "noun": "Americans",
       "leader": "Lincoln",
-      "colorIndex": 5,
+      "primaryColorIndex": 5,
+      "secondaryColorIndex": 5,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\AB_all.pcx",
       "cityNames": [
@@ -6010,7 +6019,8 @@
       "name": "Japan",
       "noun": "Japanese",
       "leader": "Tokugawa",
-      "colorIndex": 4,
+      "primaryColorIndex": 4,
+      "secondaryColorIndex": 11,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\TO_all.pcx",
       "cityNames": [
@@ -6055,7 +6065,8 @@
       "name": "France",
       "noun": "French",
       "leader": "Joan d\u0027Arc",
-      "colorIndex": 7,
+      "primaryColorIndex": 7,
+      "secondaryColorIndex": 7,
       "leaderGender": "female",
       "leaderArtFile": "art\\advisors\\JO_all.pcx",
       "cityNames": [
@@ -6095,7 +6106,8 @@
       "name": "India",
       "noun": "Indians",
       "leader": "Gandhi",
-      "colorIndex": 8,
+      "primaryColorIndex": 8,
+      "secondaryColorIndex": 12,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\GH_all.pcx",
       "cityNames": [
@@ -6131,7 +6143,8 @@
       "name": "Persia",
       "noun": "Persians",
       "leader": "Xerxes",
-      "colorIndex": 10,
+      "primaryColorIndex": 10,
+      "secondaryColorIndex": 14,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\XE_all.pcx",
       "cityNames": [
@@ -6179,7 +6192,8 @@
       "name": "Aztecs",
       "noun": "Aztecs",
       "leader": "Montezuma",
-      "colorIndex": 4,
+      "primaryColorIndex": 4,
+      "secondaryColorIndex": 4,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\MN_all.pcx",
       "cityNames": [
@@ -6234,7 +6248,8 @@
       "name": "Zululand",
       "noun": "Zulu",
       "leader": "Shaka",
-      "colorIndex": 3,
+      "primaryColorIndex": 3,
+      "secondaryColorIndex": 16,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\ZU_all.pcx",
       "cityNames": [
@@ -6269,7 +6284,8 @@
       "name": "Iroquois",
       "noun": "Iroquois",
       "leader": "Hiawatha",
-      "colorIndex": 8,
+      "primaryColorIndex": 8,
+      "secondaryColorIndex": 8,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\HI_all.pcx",
       "cityNames": [
@@ -6317,7 +6333,8 @@
       "name": "England",
       "noun": "English",
       "leader": "Elizabeth",
-      "colorIndex": 2,
+      "primaryColorIndex": 2,
+      "secondaryColorIndex": 2,
       "leaderGender": "female",
       "leaderArtFile": "art\\advisors\\LZ_all.pcx",
       "cityNames": [
@@ -6365,7 +6382,8 @@
       "name": "Mongols",
       "noun": "Mongols",
       "leader": "Temujin",
-      "colorIndex": 3,
+      "primaryColorIndex": 3,
+      "secondaryColorIndex": 26,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_temujin advisor.pcx",
       "cityNames": [
@@ -6414,7 +6432,8 @@
       "name": "Spain",
       "noun": "Spanish",
       "leader": "Isabella",
-      "colorIndex": 5,
+      "primaryColorIndex": 5,
+      "secondaryColorIndex": 20,
       "leaderGender": "female",
       "leaderArtFile": "art\\advisors\\x_isabell advisor.pcx",
       "cityNames": [
@@ -6464,7 +6483,8 @@
       "name": "Scandinavia",
       "noun": "Vikings",
       "leader": "Ragnar Lodbrok",
-      "colorIndex": 8,
+      "primaryColorIndex": 8,
+      "secondaryColorIndex": 31,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_ragnar advisor.pcx",
       "cityNames": [
@@ -6516,7 +6536,8 @@
       "name": "Ottomans",
       "noun": "Ottomans",
       "leader": "Osman",
-      "colorIndex": 2,
+      "primaryColorIndex": 2,
+      "secondaryColorIndex": 18,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_osman advisor.pcx",
       "cityNames": [
@@ -6564,7 +6585,8 @@
       "name": "Celts",
       "noun": "Celts",
       "leader": "Brennus",
-      "colorIndex": 4,
+      "primaryColorIndex": 4,
+      "secondaryColorIndex": 25,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_brennus advisor.pcx",
       "cityNames": [
@@ -6613,7 +6635,8 @@
       "name": "Arabia",
       "noun": "Arabs",
       "leader": "Abu Bakr",
-      "colorIndex": 7,
+      "primaryColorIndex": 7,
+      "secondaryColorIndex": 30,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_abu bakr advisor.pcx",
       "cityNames": [
@@ -6660,7 +6683,8 @@
       "name": "Carthage",
       "noun": "Carthaginians",
       "leader": "Hannibal",
-      "colorIndex": 9,
+      "primaryColorIndex": 9,
+      "secondaryColorIndex": 11,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_Hannibal advisor.pcx",
       "cityNames": [
@@ -6709,7 +6733,8 @@
       "name": "Korea",
       "noun": "Koreans",
       "leader": "Wang Kon",
-      "colorIndex": 6,
+      "primaryColorIndex": 6,
+      "secondaryColorIndex": 19,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x_Wang Kon advisor.pcx",
       "cityNames": [
@@ -6758,7 +6783,8 @@
       "name": "Sumeria",
       "noun": "Sumerians",
       "leader": "Gilgamesh",
-      "colorIndex": 5,
+      "primaryColorIndex": 5,
+      "secondaryColorIndex": 20,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x2_Gilgamesh advisor.pcx",
       "cityNames": [
@@ -6802,7 +6828,8 @@
       "name": "Hittites",
       "noun": "Hittites",
       "leader": "Mursilis",
-      "colorIndex": 14,
+      "primaryColorIndex": 14,
+      "secondaryColorIndex": 27,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x2_Mursilis advisor.pcx",
       "cityNames": [
@@ -6846,7 +6873,8 @@
       "name": "Netherlands",
       "noun": "Dutch",
       "leader": "William",
-      "colorIndex": 2,
+      "primaryColorIndex": 2,
+      "secondaryColorIndex": 18,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x2_William advisor.pcx",
       "cityNames": [
@@ -6890,7 +6918,8 @@
       "name": "Portugal",
       "noun": "Portuguese",
       "leader": "Henry",
-      "colorIndex": 8,
+      "primaryColorIndex": 8,
+      "secondaryColorIndex": 17,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x2_Henry advisor.pcx",
       "cityNames": [
@@ -6945,7 +6974,8 @@
       "name": "Byzantines",
       "noun": "Byzantines",
       "leader": "Theodora",
-      "colorIndex": 11,
+      "primaryColorIndex": 11,
+      "secondaryColorIndex": 1,
       "leaderGender": "female",
       "leaderArtFile": "art\\advisors\\x2_Theodora advisor.pcx",
       "cityNames": [
@@ -6989,7 +7019,8 @@
       "name": "Inca",
       "noun": "Inca",
       "leader": "Pachacuti",
-      "colorIndex": 7,
+      "primaryColorIndex": 7,
+      "secondaryColorIndex": 8,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x2_Pachacuti advisor.pcx",
       "cityNames": [
@@ -7033,7 +7064,8 @@
       "name": "Maya",
       "noun": "Maya",
       "leader": "Smoke-Jaguar",
-      "colorIndex": 6,
+      "primaryColorIndex": 6,
+      "secondaryColorIndex": 5,
       "leaderGender": "male",
       "leaderArtFile": "art\\advisors\\x2_Smoke-Jaguar_advisor.pcx",
       "cityNames": [
