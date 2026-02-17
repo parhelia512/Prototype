@@ -5,7 +5,8 @@ namespace C7GameData.Save {
 
 	public class SavePlayer {
 		public ID id;
-		public int colorIndex;
+		public int primaryColorIndex;
+		public int secondaryColorIndex;
 		public bool human = false;
 		public bool hasPlayedCurrentTurn = false;
 		public bool defeated = false;
@@ -65,7 +66,8 @@ namespace C7GameData.Save {
 				isHuman = human,
 				hasPlayedThisTurn = hasPlayedCurrentTurn,
 				defeated = defeated,
-				colorIndex = colorIndex,
+				primaryColorIndex = primaryColorIndex,
+				secondaryColorIndex = secondaryColorIndex,
 				civilization = civilization is not null ? civilizations.Find(civ => civ.name == civilization) : null,
 				knownTechs = knownTechs,
 				eraCivilopediaName = eraCivilopediaName,
@@ -109,7 +111,8 @@ namespace C7GameData.Save {
 
 		public SavePlayer(Player player) {
 			id = player.id;
-			colorIndex = player.colorIndex;
+			primaryColorIndex = player.primaryColorIndex;
+			secondaryColorIndex = player.secondaryColorIndex;
 			human = player.isHuman;
 			hasPlayedCurrentTurn = player.hasPlayedThisTurn;
 			defeated = player.defeated;

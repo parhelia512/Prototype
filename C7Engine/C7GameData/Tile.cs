@@ -510,7 +510,11 @@ namespace C7GameData {
 				int shieldsAwarded = EngineStorage.gameData.rules.ForestValueInShields;
 				c.shieldsStored += shieldsAwarded;
 				c.shieldsStored = Math.Min(c.shieldsStored, c.owner.ShieldCost(c.itemBeingProduced));
-				new MsgShowTemporaryPopup($"{shieldsAwarded} shields awarded for clearing forests", other).send();
+
+				if (c.owner.isHuman) {
+					new MsgShowTemporaryPopup($"{shieldsAwarded} shields awarded for clearing forests", other).send();
+				}
+
 				return;
 			}
 		}

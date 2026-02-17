@@ -30,8 +30,8 @@ namespace C7Engine.Pathing {
 					// to allow pathing to attack. We don't want to try and path
 					// through opponents on the way to our destination though,
 					// as we can get stuck.
-					bool allowCombat = neighbor == destination;
-					return unit.CanEnterTile(neighbor, allowCombat);
+					var probe = neighbor == destination ? TileProbe.PathCombatProbe() : TileProbe.PathProbe();
+					return unit.CanEnterTile(neighbor, probe);
 				}
 			);
 		}

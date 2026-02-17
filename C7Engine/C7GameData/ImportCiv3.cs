@@ -363,7 +363,8 @@ namespace C7GameData {
 					adjective = race.Adjective,
 					leader = race.LeaderName,
 					leaderGender = race.LeaderGender == 0 ? Gender.Male : Gender.Female,
-					colorIndex = race.DefaultColor,
+					primaryColorIndex = race.DefaultColor,
+					secondaryColorIndex = race.UniqueColor,
 					isBarbarian = i == 0 ? true : false,
 				};
 				foreach (RACE_City city in theBiq.RaceCityName[i]) {
@@ -448,6 +449,9 @@ namespace C7GameData {
 					player.human = true;
 					foundHuman = true;
 				}
+
+				// Team color in scenarios
+				player.primaryColorIndex = lead.Color;
 
 				++leadIndex;
 			}
@@ -774,7 +778,8 @@ namespace C7GameData {
 		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, string era) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
-				colorIndex = civ.colorIndex,
+				primaryColorIndex = civ.primaryColorIndex,
+				secondaryColorIndex = civ.secondaryColorIndex,
 				human = isHuman,
 				civilization = civ.name,
 

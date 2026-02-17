@@ -1,3 +1,4 @@
+using C7.Textures;
 using Godot;
 using C7GameData;
 using Serilog;
@@ -282,7 +283,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		ImageTexture baseFrame = AnimationManager.AnimationThumbnails[key];
 		ImageTexture tintFrame = AnimationManager.AnimationTintThumbnails[key];
 
-		ShaderMaterial material = TextureLoader.GetShaderMaterialForUnit(unit.owner.colorIndex);
+		ShaderMaterial material = PlayerTextureUtil.GetShaderMaterialForUnit(unit.owner.GetPlayerColor());
 
 		// Add the base sprite.
 		unitPlaceholder = new Sprite2D();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using C7.Textures;
 using C7Engine;
 using ConvertCiv3Media;
 using Godot;
@@ -394,5 +395,6 @@ public partial class Util {
 		flicCache.Clear();
 		TextureLoader.ClearCache();
 		AnimationManager.ClearCache();
+		PlayerTextureUtil.ClearCache();
 	}
 }

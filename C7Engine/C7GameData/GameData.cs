@@ -177,8 +177,21 @@ namespace C7GameData {
 		public void UpdateTileOwnersOnCityDestruction(City city) {
 			city.location.owningCity = null;
 
-			foreach (Tile tile in city.GetTilesWithinBorders()) {
+			var borderTiles = city.GetTilesWithinBorders();
+			var borderTileIds = borderTiles.Select(x => x.Id).ToHashSet();
+
+			foreach (Tile tile in borderTiles) {
 				tile.owningCity = null;
+
+				// Aggressively remove ownership from edge neighbors around the city outside the natural border.
+				// This clears out tile ownership due to Law VII or Law VIII.
+				// Regular tile ownership update will re-assign ownership where needed.
+				foreach (var fringeTile in tile.GetEdgeNeighbors().Where(x => !borderTileIds.Contains(x.Id))) {
+					if (fringeTile.HasCity) // skip encountered cities, just in case 
+						continue;
+
+					fringeTile.owningCity = null;
+				}
 			}
 
 			UpdateTileOwners();

@@ -278,10 +278,8 @@ public partial class Game : Node {
 				turnsLeftToFastForward = 0;
 				break;
 			case MsgShowTemporaryPopup mSTP:
-				TemporaryPopup popup = new(mSTP.message, 1);
-				popup.SetPosition(mapView.screenLocationOfTile(mSTP.location, true) + new Vector2(0, -64));
-				AddChild(popup);
-				popup.ShowPopup();
+				Vector2 pos = mapView.screenLocationOfTile(mSTP.location, true);
+				TemporaryPopup.Show(this, mSTP.message, pos);
 				break;
 			case MsgUnitMoved mUUAAB:
 				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mUUAAB.Unit));
@@ -525,10 +523,7 @@ public partial class Game : Node {
 
 		bool canMove = unitSelector.SetSelectedUnit(to_select);
 		if (!canMove) {
-			TemporaryPopup popup = new("This unit has already moved.", 1);
-			popup.SetPosition(eventMouseButton.Position + new Vector2(0, -64));
-			AddChild(popup);
-			popup.ShowPopup();
+			TemporaryPopup.Show(this, "This unit has already moved.", eventMouseButton.Position);
 		}
 	}
 
@@ -942,7 +937,7 @@ public partial class Game : Node {
 				// declare war with the move) mark the path.
 				if (result.moveCost == -1
 					&& unit.location.distanceTo(tile) == 1
-					&& unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: true)) {
+					&& unit.CanEnterTile(tile, TileProbe.DeclareWarProbe())) {
 					Queue<Tile> pathQueue = new();
 					pathQueue.Enqueue(tile);
 
@@ -954,7 +949,7 @@ public partial class Game : Node {
 
 					// If we couldn't enter this tile without a war declaration,
 					// record which civ we need to declare war on.
-					if (!unit.CanEnterTile(tile, allowCombat: true, allowWarDeclaration: false)) {
+					if (!unit.CanEnterTile(tile, TileProbe.CombatProbe())) {
 						if (tile.cityAtTile != null) {
 							result.requiresWarDeclarationOnPlayer = tile.cityAtTile.owner;
 						} else {

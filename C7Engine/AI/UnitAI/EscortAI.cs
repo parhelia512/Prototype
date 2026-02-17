@@ -80,7 +80,7 @@ namespace C7Engine {
 
 			// Move to the unit we're escorting.
 			TilePath path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, data.unitToEscort.location, unit);
-			result = this.TryToMoveAlongPath(unit, ref path, allowCombat: false);
+			result = this.TryToMoveAlongPath(unit, ref path, TileProbe.AiMoveProbe());
 			if (result != UnitAI.Result.InProgress) {
 				return result;
 			}
