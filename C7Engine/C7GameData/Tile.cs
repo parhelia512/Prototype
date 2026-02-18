@@ -508,8 +508,8 @@ namespace C7GameData {
 
 				City c = other.cityAtTile;
 				int shieldsAwarded = EngineStorage.gameData.rules.ForestValueInShields;
-				c.shieldsStored += shieldsAwarded;
-				c.shieldsStored = Math.Min(c.shieldsStored, c.owner.ShieldCost(c.itemBeingProduced));
+				c.SetStoredShields(shieldsAwarded, true);
+				c.SetStoredShields(Math.Min(c.shieldsStored, c.owner.ShieldCost(c.itemBeingProduced)));
 
 				if (c.owner.isHuman) {
 					new MsgShowTemporaryPopup($"{shieldsAwarded} shields awarded for clearing forests", other).send();
@@ -731,7 +731,7 @@ namespace C7GameData {
 					// Ensure we only destroy units of the losing side of the
 					// combat, not the unit entering the city.
 					if (destroyedUnit.owner == owner) {
-						destroyedUnit.disband();
+						destroyedUnit.RemoveFromPlay();
 					}
 				}
 			}

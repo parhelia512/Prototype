@@ -4,6 +4,8 @@ using System.Linq;
 using Serilog;
 using C7Engine.Lua;
 using C7Engine.Pathing;
+using System.Threading.Tasks;
+using C7Engine;
 
 namespace C7GameData {
 	public class GameData {
@@ -209,7 +211,7 @@ namespace C7GameData {
 			// units.
 			player.defeated = true;
 			for (int i = 0; i < player.units.Count; ++i) {
-				DisbandUnit(player.units[i]);
+				RemoveUnit(player.units[i]);
 			}
 
 			// Remove this civ from all other player's relationships.
@@ -220,7 +222,25 @@ namespace C7GameData {
 			return true;
 		}
 
-		public void DisbandUnit(MapUnit unit) {
+		[LuaMethod]
+		public void SendMessageToUiFromLua(string message, Tile location) {
+			log.Information($"[LUA API] - {message}");
+			new MsgShowTemporaryPopup(message, location).send();
+
+		}
+
+		public async Task DisbandUnit(MapUnit unit) {
+			log.Information($"Player {unit.owner} disbands unit: {unit}");
+
+			var disbandFunction = this.luaRulesEngine.ImportFunc<Action<MapUnit>>("gameplay.units.disband", true);
+			disbandFunction.Invoke(unit);
+
+			await unit.animateAsync(MapUnit.AnimatedAction.DEATH, AnimationEnding.Pause);
+
+			RemoveUnit(unit);
+		}
+
+		internal void RemoveUnit(MapUnit unit) {
 			// Set unit's hit points to zero to indicate that it's no longer alive. Ultimately we may not want to do this. I'm only doing it right
 			// now since this way all the UI needs to do to check if the selected unit has been destroyed is to check its hit points.
 			unit.hitPointsRemaining = 0;
@@ -235,12 +255,10 @@ namespace C7GameData {
 			unit.location.unitsOnTile.Remove(unit);
 			mapUnits.Remove(unit);
 
-			// TODO: why not just do Player p = unit.owner; p.units.Remove(unit);?
-			foreach (Player player in players) {
-				if (player.units.Contains(unit)) {
-					player.units.Remove(unit);
-				}
-			}
+			Player owner = unit.owner;
+			owner.units.Remove(unit);
+
+			log.Information($"Player {owner} removed unit: {unit}");
 		}
 
 		public int TechCostFor(Tech tech, Player player) {

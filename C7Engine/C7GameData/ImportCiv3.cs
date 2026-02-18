@@ -1730,6 +1730,7 @@ namespace C7GameData {
 			save.Rules.MaxRankOfBarbarianCampTiles = 2;
 			save.Rules.DefaultDealDuration = 20;
 			save.Rules.ShieldCostPerGold = rule.ShieldsCostPerGold;
+			save.Rules.ShieldRateForDisbanding = 0.25f;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

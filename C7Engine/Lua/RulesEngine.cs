@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using MoonSharp.Interpreter;
@@ -29,6 +30,8 @@ public class RulesEngine {
 	static ILogger log = Log.ForContext<RulesEngine>();
 	Script script = new();
 	Table rules;
+
+	private static Dictionary<string, Delegate> funcCache = new Dictionary<string, Delegate>();
 
 	static RulesEngine() {
 		RegisterTypes();
@@ -65,7 +68,14 @@ public class RulesEngine {
 	/// The path to the function should be a dot-separated string
 	/// representing the path through the rules table
 	/// (e.g. "building.production_rules.must_be_coastal")
-	public T ImportFunc<T>(string functionPath) where T : Delegate {
+	/// 
+	///  If specified, the method will return the cached Delegate
+	/// associated with the functionPath string.
+	public T ImportFunc<T>(string functionPath, bool cache = false) where T : Delegate {
+		if (cache && funcCache.TryGetValue(functionPath, out Delegate func)) {
+			return (T)(object)func;
+		}
+
 		if (script == null || rules == null)
 			throw new InvalidOperationException("Engine is not initialized");
 		if (functionPath == null)
@@ -73,6 +83,10 @@ public class RulesEngine {
 
 		Closure closure = ResolveFunctionPath(functionPath);
 		Delegate del = DelegateConverter.CreateDelegate(script, closure, typeof(T));
+
+		if (cache)
+			funcCache[functionPath] = del;
+
 		return (T)(object)del;
 	}
 
@@ -136,5 +150,9 @@ public class RulesEngine {
 
 	void RegisterGlobals() {
 		script.Globals["GAME_DATA"] = () => DynValue.FromObject(script, EngineStorage.gameData);
+	}
+
+	public static void ClearCache() {
+		funcCache.Clear();
 	}
 }

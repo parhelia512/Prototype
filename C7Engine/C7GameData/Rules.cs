@@ -21,5 +21,6 @@ namespace C7GameData {
 		public float TreasuryInterestRate = .05f;
 		public int MaxInterest = 50;
 		public int ShieldCostPerGold;
+		public float ShieldRateForDisbanding; // per cent
 	}
 }

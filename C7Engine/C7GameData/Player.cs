@@ -102,10 +102,25 @@ namespace C7GameData {
 			get => _gold;
 			set {
 				if (value < 0) {
+					// TODO: the exception is ok for development, but perhaps a warning log
+					// and a Math Max function (0, value) is more appropriate at some point
 					throw new Exception($"bad gold value of {value} for {this}");
 				}
 				_gold = value;
 			}
+		}
+
+		/// <summary>
+		/// Sets the current gold amount of the player. If the add parameter is true, the gold gets appended.<br/>
+		/// </summary>
+		/// <param name="amount">The number of gold to be added</param>
+		/// <param name="add">If true, the gold gets appended, otherwise it overwrites the current value</param>
+		[LuaMethod]
+		public void SetGold(int amount, bool add = false) {
+			if (add)
+				this.gold += amount;
+			else
+				this.gold = amount;
 		}
 
 		// The number of "beakers" (gold) spent on the currently researched
@@ -710,9 +725,9 @@ namespace C7GameData {
 				var (_, _, unitSupportCost) = TotalUnitsAllowedUnitsAndSupportCost();
 				if (unitSupportCost > 0) {
 					for (int i = 0; i < unitSupportCost / government.unitCost; ++i) {
-						MapUnit unitToDisband = units[GameData.rng.Next(units.Count)];
-						log.Information($"{this} is out of gold, disbanding {unitToDisband} at {unitToDisband.location} to being unit support costs under control");
-						gameData.DisbandUnit(unitToDisband);
+						MapUnit unitToRemove = units[GameData.rng.Next(units.Count)];
+						log.Information($"{this} is out of gold, disbanding {unitToRemove} at {unitToRemove.location} to being unit support costs under control");
+						gameData.RemoveUnit(unitToRemove);
 					}
 					continue;
 				}

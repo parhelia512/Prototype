@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Threading.Tasks;
 using Serilog;
 
 namespace C7Engine {
@@ -84,9 +84,15 @@ namespace C7Engine {
 	// Actions that require more than a 1 or 2 line lambda should probably use
 	// a custom subclass.
 	public class ActionToEngineMsg : MessageToEngine {
-		private Action action;
-		public ActionToEngineMsg(Action action) {
+		private Func<Task> action;
+		public ActionToEngineMsg(Func<Task> action) {
 			this.action = action;
+		}
+		public ActionToEngineMsg(Action action) {
+			this.action = () => {
+				action();
+				return Task.CompletedTask;
+			};
 		}
 
 		public override void process() {

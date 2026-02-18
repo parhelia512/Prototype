@@ -19,7 +19,7 @@ public class CityTest {
 
 		City city = new City(Tile.NONE, player, "Fighter Town, USA", ID.None("city"));
 		city.itemBeingProduced = warrior;
-		city.shieldsStored = 9;
+		city.SetStoredShields(9);
 
 		TerrainType oneShield = new TerrainType();
 		oneShield.baseShieldProduction = 1;
