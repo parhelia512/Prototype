@@ -82,7 +82,8 @@ namespace C7GameData {
 					// tiles away. We can't see the hill that is SW+SW of us
 					// because we are blocked. To implement this we need to
 					// prevent 90 degree "turns", which we handle by ensuring
-					// the a+b combo is never a combination of two N/S/E/W dirs.
+					// the innerTileDirection+outerTileDirection combo is never
+					// a combination of two N/S/E/W dirs.
 					//
 					//                      <  ..  >
 					//                  <  ..  ><  XX  >
