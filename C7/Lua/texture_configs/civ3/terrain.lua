@@ -86,6 +86,8 @@ terrain.marsh = {
 
 terrain.river = TERRAIN .. "mtnRivers.pcx"
 
+terrain.river_delta = TERRAIN .. "deltaRivers.pcx"
+
 terrain.tnt = TERRAIN .. "tnt.pcx"
 
 terrain.jungle = {

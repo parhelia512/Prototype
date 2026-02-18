@@ -362,43 +362,80 @@ public partial class RiverLayer : LooseLayer {
 	public static readonly Vector2 riverSize = new Vector2(128, 64);
 	public static readonly Vector2 riverCenterOffset = new Vector2(riverSize.X / 2, 0);
 	private ImageTexture riverTexture;
+	private ImageTexture riverDeltaTexture;
 
 	public RiverLayer() {
+		// Both textures are 4x4 grids of equal dimensions
+		// The delta texture has four proper deltas textures and 12 other river segments
 		riverTexture = TextureLoader.Load("terrain.river");
+		riverDeltaTexture = TextureLoader.Load("terrain.river_delta");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
-		//The "point" is the easternmost point of the tile for which we are drawing rivers.
-		//Which river graphics to used is calculated by evaluating the tiles that neighbor
-		//that point.
+		// The point where four terrain tiles meet and where we want to center our river texture.
+		// It is the easternmost point of the current tile.
+		Vector2 thePoint = tileCenter + riverCenterOffset;
+
+		// We draw the texture centered on the point by starting the draw from half of its width away  
+		Vector2 drawOffset = -0.5f * riverSize;
+
+		// The right river texture is calculated by evaluating the tiles around the point
 		Tile northOfPoint = tile.neighbors[TileDirection.NORTHEAST];
 		Tile eastOfPoint = tile.neighbors[TileDirection.EAST];
-		Tile westOfPoint = tile;
 		Tile southOfPoint = tile.neighbors[TileDirection.SOUTHEAST];
+		Tile westOfPoint = tile;
 
-		int riverGraphicsIndex = 0;
-
-		if (northOfPoint.riverSouthwest) {
-			riverGraphicsIndex++;
-		}
-		if (eastOfPoint.riverNorthwest) {
-			riverGraphicsIndex += 2;
-		}
-		if (westOfPoint.riverSoutheast) {
-			riverGraphicsIndex += 4;
-		}
-		if (southOfPoint.riverNortheast) {
-			riverGraphicsIndex += 8;
-		}
-		if (riverGraphicsIndex == 0) {
+		var (row, col, idx) = DeriveTextureIndex(northOfPoint, eastOfPoint, southOfPoint, westOfPoint);
+		if (row < 0 || col < 0)
 			return;
-		}
-		int riverRow = riverGraphicsIndex / 4;
-		int riverColumn = riverGraphicsIndex % 4;
 
-		Rect2 riverRectangle = new Rect2(riverColumn * riverSize.X, riverRow * riverSize.Y, riverSize);
-		Rect2 screenTarget = new Rect2(tileCenter - (float)0.5 * riverSize + riverCenterOffset, riverSize);
-		looseView.DrawTextureRectRegion(riverTexture, screenTarget, riverRectangle);
+		Rect2 riverRectangle = new Rect2(col * riverSize.X, row * riverSize.Y, riverSize);
+		Rect2 screenTarget = new Rect2(thePoint + drawOffset, riverSize);
+
+		// Draw a special river delta texture in certain situations, otherwise draw from the regular river texture.
+		// Note that delta detection can be a forgiving heuristic, as the delta texture also features river elements.
+		if (IsDelta(idx, northOfPoint, eastOfPoint, southOfPoint, westOfPoint))
+			looseView.DrawTextureRectRegion(riverDeltaTexture, screenTarget, riverRectangle);
+		else
+			looseView.DrawTextureRectRegion(riverTexture, screenTarget, riverRectangle);
+	}
+
+	private static (int, int, int) DeriveTextureIndex(Tile north, Tile east, Tile south, Tile west) {
+		var textureIndex = 0;
+
+		if (north.riverSouthwest) {
+			textureIndex++;
+		}
+		if (east.riverNorthwest) {
+			textureIndex += 2;
+		}
+		if (west.riverSoutheast) {
+			textureIndex += 4;
+		}
+		if (south.riverNortheast) {
+			textureIndex += 8;
+		}
+
+		if (textureIndex == 0)
+			return (-1, -1, -1);
+
+		// We will index into a 4x4 texture matrix
+		return (textureIndex / 4, textureIndex % 4, textureIndex);
+	}
+
+	private bool IsDelta(int textureIndex, Tile north, Tile east, Tile south, Tile west) {
+		// The placement calculation is the same for both river tiles and delta tiles.
+		// We simply draw from a different texture if we are on the coast.
+
+		// The delta texture is set up such that the deltas only appear specific indexes.
+		if (textureIndex is not (1 or 2 or 4 or 8))
+			return false;
+
+		// We could get fancy with our delta heuristic, but this simple thing works quite well.
+		if (north.IsWater() || east.IsWater() || south.IsWater() || west.IsWater())
+			return true;
+
+		return false;
 	}
 }
 
