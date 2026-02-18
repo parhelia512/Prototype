@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Diagnostics;
 
 namespace C7GameData {
 	public class TileKnowledge {
@@ -25,6 +26,21 @@ namespace C7GameData {
 			knownTiles.Add(unitLocation);
 			borderTiles.Remove(unitLocation);
 
+			// Crude benchmarking tool for GetTilesVisibleToUnit, which can be
+			// a hot function when profiling.
+			// {
+			// 	Stopwatch stopwatch = new Stopwatch();
+			// 	stopwatch.Start();
+
+			// 	for (int i = 0; i < 10000; ++i) {
+			// 		foreach (Tile t in GetTilesVisibleToUnit(unitLocation)) {
+			// 			knownTiles.Add(t);
+			// 		}
+			// 	}
+
+			// 	System.Console.WriteLine($"10k runs took: {stopwatch.ElapsedMilliseconds} milliseconds");
+			// }
+
 			foreach (Tile t in GetTilesVisibleToUnit(unitLocation)) {
 				knownTiles.Add(t);
 				borderTiles.Remove(t);
@@ -44,18 +60,20 @@ namespace C7GameData {
 			}
 		}
 
-		private HashSet<Tile> GetTilesVisibleToUnit(Tile unitLocation) {
-			HashSet<Tile> result = new();
+		private List<Tile> GetTilesVisibleToUnit(Tile unitLocation) {
+			// Space for current tile, 8 inner ring tiles, 12 outer ring tiles
+			List<Tile> result = new(21);
 			result.Add(unitLocation);
+			int unitHeight = unitLocation.overlayTerrainType.height;
 
-			foreach (TileDirection a in TileDirection.GetValues(typeof(TileDirection))) {
-				Tile innerRingNeighbor = unitLocation.neighbors[a];
+			foreach (var (innerTileDirection, innerRingNeighbor) in unitLocation.neighbors) {
 				if (innerRingNeighbor == Tile.NONE) {
 					continue;
 				}
 				result.Add(innerRingNeighbor);
+				int innerHeight = innerRingNeighbor.overlayTerrainType.height;
 
-				foreach (TileDirection b in TileDirection.GetValues(typeof(TileDirection))) {
+				foreach (var (outerTileDirection, outerRingNeighbor) in innerRingNeighbor.neighbors) {
 					// Say we have the following. We are standing on the XX tile
 					// and need to figure out which tiles we can see. We can see
 					// the hill directly to our SW, because we're next to it.
@@ -64,23 +82,21 @@ namespace C7GameData {
 					// tiles away. We can't see the hill that is SW+SW of us
 					// because we are blocked. To implement this we need to
 					// prevent 90 degree "turns", which we handle by ensuring
-					// the a+b combo is never a combination of two N/S/E/W dirs.
+					// the innerTileDirection+outerTileDirection combo is never
+					// a combination of two N/S/E/W dirs.
 					//
 					//                      <  ..  >
 					//                  <  ..  ><  XX  >
 					//              <  ..  >< Hill ><  gg  >
 					//                  < Hill ><  gg  >
 					//                      < Hill >
-					if (((int)a) % 2 == 0 && ((int)b) % 2 == 0) {
+					if (((int)innerTileDirection) % 2 == 0 && ((int)outerTileDirection) % 2 == 0) {
 						continue;
 					}
 
-					Tile outerRingNeighbor = innerRingNeighbor.neighbors[b];
 					if (outerRingNeighbor == Tile.NONE) {
 						continue;
 					}
-					int unitHeight = unitLocation.overlayTerrainType.height;
-					int innerHeight = innerRingNeighbor.overlayTerrainType.height;
 					int outerHeight = outerRingNeighbor.overlayTerrainType.height;
 
 					// Tiles with a height of at least 2 are visible from 2 tiles
