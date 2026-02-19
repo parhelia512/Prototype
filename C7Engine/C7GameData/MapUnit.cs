@@ -529,22 +529,20 @@ namespace C7GameData {
 			if (this.IsLandUnit() && !tile.IsLand())
 				return false;
 
-			if (!HasRank()) {
+			if (!this.HasRank()) {
 				if (HasHostileCity(tile, owner)) {
 					if (probe.RaiseNotice) {
 						new MsgShowTemporaryPopup($"Only combat units can capture cities and improvements.", location).send();
-						return false;
 					}
-					return true;
+					return false;
 				}
-				if (HasHostileUnits(tile, owner)) {
+				if (HasHostileUnits(tile, owner) || (tile.hasBarbarianCamp && !this.owner.isBarbarians)) {
 					if (probe.RaiseNotice) {
 						new MsgShowTemporaryPopup($"Non-combat units may not attack.", location).send();
-						return false;
 					}
-					return true;
+					return false;
 				}
-			}
+            }
 
 			// If we allow declaring war on this move, then it doesn't matter if
 			// there are units belonging to another player on the tile.
