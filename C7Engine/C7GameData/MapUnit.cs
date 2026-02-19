@@ -542,7 +542,7 @@ namespace C7GameData {
 					}
 					return false;
 				}
-            }
+			}
 
 			// If we allow declaring war on this move, then it doesn't matter if
 			// there are units belonging to another player on the tile.
