@@ -81,7 +81,7 @@ namespace C7Engine.AI.UnitAI {
 			}
 
 			// Move along the path, initiating combat if we reach our target.
-			return this.TryToMoveAlongPath(unit, ref data.path, TileProbe.AiCombatProbe());
+			return this.TryToMoveAlongPath(unit, ref data.path, TileProbe.MoveAggroProbe());
 		}
 
 		public string SummarizePlan() {
