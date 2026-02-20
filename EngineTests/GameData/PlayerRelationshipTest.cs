@@ -1,43 +1,23 @@
 using System;
 using C7Engine;
 using C7GameData;
-using C7GameData.Save;
 using Xunit;
 using static C7GameData.PlayerRelationship;
 
 namespace EngineTests.GameData;
 
-public class GameDataFixture : IDisposable {
-	public SaveGame SaveGame { get; }
-	public C7GameData.GameData GameData { get; }
+public class PlayerRelationshipTest : IClassFixture<SaveGameFixture> {
+	C7GameData.GameData gameData;
 
-	public GameDataFixture(SaveGameFixture saveGameFixture) {
-		SaveGame = saveGameFixture.saveGame;
+	public PlayerRelationshipTest(SaveGameFixture fixture) {
+		gameData = fixture.saveGame.ToGameData(PathUtils.luaRulesDir);
 
-		GameData = SaveGame.ToGameData(PathUtils.luaRulesDir);
-
-		EngineStorage.InitializeGameDataForTests(GameData);
-	}
-
-	public void Dispose() {
-		return;
-	}
-}
-
-[CollectionDefinition("GameDataCollection")]
-public class GameDataCollection : ICollectionFixture<SaveGameFixture> { }
-
-[Collection("GameDataCollection")]
-public class PlayerRelationshipTest : IClassFixture<GameDataFixture> {
-	GameDataFixture fixture;
-
-	public PlayerRelationshipTest(GameDataFixture fixture) {
-		this.fixture = fixture;
+		EngineStorage.InitializeGameDataForTests(gameData);
 	}
 
 	[Fact]
 	public void TestHumanToBarbarianRelationship() {
-		C7GameData.GameData gd = fixture.GameData;
+		C7GameData.GameData gd = gameData;
 
 		Player playerA = gd.players[0];
 		Player playerB = gd.players[2];
@@ -56,7 +36,7 @@ public class PlayerRelationshipTest : IClassFixture<GameDataFixture> {
 
 	[Fact]
 	public void TestRelationshipAtVariousPoints() {
-		C7GameData.GameData gd = fixture.GameData;
+		C7GameData.GameData gd = gameData;
 
 		Player playerA = gd.players[1];
 		Player playerB = gd.players[2];
@@ -108,7 +88,7 @@ public class PlayerRelationshipTest : IClassFixture<GameDataFixture> {
 
 	[Fact]
 	public void TestMultiTurnDealRegistration() {
-		C7GameData.GameData gd = fixture.GameData;
+		C7GameData.GameData gd = gameData;
 
 		Player playerA = gd.players[2];
 		Player playerB = gd.players[3];
