@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using C7GameData;
 using C7Engine;
 
@@ -27,6 +26,12 @@ public partial class StatusMenu : Control {
 			// Only show the diplomacy button if we have civs to talk to.
 			if (player.playerRelationships.Count > 0) {
 				openDiplomacy.ShowButton();
+			} else {
+				// After meeting a civ and revealed the button,
+				// if that civ gets destroyed and we don't have any more relationships
+				// with other civs (haven't met them yet) we should hide the button again.
+				// It will be shown again when we meet another civ.
+				openDiplomacy.HideButton();
 			}
 
 			// TODO: Don't show the palace button if the player can't start building the palace

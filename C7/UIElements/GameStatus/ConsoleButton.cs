@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 /// <summary>
 /// ConsoleButton is a custom control node that displays a textured button with a
@@ -28,7 +27,13 @@ public partial class ConsoleButton : Control {
 			TexturePressed = TextureLoader.Load("ui.console.pressed"),
 			TooltipText = tooltipText
 		};
-		button.Pressed += () => { EmitSignal(SignalName.Pressed); };
+		button.Pressed += () => {
+			EmitSignal(SignalName.Pressed);
+			// When first clicked the button has focus
+			// If we press the spacebar or enter after, it still has focus
+			// so it gets triggered again, and we don't want that
+			button.FocusMode = FocusModeEnum.None;
+		};
 
 		Label label = new() {
 			Text = text,
@@ -50,5 +55,9 @@ public partial class ConsoleButton : Control {
 
 	public void ShowButton() {
 		button.Show();
+	}
+
+	public void HideButton() {
+		button.Hide();
 	}
 }
