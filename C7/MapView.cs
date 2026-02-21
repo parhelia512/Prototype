@@ -396,20 +396,17 @@ public partial class RiverLayer : LooseLayer {
 		// Draw a river texture from one of the textures, depending on terrain.
 		// The placement calculation is the same for both river textures.
 
-		if (idx is 1 or 2 or 4 or 8)
-		{
+		if (idx is 1 or 2 or 4 or 8) {
 			// Narrow set has deltas at these indexes
 			if (HasWater(northOfPoint, eastOfPoint, southOfPoint, westOfPoint))
 				looseView.DrawTextureRectRegion(narrowTexture, screenTarget, riverRectangle);
 			else
 				looseView.DrawTextureRectRegion(broadTexture, screenTarget, riverRectangle);
-		}
-		else
-		{
+		} else {
 			// TODO: When to draw from the broad texture? Is it semi-random? Is it based on elevation?
 
 			// Default: narrow rivers, less meandering
-			looseView.DrawTextureRectRegion(narrowTexture, screenTarget, riverRectangle);	
+			looseView.DrawTextureRectRegion(narrowTexture, screenTarget, riverRectangle);
 		}
 	}
 
