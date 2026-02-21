@@ -361,14 +361,15 @@ public partial class MarshLayer : LooseLayer {
 public partial class RiverLayer : LooseLayer {
 	public static readonly Vector2 riverSize = new Vector2(128, 64);
 	public static readonly Vector2 riverCenterOffset = new Vector2(riverSize.X / 2, 0);
-	private ImageTexture riverTexture;
-	private ImageTexture riverDeltaTexture;
+	private ImageTexture narrowTexture;
+	private ImageTexture broadTexture;
 
 	public RiverLayer() {
 		// Both textures are 4x4 grids of equal dimensions
-		// The delta texture has four proper deltas textures and 12 other river segments
-		riverTexture = TextureLoader.Load("terrain.river");
-		riverDeltaTexture = TextureLoader.Load("terrain.river_delta");
+		// The narrow texture has four river deltas and 12 narrow river segments
+		// The broad texture has 16 broad river segments with more meandering
+		narrowTexture = TextureLoader.Load("terrain.river_delta");
+		broadTexture = TextureLoader.Load("terrain.river");
 	}
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
@@ -386,35 +387,51 @@ public partial class RiverLayer : LooseLayer {
 		Tile westOfPoint = tile;
 
 		var (row, col, idx) = DeriveTextureIndex(northOfPoint, eastOfPoint, southOfPoint, westOfPoint);
-		if (row < 0 || col < 0)
+		if (row < 0 || col < 0 || idx < 0)
 			return;
 
 		Rect2 riverRectangle = new Rect2(col * riverSize.X, row * riverSize.Y, riverSize);
 		Rect2 screenTarget = new Rect2(thePoint + drawOffset, riverSize);
 
-		// Draw a special river delta texture in certain situations, otherwise draw from the regular river texture.
-		// Note that delta detection can be a forgiving heuristic, as the delta texture also features river elements.
-		if (IsDelta(idx, northOfPoint, eastOfPoint, southOfPoint, westOfPoint))
-			looseView.DrawTextureRectRegion(riverDeltaTexture, screenTarget, riverRectangle);
+		// Draw a river texture from one of the textures, depending on terrain.
+		// The placement calculation is the same for both river textures.
+
+		if (idx is 1 or 2 or 4 or 8)
+		{
+			// Narrow set has deltas at these indexes
+			if (HasWater(northOfPoint, eastOfPoint, southOfPoint, westOfPoint))
+				looseView.DrawTextureRectRegion(narrowTexture, screenTarget, riverRectangle);
+			else
+				looseView.DrawTextureRectRegion(broadTexture, screenTarget, riverRectangle);
+		}
 		else
-			looseView.DrawTextureRectRegion(riverTexture, screenTarget, riverRectangle);
+		{
+			// TODO: When to draw from the broad texture? Is it semi-random? Is it based on elevation?
+
+			// Default: narrow rivers, less meandering
+			looseView.DrawTextureRectRegion(narrowTexture, screenTarget, riverRectangle);	
+		}
 	}
 
 	private static (int, int, int) DeriveTextureIndex(Tile north, Tile east, Tile south, Tile west) {
 		var textureIndex = 0;
 
-		if (north.riverSouthwest) {
-			textureIndex++;
+		if (north.riverSouthwest || west.riverNortheast) {
+			textureIndex += 1;
 		}
-		if (east.riverNorthwest) {
+		if (east.riverNorthwest || north.riverSoutheast) {
 			textureIndex += 2;
 		}
-		if (west.riverSoutheast) {
+		if (west.riverSoutheast || south.riverNorthwest) {
 			textureIndex += 4;
 		}
-		if (south.riverNortheast) {
+		if (south.riverNortheast || east.riverSouthwest) {
 			textureIndex += 8;
 		}
+
+		// Passes "The Point" only: an oasis
+		if (textureIndex == 0 && (north.riverSouth || east.riverWest || west.riverEast || south.riverNorth))
+			return (0, 0, 0);
 
 		if (textureIndex == 0)
 			return (-1, -1, -1);
@@ -423,19 +440,8 @@ public partial class RiverLayer : LooseLayer {
 		return (textureIndex / 4, textureIndex % 4, textureIndex);
 	}
 
-	private bool IsDelta(int textureIndex, Tile north, Tile east, Tile south, Tile west) {
-		// The placement calculation is the same for both river tiles and delta tiles.
-		// We simply draw from a different texture if we are on the coast.
-
-		// The delta texture is set up such that the deltas only appear specific indexes.
-		if (textureIndex is not (1 or 2 or 4 or 8))
-			return false;
-
-		// We could get fancy with our delta heuristic, but this simple thing works quite well.
-		if (north.IsWater() || east.IsWater() || south.IsWater() || west.IsWater())
-			return true;
-
-		return false;
+	private bool HasWater(Tile north, Tile east, Tile south, Tile west) {
+		return north.IsWater() || east.IsWater() || south.IsWater() || west.IsWater();
 	}
 }
 
