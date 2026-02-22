@@ -7188,7 +7188,8 @@
     "defaultDealDuration": 20,
     "treasuryInterestRate": 0.05,
     "maxInterest": 50,
-    "shieldCostPerGold": 4
+    "shieldCostPerGold": 4,
+    "shieldRateForDisbanding": 0.25
   },
   "techs": [
     {

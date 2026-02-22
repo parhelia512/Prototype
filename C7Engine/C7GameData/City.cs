@@ -49,7 +49,7 @@ namespace C7GameData {
 
 		//Temporary production code because production is fun.
 		public IProducible itemBeingProduced;
-		public int shieldsStored = 0;
+		public int shieldsStored { get; private set; } = 0;
 
 		public int foodStored = 0;
 
@@ -101,6 +101,20 @@ namespace C7GameData {
 
 		public bool IsCapital() {
 			return capital;
+		}
+
+		/// <summary>
+		/// Sets the current shield amount in the production box. If the add parameter is true, the shields get appended.<br/>
+		/// </summary>
+		/// <param name="shields">The number of shields to be added</param>
+		/// <param name="add">If true, the shields get appended, otherwise they overwrite the current value</param>
+		[LuaMethod]
+		public void SetStoredShields(int shields, bool add = false) {
+			// TODO: account for overflow if needed
+			if (add)
+				this.shieldsStored += shields;
+			else
+				this.shieldsStored = shields;
 		}
 
 		public List<CityBuilding> GetBuildings() {

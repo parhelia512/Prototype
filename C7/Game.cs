@@ -810,15 +810,16 @@ public partial class Game : Node {
 
 		if (currentAction == C7Action.UnitDisband) {
 			if (CurrentlySelectedUnit == null || CurrentlySelectedUnit == MapUnit.NONE) {
+				log.Warning("Trying to disband null or NONE unit");
 				return;
 			}
 			popupOverlay.ShowPopup(
 				new ConfirmationPopup(
-					$"Disband {CurrentlySelectedUnit.name}? Pardon me but these are OUR people. Do \nyou really want to disband them?",
+					$"Disband {CurrentlySelectedUnit.name}? Pardon me but these are OUR people.\nDo you really want to disband them?",
 					"Yes, we need to!",
 					"No. Maybe you are right, advisor.",
 					() => {
-						new ActionToEngineMsg(() => CurrentlySelectedUnit?.disband()).send();
+						new ActionToEngineMsg(async () => await CurrentlySelectedUnit.Disband()).send();
 					}),
 				PopupOverlay.PopupCategory.Advisor);
 		}

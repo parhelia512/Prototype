@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace C7GameData.Save {
@@ -102,12 +101,13 @@ namespace C7GameData.Save {
 					ProducibleType.UNIT => unitPrototypes.Find(proto => proto.name == producible),
 					ProducibleType.BUILDING => buildings.Find(building => building.name == producible),
 				},
-				shieldsStored = shieldsStored,
 				foodStored = foodStored,
 				turnsOfUnhappinessDueToPopRushing = turnsOfUnhappinessDueToPopRushing,
 				capital = capital,
 				constructed_buildings = this.buildings.ConvertAll(building => building.ToCityBuilding(buildings, players)),
 			};
+
+			city.SetStoredShields(shieldsStored);
 
 			foreach (KeyValuePair<string, int> keyValuePair in perPlayerCulture) {
 				city.perPlayerCulture.Add(players.Find(x => x.id.ToString() == keyValuePair.Key), keyValuePair.Value);

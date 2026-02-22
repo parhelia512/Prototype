@@ -59,7 +59,7 @@ namespace C7Engine {
 						log.Information("Building city with " + unit);
 						//TODO: This should use a message, and the message handler should cause the disbanding to happen.
 						CityInteractions.BuildCity(unit.location, player, unit.owner.GetNextCityName());
-						unit.disband();
+						unit.RemoveFromPlay();
 					} else if (data.escort == null) {
 						log.Information($"Settler {unit.id} is waiting for an escort");
 						unit.movementPoints.onConsumeAll();
@@ -72,11 +72,11 @@ namespace C7Engine {
 					if (unit.location.cityAtTile != null) {
 						//TODO: Actually join the city.  Haven't added that action.
 						//For now, just get rid of the unit.  Sorry, bro.
-						unit.disband();
+						unit.RemoveFromPlay();
 					} else {
 						//TODO: Eventually, go to the city we're supposed to join
 						//For now, just disband
-						unit.disband();
+						unit.RemoveFromPlay();
 					}
 					break;
 			}

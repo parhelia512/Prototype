@@ -392,7 +392,7 @@ namespace C7GameData {
 				var (dead, alive) = (result == CombatResult.AttackerKilled) ? (attacker, defender) : (defender, attacker);
 				alive.RollToPromote(dead);
 				await dead.animateAsync(MapUnit.AnimatedAction.DEATH);
-				dead.disband();
+				dead.RemoveFromPlay();
 			}
 
 			if (result.DefenderWon())
@@ -427,7 +427,7 @@ namespace C7GameData {
 			if (target.hitPointsRemaining <= 0) {
 				RollToPromote(target);
 				await target.animateAsync(MapUnit.AnimatedAction.DEATH);
-				target.disband();
+				target.RemoveFromPlay();
 			}
 
 			facingDirection = unitOriginalOrientation;
@@ -482,7 +482,7 @@ namespace C7GameData {
 					// TODO: Add rules for how much gold is taken.
 					int goldTaken = tile.cityAtTile.owner.gold / 4;
 					tile.cityAtTile.owner.gold -= goldTaken;
-					disband();
+					this.RemoveFromPlay();
 					if (tile.cityAtTile.owner.isHuman) {
 						new MsgShowMilitaryAdvisorPopup($"Barbarians have stolen {goldTaken} gold from our cities!\nWe need a stronger military.", happy: false).send();
 					}
@@ -732,8 +732,12 @@ namespace C7GameData {
 			movementPoints.skipTurn();
 		}
 
-		public void disband() {
-			EngineStorage.gameData.DisbandUnit(this);
+		public async Task Disband() {
+			await EngineStorage.gameData.DisbandUnit(this);
+		}
+
+		public void RemoveFromPlay() {
+			EngineStorage.gameData.RemoveUnit(this);
 		}
 
 		public bool canBuildCity() {
@@ -757,10 +761,7 @@ namespace C7GameData {
 			// TODO: Need to check somewhere that this unit is allowed to build a city on its current tile. Either do that here or in every caller
 			// (probably best to just do it here).
 			City city = CityInteractions.BuildCity(location, owner, cityName);
-
-			// TODO: Should directly delete the unit instead of disbanding it. Disbanding in a city will eventually award shields, which we
-			// obviously don't want to do here.
-			disband();
+			this.RemoveFromPlay();
 
 			return city;
 		}

@@ -104,6 +104,11 @@ namespace C7GameData {
 			LoadLuaFunctions(gameData);
 		}
 
+		[LuaMethod]
+		public bool IsGreatWonder() {
+			return this.greatWonderProperties != null;
+		}
+
 		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
 			if (!city.owner.HasRequiredTechnology(this)) {
 				return false;

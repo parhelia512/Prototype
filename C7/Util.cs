@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using C7.Textures;
 using C7Engine;
+using C7Engine.Lua;
 using ConvertCiv3Media;
 using Godot;
 using QueryCiv3;
@@ -396,5 +397,6 @@ public partial class Util {
 		TextureLoader.ClearCache();
 		AnimationManager.ClearCache();
 		PlayerTextureUtil.ClearCache();
+		RulesEngine.ClearCache();
 	}
 }
