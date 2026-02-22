@@ -36,9 +36,6 @@ public partial class PlayerSetup : Control {
 	Civilization selectedCivilization;
 	Difficulty selectedDifficulty;
 
-	// TODO: read this from the rules based on the world size
-	const int NUM_OPPONENTS = 7;
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		GlobalSingleton global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
@@ -75,7 +72,7 @@ public partial class PlayerSetup : Control {
 		DisplaySelectedLeader();
 
 		// Set up the options for opponents.
-		AddOpponentSelectors();
+		AddOpponentSelectors(global.WorldCharacteristics.worldSize.numberOfCivs);
 
 		// Set up the difficulty buttons
 		difficultyContainer.Columns = save.Difficulties.Count;
@@ -106,9 +103,10 @@ public partial class PlayerSetup : Control {
 		GetTree().ChangeSceneToFile("res://UIElements/MainMenu/main_menu.tscn");
 	}
 
-	private void AddOpponentSelectors() {
-		// TODO: The number of opponents should come from the rule set.
-		for (int i = 0; i < NUM_OPPONENTS; ++i) {
+	private void AddOpponentSelectors(int numberOfCivs) {
+		int numOpponents = numberOfCivs - 1;
+
+		for (int i = 0; i < numOpponents; ++i) {
 			OptionButton optionButton = new();
 			StyleBoxFlat styleBox = new() {
 				BorderColor = Color.Color8(150, 150, 150, 220),
@@ -136,7 +134,7 @@ public partial class PlayerSetup : Control {
 			opponentListContainer.AddChild(container);
 			container.AddChild(optionButton);
 
-			container.CustomMinimumSize = new Vector2(312.0f / opponentListContainer.Columns, 315.0f / NUM_OPPONENTS);
+			container.CustomMinimumSize = new Vector2(312.0f / opponentListContainer.Columns, 315.0f / numOpponents);
 			optionButton.CustomMinimumSize = new Vector2(290.0f / opponentListContainer.Columns, optionButton.CustomMinimumSize.Y);
 
 			foreach (Civilization civ in save.Civilizations) {

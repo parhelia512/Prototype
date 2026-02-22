@@ -1,14 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://b3qpc8q2w7rru"]
+[gd_scene format=3 uid="uid://b3qpc8q2w7rru"]
 
 [ext_resource type="Script" uid="uid://bvgtd1omfo4du" path="res://UIElements/NewGame/WorldSetup.cs" id="1_tyjud"]
 [ext_resource type="Script" uid="uid://doqipc4rnaotx" path="res://UIElements/Civ3TextureRect.cs" id="2"]
 [ext_resource type="Script" uid="uid://dcrdcjop64t6t" path="res://UIElements/Civ3TextureButton.cs" id="3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rlsqa"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_v0f8b"]
-
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_joj1k"]
+[ext_resource type="Script" uid="uid://34cq5uvdrhkp" path="res://UIElements/MainMenu/Civ3MenuButton.cs" id="4_p6qd0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13ceg"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -17,6 +12,8 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_joj1k"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_2b8n4"]
 
@@ -40,7 +37,10 @@ keycode = 4194305
 [sub_resource type="Shortcut" id="Shortcut_7oyjg"]
 events = [SubResource("InputEventKey_klcu1")]
 
-[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "tinySize", "smallSize", "standardSize", "largeSize", "hugeSize", "randomSize", "confirm", "cancel", "seedInput")]
+[sub_resource type="ButtonGroup" id="ButtonGroup_p6qd0"]
+resource_name = "WorldSizeButtonGroup"
+
+[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "confirm", "cancel", "seedInput")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -87,12 +87,6 @@ warmLarge = NodePath("Background/WarmLarge")
 billion3Large = NodePath("Background/Billion3Large")
 billion4Large = NodePath("Background/Billion4Large")
 billion5Large = NodePath("Background/Billion5Large")
-tinySize = NodePath("Background/TinySize")
-smallSize = NodePath("Background/SmallSize")
-standardSize = NodePath("Background/StandardSize")
-largeSize = NodePath("Background/LargeSize")
-hugeSize = NodePath("Background/HugeSize")
-randomSize = NodePath("Background/RandomSize")
 confirm = NodePath("Background/Confirm")
 cancel = NodePath("Background/Cancel")
 seedInput = NodePath("Background/SeedInput")
@@ -100,125 +94,6 @@ seedInput = NodePath("Background/SeedInput")
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2
 script = ExtResource("2")
-
-[node name="Label" type="Label" parent="Background"]
-layout_mode = 0
-offset_left = 118.0
-offset_top = 96.0
-offset_right = 270.0
-offset_bottom = 119.0
-theme_override_font_sizes/font_size = 16
-text = "WORLD SIZE"
-horizontal_alignment = 1
-
-[node name="TinySize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 167.0
-offset_top = 115.0
-offset_right = 242.0
-offset_bottom = 141.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Tiny"
-alignment = 2
-
-[node name="SmallSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 160.0
-offset_top = 137.0
-offset_right = 242.0
-offset_bottom = 163.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Small"
-alignment = 2
-
-[node name="StandardSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 136.0
-offset_top = 159.0
-offset_right = 241.0
-offset_bottom = 185.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_pressed = true
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Standard"
-alignment = 2
-
-[node name="LargeSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 162.0
-offset_top = 183.0
-offset_right = 241.0
-offset_bottom = 209.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Large"
-alignment = 2
-
-[node name="HugeSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 163.0
-offset_top = 208.0
-offset_right = 240.0
-offset_bottom = 234.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Huge"
-alignment = 2
-
-[node name="RandomSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 140.0
-offset_top = 231.0
-offset_right = 240.0
-offset_bottom = 257.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Random"
-alignment = 2
 
 [node name="Label2" type="Label" parent="Background"]
 layout_mode = 0
@@ -238,8 +113,8 @@ offset_top = 20.0
 offset_right = 824.0
 offset_bottom = 48.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/focus = SubResource("StyleBoxLine_joj1k")
 theme_override_styles/normal = SubResource("StyleBoxFlat_13ceg")
+theme_override_styles/focus = SubResource("StyleBoxLine_joj1k")
 text = "-1"
 virtual_keyboard_type = 2
 
@@ -756,3 +631,166 @@ offset_right = 1007.0
 offset_bottom = 748.0
 shortcut = SubResource("Shortcut_7oyjg")
 script = ExtResource("3")
+
+[node name="WorldSizeButtons" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(177, 93)
+
+[node name="WorldSizeLabel" type="Label" parent="WorldSizeButtons"]
+offset_top = 7.0
+offset_right = 165.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 16
+text = "WORLD SIZE"
+horizontal_alignment = 1
+
+[node name="WorldSizeButtonsScroller" type="ScrollContainer" parent="WorldSizeButtons"]
+offset_left = 11.0
+offset_top = 30.0
+offset_right = 154.0
+offset_bottom = 166.0
+
+[node name="WorldSizeButtonsContainer" type="VBoxContainer" parent="WorldSizeButtons/WorldSizeButtonsScroller"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="DefaultSizeButton" type="BaseButton" parent="WorldSizeButtons/WorldSizeButtonsScroller/WorldSizeButtonsContainer"]
+unique_name_in_owner = true
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = true
+button_pressed = true
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = SubResource("ButtonGroup_p6qd0")
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
+script = ExtResource("4_p6qd0")
+Text = "Default"
+textPosition = 1
+metadata/_custom_type_script = "uid://34cq5uvdrhkp"
+
+[node name="RandomSizeButton" type="BaseButton" parent="WorldSizeButtons/WorldSizeButtonsScroller/WorldSizeButtonsContainer"]
+unique_name_in_owner = true
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = true
+button_pressed = false
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = SubResource("ButtonGroup_p6qd0")
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
+script = ExtResource("4_p6qd0")
+Text = "Random"
+textPosition = 1
+metadata/_custom_type_script = "uid://34cq5uvdrhkp"

@@ -2,12 +2,13 @@ using Godot;
 using System;
 using C7Engine;
 using C7Engine.Lua;
+using C7GameData;
 using C7GameData.Save;
 using Serilog;
 
 [Tool]
 public partial class WorldSetup : Control {
-	private static ILogger log = LogManager.ForContext<WorldSetup>();
+	private ILogger log = LogManager.ForContext<WorldSetup>();
 
 	[Export] TextureRect background;
 
@@ -57,13 +58,6 @@ public partial class WorldSetup : Control {
 	[Export] TextureRect billion4Large;
 	[Export] TextureRect billion5Large;
 
-	[Export] CheckButton tinySize;
-	[Export] CheckButton smallSize;
-	[Export] CheckButton standardSize;
-	[Export] CheckButton largeSize;
-	[Export] CheckButton hugeSize;
-	[Export] CheckButton randomSize;
-
 	[Export] TextureButton confirm;
 	[Export] TextureButton cancel;
 
@@ -74,6 +68,12 @@ public partial class WorldSetup : Control {
 	WorldCharacteristics.Age age = WorldCharacteristics.Age.Billion_4;
 	WorldCharacteristics.Temperature temp = WorldCharacteristics.Temperature.Temperate;
 	WorldCharacteristics.Climate clim = WorldCharacteristics.Climate.Normal;
+
+	private WorldSize _worldSize = WorldSize.Generic();
+
+	private int GameSeed => int.Parse(seedInput.Text);
+
+	private SaveGame _saveGame;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -266,14 +266,51 @@ public partial class WorldSetup : Control {
 		billion4Large.Visible = true;
 		billion4.ButtonPressed = true;
 
-		// TODO: handle different map sizes properly (including loading the
-		// optimal city number, etc)
-		tinySize.Visible = false;
-		smallSize.Visible = false;
-		standardSize.Visible = false;
-		largeSize.Visible = false;
-		hugeSize.Visible = false;
-		randomSize.Visible = false;
+		_saveGame = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
+
+		InitMapSizes();
+	}
+
+	private void InitMapSizes() {
+		var worldSizeButtons = GetNode("%WorldSizeButtons");
+		var worldSizeButtonsContainer = worldSizeButtons.GetNode<VBoxContainer>("%WorldSizeButtonsContainer");
+
+		var defaultSizeButton = worldSizeButtons.GetNode<Civ3MenuButton>("%DefaultSizeButton");
+		var randomSizeButton = worldSizeButtons.GetNode<Civ3MenuButton>("%RandomSizeButton");
+		var worldSizeButtonGroup = defaultSizeButton.ButtonGroup;
+
+		var sizeRandom = GameSeed == -1 ? new Random() : new Random(GameSeed);
+
+		defaultSizeButton.Pressed += () => {
+			_worldSize = WorldSize.Generic();
+		};
+		randomSizeButton.Pressed += () => {
+			var wss = _saveGame?.WorldSizes ?? [];
+			_worldSize = wss.Count > 0 ? wss[sizeRandom.Next(wss.Count)] : WorldSize.Generic();
+		};
+
+		try {
+			// Dynamically create a new button for each world size in the game 
+			foreach (var ws in _saveGame.WorldSizes) {
+				var worldSizeButton = new Civ3MenuButton
+				{
+					Text = ws.name,
+					textPosition = Civ3MenuButton.TextPosition.TextRightOfIcon,
+					FontSize = 0,
+					ButtonGroup = worldSizeButtonGroup,
+					ToggleMode = true,
+					ButtonPressed = ws.isDefault
+				};
+				worldSizeButton.Pressed += () => _worldSize = ws;
+				worldSizeButtonsContainer.AddChild(worldSizeButton);
+			}
+
+			// Move random as last in the list and drop default map option and 
+			worldSizeButtonsContainer.MoveChild(randomSizeButton, -1);
+			defaultSizeButton.QueueFree();
+		} catch (Exception ex) {
+			log.Warning(ex, "Failed to load map sizes from game mode.");
+		}
 	}
 
 	private void ResetLandformGraphics() {
@@ -313,26 +350,18 @@ public partial class WorldSetup : Control {
 	private void CreateGame() {
 		GlobalSingleton Global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
 		Global.ResetLoadGameFields();
-		SaveGame save = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
 
-		Global.WorldCharacteristics = new WorldCharacteristics(save) {
+		Global.WorldCharacteristics = new WorldCharacteristics(_saveGame) {
 			landform = landform,
 			oceanCoverage = ocean,
 			age = age,
 			climate = clim,
 			temperature = temp,
-			worldSize = new WorldSize() {
-				width = 100,
-				height = 100,
-				numberOfCivs = 8,
-				distanceBetweenCivs = 12,
-				techRate = 240,
-				optimalNumberOfCities = 20,
-			},
-			mapSeed = Int32.Parse(seedInput.Text),
+			worldSize = _worldSize,
+			mapSeed = GameSeed,
 		};
 
-		Global.SaveGame = save;
+		Global.SaveGame = _saveGame;
 
 		GetTree().ChangeSceneToFile("res://UIElements/NewGame/player_setup.tscn");
 	}

@@ -8890,5 +8890,58 @@
       "corruptionPercentage": 100,
       "militaryLaw": 1
     }
+  ],
+  "worldSizes" : [
+    {
+      "name": "Tiny",
+      "length": 80,
+      "height": 60,
+      "width": 60,
+      "optimalNumberOfCities": 14,
+      "techRate": 160,
+      "distanceBetweenCivs": 11,
+      "numberOfCivs": 4
+    },
+    {
+      "name": "Small",
+      "length": 80,
+      "height": 80,
+      "width": 80,
+      "optimalNumberOfCities": 17,
+      "techRate": 200,
+      "distanceBetweenCivs": 11,
+      "numberOfCivs": 6
+    },
+    {
+      "name": "Standard",
+      "length": 80,
+      "height": 100,
+      "width": 100,
+      "optimalNumberOfCities": 20,
+      "techRate": 240,
+      "distanceBetweenCivs": 12,      
+      "numberOfCivs": 8,
+      "isDefault" : true
+    },
+    {
+      "name": "Large",
+      "length": 80,
+      "height": 130,
+      "width": 130,
+      "optimalNumberOfCities": 28,
+      "techRate": 320,
+      "distanceBetweenCivs": 18,
+      "numberOfCivs": 12
+    },
+    {
+      "name": "Huge",
+      "length": 80,
+      "height": 160,
+      "width": 160,
+      "optimalNumberOfCities": 36,
+      "techRate": 400,
+      "distanceBetweenCivs": 24,
+      "numberOfCivs": 16
+    }
   ]
 }

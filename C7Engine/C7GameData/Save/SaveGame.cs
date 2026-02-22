@@ -72,6 +72,7 @@ namespace C7GameData.Save {
 				CitizenTypes = data.citizenTypes,
 				TerraForms = data.Terraforms.ConvertAll(t => t.ToSaveTerraform()),
 				Governments = data.governments,
+				WorldSizes = data.worldSizes,
 				Difficulties = data.difficulties,
 				GameDifficulty = data.gameDifficulty,
 				Rules = data.rules,
@@ -166,6 +167,7 @@ namespace C7GameData.Save {
 				civilizations = Civilizations,
 				citizenTypes = CitizenTypes,
 				governments = Governments,
+				worldSizes = WorldSizes,
 				difficulties = Difficulties,
 				gameDifficulty = GameDifficulty,
 				ids = new ID.Factory(this),
@@ -406,6 +408,7 @@ namespace C7GameData.Save {
 		public List<CitizenType> CitizenTypes = new();
 		public List<SaveTerraform> TerraForms = new();
 		public List<Government> Governments = new();
+		public List<WorldSize> WorldSizes = new();
 
 		// The relative directory that can be used to find scenario-specific
 		// assets.
