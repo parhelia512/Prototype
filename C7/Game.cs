@@ -950,7 +950,7 @@ public partial class Game : Node {
 
 					// If we couldn't enter this tile without a war declaration,
 					// record which civ we need to declare war on.
-					if (!unit.CanEnterTile(tile, TileProbe.CombatProbe())) {
+					if (!unit.CanEnterTile(tile, TileProbe.MoveAggroProbe())) {
 						if (tile.cityAtTile != null) {
 							result.requiresWarDeclarationOnPlayer = tile.cityAtTile.owner;
 						} else {

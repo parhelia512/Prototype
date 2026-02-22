@@ -209,10 +209,14 @@ namespace C7GameData {
 
 			// This was the last city of the civilization, so destroy remaining
 			// units.
-			player.defeated = true;
-			for (int i = 0; i < player.units.Count; ++i) {
+			// Start from the end and start deleting backwards
+			// because the other way doesn't actually go through all units
+			// probably because we keep modifying the list and its count gets all messed up
+			for (int i = player.units.Count - 1; i >= 0; --i) {
 				RemoveUnit(player.units[i]);
 			}
+
+			player.defeated = true;
 
 			// Remove this civ from all other player's relationships.
 			foreach (Player p in players) {

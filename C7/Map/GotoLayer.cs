@@ -85,7 +85,7 @@ public partial class GotoLayer : LooseLayer {
 			DrawStaticGoToCursor(looseView, tileCenter, 0, true);
 		}
 
-		if (gotoInfo.path != null && unit.CanEnterTile(gotoInfo.destinationTile, TileProbe.GotoProbe())) {
+		if (gotoInfo.path != null && unit.CanEnterTile(gotoInfo.destinationTile, TileProbe.DeclareWarProbe())) {
 			List<Tile> tiles = new List<Tile>();
 			tiles.Add(unitOriginTile);
 			tiles.AddRange(gotoInfo.path.path);

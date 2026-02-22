@@ -79,7 +79,7 @@ namespace C7Engine {
 				return PerformWorkerMove(unit, improvement);
 			}
 
-			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, TileProbe.AiMoveProbe());
+			return this.TryToMoveAlongPath(unit, ref data.pathToDestination, TileProbe.MoveNonAggroProbe());
 		}
 
 		private static Terraform? GetTileImprovement(Tile t, MapUnit unit) {

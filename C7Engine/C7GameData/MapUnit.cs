@@ -178,7 +178,7 @@ namespace C7GameData {
 		}
 
 		public async Task animateAsync(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
-			if (EngineStorage.animationsEnabled) {
+			if (EngineStorage.animationsEnabled && !EngineStorage.gameData.observerMode) {
 				var msg = new MsgStartUnitAnimation(this, action, ending);
 				msg.send();
 
@@ -363,7 +363,7 @@ namespace C7GameData {
 						// TODO: Defender retreat behavior requires some more work. There's an issue for it here:
 						// https://github.com/C7-Game/Prototype/issues/274
 						Tile retreatDestination = defender.location.neighbors[attacker.facingDirection];
-						if ((retreatDestination != Tile.NONE) && defender.CanEnterTile(retreatDestination, TileProbe.PathProbe())) {
+						if ((retreatDestination != Tile.NONE) && defender.CanEnterTile(retreatDestination, TileProbe.MoveNonAggroProbe())) {
 							await defender.move(attacker.facingDirection, true);
 							result = CombatResult.DefenderRetreated;
 							break;
@@ -529,20 +529,18 @@ namespace C7GameData {
 			if (this.IsLandUnit() && !tile.IsLand())
 				return false;
 
-			if (!HasRank()) {
+			if (!this.HasRank()) {
 				if (HasHostileCity(tile, owner)) {
 					if (probe.RaiseNotice) {
 						new MsgShowTemporaryPopup($"Only combat units can capture cities and improvements.", location).send();
-						return false;
 					}
-					return true;
+					return false;
 				}
-				if (HasHostileUnits(tile, owner)) {
+				if (HasHostileUnits(tile, owner) || (tile.hasBarbarianCamp && !this.owner.isBarbarians)) {
 					if (probe.RaiseNotice) {
 						new MsgShowTemporaryPopup($"Non-combat units may not attack.", location).send();
-						return false;
 					}
-					return true;
+					return false;
 				}
 			}
 
@@ -605,7 +603,7 @@ namespace C7GameData {
 		public async Task<bool> move(TileDirection dir, bool wait = false) {
 			(int dx, int dy) = dir.toCoordDiff();
 			Tile newLoc = EngineStorage.gameData.map.tileAt(dx + location.XCoordinate, dy + location.YCoordinate);
-			if ((newLoc != Tile.NONE) && CanEnterTile(newLoc, TileProbe.MoveProbe()) && (movementPoints.canMove)) {
+			if ((newLoc != Tile.NONE) && CanEnterTile(newLoc, TileProbe.MoveAggroWithNoticeProbe()) && (movementPoints.canMove)) {
 				facingDirection = dir;
 				wake();
 
@@ -901,36 +899,20 @@ namespace C7GameData {
 		public bool AllowWarDeclaration { get; init; }
 		public bool RaiseNotice { get; init; }
 
-		public static TileProbe AiMoveProbe() {
-			return new TileProbe() { AllowCombat = false, AllowWarDeclaration = false, RaiseNotice = false };
+		public static TileProbe MoveNonAggroProbe() {
+			return new TileProbe();
 		}
 
-		public static TileProbe AiCombatProbe() {
-			return new TileProbe() { AllowCombat = true, AllowWarDeclaration = false, RaiseNotice = false };
+		public static TileProbe MoveAggroProbe() {
+			return new TileProbe() { AllowCombat = true };
 		}
 
-		public static TileProbe PathProbe() {
-			return new TileProbe() { AllowCombat = false, RaiseNotice = false };
-		}
-
-		public static TileProbe PathCombatProbe() {
-			return new TileProbe() { AllowCombat = true, RaiseNotice = false };
-		}
-
-		public static TileProbe MoveProbe() {
+		public static TileProbe MoveAggroWithNoticeProbe() {
 			return new TileProbe() { AllowCombat = true, RaiseNotice = true };
 		}
 
-		public static TileProbe CombatProbe() {
-			return new TileProbe() { AllowCombat = true, AllowWarDeclaration = false, RaiseNotice = false };
-		}
-
-		public static TileProbe GotoProbe() {
-			return new TileProbe() { AllowCombat = true, AllowWarDeclaration = true, RaiseNotice = false };
-		}
-
 		public static TileProbe DeclareWarProbe() {
-			return new TileProbe() { AllowCombat = true, AllowWarDeclaration = true, RaiseNotice = false };
+			return new TileProbe() { AllowCombat = true, AllowWarDeclaration = true };
 		}
 	}
 }
