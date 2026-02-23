@@ -272,18 +272,20 @@ public partial class WorldSetup : Control {
 	}
 
 	private void InitMapSizes() {
-		var worldSizeButtons = GetNode("%WorldSizeButtons");
-		var worldSizeButtonsContainer = worldSizeButtons.GetNode<VBoxContainer>("%WorldSizeButtonsContainer");
+		var sizeRandom = new Random();
 
-		var defaultSizeButton = worldSizeButtons.GetNode<Civ3MenuButton>("%DefaultSizeButton");
-		var randomSizeButton = worldSizeButtons.GetNode<Civ3MenuButton>("%RandomSizeButton");
-		var worldSizeButtonGroup = defaultSizeButton.ButtonGroup;
+		var worldSizeButtonsContainer = GetNode<VBoxContainer>("Background/WorldSizeButtonsScroller/WorldSizeButtonsContainer");
 
-		var sizeRandom = GameSeed == -1 ? new Random() : new Random(GameSeed);
-
-		defaultSizeButton.Pressed += () => {
-			_worldSize = WorldSize.Generic();
+		var worldSizeButtonGroup = new ButtonGroup() { ResourceName = "WorldSizeButtonGroup" };
+		var randomSizeButton = new Civ3MenuButton
+		{
+			Text = "Random",
+			textPosition = Civ3MenuButton.TextPosition.TextRightOfIcon,
+			FontSize = 0,
+			ButtonGroup = worldSizeButtonGroup,
+			ToggleMode = true
 		};
+
 		randomSizeButton.Pressed += () => {
 			var wss = _saveGame?.WorldSizes ?? [];
 			_worldSize = wss.Count > 0 ? wss[sizeRandom.Next(wss.Count)] : WorldSize.Generic();
@@ -306,8 +308,7 @@ public partial class WorldSetup : Control {
 			}
 
 			// Move random as last in the list and drop default map option and 
-			worldSizeButtonsContainer.MoveChild(randomSizeButton, -1);
-			defaultSizeButton.QueueFree();
+			worldSizeButtonsContainer.AddChild(randomSizeButton);
 		} catch (Exception ex) {
 			log.Warning(ex, "Failed to load map sizes from game mode.");
 		}
