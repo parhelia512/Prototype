@@ -52,7 +52,15 @@ jobs:
         godot -v --headless --export${BUILD_SUFFIX} "Windows Desktop" ../build/${FOLDER_NAME}/${EXPORT_NAME}.exe
     - name: Run tests
       run: |
-        dotnet test C7
+        dotnet test C7 --blame-hang-dump-type full --blame-hang-timeout 5m --logger:"console;verbosity=detailed"
+    - name: Upload Hang Dump
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hang-dump-${{ github.job }}-${{ github.run_id }}
+        path: |
+          EngineTests/TestResults/**/*.dmp
+          EngineTests/TestResults/**/*.xml
     - name: Verify formatting (`run dotnet format C7/C7.sln whitespace` to fix)
       run: |
         dotnet format C7/C7.sln whitespace --verify-no-changes
@@ -91,7 +99,15 @@ jobs:
         godot -v --headless --export${BUILD_SUFFIX} "Linux/X11" ../build/${FOLDER_NAME}/${EXPORT_NAME}.x86_64
     - name: Run tests
       run: |
-        dotnet test C7
+        dotnet test C7 --blame-hang-dump-type full --blame-hang-timeout 5m --logger:"console;verbosity=detailed"
+    - name: Upload Hang Dump
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hang-dump-${{ github.job }}-${{ github.run_id }}
+        path: |
+          EngineTests/TestResults/**/*.dmp
+          EngineTests/TestResults/**/*.xml
     - name: Verify formatting (`run dotnet format C7/C7.sln whitespace` to fix)
       run: |
         dotnet format C7/C7.sln whitespace --verify-no-changes
@@ -133,7 +149,15 @@ jobs:
         godot -v --headless --export${BUILD_SUFFIX} "macOS" ../build/${FOLDER_NAME}.zip
     - name: Run tests
       run: |
-        dotnet test C7
+        dotnet test C7 --blame-hang-dump-type full --blame-hang-timeout 5m --logger:"console;verbosity=detailed"
+    - name: Upload Hang Dump
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hang-dump-${{ github.job }}-${{ github.run_id }}
+        path: |
+          EngineTests/TestResults/**/*.dmp
+          EngineTests/TestResults/**/*.xml
     - name: Verify formatting (`run dotnet format C7/C7.sln whitespace` to fix)
       run: |
         dotnet format C7/C7.sln whitespace --verify-no-changes
