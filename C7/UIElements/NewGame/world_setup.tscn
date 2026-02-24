@@ -36,7 +36,7 @@ keycode = 4194305
 [sub_resource type="Shortcut" id="Shortcut_7oyjg"]
 events = [SubResource("InputEventKey_klcu1")]
 
-[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "confirm", "cancel", "seedInput")]
+[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "confirm", "cancel", "seedInput", "worldSizeButtonsContainer")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -86,6 +86,7 @@ billion5Large = NodePath("Background/Billion5Large")
 confirm = NodePath("Background/Confirm")
 cancel = NodePath("Background/Cancel")
 seedInput = NodePath("Background/SeedInput")
+worldSizeButtonsContainer = NodePath("Background/WorldSizeButtonsScroller/WorldSizeButtonsContainer")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2

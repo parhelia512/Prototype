@@ -63,6 +63,8 @@ public partial class WorldSetup : Control {
 
 	[Export] LineEdit seedInput;
 
+	[Export] VBoxContainer worldSizeButtonsContainer;
+
 	WorldCharacteristics.Landform landform = WorldCharacteristics.Landform.Pangaea;
 	WorldCharacteristics.OceanCoverage ocean = WorldCharacteristics.OceanCoverage.Percent_70;
 	WorldCharacteristics.Age age = WorldCharacteristics.Age.Billion_4;
@@ -273,8 +275,6 @@ public partial class WorldSetup : Control {
 
 	private void InitMapSizes() {
 		var sizeRandom = new Random();
-
-		var worldSizeButtonsContainer = GetNode<VBoxContainer>("Background/WorldSizeButtonsScroller/WorldSizeButtonsContainer");
 
 		var worldSizeButtonGroup = new ButtonGroup() { ResourceName = "WorldSizeButtonGroup" };
 		var randomSizeButton = new Civ3MenuButton
