@@ -305,6 +305,10 @@ public partial class WorldSetup : Control {
 				};
 				worldSizeButton.Pressed += () => _worldSize = ws;
 				worldSizeButtonsContainer.AddChild(worldSizeButton);
+
+				// apply the default immediately (last isDefault=true wins)
+				if (ws.isDefault)
+					_worldSize = ws;
 			}
 
 			// Move random as last in the list and drop default map option and 
