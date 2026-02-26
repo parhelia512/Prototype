@@ -25,7 +25,9 @@ public class BarbarianInteractions {
 		foreach (Tile camp in spawningCamps) {
 			UnitPrototype unitType = SelectBarbarianUnitType(gameData.barbarianInfo, camp);
 			Tile tile = SelectSpawnTile(barbPlayer, camp, unitType);
-			gameData.SpawnUnit(barbPlayer, unitType, tile);
+			if (tile != null) {
+				gameData.SpawnUnit(barbPlayer, unitType, tile);
+			}
 		}
 
 		return barbariansToSpawn;
@@ -47,9 +49,13 @@ public class BarbarianInteractions {
 			return camp;
 
 		// Spawn sea units on a sea tile, but not in a lake or on a tile occupied by another player
+		bool CanSpawnSeaUnits(Tile t) =>
+			t.IsWater() && !t.isFreshWater && t.unitsOnTile.TrueForAll(u => u.owner == player);
+
 		if (unitType.IsSeaUnit()) {
-			return camp.FindInRing(1,
-				t => t.IsWater() && !t.isFreshWater && t.unitsOnTile.TrueForAll(u => u.owner == player));
+			// Check first two ranks around camp for a suitable tile, or bail with a null 
+			return camp.FindInRing(1, CanSpawnSeaUnits)
+				?? camp.FindInRing(2, CanSpawnSeaUnits);
 		}
 
 		// Default to camp 
