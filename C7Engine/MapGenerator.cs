@@ -8,17 +8,6 @@ namespace C7Engine {
 	using C7GameData;
 	using C7GameData.Save;
 
-	public class WorldSize {
-		public int width;
-		public int height;
-
-		public int optimalNumberOfCities;
-		public int techRate;
-
-		public int distanceBetweenCivs;
-		public int numberOfCivs;
-	}
-
 	public class WorldCharacteristics {
 		public enum Climate {
 			Arid,

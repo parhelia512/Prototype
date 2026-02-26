@@ -30,7 +30,7 @@ script = ExtResource("1")
 background = NodePath("Background")
 playerListContainer = NodePath("Background/CenterContainer/PlayerListContainer")
 civLabel = NodePath("Background/CivLabel")
-opponentListContainer = NodePath("Background/OpponentListContainer")
+opponentListContainer = NodePath("Background/OpponentListScroller/OpponentListContainer")
 difficultyContainer = NodePath("Background/DifficultyContainer")
 confirm = NodePath("Background/Confirm")
 cancel = NodePath("Background/Cancel")
@@ -83,12 +83,15 @@ theme_override_font_sizes/font_size = 15
 text = "DIFFICULTY"
 vertical_alignment = 1
 
-[node name="OpponentListContainer" type="GridContainer" parent="Background"]
+[node name="OpponentListScroller" type="ScrollContainer" parent="Background"]
 layout_mode = 0
-offset_left = 636.0
-offset_top = 123.0
-offset_right = 948.0
+offset_left = 630.0
+offset_top = 120.0
+offset_right = 951.0
 offset_bottom = 458.0
+
+[node name="OpponentListContainer" type="GridContainer" parent="Background/OpponentListScroller"]
+layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="Background"]
 layout_mode = 0

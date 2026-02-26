@@ -1,12 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://b3qpc8q2w7rru"]
+[gd_scene load_steps=14 format=3 uid="uid://b3qpc8q2w7rru"]
 
 [ext_resource type="Script" uid="uid://bvgtd1omfo4du" path="res://UIElements/NewGame/WorldSetup.cs" id="1_tyjud"]
 [ext_resource type="Script" uid="uid://doqipc4rnaotx" path="res://UIElements/Civ3TextureRect.cs" id="2"]
 [ext_resource type="Script" uid="uid://dcrdcjop64t6t" path="res://UIElements/Civ3TextureButton.cs" id="3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rlsqa"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_v0f8b"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_joj1k"]
 
@@ -40,7 +36,7 @@ keycode = 4194305
 [sub_resource type="Shortcut" id="Shortcut_7oyjg"]
 events = [SubResource("InputEventKey_klcu1")]
 
-[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "tinySize", "smallSize", "standardSize", "largeSize", "hugeSize", "randomSize", "confirm", "cancel", "seedInput")]
+[node name="Control" type="CenterContainer" node_paths=PackedStringArray("background", "pangaeaLabel", "continentsLabel", "archipelagoLabel", "pangaea60", "pangaea70", "pangaea80", "continents60", "continents70", "continents80", "archipelago60", "archipelago70", "archipelago80", "pangaea60Large", "pangaea70Large", "pangaea80Large", "continents60Large", "continents70Large", "continents80Large", "archipelago60Large", "archipelago70Large", "archipelago80Large", "arid", "normal", "wet", "cool", "temperate", "warm", "billion3", "billion4", "billion5", "aridLarge", "normalLarge", "wetLarge", "coolLarge", "temperateLarge", "warmLarge", "billion3Large", "billion4Large", "billion5Large", "confirm", "cancel", "seedInput", "worldSizeButtonsContainer")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -87,15 +83,10 @@ warmLarge = NodePath("Background/WarmLarge")
 billion3Large = NodePath("Background/Billion3Large")
 billion4Large = NodePath("Background/Billion4Large")
 billion5Large = NodePath("Background/Billion5Large")
-tinySize = NodePath("Background/TinySize")
-smallSize = NodePath("Background/SmallSize")
-standardSize = NodePath("Background/StandardSize")
-largeSize = NodePath("Background/LargeSize")
-hugeSize = NodePath("Background/HugeSize")
-randomSize = NodePath("Background/RandomSize")
 confirm = NodePath("Background/Confirm")
 cancel = NodePath("Background/Cancel")
 seedInput = NodePath("Background/SeedInput")
+worldSizeButtonsContainer = NodePath("Background/WorldSizeButtonsScroller/WorldSizeButtonsContainer")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 2
@@ -110,115 +101,6 @@ offset_bottom = 119.0
 theme_override_font_sizes/font_size = 16
 text = "WORLD SIZE"
 horizontal_alignment = 1
-
-[node name="TinySize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 167.0
-offset_top = 115.0
-offset_right = 242.0
-offset_bottom = 141.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Tiny"
-alignment = 2
-
-[node name="SmallSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 160.0
-offset_top = 137.0
-offset_right = 242.0
-offset_bottom = 163.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Small"
-alignment = 2
-
-[node name="StandardSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 136.0
-offset_top = 159.0
-offset_right = 241.0
-offset_bottom = 185.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_pressed = true
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Standard"
-alignment = 2
-
-[node name="LargeSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 162.0
-offset_top = 183.0
-offset_right = 241.0
-offset_bottom = 209.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Large"
-alignment = 2
-
-[node name="HugeSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 163.0
-offset_top = 208.0
-offset_right = 240.0
-offset_bottom = 234.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Huge"
-alignment = 2
-
-[node name="RandomSize" type="CheckButton" parent="Background"]
-visible = false
-layout_mode = 0
-offset_left = 140.0
-offset_top = 231.0
-offset_right = 240.0
-offset_bottom = 257.0
-theme_override_colors/font_hover_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.0305083, 0.489873, 0.588479, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rlsqa")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rlsqa")
-button_group = SubResource("ButtonGroup_v0f8b")
-text = "Random"
-alignment = 2
 
 [node name="Label2" type="Label" parent="Background"]
 layout_mode = 0
@@ -756,3 +638,13 @@ offset_right = 1007.0
 offset_bottom = 748.0
 shortcut = SubResource("Shortcut_7oyjg")
 script = ExtResource("3")
+
+[node name="WorldSizeButtonsScroller" type="ScrollContainer" parent="Background"]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 114.0
+offset_right = 272.0
+offset_bottom = 256.0
+
+[node name="WorldSizeButtonsContainer" type="VBoxContainer" parent="Background/WorldSizeButtonsScroller"]
+layout_mode = 2
