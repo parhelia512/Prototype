@@ -48,9 +48,9 @@ public class BarbarianInteractions {
 		if (unitType.IsLandUnit())
 			return camp;
 
-		// Spawn sea units on a sea tile, but not in a lake or on a tile occupied by another player
+		// Spawn sea units on a coast tile, but not in a lake or on a tile occupied by another player
 		bool CanSpawnSeaUnits(Tile t) =>
-			t.IsWater() && !t.isFreshWater && t.unitsOnTile.TrueForAll(u => u.owner == player);
+			t.IsCoast() && !t.isFreshWater && t.unitsOnTile.TrueForAll(u => u.owner == player);
 
 		if (unitType.IsSeaUnit()) {
 			// Check first two ranks around camp for a suitable tile, or bail with a null 
