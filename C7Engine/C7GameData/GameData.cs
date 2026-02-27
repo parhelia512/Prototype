@@ -266,6 +266,26 @@ namespace C7GameData {
 			log.Information($"Player {owner} removed unit: {unit}");
 		}
 
+		internal void SpawnUnit(Player player, UnitPrototype unitType, Tile tile) {
+			// TODO: consolidate unit spawning routines (here) 
+
+			MapUnit newUnit = unitType.GetInstance(this);
+			newUnit.location = tile;
+			newUnit.owner = player;
+			newUnit.nationality = player.civilization;
+			// TODO: make this a conscript.
+			newUnit.experienceLevelKey = defaultExperienceLevelKey;
+			newUnit.experienceLevel = defaultExperienceLevel;
+			newUnit.hitPointsRemaining = 3;
+
+			tile.unitsOnTile.Add(newUnit);
+			mapUnits.Add(newUnit);
+			player.units.Add(newUnit);
+
+			log.Debug("New unit of type {type} added at {tile} for player {player}",
+				unitType.name, tile, player);
+		}
+
 		public int TechCostFor(Tech tech, Player player) {
 			// Cost formula from https://forums.civfanatics.com/threads/research-cost-formula-v1-29f.29485/.
 			// Research Cost = [MM * [10*COST * (1 - N/[CL*1.75])]/(CF * 10)] - progress

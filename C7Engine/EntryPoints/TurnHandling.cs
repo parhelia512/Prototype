@@ -1,11 +1,8 @@
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Linq;
+using System.Net.NetworkInformation;
 using Serilog;
 
 namespace C7Engine {
-	using System;
 	using System.Threading.Tasks;
 	using C7GameData;
 
@@ -39,7 +36,7 @@ namespace C7Engine {
 				//at the same place in the order.  Confirmed this is what Civ3 does.
 				UnitInteractions.ClearWaitQueue();
 
-				SpawnBarbarians(gameData);
+				BarbarianInteractions.SpawnBarbarians(gameData);
 
 				gameData.turn++;
 				foreach (Player player in gameData.players) {
@@ -107,42 +104,6 @@ namespace C7Engine {
 				}
 			}
 			return false;
-		}
-
-		private static void SpawnBarbarians(GameData gameData) {
-			Player barbPlayer = gameData.players.Find(player => player.isBarbarians);
-
-			// A random 5% of camps will spawn a unit each turn. Shuffle the
-			// camps to make this random.
-			int barbariansToSpawn = (int)Math.Ceiling(GameData.rng.Next(gameData.map.barbarianCamps.Count) / 20.0);
-			List<int> tileIndicies = Enumerable.Range(0, gameData.map.barbarianCamps.Count).ToList();
-			GameData.rng.Shuffle<int>(CollectionsMarshal.AsSpan(tileIndicies));
-
-			for (int i = 0; i < barbariansToSpawn; ++i) {
-				Tile tile = gameData.map.barbarianCamps[tileIndicies[i]];
-
-				// Its a 3:1 ratio of advanced to basic barbarians.
-				UnitPrototype unitType = GameData.rng.Next(100) < 25 ? gameData.barbarianInfo.advancedBarbarian : gameData.barbarianInfo.basicBarbarian;
-				// Give costal camps a chance to spawn a boat.
-				if (tile.NeighborsWater() && GameData.rng.Next(100) < 20) {
-					unitType = gameData.barbarianInfo.barbarianSeaUnitProto;
-				}
-
-				MapUnit newUnit = unitType.GetInstance(gameData);
-				newUnit.location = tile;
-				newUnit.owner = barbPlayer;
-				newUnit.nationality = barbPlayer.civilization;
-				// TODO: make this a conscript.
-				newUnit.experienceLevelKey = gameData.defaultExperienceLevelKey;
-				newUnit.experienceLevel = gameData.defaultExperienceLevel;
-				newUnit.hitPointsRemaining = 3;
-
-				tile.unitsOnTile.Add(newUnit);
-				gameData.mapUnits.Add(newUnit);
-				barbPlayer.units.Add(newUnit);
-
-				log.Debug("New barbarian of type {type} added at {tile}", unitType.name, tile);
-			}
 		}
 
 		///Eventually we'll have a game year or month or whatever, but for now this provides feedback on our progression
