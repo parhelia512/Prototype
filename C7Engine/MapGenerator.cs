@@ -44,6 +44,15 @@ namespace C7Engine {
 		}
 		public Age age;
 
+		public enum BarbarianActivity {
+			None = -1,
+			Sedentary = 0,
+			Roaming = 1,
+			Restless = 2,
+			Raging = 3
+		}
+		public BarbarianActivity barbarianActivity;
+
 		public int mapSeed = -1;
 		public WorldSize worldSize;
 		public List<TerrainType> terrainTypes;
