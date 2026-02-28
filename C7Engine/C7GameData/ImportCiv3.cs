@@ -103,6 +103,8 @@ namespace C7GameData {
 
 			SetMapDimensions(savData, save);
 			SetWorldWrap(savData, save);
+			
+			SetBarbarianActivity(savData, save);
 
 			// Import tiles.  This is similar to, but different from the BIQ version as tile contents may have changed in-game.
 			int i = 0;
@@ -1737,6 +1739,12 @@ namespace C7GameData {
 			if (civ3Save is not null && civ3Save.Wrld.Height > 0 && civ3Save.Wrld.Width > 0) {
 				save.Map.wrapHorizontally = civ3Save.Wrld.XWrapping;
 				save.Map.wrapVertically = civ3Save.Wrld.YWrapping;
+			}
+		}
+		
+		private static void SetBarbarianActivity(SavData civ3Save, SaveGame save) {
+			if (civ3Save?.Wrld is not null) {
+				save.BarbarianInfo.barbarianActivity = (BarbarianActivity)civ3Save.Wrld.ActualBarbarians;
 			}
 		}
 

@@ -72,7 +72,8 @@ public partial class WorldSetup : Control {
 	WorldCharacteristics.Age age = WorldCharacteristics.Age.Billion_4;
 	WorldCharacteristics.Temperature temp = WorldCharacteristics.Temperature.Temperate;
 	WorldCharacteristics.Climate clim = WorldCharacteristics.Climate.Normal;
-	WorldCharacteristics.BarbarianActivity _barbarianActivity = WorldCharacteristics.BarbarianActivity.Roaming;
+
+	private BarbarianActivity _barbarianActivity = BarbarianActivity.Roaming;
 
 	private WorldSize _worldSize = WorldSize.Generic();
 
@@ -279,8 +280,8 @@ public partial class WorldSetup : Control {
 
 	private void InitBarbarianActivityOptions() {
 		var barbRandom = new Random();
-		var barbDefault = WorldCharacteristics.BarbarianActivity.Roaming;
-		var barbOptions = Enum.GetValues<WorldCharacteristics.BarbarianActivity>().OrderBy(x => x).ToList();
+		var barbDefault = BarbarianActivity.Roaming;
+		var barbOptions = Enum.GetValues<BarbarianActivity>().OrderBy(x => x).ToList();
 
 		var barbActivityButtonGroup = new ButtonGroup() { ResourceName = "BarbActivityButtonGroup" };
 		var randomSizeButton = new Civ3MenuButton
