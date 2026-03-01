@@ -9,10 +9,17 @@ namespace C7Engine;
 public class BarbarianInteractions {
 	public static int SpawnBarbarians(GameData gameData) {
 		Player barbPlayer = gameData.players.Find(player => player.isBarbarians);
+		var activity = gameData.barbarianInfo.barbarianActivity;
 
-		// A random 5% of camps will spawn a unit each turn. Shuffle the
-		// camps to make this random.
-		int barbariansToSpawn = (int)Math.Ceiling(GameData.rng.Next(gameData.map.barbarianCamps.Count) / 20.0);
+		if (activity == BarbarianActivity.None)
+			return 0;
+
+		// A random number of camps will spawn a unit each turn.
+		var spawnRate = DetermineSpawnRate(activity);
+		var spawnMeasure = spawnRate * GameData.rng.Next(gameData.map.barbarianCamps.Count);
+		int barbariansToSpawn = (int)Math.Ceiling(spawnMeasure);
+
+		// Make the spawn locations random by shuffling a list of camp indexes
 		List<int> tileIndicies = Enumerable.Range(0, gameData.map.barbarianCamps.Count).ToList();
 		GameData.rng.Shuffle<int>(CollectionsMarshal.AsSpan(tileIndicies));
 
@@ -31,6 +38,27 @@ public class BarbarianInteractions {
 		}
 
 		return barbariansToSpawn;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private static float DetermineSpawnRate(BarbarianActivity activity) {
+		switch (activity) {
+			case BarbarianActivity.None:
+				return 0;
+			case BarbarianActivity.Sedentary:
+				return 0.03f;
+			case BarbarianActivity.Roaming:
+				return 0.05f;
+			case BarbarianActivity.Restless:
+				return 0.08f;
+			case BarbarianActivity.Raging:
+				return 0.12f;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(activity), activity, null);
+		}
+
 	}
 
 	public static UnitPrototype SelectBarbarianUnitType(BarbarianInfo barbInfo, Tile tile) {
