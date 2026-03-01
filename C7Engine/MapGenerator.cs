@@ -1413,6 +1413,9 @@ namespace C7Engine {
 				}
 			}
 
+			if (wc.worldSize.numberOfCivs > startingLocations.Count)
+				log.Error("More civs than available starting locations.");
+			
 			// Before using the starting locations, shuffle them, so that the
 			// human player doesn't always get the best starting spot.
 			rand.Shuffle<Tile>(CollectionsMarshal.AsSpan(startingLocations));
@@ -1456,6 +1459,11 @@ namespace C7Engine {
 		private static bool TileIsTooCloseToOtherStarts(Tile t, List<Tile> startingLocations, int minDistance, int attempt) {
 			if (attempt > 2) {
 				minDistance /= 2;
+			}
+			
+			if (attempt > 3) {
+				minDistance -= attempt;
+				minDistance = Math.Max(minDistance, 3); // hard floor
 			}
 
 			foreach (Tile start in startingLocations) {
