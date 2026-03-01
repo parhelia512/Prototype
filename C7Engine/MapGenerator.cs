@@ -77,6 +77,9 @@ namespace C7Engine {
 			}
 			log.Information("Seed: " + wc.mapSeed);
 
+			// Step 0: Sanitize world characteristics
+			SanitizeWorldCharacteristics(wc);
+
 			// Step 1: generate the general shape of the terrain.
 			GameMap gameMap = GenerateTerrainShape(wc);
 
@@ -123,13 +126,26 @@ namespace C7Engine {
 
 			// TODO: Goody huts, barbarian camps.
 
-
-
 			// Last step: Assign the terrain file and image ids to each tile so
 			// we know which texture to use when displaying them.
 			TerrainTextureFiles.AssignTextureDetails(new Random(wc.mapSeed + 0xebac), wc.terrainTypes, gameMap);
 
 			return gameMap;
+		}
+
+		private static void SanitizeWorldCharacteristics(WorldCharacteristics wc) {
+			// TODO: Supporting maps of odd dimensions should be doable, but beyond current tiling implementation 
+			// As a mitigation, we simply shrink the map dimensions a bit 
+
+			if (wc.worldSize.width % 2 == 1) {
+				log.Warning("Uneven map width. Shrinking by one.");
+				wc.worldSize.width -= 1;
+			}
+
+			if (wc.worldSize.height % 2 == 1) {
+				log.Warning("Uneven map height. Shrinking by one.");
+				wc.worldSize.height -= 1;
+			}
 		}
 
 		private static GameMap GenerateTerrainShape(WorldCharacteristics wc) {
@@ -1415,7 +1431,7 @@ namespace C7Engine {
 
 			if (wc.worldSize.numberOfCivs > startingLocations.Count)
 				log.Error("More civs than available starting locations.");
-			
+
 			// Before using the starting locations, shuffle them, so that the
 			// human player doesn't always get the best starting spot.
 			rand.Shuffle<Tile>(CollectionsMarshal.AsSpan(startingLocations));
@@ -1460,7 +1476,7 @@ namespace C7Engine {
 			if (attempt > 2) {
 				minDistance /= 2;
 			}
-			
+
 			if (attempt > 3) {
 				minDistance -= attempt;
 				minDistance = Math.Max(minDistance, 3); // hard floor
