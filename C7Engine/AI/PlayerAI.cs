@@ -20,10 +20,12 @@ namespace C7Engine {
 		public static readonly int MAX_LAND_EXPLORERS = 10;
 		public static readonly int MAX_WATER_EXPLORERS = 4;
 
-		public static async Task PlayTurn(Player player, Random rng, List<Tech> techs) {
+		public static async Task PlayTurn(Player player, GameData gameData) {
 			if (player.isHuman || player.isBarbarians) {
 				return;
 			}
+			List<Tech> techs = gameData.techs;
+
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			log.Information("-> Begin " + player.civilization.cityNames[0] + " turn");
