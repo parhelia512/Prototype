@@ -47,13 +47,9 @@ public partial class TerrainLayer : LooseLayer {
 		}
 
 		public int CompareTo(TileToDraw other) {
-			// "other" might be null, in which case we should return a positive value. CompareTo(null) will do this.
-			try {
-				return this.tile.ExtraInfo.BaseTerrainFileID.CompareTo(other?.tile.ExtraInfo.BaseTerrainFileID);
-			} catch (Exception) {
-				//It also could be Tile.NONE.  In which case, also return a positive value.
-				return 1;
-			}
+			var a= this?.tile?.ExtraInfo?.BaseTerrainFileID ?? int.MaxValue;
+			var b= other?.tile?.ExtraInfo?.BaseTerrainFileID ?? int.MaxValue;
+			return a.CompareTo(b);
 		}
 	}
 
