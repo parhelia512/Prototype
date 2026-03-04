@@ -30,8 +30,10 @@ internal abstract class BaseStrategy : IBarbarianStrategy {
 	/// <summary>
 	/// Wake the unit if a foreign unit or the borders of a civ are in sight. 
 	/// </summary>
-	private static bool ShouldWake(Player player, MapUnit unit) {
-		foreach (Tile t in unit.location.neighbors.Values) {
+	private static bool ShouldWake(Player player, MapUnit unit)
+	{
+		var tiles = player.tileKnowledge.GetTilesVisibleToUnit(unit.location);
+		foreach (Tile t in tiles) {
 			if (t.unitsOnTile.Count > 0 && t.unitsOnTile[0].owner != player)
 				return true;
 
