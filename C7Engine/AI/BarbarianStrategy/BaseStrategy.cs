@@ -8,7 +8,7 @@ namespace C7Engine;
 internal abstract class BaseStrategy : IBarbarianStrategy {
 	// TODO: Determine how barbarian AI is implemented in Civ3
 	// TODO: What are the key parameters influencing barbarian activity levels in Civ3?
-	
+
 	/// <summary>
 	/// Observe - Orient - Decide - Act.
 	/// 
@@ -35,8 +35,7 @@ internal abstract class BaseStrategy : IBarbarianStrategy {
 	/// <summary>
 	/// Wake the unit if a foreign unit or the borders of a civ are in sight. 
 	/// </summary>
-	private static bool ShouldWake(Player player, MapUnit unit)
-	{
+	private static bool ShouldWake(Player player, MapUnit unit) {
 		var tiles = player.tileKnowledge.GetTilesVisibleToUnit(unit.location);
 		foreach (Tile t in tiles) {
 			if (t.unitsOnTile.Count > 0 && t.unitsOnTile[0].owner != player)
@@ -96,7 +95,7 @@ internal abstract class BaseStrategy : IBarbarianStrategy {
 
 		public bool CanEngage() => CombatIntel != null;
 	}
-	
+
 	protected abstract bool DecideToEngage(Player player, MapUnit unit, Orientation orientation);
 
 	protected abstract bool DecideToExplore(Player player, MapUnit unit, Orientation orientation);
