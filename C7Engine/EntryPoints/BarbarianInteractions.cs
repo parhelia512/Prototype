@@ -41,7 +41,9 @@ public class BarbarianInteractions {
 	}
 
 	/// <summary>
-	/// 
+	/// Apply barbarian activity level to barbarian unit spawn rate. Currently NOT based on Civ3 values.
+	/// TODO: Make configurable
+	/// TODO: Determine what these values are in Civ3 (could be a constant across all) 
 	/// </summary>
 	private static float DetermineSpawnRate(BarbarianActivity activity) {
 		switch (activity) {

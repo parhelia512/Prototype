@@ -6,8 +6,13 @@ using C7GameData.AIData;
 namespace C7Engine;
 
 internal abstract class BaseStrategy : IBarbarianStrategy {
+	// TODO: Determine how barbarian AI is implemented in Civ3
+	// TODO: What are the key parameters influencing barbarian activity levels in Civ3?
+	
 	/// <summary>
-	/// Observe - Orient - Decide - Act
+	/// Observe - Orient - Decide - Act.
+	/// 
+	/// Note: This approach may or may not have anything to do with how Civ3 implements barbarian AI.
 	/// </summary>
 	public async Task PlayUnitTurn(Player player, MapUnit unit) {
 		// "Observe: Collect data and information from the environment through senses and feedback."
@@ -91,7 +96,7 @@ internal abstract class BaseStrategy : IBarbarianStrategy {
 
 		public bool CanEngage() => CombatIntel != null;
 	}
-
+	
 	protected abstract bool DecideToEngage(Player player, MapUnit unit, Orientation orientation);
 
 	protected abstract bool DecideToExplore(Player player, MapUnit unit, Orientation orientation);
