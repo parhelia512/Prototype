@@ -77,6 +77,7 @@ public class SaveGameFixture : IDisposable {
 			age = WorldCharacteristics.Age.Billion_4,
 			climate = WorldCharacteristics.Climate.Normal,
 			temperature = WorldCharacteristics.Temperature.Temperate,
+			barbarianActivity = BarbarianActivity.Roaming,
 			worldSize = worldSize,
 			mapSeed = TestSeed,
 		};

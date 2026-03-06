@@ -42,6 +42,7 @@ public class GameSetup {
 
 		// Add barbarian
 		AddPlayer(save, save.Civilizations.Find(c => c.isBarbarian), isHuman: false);
+		save.BarbarianInfo.barbarianActivity = worldCharacteristics.barbarianActivity;
 
 		// Add the human player.
 		AddPlayer(save, this.playerCivilization, isHuman: true);

@@ -86,13 +86,10 @@ namespace C7Engine {
 				}
 
 				if (player.isBarbarians) {
-					//Call the barbarian AI
-					//TODO: The AIs should be stored somewhere on the game state as some of them will store state (plans,
-					//strategy, etc.) For now, we only have a random AI, so that will be in a future commit
-					await new BarbarianAI().PlayTurn(player, gameData);
+					await BarbarianAI.PlayTurn(player, gameData);
 					player.hasPlayedThisTurn = true;
 				} else if (!player.isHuman) {
-					await PlayerAI.PlayTurn(player, GameData.rng, gameData.techs);
+					await PlayerAI.PlayTurn(player, gameData);
 					player.hasPlayedThisTurn = true;
 				} else if (player.id != EngineStorage.uiControllerID) {
 					player.hasPlayedThisTurn = true;

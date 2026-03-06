@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using C7Engine;
 using C7Engine.Lua;
 using C7GameData;
@@ -64,12 +65,15 @@ public partial class WorldSetup : Control {
 	[Export] LineEdit seedInput;
 
 	[Export] VBoxContainer worldSizeButtonsContainer;
+	[Export] VBoxContainer barbActivityButtonsContainer;
 
 	WorldCharacteristics.Landform landform = WorldCharacteristics.Landform.Pangaea;
 	WorldCharacteristics.OceanCoverage ocean = WorldCharacteristics.OceanCoverage.Percent_70;
 	WorldCharacteristics.Age age = WorldCharacteristics.Age.Billion_4;
 	WorldCharacteristics.Temperature temp = WorldCharacteristics.Temperature.Temperate;
 	WorldCharacteristics.Climate clim = WorldCharacteristics.Climate.Normal;
+
+	private BarbarianActivity _barbarianActivity = BarbarianActivity.Roaming;
 
 	private WorldSize _worldSize = WorldSize.Generic();
 
@@ -270,7 +274,45 @@ public partial class WorldSetup : Control {
 
 		_saveGame = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
 
+		InitBarbarianActivityOptions();
 		InitMapSizes();
+	}
+
+	private void InitBarbarianActivityOptions() {
+		var barbRandom = new Random();
+		var barbDefault = BarbarianActivity.Roaming;
+		var barbOptions = Enum.GetValues<BarbarianActivity>().OrderBy(x => x).ToList();
+
+		var barbActivityButtonGroup = new ButtonGroup() { ResourceName = "BarbActivityButtonGroup" };
+		var randomSizeButton = new Civ3MenuButton
+		{
+			Text = "Random",
+			textPosition = Civ3MenuButton.TextPosition.TextRightOfIcon,
+			FontSize = 0,
+			ButtonGroup = barbActivityButtonGroup,
+			ToggleMode = true
+		};
+		randomSizeButton.Pressed += () => {
+			_barbarianActivity = barbOptions[barbRandom.Next(barbOptions.Count)];
+		};
+
+		// Dynamically create a new button for each barbarian activity option 
+		foreach (var ba in barbOptions) {
+			var barbActivityButton = new Civ3MenuButton
+			{
+				Text = ba.ToString("G"),
+				textPosition = Civ3MenuButton.TextPosition.TextRightOfIcon,
+				FontSize = 0,
+				ButtonGroup = barbActivityButtonGroup,
+				ToggleMode = true,
+				ButtonPressed = ba == barbDefault
+			};
+			barbActivityButton.Pressed += () => _barbarianActivity = ba;
+			barbActivityButtonsContainer.AddChild(barbActivityButton);
+		}
+
+		// Append random as last in the list 
+		barbActivityButtonsContainer.AddChild(randomSizeButton);
 	}
 
 	private void InitMapSizes() {
@@ -311,7 +353,7 @@ public partial class WorldSetup : Control {
 					_worldSize = ws;
 			}
 
-			// Move random as last in the list and drop default map option and 
+			// Append random as last in the list 
 			worldSizeButtonsContainer.AddChild(randomSizeButton);
 		} catch (Exception ex) {
 			log.Warning(ex, "Failed to load map sizes from game mode.");
@@ -363,6 +405,7 @@ public partial class WorldSetup : Control {
 			climate = clim,
 			temperature = temp,
 			worldSize = _worldSize,
+			barbarianActivity = _barbarianActivity,
 			mapSeed = GameSeed,
 		};
 

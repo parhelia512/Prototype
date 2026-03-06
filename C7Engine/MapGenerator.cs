@@ -44,6 +44,8 @@ namespace C7Engine {
 		}
 		public Age age;
 
+		public BarbarianActivity barbarianActivity;
+
 		public int mapSeed = -1;
 		public WorldSize worldSize;
 		public List<TerrainType> terrainTypes;
@@ -62,6 +64,8 @@ namespace C7Engine {
 
 			maxRankOfWorkableTiles = save.Rules.MaxRankOfWorkableTiles;
 			maxRankOfBarbarianCampTiles = save.Rules.MaxRankOfBarbarianCampTiles;
+
+			barbarianActivity = save.BarbarianInfo.barbarianActivity;
 		}
 	}
 
@@ -1322,8 +1326,8 @@ namespace C7Engine {
 					++landTiles;
 				}
 			}
-			int totalPossibleBarbCamps = landTiles / 100;
-			// TODO: Update this based on barbarian activity.
+
+			int totalPossibleBarbCamps = DeriveTotalPossibleBarbCamps(wc, landTiles);
 
 			int numCamps = 0;
 			for (int i = 0; i < tileIndicies.Count && numCamps < totalPossibleBarbCamps; ++i) {
@@ -1333,6 +1337,30 @@ namespace C7Engine {
 					t.hasBarbarianCamp = true;
 					++numCamps;
 				}
+			}
+		}
+
+		/// <summary>
+		/// Apply barbarian activity level to barbarian camp spawn rate. Currently NOT based on Civ3 values.
+		/// TODO: Make configurable
+		/// TODO: Determine what these values are in Civ3 
+		/// </summary>
+		private static int DeriveTotalPossibleBarbCamps(WorldCharacteristics wc, int landTiles) {
+			var totalCampsBaseline = landTiles / 100;
+			switch (wc.barbarianActivity) {
+				case BarbarianActivity.None:
+					return 0;
+				case BarbarianActivity.Sedentary:
+					return totalCampsBaseline;
+				case BarbarianActivity.Roaming:
+					return totalCampsBaseline;
+				case BarbarianActivity.Restless:
+					return (int)Math.Round(totalCampsBaseline * 1.25); // extra 25%
+				case BarbarianActivity.Raging:
+					return (int)Math.Round(totalCampsBaseline * 1.50); // extra 50%
+				default:
+					log.Warning("Unknown Barbarian Activity at barb camps derivation.");
+					return totalCampsBaseline;
 			}
 		}
 
