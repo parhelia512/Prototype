@@ -827,9 +827,6 @@ namespace C7GameData {
 		}
 
 		public void Add(TerrainImprovement improvement) {
-			if (!CanAdd(improvement))
-				throw new InvalidOperationException($"Cannot add {improvement.key} to the tile");
-
 			terrainImprovementByLayer.TryGetValue(improvement.layer, out TerrainImprovement replacedImprovement);
 
 			terrainImprovementByLayer[improvement.layer] = improvement;
