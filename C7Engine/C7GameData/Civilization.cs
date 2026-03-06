@@ -74,7 +74,7 @@ namespace C7GameData {
 
 		public SettlerTileAdjustments Adjustments = new();
 
-        // This method is primarily here to satisfy the weird upgrade chains from the .biq and .sav files
+		// This method is primarily here to satisfy the weird upgrade chains from the .biq and .sav files
 		public List<UnitPrototype> GetUpgradeChain(UnitPrototype unit) {
 			List<UnitPrototype> result = [];
 			var current = unit;
@@ -85,7 +85,7 @@ namespace C7GameData {
 
 				var upgradeIsAvailable = upgrade.producibleBy.Contains(this) && !result.Contains(upgrade);
 				var upgradeOfUpgradeIsAvailable = !upgrade.producibleBy.Contains(this) && upgrade.upgradeTo != null && upgrade.upgradeTo.producibleBy.Contains(this);
-                
+
 				if (upgradeIsAvailable || upgradeOfUpgradeIsAvailable) {
 					result.Add(upgrade);
 				}

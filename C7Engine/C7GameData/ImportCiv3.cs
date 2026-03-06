@@ -1111,7 +1111,7 @@ namespace C7GameData {
 				}
 			}
 		}
-        
+
 		private void ImportUnitUpgrades() {
 			Dictionary<SaveUnitPrototype, SaveUnitPrototype> upgradeDict = BuildUpgradeDict();
 

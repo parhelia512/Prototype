@@ -35,7 +35,7 @@ namespace C7GameData {
 		public int movement { get; set; }
 		public int iconIndex { get; set; }
 		public HashSet<Civilization> producibleBy { get; set; } = [];
-        
+
 		public UnitPrototype upgradeTo;
 		public bool unproducible;
 
@@ -64,18 +64,18 @@ namespace C7GameData {
 
 			terraformActions = proto.terraformActions.Select(id => terraforms.First(t => t.Id == id)).ToHashSet();
 		}
-        
-        public int ShieldCost(HashSet<Civilization.Trait> civTraits, float costFactor) {
-            return (int)(shieldCost * costFactor);
-        }
 
-        public bool IsLandUnit() {
-            return categories.Contains("Land");
-        }
+		public int ShieldCost(HashSet<Civilization.Trait> civTraits, float costFactor) {
+			return (int)(shieldCost * costFactor);
+		}
 
-        public bool IsSeaUnit() {
-            return categories.Contains("Sea");
-        }
+		public bool IsLandUnit() {
+			return categories.Contains("Land");
+		}
+
+		public bool IsSeaUnit() {
+			return categories.Contains("Sea");
+		}
 
 		public override string ToString() {
 			return $"{name} ({attack}/{defense}/{movement})";
@@ -101,17 +101,17 @@ namespace C7GameData {
 			instance.movementPoints.reset(movement);
 			return instance;
 		}
-        
-        private UnitPrototype GetUnitUpgrade(Civilization civ) {
-            while (true) {
-                if (upgradeTo == null) return null;
-                if (!upgradeTo.producibleBy.Contains(civ)) {
-                    upgradeTo.GetUnitUpgrade(civ);
-                }
 
-                return upgradeTo;
-            }
-        }
+		private UnitPrototype GetUnitUpgrade(Civilization civ) {
+			while (true) {
+				if (upgradeTo == null) return null;
+				if (!upgradeTo.producibleBy.Contains(civ)) {
+					upgradeTo.GetUnitUpgrade(civ);
+				}
+
+				return upgradeTo;
+			}
+		}
 
 		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
 			return city.owner.civilization.IsUnitAvailable(this)
@@ -143,8 +143,8 @@ namespace C7GameData {
 					).ToList();
 			return allUnits;
 		}
-        
-        // This should be the method we use to get the "true" upgrade of a given unit
+
+		// This should be the method we use to get the "true" upgrade of a given unit
 		public UnitPrototype GetProducibleUpgrade(City city, HashSet<Resource> accessibleResources) {
 			UnitPrototype upgrade = this.GetUnitUpgrade(city.owner.civilization);
 			if (upgrade == null) return null;
@@ -155,13 +155,13 @@ namespace C7GameData {
 
 			var units = unitUpgradeChain.Concat(potentialUnits.Where(uu => !unitUpgradeChain.Contains(uu)));
 
-            // picking the last item, as when trying to get the upgrade for a Warrior,
-            // and Medieval Infantry is available, we don't want to return the Swordsman
+			// picking the last item, as when trying to get the upgrade for a Warrior,
+			// and Medieval Infantry is available, we don't want to return the Swordsman
 			var unitUpgrade = units.LastOrDefault(uu =>
 				uu.MeetsProductionRequirements(city, accessibleResources)
 				&& uu.producibleBy.Contains(city.owner.civilization)
 			);
-            
+
 			return unitUpgrade;
 		}
 
