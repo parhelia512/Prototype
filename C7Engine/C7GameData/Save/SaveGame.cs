@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using C7Engine;
-using Serilog;
 
 namespace C7GameData.Save {
 
@@ -292,19 +291,7 @@ namespace C7GameData.Save {
 					proto.requiredTech = techDict[saveProto.requiredTech];
 				}
 
-				if (saveProto.unique != null) {
-					Civilization civ = civDict[saveProto.unique.civilization];
-
-					proto.unique = new() {
-						civilization = civ
-					};
-
-					if (saveProto.unique.replace != null) {
-						proto.unique.replace = unitPrototypeDict[saveProto.unique.replace];
-					}
-
-					civ.uniqueUnit = proto;
-				}
+				proto.producibleBy = saveProto.producibleBy.Select(c => civDict[c]).ToHashSet();
 
 				proto.requiredResources = saveProto.requiredResources.Select(a => resDict[a]).ToHashSet();
 			}

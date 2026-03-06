@@ -74,30 +74,29 @@ namespace C7GameData {
 
 		public SettlerTileAdjustments Adjustments = new();
 
-		[JsonIgnore]
-		public UnitPrototype uniqueUnit;
-
-		private UnitPrototype GetDirectUpgrade(UnitPrototype unit) {
-			// Check if a regular upgrade is replaced by a unique unit
-			if (uniqueUnit != null
-				&& uniqueUnit.unique.replace != null
-				&& uniqueUnit.unique.replace == unit.upgradeTo) {
-				return uniqueUnit;
-			}
-
-			return unit.upgradeTo;
-		}
-
+        // This method is primarily here to satisfy the weird upgrade chains from the .biq and .sav files
 		public List<UnitPrototype> GetUpgradeChain(UnitPrototype unit) {
 			List<UnitPrototype> result = [];
 			var current = unit;
 
 			while (true) {
-				var upgrade = GetDirectUpgrade(current);
+				var upgrade = current.upgradeTo;
 				if (upgrade == null) break;
 
-				result.Add(upgrade);
+				var upgradeIsAvailable = upgrade.producibleBy.Contains(this) && !result.Contains(upgrade);
+				var upgradeOfUpgradeIsAvailable = !upgrade.producibleBy.Contains(this) && upgrade.upgradeTo != null && upgrade.upgradeTo.producibleBy.Contains(this);
+                
+				if (upgradeIsAvailable || upgradeOfUpgradeIsAvailable) {
+					result.Add(upgrade);
+				}
 				current = upgrade;
+
+			}
+
+			for (int i = result.Count - 1; i >= 0; i--) {
+				if (!result[i].producibleBy.Contains(this)) {
+					result.Remove(result[i]);
+				}
 			}
 
 			return result;
@@ -108,13 +107,7 @@ namespace C7GameData {
 				return false;
 			}
 
-			// Check if unit is replaced by a unique unit
-			if (uniqueUnit != null && uniqueUnit.unique.replace == unit) {
-				return false;
-			}
-
-			// Check if unit is a unique unit from another civilization
-			if (unit.unique != null && unit.unique.civilization != this) {
+			if (!unit.producibleBy.Contains(this)) {
 				return false;
 			}
 
