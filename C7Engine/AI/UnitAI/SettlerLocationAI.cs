@@ -30,12 +30,16 @@ namespace C7Engine {
 			candidates = candidates.Where(t => !SettlerAlreadyMovingTowardsTile(t, playerSettlers) && t.IsAllowCities());
 			foreach (Tile t in candidates) {
 				float score = GetTileYieldScore(t, player);
-				//For simplicity's sake, I'm only going to look at immediate neighbors here, but
-				//a lot more things should be considered over time.
+
+				// Consider the immediate neighbors
 				foreach (Tile nt in t.neighbors.Values) {
 					score += GetTileYieldScore(nt, player);
 				}
-				//TODO #802: Also look at the next ring out, with lower weights.
+
+				// Consider the outer ring of the BFC
+				foreach (var ot in t.GetBFCOuterRing()) {
+					score += GetTileYieldScore(ot, player) / 3;
+				}
 
 				//Prefer hills for defense, and coast for boats and such.
 				if (t.baseTerrainType.Key == "hills") {
@@ -44,6 +48,9 @@ namespace C7Engine {
 				if (t.NeighborsWater()) {
 					score += player.civilization.Adjustments.WaterBonus;
 				}
+
+				// Let defensibility play a role
+				score += (float)t.baseTerrainType.defenseBonus.amount * 20.0f;
 
 				//Lower scores if they are far away
 				float preDistanceScore = score;

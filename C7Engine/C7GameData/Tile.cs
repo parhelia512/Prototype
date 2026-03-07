@@ -702,6 +702,42 @@ namespace C7GameData {
 			return result;
 		}
 
+		private List<Tile> _outerRing;
+
+		public List<Tile> GetBFCOuterRing() {
+			if (_outerRing != null)
+				return _outerRing;
+
+			// List of all the BFC tiles NOT including direct Neighbors
+			// Essentially, this is every outer tile except North->North, South->South, West->West,East->East
+			(TileDirection direction1, TileDirection direction2)[] outerRingDirections =
+			{
+				(TileDirection.NORTHWEST, TileDirection.NORTH),
+				(TileDirection.NORTHWEST, TileDirection.NORTHWEST),
+				(TileDirection.NORTHWEST, TileDirection.WEST),
+				(TileDirection.SOUTHWEST, TileDirection.WEST),
+				(TileDirection.SOUTHWEST, TileDirection.SOUTHWEST),
+				(TileDirection.SOUTHWEST, TileDirection.SOUTH),
+				(TileDirection.SOUTHEAST, TileDirection.EAST),
+				(TileDirection.SOUTHEAST, TileDirection.SOUTHEAST),
+				(TileDirection.SOUTHEAST, TileDirection.SOUTH),
+				(TileDirection.NORTHEAST, TileDirection.NORTH),
+				(TileDirection.NORTHEAST, TileDirection.NORTHEAST),
+				(TileDirection.NORTHEAST, TileDirection.EAST)
+			};
+
+			Dictionary<(TileDirection,TileDirection), Tile> outerRing = new Dictionary<(TileDirection,TileDirection), Tile>();
+			foreach ((TileDirection dir1, TileDirection dir2) directions in outerRingDirections) {
+				if (!neighbors.TryGetValue(directions.dir1, out var inner))
+					continue;
+
+				if (inner != NONE && inner.neighbors.TryGetValue(directions.dir2, out var outer) && outer != NONE)
+					outerRing[(directions.dir1, directions.dir2)] = outer;
+			}
+			_outerRing = outerRing.Values.ToList();
+			return _outerRing;
+		}
+
 		public MapUnit FindTopDefender(MapUnit opponent) {
 			if (unitsOnTile.Count > 0) {
 				IEnumerable<MapUnit> potentialDefenders = unitsOnTile.Where(u => u.CanDefendAgainst(opponent));
