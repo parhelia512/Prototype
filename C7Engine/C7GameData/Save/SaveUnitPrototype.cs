@@ -9,7 +9,7 @@ namespace C7GameData.Save {
 		};
 
 		public string name { get; set; }
-		public string artName { get; set; }
+		public Art art { get; set; }
 		public int shieldCost { get; set; }
 		public int populationCost { get; set; }
 		public ID requiredTech { get; set; }
@@ -17,7 +17,6 @@ namespace C7GameData.Save {
 		public int defense { get; set; }
 		public int bombard { get; set; }
 		public int movement { get; set; }
-		public int iconIndex { get; set; }
 
 		public string upgradeTo;
 		public Unique unique;
@@ -36,10 +35,10 @@ namespace C7GameData.Save {
 		public SaveUnitPrototype() { }
 
 		public SaveUnitPrototype(UnitPrototype proto) {
-			(name, artName, shieldCost, populationCost, unproducible,
-			attack, defense, bombard, movement, iconIndex) =
-			(proto.name, proto.artName, proto.shieldCost, proto.populationCost, proto.unproducible,
-			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex);
+			(name, art, shieldCost, populationCost, unproducible,
+			attack, defense, bombard, movement) =
+			(proto.name, proto.art, proto.shieldCost, proto.populationCost, proto.unproducible,
+			 proto.attack, proto.defense, proto.bombard, proto.movement);
 
 			if (proto.requiredTech != null)
 				requiredTech = proto.requiredTech.id;

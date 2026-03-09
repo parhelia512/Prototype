@@ -766,14 +766,32 @@
   "unitPrototypes": [
     {
       "name": "Settler",
-      "artName": "Settler",
+      "art": {
+        "mainArt": {
+          "defaultName": "Settler",
+          "variations": {
+            "ERAS_Industrial_Age": "Settler Modern Times",
+            "ERAS_Modern_Era": "Settler Modern Times"
+          }
+        },
+        "thumbnailArt": {
+          "defaultIndex": 0,
+          "variations": {
+            "ERAS_Industrial_Age": 72,
+            "ERAS_Modern_Era": 72
+          }
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\00settlersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\00settlerlarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 2,
       "attack": 0,
       "defense": 0,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 0,
       "unproducible": false,
       "categories": [
         "Land"
@@ -790,14 +808,33 @@
     },
     {
       "name": "Worker",
-      "artName": "Worker",
+      "art": {
+        "mainArt": {
+          "defaultName": "Worker",
+          "variations": {
+            "ERAS_Industrial_Age": "Worker Modern Times",
+            "ERAS_Modern_Era": "Worker Modern Times",
+            "SLAVE": "Enslaved Worker"
+          }
+        },
+        "thumbnailArt": {
+          "defaultIndex": 1,
+          "variations": {
+            "ERAS_Industrial_Age": 73,
+            "ERAS_Modern_Era": 73
+          }
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\01workersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\01workerlarge.pcx"
+        }
+      },
       "shieldCost": 10,
       "populationCost": 1,
       "attack": 0,
       "defense": 0,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 1,
       "unproducible": false,
       "categories": [
         "Land"
@@ -824,14 +861,24 @@
     },
     {
       "name": "Scout",
-      "artName": "Scout",
+      "art": {
+        "mainArt": {
+          "defaultName": "Scout"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 2
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\02scoutsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\02scoutlarge.pcx"
+        }
+      },
       "shieldCost": 10,
       "populationCost": 0,
       "attack": 0,
       "defense": 0,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 2,
       "upgradeTo": "Explorer",
       "unproducible": false,
       "categories": [
@@ -848,7 +895,18 @@
     },
     {
       "name": "Explorer",
-      "artName": "Explorer",
+      "art": {
+        "mainArt": {
+          "defaultName": "Explorer"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 3
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\03Explorersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\03Explorerlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-33",
@@ -856,7 +914,6 @@
       "defense": 0,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 3,
       "unproducible": false,
       "categories": [
         "Land"
@@ -872,7 +929,18 @@
     },
     {
       "name": "Marine",
-      "artName": "Marine",
+      "art": {
+        "mainArt": {
+          "defaultName": "Marine"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 4
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\04marinesmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\04marinelarge.pcx"
+        }
+      },
       "shieldCost": 120,
       "populationCost": 0,
       "requiredTech": "tech-60",
@@ -880,7 +948,6 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 4,
       "unproducible": false,
       "categories": [
         "Land"
@@ -899,7 +966,18 @@
     },
     {
       "name": "Modern Paratrooper",
-      "artName": "Paratrooper",
+      "art": {
+        "mainArt": {
+          "defaultName": "Paratrooper"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 5
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\05paratroopersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\05paratrooperlarge.pcx"
+        }
+      },
       "shieldCost": 110,
       "populationCost": 0,
       "requiredTech": "tech-74",
@@ -907,7 +985,6 @@
       "defense": 11,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 5,
       "unproducible": false,
       "categories": [
         "Land"
@@ -927,14 +1004,24 @@
     },
     {
       "name": "Warrior",
-      "artName": "Warrior",
+      "art": {
+        "mainArt": {
+          "defaultName": "Warrior"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 6
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\06warriorsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\06warriorlarge.pcx"
+        }
+      },
       "shieldCost": 10,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 6,
       "upgradeTo": "Swordsman",
       "unproducible": false,
       "categories": [
@@ -951,7 +1038,18 @@
     },
     {
       "name": "Archer",
-      "artName": "Archer",
+      "art": {
+        "mainArt": {
+          "defaultName": "Archer"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 7
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\07archersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\07archerlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-6",
@@ -959,7 +1057,6 @@
       "defense": 1,
       "bombard": 1,
       "movement": 1,
-      "iconIndex": 7,
       "upgradeTo": "Longbowman",
       "unproducible": false,
       "categories": [
@@ -976,7 +1073,18 @@
     },
     {
       "name": "Spearman",
-      "artName": "Spearman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Spearman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 8
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\08spearmansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\08spearmanlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-1",
@@ -984,7 +1092,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 8,
       "upgradeTo": "Pikeman",
       "unproducible": false,
       "categories": [
@@ -1001,7 +1108,18 @@
     },
     {
       "name": "Swordsman",
-      "artName": "Swordsman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Swordsman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 9
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\09swordsmansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\09swordsmanlarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-8",
@@ -1009,7 +1127,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 9,
       "upgradeTo": "Medieval Infantry",
       "unproducible": false,
       "categories": [
@@ -1029,7 +1146,18 @@
     },
     {
       "name": "Chariot",
-      "artName": "chariot",
+      "art": {
+        "mainArt": {
+          "defaultName": "chariot"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 10
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\10chariotsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\10chariotlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-5",
@@ -1037,7 +1165,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 10,
       "upgradeTo": "Horseman",
       "unproducible": false,
       "categories": [
@@ -1057,7 +1184,18 @@
     },
     {
       "name": "Horseman",
-      "artName": "Horseman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Horseman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 11
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\11Horsemansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\11horsemanlarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-16",
@@ -1065,7 +1203,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 11,
       "upgradeTo": "Knight",
       "unproducible": false,
       "categories": [
@@ -1085,7 +1222,18 @@
     },
     {
       "name": "Pikeman",
-      "artName": "Pikeman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Pikeman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 12
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\12pikemansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\12pikemanlarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-23",
@@ -1093,7 +1241,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 12,
       "upgradeTo": "Musketman",
       "unproducible": false,
       "categories": [
@@ -1113,7 +1260,18 @@
     },
     {
       "name": "Longbowman",
-      "artName": "Longbowman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Longbowman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 13
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\13longbowmansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\13longbowmanlarge.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-27",
@@ -1121,7 +1279,6 @@
       "defense": 1,
       "bombard": 2,
       "movement": 1,
-      "iconIndex": 13,
       "upgradeTo": "Guerilla",
       "unproducible": false,
       "categories": [
@@ -1138,7 +1295,18 @@
     },
     {
       "name": "Musketman",
-      "artName": "Musketman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Musketman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 14
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\14musketmansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\14musketmanlarge.pcx"
+        }
+      },
       "shieldCost": 60,
       "populationCost": 0,
       "requiredTech": "tech-31",
@@ -1146,7 +1314,6 @@
       "defense": 4,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 14,
       "upgradeTo": "Rifleman",
       "unproducible": false,
       "categories": [
@@ -1166,7 +1333,18 @@
     },
     {
       "name": "Knight",
-      "artName": "Knight",
+      "art": {
+        "mainArt": {
+          "defaultName": "Knight"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 15
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\15knightsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\15knightlarge.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-26",
@@ -1174,7 +1352,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 15,
       "upgradeTo": "Cavalry",
       "unproducible": false,
       "categories": [
@@ -1195,7 +1372,18 @@
     },
     {
       "name": "Rifleman",
-      "artName": "Rifleman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Rifleman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 16
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\16riflemansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\16riflemanlarge.pcx"
+        }
+      },
       "shieldCost": 80,
       "populationCost": 0,
       "requiredTech": "tech-44",
@@ -1203,7 +1391,6 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 16,
       "upgradeTo": "Infantry",
       "unproducible": false,
       "categories": [
@@ -1220,7 +1407,18 @@
     },
     {
       "name": "Cavalry",
-      "artName": "Cavalry",
+      "art": {
+        "mainArt": {
+          "defaultName": "Cavalry"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 17
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\17cavalrysmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\17cavalrylarge.pcx"
+        }
+      },
       "shieldCost": 80,
       "populationCost": 0,
       "requiredTech": "tech-43",
@@ -1228,7 +1426,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 17,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1248,7 +1445,18 @@
     },
     {
       "name": "Infantry",
-      "artName": "Infantry",
+      "art": {
+        "mainArt": {
+          "defaultName": "Infantry"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 18
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\18infantrysmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\18infantrylarge.pcx"
+        }
+      },
       "shieldCost": 90,
       "populationCost": 0,
       "requiredTech": "tech-58",
@@ -1256,7 +1464,6 @@
       "defense": 10,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 18,
       "upgradeTo": "Mech Infantry",
       "unproducible": false,
       "categories": [
@@ -1276,7 +1483,18 @@
     },
     {
       "name": "Tank",
-      "artName": "Tank",
+      "art": {
+        "mainArt": {
+          "defaultName": "Tank"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 19
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\19shermantanksmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\19shermantanklarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-63",
@@ -1284,7 +1502,6 @@
       "defense": 8,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 19,
       "upgradeTo": "Modern Armor",
       "unproducible": false,
       "categories": [
@@ -1305,7 +1522,18 @@
     },
     {
       "name": "Mech Infantry",
-      "artName": "Mech Infantry",
+      "art": {
+        "mainArt": {
+          "defaultName": "Mech Infantry"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 20
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\20mechanizedinfantrysmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\20mechanizedinfantrylarge.pcx"
+        }
+      },
       "shieldCost": 110,
       "populationCost": 0,
       "requiredTech": "tech-67",
@@ -1313,7 +1541,6 @@
       "defense": 18,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 20,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1333,7 +1560,18 @@
     },
     {
       "name": "Modern Armor",
-      "artName": "Modern Armor",
+      "art": {
+        "mainArt": {
+          "defaultName": "Modern Armor"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 21
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\21modernarmorsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\21modernarmorlarge.pcx"
+        }
+      },
       "shieldCost": 120,
       "populationCost": 0,
       "requiredTech": "tech-74",
@@ -1341,7 +1579,6 @@
       "defense": 16,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 21,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1361,7 +1598,18 @@
     },
     {
       "name": "Catapult",
-      "artName": "Catapult",
+      "art": {
+        "mainArt": {
+          "defaultName": "Catapult"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 22
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\22catapultsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\22catapultlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-11",
@@ -1369,7 +1617,6 @@
       "defense": 0,
       "bombard": 4,
       "movement": 1,
-      "iconIndex": 22,
       "upgradeTo": "Trebuchet",
       "unproducible": false,
       "categories": [
@@ -1387,7 +1634,18 @@
     },
     {
       "name": "Cannon",
-      "artName": "Cannon",
+      "art": {
+        "mainArt": {
+          "defaultName": "Cannon"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 23
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\23cannonsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\23cannonlarge.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-39",
@@ -1395,7 +1653,6 @@
       "defense": 0,
       "bombard": 8,
       "movement": 1,
-      "iconIndex": 23,
       "upgradeTo": "Artillery",
       "unproducible": false,
       "categories": [
@@ -1417,7 +1674,18 @@
     },
     {
       "name": "Artillery",
-      "artName": "Artillery",
+      "art": {
+        "mainArt": {
+          "defaultName": "Artillery"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 24
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\24artillerysmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\24artillerylarge.pcx"
+        }
+      },
       "shieldCost": 80,
       "populationCost": 0,
       "requiredTech": "tech-58",
@@ -1425,7 +1693,6 @@
       "defense": 0,
       "bombard": 12,
       "movement": 1,
-      "iconIndex": 24,
       "upgradeTo": "Radar Artillery",
       "unproducible": false,
       "categories": [
@@ -1443,7 +1710,18 @@
     },
     {
       "name": "Radar Artillery",
-      "artName": "Radar Artillery",
+      "art": {
+        "mainArt": {
+          "defaultName": "Radar Artillery"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 25
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\25radarartillerysmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\25radarartillerylarge.pcx"
+        }
+      },
       "shieldCost": 120,
       "populationCost": 0,
       "requiredTech": "tech-80",
@@ -1451,7 +1729,6 @@
       "defense": 0,
       "bombard": 16,
       "movement": 2,
-      "iconIndex": 25,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1471,7 +1748,18 @@
     },
     {
       "name": "Cruise Missile",
-      "artName": "Cruise Missile",
+      "art": {
+        "mainArt": {
+          "defaultName": "Cruise Missile"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 26
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\26cruisemissilesmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\26cruisemissilelarge.pcx"
+        }
+      },
       "shieldCost": 60,
       "populationCost": 0,
       "requiredTech": "tech-65",
@@ -1479,7 +1767,6 @@
       "defense": 0,
       "bombard": 16,
       "movement": 1,
-      "iconIndex": 26,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1498,7 +1785,18 @@
     },
     {
       "name": "Tactical Nuke",
-      "artName": "Tactical Nuke",
+      "art": {
+        "mainArt": {
+          "defaultName": "Tactical Nuke"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 27
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\27icbmtacticalsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\27icbmtacticallarge.pcx"
+        }
+      },
       "shieldCost": 300,
       "populationCost": 0,
       "requiredTech": "tech-69",
@@ -1506,7 +1804,6 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 27,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1527,7 +1824,18 @@
     },
     {
       "name": "ICBM",
-      "artName": "ICBM",
+      "art": {
+        "mainArt": {
+          "defaultName": "ICBM"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 28
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\28icbmsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\28icbmlarge.pcx"
+        }
+      },
       "shieldCost": 500,
       "populationCost": 0,
       "requiredTech": "tech-75",
@@ -1535,7 +1843,6 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 28,
       "unproducible": false,
       "categories": [
         "Land"
@@ -1555,7 +1862,18 @@
     },
     {
       "name": "Galley",
-      "artName": "Galley",
+      "art": {
+        "mainArt": {
+          "defaultName": "Galley"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 29
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\29galley(trireme)small.pcx",
+          "large": "art\\civilopedia\\icons\\units\\29galley(trireme)large.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-15",
@@ -1563,7 +1881,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 29,
       "upgradeTo": "Caravel",
       "unproducible": false,
       "categories": [
@@ -1580,7 +1897,18 @@
     },
     {
       "name": "Caravel",
-      "artName": "Caravel",
+      "art": {
+        "mainArt": {
+          "defaultName": "Caravel"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 30
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\30caravelsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\30caravellarge.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-33",
@@ -1588,7 +1916,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
-      "iconIndex": 30,
       "upgradeTo": "Galleon",
       "unproducible": false,
       "categories": [
@@ -1605,7 +1932,18 @@
     },
     {
       "name": "Frigate",
-      "artName": "Frigate",
+      "art": {
+        "mainArt": {
+          "defaultName": "Frigate"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 31
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\31frigatesmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\31frigatelarge.pcx"
+        }
+      },
       "shieldCost": 60,
       "populationCost": 0,
       "requiredTech": "tech-42",
@@ -1613,7 +1951,6 @@
       "defense": 2,
       "bombard": 3,
       "movement": 5,
-      "iconIndex": 31,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1634,7 +1971,18 @@
     },
     {
       "name": "Galleon",
-      "artName": "Galleon",
+      "art": {
+        "mainArt": {
+          "defaultName": "Galleon"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 32
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\32galleonsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\32galleonlarge.pcx"
+        }
+      },
       "shieldCost": 50,
       "populationCost": 0,
       "requiredTech": "tech-42",
@@ -1642,7 +1990,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
-      "iconIndex": 32,
       "upgradeTo": "Transport",
       "unproducible": false,
       "categories": [
@@ -1659,7 +2006,18 @@
     },
     {
       "name": "Ironclad",
-      "artName": "Ironclad",
+      "art": {
+        "mainArt": {
+          "defaultName": "Ironclad"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 33
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\33ironcladsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\33ironcladlarge.pcx"
+        }
+      },
       "shieldCost": 90,
       "populationCost": 0,
       "requiredTech": "tech-82",
@@ -1667,7 +2025,6 @@
       "defense": 6,
       "bombard": 6,
       "movement": 3,
-      "iconIndex": 33,
       "upgradeTo": "Destroyer",
       "unproducible": false,
       "categories": [
@@ -1689,7 +2046,18 @@
     },
     {
       "name": "Transport",
-      "artName": "Transport",
+      "art": {
+        "mainArt": {
+          "defaultName": "Transport"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 34
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\34transportsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\34transportlarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-57",
@@ -1697,7 +2065,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 6,
-      "iconIndex": 34,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1716,7 +2083,18 @@
     },
     {
       "name": "Carrier",
-      "artName": "Carrier",
+      "art": {
+        "mainArt": {
+          "defaultName": "Carrier"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 35
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\35nimitzsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\35nimitzlarge.pcx"
+        }
+      },
       "shieldCost": 180,
       "populationCost": 0,
       "requiredTech": "tech-61",
@@ -1724,7 +2102,6 @@
       "defense": 8,
       "bombard": 0,
       "movement": 7,
-      "iconIndex": 35,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1743,7 +2120,18 @@
     },
     {
       "name": "Submarine",
-      "artName": "Submarine",
+      "art": {
+        "mainArt": {
+          "defaultName": "Submarine"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 36
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\36submarinesmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\36submarinelarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-61",
@@ -1751,7 +2139,6 @@
       "defense": 4,
       "bombard": 0,
       "movement": 4,
-      "iconIndex": 36,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1770,7 +2157,18 @@
     },
     {
       "name": "Destroyer",
-      "artName": "Destroyer",
+      "art": {
+        "mainArt": {
+          "defaultName": "Destroyer"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 37
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\37destroyersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\37destroyerlarge.pcx"
+        }
+      },
       "shieldCost": 120,
       "populationCost": 0,
       "requiredTech": "tech-57",
@@ -1778,7 +2176,6 @@
       "defense": 8,
       "bombard": 6,
       "movement": 8,
-      "iconIndex": 37,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1798,7 +2195,18 @@
     },
     {
       "name": "Battleship",
-      "artName": "Battleship",
+      "art": {
+        "mainArt": {
+          "defaultName": "Battleship"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 38
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\38iowabattleshipsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\38iowabattleshiplarge.pcx"
+        }
+      },
       "shieldCost": 200,
       "populationCost": 0,
       "requiredTech": "tech-61",
@@ -1806,7 +2214,6 @@
       "defense": 12,
       "bombard": 8,
       "movement": 5,
-      "iconIndex": 38,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1826,7 +2233,18 @@
     },
     {
       "name": "AEGIS Cruiser",
-      "artName": "AEGIS Cruiser",
+      "art": {
+        "mainArt": {
+          "defaultName": "AEGIS Cruiser"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 39
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\39aegiscruisersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\39aegiscruiserlarge.pcx"
+        }
+      },
       "shieldCost": 160,
       "populationCost": 0,
       "requiredTech": "tech-80",
@@ -1834,7 +2252,6 @@
       "defense": 10,
       "bombard": 6,
       "movement": 7,
-      "iconIndex": 39,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1855,7 +2272,18 @@
     },
     {
       "name": "Nuclear Submarine",
-      "artName": "Nuclear Submarine",
+      "art": {
+        "mainArt": {
+          "defaultName": "Nuclear Submarine"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 40
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\40nuclearsubmarinesmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\40nuclearsubmarinelarge.pcx"
+        }
+      },
       "shieldCost": 140,
       "populationCost": 0,
       "requiredTech": "tech-66",
@@ -1863,7 +2291,6 @@
       "defense": 4,
       "bombard": 0,
       "movement": 5,
-      "iconIndex": 40,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1882,7 +2309,18 @@
     },
     {
       "name": "Fighter",
-      "artName": "Fighter",
+      "art": {
+        "mainArt": {
+          "defaultName": "Fighter"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 41
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\41fightersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\41fighterlarge.pcx"
+        }
+      },
       "shieldCost": 80,
       "populationCost": 0,
       "requiredTech": "tech-59",
@@ -1890,7 +2328,6 @@
       "defense": 2,
       "bombard": 3,
       "movement": 1,
-      "iconIndex": 41,
       "upgradeTo": "Jet Fighter",
       "unproducible": false,
       "categories": [
@@ -1908,7 +2345,18 @@
     },
     {
       "name": "Bomber",
-      "artName": "Bomber",
+      "art": {
+        "mainArt": {
+          "defaultName": "Bomber"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 42
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\42bombersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\42bomberlarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-59",
@@ -1916,7 +2364,6 @@
       "defense": 2,
       "bombard": 12,
       "movement": 1,
-      "iconIndex": 42,
       "unproducible": false,
       "categories": [
         "Air"
@@ -1933,7 +2380,18 @@
     },
     {
       "name": "Helicopter",
-      "artName": "Helicopter",
+      "art": {
+        "mainArt": {
+          "defaultName": "Helicopter"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 43
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\43transporthelicoptersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\43transporthelicopterlarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-64",
@@ -1941,7 +2399,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 43,
       "unproducible": false,
       "categories": [
         "Air"
@@ -1959,7 +2416,18 @@
     },
     {
       "name": "Jet Fighter",
-      "artName": "Jet Fighter",
+      "art": {
+        "mainArt": {
+          "defaultName": "Jet Fighter"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 44
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\44jetfightersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\44jetfighterlarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-65",
@@ -1967,7 +2435,6 @@
       "defense": 4,
       "bombard": 3,
       "movement": 1,
-      "iconIndex": 44,
       "unproducible": false,
       "categories": [
         "Air"
@@ -1985,7 +2452,18 @@
     },
     {
       "name": "Stealth Fighter",
-      "artName": "Stealth Fighter",
+      "art": {
+        "mainArt": {
+          "defaultName": "Stealth Fighter"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 45
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\45stealthfightersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\45stealthfighterlarge.pcx"
+        }
+      },
       "shieldCost": 120,
       "populationCost": 0,
       "requiredTech": "tech-78",
@@ -1993,7 +2471,6 @@
       "defense": 6,
       "bombard": 6,
       "movement": 1,
-      "iconIndex": 45,
       "unproducible": false,
       "categories": [
         "Air"
@@ -2011,7 +2488,18 @@
     },
     {
       "name": "Stealth Bomber",
-      "artName": "Stealth Bomber",
+      "art": {
+        "mainArt": {
+          "defaultName": "Stealth Bomber"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 46
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\46stealthbombersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\46stealthbomberlarge.pcx"
+        }
+      },
       "shieldCost": 240,
       "populationCost": 0,
       "requiredTech": "tech-78",
@@ -2019,7 +2507,6 @@
       "defense": 5,
       "bombard": 18,
       "movement": 1,
-      "iconIndex": 46,
       "unproducible": false,
       "categories": [
         "Air"
@@ -2037,14 +2524,37 @@
     },
     {
       "name": "Leader",
-      "artName": "Leader Modern Times",
+      "art": {
+        "mainArt": {
+          "defaultName": "Leader Ancient Times",
+          "variations": {
+            "ERAS_Ancient_Times": "Leader Ancient Times",
+            "ERAS_Middle_Ages": "Leader Middle Ages",
+            "ERAS_Industrial_Age": "Leader Industrial Ages",
+            "ERAS_Modern_Era": "Leader Modern Times",
+            "SCI": "SciLeader"
+          }
+        },
+        "thumbnailArt": {
+          "defaultIndex": 47,
+          "variations": {
+            "ERAS_Middle_Ages": 66,
+            "ERAS_Industrial_Age": 67,
+            "ERAS_Modern_Era": 68,
+            "SCI": 169
+          }
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\47leadersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\47leaderlarge.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 0,
       "defense": 0,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 47,
       "unproducible": true,
       "categories": [
         "Land"
@@ -2060,14 +2570,35 @@
     },
     {
       "name": "Army",
-      "artName": "Army Modern Times",
+      "art": {
+        "mainArt": {
+          "defaultName": "Army Ancient Times",
+          "variations": {
+            "ERAS_Ancient_Times": "Army Ancient Times",
+            "ERAS_Middle_Ages": "Army Middle Ages",
+            "ERAS_Industrial_Age": "Army Industrial Ages",
+            "ERAS_Modern_Era": "Army Modern Times"
+          }
+        },
+        "thumbnailArt": {
+          "defaultIndex": 48,
+          "variations": {
+            "ERAS_Middle_Ages": 69,
+            "ERAS_Industrial_Age": 70,
+            "ERAS_Modern_Era": 71
+          }
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\48armysmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\48armylarge.pcx"
+        }
+      },
       "shieldCost": 400,
       "populationCost": 0,
       "attack": 0,
       "defense": 0,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 48,
       "unproducible": true,
       "categories": [
         "Land"
@@ -2083,7 +2614,18 @@
     },
     {
       "name": "Jaguar Warrior",
-      "artName": "Jaguar Warrior",
+      "art": {
+        "mainArt": {
+          "defaultName": "Jaguar Warrior"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 49
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\49aztecjaguarwarriorsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\49aztecJaguarwarriorlarge.pcx"
+        }
+      },
       "shieldCost": 15,
       "populationCost": 0,
       "requiredTech": "tech-6",
@@ -2091,7 +2633,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 49,
       "upgradeTo": "Swordsman",
       "unique": {
         "civilization": "Aztecs"
@@ -2111,7 +2652,18 @@
     },
     {
       "name": "Bowman",
-      "artName": "Bowman",
+      "art": {
+        "mainArt": {
+          "defaultName": "Bowman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 50
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\50bowman(babylonianarcher)small.pcx",
+          "large": "art\\civilopedia\\icons\\units\\50bowman(babylonianarcher)large.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-6",
@@ -2119,7 +2671,6 @@
       "defense": 2,
       "bombard": 1,
       "movement": 1,
-      "iconIndex": 50,
       "upgradeTo": "Longbowman",
       "unique": {
         "replace": "Archer",
@@ -2140,7 +2691,18 @@
     },
     {
       "name": "Hoplite",
-      "artName": "Hoplite",
+      "art": {
+        "mainArt": {
+          "defaultName": "Hoplite"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 51
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\51hoplite(greekphalanx)small.pcx",
+          "large": "art\\civilopedia\\icons\\units\\51hoplite(greekphalanx)large.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-1",
@@ -2148,7 +2710,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 51,
       "upgradeTo": "Musketman",
       "unique": {
         "replace": "Spearman",
@@ -2169,7 +2730,18 @@
     },
     {
       "name": "Impi",
-      "artName": "Impi",
+      "art": {
+        "mainArt": {
+          "defaultName": "Impi"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 52
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\52zuluspearmansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\52zuluspearmanlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-1",
@@ -2177,7 +2749,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 52,
       "upgradeTo": "Musketman",
       "unique": {
         "replace": "Spearman",
@@ -2198,7 +2769,18 @@
     },
     {
       "name": "Legionary",
-      "artName": "Legionary",
+      "art": {
+        "mainArt": {
+          "defaultName": "Legionary"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 53
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\53romanlegionsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\53romanlegionlarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-8",
@@ -2206,7 +2788,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 53,
       "upgradeTo": "Medieval Infantry",
       "unique": {
         "replace": "Swordsman",
@@ -2230,7 +2811,18 @@
     },
     {
       "name": "Immortals",
-      "artName": "Immortals",
+      "art": {
+        "mainArt": {
+          "defaultName": "Immortals"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 54
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\54immortalsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\54immortallarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-8",
@@ -2238,7 +2830,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 54,
       "upgradeTo": "Medieval Infantry",
       "unique": {
         "replace": "Swordsman",
@@ -2262,7 +2853,18 @@
     },
     {
       "name": "War Chariot",
-      "artName": "War Chariot",
+      "art": {
+        "mainArt": {
+          "defaultName": "War Chariot"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 55
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\55egyptianchariotsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\55egyptianchariotlarge.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "requiredTech": "tech-5",
@@ -2270,7 +2872,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 55,
       "upgradeTo": "Knight",
       "unique": {
         "replace": "Chariot",
@@ -2294,7 +2895,18 @@
     },
     {
       "name": "Rider",
-      "artName": "Rider",
+      "art": {
+        "mainArt": {
+          "defaultName": "Rider"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 56
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\56chinesehorsemansmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\56chinesehorsemanlarge.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-26",
@@ -2302,7 +2914,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 56,
       "upgradeTo": "Cavalry",
       "unique": {
         "replace": "Knight",
@@ -2327,7 +2938,18 @@
     },
     {
       "name": "Mounted Warrior",
-      "artName": "Mounted Warrior",
+      "art": {
+        "mainArt": {
+          "defaultName": "Mounted Warrior"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 57
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\57horsearchersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\57horsearcherlarge.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-16",
@@ -2335,7 +2957,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 57,
       "upgradeTo": "Knight",
       "unique": {
         "replace": "Horseman",
@@ -2359,7 +2980,18 @@
     },
     {
       "name": "Musketeer",
-      "artName": "Musketeer",
+      "art": {
+        "mainArt": {
+          "defaultName": "Musketeer"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 58
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\58frenchmusketeersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\58frenchmusketeerlarge.pcx"
+        }
+      },
       "shieldCost": 60,
       "populationCost": 0,
       "requiredTech": "tech-31",
@@ -2367,7 +2999,6 @@
       "defense": 5,
       "bombard": 2,
       "movement": 1,
-      "iconIndex": 58,
       "upgradeTo": "Rifleman",
       "unique": {
         "replace": "Musketman",
@@ -2391,7 +3022,18 @@
     },
     {
       "name": "Samurai",
-      "artName": "Samurai",
+      "art": {
+        "mainArt": {
+          "defaultName": "Samurai"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 59
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\59japaneseSamuraismall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\59japanesesamurailarge.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-26",
@@ -2399,7 +3041,6 @@
       "defense": 4,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 59,
       "upgradeTo": "Cavalry",
       "unique": {
         "replace": "Knight",
@@ -2423,7 +3064,18 @@
     },
     {
       "name": "War Elephant",
-      "artName": "War Elephant",
+      "art": {
+        "mainArt": {
+          "defaultName": "War Elephant"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 60
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\60warelephantsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\60warelephantlarge.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-26",
@@ -2431,7 +3083,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 60,
       "upgradeTo": "Cavalry",
       "unique": {
         "replace": "Knight",
@@ -2452,7 +3103,18 @@
     },
     {
       "name": "Cossack",
-      "artName": "Cossack",
+      "art": {
+        "mainArt": {
+          "defaultName": "Cossack"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 61
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\61russiancossacksmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\61russiancossacklarge.pcx"
+        }
+      },
       "shieldCost": 90,
       "populationCost": 0,
       "requiredTech": "tech-43",
@@ -2460,7 +3122,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 61,
       "unique": {
         "replace": "Cavalry",
         "civilization": "Russia"
@@ -2484,7 +3145,18 @@
     },
     {
       "name": "Panzer",
-      "artName": "Panzer",
+      "art": {
+        "mainArt": {
+          "defaultName": "Panzer"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 62
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\62germanpanzersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\62germanpanzerlarge.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-63",
@@ -2492,7 +3164,6 @@
       "defense": 8,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 62,
       "upgradeTo": "Modern Armor",
       "unique": {
         "replace": "Tank",
@@ -2517,7 +3188,18 @@
     },
     {
       "name": "Man-O-War",
-      "artName": "Man-O-War",
+      "art": {
+        "mainArt": {
+          "defaultName": "Man-O-War"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 63
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\63englishmanowarsmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\63englishmanowarlarge.pcx"
+        }
+      },
       "shieldCost": 65,
       "populationCost": 0,
       "requiredTech": "tech-42",
@@ -2525,7 +3207,6 @@
       "defense": 2,
       "bombard": 4,
       "movement": 5,
-      "iconIndex": 63,
       "unique": {
         "replace": "Frigate",
         "civilization": "England"
@@ -2550,7 +3231,18 @@
     },
     {
       "name": "F-15",
-      "artName": "F-15",
+      "art": {
+        "mainArt": {
+          "defaultName": "F-15"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 64
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\64americanf15small.pcx",
+          "large": "art\\civilopedia\\icons\\units\\64americanf15large.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-65",
@@ -2558,7 +3250,6 @@
       "defense": 4,
       "bombard": 6,
       "movement": 1,
-      "iconIndex": 64,
       "unique": {
         "replace": "Jet Fighter",
         "civilization": "America"
@@ -2580,7 +3271,18 @@
     },
     {
       "name": "Privateer",
-      "artName": "Privateer",
+      "art": {
+        "mainArt": {
+          "defaultName": "Privateer"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 65
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\65privateersmall.pcx",
+          "large": "art\\civilopedia\\icons\\units\\65privateerlarge.pcx"
+        }
+      },
       "shieldCost": 50,
       "populationCost": 0,
       "requiredTech": "tech-42",
@@ -2588,7 +3290,6 @@
       "defense": 1,
       "bombard": 3,
       "movement": 5,
-      "iconIndex": 65,
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2608,7 +3309,18 @@
     },
     {
       "name": "Keshik",
-      "artName": "Keshik",
+      "art": {
+        "mainArt": {
+          "defaultName": "Keshik"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 76
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_keshik civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_keshik civpedia lg.pcx"
+        }
+      },
       "shieldCost": 60,
       "populationCost": 0,
       "requiredTech": "tech-26",
@@ -2616,7 +3328,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 76,
       "upgradeTo": "Cavalry",
       "unique": {
         "replace": "Knight",
@@ -2640,7 +3351,18 @@
     },
     {
       "name": "Conquistador",
-      "artName": "Conquistador",
+      "art": {
+        "mainArt": {
+          "defaultName": "Conquistador"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 75
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_conquist civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_conquist civpedia lg.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-33",
@@ -2648,7 +3370,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 75,
       "unique": {
         "replace": "Explorer",
         "civilization": "Spain"
@@ -2671,7 +3392,18 @@
     },
     {
       "name": "Berserk",
-      "artName": "Berserk",
+      "art": {
+        "mainArt": {
+          "defaultName": "Berserk"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 74
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_berserk civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_berserk civpedia lg.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-27",
@@ -2679,7 +3411,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 74,
       "upgradeTo": "Guerilla",
       "unique": {
         "replace": "Longbowman",
@@ -2700,7 +3431,18 @@
     },
     {
       "name": "Sipahi",
-      "artName": "Sipahi",
+      "art": {
+        "mainArt": {
+          "defaultName": "Sipahi"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 77
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_sipahi civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_sipahi civpedia lg.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-43",
@@ -2708,7 +3450,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 77,
       "unique": {
         "replace": "Cavalry",
         "civilization": "Ottomans"
@@ -2732,7 +3473,18 @@
     },
     {
       "name": "Gallic Swordsman",
-      "artName": "gallic swordsman",
+      "art": {
+        "mainArt": {
+          "defaultName": "gallic swordsman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 78
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_gallic swordsman civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_gallic swordsman civpedia lg.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-8",
@@ -2740,7 +3492,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 78,
       "upgradeTo": "Medieval Infantry",
       "unique": {
         "replace": "Swordsman",
@@ -2764,7 +3515,18 @@
     },
     {
       "name": "Ansar Warrior",
-      "artName": "ansar warrior",
+      "art": {
+        "mainArt": {
+          "defaultName": "ansar warrior"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 82
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Ansar Warrior civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Ansar Warrior civpedia lg.pcx"
+        }
+      },
       "shieldCost": 60,
       "populationCost": 0,
       "requiredTech": "tech-26",
@@ -2772,7 +3534,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 3,
-      "iconIndex": 82,
       "upgradeTo": "Cavalry",
       "unique": {
         "replace": "Knight",
@@ -2797,7 +3558,18 @@
     },
     {
       "name": "Numidian Mercenary",
-      "artName": "Libyan Mercenary",
+      "art": {
+        "mainArt": {
+          "defaultName": "Libyan Mercenary"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 80
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Libyan Mercenary civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Libyan Mercenary civpedia lg.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-1",
@@ -2805,7 +3577,6 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 80,
       "upgradeTo": "Pikeman",
       "unique": {
         "replace": "Spearman",
@@ -2826,7 +3597,18 @@
     },
     {
       "name": "Hwach\u0027a",
-      "artName": "Hwacha",
+      "art": {
+        "mainArt": {
+          "defaultName": "Hwacha"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 79
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Hwacha civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Hwacha civpedia lg.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-39",
@@ -2834,7 +3616,6 @@
       "defense": 0,
       "bombard": 8,
       "movement": 1,
-      "iconIndex": 79,
       "upgradeTo": "Artillery",
       "unique": {
         "civilization": "Korea"
@@ -2858,7 +3639,18 @@
     },
     {
       "name": "Medieval Infantry",
-      "artName": "Medieval Infantry",
+      "art": {
+        "mainArt": {
+          "defaultName": "Medieval Infantry"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 84
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Medieval Infantry civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Medieval Infantry civpedia lg.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-23",
@@ -2866,7 +3658,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 84,
       "upgradeTo": "Guerilla",
       "unproducible": false,
       "categories": [
@@ -2886,7 +3677,18 @@
     },
     {
       "name": "Guerilla",
-      "artName": "Guerilla",
+      "art": {
+        "mainArt": {
+          "defaultName": "Guerilla"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 85
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Guerilla civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Guerilla civpedia lg.pcx"
+        }
+      },
       "shieldCost": 90,
       "populationCost": 0,
       "requiredTech": "tech-58",
@@ -2894,7 +3696,6 @@
       "defense": 6,
       "bombard": 3,
       "movement": 1,
-      "iconIndex": 85,
       "upgradeTo": "TOW Infantry",
       "unproducible": false,
       "categories": [
@@ -2911,14 +3712,24 @@
     },
     {
       "name": "Princess",
-      "artName": "Princess",
+      "art": {
+        "mainArt": {
+          "defaultName": "Princess"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 121
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_princess civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_princess civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 0,
       "defense": 0,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 121,
       "unproducible": true,
       "categories": [
         "Land"
@@ -2931,14 +3742,24 @@
     },
     {
       "name": "Lincoln",
-      "artName": "King American",
+      "art": {
+        "mainArt": {
+          "defaultName": "King American"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 97
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Abe civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Abe civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 97,
       "unproducible": true,
       "categories": [
         "Land"
@@ -2953,14 +3774,24 @@
     },
     {
       "name": "Hammurabi",
-      "artName": "King Babylonian",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Babylonian"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 100
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Hammurabi civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Hammurabi civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 100,
       "unproducible": true,
       "categories": [
         "Land"
@@ -2975,14 +3806,24 @@
     },
     {
       "name": "Mao",
-      "artName": "King Chinese",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Chinese"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 103
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Mao civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Mao civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 103,
       "unproducible": true,
       "categories": [
         "Land"
@@ -2997,14 +3838,24 @@
     },
     {
       "name": "Bismarck",
-      "artName": "King German",
+      "art": {
+        "mainArt": {
+          "defaultName": "King German"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 107
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Bismarck civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Bismarck civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 107,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3019,14 +3870,24 @@
     },
     {
       "name": "Alexander",
-      "artName": "King Greek",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Greek"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 108
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Alexander civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Alexander civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 108,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3041,14 +3902,24 @@
     },
     {
       "name": "Caesar",
-      "artName": "King Roman",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Roman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 116
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Caesar civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Caesar civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 116,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3063,14 +3934,24 @@
     },
     {
       "name": "Xerxes",
-      "artName": "King Persian",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Persian"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 115
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Xerxes civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Xerxes civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 115,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3085,14 +3966,24 @@
     },
     {
       "name": "Hiawatha",
-      "artName": "King Iroquois",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Iroquois"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 110
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Hiawatha civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Hiawatha civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 110,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3107,14 +3998,24 @@
     },
     {
       "name": "Shaka",
-      "artName": "King Zulu",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Zulu"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 120
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Shaka civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Shaka civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 120,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3129,14 +4030,24 @@
     },
     {
       "name": "Montezuma",
-      "artName": "King Aztec",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Aztec"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 99
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Montezuma civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Montezuma civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 99,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3151,14 +4062,24 @@
     },
     {
       "name": "Cleopatra",
-      "artName": "King Egyptian",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Egyptian"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 104
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Cleopatra civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Cleopatra civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 104,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3173,14 +4094,24 @@
     },
     {
       "name": "Elizabeth",
-      "artName": "King English",
+      "art": {
+        "mainArt": {
+          "defaultName": "King English"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 105
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Elizabeth civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Elizabeth civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 105,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3195,14 +4126,24 @@
     },
     {
       "name": "Catherine",
-      "artName": "King Russian",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Russian"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 117
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Catherine civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Catherine civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 117,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3217,14 +4158,24 @@
     },
     {
       "name": "Abu",
-      "artName": "King Arab",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Arab"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 98
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Abu Bakr civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Abu Bakr civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 98,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3239,14 +4190,24 @@
     },
     {
       "name": "Hannibal",
-      "artName": "King Carthaginian",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Carthaginian"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 101
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Hannibal civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Hannibal civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 101,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3261,14 +4222,24 @@
     },
     {
       "name": "Osman",
-      "artName": "King Ottoman",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Ottoman"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 114
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Osman civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Osman civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 114,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3283,14 +4254,24 @@
     },
     {
       "name": "Temujin",
-      "artName": "King Mongol",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Mongol"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 113
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Temujin civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Temujin civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 113,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3305,14 +4286,24 @@
     },
     {
       "name": "Gandhi",
-      "artName": "King Indian",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Indian"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 109
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Gandhi civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Gandhi civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 109,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3327,14 +4318,24 @@
     },
     {
       "name": "Ragnar",
-      "artName": "King Viking",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Viking"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 119
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Ragnar civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Ragnar civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 119,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3349,14 +4350,24 @@
     },
     {
       "name": "Brennus",
-      "artName": "King Celtic",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Celtic"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 102
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Brennus civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Brennus civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 102,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3371,14 +4382,24 @@
     },
     {
       "name": "Tokugawa",
-      "artName": "King Japanese",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Japanese"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 111
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Tokugawa civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Tokugawa civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 111,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3393,14 +4414,24 @@
     },
     {
       "name": "Joan d\u0027Arc",
-      "artName": "King French",
+      "art": {
+        "mainArt": {
+          "defaultName": "King French"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 106
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Joan civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Joan civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 106,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3415,14 +4446,24 @@
     },
     {
       "name": "Wang Kon",
-      "artName": "King Korean",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Korean"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 112
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Wang civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Wang civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 112,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3437,14 +4478,24 @@
     },
     {
       "name": "Isabella",
-      "artName": "King Spanish",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Spanish"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 118
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x_Isabella civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x_Isabella civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 118,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3459,14 +4510,24 @@
     },
     {
       "name": "Enkidu Warrior",
-      "artName": "Enkidu Warrior",
+      "art": {
+        "mainArt": {
+          "defaultName": "Enkidu Warrior"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 175
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Endiku civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Endiku civpedia lg.pcx"
+        }
+      },
       "shieldCost": 10,
       "populationCost": 0,
       "attack": 1,
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 175,
       "upgradeTo": "Pikeman",
       "unique": {
         "replace": "Warrior",
@@ -3487,7 +4548,18 @@
     },
     {
       "name": "Three-Man Chariot",
-      "artName": "Three Man Chariot",
+      "art": {
+        "mainArt": {
+          "defaultName": "Three Man Chariot"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 186
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\X2_3ManChariot civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\X2_3ManChariot civpedia lg.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-5",
@@ -3495,7 +4567,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 186,
       "upgradeTo": "Knight",
       "unique": {
         "replace": "Chariot",
@@ -3519,14 +4590,24 @@
     },
     {
       "name": "Mursilis",
-      "artName": "King Hatti",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Hatti"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 169
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Mursilis civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Mursilis civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 169,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3541,14 +4622,24 @@
     },
     {
       "name": "Gilgamesh",
-      "artName": "King Sumeria",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Sumeria"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 174
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Gilgamesh civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Gilgamesh civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 174,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3563,14 +4654,24 @@
     },
     {
       "name": "Henry",
-      "artName": "King Portugal",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Portugal"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 173
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Henry civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Henry civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 173,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3585,7 +4686,18 @@
     },
     {
       "name": "Carrack",
-      "artName": "Carrack",
+      "art": {
+        "mainArt": {
+          "defaultName": "Carrack"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 198
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_carrack civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_carrack civpedia lg.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "requiredTech": "tech-33",
@@ -3593,7 +4705,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
-      "iconIndex": 198,
       "upgradeTo": "Galleon",
       "unique": {
         "replace": "Caravel",
@@ -3614,7 +4725,18 @@
     },
     {
       "name": "Swiss Mercenary",
-      "artName": "Swiss Mercenary",
+      "art": {
+        "mainArt": {
+          "defaultName": "Swiss Mercenary"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 181
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_SwissMerc civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_SwissMerc civpedia lg.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-23",
@@ -3622,7 +4744,6 @@
       "defense": 4,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 181,
       "upgradeTo": "Rifleman",
       "unique": {
         "replace": "Pikeman",
@@ -3646,14 +4767,24 @@
     },
     {
       "name": "William of Orange",
-      "artName": "King Netherlands",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Netherlands"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 172
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_William civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_William civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 172,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3668,7 +4799,18 @@
     },
     {
       "name": "Trebuchet",
-      "artName": "Trebuchet",
+      "art": {
+        "mainArt": {
+          "defaultName": "Trebuchet"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 190
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Trebuchet civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Trebuchet civpedia lg.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-24",
@@ -3676,7 +4818,6 @@
       "defense": 0,
       "bombard": 6,
       "movement": 1,
-      "iconIndex": 190,
       "upgradeTo": "Cannon",
       "unproducible": false,
       "categories": [
@@ -3694,14 +4835,24 @@
     },
     {
       "name": "Pachacuti",
-      "artName": "King Incan",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Incan"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 170
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Pachacuti civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Pachacuti civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 170,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3716,14 +4867,24 @@
     },
     {
       "name": "Smoke-Jaguar",
-      "artName": "King Mayan",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Mayan"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 171
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_SmokeJag civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_SmokeJag civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 171,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3738,14 +4899,24 @@
     },
     {
       "name": "Theodora",
-      "artName": "King Byzantines",
+      "art": {
+        "mainArt": {
+          "defaultName": "King Byzantines"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 168
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Theodora civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Theodora civpedia lg.pcx"
+        }
+      },
       "shieldCost": 0,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 168,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3760,14 +4931,24 @@
     },
     {
       "name": "Chasqui Scout",
-      "artName": "Chasquis Scout",
+      "art": {
+        "mainArt": {
+          "defaultName": "Chasquis Scout"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 176
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_ChasquisScout civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_ChasquisScout civpedia lg.pcx"
+        }
+      },
       "shieldCost": 20,
       "populationCost": 0,
       "attack": 1,
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 176,
       "upgradeTo": "Explorer",
       "unique": {
         "replace": "Scout",
@@ -3788,7 +4969,18 @@
     },
     {
       "name": "Javelin Thrower",
-      "artName": "Javelin Thrower",
+      "art": {
+        "mainArt": {
+          "defaultName": "Javelin Thrower"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 177
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_JavelinThrower civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_JavelinThrower civpedia lg.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-6",
@@ -3796,7 +4988,6 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 177,
       "upgradeTo": "Longbowman",
       "unique": {
         "replace": "Archer",
@@ -3817,7 +5008,18 @@
     },
     {
       "name": "Dromon",
-      "artName": "Dromon",
+      "art": {
+        "mainArt": {
+          "defaultName": "Dromon"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 196
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Dromon civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Dromon civpedia lg.pcx"
+        }
+      },
       "shieldCost": 30,
       "populationCost": 0,
       "requiredTech": "tech-15",
@@ -3825,7 +5027,6 @@
       "defense": 1,
       "bombard": 2,
       "movement": 3,
-      "iconIndex": 196,
       "upgradeTo": "Caravel",
       "unique": {
         "replace": "Galley",
@@ -3847,7 +5048,18 @@
     },
     {
       "name": "Cruiser",
-      "artName": "Cruiser",
+      "art": {
+        "mainArt": {
+          "defaultName": "Cruiser"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 200
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_HvCruiser civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_HvCruiser civpedia lg.pcx"
+        }
+      },
       "shieldCost": 160,
       "populationCost": 0,
       "requiredTech": "tech-57",
@@ -3855,7 +5067,6 @@
       "defense": 10,
       "bombard": 7,
       "movement": 6,
-      "iconIndex": 200,
       "upgradeTo": "AEGIS Cruiser",
       "unproducible": false,
       "categories": [
@@ -3876,14 +5087,24 @@
     },
     {
       "name": "Crusader",
-      "artName": "Crusader",
+      "art": {
+        "mainArt": {
+          "defaultName": "Crusader"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 180
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Crusader civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Crusader civpedia lg.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "attack": 5,
       "defense": 3,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 180,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3902,14 +5123,24 @@
     },
     {
       "name": "Ancient Cavalry",
-      "artName": "Ancient Cavalry",
+      "art": {
+        "mainArt": {
+          "defaultName": "Ancient Cavalry"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 187
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_AncientCavalry civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_AncientCavalry civpedia lg.pcx"
+        }
+      },
       "shieldCost": 40,
       "populationCost": 0,
       "attack": 3,
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 187,
       "unproducible": true,
       "categories": [
         "Land"
@@ -3925,7 +5156,18 @@
     },
     {
       "name": "Curragh",
-      "artName": "Curragh",
+      "art": {
+        "mainArt": {
+          "defaultName": "Curragh"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 195
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_Curragh civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_Curragh civpedia lg.pcx"
+        }
+      },
       "shieldCost": 15,
       "populationCost": 0,
       "requiredTech": "tech-3",
@@ -3933,7 +5175,6 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 195,
       "upgradeTo": "Galley",
       "unproducible": false,
       "categories": [
@@ -3950,7 +5191,18 @@
     },
     {
       "name": "Paratrooper",
-      "artName": "WWII Paratrooper",
+      "art": {
+        "mainArt": {
+          "defaultName": "WWII Paratrooper"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 185
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\X2_WWIIParatrooper_sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\X2_WWIIParatrooper_lg.pcx"
+        }
+      },
       "shieldCost": 90,
       "populationCost": 0,
       "requiredTech": "tech-64",
@@ -3958,7 +5210,6 @@
       "defense": 9,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 185,
       "upgradeTo": "Modern Paratrooper",
       "unproducible": false,
       "categories": [
@@ -3979,7 +5230,18 @@
     },
     {
       "name": "TOW Infantry",
-      "artName": "TOW Infantry",
+      "art": {
+        "mainArt": {
+          "defaultName": "TOW Infantry"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 203
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_TOWinfantrry_civpedia sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_TOWinfantrry_civpedia lg.pcx"
+        }
+      },
       "shieldCost": 120,
       "populationCost": 0,
       "requiredTech": "tech-65",
@@ -3987,7 +5249,6 @@
       "defense": 14,
       "bombard": 6,
       "movement": 1,
-      "iconIndex": 203,
       "unproducible": false,
       "categories": [
         "Land"
@@ -4003,7 +5264,18 @@
     },
     {
       "name": "Flak",
-      "artName": "Flak",
+      "art": {
+        "mainArt": {
+          "defaultName": "Flak"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 205
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\X2_20mmQuadFlak38_sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\X2_20mmQuadFlak38_lg.pcx"
+        }
+      },
       "shieldCost": 70,
       "populationCost": 0,
       "requiredTech": "tech-59",
@@ -4011,7 +5283,6 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
-      "iconIndex": 205,
       "upgradeTo": "Mobile SAM",
       "unproducible": false,
       "categories": [
@@ -4028,7 +5299,18 @@
     },
     {
       "name": "Mobile SAM",
-      "artName": "Mobile SAM",
+      "art": {
+        "mainArt": {
+          "defaultName": "Mobile SAM"
+        },
+        "thumbnailArt": {
+          "defaultIndex": 206
+        },
+        "pediaArt": {
+          "small": "art\\civilopedia\\icons\\units\\x2_MobileSAM sm.pcx",
+          "large": "art\\civilopedia\\icons\\units\\x2_MobileSAM lg.pcx"
+        }
+      },
       "shieldCost": 100,
       "populationCost": 0,
       "requiredTech": "tech-65",
@@ -4036,7 +5318,6 @@
       "defense": 6,
       "bombard": 0,
       "movement": 2,
-      "iconIndex": 206,
       "unproducible": false,
       "categories": [
         "Land"
