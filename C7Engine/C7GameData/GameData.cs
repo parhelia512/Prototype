@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Serilog;
 using C7Engine.Lua;
 using C7Engine.Pathing;
 using System.Threading.Tasks;
 using C7Engine;
 
+[assembly: InternalsVisibleTo("EngineTests")]
 namespace C7GameData {
 	public class GameData {
 		private static ILogger log = Log.ForContext<GameData>();
