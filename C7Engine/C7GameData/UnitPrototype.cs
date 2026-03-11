@@ -114,6 +114,7 @@ namespace C7GameData {
 		}
 
 		public bool CanProduce(City city, HashSet<Resource> accessibleResources) {
+			var unitUpgradeChain = city.owner.civilization.GetUpgradeChain(this);
 			return city.owner.civilization.IsUnitAvailable(this)
 				   && this.MeetsProductionRequirements(city, accessibleResources)
 				   && !this.IsUnitObsolete(city, accessibleResources);

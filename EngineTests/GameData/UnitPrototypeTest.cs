@@ -2,58 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using C7Engine;
 using C7GameData;
 using C7GameData.Save;
+using EngineTests.Utils;
 using QueryCiv3;
 using Xunit;
 
 namespace EngineTests.GameData;
 
-public class UnitPrototypeConquestsTest {
-	private static readonly string C7GameDataTestsFolderName = "EngineTests";
-	private const string SAVES_FOLDER = "saves/unit-availability";
-	private static string getDataPath(string file) => Path.Combine(testDirectory, "data", file);
-	private static string defaultBicPath => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "conquests.biq");
-	private static string defaultPediaIconsPath => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Text", "PediaIcons.txt");
-
-	private static string testDirectory {
-		get {
-			string[] parts = AppDomain.CurrentDomain.BaseDirectory.Split(Path.DirectorySeparatorChar);
-			int pos = parts.Reverse().ToList().FindIndex(s => s == C7GameDataTestsFolderName);
-			string up = string.Concat("..", Path.DirectorySeparatorChar);
-			string relativePath = string.Concat(Enumerable.Repeat(up, pos - 1));
-			return Path.GetFullPath(relativePath);
-		}
-	}
-
-	private static async Task<(SaveGame game, Exception ex, string savePath)> LoadGameAndData(string saveName, string savesFolder, string uri, string biqPath = "default", string pediaPath = "default") {
-		string savesPath = getDataPath(savesFolder);
-		Directory.CreateDirectory(savesPath);
-
-		string savePath = Path.Combine(savesPath, saveName);
-		using HttpClient client = new();
-		byte[] fileData = await client.GetByteArrayAsync($"{uri}");
-		if (uri.Contains("dropbox") && uri.EndsWith("&dl=0"))
-			throw new Exception("Change the dl=0 to dl=1 at the end of the url to able to download the file, " +
-								"otherwise we will get an error from the .biq not being able to find the correct file headers");
-		await File.WriteAllBytesAsync(savePath, fileData);
-
-		FileInfo saveFile = new DirectoryInfo(savesPath).GetFiles().First(f => f.Name == saveName);
-
-		SaveGame game = null;
-		Exception ex = Record.Exception(() => {
-			game = ImportCiv3.ImportSav(saveFile.FullName, biqPath == "default" ? defaultBicPath : biqPath, (relativeModePath) =>
-				{ return pediaPath == "default" ? defaultPediaIconsPath : pediaPath; });
-		});
-		return (game, ex, savePath);
-	}
-
+public class UnitPrototypeConquestsTest : RemoteSaveLoader {
 	[Fact]
-	public async void UnitAvailability() {
-		// This tests a Conquests game with Conquests rules 
+	public async void UnitAvailability_SAV() {
+		// This tests a Conquests game with Conquests rules from a .SAV file
 
 		#region setup
 		// When running the tests via github actions, civ3 isn't installed so we
@@ -296,49 +257,195 @@ public class UnitPrototypeConquestsTest {
 		Assert.True(fighter.GetProducibleUpgrade(seattle, new HashSet<Resource>() { oil, aluminum }) == f15);
 		#endregion
 	}
-}
-
-public class UnitPrototypeScenarioTest {
-	private static readonly string C7GameDataTestsFolderName = "EngineTests";
-	private const string SAVES_FOLDER = "saves/unit-availability";
-	private static string getDataPath(string file) => Path.Combine(testDirectory, "data", file);
-	private static string defaultBicPath => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", "4 Middle Ages.biq");
-	private static string defaultPediaIconsPath => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", "Middle Ages", "Text", "PediaIcons.txt");
-
-	private static string testDirectory {
-		get {
-			string[] parts = AppDomain.CurrentDomain.BaseDirectory.Split(Path.DirectorySeparatorChar);
-			int pos = parts.Reverse().ToList().FindIndex(s => s == C7GameDataTestsFolderName);
-			string up = string.Concat("..", Path.DirectorySeparatorChar);
-			string relativePath = string.Concat(Enumerable.Repeat(up, pos - 1));
-			return Path.GetFullPath(relativePath);
-		}
-	}
-
-	private static async Task<(SaveGame game, Exception ex, string savePath)> LoadGameAndData(string saveName, string savesFolder, string uri, string biqPath = "default", string pediaPath = "default") {
-		string savesPath = getDataPath(savesFolder);
-		Directory.CreateDirectory(savesPath);
-
-		string savePath = Path.Combine(savesPath, saveName);
-		using HttpClient client = new();
-		byte[] fileData = await client.GetByteArrayAsync($"{uri}");
-		if (uri.Contains("dropbox") && uri.EndsWith("&dl=0"))
-			throw new Exception("Change the dl=0 to dl=1 at the end of the url to able to download the file, " +
-								"otherwise we will get an error from the .biq not being able to find the correct file headers");
-		await File.WriteAllBytesAsync(savePath, fileData);
-
-		FileInfo saveFile = new DirectoryInfo(savesPath).GetFiles().First(f => f.Name == saveName);
-
-		SaveGame game = null;
-		Exception ex = Record.Exception(() => {
-			game = ImportCiv3.ImportSav(saveFile.FullName, biqPath == "default" ? defaultBicPath : biqPath, (relativeModePath) =>
-				{ return pediaPath == "default" ? defaultPediaIconsPath : pediaPath; });
-		});
-		return (game, ex, savePath);
-	}
 
 	[Fact]
-	public async void UnitAvailability() {
+	public async void UnitAvailability_JSON() {
+		// This tests a Conquests game with Conquests rules from a .json file
+		#region setup
+		// When running the tests via github actions, civ3 isn't installed so we
+		// can't load the default bic.
+		//
+		// See https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
+		// for a full list of env vars.
+		string is_on_github = System.Environment.GetEnvironmentVariable("CI");
+		if (is_on_github != null) {
+			return;
+		}
+
+		string saveName = "Conquests 16 Players.json";
+		string uri = "https://www.dropbox.com/scl/fi/57e1sycuoml8xqu1xypah/Conquests-16-Players.json?rlkey=45ukhvcnujqapniwidg4w6bic&st=p5pvpzm0&dl=1";
+
+		(SaveGame game, Exception ex, string savePath) = await LoadGameAndData(saveName, SAVES_FOLDER, uri);
+
+		Assert.Null(ex);
+		Assert.NotNull(game);
+		Assert.True(File.Exists(savePath));
+
+		C7GameData.GameData gd = game.ToGameData(PathUtils.luaRulesDir);
+		EngineStorage.InitializeGameDataForTests(gd);
+
+		List<UnitPrototype> protos = gd.unitPrototypes;
+
+		// setup civilizations and players
+		var americans = gd.civilizations.FirstOrDefault(c => c.name == "America");
+		var amer = new Player() { civilization = americans };
+		var ottomans = gd.civilizations.FirstOrDefault(c => c.name == "Ottomans");
+		var otto = new Player() { civilization = ottomans };
+		var russians = gd.civilizations.FirstOrDefault(c => c.name == "Russia");
+		var rus = new Player() { civilization = russians };
+		var koreans = gd.civilizations.FirstOrDefault(c => c.name == "Korea");
+		var kor = new Player() { civilization = koreans };
+		var hittites = gd.civilizations.FirstOrDefault(c => c.name == "Hittites");
+		var hit = new Player() { civilization = hittites };
+
+		// setup resources
+		var noResources = new HashSet<Resource>(){};
+		var horses = gd.Resources.FirstOrDefault(r => r.Key == "Horses");
+		var iron = gd.Resources.FirstOrDefault(r => r.Key == "Iron");
+		var saltpeter = gd.Resources.FirstOrDefault(r => r.Key == "Saltpeter");
+		var rubber = gd.Resources.FirstOrDefault(r => r.Key == "Rubber");
+		var oil = gd.Resources.FirstOrDefault(r => r.Key == "Oil");
+		var aluminum = gd.Resources.FirstOrDefault(r => r.Key == "Aluminum");
+
+		// setup techs
+		var wheel = gd.techs.FirstOrDefault(t => t.Name == "The Wheel");
+		var horsebackRiding = gd.techs.FirstOrDefault(t => t.Name == "Horseback Riding");
+		var mathematics = gd.techs.FirstOrDefault(t => t.Name == "Mathematics");
+		var engineering = gd.techs.FirstOrDefault(t => t.Name == "Engineering");
+		var chivalry = gd.techs.FirstOrDefault(t => t.Name == "Chivalry");
+		var metallurgy = gd.techs.FirstOrDefault(t => t.Name == "Metallurgy");
+		var milTradition = gd.techs.FirstOrDefault(t => t.Name == "Military Tradition");
+		var flight = gd.techs.FirstOrDefault(t => t.Name == "Flight");
+		var replaceableParts = gd.techs.FirstOrDefault(t => t.Name == "Replaceable Parts");
+		var rocketry = gd.techs.FirstOrDefault(t => t.Name == "Rocketry");
+
+		// setup some unit prototypes
+		var horseman = protos.FirstOrDefault(p => p.name == "Horseman");
+		var chariot = protos.FirstOrDefault(p => p.name == "Chariot");
+		var threeManChariot = protos.FirstOrDefault(p => p.name == "Three-Man Chariot");
+		var knight = protos.FirstOrDefault(p => p.name == "Knight");
+		var cavalry = protos.FirstOrDefault(p => p.name == "Cavalry");
+		var sipahi = protos.FirstOrDefault(p => p.name == "Sipahi");
+		var cossack = protos.FirstOrDefault(p => p.name == "Cossack");
+		var catapult = protos.FirstOrDefault(p => p.name == "Catapult");
+		var trebuchet = protos.FirstOrDefault(p => p.name == "Trebuchet");
+		var cannon = protos.FirstOrDefault(p => p.name == "Cannon");
+		var hwacha = protos.FirstOrDefault(p => p.name == "Hwach'a");
+		var artillery = protos.FirstOrDefault(p => p.name == "Artillery");
+		var fighter = protos.FirstOrDefault(p => p.name == "Fighter");
+		var jet = protos.FirstOrDefault(p => p.name == "Jet Fighter");
+		var f15 = protos.FirstOrDefault(p => p.name == "F-15");
+
+		#endregion
+
+		#region Hittites
+		Tile hattusasTile = new Tile(ID.None("tile"));
+		City hattusas = new City(hattusasTile, hit, "Hattusas", gd.ids.CreateID("Hattusas"));
+
+		Assert.True(horseman.producibleBy.Contains(hittites));
+		Assert.False(chariot.producibleBy.Contains(hittites));
+		Assert.True(threeManChariot.producibleBy.Contains(hittites));
+
+
+		hit.knownTechs.Add(wheel.id);
+
+		Assert.False(horseman.CanProduce(hattusas, new HashSet<Resource>() { horses }));
+		Assert.False(chariot.CanProduce(hattusas, new HashSet<Resource>() { horses }));
+		Assert.True(threeManChariot.CanProduce(hattusas, new HashSet<Resource>() { horses }));
+
+		#endregion
+
+		#region Russians
+		Tile moscowTile = new Tile(ID.None("tile"));
+		City moscow = new City(moscowTile, rus, "Moscow", gd.ids.CreateID("Moscow"));
+
+		Assert.True(horseman.producibleBy.Contains(russians));
+		Assert.True(knight.producibleBy.Contains(russians));
+		Assert.True(cossack.producibleBy.Contains(russians));
+		Assert.False(cavalry.producibleBy.Contains(russians));
+
+		rus.knownTechs.Add(horsebackRiding.id);
+
+		Assert.True(horseman.CanProduce(moscow, new HashSet<Resource>() { horses, iron }));
+		Assert.False(knight.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+		Assert.False(sipahi.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+		Assert.False(cavalry.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+
+		rus.knownTechs.Add(chivalry.id);
+		// The Horseman is now obsolete
+		Assert.False(horseman.CanProduce(moscow, new HashSet<Resource>() { horses, iron }));
+		Assert.True(horseman.GetProducibleUpgrade(moscow, new HashSet<Resource>() { horses, iron }) == knight);
+
+		// even though we have saltpeter, we don't know Military Tradition, so the Knight is not yet obsolete
+		Assert.True(knight.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+		Assert.False(cavalry.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+		Assert.False(cossack.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+
+		rus.knownTechs.Add(milTradition.id);
+		// the Knight is now obsolete
+		Assert.False(knight.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+		Assert.True(knight.GetProducibleUpgrade(moscow, new HashSet<Resource>() { horses, iron, saltpeter }) == cossack);
+		Assert.False(cavalry.CanProduce(moscow, new HashSet<Resource>() { horses, iron, saltpeter }));
+
+		Assert.True(cossack.GetProducibleUpgrade(moscow, new HashSet<Resource>() { horses, iron, saltpeter }) == null);
+		#endregion
+
+		#region Korean
+		Tile seoulTile = new Tile(ID.None("tile"));
+		City seoul = new City(seoulTile, kor, "Seoul", gd.ids.CreateID("Seoul"));
+
+		// In conquests they both the Cannon and the Hwacha are permitted in the rules for the Koreans,
+		// maybe an oversight in the original rules, but it's there.
+		// We only care that the Trebuchet can upgrade to a Hwacha and not to a Cannon
+		Assert.True(catapult.producibleBy.Contains(koreans));
+		Assert.True(trebuchet.producibleBy.Contains(koreans));
+		Assert.True(cannon.producibleBy.Contains(koreans));
+		Assert.True(hwacha.producibleBy.Contains(koreans));
+
+		Assert.False(catapult.CanProduce(seoul, noResources));
+		Assert.False(trebuchet.CanProduce(seoul, noResources));
+		Assert.False(cannon.CanProduce(seoul, noResources));
+		Assert.False(hwacha.CanProduce(seoul, noResources));
+
+		kor.knownTechs.Add(mathematics.id);
+
+		Assert.True(catapult.CanProduce(seoul, noResources));
+		Assert.False(trebuchet.CanProduce(seoul, noResources));
+		Assert.False(cannon.CanProduce(seoul, noResources));
+		Assert.False(hwacha.CanProduce(seoul, noResources));
+
+		kor.knownTechs.Add(engineering.id);
+
+		Assert.False(catapult.CanProduce(seoul, noResources));
+		Assert.True(trebuchet.CanProduce(seoul, noResources));
+		Assert.False(cannon.CanProduce(seoul, noResources));
+		Assert.False(hwacha.CanProduce(seoul, noResources));
+
+		Assert.True(catapult.GetProducibleUpgrade(seoul, noResources) == trebuchet);
+
+		kor.knownTechs.Add(metallurgy.id);
+
+		Assert.False(catapult.CanProduce(seoul, new HashSet<Resource>() { saltpeter }));
+		Assert.False(trebuchet.CanProduce(seoul, new HashSet<Resource>() { saltpeter }));
+		Assert.False(cannon.CanProduce(seoul, new HashSet<Resource>() { saltpeter }));
+		Assert.True(hwacha.CanProduce(seoul, new HashSet<Resource>() { saltpeter }));
+
+		Assert.True(trebuchet.GetProducibleUpgrade(seoul, new HashSet<Resource>() { saltpeter }) == hwacha);
+		Assert.False(trebuchet.GetProducibleUpgrade(seoul, new HashSet<Resource>() { saltpeter }) == cannon);
+
+		kor.knownTechs.Add(replaceableParts.id);
+		Assert.False(hwacha.CanProduce(seoul, new HashSet<Resource>() { saltpeter }));
+		Assert.True(artillery.CanProduce(seoul, new HashSet<Resource>() { }));
+		Assert.True(hwacha.GetProducibleUpgrade(seoul, new HashSet<Resource>() { }) == artillery);
+
+		#endregion
+	}
+
+}
+
+public class UnitPrototypeScenarioTest : RemoteSaveLoader {
+	[Fact]
+	public async void UnitAvailability_SAV() {
 		// This tests a Conquests scenario with custom rules 
 
 		#region setup
@@ -351,11 +458,13 @@ public class UnitPrototypeScenarioTest {
 		if (is_on_github != null) {
 			return;
 		}
+		string scenarioBiqPath = Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", "4 Middle Ages.biq");
+		string scenarioPediaPath = Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", "Middle Ages", "Text", "PediaIcons.txt");
 
 		string saveName = "Middle Ages Scenario Abbasids, 843 AD.SAV";
 		string uri = "https://www.dropbox.com/scl/fi/nz7wp7whu326i7em8jle9/Middle-Ages-Scenario-Abbasids-843-AD.SAV?rlkey=oz65m286jbchytd3yuu5ksr6f&st=b3dsheus&dl=1";
 
-		(SaveGame game, Exception ex, string savePath) = await LoadGameAndData(saveName, SAVES_FOLDER, uri);
+		(SaveGame game, Exception ex, string savePath) = await LoadGameAndData(saveName, SAVES_FOLDER, uri, scenarioBiqPath, scenarioPediaPath);
 
 		Assert.Null(ex);
 		Assert.NotNull(game);
