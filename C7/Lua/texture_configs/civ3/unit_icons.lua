@@ -7,17 +7,6 @@ local unit_icons = {
     path = "Art/Units/units_32.pcx",
   },
 }
-
-local function isKeyInDictionary(dict, targetKey)
-  if(dict == nil) then
-    return false
-  end
-  for key, _ in pairs(dict) do
-      if key == targetKey then
-          return true
-      end
-  end
-end
   
 -- Context - ItemContext (UnitPrototype proto, Player player)
 function unit_icons:map_object_to_sprite(context)
@@ -36,7 +25,7 @@ function unit_icons:map_object_to_sprite(context)
   local variations = proto.art.thumbnailArt.variations
   local key = player.eraCivilopediaName
   
-  if (isKeyInDictionary(variations, key)) then
+  if (variations and variations[key]) then
     index = variations[key]
   end
     
