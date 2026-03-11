@@ -84,9 +84,8 @@ namespace C7GameData {
 				if (upgrade == null) break;
 
 				var upgradeIsAvailable = upgrade.producibleBy.Contains(this) && !result.Contains(upgrade);
-				var upgradeOfUpgradeIsAvailable = !upgrade.producibleBy.Contains(this) && upgrade.upgradeTo != null && upgrade.upgradeTo.producibleBy.Contains(this);
 
-				if (upgradeIsAvailable || upgradeOfUpgradeIsAvailable) {
+				if (upgradeIsAvailable) {
 					result.Add(upgrade);
 				}
 				current = upgrade;
