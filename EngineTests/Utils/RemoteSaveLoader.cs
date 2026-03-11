@@ -12,8 +12,6 @@ namespace EngineTests.Utils;
 
 public class RemoteSaveLoader {
 	protected static readonly string C7GameDataTestsFolderName = "EngineTests";
-
-	protected const string SAVES_FOLDER = "saves/unit-availability";
 	private static string getDataPath(string file) => Path.Combine(testDirectory, "data", file);
 	private static string defaultBicPath => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "conquests.biq");
 	private static string defaultPediaIconsPath => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Text", "PediaIcons.txt");

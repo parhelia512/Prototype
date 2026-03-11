@@ -12,6 +12,7 @@ using Xunit;
 namespace EngineTests.GameData;
 
 public class UnitPrototypeConquestsTest : RemoteSaveLoader {
+	private const string SAVES_FOLDER = "saves/unit-availability";
 	[Fact]
 	public async void UnitAvailability_SAV() {
 		// This tests a Conquests game with Conquests rules from a .SAV file
@@ -444,6 +445,7 @@ public class UnitPrototypeConquestsTest : RemoteSaveLoader {
 }
 
 public class UnitPrototypeScenarioTest : RemoteSaveLoader {
+	private const string SAVES_FOLDER = "saves/unit-availability";
 	[Fact]
 	public async void UnitAvailability_SAV() {
 		// This tests a Conquests scenario with custom rules 

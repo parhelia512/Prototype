@@ -9,6 +9,7 @@ using Xunit;
 namespace EngineTests.GameData;
 
 public class MultiTurnDealTest : RemoteSaveLoader {
+	private const string SAVES_FOLDER = "saves/multi-turn-deals";
 	[Fact]
 	public async void TestMultiTurnDeal_Save_A() {
 		// When running the tests via github actions, civ3 isn't installed so we
