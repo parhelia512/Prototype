@@ -31,6 +31,7 @@ namespace C7GameData {
 		public List<City> cities = new List<City>();
 
 		internal List<Civilization> civilizations = new List<Civilization>();
+		internal HashSet<CultureGroup> cultureGroups = new HashSet<CultureGroup>();
 
 		public List<ExperienceLevel> experienceLevels = new List<ExperienceLevel>();
 		public List<Tech> techs = new();

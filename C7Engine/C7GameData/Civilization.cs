@@ -11,6 +11,11 @@ namespace C7GameData {
 		Female,
 	}
 
+	public class CultureGroup() {
+		public int index { get; init; }
+		public string name { get; init; }
+	}
+
 	public class Civilization {
 		public enum Trait {
 			Militaristic,
@@ -38,6 +43,22 @@ namespace C7GameData {
 		public int primaryColorIndex;
 		public int secondaryColorIndex;
 		public Gender leaderGender;
+
+		[JsonIgnore]
+		public CultureGroup cultureGroup { get; private set; }
+
+		// This is null during gameplay to discourage usage, and instead use the cultureGroup
+		// It's only used for saving/loading 
+		public string cultureGroupKey;
+
+		public void SetCultureGroup(int index, string cultureGroupName) {
+			cultureGroupKey = null;
+			var cg = new CultureGroup {
+				index = index,
+				name = cultureGroupName
+			};
+			cultureGroup = cg;
+		}
 
 		// Like `art\advisors\LZ_all.pcx` for the English.
 		public string leaderArtFile;

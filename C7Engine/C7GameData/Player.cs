@@ -440,7 +440,7 @@ namespace C7GameData {
 		}
 
 		public bool WouldAcceptDealFrom(GameData gameData, Player other, TradeOffer theirOffer, TradeOffer ourOffer) {
-			// TODO: consider any factors like trade reputations here
+			// TODO: consider any factors like trade reputations here and culture groups
 			// TODO: figure out when peace is acceptable
 			int theirGoldValue = theirOffer.GoldEquivalentFor(gameData, this);
 			int ourGoldValue = ourOffer.GoldEquivalentFor(gameData, this);

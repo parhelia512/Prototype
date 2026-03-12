@@ -60,6 +60,7 @@ namespace C7GameData {
 			save.TerrainImprovements = SaveTerrainImprovement.Civ3Improvements().ToList();
 
 			ImportRaces();
+			ImportCultureGroups();
 			ImportTechs();
 			ImportCiv3Resources();
 			ImportTerraforms();
@@ -355,6 +356,23 @@ namespace C7GameData {
 			}
 		}
 
+		private void ImportCultureGroups() {
+			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
+			HashSet<CultureGroup> cultureGroups = new HashSet<CultureGroup>();
+			HashSet<int> cultureGroupsIndexes = new HashSet<int>();
+			int i = 0;
+			foreach (RACE race in theBiq.Race) {
+				if (cultureGroupsIndexes.Add(race.CultureGroup)) {
+					var cg = new CultureGroup() {
+						index = race.CultureGroup,
+						name = GetCultureGroupIdentifier(race.CultureGroup),
+					};
+					cultureGroups.Add(cg);
+				}
+			}
+			save.CultureGroups = cultureGroups.OrderBy(c => c.index).ToHashSet();
+		}
+
 		private void ImportRaces() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 			int i = 0;
@@ -373,6 +391,7 @@ namespace C7GameData {
 					civ.cityNames.Add(city.Name);
 				}
 				civ.traits = LoadCivTraits(race).ToHashSet();
+				civ.cultureGroupKey = GetCultureGroupIdentifier(race.CultureGroup);
 
 				// Look up the image for non-barbarian civs.
 				string artName = pediaIcons.GetLeaderArtName(race.CivilopediaEntry);
@@ -383,6 +402,17 @@ namespace C7GameData {
 				save.Civilizations.Add(civ);
 				i++;
 			}
+		}
+
+		private static string GetCultureGroupIdentifier(int cultureGroupIndex) {
+			if (cultureGroupIndex == -1) return "None"; // Barbarians
+			if (cultureGroupIndex == 0) return "American";
+			if (cultureGroupIndex == 1) return "European";
+			if (cultureGroupIndex == 2) return "Mediterranean";
+			if (cultureGroupIndex == 3) return "Mid East";
+			if (cultureGroupIndex == 4) return "Asian";
+			log.Error($"The culture group index {cultureGroupIndex} is invalid. Defaulting to `American`.");
+			return "American";
 		}
 
 		private static IEnumerable<Civilization.Trait> LoadCivTraits(RACE race) {
