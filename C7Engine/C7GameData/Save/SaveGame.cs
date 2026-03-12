@@ -390,6 +390,8 @@ namespace C7GameData.Save {
 
 		private void ConvertCultureGroups(GameData data) {
 			foreach (var civilization in data.civilizations) {
+				// because this might be initialized from the tests
+				if (civilization.cultureGroup != null) continue;
 				var cg = data.cultureGroups.FirstOrDefault(c => c.name == civilization.cultureGroupKey);
 				if (cg == null) {
 					throw new Exception(string.Format($"Culture group name `{civilization.cultureGroupKey}` for civilization {civilization.name} was not found in game data."));
