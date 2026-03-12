@@ -1,3 +1,4 @@
+using System;
 using C7GameData;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,18 +28,27 @@ namespace C7Engine {
 
 		private static Dictionary<Tile, float> AssignTileScores(Tile startTile, Player player, IEnumerable<Tile> candidates, List<MapUnit> playerSettlers) {
 			Dictionary<Tile, float> scores = new();
+			var memo = new Dictionary<string, float>();
+
 			candidates = candidates.Where(t => !SettlerAlreadyMovingTowardsTile(t, playerSettlers) && t.IsAllowCities());
+
 			foreach (Tile t in candidates) {
-				float score = GetTileYieldScore(t, player);
+				float score = GetTileYieldScore(t, player, memo);
 
-				// Consider the immediate neighbors
-				foreach (Tile nt in t.neighbors.Values) {
-					score += GetTileYieldScore(nt, player);
-				}
-
-				// Consider the outer ring of the BFC
-				foreach (var ot in t.GetBFCOuterRing()) {
-					score += GetTileYieldScore(ot, player) / 3;
+				// Consider all tiles within the BFC for total score.
+				// Score contribution decreases linearly with distance, by 1/R with each step:
+				// e.g., with four ranks of workable tiles, R=4:
+				//	  city | 100% | 75% | 50% | 25% | 0% | 0% | ..
+				var maxRank = EngineStorage.gameData?.rules?.MaxRankOfWorkableTiles ?? 2;
+				foreach (Tile workable in t.GetTilesWithinRankDistance(maxRank))
+				{
+					if (workable == Tile.NONE)
+						continue;
+					var rank = t.rankDistanceTo(workable);
+					if (rank <= 0)
+						continue;
+					var adjustment = Math.Max(0, (maxRank - rank + 1f) / maxRank);
+					score += GetTileYieldScore(workable, player, memo) * adjustment;
 				}
 
 				//Prefer hills for defense, and coast for boats and such.
@@ -70,7 +80,12 @@ namespace C7Engine {
 			return scores;
 		}
 
-		private static float GetTileYieldScore(Tile t, Player owner) {
+		private static float GetTileYieldScore(Tile t, Player owner, Dictionary<string, float> memo)
+		{
+			var key = $"Tile_{t.XCoordinate}_{t.YCoordinate}"; 
+			if (memo.TryGetValue(key, out var value)) 
+				return value;
+
 			float score = owner.civilization.Adjustments.FoodYieldBonus * t.foodYield(owner).yield;
 			score += owner.civilization.Adjustments.ProductionYieldBonus * t.productionYield(owner).yield;
 			score += owner.civilization.Adjustments.CommerceYieldBonus * t.commerceYield(owner).yield;
@@ -81,13 +96,14 @@ namespace C7Engine {
 					score += owner.civilization.Adjustments.LuxuryResourceBonus;
 				}
 			}
+
+			memo[key] = score;
 			return score;
 		}
 
 		private static bool IsInvalidCityLocation(Tile tile) {
-			if (tile.HasCity) {
+			if (tile == Tile.NONE || tile.HasCity)
 				return true;
-			}
 			foreach (Tile neighbor in tile.neighbors.Values) {
 				if (neighbor.HasCity) {
 					return true;
