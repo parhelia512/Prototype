@@ -40,8 +40,7 @@ namespace C7Engine {
 				// e.g., with four ranks of workable tiles, R=4:
 				//	  city | 100% | 75% | 50% | 25% | 0% | 0% | ..
 				var maxRank = EngineStorage.gameData?.rules?.MaxRankOfWorkableTiles ?? 2;
-				foreach (Tile workable in t.GetTilesWithinRankDistance(maxRank))
-				{
+				foreach (Tile workable in t.GetTilesWithinRankDistance(maxRank)) {
 					if (workable == Tile.NONE)
 						continue;
 					var rank = t.rankDistanceTo(workable);
@@ -80,10 +79,9 @@ namespace C7Engine {
 			return scores;
 		}
 
-		private static float GetTileYieldScore(Tile t, Player owner, Dictionary<string, float> memo)
-		{
-			var key = $"Tile_{t.XCoordinate}_{t.YCoordinate}"; 
-			if (memo.TryGetValue(key, out var value)) 
+		private static float GetTileYieldScore(Tile t, Player owner, Dictionary<string, float> memo) {
+			var key = $"Tile_{t.XCoordinate}_{t.YCoordinate}";
+			if (memo.TryGetValue(key, out var value))
 				return value;
 
 			float score = owner.civilization.Adjustments.FoodYieldBonus * t.foodYield(owner).yield;
