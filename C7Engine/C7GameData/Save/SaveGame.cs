@@ -292,9 +292,7 @@ namespace C7GameData.Save {
 					proto.requiredTech = techDict[saveProto.requiredTech];
 				}
 
-				if (saveProto.unique != null) {
-					Civilization civ = civDict[saveProto.unique.civilization];
-
+				if (saveProto.unique != null && civDict.TryGetValue(saveProto.unique.civilization, out var civ)) {
 					proto.unique = new() {
 						civilization = civ
 					};

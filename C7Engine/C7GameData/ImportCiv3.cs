@@ -126,6 +126,9 @@ namespace C7GameData {
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
+				if (civ3Tile.BarbarianCamp >= 0) {
+					tile.features.Add("barbarianCamp");
+				}
 				if (civ3Tile.BonusShield) {
 					tile.features.Add("bonusShield");
 				}
@@ -226,6 +229,9 @@ namespace C7GameData {
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
+				if (civ3Tile.BarbarianCamp) {
+					tile.features.Add("barbarianCamp");
+				}
 				if (civ3Tile.BonusGrassland) {
 					tile.features.Add("bonusShield");
 				}
@@ -312,6 +318,24 @@ namespace C7GameData {
 				player.tileKnowledge.Add(city.location);
 				foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
 					player.tileKnowledge.Add(Tile.NeighborCoordinate(city.location, direction));
+				}
+			}
+
+			// Remove any unplayable Players, except Barbarians,
+			// ex. Mongols in `4 Middle Ages.biq` scenario.
+			// We only need to do this in the .biq files, not the .sav,
+			// because .sav files already contain just the playable Players + Barbarians.
+			// It's easier to do it like this, otherwise we need to manipulate the biq arrays,
+			// to check for playable players, offset array indexes by the difference, etc,
+			// as we are parsing the file, which is 10 times the hassle compared to this approach
+			for (int p = save.Players.Count - 1; p >= 0; --p) {
+				var player =  save.Players[p];
+				if (p != 0 && !player.isIncludedInGame) {
+					save.Players.Remove(player);
+				}
+				// make barbarians unpickable
+				if (p == 0) {
+					save.Players[p].canBePicked = false;
 				}
 			}
 
@@ -410,7 +434,10 @@ namespace C7GameData {
 				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
 									   isBarbarian: i == 0,
 									   isHuman: false,
-									   era: ""));
+									   era: "",
+									   // GameCiv[0] does not contain the barbarians,
+									   // but we want to include them in the gameplay
+									   theBiq.GameCiv[0].Contains(i) || i == 0));
 
 				// Set a government for players not associated with LEAD.
 				// Usually, this applies only to barbarians, but in some scenarios
@@ -424,6 +451,8 @@ namespace C7GameData {
 			int leadIndex = 0;
 			foreach (LEAD lead in theBiq.Lead) {
 				SavePlayer player = save.Players[lead.Civ];
+
+				player.canBePicked = lead.HumanPlayer == 1;
 
 				// Put the player in the correct starting era.
 				player.eraCivilopediaName = theBiq.Eras[lead.InitialEra].CivilopediaEntry;
@@ -471,7 +500,10 @@ namespace C7GameData {
 				SavePlayer player = MakeSavePlayerFromCiv(civ,
 										  isBarbarian: i == 0,
 										  isHuman: i == 1,
-										  era: theBiq.Eras[leader.Era].CivilopediaEntry);
+										  era: theBiq.Eras[leader.Era].CivilopediaEntry,
+                                          // by default if the player is in the .sav file, well, it's included in the game
+                                          // in contrast to a .biq file where it can have a player/civ that is not included in the final gameplay
+                                          true);
 
 				// Record what the player is currently researching.
 				if (leader.Researching > -1) {
@@ -499,6 +531,7 @@ namespace C7GameData {
 				player.taxRate = leader.TaxRate;
 				player.governmentId = save.Governments[leader.Government].id;
 				player.inAnarchyUntilTurn = save.TurnNumber + leader.AnarchyTurnsLeft;
+				player.primaryColorIndex = leader.Color;
 
 				save.Players.Add(player);
 				i++;
@@ -777,17 +810,16 @@ namespace C7GameData {
 			}
 		}
 
-		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, string era) {
+		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, string era, bool isIncludedInGame = true) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
 				primaryColorIndex = civ.primaryColorIndex,
 				secondaryColorIndex = civ.secondaryColorIndex,
 				human = isHuman,
 				civilization = civ.name,
-
+				isIncludedInGame = isIncludedInGame,
 				// Never let barbarians play before a real player.
 				hasPlayedCurrentTurn = isBarbarian,
-
 				eraCivilopediaName = era,
 			};
 		}
@@ -853,7 +885,11 @@ namespace C7GameData {
 
 				// The owner index is into the list of civs, and we have a 1:1
 				// mapping of players and civs.
-				SavePlayer player = save.Players[unit.Owner];
+				// The exception to this are barbarian units (unit.OwnerType == 1), 
+				// where the owner points to the tribe (city name in other civs), rather than the player/civ
+				// TODO: implement tribes for barbarians
+				int owner = unit.OwnerType == 1 ? 0 : unit.Owner;
+				SavePlayer player = save.Players[owner];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
 				save.Units.Add(createUnitAtLocation(player, unit.Name, unit.UnitType, experience.key, experience.baseHitPoints, unit.X, unit.Y));
 			}

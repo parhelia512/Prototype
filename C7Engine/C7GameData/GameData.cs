@@ -30,7 +30,7 @@ namespace C7GameData {
 
 		public List<City> cities = new List<City>();
 
-		internal List<Civilization> civilizations = new List<Civilization>();
+		public List<Civilization> civilizations { get; internal set; } = new List<Civilization>();
 
 		public List<ExperienceLevel> experienceLevels = new List<ExperienceLevel>();
 		public List<Tech> techs = new();
