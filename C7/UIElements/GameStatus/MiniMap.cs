@@ -11,12 +11,18 @@ using C7Engine;
 public partial class MiniMap : TextureRect {
 	private ILogger log = LogManager.ForContext<MiniMap>();
 
+	private TextureRect mapFrameRect;
+
 	private MapView mapView;
 	private TextureRect mapTextureRect;
 	private ImageTexture mapTexture;
 	private Image mapImage;
 
-	private Vector2I miniMapSize = new (250, 125);
+	private Vector2I miniMapFrameSize = new (280, 130);
+	private Vector2I miniMapSize = new (229, 105);
+	private Vector2I frameOffset = new Vector2I(7, -12 + -10); // overall control has 10px boundary, adjust for VP
+	private Vector2I mapOffset = new Vector2I(25, -13); // offset inside the frame
+	private Vector2I clickOffset = new Vector2I(15, 0); // offset delta?
 
 	public MiniMap(MapView mapView) {
 		this.mapView = mapView;
@@ -24,9 +30,18 @@ public partial class MiniMap : TextureRect {
 
 	public override void _Ready() {
 		CreateMiniMap();
+		MouseFilter = MouseFilterEnum.Stop;
 	}
 
 	private void CreateMiniMap() {
+		// Draw frame
+		// TODO: Draw frame on top of the map texture (figure out stencil alpha)
+		ImageTexture boxLeft = TextureLoader.Load("lower_left_infobox.box");
+		mapFrameRect = new TextureRect();
+		mapFrameRect.Texture = boxLeft;
+		AddChild(mapFrameRect);
+
+		// Draw the map inside the frame
 		mapTexture = new ImageTexture();
 		mapTextureRect = new TextureRect();
 
@@ -65,8 +80,10 @@ public partial class MiniMap : TextureRect {
 	public static Color Intensify(Color colour) => Color.FromHsv(colour.H, 1, colour.V, colour.A);
 
 	public override void _Process(double delta) {
+		// Position frame and map relative to viewport
 		var vp = GetViewportRect().Size;
-		mapTextureRect.SetPosition(new Vector2(0, vp.Y - miniMapSize.Y - 20));
+		mapFrameRect.SetPosition(frameOffset + new Vector2(0, vp.Y - miniMapFrameSize.Y));
+		mapTextureRect.SetPosition(frameOffset + new Vector2(0, vp.Y - miniMapSize.Y) + mapOffset);
 
 		EngineStorage.ReadGameData((GameData gD) => {
 			var map = gD.map;
@@ -78,6 +95,8 @@ public partial class MiniMap : TextureRect {
 				var (x, y) = ComputeIsoCoordinates(t);
 				if (!gD.observerMode && !knowledge.knownTiles.Contains(t))
 					mapImage.SetPixel(x, y, Colors.Black);
+				else if (t.IsWater())
+					mapImage.SetPixel(x, y, Colors.SteelBlue);				
 				else if (t.HasCity)
 					mapImage.SetPixel(x, y, Colors.White);
 				else if (t.OwningPlayer() != null) {
@@ -88,8 +107,6 @@ public partial class MiniMap : TextureRect {
 				else if (TerrainColorMap.TryGetValue(t.overlayTerrainType.Key, out Color value))
 					mapImage.SetPixel(x, y, value);
 				// Fallbacks
-				else if (t.IsWater())
-					mapImage.SetPixel(x, y, Colors.SteelBlue);
 				else if (t.IsLand())
 					mapImage.SetPixel(x, y, Colors.DarkSeaGreen);
 			}
@@ -144,24 +161,23 @@ public partial class MiniMap : TextureRect {
 		}
 	}
 
-	public override void _UnhandledInput(InputEvent @event) {
+	public override void _GuiInput(InputEvent @event) {
 		if (@event is InputEventMouseButton eventMouseButton) {
-			if (eventMouseButton.ButtonIndex == MouseButton.Left) {
-				HandleLeftMouseButton(eventMouseButton);
+			Control uiHover = GetViewport().GuiGetHoveredControl();
+			if (eventMouseButton.IsPressed() && uiHover is TextureRect) {
+				switch (eventMouseButton.ButtonIndex) {
+					case MouseButton.Left:
+						HandleLeftMouseButton(eventMouseButton);
+						break;
+				}
 			}
 		}
 	}
 
 	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
-
-		Control uiHover = GetViewport().GuiGetHoveredControl();
-		if (eventMouseButton.IsPressed() && uiHover is TextureRect) {
-			var mapPos = eventMouseButton.Position - mapTextureRect.GlobalPosition;
-			var relativeMapPos = mapPos / mapTextureRect.Size;
-			CenterToPosition(mapPos, relativeMapPos);
-
-			GetViewport().SetInputAsHandled();
-		}
+		var mapPos = eventMouseButton.Position - mapFrameRect.GlobalPosition - clickOffset;
+		var relativeMapPos = mapPos / mapTextureRect.Size;
+		CenterToPosition(mapPos, relativeMapPos);
 	}
 
 	private void CenterToPosition(Vector2 mapPos, Vector2 relativeMapPos) {
