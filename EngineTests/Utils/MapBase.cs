@@ -45,8 +45,15 @@ public class MapBase {
 		Player player = MakePlayer(true);
 		player.civilization = new Civilization();
 		player.government = new Government();
+		player.rules = MakeTestRules();
 		foreach (Tile tile in knownTiles) { player.tileKnowledge.knownTiles.Add(tile); }
 		return player;
+	}
+
+	protected static Rules MakeTestRules() {
+		return new Rules() {
+			MaxRankOfWorkableTiles = 2
+		};
 	}
 
 	private TileDirection[] directions = {

@@ -39,7 +39,7 @@ namespace C7Engine {
 				// Score contribution decreases linearly with distance, by 1/R with each step:
 				// e.g., with four ranks of workable tiles, R=4:
 				//	  city | 100% | 75% | 50% | 25% | 0% | 0% | ..
-				var maxRank = EngineStorage.gameData?.rules?.MaxRankOfWorkableTiles ?? 2;
+				var maxRank = player.rules.MaxRankOfWorkableTiles;
 				foreach (Tile workable in t.GetTilesWithinRankDistance(maxRank)) {
 					if (workable == Tile.NONE)
 						continue;
