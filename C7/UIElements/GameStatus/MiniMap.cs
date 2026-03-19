@@ -96,7 +96,7 @@ public partial class MiniMap : TextureRect {
 				if (!gD.observerMode && !knowledge.knownTiles.Contains(t))
 					mapImage.SetPixel(x, y, Colors.Black);
 				else if (t.IsWater())
-					mapImage.SetPixel(x, y, Colors.SteelBlue);				
+					mapImage.SetPixel(x, y, Colors.SteelBlue);
 				else if (t.HasCity)
 					mapImage.SetPixel(x, y, Colors.White);
 				else if (t.OwningPlayer() != null) {
