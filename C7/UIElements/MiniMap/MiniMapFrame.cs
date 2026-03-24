@@ -27,9 +27,7 @@ public partial class MiniMapFrame : TextureRect {
 		AddChild(mapFrameRect);
 
 		// Draw the map inside the frame
-		mapTexture = new ImageTexture();
 		mapTextureRect = new TextureRect();
-		mapTextureRect.Texture = mapTexture;
 		mapTextureRect.SetSize(miniMapSize);
 		mapTextureRect.SetExpandMode(ExpandModeEnum.KeepSize);
 		AddChild(mapTextureRect);
@@ -47,8 +45,10 @@ public partial class MiniMapFrame : TextureRect {
 	}
 
 	public void RenderImage(Image mapImage) {
-		mapTexture.SetImage(mapImage);
+		mapTexture = ImageTexture.CreateFromImage(mapImage);
 		mapTexture.SetSizeOverride(miniMapSize);
+
+		mapTextureRect.Texture = mapTexture;
 	}
 
 	public override void _GuiInput(InputEvent @event) {

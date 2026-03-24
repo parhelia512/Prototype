@@ -51,7 +51,7 @@ public partial class MiniMap : Control {
 		EngineStorage.ReadGameData((GameData gD) => {
 			var map = gD.map;
 
-			var mapImage = Image.CreateEmpty(map.numTilesWide, map.numTilesTall / 2, true, Image.Format.Rgb8);
+			var mapImage = Image.CreateEmpty(map.numTilesWide, map.numTilesTall / 2, true, Image.Format.Rgba8);
 
 			// Configure layers
 			foreach (var layer in layers)
