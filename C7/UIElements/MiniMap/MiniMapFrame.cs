@@ -15,6 +15,8 @@ public partial class MiniMapFrame : TextureRect {
 	private Vector2I mapOffset = new (25, -13); // offset inside the frame
 	private Vector2I clickOffset = new (15, 0); // offset delta?
 
+	private bool isDragging;
+
 	public MiniMapFrame(MapView mapView) {
 		this.mapView = mapView;
 
@@ -29,7 +31,6 @@ public partial class MiniMapFrame : TextureRect {
 		// Draw the map inside the frame
 		mapTextureRect = new TextureRect();
 		mapTextureRect.SetSize(miniMapSize);
-		mapTextureRect.SetExpandMode(ExpandModeEnum.KeepSize);
 		AddChild(mapTextureRect);
 	}
 
@@ -54,6 +55,7 @@ public partial class MiniMapFrame : TextureRect {
 	public override void _GuiInput(InputEvent @event) {
 		if (@event is InputEventMouseButton eventMouseButton) {
 			Control uiHover = GetViewport().GuiGetHoveredControl();
+			isDragging = eventMouseButton.IsPressed();
 			if (eventMouseButton.IsPressed() && uiHover is TextureRect) {
 				switch (eventMouseButton.ButtonIndex) {
 					case MouseButton.Left:
@@ -61,11 +63,24 @@ public partial class MiniMapFrame : TextureRect {
 						break;
 				}
 			}
+		} else if (@event is InputEventMouseMotion eventMouseMotion) {
+			Control uiHover = GetViewport().GuiGetHoveredControl();
+			if (isDragging && uiHover is TextureRect) {
+				HandleMouseMotionInput(eventMouseMotion);
+			}
 		}
 	}
 
+	private void HandleMouseMotionInput(InputEventMouseMotion eventMouseMotion) {
+		CenterToMousePosition(eventMouseMotion.Position);
+	}
+
 	private void HandleLeftMouseButton(InputEventMouseButton eventMouseButton) {
-		var mapPos = eventMouseButton.Position - mapFrameRect.GlobalPosition - clickOffset;
+		CenterToMousePosition(eventMouseButton.Position);
+	}
+
+	private void CenterToMousePosition(Vector2 mousePosition) {
+		var mapPos = mousePosition - mapFrameRect.GlobalPosition - clickOffset;
 		var relativeMapPos = mapPos / mapTextureRect.Size;
 		CenterToPosition(mapPos, relativeMapPos);
 	}
