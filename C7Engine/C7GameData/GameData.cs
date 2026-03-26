@@ -43,6 +43,7 @@ namespace C7GameData {
 		public string defaultExperienceLevelKey;
 		public ExperienceLevel defaultExperienceLevel;
 		public Rules rules;
+		public TimeOptions timeOptions;
 
 		public BarbarianInfo barbarianInfo = new BarbarianInfo();
 

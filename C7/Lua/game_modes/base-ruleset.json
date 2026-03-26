@@ -7191,6 +7191,39 @@
     "shieldCostPerGold": 4,
     "shieldRateForDisbanding": 0.25
   },
+  "timeOptions": {
+    "baseUnit": "years",
+    "negativeLabel": "BC",
+    "positiveLabel": "AD",
+    "startYear": -4000,
+    "startMonth": 1,
+    "startWeek": 1,
+    "startDay": 1,
+    "startHour": 12,
+    "timeScale": [
+      [
+        25,
+        25,
+        40,
+        50,
+        100,
+        100,
+        100,
+        10000
+      ],
+      [
+        50,
+        40,
+        25,
+        20,
+        10,
+        5,
+        2,
+        1
+      ]
+    ],
+    "turnLimit": 540
+  },
   "techs": [
     {
       "name": "Bronze Working",
