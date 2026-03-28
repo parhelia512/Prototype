@@ -63,6 +63,7 @@ local c7_texture_list = {
   "Art/interface/NormButtons.png",
   "Art/interface/rolloverbuttons.png",
   "Art/interface/highlightedbuttons.png",
+  "Art/interface/box left color.png",
   "Art/interface/box right color.png",
   "Art/interface/nextturn states color.png",
   "Art/interface/consoleButtons.png",

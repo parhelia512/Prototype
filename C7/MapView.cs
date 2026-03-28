@@ -636,9 +636,15 @@ public partial class MapView : Node2D {
 	const float MAX_SCALE = 4.0f;
 
 	private LowerRightInfoBox lowerRightInfoBox;
+	private MiniMap miniMap;
+
 	public override void _Ready() {
 		lowerRightInfoBox = GetNode<LowerRightInfoBox>("/root/C7Game/CanvasLayer/Control/GameStatus/LowerRightInfoBox");
 		lowerRightInfoBox.CenterCameraOnActiveUnit += OnCenterCameraOnUnit;
+
+		miniMap = new MiniMap(this);
+		var canvasControl = GetNode<Control>("/root/C7Game/CanvasLayer/Control");
+		canvasControl.AddChild(miniMap);
 	}
 
 	public override void _ExitTree() {
@@ -723,7 +729,7 @@ public partial class MapView : Node2D {
 	}
 
 	public VisibleRegion getVisibleRegion() {
-		(int X0, int Y0) = tileCoordsOnScreenAt(new Vector2(0, 0));
+		(int X0, int Y0) = tileCoordsInMainCamera(new Vector2(0, 0));
 		Vector2 mapViewSize = new Vector2(2, 4) + getVisibleAreaSize() / scaledCellSize;
 		return new VisibleRegion {
 			upperLeftX = X0 - 2,
@@ -822,10 +828,14 @@ public partial class MapView : Node2D {
 
 	// Returns the virtual tile coordinates on screen at the given location. "Virtual" meaning the coordinates are unwrapped and there isn't
 	// necessarily a tile there at all.
-	public (int, int) tileCoordsOnScreenAt(Vector2 screenLocation) {
+	public (int, int) tileCoordsInMainCamera(Vector2 screenLocation) {
 		Vector2 mapLoc = (screenLocation + cameraLocation) / scaledCellSize;
-		Vector2 intMapLoc = mapLoc.Floor();
-		Vector2 fracMapLoc = mapLoc - intMapLoc;
+		return tileCoordsForMapLocation(mapLoc);
+	}
+
+	public (int, int) tileCoordsForMapLocation(Vector2 mapLocation) {
+		Vector2 intMapLoc = mapLocation.Floor();
+		Vector2 fracMapLoc = mapLocation - intMapLoc;
 		int X = (int)intMapLoc.X, Y = (int)intMapLoc.Y;
 		bool evenColumn = X % 2 == 0, evenRow = Y % 2 == 0;
 		if (evenColumn ^ evenRow) {
@@ -843,7 +853,7 @@ public partial class MapView : Node2D {
 	}
 
 	public Tile tileOnScreenAt(GameMap map, Vector2 screenLocation) {
-		(int X, int Y) = tileCoordsOnScreenAt(screenLocation);
+		(int X, int Y) = tileCoordsInMainCamera(screenLocation);
 		return map.tileAt(X, Y);
 	}
 

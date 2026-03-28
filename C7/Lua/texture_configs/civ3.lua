@@ -400,6 +400,13 @@ textures.lower_right_infobox = {
   },
 }
 
+textures.lower_left_infobox = {
+    box = {
+      path = INTERFACE .. "box left color.pcx",
+      alpha = INTERFACE .. "box left alpha.pcx",
+    },
+}
+
 textures.popup_background = {
   top_left = {
     path = POPUP_BORDERS,
