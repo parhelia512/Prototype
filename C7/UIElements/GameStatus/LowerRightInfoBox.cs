@@ -113,17 +113,14 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 		boxRightRectangle.AddChild(terrainType);
 
 		// Player info
-		civAndGovt.SetPosition(new Vector2(0, 80));
 		boxRightRectangle.AddChild(civAndGovt);
-		civAndGovt.SetTextAndCenterLabel("Netherlands - Despotism (5.5.0)", extraXOffset);
+		civAndGovt.SetTextAndCenterLabel("Netherlands - Despotism (5.5.0)").AddXOffset(extraXOffset).AddYOffset(80);
 
-		yearAndGold.SetPosition(new Vector2(0, 94));
 		boxRightRectangle.AddChild(yearAndGold);
-		yearAndGold.SetTextAndCenterLabel("Turn 0  10 Gold (+0 per turn)", extraXOffset);
+		yearAndGold.SetTextAndCenterLabel("Turn 0  10 Gold (+0 per turn)").AddXOffset(extraXOffset).AddYOffset(94);
 
-		scienceProgress.SetPosition(new Vector2(0, 108));
 		boxRightRectangle.AddChild(scienceProgress);
-		scienceProgress.SetTextAndCenterLabel("");
+		scienceProgress.SetTextAndCenterLabel("").AddXOffset(extraXOffset).AddYOffset(108);
 
 		// End of turn suggestions
 		suggestion.HorizontalAlignment = HorizontalAlignment.Right;
@@ -248,14 +245,14 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 
 				var turnText = gD.timeOptions.GetDisplayTime(turnNumber);
 				var gptText = $"{(goldPerTurn >= 0 ? "+" : "")}{goldPerTurn}";
-				yearAndGold.SetTextAndCenterLabel($"{turnText}  {gold} Gold ({gptText} per turn)", extraXOffset);
+				yearAndGold.SetTextAndCenterLabel($"{turnText}  {gold} Gold ({gptText} per turn)").AddXOffset(extraXOffset);
 			}
 
 			// Tech progress.
-			scienceProgress.SetTextAndCenterLabel(player.SummarizeScience(gD), extraXOffset);
+			scienceProgress.SetTextAndCenterLabel(player.SummarizeScience(gD)).AddXOffset(extraXOffset);
 
 			// Civ and government.
-			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - {player.government.name} (5.5.0)", extraXOffset);
+			civAndGovt.SetTextAndCenterLabel($"{player.civilization.name} - {player.government.name} (5.5.0)").AddXOffset(extraXOffset);
 		});
 
 		base._Process(delta);

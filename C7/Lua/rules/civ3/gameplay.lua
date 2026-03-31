@@ -14,8 +14,7 @@ end
 
 local gameplay = {}
 
-local void
-function disband_reward(context)
+local function disband_reward(context)
   local unit = context
   local unit_shield_cost = unit.unitType.shieldCost;
 
@@ -41,11 +40,10 @@ function disband_reward(context)
   end
 end
 
-local string
-function get_display_time_text(raw_time)
+local function get_display_time_text(raw_time)
   local bc = game_data().timeOptions.negativeLabel
   local ad = game_data().timeOptions.positiveLabel
-  
+
   -- Years
   if (game_data().timeOptions.baseUnit == time_unit.Years) then
     game_data().timeOptions.SetTimeUnitCurrent(time_unit.Years, raw_time)
