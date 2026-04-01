@@ -186,6 +186,10 @@ namespace C7GameData {
 				}
 				i++;
 			}
+
+			// make barbarians unpickable
+			save.Players.Where(p => p.isBarbarian).ToList().ForEach(p => p.canBePicked = false);
+
 			return save;
 		}
 
@@ -328,16 +332,10 @@ namespace C7GameData {
 			// It's easier to do it like this, otherwise we need to manipulate the biq arrays,
 			// to check for playable players, offset array indexes by the difference, etc,
 			// as we are parsing the file, which is 10 times the hassle compared to this approach
-			for (int p = save.Players.Count - 1; p >= 0; --p) {
-				var player =  save.Players[p];
-				if (p != 0 && !player.isIncludedInGame) {
-					save.Players.Remove(player);
-				}
-				// make barbarians unpickable
-				if (p == 0) {
-					save.Players[p].canBePicked = false;
-				}
-			}
+			save.Players = save.Players.Where(p => p.isBarbarian || p.isIncludedInGame).ToList();
+
+			// make barbarians unpickable
+			save.Players.Where(p => p.isBarbarian).ToList().ForEach(p => p.canBePicked = false);
 
 			return save;
 		}
@@ -431,13 +429,16 @@ namespace C7GameData {
 
 			// Make a player for each civ. The barbarians are always civ 0.
 			for (int i = 0; i < save.Civilizations.Count; ++i) {
-				save.Players.Add(MakeSavePlayerFromCiv(save.Civilizations[i],
-									   isBarbarian: i == 0,
+				Civilization civ = save.Civilizations[i];
+
+				// GameCiv[0] does not contain the barbarians,
+				// but we want to include them in the gameplay
+				bool isIncluded = theBiq.GameCiv[0].Contains(i) || civ.isBarbarian;
+
+				save.Players.Add(MakeSavePlayerFromCiv(civ,
 									   isHuman: false,
 									   era: "",
-									   // GameCiv[0] does not contain the barbarians,
-									   // but we want to include them in the gameplay
-									   theBiq.GameCiv[0].Contains(i) || i == 0));
+									   isIncluded));
 
 				// Set a government for players not associated with LEAD.
 				// Usually, this applies only to barbarians, but in some scenarios
@@ -498,7 +499,6 @@ namespace C7GameData {
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];
 				SavePlayer player = MakeSavePlayerFromCiv(civ,
-										  isBarbarian: i == 0,
 										  isHuman: i == 1,
 										  era: theBiq.Eras[leader.Era].CivilopediaEntry,
                                           // by default if the player is in the .sav file, well, it's included in the game
@@ -810,7 +810,7 @@ namespace C7GameData {
 			}
 		}
 
-		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, string era, bool isIncludedInGame = true) {
+		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isHuman, string era, bool isIncludedInGame = true) {
 			return new SavePlayer {
 				id = ids.CreateID("player"),
 				primaryColorIndex = civ.primaryColorIndex,
@@ -819,7 +819,8 @@ namespace C7GameData {
 				civilization = civ.name,
 				isIncludedInGame = isIncludedInGame,
 				// Never let barbarians play before a real player.
-				hasPlayedCurrentTurn = isBarbarian,
+				hasPlayedCurrentTurn = civ.isBarbarian,
+				isBarbarian = civ.isBarbarian,
 				eraCivilopediaName = era,
 			};
 		}
