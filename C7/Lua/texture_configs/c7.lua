@@ -8,6 +8,7 @@ local utils = require "utils"
 
 local c7_texture_list = {
   "Art/buttonsFINAL.png",
+  "Art/TileInfo.png",
   "Art/X-o_ALLstates-sprite.png",
   "Art/SmallHeads/popHeads.png",
   "Art/Terrain/Mountains-snow.png",

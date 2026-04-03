@@ -226,6 +226,10 @@ public partial class UnitLayer : LooseLayer {
 			return;
 		}
 
+		if (looseView.IsTileCoveredByTileInfo(tile)) {
+			return;
+		}
+
 		// First draw animated effects. These will always appear over top of units regardless of draw order due to z-index.
 		C7Animation tileEffect = looseView.mapView.game.animationController.animTracker.getTileEffect(tile);
 		if (tileEffect != null) {
