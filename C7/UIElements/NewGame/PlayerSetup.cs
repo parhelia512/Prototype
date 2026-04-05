@@ -235,7 +235,33 @@ public partial class PlayerSetup : Control {
 		thread.Start();
 	}
 
+	private void PersistGameSettings(GlobalSingleton global)
+	{
+		try {
+			WorldCharacteristics world = global.WorldCharacteristics;
+			C7Settings.SetValue("lastGame", "worldSize", world.worldSize.name);
+			C7Settings.SetValue("lastGame", "barbarianActivity", world.barbarianActivity.ToString());
+			C7Settings.SetValue("lastGame", "landform", world.landform.ToString());
+			C7Settings.SetValue("lastGame", "oceanCoverage", world.oceanCoverage.ToString());
+			C7Settings.SetValue("lastGame", "climate", world.climate.ToString());
+			C7Settings.SetValue("lastGame", "temperature", world.temperature.ToString());
+			C7Settings.SetValue("lastGame", "age", world.age.ToString());
+			C7Settings.SetValue("lastGame", "civilization", selectedCivilization.name);
+			C7Settings.SetValue("lastGame", "difficulty", selectedDifficulty.Name);
+
+			List<SelectedOpponent> ops = CollectSelectedOpponents();
+			string opponentsValue = string.Join(",", ops.Select(o => o.isRandom ? "Random" : o.Name));
+			C7Settings.SetValue("lastGame", "opponents", opponentsValue);
+
+			C7Settings.SaveSettings();
+		} catch (Exception e) {
+			log.Error(e, "Failed to persist game settings to C7.ini");
+		}
+	}
+
 	private void StartGame() {
+		GlobalSingleton global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
+		PersistGameSettings(global);
 		GetTree().ChangeSceneToFile("res://C7Game.tscn");
 	}
 }
