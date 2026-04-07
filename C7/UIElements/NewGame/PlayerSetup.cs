@@ -235,8 +235,7 @@ public partial class PlayerSetup : Control {
 		thread.Start();
 	}
 
-	private void PersistGameSettings(GlobalSingleton global)
-	{
+	private void PersistGameSettings(GlobalSingleton global) {
 		try {
 			WorldCharacteristics world = global.WorldCharacteristics;
 			C7Settings.SetValue("lastGame", "worldSize", world.worldSize.name);

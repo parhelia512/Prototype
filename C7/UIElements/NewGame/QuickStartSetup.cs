@@ -57,9 +57,9 @@ public partial class QuickStartSetup : Node {
 	private static WorldSize GetWorldSize(List<WorldSize> availableSizes) {
 		string lastWorldSize = C7Settings.GetSettingValue("lastGame", "worldSize");
 		return availableSizes.FirstOrDefault(ws =>
-			       string.Equals(ws.name, lastWorldSize, StringComparison.OrdinalIgnoreCase))
-		       ?? availableSizes.FirstOrDefault(ws => ws.isDefault)
-		       ?? WorldSize.Generic();
+				   string.Equals(ws.name, lastWorldSize, StringComparison.OrdinalIgnoreCase))
+			   ?? availableSizes.FirstOrDefault(ws => ws.isDefault)
+			   ?? WorldSize.Generic();
 	}
 
 	private static List<SelectedOpponent> GetOpponents(int expectedCount) {
@@ -68,9 +68,9 @@ public partial class QuickStartSetup : Node {
 
 		if (!string.IsNullOrEmpty(opsRaw)) {
 			foreach (string name in opsRaw
-				         .Split(',').Select(n => n.Trim())
-				         .Where(n => !string.IsNullOrEmpty(n))
-			        ) {
+						 .Split(',').Select(n => n.Trim())
+						 .Where(n => !string.IsNullOrEmpty(n))
+					) {
 				opponents.Add(name == "Random"
 					? new SelectedOpponent { isRandom = true }
 					: new SelectedOpponent { isRandom = false, Name = name });
