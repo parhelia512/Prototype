@@ -224,6 +224,8 @@ public partial class PlayerSetup : Control {
 			opponents = CollectSelectedOpponents()
 		};
 
+		PersistGameSettings(gameSetup);
+
 		// World generation can take a bit of time if multiple attempts are
 		// needed, so we don't want to tie up the UI thread.
 		Thread thread = new(() => {
@@ -235,22 +237,21 @@ public partial class PlayerSetup : Control {
 		thread.Start();
 	}
 
-	private void PersistGameSettings(GlobalSingleton global) {
+	private void PersistGameSettings(GameSetup gameSetup) {
 		try {
-			WorldCharacteristics world = global.WorldCharacteristics;
-			C7Settings.SetValue("lastGame", "worldSize", world.worldSize.name);
-			C7Settings.SetValue("lastGame", "barbarianActivity", world.barbarianActivity.ToString());
-			C7Settings.SetValue("lastGame", "landform", world.landform.ToString());
-			C7Settings.SetValue("lastGame", "oceanCoverage", world.oceanCoverage.ToString());
-			C7Settings.SetValue("lastGame", "climate", world.climate.ToString());
-			C7Settings.SetValue("lastGame", "temperature", world.temperature.ToString());
-			C7Settings.SetValue("lastGame", "age", world.age.ToString());
-			C7Settings.SetValue("lastGame", "civilization", selectedCivilization.name);
-			C7Settings.SetValue("lastGame", "difficulty", selectedDifficulty.Name);
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.WorldSize, gameSetup.worldCharacteristics.worldSize.name);
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.BarbarianActivity, gameSetup.worldCharacteristics.barbarianActivity.ToString());
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Landform, gameSetup.worldCharacteristics.landform.ToString());
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.OceanCoverage, gameSetup.worldCharacteristics.oceanCoverage.ToString());
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Climate, gameSetup.worldCharacteristics.climate.ToString());
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Temperature, gameSetup.worldCharacteristics.temperature.ToString());
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Age, gameSetup.worldCharacteristics.age.ToString());
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Civilization, gameSetup.playerCivilization.name);
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Difficulty, gameSetup.difficulty.Name);
 
-			List<SelectedOpponent> ops = CollectSelectedOpponents();
-			string opponentsValue = string.Join(",", ops.Select(o => o.isRandom ? "Random" : o.Name));
-			C7Settings.SetValue("lastGame", "opponents", opponentsValue);
+			List<SelectedOpponent> ops = gameSetup.opponents;
+			string opponentsValue = string.Join("|", ops.Select(o => o.isRandom ? "Random" : o.Name));
+			C7Settings.SetValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.Opponents, opponentsValue);
 
 			C7Settings.SaveSettings();
 		} catch (Exception e) {
@@ -259,8 +260,6 @@ public partial class PlayerSetup : Control {
 	}
 
 	private void StartGame() {
-		GlobalSingleton global = GetNode<GlobalSingleton>("/root/GlobalSingleton");
-		PersistGameSettings(global);
 		GetTree().ChangeSceneToFile("res://C7Game.tscn");
 	}
 }

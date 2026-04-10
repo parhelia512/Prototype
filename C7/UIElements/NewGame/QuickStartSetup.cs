@@ -16,28 +16,25 @@ public partial class QuickStartSetup : Node {
 		globalState.ResetLoadGameFields();
 
 		var save = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
+		WorldSize worldSize = GetWorldSize(save.WorldSizes);
 
 		globalState.WorldCharacteristics = new WorldCharacteristics(save) {
-			barbarianActivity = GetSetting("barbarianActivity", BarbarianActivity.Roaming),
-			landform = GetSetting("landform", WorldCharacteristics.Landform.Pangaea),
-			oceanCoverage = GetSetting("oceanCoverage", WorldCharacteristics.OceanCoverage.Percent_70),
-			age = GetSetting("age", WorldCharacteristics.Age.Billion_4),
-			climate = GetSetting("climate", WorldCharacteristics.Climate.Normal),
-			temperature = GetSetting("temperature", WorldCharacteristics.Temperature.Temperate),
-			worldSize = GetWorldSize(save.WorldSizes),
+			barbarianActivity = GetBarbarianActivity(),
+			landform = GetLandform(),
+			oceanCoverage = GetOceanCoverage(),
+			age = GetAge(),
+			climate = GetClimate(),
+			temperature = GetTemperature(),
+			worldSize = worldSize,
 			mapSeed = new Random().Next(),
 		};
 
 		globalState.SaveGame = save;
 
-		string lastCivilization = C7Settings.GetSettingsValueOrDefault("lastGame", "civilization", "Netherlands");
-		Civilization player = save.Civilizations.FirstOrDefault(civ => civ.name == lastCivilization) ?? save.Civilizations[1];
+		Civilization player = GetPlayerCivilization(save.Civilizations);
+		Difficulty difficulty = GetDifficulty(save.Difficulties);
 
-		string lastDifficulty = C7Settings.GetSettingsValueOrDefault("lastGame", "difficulty", "Regent");
-		Difficulty difficulty = save.Difficulties.FirstOrDefault(diff => diff.Name == lastDifficulty) ?? save.Difficulties[0];
-
-		int numOpponents = globalState.WorldCharacteristics.worldSize.numberOfCivs - 1;
-		List<SelectedOpponent> opponents = GetOpponents(numOpponents);
+		List<SelectedOpponent> opponents = GetOpponents(save.Civilizations, worldSize.numberOfCivs - 1);
 
 		GameSetup gameSetup = new() {
 			playerCivilization = player,
@@ -49,40 +46,73 @@ public partial class QuickStartSetup : Node {
 		gameSetup.Populate(save);
 	}
 
-	private static T GetSetting<T>(string key, T defaultValue) where T : struct, Enum {
-		string value = C7Settings.GetSettingValue("lastGame", key);
-		return Enum.TryParse(value, true, out T result) ? result : defaultValue;
+	private static BarbarianActivity GetBarbarianActivity() {
+		return C7Settings.GetTypedSettingOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.BarbarianActivity, BarbarianActivity.Roaming);
+	}
+
+	private static WorldCharacteristics.Landform GetLandform() {
+		return C7Settings.GetTypedSettingOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Landform, WorldCharacteristics.Landform.Pangaea);
+	}
+
+	private static WorldCharacteristics.OceanCoverage GetOceanCoverage() {
+		return C7Settings.GetTypedSettingOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.OceanCoverage, WorldCharacteristics.OceanCoverage.Percent_70);
+	}
+
+	private static WorldCharacteristics.Age GetAge() {
+		return C7Settings.GetTypedSettingOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Age, WorldCharacteristics.Age.Billion_4);
+	}
+
+	private static WorldCharacteristics.Climate GetClimate() {
+		return C7Settings.GetTypedSettingOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Climate, WorldCharacteristics.Climate.Normal);
+	}
+
+	private static WorldCharacteristics.Temperature GetTemperature() {
+		return C7Settings.GetTypedSettingOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Temperature, WorldCharacteristics.Temperature.Temperate);
 	}
 
 	private static WorldSize GetWorldSize(List<WorldSize> availableSizes) {
-		string lastWorldSize = C7Settings.GetSettingValue("lastGame", "worldSize");
+		string lastWorldSize = C7Settings.GetSettingValue(C7Settings.LastGame.SectionName, C7Settings.LastGame.WorldSize);
 		return availableSizes.FirstOrDefault(ws =>
 				   string.Equals(ws.name, lastWorldSize, StringComparison.OrdinalIgnoreCase))
 			   ?? availableSizes.FirstOrDefault(ws => ws.isDefault)
 			   ?? WorldSize.Generic();
 	}
 
-	private static List<SelectedOpponent> GetOpponents(int expectedCount) {
-		string opsRaw = C7Settings.GetSettingsValueOrDefault("lastGame", "opponents", "");
+	private static Civilization GetPlayerCivilization(List<Civilization> civilizations) {
+		string lastCiv = C7Settings.GetSettingsValueOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Civilization, "Netherlands");
+		return civilizations.FirstOrDefault(civ => civ.name == lastCiv) ?? civilizations.First();
+	}
+
+	private static Difficulty GetDifficulty(List<Difficulty> difficulties) {
+		string lastDiff = C7Settings.GetSettingsValueOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Difficulty, "Regent");
+		return difficulties.FirstOrDefault(diff => diff.Name == lastDiff) ?? difficulties.First();
+	}
+
+	private static List<SelectedOpponent> GetOpponents(List<Civilization> availableCivilizations, int expectedCount) {
+		string opsRaw = C7Settings.GetSettingsValueOrDefault(C7Settings.LastGame.SectionName, C7Settings.LastGame.Opponents, "");
 		List<SelectedOpponent> opponents = [];
 
 		if (!string.IsNullOrEmpty(opsRaw)) {
-			foreach (string name in opsRaw
-						 .Split(',').Select(n => n.Trim())
-						 .Where(n => !string.IsNullOrEmpty(n))
-					) {
-				opponents.Add(name == "Random"
-					? new SelectedOpponent { isRandom = true }
-					: new SelectedOpponent { isRandom = false, Name = name });
-			}
+			var cleanNames = opsRaw.Split('|')
+				.Select(n => n.Trim())
+				.Where(n => !string.IsNullOrEmpty(n));
+
+			opponents.AddRange(cleanNames.Select(name => ToSelectedOpponent(name, availableCivilizations)));
 		}
 
-		if (opponents.Count == 0) {
-			for (int i = 0; i < expectedCount; i++) {
-				opponents.Add(new SelectedOpponent { isRandom = true });
-			}
+		while (opponents.Count < expectedCount) {
+			opponents.Add(new SelectedOpponent { isRandom = true });
 		}
 
 		return opponents.Take(expectedCount).ToList();
 	}
+
+	private static SelectedOpponent ToSelectedOpponent(string name, List<Civilization> availableCivs) {
+		if (name == "Random" || availableCivs.All(c => c.name != name)) {
+			return new SelectedOpponent { isRandom = true };
+		}
+
+		return new SelectedOpponent { isRandom = false, Name = name };
+	}
+
 }
