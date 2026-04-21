@@ -140,5 +140,20 @@ public partial class PopupOverlay : HBoxContainer {
 			// as most of the global ones should *not* go through here.
 			GetViewport().SetInputAsHandled();
 		}
+
+		if (@event is InputEventMouseButton ev) {
+			// Catch right clicks over UI elements to stop awkward TileInfo renders 
+			if (ev.ButtonIndex == MouseButton.Right) {
+				if (IsOverUI()) {
+					AcceptEvent();
+					GetViewport().SetInputAsHandled();
+				}
+			}
+		}
+	}
+
+	private bool IsOverUI() {
+		Control ctrl = GetViewport().GuiGetHoveredControl();
+		return ctrl is TextureButton or TextureRect;
 	}
 }
