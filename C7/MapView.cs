@@ -515,7 +515,7 @@ public partial class LooseView : Node2D {
 				layer.onEndDraw(this, gD);
 			}
 
-			foreach (GridLayer layer in layers.Where(layer => layer.visible && layer is GridLayer).Cast<GridLayer>()) {
+			foreach (var layer in layers.Where(layer => layer.visible && layer is GridLayer)) {
 				layer.onBeginDraw(this, gD);
 				foreach (VisibleTile vT in visibleKnownTiles.Concat(visibleUnKnownTiles)) {
 					layer.drawObject(this, gD, vT.tile, vT.tileCenter);
@@ -578,6 +578,22 @@ public partial class LooseView : Node2D {
 		}
 		TileKnowledge knowledge = gameData.GetFirstHumanPlayer().tileKnowledge;
 		return tile != Tile.NONE && knowledge.isTileKnown(tile);
+	}
+
+	public bool IsTileCoveredByTileInfo(Tile tile) {
+		var target = mapView.game.tileInfo;
+		if (target == null) return false;
+
+		return target.IsCovered(tile);
+	}
+
+	public bool HasCityLabelToHideFromTileInfo(Tile tile) {
+		if (!tile.HasCity) return false;
+
+		var target = mapView.game.tileInfo;
+		if (target == null) return false;
+
+		return target.HasCityLabelToCover(tile);
 	}
 }
 

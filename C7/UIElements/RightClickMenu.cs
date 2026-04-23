@@ -132,6 +132,11 @@ public partial class RightClickTileMenu : RightClickMenu {
 	public void ResetItems(Tile tile, Dictionary<ID, bool> uiUpdatedUnitStates = null) {
 		RemoveAll();
 
+		AddItem($"Show Tile Information", () => {
+			game.ShowTileInfo(tile);
+			CloseAndDelete();
+		});
+
 		bool observerMode = false;
 		EngineStorage.ReadGameData((GameData gameData) => {
 			observerMode = gameData.observerMode;
