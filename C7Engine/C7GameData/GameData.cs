@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Serilog;
 using C7Engine.Lua;
 using C7Engine.Pathing;
 using System.Threading.Tasks;
 using C7Engine;
 
+[assembly: InternalsVisibleTo("EngineTests")]
 namespace C7GameData {
 	public class GameData {
 		private static ILogger log = Log.ForContext<GameData>();
@@ -31,6 +33,7 @@ namespace C7GameData {
 		public List<City> cities = new List<City>();
 
 		internal List<Civilization> civilizations = new List<Civilization>();
+		internal HashSet<CultureGroup> cultureGroups = new HashSet<CultureGroup>();
 
 		public List<ExperienceLevel> experienceLevels = new List<ExperienceLevel>();
 		public List<Tech> techs = new();
@@ -43,6 +46,7 @@ namespace C7GameData {
 		public string defaultExperienceLevelKey;
 		public ExperienceLevel defaultExperienceLevel;
 		public Rules rules;
+		public TimeOptions timeOptions;
 
 		public BarbarianInfo barbarianInfo = new BarbarianInfo();
 

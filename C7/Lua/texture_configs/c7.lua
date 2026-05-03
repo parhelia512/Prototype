@@ -8,6 +8,7 @@ local utils = require "utils"
 
 local c7_texture_list = {
   "Art/buttonsFINAL.png",
+  "Art/TileInfo.png",
   "Art/X-o_ALLstates-sprite.png",
   "Art/SmallHeads/popHeads.png",
   "Art/Terrain/Mountains-snow.png",
@@ -27,6 +28,7 @@ local c7_texture_list = {
   "Art/Terrain/mountain forests.png",
   "Art/Terrain/mountain jungles.png",
   "Art/Terrain/mtnRivers.png",
+  "Art/Terrain/deltaRivers.png",
   "Art/Terrain/plains forests.png",
   "Art/Terrain/tnt.png",
   "Art/Terrain/roads.png",
@@ -62,6 +64,7 @@ local c7_texture_list = {
   "Art/interface/NormButtons.png",
   "Art/interface/rolloverbuttons.png",
   "Art/interface/highlightedbuttons.png",
+  "Art/interface/box left color.png",
   "Art/interface/box right color.png",
   "Art/interface/nextturn states color.png",
   "Art/interface/consoleButtons.png",

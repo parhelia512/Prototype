@@ -792,6 +792,39 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -835,6 +868,39 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -879,6 +945,15 @@
       "defense": 0,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Russia",
+        "America",
+        "Zululand",
+        "Mongols",
+        "Arabia",
+        "Hittites",
+        "Portugal"
+      ],
       "upgradeTo": "Explorer",
       "unproducible": false,
       "categories": [
@@ -914,6 +989,38 @@
       "defense": 0,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -948,6 +1055,39 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -985,6 +1125,39 @@
       "defense": 11,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1022,6 +1195,39 @@
       "defense": 1,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "A Barbarian Chiefdom",
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Swordsman",
       "unproducible": false,
       "categories": [
@@ -1057,6 +1263,37 @@
       "defense": 1,
       "bombard": 1,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca"
+      ],
       "upgradeTo": "Longbowman",
       "unproducible": false,
       "categories": [
@@ -1092,6 +1329,35 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Korea",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Pikeman",
       "unproducible": false,
       "categories": [
@@ -1127,6 +1393,36 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Medieval Infantry",
       "unproducible": false,
       "categories": [
@@ -1165,6 +1461,37 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Horseman",
       "unproducible": false,
       "categories": [
@@ -1203,6 +1530,39 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "A Barbarian Chiefdom",
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Knight",
       "unproducible": false,
       "categories": [
@@ -1241,6 +1601,36 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Musketman",
       "unproducible": false,
       "categories": [
@@ -1279,6 +1669,38 @@
       "defense": 1,
       "bombard": 2,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Guerilla",
       "unproducible": false,
       "categories": [
@@ -1314,6 +1736,38 @@
       "defense": 4,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Rifleman",
       "unproducible": false,
       "categories": [
@@ -1352,6 +1806,34 @@
       "defense": 3,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "America",
+        "France",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Cavalry",
       "unproducible": false,
       "categories": [
@@ -1391,6 +1873,39 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Infantry",
       "unproducible": false,
       "categories": [
@@ -1426,6 +1941,37 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1464,6 +2010,39 @@
       "defense": 10,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Mech Infantry",
       "unproducible": false,
       "categories": [
@@ -1502,6 +2081,38 @@
       "defense": 8,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Modern Armor",
       "unproducible": false,
       "categories": [
@@ -1541,6 +2152,39 @@
       "defense": 18,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1579,6 +2223,39 @@
       "defense": 16,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1617,6 +2294,39 @@
       "defense": 0,
       "bombard": 4,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Trebuchet",
       "unproducible": false,
       "categories": [
@@ -1653,6 +2363,38 @@
       "defense": 0,
       "bombard": 8,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Artillery",
       "unproducible": false,
       "categories": [
@@ -1693,6 +2435,39 @@
       "defense": 0,
       "bombard": 12,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Radar Artillery",
       "unproducible": false,
       "categories": [
@@ -1729,6 +2504,39 @@
       "defense": 0,
       "bombard": 16,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1767,6 +2575,39 @@
       "defense": 0,
       "bombard": 16,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1804,6 +2645,39 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1843,6 +2717,39 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1881,6 +2788,38 @@
       "defense": 1,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Caravel",
       "unproducible": false,
       "categories": [
@@ -1916,6 +2855,38 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Galleon",
       "unproducible": false,
       "categories": [
@@ -1951,6 +2922,38 @@
       "defense": 2,
       "bombard": 3,
       "movement": 5,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -1990,6 +2993,39 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Transport",
       "unproducible": false,
       "categories": [
@@ -2025,6 +3061,39 @@
       "defense": 6,
       "bombard": 6,
       "movement": 3,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Destroyer",
       "unproducible": false,
       "categories": [
@@ -2065,6 +3134,39 @@
       "defense": 2,
       "bombard": 0,
       "movement": 6,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2102,6 +3204,39 @@
       "defense": 8,
       "bombard": 0,
       "movement": 7,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2139,6 +3274,39 @@
       "defense": 4,
       "bombard": 0,
       "movement": 4,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2176,6 +3344,39 @@
       "defense": 8,
       "bombard": 6,
       "movement": 8,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2214,6 +3415,39 @@
       "defense": 12,
       "bombard": 8,
       "movement": 5,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2252,6 +3486,39 @@
       "defense": 10,
       "bombard": 6,
       "movement": 7,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2291,6 +3558,39 @@
       "defense": 4,
       "bombard": 0,
       "movement": 5,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -2328,6 +3628,39 @@
       "defense": 2,
       "bombard": 3,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Jet Fighter",
       "unproducible": false,
       "categories": [
@@ -2364,6 +3697,39 @@
       "defense": 2,
       "bombard": 12,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -2399,6 +3765,39 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -2435,6 +3834,38 @@
       "defense": 4,
       "bombard": 3,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -2471,6 +3902,39 @@
       "defense": 6,
       "bombard": 6,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -2507,6 +3971,39 @@
       "defense": 5,
       "bombard": 18,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -2555,6 +4052,39 @@
       "defense": 0,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": true,
       "categories": [
         "Land"
@@ -2599,6 +4129,39 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": true,
       "categories": [
         "Land"
@@ -2633,10 +4196,10 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Aztecs"
+      ],
       "upgradeTo": "Swordsman",
-      "unique": {
-        "civilization": "Aztecs"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2671,11 +4234,10 @@
       "defense": 2,
       "bombard": 1,
       "movement": 1,
+      "producibleBy": [
+        "Babylon"
+      ],
       "upgradeTo": "Longbowman",
-      "unique": {
-        "replace": "Archer",
-        "civilization": "Babylon"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2710,11 +4272,10 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Greece"
+      ],
       "upgradeTo": "Musketman",
-      "unique": {
-        "replace": "Spearman",
-        "civilization": "Greece"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2749,11 +4310,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Zululand"
+      ],
       "upgradeTo": "Musketman",
-      "unique": {
-        "replace": "Spearman",
-        "civilization": "Zululand"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2788,11 +4348,10 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome"
+      ],
       "upgradeTo": "Medieval Infantry",
-      "unique": {
-        "replace": "Swordsman",
-        "civilization": "Rome"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2830,11 +4389,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Persia"
+      ],
       "upgradeTo": "Medieval Infantry",
-      "unique": {
-        "replace": "Swordsman",
-        "civilization": "Persia"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2872,11 +4430,10 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Egypt"
+      ],
       "upgradeTo": "Knight",
-      "unique": {
-        "replace": "Chariot",
-        "civilization": "Egypt"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2914,11 +4471,10 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "China"
+      ],
       "upgradeTo": "Cavalry",
-      "unique": {
-        "replace": "Knight",
-        "civilization": "China"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2957,11 +4513,10 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Iroquois"
+      ],
       "upgradeTo": "Knight",
-      "unique": {
-        "replace": "Horseman",
-        "civilization": "Iroquois"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -2999,11 +4554,10 @@
       "defense": 5,
       "bombard": 2,
       "movement": 1,
+      "producibleBy": [
+        "France"
+      ],
       "upgradeTo": "Rifleman",
-      "unique": {
-        "replace": "Musketman",
-        "civilization": "France"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3041,11 +4595,10 @@
       "defense": 4,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Japan"
+      ],
       "upgradeTo": "Cavalry",
-      "unique": {
-        "replace": "Knight",
-        "civilization": "Japan"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3083,11 +4636,10 @@
       "defense": 3,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "India"
+      ],
       "upgradeTo": "Cavalry",
-      "unique": {
-        "replace": "Knight",
-        "civilization": "India"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3122,10 +4674,9 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
-      "unique": {
-        "replace": "Cavalry",
-        "civilization": "Russia"
-      },
+      "producibleBy": [
+        "Russia"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -3164,11 +4715,10 @@
       "defense": 8,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "Germany"
+      ],
       "upgradeTo": "Modern Armor",
-      "unique": {
-        "replace": "Tank",
-        "civilization": "Germany"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3207,10 +4757,9 @@
       "defense": 2,
       "bombard": 4,
       "movement": 5,
-      "unique": {
-        "replace": "Frigate",
-        "civilization": "England"
-      },
+      "producibleBy": [
+        "England"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -3250,10 +4799,9 @@
       "defense": 4,
       "bombard": 6,
       "movement": 1,
-      "unique": {
-        "replace": "Jet Fighter",
-        "civilization": "America"
-      },
+      "producibleBy": [
+        "America"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -3290,6 +4838,39 @@
       "defense": 1,
       "bombard": 3,
       "movement": 5,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -3328,11 +4909,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Mongols"
+      ],
       "upgradeTo": "Cavalry",
-      "unique": {
-        "replace": "Knight",
-        "civilization": "Mongols"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3370,10 +4950,9 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
-      "unique": {
-        "replace": "Explorer",
-        "civilization": "Spain"
-      },
+      "producibleBy": [
+        "Spain"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -3411,11 +4990,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Scandinavia"
+      ],
       "upgradeTo": "Guerilla",
-      "unique": {
-        "replace": "Longbowman",
-        "civilization": "Scandinavia"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3450,10 +5028,9 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
-      "unique": {
-        "replace": "Cavalry",
-        "civilization": "Ottomans"
-      },
+      "producibleBy": [
+        "Ottomans"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -3492,11 +5069,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Celts"
+      ],
       "upgradeTo": "Medieval Infantry",
-      "unique": {
-        "replace": "Swordsman",
-        "civilization": "Celts"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3534,11 +5110,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 3,
+      "producibleBy": [
+        "Arabia"
+      ],
       "upgradeTo": "Cavalry",
-      "unique": {
-        "replace": "Knight",
-        "civilization": "Arabia"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3577,11 +5152,10 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Carthage"
+      ],
       "upgradeTo": "Pikeman",
-      "unique": {
-        "replace": "Spearman",
-        "civilization": "Carthage"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3616,10 +5190,10 @@
       "defense": 0,
       "bombard": 8,
       "movement": 1,
+      "producibleBy": [
+        "Korea"
+      ],
       "upgradeTo": "Artillery",
-      "unique": {
-        "civilization": "Korea"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -3658,6 +5232,38 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Guerilla",
       "unproducible": false,
       "categories": [
@@ -3696,6 +5302,39 @@
       "defense": 6,
       "bombard": 3,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "TOW Infantry",
       "unproducible": false,
       "categories": [
@@ -3730,6 +5369,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3760,6 +5400,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3792,6 +5433,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3824,6 +5466,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3856,6 +5499,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3888,6 +5532,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3920,6 +5565,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3952,6 +5598,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -3984,6 +5631,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4016,6 +5664,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4048,6 +5697,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4080,6 +5730,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4112,6 +5763,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4144,6 +5796,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4176,6 +5829,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4208,6 +5862,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4240,6 +5895,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4272,6 +5928,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4304,6 +5961,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4336,6 +5994,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4368,6 +6027,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4400,6 +6060,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4432,6 +6093,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4464,6 +6126,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4496,6 +6159,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4528,11 +6192,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Sumeria"
+      ],
       "upgradeTo": "Pikeman",
-      "unique": {
-        "replace": "Warrior",
-        "civilization": "Sumeria"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -4567,11 +6230,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Hittites"
+      ],
       "upgradeTo": "Knight",
-      "unique": {
-        "replace": "Chariot",
-        "civilization": "Hittites"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -4608,6 +6270,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4640,6 +6303,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4672,6 +6336,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4705,11 +6370,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
+      "producibleBy": [
+        "Portugal"
+      ],
       "upgradeTo": "Galleon",
-      "unique": {
-        "replace": "Caravel",
-        "civilization": "Portugal"
-      },
       "unproducible": false,
       "categories": [
         "Sea"
@@ -4744,11 +6408,10 @@
       "defense": 4,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Netherlands"
+      ],
       "upgradeTo": "Rifleman",
-      "unique": {
-        "replace": "Pikeman",
-        "civilization": "Netherlands"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -4785,6 +6448,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4818,6 +6482,39 @@
       "defense": 0,
       "bombard": 6,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Cannon",
       "unproducible": false,
       "categories": [
@@ -4853,6 +6550,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4885,6 +6583,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4917,6 +6616,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -4949,11 +6649,10 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Inca"
+      ],
       "upgradeTo": "Explorer",
-      "unique": {
-        "replace": "Scout",
-        "civilization": "Inca"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -4988,11 +6687,10 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Maya"
+      ],
       "upgradeTo": "Longbowman",
-      "unique": {
-        "replace": "Archer",
-        "civilization": "Maya"
-      },
       "unproducible": false,
       "categories": [
         "Land"
@@ -5027,11 +6725,10 @@
       "defense": 1,
       "bombard": 2,
       "movement": 3,
+      "producibleBy": [
+        "Byzantines"
+      ],
       "upgradeTo": "Caravel",
-      "unique": {
-        "replace": "Galley",
-        "civilization": "Byzantines"
-      },
       "unproducible": false,
       "categories": [
         "Sea"
@@ -5067,6 +6764,39 @@
       "defense": 10,
       "bombard": 7,
       "movement": 6,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "AEGIS Cruiser",
       "unproducible": false,
       "categories": [
@@ -5105,6 +6835,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5141,6 +6872,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5176,6 +6908,39 @@
       "bombard": 0,
       "movement": 2,
       "upgradeTo": "Galley",
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -5210,6 +6975,39 @@
       "defense": 9,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Modern Paratrooper",
       "unproducible": false,
       "categories": [
@@ -5249,6 +7047,39 @@
       "defense": 14,
       "bombard": 6,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5283,6 +7114,39 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "upgradeTo": "Mobile SAM",
       "unproducible": false,
       "categories": [
@@ -5318,6 +7182,39 @@
       "defense": 6,
       "bombard": 0,
       "movement": 2,
+      "producibleBy": [
+        "Rome",
+        "Egypt",
+        "Greece",
+        "Babylon",
+        "Germany",
+        "Russia",
+        "China",
+        "America",
+        "Japan",
+        "France",
+        "India",
+        "Persia",
+        "Aztecs",
+        "Zululand",
+        "Iroquois",
+        "England",
+        "Mongols",
+        "Spain",
+        "Scandinavia",
+        "Ottomans",
+        "Celts",
+        "Arabia",
+        "Carthage",
+        "Korea",
+        "Sumeria",
+        "Hittites",
+        "Netherlands",
+        "Portugal",
+        "Byzantines",
+        "Inca",
+        "Maya"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6815,6 +8712,7 @@
       "primaryColorIndex": 0,
       "secondaryColorIndex": 0,
       "leaderGender": "male",
+      "cultureGroupKey": "None",
       "cityNames": [
         "Chanca",
         "Lupaca",
@@ -6903,6 +8801,7 @@
       "primaryColorIndex": 1,
       "secondaryColorIndex": 1,
       "leaderGender": "male",
+      "cultureGroupKey": "Mediterranean",
       "leaderArtFile": "art\\advisors\\CE_all.pcx",
       "cityNames": [
         "Rome",
@@ -6968,6 +8867,7 @@
       "primaryColorIndex": 3,
       "secondaryColorIndex": 3,
       "leaderGender": "female",
+      "cultureGroupKey": "Mediterranean",
       "leaderArtFile": "art\\advisors\\CL_all.pcx",
       "cityNames": [
         "Thebes",
@@ -7018,6 +8918,7 @@
       "primaryColorIndex": 10,
       "secondaryColorIndex": 10,
       "leaderGender": "male",
+      "cultureGroupKey": "Mediterranean",
       "leaderArtFile": "art\\advisors\\AL_all.pcx",
       "cityNames": [
         "Athens",
@@ -7068,6 +8969,7 @@
       "primaryColorIndex": 1,
       "secondaryColorIndex": 13,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\HA_all.pcx",
       "cityNames": [
         "Babylon",
@@ -7116,6 +9018,7 @@
       "primaryColorIndex": 6,
       "secondaryColorIndex": 6,
       "leaderGender": "male",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\BS_all.pcx",
       "cityNames": [
         "Berlin",
@@ -7153,6 +9056,7 @@
       "primaryColorIndex": 9,
       "secondaryColorIndex": 9,
       "leaderGender": "female",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\CA_all.pcx",
       "cityNames": [
         "Moscow",
@@ -7213,6 +9117,7 @@
       "primaryColorIndex": 5,
       "secondaryColorIndex": 15,
       "leaderGender": "male",
+      "cultureGroupKey": "Asian",
       "leaderArtFile": "art\\advisors\\MO_all.pcx",
       "cityNames": [
         "Beijing",
@@ -7252,6 +9157,7 @@
       "primaryColorIndex": 5,
       "secondaryColorIndex": 5,
       "leaderGender": "male",
+      "cultureGroupKey": "American",
       "leaderArtFile": "art\\advisors\\AB_all.pcx",
       "cityNames": [
         "Washington",
@@ -7313,6 +9219,7 @@
       "primaryColorIndex": 4,
       "secondaryColorIndex": 11,
       "leaderGender": "male",
+      "cultureGroupKey": "Asian",
       "leaderArtFile": "art\\advisors\\TO_all.pcx",
       "cityNames": [
         "Kyoto",
@@ -7360,6 +9267,7 @@
       "primaryColorIndex": 7,
       "secondaryColorIndex": 7,
       "leaderGender": "female",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\JO_all.pcx",
       "cityNames": [
         "Paris",
@@ -7402,6 +9310,7 @@
       "primaryColorIndex": 8,
       "secondaryColorIndex": 12,
       "leaderGender": "male",
+      "cultureGroupKey": "Asian",
       "leaderArtFile": "art\\advisors\\GH_all.pcx",
       "cityNames": [
         "Delhi",
@@ -7440,6 +9349,7 @@
       "primaryColorIndex": 10,
       "secondaryColorIndex": 14,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\XE_all.pcx",
       "cityNames": [
         "Persepolis",
@@ -7490,6 +9400,7 @@
       "primaryColorIndex": 4,
       "secondaryColorIndex": 4,
       "leaderGender": "male",
+      "cultureGroupKey": "American",
       "leaderArtFile": "art\\advisors\\MN_all.pcx",
       "cityNames": [
         "Tenochtitlan",
@@ -7547,6 +9458,7 @@
       "primaryColorIndex": 3,
       "secondaryColorIndex": 16,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\ZU_all.pcx",
       "cityNames": [
         "Zimbabwe",
@@ -7584,6 +9496,7 @@
       "primaryColorIndex": 8,
       "secondaryColorIndex": 8,
       "leaderGender": "male",
+      "cultureGroupKey": "American",
       "leaderArtFile": "art\\advisors\\HI_all.pcx",
       "cityNames": [
         "Salamanca",
@@ -7634,6 +9547,7 @@
       "primaryColorIndex": 2,
       "secondaryColorIndex": 2,
       "leaderGender": "female",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\LZ_all.pcx",
       "cityNames": [
         "London",
@@ -7684,6 +9598,7 @@
       "primaryColorIndex": 3,
       "secondaryColorIndex": 26,
       "leaderGender": "male",
+      "cultureGroupKey": "Asian",
       "leaderArtFile": "art\\advisors\\x_temujin advisor.pcx",
       "cityNames": [
         "Karakorum",
@@ -7735,6 +9650,7 @@
       "primaryColorIndex": 5,
       "secondaryColorIndex": 20,
       "leaderGender": "female",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\x_isabell advisor.pcx",
       "cityNames": [
         "Madrid",
@@ -7787,6 +9703,7 @@
       "primaryColorIndex": 8,
       "secondaryColorIndex": 31,
       "leaderGender": "male",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\x_ragnar advisor.pcx",
       "cityNames": [
         "Trondheim",
@@ -7841,6 +9758,7 @@
       "primaryColorIndex": 2,
       "secondaryColorIndex": 18,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\x_osman advisor.pcx",
       "cityNames": [
         "Istanbul",
@@ -7891,6 +9809,7 @@
       "primaryColorIndex": 4,
       "secondaryColorIndex": 25,
       "leaderGender": "male",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\x_brennus advisor.pcx",
       "cityNames": [
         "Entremont",
@@ -7942,6 +9861,7 @@
       "primaryColorIndex": 7,
       "secondaryColorIndex": 30,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\x_abu bakr advisor.pcx",
       "cityNames": [
         "Mecca",
@@ -7991,6 +9911,7 @@
       "primaryColorIndex": 9,
       "secondaryColorIndex": 11,
       "leaderGender": "male",
+      "cultureGroupKey": "Mediterranean",
       "leaderArtFile": "art\\advisors\\x_Hannibal advisor.pcx",
       "cityNames": [
         "Carthage",
@@ -8042,6 +9963,7 @@
       "primaryColorIndex": 6,
       "secondaryColorIndex": 19,
       "leaderGender": "male",
+      "cultureGroupKey": "Asian",
       "leaderArtFile": "art\\advisors\\x_Wang Kon advisor.pcx",
       "cityNames": [
         "Seoul",
@@ -8093,6 +10015,7 @@
       "primaryColorIndex": 5,
       "secondaryColorIndex": 20,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\x2_Gilgamesh advisor.pcx",
       "cityNames": [
         "Ur",
@@ -8139,6 +10062,7 @@
       "primaryColorIndex": 14,
       "secondaryColorIndex": 27,
       "leaderGender": "male",
+      "cultureGroupKey": "Mid East",
       "leaderArtFile": "art\\advisors\\x2_Mursilis advisor.pcx",
       "cityNames": [
         "Hattusas",
@@ -8185,6 +10109,7 @@
       "primaryColorIndex": 2,
       "secondaryColorIndex": 18,
       "leaderGender": "male",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\x2_William advisor.pcx",
       "cityNames": [
         "Amsterdam",
@@ -8231,6 +10156,7 @@
       "primaryColorIndex": 8,
       "secondaryColorIndex": 17,
       "leaderGender": "male",
+      "cultureGroupKey": "European",
       "leaderArtFile": "art\\advisors\\x2_Henry advisor.pcx",
       "cityNames": [
         "Lisbon",
@@ -8288,6 +10214,7 @@
       "primaryColorIndex": 11,
       "secondaryColorIndex": 1,
       "leaderGender": "female",
+      "cultureGroupKey": "Mediterranean",
       "leaderArtFile": "art\\advisors\\x2_Theodora advisor.pcx",
       "cityNames": [
         "Constantinople",
@@ -8334,6 +10261,7 @@
       "primaryColorIndex": 7,
       "secondaryColorIndex": 8,
       "leaderGender": "male",
+      "cultureGroupKey": "American",
       "leaderArtFile": "art\\advisors\\x2_Pachacuti advisor.pcx",
       "cityNames": [
         "Cuzco",
@@ -8380,6 +10308,7 @@
       "primaryColorIndex": 6,
       "secondaryColorIndex": 5,
       "leaderGender": "male",
+      "cultureGroupKey": "American",
       "leaderArtFile": "art\\advisors\\x2_Smoke-Jaguar_advisor.pcx",
       "cityNames": [
         "Chich\u00E9n Itza",
@@ -8418,6 +10347,32 @@
         "agricultural"
       ],
       "isBarbarian": false
+    }
+  ],
+  "cultureGroups": [
+    {
+      "index": -1,
+      "name": "None"
+    },
+    {
+      "index": 0,
+      "name": "American"
+    },
+    {
+      "index": 1,
+      "name": "European"
+    },
+    {
+      "index": 2,
+      "name": "Mediterranean"
+    },
+    {
+      "index": 3,
+      "name": "Mid East"
+    },
+    {
+      "index": 4,
+      "name": "Asian"
     }
   ],
   "strengthBonuses": [
@@ -8470,7 +10425,41 @@
     "treasuryInterestRate": 0.05,
     "maxInterest": 50,
     "shieldCostPerGold": 4,
-    "shieldRateForDisbanding": 0.25
+    "shieldRateForDisbanding": 0.25,
+    "allowLesserUnitProduction": false
+  },
+  "timeOptions": {
+    "baseUnit": "years",
+    "negativeLabel": "BC",
+    "positiveLabel": "AD",
+    "startYear": -4000,
+    "startMonth": 1,
+    "startWeek": 1,
+    "startDay": 1,
+    "startHour": 12,
+    "timeScale": [
+      [
+        25,
+        25,
+        40,
+        50,
+        100,
+        100,
+        100,
+        10000
+      ],
+      [
+        50,
+        40,
+        25,
+        20,
+        10,
+        5,
+        2,
+        1
+      ]
+    ],
+    "turnLimit": 540
   },
   "techs": [
     {
