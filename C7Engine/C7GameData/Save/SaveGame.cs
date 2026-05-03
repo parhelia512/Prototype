@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using C7Engine;
-using Serilog;
 
 namespace C7GameData.Save {
 
@@ -54,6 +53,7 @@ namespace C7GameData.Save {
 				Seed = data.seed,
 				TurnNumber = data.turn,
 				Civilizations = data.civilizations,
+				CultureGroups = data.cultureGroups,
 				Map = new SaveMap(data.map),
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
@@ -79,6 +79,9 @@ namespace C7GameData.Save {
 				TimeOptions = data.timeOptions,
 				TerrainImprovements = data.terrainImprovements.ConvertAll(ti => ti.ToSaveTerrainImprovement())
 			};
+			foreach (var saveCivilization in save.Civilizations) {
+				saveCivilization.cultureGroupKey = save.CultureGroups.First(c => c.name == saveCivilization.cultureGroup.name).name;
+			}
 			save.StrengthBonuses.Add(data.fortificationBonus);
 			save.StrengthBonuses.Add(data.riverCrossingBonus);
 			save.StrengthBonuses.Add(data.cityLevel1DefenseBonus);
@@ -120,6 +123,7 @@ namespace C7GameData.Save {
 			ConvertBarbarianInfo(data);
 			ConvertStrengthBonuses(data);
 			ConvertHealRates(data);
+			ConvertCultureGroups(data);
 
 			data.defaultExperienceLevelKey = DefaultExperienceLevel;
 			data.defaultExperienceLevel = data.experienceLevels.Find(el => el.key == DefaultExperienceLevel);
@@ -166,6 +170,7 @@ namespace C7GameData.Save {
 				Resources = Resources,
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
+				cultureGroups = CultureGroups,
 				citizenTypes = CitizenTypes,
 				governments = Governments,
 				worldSizes = WorldSizes,
@@ -385,6 +390,18 @@ namespace C7GameData.Save {
 			data.healRateInCity = HealRates["city"];
 		}
 
+		private void ConvertCultureGroups(GameData data) {
+			foreach (var civilization in data.civilizations) {
+				// because this might be initialized from the tests
+				if (civilization.cultureGroup != null) continue;
+				var cg = data.cultureGroups.FirstOrDefault(c => c.name == civilization.cultureGroupKey);
+				if (cg == null) {
+					throw new Exception(string.Format($"Culture group name `{civilization.cultureGroupKey}` for civilization {civilization.name} was not found in game data."));
+				}
+				civilization.SetCultureGroup(cg.index, cg.name);
+			}
+		}
+
 		public string Version = "0.0.0";
 		public int Seed = -1;
 		public int TurnNumber = 0;
@@ -403,6 +420,7 @@ namespace C7GameData.Save {
 		public List<ExperienceLevel> ExperienceLevels = new List<ExperienceLevel>();
 		public string DefaultExperienceLevel; // key
 		public List<Civilization> Civilizations = new List<Civilization>();
+		public HashSet<CultureGroup> CultureGroups = new HashSet<CultureGroup>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
 		public Rules Rules = new();
