@@ -59,6 +59,7 @@ namespace C7GameData {
 		private void ImportSharedBiqData() {
 			save.TerrainImprovements = SaveTerrainImprovement.Civ3Improvements().ToList();
 
+			ImportTimeScale();
 			ImportRaces();
 			ImportTechs();
 			ImportCiv3Resources();
@@ -322,6 +323,34 @@ namespace C7GameData {
 			int Y = tileIndex / (mapWidth / 2);
 			int X = tileIndex % (mapWidth / 2) * 2 + (Y % 2);
 			return (X, Y);
+		}
+
+		private void ImportTimeScale() {
+			save.TimeOptions = new TimeOptions() {
+				baseUnit = (TimeUnit)biq.Game[0].BaseTimeUnit,
+				startYear = biq.Game[0].StartYear,
+				startMonth = biq.Game[0].StartMonth,
+				startWeek = biq.Game[0].StartWeek,
+				turnLimit = biq.Game[0].TurnTimeLimit,
+				negativeLabel = "BC",
+				positiveLabel = "AD",
+			};
+
+			save.TimeOptions.timeScale = new int[2, 8];
+
+			for (int i = 0; i < 7; ++i) {
+				var turns = biq.Game[0].TimescaleNumberOfTurns[i];
+				var units = biq.Game[0].TurnNumberOfTimeUnits[i];
+				save.TimeOptions.timeScale[0, i] = turns;
+				save.TimeOptions.timeScale[1, i] = units;
+			}
+
+			// Add some extra padding at the end to allow continuing playing 1 turn at a time.
+			// CivIII allows dates from -10000 to 10000, so 50000 is enough to cover for that,
+			// and for our custom scenarios from now on, this value is easily editable in the json
+			save.TimeOptions.timeScale[0, 7] = 50000;
+			save.TimeOptions.timeScale[1, 7] = 1;
+
 		}
 
 		private void ImportCiv3Resources() {

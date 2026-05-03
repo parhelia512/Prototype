@@ -76,6 +76,7 @@ namespace C7GameData.Save {
 				Difficulties = data.difficulties,
 				GameDifficulty = data.gameDifficulty,
 				Rules = data.rules,
+				TimeOptions = data.timeOptions,
 				TerrainImprovements = data.terrainImprovements.ConvertAll(ti => ti.ToSaveTerrainImprovement())
 			};
 			save.StrengthBonuses.Add(data.fortificationBonus);
@@ -173,6 +174,7 @@ namespace C7GameData.Save {
 				ids = new ID.Factory(this),
 				experienceLevels = ExperienceLevels,
 				rules = Rules,
+				timeOptions = TimeOptions,
 				GreatWondersBuilt = GreatWondersBuilt,
 			};
 		}
@@ -404,6 +406,7 @@ namespace C7GameData.Save {
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
 		public Rules Rules = new();
+		public TimeOptions TimeOptions = new();
 		public List<SaveTech> Techs = new();
 		public List<CitizenType> CitizenTypes = new();
 		public List<SaveTerraform> TerraForms = new();
