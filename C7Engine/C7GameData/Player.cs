@@ -57,6 +57,16 @@ namespace C7GameData {
 
 		public Civilization civilization;
 
+		// Answers if this player-civ is simply included in the game.
+		// Some .biq scenarios contain players/civs in their data
+		// that are not a part of the gameplay.
+		// ex. Mongols in `4 Middle Ages.biq` scenario.
+		public bool isIncludedInGame = true;
+
+		// Answers if the human player can pick and play as this player-civ
+		// or is it only an AI player
+		public bool canBePicked = true;
+
 		public List<MapUnit> units = new List<MapUnit>();
 		public List<City> cities = new List<City>();
 		public TileKnowledge tileKnowledge { get; private set; }

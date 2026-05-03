@@ -266,6 +266,11 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 		});
 		Assert.Equal(50, game.turn);
 
+		Assert.True(game.players.Count(p => p.isIncludedInGame) == 9);
+		Assert.True(game.players.Count(p => p.canBePicked) == 8);
+		Assert.True(game.players.Count == 9);
+		Assert.True(game.civilizations.Count == 32);
+
 		// Save the game.
 		string outputDirectSavePath = PathUtils.getDataPath($"output/headless-game-direct-save-{outputFilePostfix}.json");
 		SaveGame.FromGameData(game).Save(outputDirectSavePath);
@@ -561,6 +566,8 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 			Assert.NotNull(game);
 			Assert.NotNull(gd);
 
+			CheckPlayableCivs(name, game);
+
 			// Check that the human player has at least one settler or city in
 			// each scenario, when looking at the SaveGame.
 			foreach (SavePlayer player in game.Players) {
@@ -621,6 +628,119 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 				new MsgEndTurn().send();
 				WaitForStartTurnMessage();
 			}
+		}
+	}
+
+	private void CheckPlayableCivs(string name, SaveGame game) {
+		Console.WriteLine($"Running playability test for {name}");
+
+		// Playable checks
+		// 4 Middle Ages.biq
+		if (name.Equals("4 Middle Ages.biq")) {
+			Assert.True(game.Players.Count(p => p.isIncludedInGame) == 19);
+			Assert.True(game.Players.Count(p => p.canBePicked) == 13);
+			Assert.True(game.Players.Count == 19);
+			Assert.True(game.Civilizations.Count == 20);
+
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Mongols");
+
+			Assert.Contains(game.Civilizations, c => c.name == "Mongols");
+			Assert.Contains(game.Civilizations, c => c.name == "Bulgars");
+			Assert.Contains(game.Civilizations, c => c.name == "Poland");
+
+			foreach (var gamePlayer in game.Players) {
+				if (gamePlayer.civilization == "Turks") {
+					Assert.True(gamePlayer.primaryColorIndex == 14);
+				}
+			}
+
+			// make sure barbarian save units are assigned correctly to the barbarian civ
+			foreach (var gameUnit in game.Units) {
+				// there is a horseman barb + barb camp unit in this location
+				if (gameUnit.currentLocation is { X: 7, Y: 103 }) {
+					Assert.Contains("barbarianCamp", game.Map.tiles.Find(t => t.X == 7 && t.Y == 103).features);
+					Assert.True(game.Players.Find(p => p.id == gameUnit.owner).civilization == "A Barbarian Chiefdom");
+				}
+			}
+		}
+		// 4 MP Middle Ages.biq
+		if (name.Equals("4 MP Middle Ages.biq")) {
+			Assert.True(game.Players.Count(p => p.isIncludedInGame) == 9);
+			Assert.True(game.Players.Count(p => p.canBePicked) == 8);
+			Assert.True(game.Players.Count == 9);
+			Assert.True(game.Civilizations.Count == 20);
+
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Mongols");
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Bulgars");
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Poland");
+
+			Assert.Contains(game.Civilizations, c => c.name == "Mongols");
+			Assert.Contains(game.Civilizations, c => c.name == "Bulgars");
+			Assert.Contains(game.Civilizations, c => c.name == "Poland");
+		}
+		// 6 Age of Discovery.biq
+		if (name.Equals("6 Age of Discovery.biq")) {
+			Assert.True(game.Players.Count(p => p.isIncludedInGame) == 10);
+			Assert.True(game.Players.Count(p => p.canBePicked) == 8);
+			Assert.True(game.Players.Count == 10);
+			Assert.True(game.Civilizations.Count == 10);
+
+			Assert.Contains(game.Players, p => p.civilization == "Iroquois");
+			Assert.Contains(game.Players, p => p.civilization == "France");
+			Assert.Contains(game.Players, p => p.civilization == "Maya");
+
+			Assert.Contains(game.Civilizations, c => c.name == "Iroquois");
+			Assert.Contains(game.Civilizations, c => c.name == "France");
+			Assert.Contains(game.Civilizations, c => c.name == "Maya");
+		}
+		// 6 MP Age of Discovery.biq
+		if (name.Equals("6 MP Age of Discovery.biq")) {
+			Assert.True(game.Players.Count(p => p.isIncludedInGame) == 9);
+			Assert.True(game.Players.Count(p => p.canBePicked) == 8);
+			Assert.True(game.Players.Count == 9);
+			Assert.True(game.Civilizations.Count == 10);
+
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Iroquois");
+			Assert.Contains(game.Players, p => p.civilization == "France");
+			Assert.Contains(game.Players, p => p.civilization == "Maya");
+
+			Assert.Contains(game.Civilizations, c => c.name == "Iroquois");
+			Assert.Contains(game.Civilizations, c => c.name == "France");
+			Assert.Contains(game.Civilizations, c => c.name == "Maya");
+		}
+		// 8 Napoleonic Europe.biq
+		if (name.Equals("8 Napoleonic Europe.biq")) {
+			Assert.True(game.Players.Count(p => p.isIncludedInGame) == 13);
+			Assert.True(game.Players.Count(p => p.canBePicked) == 7);
+			Assert.True(game.Players.Count == 13);
+			Assert.True(game.Civilizations.Count == 13);
+
+			Assert.Contains(game.Players, p => p.civilization == "Denmark");
+			Assert.Contains(game.Players, p => p.civilization == "Portugal");
+			Assert.Contains(game.Players, p => p.civilization == "Netherlands");
+			Assert.Contains(game.Players, p => p.civilization == "Kingdom of Naples");
+
+			Assert.Contains(game.Civilizations, c => c.name == "Denmark");
+			Assert.Contains(game.Civilizations, c => c.name == "Portugal");
+			Assert.Contains(game.Civilizations, c => c.name == "Netherlands");
+			Assert.Contains(game.Civilizations, c => c.name == "Kingdom of Naples");
+		}
+		// 8 MP Napoleonic Europe.biq
+		if (name.Equals("8 MP Napoleonic Europe.biq")) {
+			Assert.True(game.Players.Count(p => p.isIncludedInGame) == 9);
+			Assert.True(game.Players.Count(p => p.canBePicked) == 7);
+			Assert.True(game.Players.Count == 9);
+			Assert.True(game.Civilizations.Count == 13);
+
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Denmark");
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Portugal");
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Netherlands");
+			Assert.DoesNotContain(game.Players, p => p.civilization == "Kingdom of Naples");
+
+			Assert.Contains(game.Civilizations, c => c.name == "Denmark");
+			Assert.Contains(game.Civilizations, c => c.name == "Portugal");
+			Assert.Contains(game.Civilizations, c => c.name == "Netherlands");
+			Assert.Contains(game.Civilizations, c => c.name == "Kingdom of Naples");
 		}
 	}
 }

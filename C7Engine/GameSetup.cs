@@ -91,6 +91,7 @@ public class GameSetup {
 		save.Players.Add(player);
 
 		if (civ.isBarbarian) {
+			player.canBePicked = false;
 			return;
 		}
 
