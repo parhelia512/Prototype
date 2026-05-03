@@ -6,6 +6,7 @@ local EXIT_BOX = "Art/exitBox-backgroundStates.pcx"
 local INTERFACE = "Art/interface/"
 local X_O = "Art/X-o_ALLstates-sprite.pcx"
 local SCIENCE_NAV = "Art/Tech Chooser/scienceNAV.pcx"
+local TILEINFO = "Art/TileInfo.pcx"
 
 local CITY_SCREEN = "Art/city screen/"
 local CITY_BUTTONS = "Art/city screen/cityMgmtButtons.pcx"
@@ -398,6 +399,19 @@ textures.lower_right_infobox = {
       crop_region = { 94, 0, 47, 28 },
     },
   },
+}
+
+textures.lower_left_infobox = {
+    box = {
+      path = INTERFACE .. "box left color.pcx",
+      alpha = INTERFACE .. "box left alpha.pcx",
+    },
+}
+
+textures.tileinfo = {
+      box = {
+        path = TILEINFO
+      },
 }
 
 textures.popup_background = {

@@ -51,6 +51,37 @@ public partial class Game : Node {
 	};
 	public GotoInfo gotoInfo = null;
 
+	public class TileInfo {
+		public Tile targetTile;
+		public HashSet<Tile> coveredTiles = [];
+		public HashSet<Tile> cityLabelsToHide = [];
+
+		public TileInfo(Tile tile) {
+			targetTile = tile;
+
+			List<TileDirection> coverage = [TileDirection.SOUTHWEST, TileDirection.SOUTH, TileDirection.SOUTHEAST];
+			foreach (var dir in coverage)
+				if (TryNeighbor(tile, dir, out var neighbor))
+					coveredTiles.Add(neighbor);
+
+			List<TileDirection> labelCoverage = [TileDirection.NORTHWEST, TileDirection.NORTH, TileDirection.NORTHEAST];
+			foreach (var dir in labelCoverage)
+				if (TryNeighbor(tile, dir, out var neighbor))
+					cityLabelsToHide.Add(neighbor);
+		}
+
+		private bool TryNeighbor(Tile tile, TileDirection dir, out Tile neighbor) {
+			neighbor = tile.neighbors[dir];
+			return neighbor != Tile.NONE;
+		}
+
+		public bool IsCovered(Tile tile) => tile == targetTile || coveredTiles.Contains(tile);
+
+		public bool HasCityLabelToCover(Tile tile) => cityLabelsToHide.Contains(tile);
+	};
+
+	public TileInfo tileInfo = null;
+
 	// When in observer mode, the number of turns to play before prompting the
 	// user to advance the turn manually. This allows for more rapid debugging
 	// without pressing the spacebar repeatedly.
@@ -550,8 +581,23 @@ public partial class Game : Node {
 		else if (!shiftDown && tile.cityAtTile?.owner == controller)
 			// There are no units, but this is the player's city.
 			new RightClickCityMenu(this, tile).Open(eventMouseButton.Position);
+		else
+			ShowTileInfo(tile);
 
 		LogTileDetails(tile);
+	}
+
+	public void ShowTileInfo(Tile tile) {
+		tileInfo = new TileInfo(tile);
+		var zoom = mapView.cameraZoom;
+		var tileCenter = mapView.screenLocationOfTile(tile, true);
+		var tileInfoPopup = new TileInfoPopup(this, tile, tileCenter, zoom);
+		popupOverlay.ShowPopup(tileInfoPopup, PopupOverlay.PopupCategory.TileInfo);
+	}
+
+	public void HideTileInfo() {
+		tileInfo = null;
+		popupOverlay.OnHidePopup();
 	}
 
 	private void LogTileDetails(Tile tile) {
@@ -717,6 +763,11 @@ public partial class Game : Node {
 	}
 
 	private void ProcessAction(string currentAction) {
+		if (currentAction == C7Action.Escape && tileInfo != null) {
+			HideTileInfo();
+			return;
+		}
+
 		if (currentAction == C7Action.Escape && popupOverlay.ShowingPopup) {
 			popupOverlay.OnHidePopup();
 			return;

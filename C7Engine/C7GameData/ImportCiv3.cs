@@ -59,12 +59,13 @@ namespace C7GameData {
 		private void ImportSharedBiqData() {
 			save.TerrainImprovements = SaveTerrainImprovement.Civ3Improvements().ToList();
 
+			ImportTimeScale();
 			ImportRaces();
+			ImportCultureGroups();
 			ImportTechs();
 			ImportCiv3Resources();
 			ImportTerraforms();
 			ImportUnitPrototypes();
-			ImportUniqueUnitReplacements();
 			ImportUnitUpgrades();
 			ImportBuildings();
 			ImportCiv3TerrainTypes();
@@ -346,6 +347,34 @@ namespace C7GameData {
 			return (X, Y);
 		}
 
+		private void ImportTimeScale() {
+			save.TimeOptions = new TimeOptions() {
+				baseUnit = (TimeUnit)biq.Game[0].BaseTimeUnit,
+				startYear = biq.Game[0].StartYear,
+				startMonth = biq.Game[0].StartMonth,
+				startWeek = biq.Game[0].StartWeek,
+				turnLimit = biq.Game[0].TurnTimeLimit,
+				negativeLabel = "BC",
+				positiveLabel = "AD",
+			};
+
+			save.TimeOptions.timeScale = new int[2, 8];
+
+			for (int i = 0; i < 7; ++i) {
+				var turns = biq.Game[0].TimescaleNumberOfTurns[i];
+				var units = biq.Game[0].TurnNumberOfTimeUnits[i];
+				save.TimeOptions.timeScale[0, i] = turns;
+				save.TimeOptions.timeScale[1, i] = units;
+			}
+
+			// Add some extra padding at the end to allow continuing playing 1 turn at a time.
+			// CivIII allows dates from -10000 to 10000, so 50000 is enough to cover for that,
+			// and for our custom scenarios from now on, this value is easily editable in the json
+			save.TimeOptions.timeScale[0, 7] = 50000;
+			save.TimeOptions.timeScale[1, 7] = 1;
+
+		}
+
 		private void ImportCiv3Resources() {
 			GOOD[] Good = biq?.Good ?? defaultBiq.Good;
 			foreach (GOOD good in Good) {
@@ -377,6 +406,23 @@ namespace C7GameData {
 			}
 		}
 
+		private void ImportCultureGroups() {
+			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
+			HashSet<CultureGroup> cultureGroups = new HashSet<CultureGroup>();
+			HashSet<int> cultureGroupsIndexes = new HashSet<int>();
+			int i = 0;
+			foreach (RACE race in theBiq.Race) {
+				if (cultureGroupsIndexes.Add(race.CultureGroup)) {
+					var cg = new CultureGroup() {
+						index = race.CultureGroup,
+						name = GetCultureGroupIdentifier(race.CultureGroup),
+					};
+					cultureGroups.Add(cg);
+				}
+			}
+			save.CultureGroups = cultureGroups.OrderBy(c => c.index).ToHashSet();
+		}
+
 		private void ImportRaces() {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 			int i = 0;
@@ -395,6 +441,7 @@ namespace C7GameData {
 					civ.cityNames.Add(city.Name);
 				}
 				civ.traits = LoadCivTraits(race).ToHashSet();
+				civ.cultureGroupKey = GetCultureGroupIdentifier(race.CultureGroup);
 
 				// Look up the image for non-barbarian civs.
 				string artName = pediaIcons.GetLeaderArtName(race.CivilopediaEntry);
@@ -405,6 +452,17 @@ namespace C7GameData {
 				save.Civilizations.Add(civ);
 				i++;
 			}
+		}
+
+		private static string GetCultureGroupIdentifier(int cultureGroupIndex) {
+			if (cultureGroupIndex == -1) return "None"; // Barbarians
+			if (cultureGroupIndex == 0) return "American";
+			if (cultureGroupIndex == 1) return "European";
+			if (cultureGroupIndex == 2) return "Mediterranean";
+			if (cultureGroupIndex == 3) return "Mid East";
+			if (cultureGroupIndex == 4) return "Asian";
+			log.Error($"The culture group index {cultureGroupIndex} is invalid. Defaulting to `American`.");
+			return "American";
 		}
 
 		private static IEnumerable<Civilization.Trait> LoadCivTraits(RACE race) {
@@ -1087,21 +1145,22 @@ namespace C7GameData {
 			if (prto.BuildFortress) yield return TerraformKey.BuildFortress;
 		}
 
-		private SaveUnitPrototype.Unique ImportUniqueUnitData(PRTO prto) {
-			int civIndex = prto.AvailableTo.GetUniqueCivIndex();
-
-			if (civIndex == -1) {
-				return null;
-			}
-
-			return new() { civilization = save.Civilizations[civIndex].name };
-		}
-
 		private static bool IsUnproducible(PRTO prto) {
 			int[] availableTo = prto.AvailableTo.GetAvailableCivIndexes().ToArray();
 
 			// TODO: Implement proper logic for Army production
 			return availableTo.Length == 0 || prto.ShieldCost < 1 || prto.Army;
+		}
+
+		private HashSet<string> ImportUnitAvailability(PRTO prto) {
+			HashSet<string> availableToCivs = [];
+			int[] availableTo = prto.AvailableTo.GetAvailableCivIndexes().ToArray();
+			for (int i = 0; i < biq.Race.Length; ++i) {
+				if (availableTo.Contains(i))
+					availableToCivs.Add(biq.Race[i].Name);
+			}
+
+			return availableToCivs;
 		}
 
 		private void ImportUnitPrototypes() {
@@ -1117,18 +1176,23 @@ namespace C7GameData {
 				}
 
 				prototype.name = prto.Name;
-				prototype.artName = pediaIcons.GetUnitArtName(prto.CivilopediaEntry);
+
+				Art unitArt = new Art();
+				unitArt.mainArt = pediaIcons.GetUnitMainArt(prto.CivilopediaEntry);
+				unitArt.thumbnailArt = pediaIcons.GetUnitThumbnailArt(prto.CivilopediaEntry, prto.IconIndex);
+				unitArt.pediaArt = pediaIcons.GetUnitCivilopediaArt(prto.CivilopediaEntry);
+				prototype.art = unitArt;
+
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;
 				prototype.shieldCost = prto.ShieldCost;
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
-				prototype.iconIndex = prto.IconIndex;
+
 				prototype.actions.UnionWith(GetUnitActions(prto));
 				prototype.terraformActions.UnionWith(GetUnitTerraforms(prto).Select(tfKey => terraformIdByCiv3Key[tfKey]));
 
-				prototype.unique = ImportUniqueUnitData(prto);
 				prototype.unproducible = IsUnproducible(prto);
 
 				if (prto.Required != -1) {
@@ -1143,6 +1207,8 @@ namespace C7GameData {
 					prototype.requiredResources.Add(save.Resources[prto.RequiredResource2].Key);
 				}
 
+				prototype.producibleBy = ImportUnitAvailability(prto);
+
 				//Temporary check until #330 is finished
 				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
 					save.UnitPrototypes.Add(prototype);
@@ -1150,79 +1216,16 @@ namespace C7GameData {
 			}
 		}
 
-		// This method assigns standard units that are replaced by unique units.
-		//
-		// A unique unit replaces a standard unit if both share the same tech requirement
-		// and the standard unit is unproducible by the civilization to which the unique unit belongs.
-		//
-		// For example, this method updates the Mounted Warrior prototype to indicate that it replaces the Horseman.
-		private void ImportUniqueUnitReplacements() {
-			var unitPrototypeDict = save.UnitPrototypes.ToDictionary(b => b.name);
-
-			// Group unique units by civilization.
-			// In the base ruleset a civilization only has one unique unit,
-			// but this may vary in scenarios.
-			var uniqueUnitPrototypesByCiv = save.UnitPrototypes
-					.Where(u => u.unique != null)
-					.ToLookup(u => u.unique.civilization);
-
-			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
-
-			foreach (PRTO standardUnitPrto in Prto) {
-				string standardUnitName = standardUnitPrto.Name;
-				SaveUnitPrototype standardUnit = unitPrototypeDict[standardUnitName];
-
-				// Skip units that are either unique or unproducible (cannot be built normally)
-				if (standardUnit.unique != null) {
-					continue;
-				}
-
-				if (standardUnit.unproducible) {
-					continue;
-				}
-
-				// For each civilization that cannot build the standard unit
-				foreach (int civIndex in standardUnitPrto.AvailableTo.GetUnavailableCivIndexes()) {
-					if (civIndex >= save.Civilizations.Count) {
-						break;
-					}
-
-					var uniqueUnits = uniqueUnitPrototypesByCiv[save.Civilizations[civIndex].name];
-
-					foreach (SaveUnitPrototype uniqueUnit in uniqueUnits) {
-						// If the unique unit has the same tech requirement as the standard unit,
-						// mark the unique unit as a replacement for the standard unit
-						if (uniqueUnit.requiredTech == standardUnit.requiredTech) {
-							uniqueUnit.unique.replace = standardUnitName;
-						}
-					}
-				}
-			}
-		}
-
-		// This method loads unit upgrades from CIV3 data. In CIV3, unique units are part of the upgrade chain.
-		//
-		// For example, the upgrade path for Horseman looks like this:
-		// Horseman->Mounted Warrior->Three-Man Chariot->Knight->Keshik->Ansar Warrior->Rider->Samurai->War Elephant->Cavalry.
-		// see also: https://forums.civfanatics.com/threads/how-to-upgrade-regular-units-to-uus.108396/
-		//
-		// When loading this data, the method ignores the unique units in the upgrade chain.
-		// Instead, each unit of the chain will be assigned an upgrade that represents the closest non-unique unit
-		// that also requires a tech advancement over the base unit.
-		//
-		// For example, this method will mark that Horseman upgrades to Knight and that Keshik upgrades to Cavalry.
 		private void ImportUnitUpgrades() {
 			Dictionary<SaveUnitPrototype, SaveUnitPrototype> upgradeDict = BuildUpgradeDict();
 
 			foreach (SaveUnitPrototype proto in save.UnitPrototypes) {
-				proto.upgradeTo = GetUnitUpgrade(proto, upgradeDict);
+				proto.upgradeTo = upgradeDict[proto]?.name;
 			}
 		}
 
 		// This method builds a Dictionary of unit upgrades based on the CIV3 data.
 		// The dictionary represents the raw upgrade relationships as defined in the game files.
-		// The dictionary serves as an intermediate data structure for the ImportUnitUpgrades process,
-		// before filtering out unique units.
 		private Dictionary<SaveUnitPrototype, SaveUnitPrototype> BuildUpgradeDict() {
 			PRTO[] Prto = biq.Prto ?? defaultBiq.Prto;
 			var unitPrototypeDict = save.UnitPrototypes.ToDictionary(b => b.name);
@@ -1240,29 +1243,6 @@ namespace C7GameData {
 			}
 
 			return upgradeDict;
-		}
-
-		// This method returns the name of the first valid unit upgrade in the upgrade chain.
-		// A valid upgrade must require a different technology than the base unit and must not be a unique unit.
-		// If no valid upgrade is found, it returns null.
-		private static string GetUnitUpgrade(SaveUnitPrototype proto, Dictionary<SaveUnitPrototype, SaveUnitPrototype> upgradeDict) {
-			SaveUnitPrototype currentProto = proto;
-
-			while (true) {
-				// Check if there's an upgrade available
-				var upgrade = upgradeDict[currentProto];
-				if (upgrade == null) {
-					return null;
-				}
-
-				// If this upgrade represents a technology advancement over the base unit and is not a unique unit, return it
-				if (upgrade.requiredTech != proto.requiredTech && upgrade.unique == null) {
-					return upgrade.name;
-				}
-
-				// Otherwise, continue checking the upgrade chain
-				currentProto = upgrade;
-			}
 		}
 
 		private void ImportBuildings() {
@@ -1770,6 +1750,7 @@ namespace C7GameData {
 			save.Rules.DefaultDealDuration = 20;
 			save.Rules.ShieldCostPerGold = rule.ShieldsCostPerGold;
 			save.Rules.ShieldRateForDisbanding = 0.25f;
+			save.Rules.AllowLesserUnitProduction = false;
 		}
 
 		private static void SetWorldWrap(SavData civ3Save, SaveGame save) {

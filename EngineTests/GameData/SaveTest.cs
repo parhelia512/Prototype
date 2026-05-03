@@ -315,6 +315,142 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 
 
 	[Fact]
+	public void TurnTimeCalculations() {
+		Player human = CreateHeadlessGame(fixture.saveGame);
+		WaitForStartTurnMessage();
+
+		C7GameData.GameData gd = null;
+		EngineStorage.ReadGameData((C7GameData.GameData gameData) => { gd = gameData; });
+
+		// YEARS
+
+		// --------------- 50 turn interval for 25 turns ---------------
+		Assert.Equal(-4000, gd.timeOptions.GetRawNumber(0));
+		Assert.Equal(0, gd.timeOptions.GetTurnFromRaw(-4000));
+		Assert.Equal(-3950, gd.timeOptions.GetRawNumber(1));
+		Assert.Equal(1, gd.timeOptions.GetTurnFromRaw(-3950));
+		Assert.Equal(2, gd.timeOptions.GetTurnFromRaw(-3900));
+		Assert.Equal(-2800, gd.timeOptions.GetRawNumber(24));
+		Assert.Equal(-2750, gd.timeOptions.GetRawNumber(25));
+
+		// --------------- 40 turn interval for 25 turns ---------------
+		Assert.Equal(-2710, gd.timeOptions.GetRawNumber(26));
+		Assert.Equal(26, gd.timeOptions.GetTurnFromRaw(-2710));
+		Assert.Equal(-2670, gd.timeOptions.GetRawNumber(27));
+		Assert.Equal(-1790, gd.timeOptions.GetRawNumber(49));
+		Assert.Equal(-1750, gd.timeOptions.GetRawNumber(50));
+
+		// --------------- 25 turn interval for 40 turns ---------------
+		Assert.Equal(-1725, gd.timeOptions.GetRawNumber(51));
+		Assert.Equal(52, gd.timeOptions.GetTurnFromRaw(-1700));
+		Assert.Equal(-1700, gd.timeOptions.GetRawNumber(52));
+		Assert.Equal(-1675, gd.timeOptions.GetRawNumber(53));
+		Assert.Equal(-1525, gd.timeOptions.GetRawNumber(59));
+		Assert.Equal(-775, gd.timeOptions.GetRawNumber(89));
+		Assert.Equal(-750, gd.timeOptions.GetRawNumber(90));
+		Assert.Equal(90, gd.timeOptions.GetTurnFromRaw(-750));
+
+		// --------------- 20 turn interval for 50 turns ---------------
+		Assert.Equal(-730, gd.timeOptions.GetRawNumber(91));
+		Assert.Equal(91, gd.timeOptions.GetTurnFromRaw(-730));
+		Assert.Equal(-710, gd.timeOptions.GetRawNumber(92));
+		Assert.Equal(-570, gd.timeOptions.GetRawNumber(99));
+		Assert.Equal(-470, gd.timeOptions.GetRawNumber(104));
+		Assert.Equal(230, gd.timeOptions.GetRawNumber(139));
+		Assert.Equal(250, gd.timeOptions.GetRawNumber(140));
+		Assert.Equal(140, gd.timeOptions.GetTurnFromRaw(250));
+
+		// --------------- 10 turn interval for 100 turns ---------------
+		Assert.Equal(260, gd.timeOptions.GetRawNumber(141));
+		Assert.Equal(141, gd.timeOptions.GetTurnFromRaw(260));
+		Assert.Equal(270, gd.timeOptions.GetRawNumber(142));
+		Assert.Equal(280, gd.timeOptions.GetRawNumber(143));
+		Assert.Equal(600, gd.timeOptions.GetRawNumber(175));
+		//...
+		Assert.Equal(1230, gd.timeOptions.GetRawNumber(238));
+		Assert.Equal(1240, gd.timeOptions.GetRawNumber(239));
+		Assert.Equal(1250, gd.timeOptions.GetRawNumber(240));
+
+		// --------------- 5  turn interval for 100 turns ---------------
+		Assert.Equal(1255, gd.timeOptions.GetRawNumber(241));
+		Assert.Equal(241, gd.timeOptions.GetTurnFromRaw(1255));
+		Assert.Equal(1260, gd.timeOptions.GetRawNumber(242));
+		Assert.Equal(1560, gd.timeOptions.GetRawNumber(302));
+		Assert.Equal(1745, gd.timeOptions.GetRawNumber(339));
+		Assert.Equal(1750, gd.timeOptions.GetRawNumber(340));
+
+		// --------------- 2  turn interval for 100 turns ---------------
+		Assert.Equal(1752, gd.timeOptions.GetRawNumber(341));
+		Assert.Equal(1754, gd.timeOptions.GetRawNumber(342));
+		Assert.Equal(342, gd.timeOptions.GetTurnFromRaw(1754));
+		// ...
+		Assert.Equal(1948, gd.timeOptions.GetRawNumber(439));
+		Assert.Equal(1950, gd.timeOptions.GetRawNumber(440));
+
+		// ---------------   1  turn interval forEVER     ---------------
+		Assert.Equal(1951, gd.timeOptions.GetRawNumber(441));
+		Assert.Equal(1955, gd.timeOptions.GetRawNumber(445));
+		Assert.Equal(445, gd.timeOptions.GetTurnFromRaw(1955));
+		Assert.Equal(2000, gd.timeOptions.GetRawNumber(490));
+		Assert.Equal(2500, gd.timeOptions.GetRawNumber(990));
+
+
+
+		// MONTHS
+
+		gd.timeOptions = new TimeOptions() {
+			baseUnit = TimeUnit.Months,
+			startMonth = 0, // to simplify the math
+			timeScale = new int[,] { { 25, 35, 40, 50, 100, 100, 100, 1000 }, { 12, 6, 4, 3, 2, 2, 1, 1 } }
+		};
+
+		// 12 moths every turn for 25 turns
+		Assert.Equal(0, gd.timeOptions.GetRawNumber(0));
+
+		Assert.Equal(12, gd.timeOptions.GetRawNumber(1));
+		Assert.Equal(1, gd.timeOptions.GetTurnFromRaw(12));
+
+		Assert.Equal(24, gd.timeOptions.GetRawNumber(2));
+		Assert.Equal(2, gd.timeOptions.GetTurnFromRaw(24));
+		Assert.Equal(0, gd.timeOptions.GetTurnFromRaw(0));
+
+		// 6 moths every turn for 35 turns
+		Assert.Equal(306, gd.timeOptions.GetRawNumber(26));
+		Assert.Equal(26, gd.timeOptions.GetTurnFromRaw(306));
+
+		// 4 moths every turn for 40 turns
+		Assert.Equal(514, gd.timeOptions.GetRawNumber(61));
+		Assert.Equal(61, gd.timeOptions.GetTurnFromRaw(514));
+
+		// WEEKS
+
+		gd.timeOptions = new TimeOptions() {
+			baseUnit = TimeUnit.Weeks,
+			startWeek = 0, // to simplify the math
+			timeScale = new int[,] { { 25, 35, 40, 50, 100, 100, 100, 1000 }, { 8, 4, 2, 2, 2, 2, 1, 1 } }
+		};
+
+		// 8 weeks every turn for 25 turns
+		Assert.Equal(0, gd.timeOptions.GetRawNumber(0));
+		Assert.Equal(0, gd.timeOptions.GetTurnFromRaw(0));
+
+		Assert.Equal(8, gd.timeOptions.GetRawNumber(1));
+		Assert.Equal(1, gd.timeOptions.GetTurnFromRaw(8));
+
+		Assert.Equal(16, gd.timeOptions.GetRawNumber(2));
+		Assert.Equal(2, gd.timeOptions.GetTurnFromRaw(16));
+
+		// 4 weeks every turn for 35 turns
+		Assert.Equal(220, gd.timeOptions.GetRawNumber(30));
+		Assert.Equal(30, gd.timeOptions.GetTurnFromRaw(220));
+
+		// 2 weeks every turn for 40 turns
+		Assert.Equal(342, gd.timeOptions.GetRawNumber(61));
+		Assert.Equal(61, gd.timeOptions.GetTurnFromRaw(342));
+	}
+
+
+	[Fact]
 	public async void LoadSampleSaves() {
 		// When running the tests via github actions, civ3 isn't installed so we
 		// can't load the default bic.
