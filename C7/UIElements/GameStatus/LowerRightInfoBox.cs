@@ -276,7 +276,7 @@ public partial class LowerRightInfoBox : Civ3TextureRect {
 			return;
 		}
 
-		string key = AnimationManager.GetUnitDefaultThumbnailKey(unit.unitType);
+		string key = AnimationManager.GetUnitDefaultThumbnailKey(unit);
 		ImageTexture baseFrame = AnimationManager.AnimationThumbnails[key];
 		ImageTexture tintFrame = AnimationManager.AnimationTintThumbnails[key];
 

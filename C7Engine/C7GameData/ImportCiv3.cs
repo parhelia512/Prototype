@@ -1139,14 +1139,20 @@ namespace C7GameData {
 				}
 
 				prototype.name = prto.Name;
-				prototype.artName = pediaIcons.GetUnitArtName(prto.CivilopediaEntry);
+
+				Art unitArt = new Art();
+				unitArt.mainArt = pediaIcons.GetUnitMainArt(prto.CivilopediaEntry);
+				unitArt.thumbnailArt = pediaIcons.GetUnitThumbnailArt(prto.CivilopediaEntry, prto.IconIndex);
+				unitArt.pediaArt = pediaIcons.GetUnitCivilopediaArt(prto.CivilopediaEntry);
+				prototype.art = unitArt;
+
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;
 				prototype.shieldCost = prto.ShieldCost;
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
-				prototype.iconIndex = prto.IconIndex;
+
 				prototype.actions.UnionWith(GetUnitActions(prto));
 				prototype.terraformActions.UnionWith(GetUnitTerraforms(prto).Select(tfKey => terraformIdByCiv3Key[tfKey]));
 

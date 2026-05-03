@@ -18,14 +18,41 @@ namespace C7GameData {
 		Automate
 	}
 
+	public struct ItemContext(UnitPrototype proto, Player player) {
+		public UnitPrototype proto = proto;
+		public Player player = player;
+	}
+
+	// A container for all the art for this unit
+	public struct Art {
+		public MainArt mainArt;
+		public ThumbNailArt thumbnailArt;
+		public PediaArt pediaArt;
+	}
+
+	// the main art contains the Animation art folder path for the unit
+	public struct MainArt {
+		public string defaultName;
+		public Dictionary<string, string> variations;
+	}
+	// the thumbnail art contains the index to the small unit icons used in city screen production, etc
+	public struct ThumbNailArt {
+		public int defaultIndex;
+		public Dictionary<string, int> variations;
+	}
+	// the icons being used by the civilopedia and also other places like the Science Advisor
+	public struct PediaArt {
+		public string small;
+		public string large;
+	}
+
 	/**
 	 * The prototype for a unit, which defines the characteristics of a unit.
 	 * For example, a Spearman might have 1 attack, 2 defense, and 1 movement.
 	 **/
 	public class UnitPrototype : IProducible {
 		public string name { get; set; }
-		// The name to use when searching for animations for this unit.
-		public string artName { get; set; }
+		public Art art { get; set; }
 		public int shieldCost { get; set; }
 		public int populationCost { get; set; }
 		public Tech requiredTech { get; set; }
@@ -33,9 +60,7 @@ namespace C7GameData {
 		public int defense { get; set; }
 		public int bombard { get; set; }
 		public int movement { get; set; }
-		public int iconIndex { get; set; }
 		public HashSet<Civilization> producibleBy { get; set; } = [];
-
 		public UnitPrototype upgradeTo;
 		public bool unproducible;
 
@@ -54,9 +79,9 @@ namespace C7GameData {
 		public UnitPrototype() { }
 
 		public UnitPrototype(SaveUnitPrototype proto, IEnumerable<Terraform> terraforms) {
-			(name, artName, shieldCost, populationCost, attack, defense, bombard, movement, iconIndex, unproducible) =
-			(proto.name, proto.artName, proto.shieldCost, proto.populationCost,
-			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.iconIndex, proto.unproducible);
+			(name, art, shieldCost, populationCost, attack, defense, bombard, movement, unproducible) =
+			(proto.name, proto.art, proto.shieldCost, proto.populationCost,
+			 proto.attack, proto.defense, proto.bombard, proto.movement, proto.unproducible);
 
 			categories = new HashSet<string>(proto.categories);
 			actions = proto.actions;
@@ -93,11 +118,18 @@ namespace C7GameData {
 			}
 		}
 
-		public MapUnit GetInstance(GameData gameData) {
-			MapUnit instance = new MapUnit(gameData.ids.CreateID(this.name));
-			instance.unitType = this;
-			instance.name = this.name;
-			instance.hitPointsRemaining = 3;    //todo: make this configurable
+		public MapUnit GetInstance(ID id, UnitPrototype proto, Player owner, Civilization nationality = null, Tile location = null, TileDirection facingDirection = TileDirection.SOUTHWEST, int hitPoints = 3) {
+			MapUnit instance = new MapUnit(id);
+			instance.unitType = proto;
+			instance.name = proto.name;
+			instance.hitPointsRemaining = hitPoints;    //todo: make this configurable
+			instance.owner = owner;
+			if (nationality != null)
+				instance.nationality = nationality;
+			else
+				instance.nationality = owner.civilization;
+			instance.location = location;
+
 			instance.movementPoints.reset(movement);
 			return instance;
 		}

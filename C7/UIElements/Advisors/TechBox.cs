@@ -197,9 +197,8 @@ public partial class TechBox : TextureButton {
 
 		// Units
 		foreach (UnitPrototype unit in Units[tech.id]) {
-			// TODO : load the correct textures
-			// ImageTexture texture = ...
-			// textures.Add(texture);
+			ImageTexture texture = TextureLoader.LoadByPath(unit.art.pediaArt.small);
+			textures.Add(texture);
 		}
 
 		// Buildings
