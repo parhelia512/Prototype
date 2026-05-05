@@ -11,13 +11,14 @@ public static class Civ3TestData {
 		"Conquests/Text/PediaIcons.txt",
 	};
 
-	public static bool ShouldSkipCiv3DependentTests(params string[] requiredRelativePaths) {
+	public static bool ShouldSkipCiv3DependentTests() {
+		// GitHub Actions sets CI, and Civ3 is not installed there. Local
+		// contributors can also run without Civ3 assets or CIV3_HOME configured.
 		if (Environment.GetEnvironmentVariable("CI") != null) {
 			return true;
 		}
 
-		string[] requiredFiles = DefaultRequiredFiles.Concat(requiredRelativePaths).ToArray();
-		return requiredFiles.Any(relativePath => !File.Exists(GetCiv3Path(relativePath)));
+		return DefaultRequiredFiles.Any(relativePath => !File.Exists(GetCiv3Path(relativePath)));
 	}
 
 	private static string GetCiv3Path(string relativePath) {

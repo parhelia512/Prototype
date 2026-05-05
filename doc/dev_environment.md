@@ -12,7 +12,7 @@ Install the [.NET version of Godot 4.4](https://godotengine.org/download). The G
 The first time you check out OpenCiv3, import `C7/project.godot` from the Godot Project Manager. Godot will build the C# project before running it.
 
 # IDEs
-Most OpenCiv3 development is C#, so use Visual Studio Code or JetBrains Rider alongside the Godot editor. Visual Studio 2019 is no longer a supported setup for current Godot 4/.NET development.
+Most OpenCiv3 development is C#, so use Visual Studio Code or [JetBrains Rider](https://www.jetbrains.com/rider/download/) alongside the Godot editor. Visual Studio 2019 is no longer a supported setup for current Godot 4/.NET development. There is a [CFC thread](https://forums.civfanatics.com/threads/dev-jetbrains-rider-impressions.675190/) on Rider that may provide additional information on setting it up.
 
 ## Visual Studio Code
 Follow the [official guide](https://code.visualstudio.com/docs/setup/setup-overview#_cross-platform) to install Visual Studio Code for your platform.

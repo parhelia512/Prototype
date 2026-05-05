@@ -439,10 +439,9 @@ public class UnitPrototypeScenarioTest : RemoteSaveLoader {
 		// This tests a Conquests scenario with custom rules 
 
 		#region setup
-		if (Civ3TestData.ShouldSkipCiv3DependentTests(
-			"Conquests/Conquests/4 Middle Ages.biq",
-			"Conquests/Conquests/Middle Ages/Text/PediaIcons.txt"
-		)) {
+		// Civ3 isn't installed in CI, so we can't load the default BIC. Local
+		// contributors without Civ3 assets configured should skip this too.
+		if (Civ3TestData.ShouldSkipCiv3DependentTests()) {
 			return;
 		}
 		string scenarioBiqPath = Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Conquests", "4 Middle Ages.biq");

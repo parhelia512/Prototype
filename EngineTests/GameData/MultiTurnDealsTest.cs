@@ -450,10 +450,7 @@ public class MultiTurnDealTest : RemoteSaveLoader {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_E() {
-		if (Civ3TestData.ShouldSkipCiv3DependentTests(
-			"Conquests/Scenarios/8 MP Napoleonic Europe.biq",
-			"Conquests/Conquests/Napoleonic Europe/Text/PediaIcons.txt"
-		)) {
+		if (Civ3TestData.ShouldSkipCiv3DependentTests()) {
 			return;
 		}
 
@@ -607,10 +604,7 @@ public class MultiTurnDealTest : RemoteSaveLoader {
 
 	[Fact]
 	public async void TestMultiTurnDeal_Save_F() {
-		if (Civ3TestData.ShouldSkipCiv3DependentTests(
-			"Conquests/Scenarios/8 MP Napoleonic Europe.biq",
-			"Conquests/Conquests/Napoleonic Europe/Text/PediaIcons.txt"
-		)) {
+		if (Civ3TestData.ShouldSkipCiv3DependentTests()) {
 			return;
 		}
 
