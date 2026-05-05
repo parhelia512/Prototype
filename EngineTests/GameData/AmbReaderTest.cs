@@ -9,6 +9,11 @@ namespace EngineTests.GameData;
 public class AmbReaderTest {
 	[Fact]
 	public void WorkerRunAmbTest() {
+        string is_on_github = System.Environment.GetEnvironmentVariable("CI");
+        if (is_on_github != null) {
+            return;
+        }
+        
 		string path = Path.Combine(Civ3Location.GetCiv3Path(), "Art", "Units", "Worker", "WorkerRun.amb");
 
 		Sfx sfx1 = new Amb(path).soundEffects.First();
