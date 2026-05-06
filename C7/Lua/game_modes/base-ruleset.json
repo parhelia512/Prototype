@@ -2504,6 +2504,7 @@
       "defense": 0,
       "bombard": 16,
       "movement": 2,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2788,6 +2789,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2855,6 +2857,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2922,6 +2925,7 @@
       "defense": 2,
       "bombard": 3,
       "movement": 5,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2993,6 +2997,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3415,6 +3420,7 @@
       "defense": 12,
       "bombard": 8,
       "movement": 5,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -4757,6 +4763,7 @@
       "defense": 2,
       "bombard": 4,
       "movement": 5,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "England"
       ],
@@ -4838,6 +4845,7 @@
       "defense": 1,
       "bombard": 3,
       "movement": 5,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -6370,6 +6378,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 4,
+      "rotateBeforeAttack": true,
       "producibleBy": [
         "Portugal"
       ],
@@ -6907,6 +6916,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": true,
       "upgradeTo": "Galley",
       "producibleBy": [
         "Rome",

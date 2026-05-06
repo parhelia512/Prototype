@@ -1189,6 +1189,7 @@ namespace C7GameData {
 				prototype.shieldCost = prto.ShieldCost;
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
+				prototype.rotateBeforeAttack = prto.TurnToAttack;
 
 				prototype.actions.UnionWith(GetUnitActions(prto));
 				prototype.terraformActions.UnionWith(GetUnitTerraforms(prto).Select(tfKey => terraformIdByCiv3Key[tfKey]));

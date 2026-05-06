@@ -17,6 +17,7 @@ namespace C7GameData.Save {
 
 		public string upgradeTo;
 		public bool unproducible;
+		public bool rotateBeforeAttack { get; set; }
 
 		public HashSet<string> categories = new HashSet<string>();
 
@@ -31,9 +32,9 @@ namespace C7GameData.Save {
 		public SaveUnitPrototype() { }
 
 		public SaveUnitPrototype(UnitPrototype proto) {
-			(name, art, shieldCost, populationCost, unproducible,
+			(name, art, shieldCost, populationCost, unproducible, rotateBeforeAttack,
 			attack, defense, bombard, movement) =
-			(proto.name, proto.art, proto.shieldCost, proto.populationCost, proto.unproducible,
+			(proto.name, proto.art, proto.shieldCost, proto.populationCost, proto.unproducible, proto.rotateBeforeAttack,
 			 proto.attack, proto.defense, proto.bombard, proto.movement);
 
 			if (proto.requiredTech != null)
