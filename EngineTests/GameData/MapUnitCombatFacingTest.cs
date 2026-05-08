@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using C7Engine.Lua;
 using C7GameData;
 using Xunit;
@@ -48,15 +50,19 @@ public class MapUnitCombatFacingTest {
 			"Curragh",
 		];
 
-		HashSet<string> rotatingUnits = GameModeLoader.Load(PathUtils.gameModesDir, new GameModeConfig("base-ruleset.json"))
-			.UnitPrototypes
-			.Where(proto => proto.rotateBeforeAttack)
-			.Select(proto => proto.name)
+		using JsonDocument ruleset = JsonDocument.Parse(File.ReadAllText(Path.Combine(PathUtils.gameModesDir, "base-ruleset.json")));
+		JsonElement unitPrototypes = ruleset.RootElement.GetProperty("unitPrototypes");
+		foreach (JsonElement unitPrototype in unitPrototypes.EnumerateArray()) {
+			string unitName = unitPrototype.GetProperty("name").GetString();
+			Assert.True(unitPrototype.TryGetProperty("rotateBeforeAttack", out _), $"{unitName} should declare rotateBeforeAttack.");
+		}
+
+		HashSet<string> rotatingUnits = unitPrototypes.EnumerateArray()
+			.Where(unitPrototype => unitPrototype.GetProperty("rotateBeforeAttack").GetBoolean())
+			.Select(unitPrototype => unitPrototype.GetProperty("name").GetString())
 			.ToHashSet();
 
-		foreach (string unitName in expectedRotatingUnits) {
-			Assert.True(rotatingUnits.Contains(unitName), $"{unitName} should rotate before attack.");
-		}
+		Assert.Equal(expectedRotatingUnits.OrderBy(unitName => unitName), rotatingUnits.OrderBy(unitName => unitName));
 	}
 
 	private static MapUnit MakeUnit(bool rotateBeforeAttack) {

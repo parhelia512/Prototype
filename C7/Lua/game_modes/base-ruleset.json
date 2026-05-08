@@ -792,6 +792,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -868,6 +869,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -945,6 +947,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Russia",
         "America",
@@ -989,6 +992,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1055,6 +1059,7 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1125,6 +1130,7 @@
       "defense": 11,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1195,6 +1201,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "A Barbarian Chiefdom",
         "Rome",
@@ -1263,6 +1270,7 @@
       "defense": 1,
       "bombard": 1,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1329,6 +1337,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1393,6 +1402,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Egypt",
         "Greece",
@@ -1461,6 +1471,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Greece",
@@ -1530,6 +1541,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "A Barbarian Chiefdom",
         "Rome",
@@ -1601,6 +1613,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1669,6 +1682,7 @@
       "defense": 1,
       "bombard": 2,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1736,6 +1750,7 @@
       "defense": 4,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1806,6 +1821,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1873,6 +1889,7 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -1941,6 +1958,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2010,6 +2028,7 @@
       "defense": 10,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2081,6 +2100,7 @@
       "defense": 8,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2152,6 +2172,7 @@
       "defense": 18,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2223,6 +2244,7 @@
       "defense": 16,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2294,6 +2316,7 @@
       "defense": 0,
       "bombard": 4,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2363,6 +2386,7 @@
       "defense": 0,
       "bombard": 8,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2435,6 +2459,7 @@
       "defense": 0,
       "bombard": 12,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2576,6 +2601,7 @@
       "defense": 0,
       "bombard": 16,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2646,6 +2672,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2718,6 +2745,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3066,6 +3094,7 @@
       "defense": 6,
       "bombard": 6,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3139,6 +3168,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 6,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3209,6 +3239,7 @@
       "defense": 8,
       "bombard": 0,
       "movement": 7,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3279,6 +3310,7 @@
       "defense": 4,
       "bombard": 0,
       "movement": 4,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3349,6 +3381,7 @@
       "defense": 8,
       "bombard": 6,
       "movement": 8,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3492,6 +3525,7 @@
       "defense": 10,
       "bombard": 6,
       "movement": 7,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3564,6 +3598,7 @@
       "defense": 4,
       "bombard": 0,
       "movement": 5,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3634,6 +3669,7 @@
       "defense": 2,
       "bombard": 3,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3703,6 +3739,7 @@
       "defense": 2,
       "bombard": 12,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3771,6 +3808,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3840,6 +3878,7 @@
       "defense": 4,
       "bombard": 3,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3908,6 +3947,7 @@
       "defense": 6,
       "bombard": 6,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3977,6 +4017,7 @@
       "defense": 5,
       "bombard": 18,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -4058,6 +4099,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -4135,6 +4177,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -4202,6 +4245,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Aztecs"
       ],
@@ -4240,6 +4284,7 @@
       "defense": 2,
       "bombard": 1,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Babylon"
       ],
@@ -4278,6 +4323,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Greece"
       ],
@@ -4316,6 +4362,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Zululand"
       ],
@@ -4354,6 +4401,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome"
       ],
@@ -4395,6 +4443,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Persia"
       ],
@@ -4436,6 +4485,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Egypt"
       ],
@@ -4477,6 +4527,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "China"
       ],
@@ -4519,6 +4570,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Iroquois"
       ],
@@ -4560,6 +4612,7 @@
       "defense": 5,
       "bombard": 2,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "France"
       ],
@@ -4601,6 +4654,7 @@
       "defense": 4,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Japan"
       ],
@@ -4642,6 +4696,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "India"
       ],
@@ -4680,6 +4735,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Russia"
       ],
@@ -4721,6 +4777,7 @@
       "defense": 8,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Germany"
       ],
@@ -4806,6 +4863,7 @@
       "defense": 4,
       "bombard": 6,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "America"
       ],
@@ -4917,6 +4975,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Mongols"
       ],
@@ -4958,6 +5017,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Spain"
       ],
@@ -4998,6 +5058,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Scandinavia"
       ],
@@ -5036,6 +5097,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Ottomans"
       ],
@@ -5077,6 +5139,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Celts"
       ],
@@ -5118,6 +5181,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Arabia"
       ],
@@ -5160,6 +5224,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Carthage"
       ],
@@ -5198,6 +5263,7 @@
       "defense": 0,
       "bombard": 8,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Korea"
       ],
@@ -5240,6 +5306,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -5310,6 +5377,7 @@
       "defense": 6,
       "bombard": 3,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -5377,6 +5445,7 @@
       "defense": 0,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5408,6 +5477,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5441,6 +5511,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5474,6 +5545,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5507,6 +5579,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5540,6 +5613,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5573,6 +5647,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5606,6 +5681,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5639,6 +5715,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5672,6 +5749,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5705,6 +5783,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5738,6 +5817,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5771,6 +5851,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5804,6 +5885,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5837,6 +5919,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5870,6 +5953,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5903,6 +5987,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5936,6 +6021,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -5969,6 +6055,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6002,6 +6089,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6035,6 +6123,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6068,6 +6157,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6101,6 +6191,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6134,6 +6225,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6167,6 +6259,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6200,6 +6293,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Sumeria"
       ],
@@ -6238,6 +6332,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Hittites"
       ],
@@ -6278,6 +6373,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6311,6 +6407,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6344,6 +6441,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6417,6 +6515,7 @@
       "defense": 4,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Netherlands"
       ],
@@ -6457,6 +6556,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6491,6 +6591,7 @@
       "defense": 0,
       "bombard": 6,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -6559,6 +6660,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6592,6 +6694,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6625,6 +6728,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6658,6 +6762,7 @@
       "defense": 1,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Inca"
       ],
@@ -6696,6 +6801,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Maya"
       ],
@@ -6734,6 +6840,7 @@
       "defense": 1,
       "bombard": 2,
       "movement": 3,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Byzantines"
       ],
@@ -6773,6 +6880,7 @@
       "defense": 10,
       "bombard": 7,
       "movement": 6,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -6844,6 +6952,7 @@
       "defense": 3,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6881,6 +6990,7 @@
       "defense": 2,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [],
       "unproducible": true,
       "categories": [
@@ -6985,6 +7095,7 @@
       "defense": 9,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -7057,6 +7168,7 @@
       "defense": 14,
       "bombard": 6,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -7124,6 +7236,7 @@
       "defense": 6,
       "bombard": 0,
       "movement": 1,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -7192,6 +7305,7 @@
       "defense": 6,
       "bombard": 0,
       "movement": 2,
+      "rotateBeforeAttack": false,
       "producibleBy": [
         "Rome",
         "Egypt",
