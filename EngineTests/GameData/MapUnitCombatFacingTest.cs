@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using C7Engine.Lua;
 using C7GameData;
+using C7GameData.Save;
 using Xunit;
 
 namespace EngineTests.GameData;
@@ -29,10 +30,11 @@ public class MapUnitCombatFacingTest {
 	public void UnitPrototypePreservesRotateBeforeAttackFromSavedPrototype() {
 		UnitPrototype unit = new(new() {
 			name = "Galley",
-			rotateBeforeAttack = true,
+			flags = [SaveUnitPrototype.Flag.RotateBeforeAttack],
 		}, []);
 
 		Assert.True(unit.rotateBeforeAttack);
+		Assert.Contains(SaveUnitPrototype.Flag.RotateBeforeAttack, unit.flags);
 	}
 
 	[Fact]
@@ -54,15 +56,25 @@ public class MapUnitCombatFacingTest {
 		JsonElement unitPrototypes = ruleset.RootElement.GetProperty("unitPrototypes");
 		foreach (JsonElement unitPrototype in unitPrototypes.EnumerateArray()) {
 			string unitName = unitPrototype.GetProperty("name").GetString();
-			Assert.True(unitPrototype.TryGetProperty("rotateBeforeAttack", out _), $"{unitName} should declare rotateBeforeAttack.");
+			Assert.False(unitPrototype.TryGetProperty("rotateBeforeAttack", out _), $"{unitName} should use flags for unit abilities.");
 		}
 
 		HashSet<string> rotatingUnits = unitPrototypes.EnumerateArray()
-			.Where(unitPrototype => unitPrototype.GetProperty("rotateBeforeAttack").GetBoolean())
+			.Where(unitPrototype => UnitFlags(unitPrototype).Contains("rotateBeforeAttack"))
 			.Select(unitPrototype => unitPrototype.GetProperty("name").GetString())
 			.ToHashSet();
 
 		Assert.Equal(expectedRotatingUnits.OrderBy(unitName => unitName), rotatingUnits.OrderBy(unitName => unitName));
+	}
+
+	private static HashSet<string> UnitFlags(JsonElement unitPrototype) {
+		if (!unitPrototype.TryGetProperty("flags", out JsonElement flags)) {
+			return [];
+		}
+
+		return flags.EnumerateArray()
+			.Select(flag => flag.GetString())
+			.ToHashSet();
 	}
 
 	private static MapUnit MakeUnit(bool rotateBeforeAttack) {

@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace C7GameData.Save {
 	public class SaveUnitPrototype {
+		public enum Flag {
+			RotateBeforeAttack,
+		}
+
 		public string name { get; set; }
 		public Art art { get; set; }
 		public int shieldCost { get; set; }
@@ -17,7 +21,10 @@ namespace C7GameData.Save {
 
 		public string upgradeTo;
 		public bool unproducible;
-		public bool rotateBeforeAttack { get; set; }
+
+		// Assorted boolean flags for the unit prototype. They're stored in
+		// this set rather than as booleans to avoid bloating the json file.
+		public HashSet<Flag> flags = [];
 
 		public HashSet<string> categories = new HashSet<string>();
 
@@ -32,9 +39,9 @@ namespace C7GameData.Save {
 		public SaveUnitPrototype() { }
 
 		public SaveUnitPrototype(UnitPrototype proto) {
-			(name, art, shieldCost, populationCost, unproducible, rotateBeforeAttack,
+			(name, art, shieldCost, populationCost, unproducible,
 			attack, defense, bombard, movement) =
-			(proto.name, proto.art, proto.shieldCost, proto.populationCost, proto.unproducible, proto.rotateBeforeAttack,
+			(proto.name, proto.art, proto.shieldCost, proto.populationCost, proto.unproducible,
 			 proto.attack, proto.defense, proto.bombard, proto.movement);
 
 			if (proto.requiredTech != null)
@@ -46,6 +53,7 @@ namespace C7GameData.Save {
 			categories = new HashSet<string>(proto.categories);
 			actions = proto.actions;
 			attributes = new HashSet<string>(proto.attributes);
+			flags = new HashSet<Flag>(proto.flags);
 
 			requiredResources = proto.requiredResources.Select(r => r.Key).ToHashSet();
 			terraformActions = proto.terraformActions.Select(r => r.Id).ToHashSet();
