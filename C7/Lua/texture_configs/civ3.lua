@@ -20,6 +20,8 @@ local PALACE = "Art/PalaceView/"
 
 local POPUP_BORDERS = "Art/popupborders.pcx"
 
+local CURSORS = "Art/Cursor.pcx"
+
 -- Texture definitions
 local textures = {}
 
@@ -153,6 +155,16 @@ textures.ui = {
       crop_region = { 144, 0, 72, 48 },
     },
   },
+  cursor = {
+      bombard_deny = {
+          path = CURSORS,
+          crop_region = { 166, 1, 32, 32 },
+      },
+      bombard = {
+          path = CURSORS,
+          crop_region = { 199, 1, 32, 32 },
+      }
+  }
 }
 
 textures.terrain = require "civ3.terrain"

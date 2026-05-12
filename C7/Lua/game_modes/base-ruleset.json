@@ -791,6 +791,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -867,6 +869,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -944,6 +948,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Russia",
@@ -988,6 +994,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Rome",
@@ -1054,6 +1062,8 @@
       "attack": 12,
       "defense": 6,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1124,6 +1134,8 @@
       "attack": 6,
       "defense": 11,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1194,6 +1206,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "A Barbarian Chiefdom",
@@ -1262,6 +1276,8 @@
       "attack": 2,
       "defense": 1,
       "bombard": 1,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1328,6 +1344,8 @@
       "attack": 1,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1392,6 +1410,8 @@
       "attack": 3,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Egypt",
@@ -1460,6 +1480,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Rome",
@@ -1529,6 +1551,8 @@
       "attack": 2,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "A Barbarian Chiefdom",
@@ -1600,6 +1624,8 @@
       "attack": 1,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1668,6 +1694,8 @@
       "attack": 4,
       "defense": 1,
       "bombard": 2,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1735,6 +1763,8 @@
       "attack": 2,
       "defense": 4,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1805,6 +1835,8 @@
       "attack": 4,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Rome",
@@ -1872,6 +1904,8 @@
       "attack": 4,
       "defense": 6,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -1940,6 +1974,8 @@
       "attack": 6,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Rome",
@@ -2009,6 +2045,8 @@
       "attack": 6,
       "defense": 10,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2080,6 +2118,8 @@
       "attack": 16,
       "defense": 8,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Rome",
@@ -2151,6 +2191,8 @@
       "attack": 12,
       "defense": 18,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Rome",
@@ -2222,6 +2264,8 @@
       "attack": 24,
       "defense": 16,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Rome",
@@ -2293,6 +2337,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 4,
+      "bombardRange": 1,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2362,6 +2408,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 8,
+      "bombardRange": 1,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2434,6 +2482,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 12,
+      "bombardRange": 2,
+      "rateOfFire": 2,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2503,6 +2553,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 16,
+      "bombardRange": 2,
+      "rateOfFire": 3,
       "movement": 2,
       "flags": [
         "rotateBeforeAttack"
@@ -2577,6 +2629,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 16,
+      "bombardRange": 4,
+      "rateOfFire": 3,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2647,6 +2701,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 6,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2719,6 +2775,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -2790,6 +2848,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "flags": [
         "rotateBeforeAttack"
@@ -2860,6 +2920,8 @@
       "attack": 1,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 4,
       "flags": [
         "rotateBeforeAttack"
@@ -2930,6 +2992,8 @@
       "attack": 2,
       "defense": 2,
       "bombard": 3,
+      "bombardRange": 1,
+      "rateOfFire": 2,
       "movement": 5,
       "flags": [
         "rotateBeforeAttack"
@@ -3004,6 +3068,8 @@
       "attack": 1,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 4,
       "flags": [
         "rotateBeforeAttack"
@@ -3075,6 +3141,8 @@
       "attack": 5,
       "defense": 6,
       "bombard": 6,
+      "bombardRange": 1,
+      "rateOfFire": 2,
       "movement": 3,
       "producibleBy": [
         "Rome",
@@ -3148,6 +3216,8 @@
       "attack": 1,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 6,
       "producibleBy": [
         "Rome",
@@ -3218,6 +3288,8 @@
       "attack": 1,
       "defense": 8,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 7,
       "producibleBy": [
         "Rome",
@@ -3288,6 +3360,8 @@
       "attack": 8,
       "defense": 4,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 4,
       "producibleBy": [
         "Rome",
@@ -3358,6 +3432,8 @@
       "attack": 12,
       "defense": 8,
       "bombard": 6,
+      "bombardRange": 1,
+      "rateOfFire": 2,
       "movement": 8,
       "producibleBy": [
         "Rome",
@@ -3429,6 +3505,8 @@
       "attack": 18,
       "defense": 12,
       "bombard": 8,
+      "bombardRange": 2,
+      "rateOfFire": 2,
       "movement": 5,
       "flags": [
         "rotateBeforeAttack"
@@ -3503,6 +3581,8 @@
       "attack": 15,
       "defense": 10,
       "bombard": 6,
+      "bombardRange": 2,
+      "rateOfFire": 2,
       "movement": 7,
       "producibleBy": [
         "Rome",
@@ -3575,6 +3655,8 @@
       "attack": 8,
       "defense": 4,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 5,
       "producibleBy": [
         "Rome",
@@ -3645,6 +3727,8 @@
       "attack": 4,
       "defense": 2,
       "bombard": 3,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -3714,6 +3798,8 @@
       "attack": 0,
       "defense": 2,
       "bombard": 12,
+      "bombardRange": 0,
+      "rateOfFire": 3,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -3782,6 +3868,8 @@
       "attack": 0,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -3851,6 +3939,8 @@
       "attack": 8,
       "defense": 4,
       "bombard": 3,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -3919,6 +4009,8 @@
       "attack": 8,
       "defense": 6,
       "bombard": 6,
+      "bombardRange": 0,
+      "rateOfFire": 2,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -3988,6 +4080,8 @@
       "attack": 0,
       "defense": 5,
       "bombard": 18,
+      "bombardRange": 0,
+      "rateOfFire": 3,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -4069,6 +4163,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Rome",
@@ -4146,6 +4242,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -4213,6 +4311,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Aztecs"
@@ -4251,6 +4351,8 @@
       "attack": 2,
       "defense": 2,
       "bombard": 1,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Babylon"
@@ -4289,6 +4391,8 @@
       "attack": 1,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Greece"
@@ -4327,6 +4431,8 @@
       "attack": 1,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Zululand"
@@ -4365,6 +4471,8 @@
       "attack": 3,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome"
@@ -4406,6 +4514,8 @@
       "attack": 4,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Persia"
@@ -4447,6 +4557,8 @@
       "attack": 2,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Egypt"
@@ -4488,6 +4600,8 @@
       "attack": 4,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "China"
@@ -4530,6 +4644,8 @@
       "attack": 3,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Iroquois"
@@ -4571,6 +4687,8 @@
       "attack": 2,
       "defense": 5,
       "bombard": 2,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "France"
@@ -4612,6 +4730,8 @@
       "attack": 4,
       "defense": 4,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Japan"
@@ -4653,6 +4773,8 @@
       "attack": 4,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "India"
@@ -4691,6 +4813,8 @@
       "attack": 6,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Russia"
@@ -4732,6 +4856,8 @@
       "attack": 16,
       "defense": 8,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Germany"
@@ -4774,6 +4900,8 @@
       "attack": 4,
       "defense": 2,
       "bombard": 4,
+      "bombardRange": 1,
+      "rateOfFire": 2,
       "movement": 5,
       "flags": [
         "rotateBeforeAttack"
@@ -4819,6 +4947,8 @@
       "attack": 8,
       "defense": 4,
       "bombard": 6,
+      "bombardRange": 0,
+      "rateOfFire": 2,
       "movement": 1,
       "producibleBy": [
         "America"
@@ -4858,6 +4988,8 @@
       "attack": 2,
       "defense": 1,
       "bombard": 3,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 5,
       "flags": [
         "rotateBeforeAttack"
@@ -4932,6 +5064,8 @@
       "attack": 4,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Mongols"
@@ -4973,6 +5107,8 @@
       "attack": 3,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Spain"
@@ -5013,6 +5149,8 @@
       "attack": 6,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Scandinavia"
@@ -5051,6 +5189,8 @@
       "attack": 8,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Ottomans"
@@ -5092,6 +5232,8 @@
       "attack": 3,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Celts"
@@ -5133,6 +5275,8 @@
       "attack": 4,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 3,
       "producibleBy": [
         "Arabia"
@@ -5175,6 +5319,8 @@
       "attack": 2,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Carthage"
@@ -5213,6 +5359,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 8,
+      "bombardRange": 1,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Korea"
@@ -5255,6 +5403,8 @@
       "attack": 4,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -5325,6 +5475,8 @@
       "attack": 6,
       "defense": 6,
       "bombard": 3,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -5392,6 +5544,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [],
       "unproducible": true,
@@ -5423,6 +5577,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5456,6 +5612,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5489,6 +5647,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5522,6 +5682,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5555,6 +5717,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5588,6 +5752,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5621,6 +5787,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5654,6 +5822,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5687,6 +5857,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5720,6 +5892,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5753,6 +5927,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5786,6 +5962,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5819,6 +5997,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5852,6 +6032,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5885,6 +6067,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5918,6 +6102,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5951,6 +6137,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -5984,6 +6172,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6017,6 +6207,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6050,6 +6242,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6083,6 +6277,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6116,6 +6312,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6149,6 +6347,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6182,6 +6382,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6215,6 +6417,8 @@
       "attack": 1,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Sumeria"
@@ -6253,6 +6457,8 @@
       "attack": 2,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Hittites"
@@ -6293,6 +6499,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6326,6 +6534,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6359,6 +6569,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6393,6 +6605,8 @@
       "attack": 2,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 4,
       "flags": [
         "rotateBeforeAttack"
@@ -6434,6 +6648,8 @@
       "attack": 1,
       "defense": 4,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Netherlands"
@@ -6474,6 +6690,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6508,6 +6726,8 @@
       "attack": 0,
       "defense": 0,
       "bombard": 6,
+      "bombardRange": 1,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -6576,6 +6796,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6609,6 +6831,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6642,6 +6866,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6675,6 +6901,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Inca"
@@ -6713,6 +6941,8 @@
       "attack": 2,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Maya"
@@ -6751,6 +6981,8 @@
       "attack": 2,
       "defense": 1,
       "bombard": 2,
+      "bombardRange": 1,
+      "rateOfFire": 2,
       "movement": 3,
       "producibleBy": [
         "Byzantines"
@@ -6790,6 +7022,8 @@
       "attack": 15,
       "defense": 10,
       "bombard": 7,
+      "bombardRange": 1,
+      "rateOfFire": 2,
       "movement": 6,
       "producibleBy": [
         "Rome",
@@ -6861,6 +7095,8 @@
       "attack": 5,
       "defense": 3,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [],
       "unproducible": true,
@@ -6898,6 +7134,8 @@
       "attack": 3,
       "defense": 2,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [],
       "unproducible": true,
@@ -6933,6 +7171,8 @@
       "attack": 1,
       "defense": 1,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "flags": [
         "rotateBeforeAttack"
@@ -7004,6 +7244,8 @@
       "attack": 4,
       "defense": 9,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -7076,6 +7318,8 @@
       "attack": 12,
       "defense": 14,
       "bombard": 6,
+      "bombardRange": 0,
+      "rateOfFire": 1,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -7143,6 +7387,8 @@
       "attack": 1,
       "defense": 6,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 1,
       "producibleBy": [
         "Rome",
@@ -7211,6 +7457,8 @@
       "attack": 1,
       "defense": 6,
       "bombard": 0,
+      "bombardRange": 0,
+      "rateOfFire": 0,
       "movement": 2,
       "producibleBy": [
         "Rome",

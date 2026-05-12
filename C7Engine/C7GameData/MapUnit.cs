@@ -269,17 +269,17 @@ namespace C7GameData {
 		// priority. Otherwise it's just whoever is stronger on defense.
 		public bool HasPriorityAsDefender(MapUnit otherDefender, MapUnit opponent) {
 			Player opponentPlayer = opponent.owner;
-			bool weAreEnemy           = (opponentPlayer != null) ? ! opponentPlayer.IsAtPeaceWith(owner)          : false;
-			bool otherDefenderIsEnemy = (opponentPlayer != null) ? ! opponentPlayer.IsAtPeaceWith(otherDefender.owner) : false;
+			bool weAreEnemy           = !opponentPlayer?.IsAtPeaceWith(owner) ?? false;
+			bool otherDefenderIsEnemy = !opponentPlayer?.IsAtPeaceWith(otherDefender.owner) ?? false;
+
 			if (weAreEnemy && !otherDefenderIsEnemy)
 				return true;
-			else if (otherDefenderIsEnemy && !weAreEnemy)
+			if (otherDefenderIsEnemy && !weAreEnemy)
 				return false;
-			else {
-				double ourTotalStrength   = StrengthVersus(opponent, CombatRole.Defense, null) * hitPointsRemaining,
-				   theirTotalStrength = otherDefender.StrengthVersus(opponent, CombatRole.Defense, null) * otherDefender.hitPointsRemaining;
-				return ourTotalStrength > theirTotalStrength;
-			}
+
+			double ourTotalStrength = StrengthVersus(opponent, CombatRole.Defense, null) * hitPointsRemaining;
+			double theirTotalStrength = otherDefender.StrengthVersus(opponent, CombatRole.Defense, null) * otherDefender.hitPointsRemaining;
+			return ourTotalStrength > theirTotalStrength;
 		}
 
 
@@ -430,36 +430,223 @@ namespace C7GameData {
 			return result;
 		}
 
-		public async Task bombard(Tile tile) {
+		public bool canBombard() {
+			return unitType.actions.Contains(UnitAction.Bombard);
+		}
+
+		public bool canBombardTile(Tile tile) {
+			if (unitType.bombard == 0)
+				return false;
+
+			if (tile.HasImprovements)
+				return true;
+
 			MapUnit target = tile.FindTopDefender(this);
-			if ((unitType.bombard == 0) || (target == MapUnit.NONE))
-				return; // Do nothing if we don't have a unit to attack. TODO: Attack city or tile improv if possible
+			if (target.owner == owner)
+				return false;
+
+			if (target != MapUnit.NONE)
+				return true;
+
+			if (tile.HasCity && tile.cityAtTile.owner != owner)
+				return true;
+
+			return false;
+		}
+
+
+		public async Task bombard(Tile tile) {
+			// Could check canBombardTile(..) again, but no need really
+
+			MapUnit target = tile.FindTopDefender(this);
+
+			var hasTargetUnit = target != MapUnit.NONE && target.owner != owner;
+			var hasForeignCity = tile.HasCity && tile.cityAtTile.owner != owner;
+			var hasCityWalls = hasForeignCity && tile.cityAtTile.GetBuildings().Any(b => b.building.providesWalls);
+			var hasTileImprovements = tile.HasImprovements;
+
+			if (!(hasTargetUnit || hasTileImprovements || hasForeignCity))
+				return; // Nothing to bombard
 
 			var unitOriginalOrientation = facingDirection;
 			facingDirection = location.directionTo(tile);
 
-			// TODO: Figure out the bombard defense that walls grant.
-			double bombardStrength  = StrengthVersus(target, CombatRole.Bombard, facingDirection);
-			double defenderStrength = target.StrengthVersus(this, CombatRole.BombardDefense, facingDirection);
-			double attackerOdds = bombardStrength / (bombardStrength + defenderStrength);
-			if (Double.IsNaN(attackerOdds))
-				return;
+			if (hasCityWalls)
+				await bombardCityWalls(tile);
+			else if (hasTargetUnit)
+				await bombardUnits(tile, target);
+			else if (hasForeignCity)
+				await bombardCity(tile);
+			else
+				await bombardTileImprovements(tile);
 
+			facingDirection = unitOriginalOrientation;
+		}
+
+		private async Task bombardUnits(Tile tile, MapUnit target) {
+			// TODO: Make configurable
+
+			var hitCount = 0;
+
+			foreach (var fire in Enumerable.Range(0, unitType.rateOfFire)) {
+				// TODO: Figure out the bombard defense that walls grant.
+				double bombardStrength  = StrengthVersus(target, CombatRole.Bombard, facingDirection);
+				double defenderStrength = target.StrengthVersus(this, CombatRole.BombardDefense, facingDirection);
+				double attackerOdds = bombardStrength / (bombardStrength + defenderStrength);
+				if (Double.IsNaN(attackerOdds))
+					return;
+
+				// TODO: Lethal/non-lethal bombardment
+				var isPotentiallyLethal = target.hitPointsRemaining == 1;
+
+				await animateAsync(MapUnit.AnimatedAction.ATTACK1);
+				movementPoints.onUnitMove(1);
+				if (GameData.rng.NextDouble() < attackerOdds && !isPotentiallyLethal) {
+					hitCount += 1;
+					target.hitPointsRemaining -= 1;
+					await tile.AnimateAsync(AnimatedEffect.Hit3);
+				} else
+					await tile.AnimateAsync(AnimatedEffect.Miss);
+
+				if (target.hitPointsRemaining <= 0) {
+					RollToPromote(target);
+					await target.animateAsync(MapUnit.AnimatedAction.DEATH);
+					target.RemoveFromPlay();
+					break; // Target destroyed, skip remaining fire -- TODO: Re-target?
+				}
+			}
+
+			if (owner.isHuman) {
+				if (hitCount > 0)
+					new MsgShowTemporaryPopup($"Artillery bombardment successful! Enemy units injured.", tile).send();
+				else
+					new MsgShowTemporaryPopup($"Artillery bombardment failed.", tile).send();
+			}
+		}
+
+		private async Task bombardCityWalls(Tile tile) {
+			// CF Civilopedia: City walls have a land bombardment defense of 8
+			// CF Civilopedia: Coastal defences have a land bombardment defense of 8
+			// Anecdotal: "City walls are hit first."
+			// TODO: Make configurable
+
+			const int wallDefence = 8;
+
+			var hitCount = 0;
+
+			var walls = tile.cityAtTile.GetBuildings().First(b => b.building.providesWalls);
+
+			foreach (var fire in Enumerable.Range(0, unitType.rateOfFire)) {
+				double bombardStrength  = StrengthVersus(null, CombatRole.Bombard, facingDirection);
+				double defenderStrength = wallDefence;
+				double attackerOdds = bombardStrength / (bombardStrength + defenderStrength);
+				if (Double.IsNaN(attackerOdds))
+					return;
+
+				await RunAnimatedBombard(tile, attackerOdds, () => {
+					hitCount += 1;
+					tile.cityAtTile.RemoveBuilding(walls);
+				});
+			}
+
+			if (owner.isHuman) {
+				if (hitCount > 0)
+					new MsgShowTemporaryPopup($"Artillery bombardment successful! Walls destroyed.", tile).send();
+				else
+					new MsgShowTemporaryPopup($"Artillery bombardment failed.", tile).send();
+			}
+		}
+
+		private async Task RunAnimatedBombard(Tile tile, double attackerOdds, Action callback) {
 			await animateAsync(MapUnit.AnimatedAction.ATTACK1);
 			movementPoints.onUnitMove(1);
 			if (GameData.rng.NextDouble() < attackerOdds) {
-				target.hitPointsRemaining -= 1;
-				tile.Animate(AnimatedEffect.Hit3);
+				await tile.AnimateAsync(AnimatedEffect.Hit3);
+				callback();
 			} else
-				tile.Animate(AnimatedEffect.Miss);
+				await tile.AnimateAsync(AnimatedEffect.Miss);
+		}
 
-			if (target.hitPointsRemaining <= 0) {
-				RollToPromote(target);
-				await target.animateAsync(MapUnit.AnimatedAction.DEATH);
-				target.RemoveFromPlay();
+		private async Task bombardCity(Tile tile) {
+			// Anecdotal: If there are no units left to hit, then citizens or buildings are hit, apparently with same probability.
+			// Anecdotal: "buildings (if I remember correctly) have a defense value of 16"
+			// Anecdotal: It seems population is killed off more quickly than buildings.
+			// TODO: Make configurable
+
+			const int buildingDefence = 16;
+			const int populationDefence = 12;
+			const float buildingOrPopulationOdds = 0.5f;
+
+			var targetBuildings = GameData.rng.NextDouble() <= buildingOrPopulationOdds;
+			var defence = targetBuildings ? buildingDefence : populationDefence;
+			var destroyMsg = targetBuildings ? "Destroyed city population." : "Destroyed a building.";
+			Action remover = targetBuildings
+				? () =>
+				{
+					var building = tile.cityAtTile.GetBuildings()
+						.OrderBy(x => GameData.rng.Next()).FirstOrDefault();
+					tile.cityAtTile.RemoveBuilding(building);
+				}
+			: () =>
+				{
+					tile.cityAtTile.RemoveRandomCitizen();
+				};
+
+			var hitCount = 0;
+
+			foreach (var fire in Enumerable.Range(0, unitType.rateOfFire)) {
+				double bombardStrength  = StrengthVersus(null, CombatRole.Bombard, facingDirection);
+				double defenderStrength = defence;
+				double attackerOdds = bombardStrength / (bombardStrength + defenderStrength);
+				if (Double.IsNaN(attackerOdds))
+					return;
+
+				await RunAnimatedBombard(tile, attackerOdds, () => {
+					hitCount += 1;
+					remover();
+				});
 			}
 
-			facingDirection = unitOriginalOrientation;
+			if (owner.isHuman) {
+				if (hitCount > 0)
+					new MsgShowTemporaryPopup($"Artillery bombardment successful! {destroyMsg}", tile).send();
+				else
+					new MsgShowTemporaryPopup($"Artillery bombardment failed.", tile).send();
+			}
+		}
+
+		private async Task bombardTileImprovements(Tile tile) {
+			// Anecdotal: "arty seems to wipe out improvement on 75% or more of the shots"
+			// ==> Artillery.bombard : 12 --> TileImprovement.Defense : 3
+			// TODO: Make configurable
+
+			const int tileImprovementDefence = 3;
+
+			var hitCount = 0;
+
+			var improvement = tile.overlays.GetImprovements()
+				.OrderBy(x => GameData.rng.Next()).FirstOrDefault();
+
+			foreach (var fire in Enumerable.Range(0, unitType.rateOfFire)) {
+				double bombardStrength  = StrengthVersus(null, CombatRole.Bombard, facingDirection);
+				double defenderStrength = tileImprovementDefence;
+				double attackerOdds = bombardStrength / (bombardStrength + defenderStrength);
+				if (Double.IsNaN(attackerOdds))
+					return;
+
+				await RunAnimatedBombard(tile, attackerOdds, () => {
+					hitCount += 1;
+					tile.overlays.Remove(improvement);
+					// TODO: Re-target?
+				});
+			}
+
+			if (owner.isHuman) {
+				if (hitCount > 0)
+					new MsgShowTemporaryPopup($"Artillery bombardment successful! Destroyed {improvement?.key}.", tile).send();
+				else
+					new MsgShowTemporaryPopup($"Artillery bombardment failed.", tile).send();
+			}
 		}
 
 		public int HealRateAt(Tile location) {
@@ -663,9 +850,6 @@ namespace C7GameData {
 							movementPoints.onUnitMove(1);
 							return true;
 						}
-					} else if (unitType.bombard > 0) {
-						await bombard(newLoc);
-						return true;
 					} else {
 						return true;
 					}

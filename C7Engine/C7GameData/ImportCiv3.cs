@@ -1189,6 +1189,8 @@ namespace C7GameData {
 				prototype.shieldCost = prto.ShieldCost;
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
+				prototype.bombardRange = prto.BombardRange;
+				prototype.rateOfFire = prto.RateOfFire;
 				if (prto.TurnToAttack) {
 					prototype.flags.Add(SaveUnitPrototype.Flag.RotateBeforeAttack);
 				}
