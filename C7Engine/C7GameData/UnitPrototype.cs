@@ -88,6 +88,8 @@ namespace C7GameData {
 		public HashSet<Terraform> terraformActions = [];
 
 		public bool isWorker => terraformActions.Count > 0;
+		public bool isSettler => actions.Contains(UnitAction.BuildCity);
+
 
 		public UnitPrototype() { }
 
