@@ -527,6 +527,8 @@ namespace C7GameData {
 
 				player.governmentId = save.Governments[lead.Government].id;
 
+				player.skipFirstTurn = lead.SkipFirstTurn == 1;
+
 				// Add the starting techs for scenarios.
 				if (theBiq.LeadTech != null) {
 					for (int j = 0; j < theBiq.LeadTech[leadIndex].Length; ++j) {
