@@ -70,9 +70,9 @@ public partial class GotoLayer : LooseLayer {
 
 		looseView.mapView.game.animationController.updateAnimations();
 	}
-    
-    private GotoInfo lastGotoInfo = null;
-    private bool lastCanEnter = false;
+
+	private GotoInfo lastGotoInfo = null;
+	private bool lastCanEnter = false;
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter) {
 		MapUnit unit = looseView.mapView.game.CurrentlySelectedUnit;
@@ -88,18 +88,18 @@ public partial class GotoLayer : LooseLayer {
 			DrawStaticGoToCursor(looseView, tileCenter, 0, true);
 		}
 
-        bool canEnter;
-        
-        if (gotoInfo == lastGotoInfo)
-            canEnter = lastCanEnter;
-        else {
-            lastCanEnter = canEnter = unit.CanEnterTile(gotoInfo.destinationTile, TileProbe.DeclareWarProbe());
-            lastGotoInfo = gotoInfo;
-        }
+		bool canEnter;
 
-        if (gotoInfo.path == null || !canEnter)
-            return;
-        
+		if (gotoInfo == lastGotoInfo)
+			canEnter = lastCanEnter;
+		else {
+			lastCanEnter = canEnter = unit.CanEnterTile(gotoInfo.destinationTile, TileProbe.DeclareWarProbe());
+			lastGotoInfo = gotoInfo;
+		}
+
+		if (gotoInfo.path == null || !canEnter)
+			return;
+
 		List<Tile> tiles = new List<Tile>();
 		tiles.Add(unitOriginTile);
 		tiles.AddRange(gotoInfo.path.path);
