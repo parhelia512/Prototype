@@ -960,7 +960,9 @@
         "Hittites",
         "Portugal"
       ],
-      "upgradeTo": "Explorer",
+      "upgradesTo": [
+        "Explorer"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1242,7 +1244,12 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Swordsman",
+      "upgradesTo": [
+        "Gallic Swordsman",
+        "Immortals",
+        "Legionary",
+        "Swordsman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1310,7 +1317,10 @@
         "Byzantines",
         "Inca"
       ],
-      "upgradeTo": "Longbowman",
+      "upgradesTo": [
+        "Berserk",
+        "Longbowman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1376,7 +1386,10 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Pikeman",
+      "upgradesTo": [
+        "Musketman",
+        "Pikeman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1443,7 +1456,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Medieval Infantry",
+      "upgradesTo": [
+        "Medieval Infantry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1514,7 +1529,10 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Horseman",
+      "upgradesTo": [
+        "Horseman",
+        "Mounted Warrior"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1587,7 +1605,15 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Knight",
+      "upgradesTo": [
+        "Ansar Warrior",
+        "Keshik",
+        "Knight",
+        "Rider",
+        "Samurai",
+        "Three-Man Chariot",
+        "War Elephant"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1657,7 +1683,10 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Musketman",
+      "upgradesTo": [
+        "Musketeer",
+        "Musketman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1729,7 +1758,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Guerilla",
+      "upgradesTo": [
+        "Guerilla"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1798,7 +1829,10 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Rifleman",
+      "upgradesTo": [
+        "Rifleman",
+        "Swiss Mercenary"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1866,7 +1900,11 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Cavalry",
+      "upgradesTo": [
+        "Cavalry",
+        "Cossack",
+        "Sipahi"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -1940,7 +1978,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Infantry",
+      "upgradesTo": [
+        "Infantry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -2081,7 +2121,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Mech Infantry",
+      "upgradesTo": [
+        "Mech Infantry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -2153,7 +2195,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Modern Armor",
+      "upgradesTo": [
+        "Modern Armor"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -2373,7 +2417,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Trebuchet",
+      "upgradesTo": [
+        "Trebuchet"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -2435,6 +2481,7 @@
         "Celts",
         "Arabia",
         "Carthage",
+        "Korea",
         "Sumeria",
         "Hittites",
         "Netherlands",
@@ -2443,7 +2490,10 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Artillery",
+      "upgradesTo": [
+        "Artillery",
+        "Hwach'a"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -2518,7 +2568,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Radar Artillery",
+      "upgradesTo": [
+        "Radar Artillery"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -2556,9 +2608,6 @@
       "bombardRange": 2,
       "rateOfFire": 3,
       "movement": 2,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2593,6 +2642,9 @@
         "Maya"
       ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Land"
       ],
@@ -2851,9 +2903,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 3,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2886,8 +2935,14 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Caravel",
+      "upgradesTo": [
+        "Caravel",
+        "Carrack"
+      ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -2923,9 +2978,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 4,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -2958,8 +3010,13 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Galleon",
+      "upgradesTo": [
+        "Galleon"
+      ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -2995,9 +3052,6 @@
       "bombardRange": 1,
       "rateOfFire": 2,
       "movement": 5,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3031,6 +3085,9 @@
         "Maya"
       ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -3071,9 +3128,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 4,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3107,8 +3161,13 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Transport",
+      "upgradesTo": [
+        "Transport"
+      ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -3177,7 +3236,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Destroyer",
+      "upgradesTo": [
+        "Destroyer"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -3508,9 +3569,6 @@
       "bombardRange": 2,
       "rateOfFire": 2,
       "movement": 5,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -3545,6 +3603,9 @@
         "Maya"
       ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -3763,7 +3824,10 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Jet Fighter",
+      "upgradesTo": [
+        "F-15",
+        "Jet Fighter"
+      ],
       "unproducible": false,
       "categories": [
         "Air"
@@ -4317,7 +4381,9 @@
       "producibleBy": [
         "Aztecs"
       ],
-      "upgradeTo": "Swordsman",
+      "upgradesTo": [
+        "Swordsman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4357,7 +4423,9 @@
       "producibleBy": [
         "Babylon"
       ],
-      "upgradeTo": "Longbowman",
+      "upgradesTo": [
+        "Longbowman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4397,7 +4465,9 @@
       "producibleBy": [
         "Greece"
       ],
-      "upgradeTo": "Musketman",
+      "upgradesTo": [
+        "Musketman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4437,7 +4507,9 @@
       "producibleBy": [
         "Zululand"
       ],
-      "upgradeTo": "Musketman",
+      "upgradesTo": [
+        "Musketman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4477,7 +4549,9 @@
       "producibleBy": [
         "Rome"
       ],
-      "upgradeTo": "Medieval Infantry",
+      "upgradesTo": [
+        "Medieval Infantry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4520,7 +4594,9 @@
       "producibleBy": [
         "Persia"
       ],
-      "upgradeTo": "Medieval Infantry",
+      "upgradesTo": [
+        "Guerilla"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4563,7 +4639,9 @@
       "producibleBy": [
         "Egypt"
       ],
-      "upgradeTo": "Knight",
+      "upgradesTo": [
+        "Knight"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4606,7 +4684,9 @@
       "producibleBy": [
         "China"
       ],
-      "upgradeTo": "Cavalry",
+      "upgradesTo": [
+        "Cavalry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4650,7 +4730,9 @@
       "producibleBy": [
         "Iroquois"
       ],
-      "upgradeTo": "Knight",
+      "upgradesTo": [
+        "Knight"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4693,7 +4775,9 @@
       "producibleBy": [
         "France"
       ],
-      "upgradeTo": "Rifleman",
+      "upgradesTo": [
+        "Rifleman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4736,7 +4820,9 @@
       "producibleBy": [
         "Japan"
       ],
-      "upgradeTo": "Cavalry",
+      "upgradesTo": [
+        "Cavalry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4779,7 +4865,9 @@
       "producibleBy": [
         "India"
       ],
-      "upgradeTo": "Cavalry",
+      "upgradesTo": [
+        "Cavalry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4862,7 +4950,9 @@
       "producibleBy": [
         "Germany"
       ],
-      "upgradeTo": "Modern Armor",
+      "upgradesTo": [
+        "Modern Armor"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -4903,13 +4993,13 @@
       "bombardRange": 1,
       "rateOfFire": 2,
       "movement": 5,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "England"
       ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -4991,9 +5081,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 5,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -5028,6 +5115,9 @@
         "Maya"
       ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -5070,7 +5160,9 @@
       "producibleBy": [
         "Mongols"
       ],
-      "upgradeTo": "Cavalry",
+      "upgradesTo": [
+        "Cavalry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5155,7 +5247,9 @@
       "producibleBy": [
         "Scandinavia"
       ],
-      "upgradeTo": "Guerilla",
+      "upgradesTo": [
+        "Guerilla"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5238,7 +5332,9 @@
       "producibleBy": [
         "Celts"
       ],
-      "upgradeTo": "Medieval Infantry",
+      "upgradesTo": [
+        "Medieval Infantry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5281,7 +5377,9 @@
       "producibleBy": [
         "Arabia"
       ],
-      "upgradeTo": "Cavalry",
+      "upgradesTo": [
+        "Cavalry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5325,7 +5423,9 @@
       "producibleBy": [
         "Carthage"
       ],
-      "upgradeTo": "Pikeman",
+      "upgradesTo": [
+        "Musketman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5340,7 +5440,7 @@
       ]
     },
     {
-      "name": "Hwach\u0027a",
+      "name": "Hwach'a",
       "art": {
         "mainArt": {
           "defaultName": "Hwacha"
@@ -5365,7 +5465,9 @@
       "producibleBy": [
         "Korea"
       ],
-      "upgradeTo": "Artillery",
+      "upgradesTo": [
+        "Artillery"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5438,7 +5540,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Guerilla",
+      "upgradesTo": [
+        "Guerilla"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5511,7 +5615,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "TOW Infantry",
+      "upgradesTo": [
+        "TOW Infantry"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -5547,7 +5653,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 1,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5580,7 +5685,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5615,7 +5719,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5650,7 +5753,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5685,7 +5787,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5720,7 +5821,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5755,7 +5855,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5790,7 +5889,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5825,7 +5923,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5860,7 +5957,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5895,7 +5991,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5930,7 +6025,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -5965,7 +6059,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6000,7 +6093,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6035,7 +6127,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6070,7 +6161,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6105,7 +6195,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6140,7 +6229,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6175,7 +6263,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6210,7 +6297,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6245,7 +6331,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6280,7 +6365,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6294,7 +6378,7 @@
       ]
     },
     {
-      "name": "Joan d\u0027Arc",
+      "name": "Joan d'Arc",
       "art": {
         "mainArt": {
           "defaultName": "King French"
@@ -6315,7 +6399,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6350,7 +6433,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6385,7 +6467,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6423,7 +6504,9 @@
       "producibleBy": [
         "Sumeria"
       ],
-      "upgradeTo": "Pikeman",
+      "upgradesTo": [
+        "Pikeman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6463,7 +6546,9 @@
       "producibleBy": [
         "Hittites"
       ],
-      "upgradeTo": "Knight",
+      "upgradesTo": [
+        "Knight"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6502,7 +6587,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6537,7 +6621,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6572,7 +6655,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6608,14 +6690,16 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 4,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
       "producibleBy": [
         "Portugal"
       ],
-      "upgradeTo": "Galleon",
+      "upgradesTo": [
+        "Galleon"
+      ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -6654,7 +6738,9 @@
       "producibleBy": [
         "Netherlands"
       ],
-      "upgradeTo": "Rifleman",
+      "upgradesTo": [
+        "Rifleman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6693,7 +6779,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6762,7 +6847,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Cannon",
+      "upgradesTo": [
+        "Cannon"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6799,7 +6886,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6834,7 +6920,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6869,7 +6954,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -6907,7 +6991,9 @@
       "producibleBy": [
         "Inca"
       ],
-      "upgradeTo": "Explorer",
+      "upgradesTo": [
+        "Explorer"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6947,7 +7033,9 @@
       "producibleBy": [
         "Maya"
       ],
-      "upgradeTo": "Longbowman",
+      "upgradesTo": [
+        "Longbowman"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -6987,7 +7075,9 @@
       "producibleBy": [
         "Byzantines"
       ],
-      "upgradeTo": "Caravel",
+      "upgradesTo": [
+        "Caravel"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -7058,7 +7148,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "AEGIS Cruiser",
+      "upgradesTo": [
+        "AEGIS Cruiser"
+      ],
       "unproducible": false,
       "categories": [
         "Sea"
@@ -7098,7 +7190,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 1,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -7137,7 +7228,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "producibleBy": [],
       "unproducible": true,
       "categories": [
         "Land"
@@ -7174,10 +7264,6 @@
       "bombardRange": 0,
       "rateOfFire": 0,
       "movement": 2,
-      "flags": [
-        "rotateBeforeAttack"
-      ],
-      "upgradeTo": "Galley",
       "producibleBy": [
         "Rome",
         "Egypt",
@@ -7211,7 +7297,14 @@
         "Inca",
         "Maya"
       ],
+      "upgradesTo": [
+        "Dromon",
+        "Galley"
+      ],
       "unproducible": false,
+      "flags": [
+        "rotateBeforeAttack"
+      ],
       "categories": [
         "Sea"
       ],
@@ -7280,7 +7373,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Modern Paratrooper",
+      "upgradesTo": [
+        "Modern Paratrooper"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -7423,7 +7518,9 @@
         "Inca",
         "Maya"
       ],
-      "upgradeTo": "Mobile SAM",
+      "upgradesTo": [
+        "Mobile SAM"
+      ],
       "unproducible": false,
       "categories": [
         "Land"
@@ -8157,7 +8254,7 @@
       ]
     },
     {
-      "name": "Sun Tzu\u0027s Art of War",
+      "name": "Sun Tzu's Art of War",
       "shieldCost": 600,
       "populationCost": 0,
       "requiredTech": "tech-23",
@@ -8191,7 +8288,7 @@
       ]
     },
     {
-      "name": "Magellan\u0027s Voyage",
+      "name": "Magellan's Voyage",
       "shieldCost": 400,
       "populationCost": 0,
       "requiredTech": "tech-37",
@@ -8215,7 +8312,7 @@
       ]
     },
     {
-      "name": "Copernicus\u0027 Observatory",
+      "name": "Copernicus' Observatory",
       "shieldCost": 400,
       "populationCost": 0,
       "requiredTech": "tech-33",
@@ -8231,7 +8328,7 @@
       ]
     },
     {
-      "name": "Shakespeare\u0027s Theater",
+      "name": "Shakespeare's Theater",
       "shieldCost": 450,
       "populationCost": 0,
       "requiredTech": "tech-40",
@@ -8250,7 +8347,7 @@
       ]
     },
     {
-      "name": "Leonardo\u0027s Workshop",
+      "name": "Leonardo's Workshop",
       "shieldCost": 600,
       "populationCost": 0,
       "requiredTech": "tech-27",
@@ -8266,7 +8363,7 @@
       ]
     },
     {
-      "name": "JS Bach\u0027s Cathedral",
+      "name": "JS Bach's Cathedral",
       "shieldCost": 600,
       "populationCost": 0,
       "requiredTech": "tech-29",
@@ -8282,7 +8379,7 @@
       ]
     },
     {
-      "name": "Newton\u0027s University",
+      "name": "Newton's University",
       "shieldCost": 400,
       "populationCost": 0,
       "requiredTech": "tech-41",
@@ -8298,7 +8395,7 @@
       ]
     },
     {
-      "name": "Smith\u0027s Trading Company",
+      "name": "Smith's Trading Company",
       "shieldCost": 600,
       "populationCost": 0,
       "requiredTech": "tech-36",
@@ -9341,7 +9438,7 @@
         "St. Petersburg",
         "Novgorod",
         "Rostov",
-        "Yaroslavl\u0027",
+        "Yaroslavl'",
         "Yekaterinburg",
         "Yakutsk",
         "Vladivostok",
@@ -9350,31 +9447,31 @@
         "Krasnoyarsk",
         "Khabarovsk",
         "Bryansk",
-        "Tver\u0027",
-        "Kazan\u0027",
+        "Tver'",
+        "Kazan'",
         "Novosibirsk",
         "Magadan",
         "Murmansk",
         "Irkutsk",
         "Chita",
         "Samara",
-        "Arkhangel\u0027sk",
+        "Arkhangel'sk",
         "Chelyabinsk",
-        "Tobol\u0027sk",
+        "Tobol'sk",
         "Vologda",
         "Omsk",
-        "Astrakhan\u0027",
+        "Astrakhan'",
         "Kursk",
         "Saratov",
         "Tula",
         "Vladimir",
-        "Perm\u0027",
+        "Perm'",
         "Voronezh",
         "Pskov",
         "Staraya Russa",
         "Kostroma",
         "Nizhniy Novgorod",
-        "Suzdal\u0027",
+        "Suzdal'",
         "Magnitogorsk"
       ],
       "startingTechs": [
@@ -9541,7 +9638,7 @@
       "name": "France",
       "noun": "French",
       "adjective": "French",
-      "leader": "Joan d\u0027Arc",
+      "leader": "Joan d'Arc",
       "primaryColorIndex": 7,
       "secondaryColorIndex": 7,
       "leaderGender": "female",
@@ -9953,7 +10050,7 @@
         "Almeria",
         "Leon",
         "Zamora",
-        "M\u00E9rida",
+        "Mérida",
         "Lugo",
         "Alicante",
         "Cadiz",
@@ -10168,7 +10265,7 @@
         "Taif",
         "Hama",
         "Tabuk",
-        "Sana\u0027a",
+        "Sana'a",
         "Shihr"
       ],
       "startingTechs": [
@@ -10245,18 +10342,18 @@
       "leaderArtFile": "art\\advisors\\x_Wang Kon advisor.pcx",
       "cityNames": [
         "Seoul",
-        "P\u0027yongyang",
+        "P'yongyang",
         "Wonsan",
         "Pusan",
-        "Namp\u0027o",
+        "Namp'o",
         "Cheju",
         "Hyangsan",
         "Ulsan",
-        "Inch\u0027on",
+        "Inch'on",
         "Pyongsong",
         "Taejon",
         "Paegam",
-        "Manp\u0027o",
+        "Manp'o",
         "Kaesong",
         "Chonju",
         "Sariwon",
@@ -10264,13 +10361,13 @@
         "Haeju",
         "Taegu",
         "Chinje",
-        "Tokch\u0027on",
-        "Ch\u0027ongfu",
+        "Tokch'on",
+        "Ch'ongfu",
         "Taegwon",
-        "Sokch\u0027o",
+        "Sokch'o",
         "Hamhung",
         "Iri",
-        "Huich\u0027on",
+        "Huich'on",
         "Namwon",
         "Kumgang",
         "Oijongbu"
@@ -10439,34 +10536,34 @@
       "cityNames": [
         "Lisbon",
         "Oporto",
-        "Guimar\u00E3es",
+        "Guimarães",
         "Lagos",
         "Emerita",
         "Sagres",
         "Coimbra",
         "Leiria",
-        "\u00C9vora",
+        "Évora",
         "Braga",
         "Faro",
         "Rio Janeiro",
-        "S\u00E3o Paulo",
+        "São Paulo",
         "Luanda",
-        "Alc\u00E1cer do Sal",
+        "Alcácer do Sal",
         "Guarda",
         "Castelo Branco",
         "Badajoz",
-        "Louren\u00E7o Marques",
+        "Lourenço Marques",
         "Viseu",
-        "S\u00E3o Mamede",
+        "São Mamede",
         "Ourique",
         "Goa",
         "Diu",
         "Tavira",
         "Cacela",
-        "Alcoba\u00E7a",
+        "Alcobaça",
         "Bissau",
-        "\u00D3bidos",
-        "Nazar\u00E9",
+        "Óbidos",
+        "Nazaré",
         "Avis",
         "Praia",
         "Tomar",
@@ -10589,27 +10686,27 @@
       "cultureGroupKey": "American",
       "leaderArtFile": "art\\advisors\\x2_Smoke-Jaguar_advisor.pcx",
       "cityNames": [
-        "Chich\u00E9n Itza",
-        "Cop\u00E1n",
+        "Chichén Itza",
+        "Copán",
         "Palenque",
         "Tikal",
-        "Yaxchil\u00E1n",
+        "Yaxchilán",
         "Bonampak",
         "Lagartero",
-        "Quirigu\u00E1",
+        "Quiriguá",
         "Calakmul",
         "Lazapa",
-        "Kaminaljuy\u00FA",
+        "Kaminaljuyú",
         "Piedras Negras",
-        "Uaxact\u00FAn",
+        "Uaxactún",
         "Cuello",
-        "Tul\u00FAm",
-        "Cob\u00E1",
+        "Tulúm",
+        "Cobá",
         "Dzibilchaltun",
         "Uxmal",
-        "Mayap\u00E1n",
-        "Kab\u00E1h",
-        "Ak\u00E9",
+        "Mayapán",
+        "Kabáh",
+        "Aké",
         "Xcalumkin",
         "Ek Balam",
         "Tazumal",
@@ -12439,7 +12536,7 @@
       "militaryLaw": 1
     }
   ],
-  "worldSizes" : [
+  "worldSizes": [
     {
       "name": "Tiny",
       "length": 80,
@@ -12467,9 +12564,9 @@
       "width": 100,
       "optimalNumberOfCities": 20,
       "techRate": 240,
-      "distanceBetweenCivs": 12,      
+      "distanceBetweenCivs": 12,
       "numberOfCivs": 8,
-      "isDefault" : true
+      "isDefault": true
     },
     {
       "name": "Large",
