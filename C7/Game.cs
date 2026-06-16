@@ -1057,7 +1057,11 @@ public partial class Game : Node {
 			// Figure out what unit is in goto mode. If the tile we're hovering over is
 			// different than the tile the unit is on, calculate the path to move there.
 			MapUnit unit = tile == null ? null : gameData.GetUnit(CurrentlySelectedUnit.id);
-			if (unit != null && unit.location != tile) {
+
+			// Units like the Bomber don't have a go-to action
+			if (unit != null && !unit.GetAvailableActions().Contains(UnitAction.Goto)) {
+				result = null;
+			} else if (unit != null && unit.location != tile) {
 				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile, unit);
 				result.moveCost =
 					result.path.PathCost(unit.owner, unit.location, unit.unitType.movement, unit.movementPoints.remaining);

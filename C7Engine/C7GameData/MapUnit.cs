@@ -70,6 +70,9 @@ namespace C7GameData {
 		public bool IsWaterUnit() {
 			return this.unitType.categories.Contains("Sea");
 		}
+		public bool IsAirUnit() {
+			return this.unitType.categories.Contains("Air");
+		}
 
 		public bool CanDefendOnLand() {
 			return IsLandUnit() && unitType.defense > 0;
@@ -730,6 +733,11 @@ namespace C7GameData {
 
 		// Generalized check to see whether a given tile is accessible to the unit in a given context.
 		public bool CanEnterTile(Tile tile, TileProbe probe) {
+			// TODO: Perhaps this is not sufficient, but it is for now,
+			// since otherwise we can move air units on land and sea
+			if (this.IsAirUnit())
+				return false;
+
 			if (this.owner.isHuman && !this.owner.HasExploredTile(tile))
 				return true;
 
