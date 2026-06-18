@@ -194,8 +194,11 @@ namespace C7GameData {
 			return workerJob.TurnsToComplete * tile.overlayTerrainType.movementCost;
 		}
 
-		public async Task animateAsync(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
-			if (EngineStorage.animationsEnabled && !EngineStorage.gameData.observerMode) {
+		public async Task animateAsync(AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
+			var animationsEnabled = EngineStorage.animationsEnabled && !EngineStorage.gameData.observerMode;
+			var skipAnimations = SkipAnimations(action);
+
+			if (animationsEnabled && !skipAnimations) {
 				var msg = new MsgStartUnitAnimation(this, action, ending);
 				msg.send();
 
@@ -207,6 +210,23 @@ namespace C7GameData {
 
 		public void animate(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
 			_ = animateAsync(action, ending);
+		}
+
+		private bool SkipAnimations(AnimatedAction action) {
+			if (action != AnimatedAction.RUN) return false;
+
+			// as soon as we move, the tile we were just on becomes the previous tile
+			var isOnRailroad = Tile.IsTileValid(this.previousLocation) && this.previousLocation.overlays.HasRailroad();
+			if (!isOnRailroad) return false;
+
+			// and the tile we are moving towards, becomes the current tile
+			var movingOnRailroad = Tile.IsTileValid(this.location) && this.location.overlays.HasRailroad();
+			if (!movingOnRailroad) return false;
+
+			var canMoveFreely = Player.CanMoveFreely(this.owner, this.previousLocation, this.location);
+			if (!canMoveFreely) return false;
+
+			return true;
 		}
 
 		public void fortify() {
