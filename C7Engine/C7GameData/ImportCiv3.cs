@@ -887,6 +887,9 @@ namespace C7GameData {
 		}
 
 		private void ImportSavUnits() {
+			var shadowIdMap = new Dictionary<int, ID>();
+			var loadMap = new Dictionary<ID, int>();
+
 			foreach (QueryCiv3.Sav.UNIT unit in savData.Unit) {
 				if (unit.OwnerID < 0 || unit.OwnerID >= save.Players.Count) {
 					continue;
@@ -913,7 +916,20 @@ namespace C7GameData {
 					saveUnit.action = "fortified";
 				}
 
+				shadowIdMap[unit.ID] = saveUnit.id;
+				if (unit.LoadedOnUnitId > 0)
+					loadMap[saveUnit.id] = unit.LoadedOnUnitId;
+
 				save.Units.Add(saveUnit);
+			}
+
+			// Civ3 saves have their own ID scheme.
+			// Here we translate one "loaded on" reference to another using information
+			// gathered above. Note that we can't be sure to be able to resolve identifiers
+			// until we have scanned all units. Hence a second pass for these mappings.
+			foreach (var saveUnit in save.Units) {
+				if (loadMap.TryGetValue(saveUnit.id, out var loadedOnUnitId))
+					saveUnit.loadedOnUnitId = shadowIdMap[loadedOnUnitId];
 			}
 		}
 
@@ -1135,6 +1151,8 @@ namespace C7GameData {
 			if (prto.GoTo) yield return UnitAction.Goto;
 			if (prto.Explore) yield return UnitAction.Explore;
 			if (prto.Automate) yield return UnitAction.Automate;
+			if (prto.Load) yield return UnitAction.Load;
+			if (prto.Unload) yield return UnitAction.Unload;
 		}
 
 		private static IEnumerable<TerraformKey> GetUnitTerraforms(PRTO prto) {
@@ -1189,14 +1207,18 @@ namespace C7GameData {
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;
+				prototype.capacity = prto.Capacity;
 				prototype.shieldCost = prto.ShieldCost;
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
 				prototype.bombardRange = prto.BombardRange;
 				prototype.rateOfFire = prto.RateOfFire;
-				if (prto.TurnToAttack) {
-					prototype.flags.Add(SaveUnitPrototype.Flag.RotateBeforeAttack);
-				}
+
+				if (prto.TurnToAttack) prototype.flags.Add(SaveUnitPrototype.Flag.RotateBeforeAttack);
+
+				if (prto.CanCarryFootUnitsOnly) prototype.flags.Add(SaveUnitPrototype.Flag.CanCarryFootUnitsOnly);
+				if (prto.CanCarryAircraft) prototype.flags.Add(SaveUnitPrototype.Flag.CanCarryAircraft);
+				if (prto.CanCarryTacticalMissiles) prototype.flags.Add(SaveUnitPrototype.Flag.CanCarryTacticalMissiles);
 
 				prototype.actions.UnionWith(GetUnitActions(prto));
 				prototype.terraformActions.UnionWith(GetUnitTerraforms(prto).Select(tfKey => terraformIdByCiv3Key[tfKey]));

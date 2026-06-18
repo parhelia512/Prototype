@@ -360,6 +360,10 @@ public partial class Game : Node {
 			case MsgUnitMoved mUUAAB:
 				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mUUAAB.Unit));
 				break;
+			case MsgTransportUnloaded mTU:
+				// UnitMoved is enough to refresh UI
+				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mTU.Unit));
+				break;
 		}
 	}
 
@@ -579,7 +583,7 @@ public partial class Game : Node {
 			}
 		} else {
 			// Select unit on tile at mouse location
-			HandleUnitSelection(eventMouseButton);
+			HandleUnitSelectionTileClick(eventMouseButton);
 		}
 	}
 
@@ -592,22 +596,32 @@ public partial class Game : Node {
 		}
 	}
 
-	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
+	private void HandleUnitSelectionTileClick(InputEventMouseButton eventMouseButton) {
+
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile == null) {
 			return;
 		}
 
 		// TODO: This should really be the top unit.
-		MapUnit to_select = tile.unitsOnTile.FirstOrDefault();
-		if (to_select == null || to_select.owner != controller) {
+		MapUnit unit = tile.unitsOnTile.FirstOrDefault();
+		if (unit == null || unit.owner != controller) {
 			return;
 		}
 
-		bool canMove = unitSelector.SetSelectedUnit(to_select);
+		SelectUnit(unit, eventMouseButton.Position);
+	}
+
+	private void SelectUnit(MapUnit unit, Vector2 screenPosition) {
+		bool canMove = unitSelector.SetSelectedUnit(unit);
 		if (!canMove) {
-			TemporaryPopup.Show(this, "This unit has already moved.", eventMouseButton.Position);
+			TemporaryPopup.Show(this, "This unit has already moved.", screenPosition);
 		}
+	}
+
+	public void SelectUnit(MapUnit unit) {
+		var screenPos = mapView.screenLocationOfTile(unit.location);
+		SelectUnit(unit, screenPos);
 	}
 
 	private void HandleRightMouseButton(InputEventMouseButton eventMouseButton) {
@@ -976,6 +990,18 @@ public partial class Game : Node {
 					MapUnit currentUnit = gameData.GetUnit(CurrentlySelectedUnit.id);
 					setBombard(currentUnit);
 				});
+			}
+		}
+
+
+		if (currentAction == C7Action.UnitLoad) {
+			// TODO: Which transport?
+			if (CurrentlySelectedUnit != MapUnit.NONE && CurrentlySelectedUnit != null)
+				new MsgLoadToTransport(CurrentlySelectedUnit.id).send();
+		}
+		if (currentAction == C7Action.UnitUnload) {
+			if (CurrentlySelectedUnit != MapUnit.NONE && CurrentlySelectedUnit != null) {
+				new MsgUnloadTransport(CurrentlySelectedUnit.id).send();
 			}
 		}
 
