@@ -344,6 +344,18 @@ public partial class Game : Node {
 						PopupOverlay.PopupCategory.Advisor);
 				}
 				break;
+			case MsgDisplayStopWorkerActionPopup mDSWA:
+				popupOverlay.ShowPopup(
+					new ConfirmationPopup(
+						$"This worker has been ordered to {C7Action.ToTooltip(mDSWA.workerJob.UIAction)} and will be done in {mDSWA.turnsLeft} turns." +
+						$"\nDo you want them to stop?",
+						"Yes, there is more important work to do!",
+						"No, carry on.",
+						() => {
+							new MsgDoStopWorkerAction(mDSWA.worker).send();
+						}),
+					PopupOverlay.PopupCategory.Advisor);
+				break;
 			case MsgWarDeclaration mWD:
 				popupOverlay.ShowPopup(
 					new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
@@ -592,6 +604,13 @@ public partial class Game : Node {
 		}
 	}
 
+	public static bool PreSelectUint(MapUnit unit) {
+		if (unit.WorkerJob != null)
+			return false;
+		return true;
+	}
+
+	// TODO: unify same parts with RightClickTileMenu->SelectUnit()
 	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile == null) {
@@ -605,6 +624,13 @@ public partial class Game : Node {
 		}
 
 		bool canMove = unitSelector.SetSelectedUnit(to_select);
+
+		if (to_select.WorkerJob != null) {
+			if (!PreSelectUint(to_select)) {
+				return;
+			}
+		}
+
 		if (!canMove) {
 			TemporaryPopup.Show(this, "This unit has already moved.", eventMouseButton.Position);
 		}

@@ -314,6 +314,8 @@ namespace C7Engine {
 		public override async void process() {
 			Player controller = EngineStorage.gameData.GetPlayer(EngineStorage.uiControllerID);
 
+			TurnHandling.OnEndTurn(controller);
+
 			// Reorder the unit list so that non-busy units will be selected
 			// first.
 			controller.units.Sort((x, y) => x.IsBusy().CompareTo(y.IsBusy()));
@@ -342,6 +344,18 @@ namespace C7Engine {
 
 		public override void process() {
 			city.HurryProduction();
+		}
+	}
+
+	public class MsgDoStopWorkerAction : MessageToEngine {
+		private MapUnit worker;
+		public MsgDoStopWorkerAction(MapUnit worker) {
+			this.worker = worker;
+		}
+
+		public override void process() {
+			this.worker.resetWorkerJob();
+			this.worker.isAutomated = false;
 		}
 	}
 

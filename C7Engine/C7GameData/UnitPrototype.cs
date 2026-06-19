@@ -89,7 +89,8 @@ namespace C7GameData {
 
 		public HashSet<Terraform> terraformActions = [];
 
-		public bool isWorker => terraformActions.Count > 0;
+		// terraformActions.Count > 0 is not enough, as for example the Crusader unit can build a Fortress
+		public bool isWorker => terraformActions.Count > 0 && actions.Contains(UnitAction.Automate);
 		public bool isSettler => actions.Contains(UnitAction.BuildCity);
 
 

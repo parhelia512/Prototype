@@ -892,12 +892,12 @@ namespace C7GameData {
 
 		public int TurnsToCompleteTerraform(Terraform t) {
 			// Figure out how much work remains to do on this particular job.
-			int remainingTerraformCost = GetWorkerJobCost(location, t) - (int)SumWorkerProgress(location, t);
+			int remainingTerraformCost = GetWorkerJobCost(location, t) - (int)this.SumWorkerProgress(location, t);
 
 			// Figure out how fast all of the wokers doing this particular
 			// terraform will work.
-			float combinedWorkerSpeed = workerSpeed();
-			foreach (MapUnit unit in location.unitsOnTile) {
+			float combinedWorkerSpeed = this.workerSpeed();
+			foreach (MapUnit unit in location.unitsOnTile.Where(u => u.id != this.id)) {
 				if (unit.WorkerJob == t) {
 					combinedWorkerSpeed += unit.workerSpeed();
 				}
@@ -917,9 +917,18 @@ namespace C7GameData {
 				return;
 			}
 
-			// Check to see if we have a worker job, and if so, contribute our
-			// work towards it. We do this before any automation logic, so that
-			// automated units properly contribute their efforts.
+			if (isAutomated) {
+				// workers contribute their work at the end of the turn, not when assigned
+				if (this.unitType.isWorker && WorkerJob != null) {
+					return;
+				}
+				playAutomatedTurn();
+				return;
+			}
+		}
+
+		public async Task PerformEndOfTurnAction() {
+			// Busy Worker
 			if (WorkerJob != null) {
 				WorkerProgressTowardsJob += workerSpeed();
 				movementPoints.onConsumeAll();
@@ -928,11 +937,6 @@ namespace C7GameData {
 				if ((int)SumWorkerProgress(location, WorkerJob) >= GetWorkerJobCost(location, WorkerJob)) {
 					location.FinishWorkerJob(WorkerJob);
 				}
-			}
-
-			if (isAutomated) {
-				playAutomatedTurn();
-				return;
 			}
 		}
 
@@ -994,6 +998,7 @@ namespace C7GameData {
 			return unitType.terraformActions.Contains(terraform) && terraform.MeetsRequirements(owner, tile);
 		}
 
+		// entry point for "manual" job assignment
 		public void PerformTerraformAction(Terraform terraform) {
 			if (!canPerformTerraformAction(terraform)) {
 				log.Warning($"can't perform {terraform.Name} by {this}");
@@ -1003,6 +1008,14 @@ namespace C7GameData {
 
 			if (terraform.Animation is AnimatedAction animation)
 				animate(animation, AnimationEnding.Repeat);
+
+			movementPoints.onConsumeAll();
+
+			// See if this worker finished the job.
+			var turnsToFinish = this.TurnsToCompleteTerraform(this.WorkerJob);
+			if (turnsToFinish == 1) {
+				location.FinishWorkerJob(WorkerJob);
+			}
 
 			wake();
 			_ = PerformBusyAction();

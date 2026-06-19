@@ -207,11 +207,18 @@ public partial class RightClickTileMenu : RightClickMenu {
 		}
 	}
 
+	// TODO: unify same parts with Game->HandleUnitSelection()
 	public void SelectUnit(ID id) {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
+
 			if (toSelect != null && toSelect.owner == game.controller) {
+
 				bool canMove = game.unitSelector.SetSelectedUnit(toSelect);
+				if (!Game.PreSelectUint(toSelect)) {
+					return;
+				}
+
 				if (!canMove) {
 					ShowCannotMovePopup();
 				}
