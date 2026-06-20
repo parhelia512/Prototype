@@ -54,8 +54,7 @@ public partial class GotoLayer : LooseLayer {
 		staticCursorRect.Position = position - new Vector2(staticCursor.GetWidth(), staticCursor.GetHeight()) / 2;
 
 		gotoLabel.Theme = attackingMove ? redFontTheme : whiteFontTheme;
-		gotoLabel.Text = moves > 0 ? moves.ToString() : " ";
-		gotoLabel.Text = moves == 0 && !attackingMove ? moves.ToString() : gotoLabel.Text;
+		gotoLabel.Text = moves > 0 || !attackingMove ? moves.ToString() : " ";
 		Vector2 labelSize = gotoLabelFont.GetStringSize(gotoLabel.Text);
 		gotoLabel.Position = position - labelSize / 2;
 
