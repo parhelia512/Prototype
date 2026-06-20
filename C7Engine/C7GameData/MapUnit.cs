@@ -191,7 +191,7 @@ namespace C7GameData {
 			// worker that would take 2 turns. In order for the job to take the
 			// expected 4 turns we need to multiply by the movement cost of the
 			// terrain. This also makes roading hills/mountains more expensive.
-			return workerJob.TurnsToComplete * tile.overlayTerrainType.movementCost;
+			return tile.overlayTerrainType.movementCost * workerJob.TurnsToComplete;
 		}
 
 		public async Task animateAsync(MapUnit.AnimatedAction action, AnimationEnding ending = AnimationEnding.Stop) {
@@ -1012,8 +1012,11 @@ namespace C7GameData {
 			movementPoints.onConsumeAll();
 
 			// See if this worker finished the job.
-			var turnsToFinish = this.TurnsToCompleteTerraform(this.WorkerJob);
-			if (turnsToFinish == 1) {
+            var terraformProgress = this.SumWorkerProgress(this.location, this.WorkerJob);
+            var turnProgress = this.location.GetCurrentUnaccountedJobProgress(terraform);
+            var totalCost = (float)GetWorkerJobCost(this.location, this.WorkerJob);
+            
+			if (terraformProgress + turnProgress == totalCost) {
 				location.FinishWorkerJob(WorkerJob);
 			}
 

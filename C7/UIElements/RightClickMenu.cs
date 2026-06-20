@@ -100,10 +100,6 @@ public partial class RightClickMenu : VBoxContainer {
 			this.AcceptEvent();
 		}
 	}
-
-	public void ShowCannotMovePopup() {
-		TemporaryPopup.Show(GetParent(), "This unit has already moved.", position);
-	}
 }
 
 public partial class RightClickTileMenu : RightClickMenu {
@@ -215,12 +211,13 @@ public partial class RightClickTileMenu : RightClickMenu {
 			if (toSelect != null && toSelect.owner == game.controller) {
 
 				bool canMove = game.unitSelector.SetSelectedUnit(toSelect);
-				if (!Game.PreSelectUint(toSelect)) {
+                
+				if (toSelect.WorkerJob != null) {
 					return;
 				}
 
 				if (!canMove) {
-					ShowCannotMovePopup();
+                    new MsgShowTemporaryPopup("This unit has already moved.", toSelect.location).send();
 				}
 
 				new MsgSetFortification(toSelect.id, false).send();
@@ -245,7 +242,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 					if (!hasSelectedUnit && !isFortify) {
 						bool canMove = game.unitSelector.SetSelectedUnit(unit);
 						if (!canMove) {
-							ShowCannotMovePopup();
+                            new MsgShowTemporaryPopup("This unit has already moved.", tile).send();
 						}
 					}
 				}

@@ -604,12 +604,6 @@ public partial class Game : Node {
 		}
 	}
 
-	public static bool PreSelectUint(MapUnit unit) {
-		if (unit.WorkerJob != null)
-			return false;
-		return true;
-	}
-
 	// TODO: unify same parts with RightClickTileMenu->SelectUnit()
 	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
@@ -618,21 +612,19 @@ public partial class Game : Node {
 		}
 
 		// TODO: This should really be the top unit.
-		MapUnit to_select = tile.unitsOnTile.FirstOrDefault();
-		if (to_select == null || to_select.owner != controller) {
+		MapUnit toSelect = tile.unitsOnTile.FirstOrDefault();
+		if (toSelect == null || toSelect.owner != controller) {
 			return;
 		}
 
-		bool canMove = unitSelector.SetSelectedUnit(to_select);
+		bool canMove = unitSelector.SetSelectedUnit(toSelect);
 
-		if (to_select.WorkerJob != null) {
-			if (!PreSelectUint(to_select)) {
-				return;
-			}
+		if (toSelect.WorkerJob != null) {
+			return;
 		}
 
 		if (!canMove) {
-			TemporaryPopup.Show(this, "This unit has already moved.", eventMouseButton.Position);
+            new MsgShowTemporaryPopup("This unit has already moved.", tile).send();
 		}
 	}
 
