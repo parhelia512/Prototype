@@ -1070,6 +1070,7 @@ public partial class Game : Node {
 			}), PopupOverlay.PopupCategory.Advisor);
 	}
 
+	private Tile lastTile = null;
 	private GotoInfo GetGotoInfo(Vector2 mousePos) {
 		GotoInfo result = new();
 
@@ -1078,7 +1079,11 @@ public partial class Game : Node {
 		// Figure out which tile it was.
 		EngineStorage.ReadGameData((GameData gameData) => {
 			Tile tile = mapView.tileOnScreenAt(gameData.map, mousePos);
-			result.destinationTile = tile;
+			if (tile == lastTile) {
+				result = gotoInfo;
+				return;
+			}
+			lastTile = result.destinationTile = tile;
 
 			// Figure out what unit is in goto mode. If the tile we're hovering over is
 			// different than the tile the unit is on, calculate the path to move there.
