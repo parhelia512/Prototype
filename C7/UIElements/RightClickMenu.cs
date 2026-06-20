@@ -336,24 +336,24 @@ public partial class RightClickCityMenu : RightClickMenu {
 
 	public void ResetItems(Tile tile) {
 		RemoveAll();
-        
-        // TODO: maybe look into unifying this with the other right click menu (when there are units present)
-        // I don't like this much duplication
-        AddItem($"Terrain Info", () => {
-            game.ShowTileInfo(tile);
-            CloseAndDelete();
-        });
 
-        AddTreeSeparator();
+		// TODO: maybe look into unifying this with the other right click menu (when there are units present)
+		// I don't like this much duplication
+		AddItem($"Terrain Info", () => {
+			game.ShowTileInfo(tile);
+			CloseAndDelete();
+		});
+
+		AddTreeSeparator();
 
 		if (tile.cityAtTile?.owner == game.controller) {
-            AddItem("Zoom to city", () => {
-                this.CloseAndDelete();
-                EngineStorage.ReadGameData((GameData gameData) => {
-                    game.ShowCityScreenForCity(gameData, tile.cityAtTile);
-                });
-            });
-            AddTreeSeparator();
+			AddItem("Zoom to city", () => {
+				this.CloseAndDelete();
+				EngineStorage.ReadGameData((GameData gameData) => {
+					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
+				});
+			});
+			AddTreeSeparator();
 			AddItem("Change Production", () => {
 				// Close the first menu before opening the second menu.
 				this.CloseAndDelete();
