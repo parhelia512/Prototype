@@ -202,23 +202,13 @@ public partial class RightClickTileMenu : RightClickMenu {
 				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 		}
 	}
-
-	// TODO: unify same parts with Game->HandleUnitSelection()
+    
 	public void SelectUnit(ID id) {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
 
 			if (toSelect != null && toSelect.owner == game.controller) {
-
-				bool canMove = game.unitSelector.SetSelectedUnit(toSelect);
-                
-				if (toSelect.WorkerJob != null) {
-					return;
-				}
-
-				if (!canMove) {
-                    new MsgShowTemporaryPopup("This unit has already moved.", toSelect.location).send();
-				}
+                game.HandleSelection(toSelect);
 
 				new MsgSetFortification(toSelect.id, false).send();
 				ResetItems(toSelect.location, new Dictionary<ID, bool>() { { toSelect.id, false } });
