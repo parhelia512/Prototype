@@ -1012,10 +1012,10 @@ namespace C7GameData {
 			movementPoints.onConsumeAll();
 
 			// See if this worker finished the job.
-            var terraformProgress = this.SumWorkerProgress(this.location, this.WorkerJob);
-            var turnProgress = this.location.GetCurrentUnaccountedJobProgress(terraform);
-            var totalCost = (float)GetWorkerJobCost(this.location, this.WorkerJob);
-            
+			var terraformProgress = this.SumWorkerProgress(this.location, this.WorkerJob);
+			var turnProgress = this.location.GetCurrentUnaccountedJobProgress(terraform);
+			var totalCost = (float)GetWorkerJobCost(this.location, this.WorkerJob);
+
 			if (terraformProgress + turnProgress == totalCost) {
 				location.FinishWorkerJob(WorkerJob);
 			}

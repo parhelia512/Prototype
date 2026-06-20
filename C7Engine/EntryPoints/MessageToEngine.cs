@@ -356,9 +356,9 @@ namespace C7Engine {
 		public override void process() {
 			this.worker.resetWorkerJob();
 			this.worker.isAutomated = false;
-            if(!this.worker.movementPoints.canMove)
-                new MsgShowTemporaryPopup("This unit has already moved.", this.worker.location).send();
-        }
+			if (!this.worker.movementPoints.canMove)
+				new MsgShowTemporaryPopup("This unit has already moved.", this.worker.location).send();
+		}
 	}
 
 	public class MsgSetAnimationsEnabled : MessageToEngine {

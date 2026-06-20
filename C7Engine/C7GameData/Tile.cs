@@ -772,9 +772,9 @@ namespace C7GameData {
 			currentWorkerJob.OnComplete(player, this);
 		}
 
-        public float GetCurrentUnaccountedJobProgress(Terraform currentWorkerJob) {
-            return unitsOnTile.Where(unit => currentWorkerJob == unit.WorkerJob).Sum(unit => unit.workerSpeed());
-        }
+		public float GetCurrentUnaccountedJobProgress(Terraform currentWorkerJob) {
+			return unitsOnTile.Where(unit => currentWorkerJob == unit.WorkerJob).Sum(unit => unit.workerSpeed());
+		}
 
 		public async Task AnimateAsync(AnimatedEffect effect) {
 			if (!EngineStorage.animationsEnabled) return;

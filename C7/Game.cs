@@ -603,7 +603,7 @@ public partial class Game : Node {
 			});
 		}
 	}
-    
+
 	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile == null) {
@@ -612,25 +612,25 @@ public partial class Game : Node {
 
 		// TODO: This should really be the top unit.
 		MapUnit toSelect = tile.unitsOnTile.FirstOrDefault();
-        
-        if (toSelect == null || toSelect.owner != controller) {
-        	return;
-        }
-        
-        HandleSelection(toSelect);
-    }
 
-    public void HandleSelection(MapUnit unit) { 
-        bool canMove = unitSelector.SetSelectedUnit(unit);
+		if (toSelect == null || toSelect.owner != controller) {
+			return;
+		}
 
-        if (unit.WorkerJob != null) {
-            return;
-        }
+		HandleSelection(toSelect);
+	}
 
-        if (!canMove) {
-            new MsgShowTemporaryPopup("This unit has already moved.", unit.location).send();
-        }
-    }
+	public void HandleSelection(MapUnit unit) {
+		bool canMove = unitSelector.SetSelectedUnit(unit);
+
+		if (unit.WorkerJob != null) {
+			return;
+		}
+
+		if (!canMove) {
+			new MsgShowTemporaryPopup("This unit has already moved.", unit.location).send();
+		}
+	}
 
 	private void HandleRightMouseButton(InputEventMouseButton eventMouseButton) {
 		setGotoMode(false);

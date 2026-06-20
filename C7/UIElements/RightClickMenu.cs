@@ -202,13 +202,13 @@ public partial class RightClickTileMenu : RightClickMenu {
 				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 		}
 	}
-    
+
 	public void SelectUnit(ID id) {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
 
 			if (toSelect != null && toSelect.owner == game.controller) {
-                game.HandleSelection(toSelect);
+				game.HandleSelection(toSelect);
 
 				new MsgSetFortification(toSelect.id, false).send();
 				ResetItems(toSelect.location, new Dictionary<ID, bool>() { { toSelect.id, false } });
@@ -232,7 +232,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 					if (!hasSelectedUnit && !isFortify) {
 						bool canMove = game.unitSelector.SetSelectedUnit(unit);
 						if (!canMove) {
-                            new MsgShowTemporaryPopup("This unit has already moved.", tile).send();
+							new MsgShowTemporaryPopup("This unit has already moved.", tile).send();
 						}
 					}
 				}
