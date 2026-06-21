@@ -54,7 +54,7 @@ namespace C7GameData.Save {
 				TurnNumber = data.turn,
 				Civilizations = data.civilizations,
 				CultureGroups = data.cultureGroups,
-				Alliances = data.alliances == null ? null : [..data.alliances],
+				Alliances = data.alliances,
 				Map = new SaveMap(data.map),
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
@@ -178,7 +178,7 @@ namespace C7GameData.Save {
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
 				cultureGroups = CultureGroups,
-				alliances = Alliances == null ? null : [.. Alliances],
+				alliances = Alliances,
 				citizenTypes = CitizenTypes,
 				governments = Governments,
 				worldSizes = WorldSizes,
@@ -431,7 +431,7 @@ namespace C7GameData.Save {
 		public string DefaultExperienceLevel; // key
 		public List<Civilization> Civilizations = new List<Civilization>();
 		public HashSet<CultureGroup> CultureGroups = new HashSet<CultureGroup>();
-		public HashSet<Alliance> Alliances;
+        public HashSet<Alliance> Alliances = new HashSet<Alliance>();
 		public Dictionary<string, string> AllianceWars = new Dictionary<string, string>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
