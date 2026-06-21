@@ -941,8 +941,6 @@ namespace C7GameData {
 			// import player alliances
 			for (int i = 0; i < theBiq.GameAlliance[0].Length; i++) {
 				save.Players[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
-				// if(save.Players[i + 1].alliance == string.Empty)
-				//     save.Players[i + 1].alliance = null;
 			}
 
 			foreach (var saveAlliance in save.Alliances) {
