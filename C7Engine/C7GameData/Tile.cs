@@ -152,6 +152,10 @@ namespace C7GameData {
 			YCoordinate = -1,
 		};
 
+		public static bool IsTileValid(Tile tile) {
+			return tile != null && tile != Tile.NONE;
+		}
+
 		//This should be used when we want to check if land tiles are next to water tiles.
 		//Usually this is coast, but it could be Sea - see the "Deepwater Harbours" topics at CFC.
 		//Sometimes we care *specifically* about the Coast terrain, e.g. galleys can only move on that terrain, not Sea or Ocean
@@ -246,6 +250,10 @@ namespace C7GameData {
 
 		public bool IsVolcano() {
 			return overlayTerrainType.isVolcano();
+		}
+
+		public bool IsRoaded() {
+			return this.overlays.HasRoad() || this.overlays.HasRailroad();
 		}
 
 		public TileDirection directionTo(Tile other) {
@@ -924,7 +932,20 @@ namespace C7GameData {
 		}
 
 		public bool HasRoad() {
-			return terrainImprovementByLayer.ContainsKey(TerrainImprovement.Layer.Roads) || tile.HasCity;
+			if (terrainImprovementByLayer.TryGetValue(TerrainImprovement.Layer.Roads, out var value)) {
+				if (ImprovementAtLayer(value.layer).key == "road")
+					return true;
+			} else if (tile.HasCity)
+				return true;
+			return false;
+		}
+		public bool HasRailroad() {
+			if (terrainImprovementByLayer.TryGetValue(TerrainImprovement.Layer.Roads, out var value)) {
+				if (ImprovementAtLayer(value.layer).key == "railroad")
+					return true;
+			} else if (tile.HasCity)
+				return true;
+			return false;
 		}
 
 		// Will return a -1 if the tile movement cost is unaffected by the improvements

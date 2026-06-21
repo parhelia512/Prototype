@@ -372,6 +372,10 @@ public partial class Game : Node {
 			case MsgUnitMoved mUUAAB:
 				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mUUAAB.Unit));
 				break;
+			case MsgTransportUnloaded mTU:
+				// UnitMoved is enough to refresh UI
+				EmitSignal(SignalName.UnitMoved, new ParameterWrapper<MapUnit>(mTU.Unit));
+				break;
 		}
 	}
 
@@ -591,7 +595,7 @@ public partial class Game : Node {
 			}
 		} else {
 			// Select unit on tile at mouse location
-			HandleUnitSelection(eventMouseButton);
+			HandleUnitSelectionTileClick(eventMouseButton);
 		}
 	}
 
@@ -604,32 +608,38 @@ public partial class Game : Node {
 		}
 	}
 
-	private void HandleUnitSelection(InputEventMouseButton eventMouseButton) {
+	private void HandleUnitSelectionTileClick(InputEventMouseButton eventMouseButton) {
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile == null) {
 			return;
 		}
 
 		// TODO: This should really be the top unit.
-		MapUnit toSelect = tile.unitsOnTile.FirstOrDefault();
-
-		if (toSelect == null || toSelect.owner != controller) {
+		MapUnit unit = tile.unitsOnTile.FirstOrDefault();
+		if (unit == null || unit.owner != controller) {
 			return;
 		}
 
-		HandleSelection(toSelect);
+		SelectUnit(unit, eventMouseButton.Position);
 	}
 
-	public void HandleSelection(MapUnit unit) {
+	private void SelectUnit(MapUnit unit, Vector2 screenPosition) {
 		bool canMove = unitSelector.SetSelectedUnit(unit);
 
 		if (unit.WorkerJob != null) {
 			return;
 		}
 
+		Tile tile = PositionToTile(screenPosition);
+
 		if (!canMove) {
-			new MsgShowTemporaryPopup("This unit has already moved.", unit.location).send();
+			new MsgShowTemporaryPopup("This unit has already moved.", tile).send();
 		}
+	}
+
+	public void SelectUnit(MapUnit unit) {
+		var screenPos = mapView.screenLocationOfTile(unit.location);
+		SelectUnit(unit, screenPos);
 	}
 
 	private void HandleRightMouseButton(InputEventMouseButton eventMouseButton) {
@@ -646,13 +656,15 @@ public partial class Game : Node {
 	private void HandleRightClickOnTile(Tile tile, InputEventMouseButton eventMouseButton) {
 		bool shiftDown = Input.IsKeyPressed(Godot.Key.Shift);
 
+		var activeTile = controller.tileKnowledge.isActiveTile(tile);
+
 		// Handle the shortcut of shift+right clicking a city to get the change production menu.
-		if (shiftDown && tile.cityAtTile?.owner == controller)
+		if (shiftDown && activeTile && tile.cityAtTile?.owner == controller)
 			new RightClickChooseProductionMenu(this, tile.cityAtTile).Open(eventMouseButton.Position);
-		else if (!shiftDown && tile.unitsOnTile.Count > 0)
+		else if (!shiftDown && activeTile && tile.unitsOnTile.Count > 0)
 			// There are units on this title, so open that menu.
 			new RightClickTileMenu(this, tile).Open(eventMouseButton.Position);
-		else if (!shiftDown && tile.cityAtTile?.owner == controller)
+		else if (!shiftDown && activeTile && tile.cityAtTile?.owner == controller)
 			// There are no units, but this is the player's city.
 			new RightClickCityMenu(this, tile).Open(eventMouseButton.Position);
 		else if (bombardInfo != null)
@@ -1001,6 +1013,18 @@ public partial class Game : Node {
 			}
 		}
 
+
+		if (currentAction == C7Action.UnitLoad) {
+			// TODO: Which transport?
+			if (CurrentlySelectedUnit != MapUnit.NONE && CurrentlySelectedUnit != null)
+				new MsgLoadToTransport(CurrentlySelectedUnit.id).send();
+		}
+		if (currentAction == C7Action.UnitUnload) {
+			if (CurrentlySelectedUnit != MapUnit.NONE && CurrentlySelectedUnit != null) {
+				new MsgUnloadTransport(CurrentlySelectedUnit.id).send();
+			}
+		}
+
 		Terraform terraform = C7Action.ToTerraform(currentAction);
 
 		if (CurrentlySelectedUnit == MapUnit.NONE || CurrentlySelectedUnit == null
@@ -1066,6 +1090,7 @@ public partial class Game : Node {
 			}), PopupOverlay.PopupCategory.Advisor);
 	}
 
+	private Tile lastTile = null;
 	private GotoInfo GetGotoInfo(Vector2 mousePos) {
 		GotoInfo result = new();
 
@@ -1074,12 +1099,20 @@ public partial class Game : Node {
 		// Figure out which tile it was.
 		EngineStorage.ReadGameData((GameData gameData) => {
 			Tile tile = mapView.tileOnScreenAt(gameData.map, mousePos);
-			result.destinationTile = tile;
+			if (tile == lastTile) {
+				result = gotoInfo;
+				return;
+			}
+			lastTile = result.destinationTile = tile;
 
 			// Figure out what unit is in goto mode. If the tile we're hovering over is
 			// different than the tile the unit is on, calculate the path to move there.
 			MapUnit unit = tile == null ? null : gameData.GetUnit(CurrentlySelectedUnit.id);
-			if (unit != null && unit.location != tile) {
+
+			// Units like the Bomber don't have a go-to action
+			if (unit != null && !unit.GetAvailableActions().Contains(UnitAction.Goto)) {
+				result = null;
+			} else if (unit != null && unit.location != tile) {
 				result.path = PathingAlgorithmChooser.GetAlgorithm(unit).PathFrom(unit.location, tile, unit);
 				result.moveCost =
 					result.path.PathCost(unit.owner, unit.location, unit.unitType.movement, unit.movementPoints.remaining);

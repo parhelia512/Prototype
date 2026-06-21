@@ -160,4 +160,11 @@ namespace C7Engine {
 			this.Unit = unit;
 		}
 	}
+
+	public class MsgTransportUnloaded : MessageToUI {
+		public MapUnit Unit;
+		public MsgTransportUnloaded(MapUnit unit) {
+			this.Unit = unit;
+		}
+	}
 }

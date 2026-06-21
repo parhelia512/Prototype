@@ -3,6 +3,7 @@ using Godot;
 using C7GameData;
 using C7Engine;
 using System;
+using System.Linq;
 
 public partial class RightClickMenu : VBoxContainer {
 	protected Game game;
@@ -57,14 +58,14 @@ public partial class RightClickMenu : VBoxContainer {
 	private static StyleBoxFlat GetItemStyleBox(Color color) {
 		return new StyleBoxFlat() {
 			BgColor = color,
-			ContentMarginLeft = 4f,
-			ContentMarginTop = 2f,
-			ContentMarginRight = 4f,
-			ContentMarginBottom = 2f
+			ContentMarginLeft = 10f,
+			ContentMarginTop = 0f,
+			ContentMarginRight = 10f,
+			ContentMarginBottom = 0f
 		};
 	}
 
-	public void AddItem(string text, System.Action action, Texture2D icon = null) {
+	public Button AddItem(string text, System.Action action, Texture2D icon = null) {
 		Button button = new Button();
 		button.Text = text;
 		if (icon != null) {
@@ -75,6 +76,35 @@ public partial class RightClickMenu : VBoxContainer {
 			button.Pressed += action;
 		}
 		this.AddChild(button);
+		return button;
+	}
+
+	protected void AddTreeSeparator() {
+		var background = new ColorRect();
+		background.Color = Color.Color8(255, 247, 222, 255);
+		background.CustomMinimumSize = new Vector2(0, 12);
+		background.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+		background.MouseFilter = Control.MouseFilterEnum.Stop;
+
+		var margin = new MarginContainer();
+		margin.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+		margin.MouseFilter = MouseFilterEnum.Stop;
+
+		margin.AddThemeConstantOverride("margin_left", 10);
+		margin.AddThemeConstantOverride("margin_right", 10);
+		margin.AddThemeConstantOverride("margin_top", 5);
+		margin.AddThemeConstantOverride("margin_bottom", 5);
+
+		var line = new ColorRect();
+		line.Color = Color.Color8(165, 165, 165, 255);
+		line.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+		line.CustomMinimumSize = new Vector2(0, 2);
+		line.MouseFilter = Control.MouseFilterEnum.Stop;
+
+		margin.AddChild(line);
+		background.AddChild(margin);
+
+		this.AddChild(background);
 	}
 
 	public void RemoveAll() {
@@ -114,11 +144,23 @@ public partial class RightClickTileMenu : RightClickMenu {
 		return uiStates[unit.id];
 	}
 
+	private bool isUnitLoadedOnTransport(MapUnit unit) => unit.IsLoaded();
+
 	private string getUnitAction(MapUnit unit, bool isFortified) {
 		if (unit.owner == game.controller) {
 			return isFortified ? "Wake" : "Activate";
 		}
 		return "Contact";
+	}
+
+	private static StyleBoxFlat AltItemStyleBox(Color color) {
+		return new StyleBoxFlat() {
+			BgColor = color,
+			ContentMarginLeft = 20f,
+			ContentMarginTop = 2f,
+			ContentMarginRight = 4f,
+			ContentMarginBottom = 2f
+		};
 	}
 
 	// uiUpdatedUnitStates maps unit guid to a boolean that is true if they were fortified
@@ -128,10 +170,12 @@ public partial class RightClickTileMenu : RightClickMenu {
 	public void ResetItems(Tile tile, Dictionary<ID, bool> uiUpdatedUnitStates = null) {
 		RemoveAll();
 
-		AddItem($"Show Tile Information", () => {
+		AddItem($"Terrain Info", () => {
 			game.ShowTileInfo(tile);
 			CloseAndDelete();
 		});
+
+		AddTreeSeparator();
 
 		bool observerMode = false;
 		EngineStorage.ReadGameData((GameData gameData) => {
@@ -142,11 +186,20 @@ public partial class RightClickTileMenu : RightClickMenu {
 		List<MapUnit> playerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id == game.controller.id || observerMode);
 		List<MapUnit> nonPlayerUnits = tile.unitsOnTile.FindAll(unit => unit.owner.id != game.controller.id && !observerMode);
 
+		// Sort by transport group
+		playerUnits = playerUnits
+			.GroupBy(u => u.CanTransport() ? u.id : u.loadedOnUnitId ?? ID.None("Other"))
+			.SelectMany(g => g.OrderBy(u => u.CanTransport() ? int.MinValue : 0))
+			.ToList();
+
 		foreach (MapUnit unit in playerUnits) {
 			bool isFortified = isUnitFortified(unit, uiUpdatedUnitStates);
 			fortifiedCount += isFortified ? 1 : 0;
 			string actionName = getUnitAction(unit, isFortified);
-			AddItem($"{actionName} {unit.Describe()}", () => SelectUnit(unit.id));
+			var menuItem = AddItem($"{actionName} {unit.Describe()}", () => SelectUnit(unit.id));
+
+			if (isUnitLoadedOnTransport(unit))
+				ApplyAltItemOverrides(menuItem);
 		}
 		int unfortifiedCount = playerUnits.Count - fortifiedCount;
 
@@ -157,7 +210,16 @@ public partial class RightClickTileMenu : RightClickMenu {
 			AddItem($"Fortify All ({unfortifiedCount} units)", () => ForAll(tile.XCoordinate, tile.YCoordinate, true));
 		}
 		if (tile.cityAtTile?.owner == game.controller) {
-			AddItem("Change Production (Shift+right click)", () => {
+			AddTreeSeparator();
+			AddItem($"Zoom to {tile.cityAtTile.name}", () => {
+				this.CloseAndDelete();
+				EngineStorage.ReadGameData((GameData gameData) => {
+					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
+				});
+			});
+			// TODO: Rename city
+			AddTreeSeparator();
+			AddItem("Change Production", () => {
 				// Close the first menu before opening the second menu.
 				this.CloseAndDelete();
 				new RightClickChooseProductionMenu(game, tile.cityAtTile).Open(this.position);
@@ -169,12 +231,15 @@ public partial class RightClickTileMenu : RightClickMenu {
 					new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
 				});
 			});
-			AddItem("Zoom to city", () => {
-				this.CloseAndDelete();
-				EngineStorage.ReadGameData((GameData gameData) => {
-					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
-				});
-			});
+			// TODO: Contact Governor
+			// TODO: Set Rally Point
+			// TODO: Set Continental Rally Point
+			// TODO: Clear Continental Rally Point
+			// TODO: Abandon City
+
+			// AddTreeSeparator();
+			// TODO: Wikipedia links
+
 		}
 
 		// If we're looking at an enemy tile, then the behavior depends on whether the units
@@ -201,6 +266,17 @@ public partial class RightClickTileMenu : RightClickMenu {
 			if (!nonPlayerUnits[0].owner.isBarbarians)
 				AddItem($"Contact {nonPlayerUnits[0].owner.civilization.name}", contactCiv);
 		}
+	}
+
+	private static void ApplyAltItemOverrides(Button menuItem) {
+		var grey = Color.Color8(64, 64, 64, 255);
+		menuItem.AddThemeColorOverride("font_color", grey);
+		menuItem.AddThemeColorOverride("font_hover_color", grey);
+		menuItem.AddThemeColorOverride("font_pressed_color", grey);
+		menuItem.AddThemeColorOverride("font_focus_color", grey);
+		menuItem.AddThemeStyleboxOverride("normal", AltItemStyleBox(Color.Color8(255, 247, 222, 255)));
+		menuItem.AddThemeStyleboxOverride("hover", AltItemStyleBox(Color.Color8(255, 189, 107, 255)));
+		menuItem.AddThemeStyleboxOverride("pressed", AltItemStyleBox(Color.Color8(140, 200, 200, 255)));
 	}
 
 	public void SelectUnit(ID id) {
@@ -255,8 +331,24 @@ public partial class RightClickCityMenu : RightClickMenu {
 	public void ResetItems(Tile tile) {
 		RemoveAll();
 
+		// TODO: maybe look into unifying this with the other right click menu (when there are units present)
+		// I don't like this much duplication
+		AddItem($"Terrain Info", () => {
+			game.ShowTileInfo(tile);
+			CloseAndDelete();
+		});
+
+		AddTreeSeparator();
+
 		if (tile.cityAtTile?.owner == game.controller) {
-			AddItem("Change Production (Shift+right click)", () => {
+			AddItem($"Zoom to {tile.cityAtTile.name}", () => {
+				this.CloseAndDelete();
+				EngineStorage.ReadGameData((GameData gameData) => {
+					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
+				});
+			});
+			AddTreeSeparator();
+			AddItem("Change Production", () => {
 				// Close the first menu before opening the second menu.
 				this.CloseAndDelete();
 				new RightClickChooseProductionMenu(game, tile.cityAtTile).Open(this.position);
@@ -266,12 +358,6 @@ public partial class RightClickCityMenu : RightClickMenu {
 				EngineStorage.ReadGameData((GameData gameData) => {
 					City.HurryProductionDetails details = tile.cityAtTile.GetHurryProductionDetails();
 					new MsgDisplayHurryProductionPopup(tile.cityAtTile, details).send();
-				});
-			});
-			AddItem("Zoom to city", () => {
-				this.CloseAndDelete();
-				EngineStorage.ReadGameData((GameData gameData) => {
-					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
 				});
 			});
 		}
