@@ -58,10 +58,10 @@ public partial class RightClickMenu : VBoxContainer {
 	private static StyleBoxFlat GetItemStyleBox(Color color) {
 		return new StyleBoxFlat() {
 			BgColor = color,
-			ContentMarginLeft = 4f,
-			ContentMarginTop = 2f,
-			ContentMarginRight = 4f,
-			ContentMarginBottom = 2f
+			ContentMarginLeft = 10f,
+			ContentMarginTop = 0f,
+			ContentMarginRight = 10f,
+			ContentMarginBottom = 0f
 		};
 	}
 
@@ -215,7 +215,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 		}
 		if (tile.cityAtTile?.owner == game.controller) {
 			AddTreeSeparator();
-			AddItem("Zoom to city", () => {
+			AddItem($"Zoom to {tile.cityAtTile.name}", () => {
 				this.CloseAndDelete();
 				EngineStorage.ReadGameData((GameData gameData) => {
 					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
@@ -347,7 +347,7 @@ public partial class RightClickCityMenu : RightClickMenu {
 		AddTreeSeparator();
 
 		if (tile.cityAtTile?.owner == game.controller) {
-			AddItem("Zoom to city", () => {
+			AddItem($"Zoom to {tile.cityAtTile.name}", () => {
 				this.CloseAndDelete();
 				EngineStorage.ReadGameData((GameData gameData) => {
 					game.ShowCityScreenForCity(gameData, tile.cityAtTile);
