@@ -273,14 +273,17 @@ namespace C7GameData {
 		internal void SpawnUnit(Player player, UnitPrototype proto, Tile tile) {
 			// TODO: consolidate unit spawning routines (here) 
 
+			var defaultExpLevel = this.defaultExperienceLevel;
+			var barbExpLevel = this.experienceLevels.First(e => e.baseHitPoints == this.barbarianInfo.maxHitpoints);
+
 			MapUnit newUnit = proto.GetInstance(this.GenerateID(proto.name), proto, player, location: tile);
-			// TODO: make this a conscript.
-			newUnit.experienceLevelKey = defaultExperienceLevelKey;
-			newUnit.experienceLevel = defaultExperienceLevel;
-			newUnit.hitPointsRemaining = 3;
+
+			newUnit.experienceLevel = player.isBarbarians ? barbExpLevel : defaultExpLevel;
+			newUnit.experienceLevelKey = player.isBarbarians ? barbExpLevel.key : defaultExpLevel.key;
+			newUnit.hitPointsRemaining = player.isBarbarians ? barbExpLevel.baseHitPoints : defaultExpLevel.baseHitPoints;
 
 			tile.unitsOnTile.Add(newUnit);
-			mapUnits.Add(newUnit);
+			this.mapUnits.Add(newUnit);
 			player.units.Add(newUnit);
 
 			log.Debug("New unit of type {type} added at {tile} for player {player}",

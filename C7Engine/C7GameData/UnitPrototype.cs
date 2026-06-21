@@ -67,6 +67,7 @@ namespace C7GameData {
 		public int rateOfFire { get; set; }
 		public int movement { get; set; }
 		public int capacity { get; set; }
+		public int hpBonus { get; set; }
 		public HashSet<Civilization> producibleBy { get; set; } = [];
 		public List<UnitPrototype> upgradesTo = [];
 		public bool unproducible;
@@ -105,8 +106,8 @@ namespace C7GameData {
 			(attack, defense, bombard, bombardRange, rateOfFire)
 				= (proto.attack, proto.defense, proto.bombard, proto.bombardRange, proto.rateOfFire);
 
-			(movement, capacity, unproducible) =
-				(proto.movement, proto.capacity, proto.unproducible);
+			(movement, capacity, hpBonus, unproducible) =
+				(proto.movement, proto.capacity, proto.hpBonus, proto.unproducible);
 
 			categories = new HashSet<string>(proto.categories);
 			actions = proto.actions;
