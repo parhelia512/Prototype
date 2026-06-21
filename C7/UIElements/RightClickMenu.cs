@@ -284,7 +284,7 @@ public partial class RightClickTileMenu : RightClickMenu {
 			MapUnit toSelect = gameData.mapUnits.Find(u => u.id == id);
 
 			if (toSelect != null && toSelect.owner == game.controller) {
-				game.HandleSelection(toSelect);
+				game.SelectUnit(toSelect);
 
 				new MsgSetFortification(toSelect.id, false).send();
 				ResetItems(toSelect.location, new Dictionary<ID, bool>() { { toSelect.id, false } });
