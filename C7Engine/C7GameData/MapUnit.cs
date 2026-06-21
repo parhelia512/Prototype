@@ -1,3 +1,5 @@
+using static C7GameData.PlayerRelationship;
+
 namespace C7GameData {
 	using Serilog;
 	using System.Collections.Generic;
@@ -821,6 +823,14 @@ namespace C7GameData {
 				}
 			}
 
+			var tileOwner = tile.OwningPlayer();
+
+			if (tile.HasCity && tileOwner != this.owner) {
+				if (EngineStorage.gameData.AreInLockedPeace(tileOwner, this.owner)) {
+					return false;
+				}
+			}
+
 			// If we allow declaring war on this move, then it doesn't matter if
 			// there are units belonging to another player on the tile.
 			// TODO: unbreakable alliances
@@ -933,14 +943,14 @@ namespace C7GameData {
 
 		private static bool HasHostileUnits(Tile tile, Player player) {
 			foreach (MapUnit other in tile.unitsOnTile) {
-				if (player != other.owner && !player.IsAtPeaceWith(other.owner))
+				if (player != other.owner && AtWar(player, other.owner))
 					return true;
 			}
 			return false;
 		}
 
 		private static bool HasHostileCity(Tile tile, Player player) {
-			return tile.HasCity && !player.IsAtPeaceWith(tile.cityAtTile.owner);
+			return tile.HasCity && AtWar(player, tile.cityAtTile.owner);
 		}
 
 		/// <summary>

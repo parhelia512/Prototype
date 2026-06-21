@@ -213,6 +213,8 @@ namespace C7GameData {
 			ImportBicLeaders();
 			ImportBicUnits();
 			ImportBicCities();
+			ImportEmbassies();
+			ImportAlliances();
 
 			SetMapDimensions(biq, save);
 			SetWorldWrap(biq, save);
@@ -884,6 +886,108 @@ namespace C7GameData {
 				isBarbarian = civ.isBarbarian,
 				eraCivilopediaName = era,
 			};
+		}
+
+		private void ImportEmbassies() {
+			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
+
+			List<SavePlayer> playerWithEmbassies = new List<SavePlayer>();
+
+			for (int i = 0; i < theBiq.Lead.Length; ++i) {
+				var lead = theBiq.Lead[i];
+				if (lead.StartEmbassies == 1) {
+					var player = save.Players[lead.Civ];
+					if (!player.isBarbarian)
+						playerWithEmbassies.Add(player);
+				}
+			}
+
+			// TODO: create actual embassies
+
+			// In scenarios where there isn't any actual information about player relationships,
+			// the entry point of these relationships seems to be the embassies.
+			// Players that start with embassies, are aware of each other.
+			// Information about players at war, is given in alliances data.
+			foreach (var playerWithEmbassy in playerWithEmbassies) {
+				foreach (var other in playerWithEmbassies.Except(new List<SavePlayer> { playerWithEmbassy })) {
+					var pr = new PlayerRelationship() {
+						warDeclarationCount = 0,
+						warDeclarationWithRoPActiveCount = 0,
+						wasSneakAttacked = false,
+						refuseContactUntilTurn = -1,
+					};
+					playerWithEmbassy.playerRelationships.Add(other.id.ToString(), pr);
+
+					// simple peace deal, that could be removed if in a locked war (check ImportAlliances())
+					pr.multiTurnDeals.Add(MultiTurnDeal.DEFAULT_PEACE);
+				}
+			}
+		}
+
+		private void ImportAlliances() {
+			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
+
+			// import alliances names and indexes
+			HashSet<Alliance> alliances = new HashSet<Alliance>() {
+                // new (0, theBiq.Game[0].AllianceNames[0]), // no alliance, not sure if it's necessary
+                new (1, theBiq.Game[0].AllianceNames[1]),
+				new (2, theBiq.Game[0].AllianceNames[2]),
+				new (3, theBiq.Game[0].AllianceNames[3]),
+				new (4, theBiq.Game[0].AllianceNames[4]),
+			};
+
+			save.Alliances = new HashSet<Alliance>(alliances.OrderBy(a => a.index).ToHashSet());
+
+			// import player alliances
+			for (int i = 0; i < theBiq.GameAlliance[0].Length; i++) {
+				save.Players[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
+				// if(save.Players[i + 1].alliance == string.Empty)
+				//     save.Players[i + 1].alliance = null;
+			}
+
+			foreach (var saveAlliance in save.Alliances) {
+				foreach (var savePlayer in save.Players.Where(p => p.alliance == saveAlliance.name)) {
+					foreach (var otherSavePlayer in save.Players.Where(p => p.alliance == saveAlliance.name && p.id != savePlayer.id)) {
+						var relationship = savePlayer.playerRelationships.TryGetValue(otherSavePlayer.id.ToString(), out var otherPlayerRelationship);
+						if (relationship) {
+							log.Information($"Players {savePlayer.civilization} and {otherSavePlayer.civilization}" +
+											$" are in the same alliance: {saveAlliance.name}, and have a Mutual Protection Pact");
+							otherPlayerRelationship.multiTurnDeals.Add(MultiTurnDeal.DEFAULT_MUTUAL_PROTECTION_PACT);
+						}
+					}
+				}
+			}
+
+			// import alliances war info
+
+			// alliance no
+			// skip first alliance as it means "no alliance"
+			for (int a = 1; a < 5; a++) {
+				// entry in each alliance
+				for (int e = 0; e < 5; e++) {
+					var wwa = theBiq.Game[0].WarWithAlliance[a, e];
+
+					if (wwa != 0) {
+						save.AllianceWars.TryAdd(
+							alliances.First(al => al.name == theBiq.Game[0].AllianceNames[a]).name,
+							alliances.First(al => al.name == theBiq.Game[0].AllianceNames[e]).name
+							);
+					}
+				}
+			}
+
+			// "Declare" war for rival alliances
+			foreach (KeyValuePair<string, string> kvp in save.AllianceWars) {
+				var playerAllianceA = save.Players.Where(p => p.alliance == kvp.Key).ToList();
+				var playerAllianceB = save.Players.Where(p => p.alliance == kvp.Value).ToList();
+
+				foreach (var playerInAllianceA in playerAllianceA) {
+					foreach (var playerInAllianceB in playerAllianceB) {
+						playerInAllianceA.playerRelationships[playerInAllianceB.id.ToString()].multiTurnDeals = new List<MultiTurnDeal>();
+						playerInAllianceB.playerRelationships[playerInAllianceA.id.ToString()].multiTurnDeals = new List<MultiTurnDeal>();
+					}
+				}
+			}
 		}
 
 		private void ImportSavUnits() {

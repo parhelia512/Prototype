@@ -54,6 +54,7 @@ namespace C7GameData.Save {
 				TurnNumber = data.turn,
 				Civilizations = data.civilizations,
 				CultureGroups = data.cultureGroups,
+				Alliances = data.alliances == null ? null : [..data.alliances],
 				Map = new SaveMap(data.map),
 				TerrainTypes = data.terrainTypes,
 				Resources = data.Resources,
@@ -92,6 +93,10 @@ namespace C7GameData.Save {
 			save.HealRates["hostile_field"] = data.healRateInHostileField;
 			save.HealRates["city"] = data.healRateInCity;
 
+			foreach (KeyValuePair<Alliance, Alliance> kvp in data.allianceWars) {
+				save.AllianceWars.TryAdd(kvp.Key.name, kvp.Value.name);
+			}
+
 			return save;
 		}
 
@@ -124,6 +129,8 @@ namespace C7GameData.Save {
 			ConvertStrengthBonuses(data);
 			ConvertHealRates(data);
 			ConvertCultureGroups(data);
+			ConvertAlliances(data);
+			ConvertAllianceWars(data);
 
 			data.defaultExperienceLevelKey = DefaultExperienceLevel;
 			data.defaultExperienceLevel = data.experienceLevels.Find(el => el.key == DefaultExperienceLevel);
@@ -171,6 +178,7 @@ namespace C7GameData.Save {
 				scenarioSearchPath = ScenarioSearchPath,
 				civilizations = Civilizations,
 				cultureGroups = CultureGroups,
+				alliances = Alliances == null ? null : [.. Alliances],
 				citizenTypes = CitizenTypes,
 				governments = Governments,
 				worldSizes = WorldSizes,
@@ -193,7 +201,7 @@ namespace C7GameData.Save {
 			data.map = Map.ToGameMap(data);
 
 			// players need game map to populate tile knowledge
-			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.techs, data.rules));
+			data.players = Players.ConvertAll(player => player.ToPlayer(data.map, Civilizations, data.governments, data.techs, data.rules, data.alliances));
 		}
 
 		private void ConvertTerrainImprovements(GameData gameData) {
@@ -390,6 +398,20 @@ namespace C7GameData.Save {
 			}
 		}
 
+		private void ConvertAlliances(GameData data) {
+			foreach (var dataPlayer in data.players) {
+				if (dataPlayer.alliance is null) continue; // null for barbarians
+				Alliance alliance = data.alliances.FirstOrDefault(a => a.name == dataPlayer.alliance.name);
+				dataPlayer.alliance = alliance;
+			}
+		}
+
+		private void ConvertAllianceWars(GameData data) {
+			foreach (var allianceWar in AllianceWars) {
+				data.allianceWars.TryAdd(data.alliances.FirstOrDefault(a => a.name == allianceWar.Key), data.alliances.FirstOrDefault(a => a.name == allianceWar.Value));
+			}
+		}
+
 		public string Version = "0.0.0";
 		public int Seed = -1;
 		public int TurnNumber = 0;
@@ -409,6 +431,8 @@ namespace C7GameData.Save {
 		public string DefaultExperienceLevel; // key
 		public List<Civilization> Civilizations = new List<Civilization>();
 		public HashSet<CultureGroup> CultureGroups = new HashSet<CultureGroup>();
+		public HashSet<Alliance> Alliances;
+		public Dictionary<string, string> AllianceWars = new Dictionary<string, string>();
 		public List<StrengthBonus> StrengthBonuses = new List<StrengthBonus>();
 		public Dictionary<string, int> HealRates = new Dictionary<string, int>();
 		public Rules Rules = new();
