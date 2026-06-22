@@ -37,7 +37,7 @@ namespace C7GameData {
 		public int hitPointsRemaining { get; set; }
 		public int maxHitPoints {
 			get {
-				return experienceLevel.baseHitPoints; // TODO: Include bonus HP from unit type
+				return this.experienceLevel.baseHitPoints + this.unitType.hpBonus;
 			}
 		}
 		public bool isFortified { get; set; }
@@ -47,7 +47,7 @@ namespace C7GameData {
 		//sentry, etc. will come later.  For now, let's just have a couple things so we can cycle through units that aren't fortified.
 		public int defensiveBombardsRemaining;
 
-		public TileDirection facingDirection;
+		public TileDirection facingDirection = TileDirection.SOUTHEAST;
 
 		public float WorkerProgressTowardsJob { get; set; }
 		public Terraform WorkerJob { get; set; }

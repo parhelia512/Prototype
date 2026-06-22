@@ -178,8 +178,11 @@ public partial class Game : Node {
 		await CreateGameAndAssignPlayerController(options);
 
 		foreach (var gameDataPlayer in EngineStorage.gameData.players) {
-			if (gameDataPlayer.SitsOutFirstTurn() && TurnHandling.GetTurnNumber() == 0)
-				TurnHandling.InitTurnData(gameDataPlayer, true);
+			if (TurnHandling.GetTurnNumber() == 0)
+				if (gameDataPlayer.SitsOutFirstTurn())
+					TurnHandling.InitTurnData(gameDataPlayer, true);
+				else if (Global.SaveGame != null)
+					TurnHandling.InitTurnData(gameDataPlayer, false);
 		}
 
 		InitializeMapView();

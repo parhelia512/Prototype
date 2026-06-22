@@ -906,12 +906,16 @@ namespace C7GameData {
 					currentLocation = new TileLocation(unit.X, unit.Y),
 					previousLocation = new TileLocation(unit.PreviousX, unit.PreviousY),
 					experience = experience.key,
-					hitPointsRemaining = experience.baseHitPoints - unit.Damage, // TODO: include bonus hitpoints from unit type
-					movePointsRemaining = (float)prototype.Movement - (unit.MovementUsed / 3f),
+					hitPointsRemaining = experience.baseHitPoints,
+					movePointsRemaining = prototype.Movement,
 					WorkerProgressTowardsJob = unit.WorkerProgressTowardsJob,
 					WorkerJob = (unit.WorkerJob==-1) ? null: save.TerraForms[unit.WorkerJob].Id,
 					isAutomated = unit.IsAutomated,
 				};
+				// since this is a .sav unit, we need to adjust things like the hp, remaining moves, etc
+				// TODO: there are surely more things to add here, e.x. has this unit used its defensive bombardment this round?
+				saveUnit.hitPointsRemaining += prototype.HPBonus - unit.Damage;
+				saveUnit.movePointsRemaining -= (unit.MovementUsed / 3f);
 				if (unit.Fortified) {
 					saveUnit.action = "fortified";
 				}
@@ -950,7 +954,7 @@ namespace C7GameData {
 					currentLocation = new TileLocation(x, y),
 					previousLocation = new TileLocation(x, y),
 					experience = experienceLevel,
-					hitPointsRemaining = hitPoints, // TODO: include bonus hitpoints from unit type
+					hitPointsRemaining = hitPoints + prototype.HPBonus,
 					movePointsRemaining = (float)prototype.Movement,
 				};
 				return saveUnit;
@@ -1208,6 +1212,7 @@ namespace C7GameData {
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;
 				prototype.capacity = prto.Capacity;
+				prototype.hpBonus = prto.HPBonus;
 				prototype.shieldCost = prto.ShieldCost;
 				prototype.populationCost = prto.PopulationCost;
 				prototype.bombard = prto.BombardStrength;
@@ -1240,7 +1245,7 @@ namespace C7GameData {
 				prototype.producibleBy = ImportUnitAvailability(prto);
 
 				//Temporary check until #330 is finished
-				if (!save.UnitPrototypes.Where(p => p.name == prototype.name).Any()) {
+				if (!save.UnitPrototypes.Any(p => p.name == prototype.name)) {
 					save.UnitPrototypes.Add(prototype);
 				}
 			}

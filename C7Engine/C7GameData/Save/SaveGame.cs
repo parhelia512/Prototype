@@ -61,7 +61,7 @@ namespace C7GameData.Save {
 				Inflows = data.Inflows.ConvertAll(inflow => new SaveInflow(inflow)),
 				GreatWondersBuilt = data.GreatWondersBuilt,
 				BarbarianInfo = data.barbarianInfo,
-				Units = data.mapUnits.ConvertAll(unit => new SaveUnit(unit, data.map)),
+				Units = data.mapUnits.ConvertAll(unit => new SaveUnit(unit)),
 				UnitPrototypes = data.unitPrototypes.ConvertAll(proto => new SaveUnitPrototype(proto)),
 				Players = data.players.ConvertAll(player => new SavePlayer(player)),
 				Cities = data.cities.ConvertAll(city => new SaveCity(city)),
