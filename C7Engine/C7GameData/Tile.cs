@@ -483,7 +483,7 @@ namespace C7GameData {
 
 		//Convenience method for printing the yield
 		public string YieldString(Player player) {
-			return $"{foodYield(player).yield}/{productionYield(player).yield}/{commerceYield(player).yield})";
+			return $"{foodYield(player).yield}/{productionYield(player).yield}/{commerceYield(player).yield}";
 		}
 
 		public Player? OwningPlayer() {
