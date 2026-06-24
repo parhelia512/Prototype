@@ -347,6 +347,18 @@ public partial class Game : Node {
 						PopupOverlay.PopupCategory.Advisor);
 				}
 				break;
+			case MsgDisplayStopWorkerActionPopup mDSWA:
+				popupOverlay.ShowPopup(
+					new ConfirmationPopup(
+						$"This worker has been ordered to {C7Action.ToTooltip(mDSWA.workerJob.UIAction)} and will be done in {mDSWA.turnsLeft} turns." +
+						$"\nDo you want them to stop?",
+						"Yes, there is more important work to do!",
+						"No, carry on.",
+						() => {
+							new MsgDoStopWorkerAction(mDSWA.worker).send();
+						}),
+					PopupOverlay.PopupCategory.Advisor);
+				break;
 			case MsgWarDeclaration mWD:
 				popupOverlay.ShowPopup(
 					new InformationalPopup($"The {mWD.aggressor.civilization.noun} declared war on the {mWD.opponent.civilization.noun}"),
@@ -600,7 +612,6 @@ public partial class Game : Node {
 	}
 
 	private void HandleUnitSelectionTileClick(InputEventMouseButton eventMouseButton) {
-
 		Tile tile = PositionToTile(eventMouseButton.Position);
 		if (tile == null) {
 			return;
@@ -617,8 +628,15 @@ public partial class Game : Node {
 
 	private void SelectUnit(MapUnit unit, Vector2 screenPosition) {
 		bool canMove = unitSelector.SetSelectedUnit(unit);
+
+		if (unit.WorkerJob != null) {
+			return;
+		}
+
+		Tile tile = PositionToTile(screenPosition);
+
 		if (!canMove) {
-			TemporaryPopup.Show(this, "This unit has already moved.", screenPosition);
+			new MsgShowTemporaryPopup("This unit has already moved.", tile).send();
 		}
 	}
 
