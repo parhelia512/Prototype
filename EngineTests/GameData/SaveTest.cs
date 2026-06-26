@@ -504,7 +504,7 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 
 		string[] singleplayerScenarios = {
 			"1 Mesopotamia.biq",
-			"2 Rise of Rome.biq",
+			// "2 Rise of Rome.biq" is covered by LoadRiseOfRomeScenario below
 			"3 Fall of Rome.biq",
 			"4 Middle Ages.biq",
 			"5 Mesoamerica.biq",
@@ -530,6 +530,23 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 		// tests faster.
 		await CheckScenariosInCiv3Subfolder("Conquests/Conquests", singleplayerScenarios, runOneTurn: true, "singleplayer");
 		await CheckScenariosInCiv3Subfolder("Conquests/Scenarios", multiplayerScenarios, runOneTurn: false, "multiplayer");
+	}
+
+	// "2 Rise of Rome.biq" is missing from the Conquests folder in some
+	// recent releases of the game. We test it separately from the rest of the
+	// scenarios so that its absence only skips this one test, instead of
+	// failing (or requiring us to silently tolerate missing files in)
+	// LoadAllConquestScenarios as a whole.
+	private const string RiseOfRomeScenarioName = "2 Rise of Rome.biq";
+
+	[SkippableFact]
+	public async Task LoadRiseOfRomeScenario() {
+		Skip.If(Civ3TestData.ShouldSkipCiv3DependentTests(), "No Civ3 install found.");
+
+		string scenarioPath = Path.Combine(Civ3Location.GetCiv3Path(), "Conquests/Conquests", RiseOfRomeScenarioName);
+		Skip.If(!File.Exists(scenarioPath), $"{RiseOfRomeScenarioName} not present in this Civ3 installation.");
+
+		await CheckScenariosInCiv3Subfolder("Conquests/Conquests", new[] { RiseOfRomeScenarioName }, runOneTurn: true, "singleplayer");
 	}
 
 	private async Task CheckScenariosInCiv3Subfolder(string subfolder, string[] scenarioNamesToTest, bool runOneTurn, string basename) {
