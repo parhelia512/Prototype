@@ -5,6 +5,7 @@ using System.Linq;
 using C7GameData;
 using C7Engine;
 using C7Engine.Lua;
+using C7GameData.Save;
 using Serilog;
 
 public partial class QuickStartSetup : Node {
@@ -15,7 +16,8 @@ public partial class QuickStartSetup : Node {
 
 		global.ResetLoadGameFields();
 
-		var save = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
+		var game = GameMode.Load(GamePaths.GameModesDir, GamePaths.GameMode);
+		var save = game.GetSave();
 		WorldSize worldSize = GetWorldSize(save.WorldSizes);
 
 		global.WorldCharacteristics = new WorldCharacteristics(save) {

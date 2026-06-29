@@ -1,6 +1,7 @@
 using System;
 using C7Engine;
 using C7GameData;
+using EngineTests.Utils;
 using Xunit;
 using static C7GameData.PlayerRelationship;
 
@@ -10,7 +11,7 @@ public class PlayerRelationshipTest : IClassFixture<SaveGameFixture> {
 	C7GameData.GameData gameData;
 
 	public PlayerRelationshipTest(SaveGameFixture fixture) {
-		gameData = fixture.saveGame.ToGameData(PathUtils.luaRulesDir);
+		gameData = fixture.saveGame.ToGameData(fixture.behaviors);
 
 		EngineStorage.InitializeGameDataForTests(gameData);
 	}

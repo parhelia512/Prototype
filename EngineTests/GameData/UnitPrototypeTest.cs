@@ -52,7 +52,7 @@ public class UnitPrototypeConquestsTest : RemoteSaveLoader {
 
 	private void TestUnitAvailabilityAndUpgrades(SaveGame game) {
 		#region Setup
-		C7GameData.GameData gd = game.ToGameData(PathUtils.luaRulesDir);
+		var gd = SaveGameFixture.HydrateSaveGame(game);
 		EngineStorage.InitializeGameDataForTests(gd);
 
 		List<UnitPrototype> protos = gd.unitPrototypes;
@@ -469,7 +469,7 @@ public class UnitPrototypeScenarioTest : RemoteSaveLoader {
 		Assert.NotNull(game);
 		Assert.True(File.Exists(savePath));
 
-		C7GameData.GameData gd = game.ToGameData(PathUtils.luaRulesDir);
+		var gd = SaveGameFixture.HydrateSaveGame(game);
 		EngineStorage.InitializeGameDataForTests(gd);
 
 		List<UnitPrototype> protos = gd.unitPrototypes;

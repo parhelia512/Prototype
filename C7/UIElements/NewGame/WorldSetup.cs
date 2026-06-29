@@ -3,9 +3,9 @@ using System;
 using System.Linq;
 using C7Engine;
 using C7Engine.Lua;
+using Serilog;
 using C7GameData;
 using C7GameData.Save;
-using Serilog;
 
 [Tool]
 public partial class WorldSetup : Control {
@@ -76,10 +76,9 @@ public partial class WorldSetup : Control {
 	private BarbarianActivity _barbarianActivity = BarbarianActivity.Roaming;
 
 	private WorldSize _worldSize = WorldSize.Generic();
+	private SaveGame _saveGame;
 
 	private int GameSeed => int.Parse(seedInput.Text);
-
-	private SaveGame _saveGame;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -272,7 +271,8 @@ public partial class WorldSetup : Control {
 		billion4Large.Visible = true;
 		billion4.ButtonPressed = true;
 
-		_saveGame = GameModeLoader.Load(GamePaths.GameModesDir, GamePaths.GameMode);
+		var game = GameMode.Load(GamePaths.GameModesDir, GamePaths.GameMode);
+		_saveGame = game.GetSave();
 
 		InitBarbarianActivityOptions();
 		InitMapSizes();
@@ -334,7 +334,7 @@ public partial class WorldSetup : Control {
 		};
 
 		try {
-			// Dynamically create a new button for each world size in the game 
+			// Dynamically create a new button for each world size in the game
 			foreach (var ws in _saveGame.WorldSizes) {
 				var worldSizeButton = new Civ3MenuButton
 				{

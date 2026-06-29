@@ -5,6 +5,7 @@ using System.Text.Json;
 using C7Engine.Lua;
 using C7GameData;
 using C7GameData.Save;
+using EngineTests.Utils;
 using Xunit;
 
 namespace EngineTests.GameData;
@@ -52,7 +53,7 @@ public class MapUnitCombatFacingTest {
 			"Curragh",
 		];
 
-		using JsonDocument ruleset = JsonDocument.Parse(File.ReadAllText(Path.Combine(PathUtils.gameModesDir, "base-ruleset.json")));
+		using JsonDocument ruleset = JsonUtils.LoadBaseRuleset();
 		JsonElement unitPrototypes = ruleset.RootElement.GetProperty("unitPrototypes");
 		foreach (JsonElement unitPrototype in unitPrototypes.EnumerateArray()) {
 			string unitName = unitPrototype.GetProperty("name").GetString();

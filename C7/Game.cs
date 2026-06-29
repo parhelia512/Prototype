@@ -203,7 +203,7 @@ public partial class Game : Node {
 	}
 
 	private GameParams CreateGameParams() {
-		return new(GamePaths.LuaRulesDir, GamePaths.DefaultBicPath) {
+		return new(GamePaths.DefaultBicPath) {
 			GetPediaIconsPath = (scenarioSearchPath) => {
 				// When the game loading logic tries to load the PediaIcons file, set the
 				// scenario search path and then use our Civ3MediaPath searching logic to
@@ -221,14 +221,18 @@ public partial class Game : Node {
 				Util.setModPath(scenarioSearchPath);
 				log.Debug("RelativeModPath ", scenarioSearchPath);
 				return Util.Civ3MediaPath("Text/PediaIcons.txt");
-			}
+			},
+			GameModeLoader = (config) => {
+				Global.ActivateGameMode(config);
+				return Global.GameMode.behaviors;
+			},
 		};
 	}
 
 	private async Task CreateGameAndAssignPlayerController(GameParams options) {
 		// Initializes the game data and returns the "human" player
 		if (Global.SaveGame != null) {
-			controller = await CreateGame.createGame(Global.SaveGame, options);
+			controller = await CreateGame.createGame(Global.SaveGame, options.GameModeLoader);
 		} else if (Global.LoadGamePath != null) {
 			controller = await CreateGame.createGame(Global.LoadGamePath, options);
 		} else {
@@ -736,9 +740,6 @@ public partial class Game : Node {
 		if (eventKeyDown.Keycode == Godot.Key.O && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
 			ToggleObserverMode();
 		}
-		if (eventKeyDown.Keycode == Godot.Key.T && eventKeyDown.ShiftPressed && eventKeyDown.IsCommandOrControlPressed() && eventKeyDown.AltPressed) {
-			ToggleC7Graphics();
-		}
 		if (eventKeyDown.Keycode == Godot.Key.F1) {
 			EmitSignal(SignalName.ShowSpecificAdvisor, "F1");
 		}
@@ -824,11 +825,6 @@ public partial class Game : Node {
 		EngineStorage.ReadGameData((GameData gameData) => {
 			gameData.showGridCoordinates = !gameData.showGridCoordinates;
 		});
-	}
-
-	private void ToggleC7Graphics() {
-		Global.ToggleModernGraphics();
-		InitializeMapView();
 	}
 
 	private void HandleMagnifyGesture(InputEventMagnifyGesture magnifyGesture) {

@@ -147,7 +147,7 @@ public sealed class TimeOptions {
 
 	public string GetDisplayTimeFromRaw(int time) {
 		string label = "PLACEHOLDER_TIME";
-		var displayTimeLabelFunction = EngineStorage.gameData.luaRulesEngine.ImportFunc<Func<int, string>>("gameplay.time.display_text", true);
+		var displayTimeLabelFunction = EngineStorage.gameData.luaBehaviorEngine.ImportFunc<Func<int, string>>("gameplay.time.display_text");
 		label = displayTimeLabelFunction.Invoke(time);
 		return label;
 	}

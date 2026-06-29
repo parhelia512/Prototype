@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using C7Engine;
-using C7Engine.Lua;
 using C7GameData;
 using C7GameData.Save;
 using EngineTests.Utils;
@@ -17,89 +16,6 @@ using Xunit;
 using Serilog;
 
 namespace EngineTests.GameData;
-
-public class PathUtils {
-	private static readonly string C7GameDataTestsFolderName = "EngineTests";
-
-	public static string getBasePath(string file) => Path.Combine(testDirectory, file);
-
-	public static string getDataPath(string file) => Path.Combine(testDirectory, "data", file);
-
-	public static string defaultBicPath {
-		get => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "conquests.biq");
-	}
-
-	public static string defaultPediaIconsPath {
-		get => Path.Combine(Civ3Location.GetCiv3Path(), "Conquests", "Text", "PediaIcons.txt");
-	}
-
-	public static string testDirectory {
-		get {
-			string[] parts = AppDomain.CurrentDomain.BaseDirectory.Split(Path.DirectorySeparatorChar);
-			int pos = parts.Reverse().ToList().FindIndex(s => s == C7GameDataTestsFolderName);
-			string up = string.Concat("..", Path.DirectorySeparatorChar);
-			string relativePath = string.Concat(Enumerable.Repeat(up, pos - 1));
-			return Path.GetFullPath(relativePath);
-		}
-	}
-
-	public static string luaRulesDir => getBasePath("../C7/Lua/rules");
-	public static string gameModesDir => getBasePath("../C7/Lua/game_modes/");
-}
-
-public class SaveGameFixture : IDisposable {
-	internal SaveGame saveGame;
-	internal SaveGame standaloneSaveGame;
-
-	const int TestSeed = 123456;
-
-	public SaveGameFixture() {
-		GameModeConfig basic = new("base-ruleset.json");
-		GameModeConfig standalone = new("base-ruleset.json", ["standalone.lua"]);
-
-		saveGame = LoadSave(basic);
-		standaloneSaveGame = LoadSave(standalone);
-	}
-
-	private static SaveGame LoadSave(GameModeConfig gameModeConfig) {
-		SaveGame save = GameModeLoader.Load(PathUtils.gameModesDir, gameModeConfig);
-
-		WorldSize worldSize = new() {
-			width = 100,
-			height = 100,
-			numberOfCivs = 8,
-			distanceBetweenCivs = 12,
-			techRate = 240,
-			optimalNumberOfCities = 20,
-		};
-
-		WorldCharacteristics wc = new(save) {
-			landform = WorldCharacteristics.Landform.Pangaea,
-			oceanCoverage = WorldCharacteristics.OceanCoverage.Percent_70,
-			age = WorldCharacteristics.Age.Billion_4,
-			climate = WorldCharacteristics.Climate.Normal,
-			temperature = WorldCharacteristics.Temperature.Temperate,
-			barbarianActivity = BarbarianActivity.Roaming,
-			worldSize = worldSize,
-			mapSeed = TestSeed,
-		};
-
-		GameSetup gameSetup = new() {
-			playerCivilization = save.Civilizations.Find(c => !c.isBarbarian),
-			difficulty = save.Difficulties.First(),
-			worldCharacteristics = wc,
-			opponents = Enumerable.Repeat(new SelectedOpponent() { isRandom = true }, worldSize.numberOfCivs - 1).ToList(),
-		};
-
-		gameSetup.Populate(save);
-
-		return save;
-	}
-
-	public void Dispose() {
-		return;
-	}
-}
 
 public class SaveTests : IClassFixture<SaveGameFixture> {
 	SaveGameFixture fixture;
@@ -181,15 +97,15 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 						continue;
 					default:
 						throw new Exception($"{msg}");
-						continue;
 				}
 			}
 		}
 	}
 
 	private async Task<Player> CreateHeadlessGame(string path, string biqPath, Func<string, string> getPediaIconsPath) {
-		GameParams options = new(PathUtils.luaRulesDir, biqPath) {
-			GetPediaIconsPath = getPediaIconsPath
+		GameParams options = new(biqPath) {
+			GetPediaIconsPath = getPediaIconsPath,
+			GameModeLoader = (_) => { return fixture.behaviors; },
 		};
 		var player = CreateGame.createGame(path, options).Result;
 		TurnHandling.OnBeginTurn();
@@ -199,8 +115,7 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 	}
 
 	private async Task<Player> CreateHeadlessGame(SaveGame game) {
-		GameParams options = new(PathUtils.luaRulesDir, "");
-		var player = CreateGame.createGame(game, options).Result;
+		var player = CreateGame.createGame(game, (_) => { return fixture.behaviors; }).Result;
 		TurnHandling.OnBeginTurn();
 		TurnHandling.InitTurnData();
 		await TurnHandling.AdvanceTurn();
@@ -208,7 +123,7 @@ public class SaveTests : IClassFixture<SaveGameFixture> {
 	}
 
 	private C7GameData.GameData ToGameData(SaveGame game) {
-		return game.ToGameData(PathUtils.luaRulesDir);
+		return game.ToGameData(fixture.behaviors);
 	}
 
 	private void CheckAiInvariants() {
