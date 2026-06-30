@@ -939,8 +939,8 @@ namespace C7GameData {
 			save.Alliances = new HashSet<Alliance>(alliances.OrderBy(a => a.index).ToHashSet());
 
 			// import player alliances
+			var filteredPlayers = save.Players.Where(p => p.isIncludedInGame || p.isBarbarian).ToList();
 			for (int i = 0; i < theBiq.GameAlliance[0].Length; i++) {
-				var filteredPlayers = save.Players.Where(p => p.isIncludedInGame || p.isBarbarian).ToList();
 				filteredPlayers[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
 			}
 
