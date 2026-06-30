@@ -940,7 +940,8 @@ namespace C7GameData {
 
 			// import player alliances
 			for (int i = 0; i < theBiq.GameAlliance[0].Length; i++) {
-				save.Players.Where(p => p.isIncludedInGame || p.isBarbarian).ToList()[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
+				var filteredPlayers = save.Players.Where(p => p.isIncludedInGame || p.isBarbarian).ToList();
+				filteredPlayers[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
 			}
 
 			foreach (var saveAlliance in save.Alliances) {
