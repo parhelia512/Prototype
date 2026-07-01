@@ -939,8 +939,9 @@ namespace C7GameData {
 			save.Alliances = new HashSet<Alliance>(alliances.OrderBy(a => a.index).ToHashSet());
 
 			// import player alliances
+			var filteredPlayers = save.Players.Where(p => p.isIncludedInGame || p.isBarbarian).ToList();
 			for (int i = 0; i < theBiq.GameAlliance[0].Length; i++) {
-				save.Players[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
+				filteredPlayers[i + 1].alliance = alliances.FirstOrDefault(a => a.index == theBiq.GameAlliance[0][i])?.name;
 			}
 
 			foreach (var saveAlliance in save.Alliances) {
@@ -1063,7 +1064,11 @@ namespace C7GameData {
 			};
 
 			foreach (UNIT unit in theBiq.Unit) {
-				if (unit.Owner >= save.Players.Count) {
+				// Only barbarians can have an owner index larger than 31,
+				// as it denotes the tribe index rather that the player index.
+				// That is why we exclude barbarians (ownerType == 1) from this.
+				if (unit.Owner >= save.Players.Count && unit.OwnerType != 1) {
+					log.Warning($"Unit has owner with index {unit.Owner}, but there are only {save.Players.Count} players");
 					continue;
 				}
 
